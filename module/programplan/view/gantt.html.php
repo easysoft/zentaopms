@@ -503,21 +503,25 @@ $(function()
 
     gantt.config.columns = [
     {name: 'text',       width: '*', tree: true, resize: true, width:200},
+    {name: 'owner_id',   align: 'center', resize: true, width: 80},
     {name: 'status',     align: 'center', resize: true, width: 80},
     {name: 'start_date', align: 'center', resize: true, width: 80},
     {name: 'end_date',   align: 'center', resize: true, width: 80},
     {name: 'duration',   align: 'center', resize: true, width: 60},
+    {name: 'estimate',   align: 'center', resize: true, width: 60},
     {name: 'percent',    align: 'center', resize: true, width:70, template: function(plan)
         {
             if(plan.percent) return Math.round(plan.percent) + '%';
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realBegan',    align: 'center', resize: true, width: 150},
-    {name: 'realEnd',      align: 'center', width: 150}
+    {name: 'realBegan',    align: 'center', resize: true, width: 60},
+    {name: 'realEnd',      align: 'center', resize: true, width: 60},
+    {name: 'consumed',     align: 'center', resize: true, width: 60},
     ];
 
     gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
+    gantt.locale.labels.column_owner_id     = "<?php echo $lang->programplan->PMAB;?>";
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
@@ -526,6 +530,8 @@ $(function()
     gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
     gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
+    gantt.locale.labels.column_estimate     = "<?php echo $lang->programplan->estimate;?>";
+    gantt.locale.labels.column_consumed     = "<?php echo $lang->programplan->consumed;?>";
 
     if((module == 'review' && method == 'assess') || dateDetails) gantt.config.show_chart = false;
 

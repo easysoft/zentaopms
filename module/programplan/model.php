@@ -206,7 +206,7 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
         $taskSign = "<span class='task-label'>[ T ] </span>";
@@ -275,6 +275,8 @@ class programplanModel extends model
             $data->start_date   = $start;
             $data->endDate      = $end;
             $data->duration     = 1;
+            $data->estimate     = $task->estimate;
+            $data->consumed     = $task->consumed;
 
             /* If multi task then show the teams. */
             if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
@@ -294,12 +296,14 @@ class programplanModel extends model
             {
                 if($stage['planID'] == $task->execution)
                 {
+                    $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
                     $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
+                        $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
                         $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
                         $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
                     }
@@ -315,6 +319,8 @@ class programplanModel extends model
 
             $progress = ($progress * 100) . '%';
             $datas['data'][$index]->taskProgress = $progress;
+            $datas['data'][$index]->estimate = $stage['progress']['totalEstimate'];
+            $datas['data'][$index]->consumed = $stage['progress']['consumed'];
         }
 
         $datas['links'] = array();
@@ -466,6 +472,8 @@ class programplanModel extends model
                 $data->start_date   = $start;
                 $data->endDate      = $end;
                 $data->duration     = 1;
+                $data->estimate     = $task->estimate;
+                $data->consumed     = $task->consumed;
 
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
 
@@ -481,11 +489,13 @@ class programplanModel extends model
                 {
                     $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
                     $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
+                    $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
                 }
                 else
                 {
                     $stageIndex[$groupKey]['totalConsumed'] = $task->consumed;
                     $stageIndex[$groupKey]['totalReal']     = $task->left + $task->consumed;
+                    $stageIndex[$groupKey]['totalEstimate'] = $task->estimate;
                 }
             }
 
@@ -502,6 +512,8 @@ class programplanModel extends model
 
             $progress = ($progress * 100) . '%';
             $datas['data'][$index]->taskProgress = $progress;
+            $datas['data'][$index]->estimate     = $stage['totalEstimate'];
+            $datas['data'][$index]->consumed     = $stage['totalConsumed'];
         }
 
         $datas['links'] = array();
