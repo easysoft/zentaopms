@@ -1804,7 +1804,13 @@ class block extends control
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
 
-                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo');
+
+                foreach($objects as $k => $task)
+                {
+                    if(in_array($task->status, array('closed', 'cancel', 'pause'))) unset($objects[$k]);
+                }
+                if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');

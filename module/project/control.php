@@ -1127,6 +1127,10 @@ class project extends control
             }
         }
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {

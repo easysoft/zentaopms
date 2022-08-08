@@ -85,4 +85,68 @@ class gitlabTest
 
         return $this->gitlab->getById($id);
     }
+
+    /**
+     * Manage branch privs.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  array  $hasAccessBranches
+     * @access public
+     * @return string
+     */
+    public function manageBranchPrivsTest($gitlabID, $projectID, $hasAccessBranches = array())
+    {
+        $result = $this->gitlab->manageBranchPrivs($gitlabID, $projectID, $hasAccessBranches);
+        return empty($result) ? 'success' : 'fail';
+    }
+
+    /**
+     * Manage tag privs.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  array  $hasAccessTags
+     * @access public
+     * @return string
+     */
+    public function manageTagPrivsTest($gitlabID, $projectID, $hasAccessTags = array())
+    {
+        $result = $this->gitlab->manageTagPrivs($gitlabID, $projectID, $hasAccessTags);
+        return empty($result) ? 'success' : 'fail';
+    }
+
+    /**
+     * Api get signle tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleTagTest($gitlabID, $projectID, $tag)
+    {
+        return $this->gitlab->apiGetSingleTag($gitlabID, $projectID, $tag);
+    }
+
+    /**
+     * Get gitlab menu.
+     *
+     * @param  int    $gitlabID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function getGitlabMenuTest($gitlabID, $type = 'project')
+    {
+        $html = $this->gitlab->getGitlabMenu($gitlabID, $type);
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            return key($errors);
+        }
+
+        return substr($html, 0, 4);
+    }
 }

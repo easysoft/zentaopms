@@ -1,46 +1,16 @@
 <?php
 /**
- * The create view of doc module of ZenTaoPMS.
+ * The create basic info view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Jia Fu <fujia@cnezsoft.com>
+ * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
- * @version     $Id: create.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
+ * @version     $Id: createbasicinfo.html.php 2022-08-02 13:49:25Z $
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(strpos($config->doc->textTypes, $docType) !== false and $from == 'doc'):?>
-<?php include 'createtexttype.html.php';?>
-<?php else:?>
-<?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
-<?php include '../../common/view/header.lite.html.php';?>
-<div id="mainContent" class="main-content">
-  <div class='center-block'>
-    <div class='main-header'>
-      <h2><?php echo $lang->doc->create;?></h2>
-    </div>
-    <?php if($this->config->edition != 'open'):?>
-    <div class='alert alert-warning strong'>
-      <?php printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice', '', '', true) : '###');?>
-    </div>
-    <?php else:?>
-    <div class='alert alert-warning strong'><?php printf($lang->doc->cannotCreateOffice, zget($lang->doc->typeList, $docType));?></div>
-    <?php endif;?>
-  </div>
-</div>
-<script>
-$("a[href^='###']").click(function()
-{
-    alert('<?php echo $lang->doc->noLibreOffice;?>');
-});
-</script>
-</body>
-</html>
-<?php else:?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
-<?php include '../../common/view/markdown.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <div id="mainContent" class="main-content">
@@ -66,18 +36,11 @@ $("a[href^='###']").click(function()
           </tr>
           <tr>
             <th><?php echo $lang->doc->title;?></th>
-            <td colspan='2'><?php echo html::input('title', '', "class='form-control' required");?></td>
+            <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
             <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
-          </tr>
-          <tr id='contentBox'>
-            <th><?php echo $lang->doc->content;?></th>
-            <td colspan='2'>
-              <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
-              <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;height:200px'");?></div>
-            </td>
           </tr>
           <tr class='hidden'>
             <th><?php echo $lang->doc->type;?></th>
@@ -86,14 +49,6 @@ $("a[href^='###']").click(function()
             foreach($lang->doc->types as $typeKey => $typeName) $typeKeyList[$typeKey] = $typeKey;
             ?>
             <td><?php echo html::radio('type', $lang->doc->types, zget($typeKeyList, $docType, 'text'));?></td>
-          </tr>
-          <tr id='urlBox' class='hidden'>
-            <th><?php echo $lang->doc->url;?></th>
-            <td colspan='2'><?php echo html::input('url', '', "class='form-control'");?></td>
-          </tr>
-          <tr id='fileBox'>
-            <th><?php echo $lang->doc->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->mailto;?></th>
@@ -131,11 +86,7 @@ $("a[href^='###']").click(function()
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::hidden('contentType', 'html');?>
-              <?php echo html::submitButton();?>
-              <?php if($config->showMainMenu):?>
-              <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
-              <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
-              <?php endif;?>
+              <?php echo html::commonButton($lang->doc->nextStep, "id='saveBtn'", "btn btn-wide btn-primary");?>
             </td>
           </tr>
         </tbody>
@@ -143,9 +94,8 @@ $("a[href^='###']").click(function()
     </form>
   </div>
 </div>
+<?php js::set('objectType', $objectType);?>
+<?php js::set('objectID', $objectID);?>
 <?php js::set('docType', $docType);?>
-<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
-<?php endif;?>
-<?php endif;?>

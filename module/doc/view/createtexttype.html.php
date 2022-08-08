@@ -35,10 +35,9 @@
 .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
 .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
 .ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding-left: 20px !important;}
+.kindeditor-ph {padding: 20px 20px 0 20px !important;}
 .editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.hide-sidebar .ke-edit {padding-right: 20px;}
-.hide-sidebar .CodeMirror {padding-right: 50px;}
+.CodeMirror {padding: 20px 20px 0 20px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
 .ke-statusbar {display: none;}
 .contentmarkdown {background: #efefef;}
@@ -55,7 +54,6 @@
 #backBtn i {font-size: 20px;}
 
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#modalBasicInfo .modal-dialog {width: 720px;}
 </style>
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
@@ -97,9 +95,6 @@
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class="icon icon-close"></i>
-            </button>
             <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
           </div>
           <div class='modal-body'>
@@ -159,7 +154,7 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->save, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->close, '', "class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -176,20 +171,12 @@ $(function()
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
     setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
 
-    //basicInfoContent = '';
-    //$('#basicInfoLink').click(function()
-    //{
-    //    basicInfoContent = $('#basicInfoBox').html();
-    //});
-
-    //$('#modalBasicInfo .modal-header .close').click(function()
-    //{
-    //    $('#basicInfoBox').html(basicInfoContent);
-    //});
-
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
+
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
 <?php js::set('docType', $docType);?>
+<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
