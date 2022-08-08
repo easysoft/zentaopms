@@ -18,3 +18,5 @@
 .c-consumedAB {width: 60px;}
 .c-leftAB {width: 60px;}
 .c-actions {width: 175px;}
+
+[lang^='de'] #mainContent .main-actions .btn-toolbar .btn {padding-left: 3px; padding-right: 3px;}

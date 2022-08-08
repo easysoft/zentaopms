@@ -412,7 +412,7 @@
               ?>
               <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
               <li><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
-              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>
+              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>
           <?php endif;?>
@@ -464,7 +464,7 @@
                     <?php
                     foreach($bugs as $bug)
                     {
-                        echo "<li title='[B]$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "[B] #$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='$bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "#$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -479,7 +479,7 @@
 
                     foreach($cases as $case)
                     {
-                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', $misc) . '</li>';
+                        echo "<li title='$case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "#$case->id $case->title", '', $misc) . '</li>';
                     }
                     ?>
                     </ul>
@@ -494,7 +494,7 @@
                     foreach($builds as $build)
                     {
                         $link = common::hasPriv('build', 'view') ? html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") : "#$build->id $build->name";
-                        echo "<li title='$build->id $build->name'>$link</li>";
+                        echo "<li title='$build->name'>$link</li>";
                     }
                     ?>
                     </ul>
@@ -510,9 +510,33 @@
                     foreach($releases as $release)
                     {
                         $link = common::hasPriv($releaseModule, 'view') ? html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") : "#$release->id $release->name";
-                        echo "<li title='$release->id $release->name'>$link</li>";
+                        echo "<li title='$release->name'>$link</li>";
                     }
                     ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr class='text-top linkStoryTr'>
+                  <th><?php echo $lang->story->linkStories;?></th>
+                  <td>
+                    <ul class='list-unstyled'>
+                      <?php
+                      if(isset($story->linkStoryTitles))
+                      {
+                          foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
+                          {
+                              if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
+                              {
+                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                              }
+                              else
+                              {
+                                  $storyLink = "#$linkStoryID $linkStoryTitle";
+                              }
+                              echo "<li title='$linkStoryTitle' class='linkStoryTitle'>$storyLink</li>";
+                          }
+                      }
+                      ?>
                     </ul>
                   </td>
                 </tr>
@@ -526,11 +550,11 @@
                     {
                         if($mrPriv)
                         {
-                            echo "<li title='#$MRID $linkMRTitle'>" . html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") . '</li>';
+                            echo "<li title='$linkMRTitle'>" . html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") . '</li>';
                         }
                         else
                         {
-                            echo "<li title='#$MRID $linkMRTitle'>" . "#$MRID $linkMRTitle" . '</li>';
+                            echo "<li title='$linkMRTitle'>" . "#$MRID $linkMRTitle" . '</li>';
                         }
                     }
                     ?>

@@ -74,9 +74,9 @@
         <tr>
           <th><?php echo $lang->project->budget;?></th>
           <td>
-            <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+            <div id='budgetBox' class='input-group'>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
+              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($project->id)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
@@ -85,7 +85,7 @@
               <?php endif;?>
             </div>
           </td>
-          <td>
+          <td class='futureBox'>
             <div class='checkbox-primary'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($project->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->project->future;?></label>
@@ -153,7 +153,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->linkPlan;?></th>
+          <th id='linkPlan'><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox" colspan="3">
             <div class='row'>
               <?php $i = 0;?>

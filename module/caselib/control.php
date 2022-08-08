@@ -442,7 +442,7 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($libID)
+    public function exportTemplate($libID)
     {
         $this->loadModel('testcase');
         if($_POST)

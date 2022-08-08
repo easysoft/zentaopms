@@ -407,7 +407,7 @@ function renderKanbanItem(item, $item)
         $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
     }
 
-    if(kanban.performable == 1)
+    if(kanban.performable == 1 && (item.fromType == '' || item.fromType == 'execution'))
     {
         var $progress = $item.children('.progress-box');
         if(!$progress.length) $progress = $('<div class="progress-box"><div class="progress"><div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + item.progress + '%;"></div></div><div class="progress-number">' + item.progress + '%</div></div>').appendTo($item);
@@ -1189,7 +1189,7 @@ function createCardMenu(options)
     var items = [];
     if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(kanban.performable == 1)
+    if(kanban.performable == 1 && card.fromType == '')
     {
         if(card.status == 'done')
         {

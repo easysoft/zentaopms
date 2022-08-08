@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($docType == 'text' and $fromGlobal):?>
+<?php if(strpos($config->doc->textTypes, $docType) !== false and $from == 'doc'):?>
 <?php include 'createtexttype.html.php';?>
 <?php else:?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
@@ -72,8 +72,7 @@ $("a[href^='###']").click(function()
             <th><?php echo $lang->doc->keywords;?></th>
             <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
           </tr>
-          <?php $docContentHidden = strpos($this->config->doc->textTypes, $docType) !== false ? 'hidden' : '';?>
-          <tr id='contentBox' class="<?php echo $docContentHidden;?>">
+          <tr id='contentBox'>
             <th><?php echo $lang->doc->content;?></th>
             <td colspan='2'>
               <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
@@ -145,6 +144,7 @@ $("a[href^='###']").click(function()
   </div>
 </div>
 <?php js::set('docType', $docType);?>
+<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
 <?php endif;?>

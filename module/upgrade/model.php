@@ -83,14 +83,13 @@ class upgradeModel extends model
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
 
-        $editions    = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
+        $fromEdition = $this->getEditionByVersion($fromVersion);
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
         /* Execute. */
-        $fromOpenVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition . 'Version'}[$fromVersion];
+        $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
@@ -530,10 +529,12 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+                break;
             case '17_4':
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
+                break;
         }
 
         $this->deletePatch();
@@ -1202,6 +1203,32 @@ class upgradeModel extends model
         }
 
         return $confirmContent;
+    }
+
+    /**
+     * Get edition by version.
+     *
+     * @param  string    $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersion($version)
+    {
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+    }
+
+    /**
+     * Get openVersion
+     *
+     * @param  int    $version.
+     * @access public
+     * @return string
+     */
+    public function getOpenVersion($version)
+    {
+        $edition = $this->getEditionByVersion($version);
+        return is_numeric($version[0]) ? $version : zget($this->config->upgrade->{$edition . 'Version'}, $version);
     }
 
     /**
@@ -3002,7 +3029,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'testsuite';
-            $newMethods   = array('batchCreateCase', 'exportTemplet', 'import', 'showImport');
+            $newMethods   = array('batchCreateCase', 'exportTemplate', 'import', 'showImport');
             foreach($newMethods as $method)
             {
                 $data->method = $method;
@@ -3183,6 +3210,10 @@ class upgradeModel extends model
                 $needProcess['search'] = true;
             }
         }
+
+        $openVersion = $this->getOpenVersion($fromVersion);
+        if(version_compare($open, '17_4', '<=')) $needProcess['changeEngine'] = true;
+
         return $needProcess;
     }
 
@@ -4013,7 +4044,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('browse')->where('module')->eq('testsuite')->andWhere('method')->eq('library')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('create')->where('module')->eq('testsuite')->andWhere('method')->eq('createLib')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('view')->where('module')->eq('testsuite')->andWhere('method')->eq('libView')->exec();
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplet,import,showImport,batchCreateCase,createCase')->exec();
+        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplate,import,showImport,batchCreateCase,createCase')->exec();
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)

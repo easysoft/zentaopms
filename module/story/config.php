@@ -30,7 +30,7 @@ $config->story->editor->activate = array('id' => 'comment', 'tools' => 'simpleTo
 $config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->story->list = new stdclass();
-$config->story->list->exportFields      = '
+$config->story->exportFields = '
     id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
     pri, estimate, status, stage, category, taskCountAB, bugCountAB, caseCountAB,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
@@ -87,20 +87,29 @@ $config->story->datatable->fieldList['title']['fixed']    = 'left';
 $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
-$config->story->datatable->fieldList['branch']['title']    = 'branch';
-$config->story->datatable->fieldList['branch']['fixed']    = 'no';
-$config->story->datatable->fieldList['branch']['width']    = '100';
-$config->story->datatable->fieldList['branch']['required'] = 'no';
+$config->story->datatable->fieldList['product']['title']      = 'product';
+$config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
+
+$config->story->datatable->fieldList['branch']['title']      = 'branch';
+$config->story->datatable->fieldList['branch']['fixed']      = 'no';
+$config->story->datatable->fieldList['branch']['width']      = '100';
+$config->story->datatable->fieldList['branch']['required']   = 'no';
+$config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+
+$config->story->datatable->fieldList['module']['title']      = 'module';
+$config->story->datatable->fieldList['module']['control']    = 'select';
+$config->story->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'story');
 
 $config->story->datatable->fieldList['keywords']['title']    = 'keywords';
 $config->story->datatable->fieldList['keywords']['fixed']    = 'no';
 $config->story->datatable->fieldList['keywords']['width']    = '100';
 $config->story->datatable->fieldList['keywords']['required'] = 'no';
 
-$config->story->datatable->fieldList['plan']['title']    = 'planAB';
-$config->story->datatable->fieldList['plan']['fixed']    = 'no';
-$config->story->datatable->fieldList['plan']['width']    = '90';
-$config->story->datatable->fieldList['plan']['required'] = 'no';
+$config->story->datatable->fieldList['plan']['title']      = 'planAB';
+$config->story->datatable->fieldList['plan']['fixed']      = 'no';
+$config->story->datatable->fieldList['plan']['width']      = '90';
+$config->story->datatable->fieldList['plan']['required']   = 'no';
+$config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
 
 $config->story->datatable->fieldList['source']['title']    = 'source';
 $config->story->datatable->fieldList['source']['fixed']    = 'no';

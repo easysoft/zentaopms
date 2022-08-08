@@ -24,7 +24,7 @@
     </p>
   </div>
   <?php else:?>
-    <?php if($type == 'gantt') include './gantt.html.php';?>
+    <?php if($type == 'gantt' or $type == 'assignedTo') include './gantt.html.php';?>
     <?php if($type == 'lists') include './list.html.php';?>
   <?php endif;?>
 </div>

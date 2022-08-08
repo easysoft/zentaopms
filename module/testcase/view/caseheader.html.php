@@ -127,10 +127,10 @@
       $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc . "data-app={$this->app->tab}") . "</li>";
 
-      $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
-      $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc . "data-app={$this->app->tab} data-width='50%'") . "</li>";
+      $class = common::hasPriv('testcase', 'exportTemplate') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='50%'") . "</li>";
       ?>
       </ul>
     </div>

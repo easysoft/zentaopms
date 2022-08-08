@@ -1521,10 +1521,12 @@ class commonModel extends model
     public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
-        global $app;
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1966,7 +1968,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;

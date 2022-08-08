@@ -132,15 +132,15 @@ class treeModel extends model
             if(!is_array($branch)) return $modulePairs;
 
             $modules = array();
-            foreach($branch as $b) $modules[$b] = $modulePairs;
+            foreach($branch as $branchID) $modules[$branchID] = $modulePairs;
             return $modules;
         }
 
         /* If type of $branch is array, get modules of these branches. */
-        if(gettype($branch) == 'array')
+        if(is_array($branch))
         {
             $modules = array();
-            foreach($branch as $b) $modules[$b] = $this->getOptionMenu($rootID, $type, $startModule, $b, $param);
+            foreach($branch as $branchID) $modules[$branchID] = $this->getOptionMenu($rootID, $type, $startModule, $branchID, $param);
 
             return $modules;
         }
@@ -148,13 +148,13 @@ class treeModel extends model
         if($type == 'line') $rootID = 0;
 
         $branches = array($branch => '');
-        if(strpos('story|bug|case', $type) !== false)
+        if($branch != 'all' and strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                $branches    = $branch === 'all' ? $branchPairs : array($branch => $branchPairs[$branch]);
+                $branches    = array($branch => $branchPairs[$branch]);
             }
             elseif($product and $product->type == 'normal')
             {

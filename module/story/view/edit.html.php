@@ -13,6 +13,7 @@
 <?php include './header.html.php';?>
 <?php js::set('page', 'edit')?>
 <?php js::set('oldProductID', $story->product);?>
+<?php js::set('storyID', $story->id);?>
 <?php js::set('parentStory', !empty($story->children));?>
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
@@ -249,38 +250,34 @@
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
               </tr>
               <?php endif;?>
-              <?php if($story->status == 'closed'):?>
               <tr class='text-top'>
-                <th><?php echo $lang->story->childStories;?></th>
+                <th class='thWidth'><?php echo $lang->story->linkStory;?></th>
                 <td>
-                  <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
+                  <?php if(common::hasPriv('story', 'linkStories') and $story->type == 'story') echo html::a("#", $lang->story->linkStoriesAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
+                  <?php if(common::hasPriv('story', 'linkRequirements') and $story->type == 'requirement') echo html::a("#", $lang->story->linkRequirementsAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
                 </td>
               </tr>
               <tr>
                 <th></th>
-                <td>
+                <td class='linkStoryTd'>
                   <ul class='list-unstyled'>
                     <?php
-                    if($story->childStories)
+                    $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
+                    if(isset($story->linkStoryTitles))
                     {
-                        $childStories = explode(',', $story->childStories);
-                        foreach($childStories as $childStoryID)
+                        foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
                         {
-                            if(isset($story->extraStories[$childStoryID]))
-                            {
-                                echo "<li><div class='checkbox-primary'>";
-                                echo "<input type='checkbox' checked='checked' name='childStories[]' value=$childStoryID />";
-                                echo "<label>#{$childStoryID} {$story->extraStories[$childStoryID]}</label>";
-                                echo '</div></li>';
-                            }
+                            echo "<li><div class='checkbox-primary' title='$linkStoryTitle'>";
+                            echo "<input type='checkbox' checked='checked' name='" . $linkStoryField . "[]' value=$linkStoryID />";
+                            echo "<label class='linkStoryTitle'>#{$linkStoryID} {$linkStoryTitle}</label>";
+                            echo '</div></li>';
                         }
                     }
                     ?>
-                    <span id='childStoriesBox'></span>
+                    <span id='linkStoriesBox'></span>
                   </ul>
                 </td>
               </tr>
-              <?php endif;?>
            </table>
           </div>
         </div>

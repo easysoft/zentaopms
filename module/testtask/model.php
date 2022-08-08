@@ -1451,7 +1451,13 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'runcase' and isset($testtask->auto) and $testtask->auto == 'unit')  return false;
-        if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
+
+        if($action == 'runcase')
+        {
+            if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
+            return $testtask->status != 'wait';
+        }
+
         return true;
     }
 
@@ -1539,7 +1545,7 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
                 }
@@ -1604,7 +1610,7 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
                     break;

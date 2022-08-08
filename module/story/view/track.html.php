@@ -7,6 +7,8 @@
 .main-table tbody>tr:hover { background-color: #fff; }
 .main-table tbody>tr:nth-child(odd):hover { background-color: #f5f5f5; }
 .fix-table-copy-wrapper {overflow: unset !important;}
+.table tr > th .dropdown > a.dropdown-toggle {display: flex; align-items: center;}
+.table tr > th .dropdown > a.dropdown-toggle .product-name {overflow: hidden;}
 </style>
 <div id="mainContent" class="main-row fade">
   <div class="main-col">
@@ -17,7 +19,7 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style  = $this->app->rawModule == 'projectstory' ? "style='overflow: overflow; text-align: left'" : '';?>
+    <?php $style  = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
     <?php $tab    = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
     <?php $module = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
@@ -28,7 +30,7 @@
             <th <?php echo $style;?>>
               <?php if($this->app->rawModule == 'projectstory'): ?>
               <div class="dropdown">
-                <?php echo html::a('javascript:;', "<i class='icon icon-product'></i>". $projectProducts[$productID]->name . '<span class="caret"></span>', '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
+                <?php echo html::a('javascript:;', "<i class='icon icon-product'></i><div class='product-name'>{$projectProducts[$productID]->name}</div><span class='caret'></span>", '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
                 <ul class="dropdown-menu">
                   <?php foreach($projectProducts as $product): ?>
                   <li><?php echo html::a($this->createLink('projectstory', 'track', "projectID={$this->session->project}&productID=$product->id"), $product->name);?></li>
@@ -66,7 +68,7 @@
             </td>
             <?php endif;?>
             <?php if(count($track) != 0):?>
-            <?php $i = 1;?>
+            <?php $i = 0;?>
             <?php foreach($track as $storyID => $story):?>
             <?php if($i != 1) echo '<tr>';?>
               <td>

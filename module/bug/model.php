@@ -741,6 +741,13 @@ class bugModel extends model
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
+            if($bug->plan != $oldBug->plan)
+            {
+                $this->loadModel('action');
+                if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bugID);
+                if(!empty($bug->plan)) $this->action->create('productplan', $bug->plan, 'linkbug', '', $bugID);
+            }
+
             $linkBugs    = explode(',', $bug->linkBug);
             $oldLinkBugs = explode(',', $oldBug->linkBug);
             $addBugs     = array_diff($linkBugs, $oldLinkBugs);
@@ -778,11 +785,13 @@ class bugModel extends model
      */
     public function batchUpdate()
     {
-        $bugs       = array();
-        $allChanges = array();
-        $now        = helper::now();
-        $data       = fixer::input('post')->get();
-        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $bugs        = array();
+        $allChanges  = array();
+        $now         = helper::now();
+        $data        = fixer::input('post')->get();
+        $bugIDList   = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
 
         if(!empty($bugIDList))
         {
@@ -862,6 +871,12 @@ class bugModel extends model
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 }
 
+                if($bug->plan != $oldBug->plan)
+                {
+                    if($bug->plan != $oldBug->plan and !empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+                    if($bug->plan != $oldBug->plan and !empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},$bugID";
+                }
+
                 $bugs[$bugID] = $bug;
                 unset($bug);
             }
@@ -903,7 +918,14 @@ class bugModel extends model
                 }
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
+        }
         return $allChanges;
     }
 
@@ -1245,13 +1267,17 @@ class bugModel extends model
      */
     public function batchChangePlan($bugIDList, $planID)
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
+        $now         = helper::now();
+        $allChanges  = array();
+        $oldBugs     = $this->getByList($bugIDList);
+        $unlinkPlans = array();
+        $link2Plans  = array();
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($planID == $oldBug->plan) continue;
+            $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+            $link2Plans[$planID]        = empty($link2Plans[$planID]) ? $bugID : "{$link2Plans[$planID]},$bugID";
 
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
@@ -1260,6 +1286,12 @@ class bugModel extends model
 
             $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+        }
+        if(!dao::isError())
+        {
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
         }
         return $allChanges;
     }
@@ -1666,7 +1698,7 @@ class bugModel extends model
         $bugIDList = array();
         if($moduleName == 'contributeBug')
         {
-            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'bug');
+            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
             foreach($bugsAssignedByMe as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
 
@@ -1700,8 +1732,8 @@ class bugModel extends model
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
             ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
@@ -3494,5 +3526,35 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
 
         return $menu;
+    }
+
+    /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($object, $pairs = '')
+    {
+        /* Get bugs. */
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->fetchAll('id');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
+
+        if($object == 'openedBuild') $object = 'build';
+
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+
+        if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+
+        return $relatedObjects;
     }
 }
