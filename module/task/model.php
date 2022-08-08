@@ -4016,71 +4016,19 @@ class taskModel extends model
     /**
      * Update order by gantt.
      *
-     * @param int     $productID
      * @access public
      * @return void
      */
-    public function updateOrderByGantt($productID = 0)
+    public function updateOrderByGantt()
     {
-        $data        = fixer::input('post')->get();
-        $IdList      = explode('-', $data->id);
-        $executionID = $IdList[0];
-        $taskID      = $IdList[1];
-        $oldTask     = $this->loadModel('task')->getByID($taskID);
-        $index       = (int)$data->index;
+        $data = fixer::input('post')->get();
 
-        $hasZeroOrder = $this->dao->select('id')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->andWhere('execution')->eq($executionID)
-            ->andWhere('`order`')->eq(0)
-            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-            ->limit(1)
-            ->fetch('id');
-
-        if($hasZeroOrder)
+        $order = 1;
+        foreach($data->tasks as $task)
         {
-            $tasks = $this->dao->select('id')->from(TABLE_TASK)
-                ->where('execution')->eq($executionID)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->orderBy('order_asc, id_desc')
-                ->fetchPairs('id');
-
-            $order = 1;
-            foreach($tasks as $task)
-            {
-                $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($task)->exec();
-                $order ++;
-            }
-
-            $oldTask  = $this->loadModel('task')->getByID($taskID);
+            $taskID = explode('-', $task)[1];
+            $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
+            $order ++;
         }
-
-        $order    = ++ $index;
-        $oldOrder = (int)$oldTask->order;
-        if($order > $oldOrder)
-        {
-            $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
-                ->where('execution')->eq($executionID)
-                ->andWhere('`order`')->le($order)
-                ->andWhere('`order`')->gt($oldOrder)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->exec();
-        }
-        else if($order < $oldOrder)
-        {
-            $this->dao->update(TABLE_TASK)->set('`order`=`order`+1')
-                ->where('execution')->eq($executionID)
-                ->andWhere('`order`')->lt($oldOrder)
-                ->andWhere('`order`')->ge($order)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->exec();
-        }
-
-        $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
     }
 }

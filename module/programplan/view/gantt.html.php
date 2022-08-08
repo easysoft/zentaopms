@@ -649,9 +649,9 @@ $(function()
 
     gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
     {
-        console.log(gantt.getChildren(gantt.getTask(id).parent))
-        var task = gantt.getTask(id);
-        var link = createLink('programplan', 'ajaxResponseGanttMoveEvent');
+        var tasks = gantt.getChildren(parent);
+        var task  = gantt.getTask(id);
+        var link  = createLink('programplan', 'ajaxResponseGanttMoveEvent');
 
         //prevent moving to another position.
         if(task.parent != parent || id.indexOf('-') == -1)
@@ -663,7 +663,7 @@ $(function()
             $.ajax({
             url: link,
                 dataType: "json",
-                data: {id: id, type: task.type, index: tindex},
+                data: {tasks: tasks},
                 type: "post",
                 success: function(result){}
             });
