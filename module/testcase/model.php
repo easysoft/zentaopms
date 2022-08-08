@@ -2092,10 +2092,11 @@ class testcaseModel extends model
     /**
      * Append bugs and results.
      *
-     * @param  array    $cases
-     * @param  string   $type
+     * @param  int    $cases
+     * @param  string $type
+     * @param  array  $caseIdlist
      * @access public
-     * @return array
+     * @return void
      */
     public function appendData($cases, $type = 'case', $caseIdlist = array())
     {
@@ -2501,7 +2502,7 @@ class testcaseModel extends model
     /**
      * processDatas
      *
-     * @param  int    $datas
+     * @param  array  $datas
      * @access public
      * @return void
      */

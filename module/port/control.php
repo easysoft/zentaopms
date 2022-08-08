@@ -5,8 +5,6 @@ class port extends control
      * Export datas.
      *
      * @param  string $model
-     * @param  string $params
-     * @param  array  $rows
      * @access public
      * @return void
      */

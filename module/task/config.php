@@ -56,7 +56,7 @@ $config->task->datatable->fieldList['id']['fixed']    = 'left';
 $config->task->datatable->fieldList['id']['width']    = '70';
 $config->task->datatable->fieldList['id']['required'] = 'yes';
 
-$config->task->datatable->fieldList['module']['title']     = 'idAB';
+$config->task->datatable->fieldList['module']['title']      = 'idAB';
 $config->task->datatable->fieldList['module']['control']    = 'select';
 $config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
 

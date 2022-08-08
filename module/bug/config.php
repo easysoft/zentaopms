@@ -319,7 +319,7 @@ $config->bug->datatable->fieldList['deadline']['title']    = 'deadline';
 $config->bug->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->bug->datatable->fieldList['deadline']['width']    = '90';
 $config->bug->datatable->fieldList['deadline']['required'] = 'no';
-$config->bug->datatable->fieldList['deadline']['control'] = 'date';
+$config->bug->datatable->fieldList['deadline']['control']  = 'date';
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
