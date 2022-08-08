@@ -11,8 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::import($jsRoot . 'uploader/min.js');?>
-<?php css::import($jsRoot . 'uploader/min.css');?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <div id="mainContent" class="main-content">
