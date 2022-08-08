@@ -83,14 +83,13 @@ class upgradeModel extends model
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
 
-        $editions    = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
+        $fromEdition = $this->getEditionByVersion($fromVersion);
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
         /* Execute. */
-        $fromOpenVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition . 'Version'}[$fromVersion];
+        $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
@@ -532,7 +531,6 @@ class upgradeModel extends model
                 $this->processBugLinkBug();
                 break;
             case '17_4':
-                $this->changeTableEngine();
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
@@ -1205,6 +1203,32 @@ class upgradeModel extends model
         }
 
         return $confirmContent;
+    }
+
+    /**
+     * Get edition by version.
+     *
+     * @param  string    $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersion($version)
+    {
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+    }
+
+    /**
+     * Get openVersion
+     *
+     * @param  int    $version.
+     * @access public
+     * @return string
+     */
+    public function getOpenVersion($version)
+    {
+        $edition = $this->getEditionByVersion($version);
+        return is_numeric($version[0]) ? $version : zget($this->config->upgrade{$edition . 'Version'}, $version);
     }
 
     /**
@@ -3186,6 +3210,10 @@ class upgradeModel extends model
                 $needProcess['search'] = true;
             }
         }
+
+        $openVersion = $this->getOpenVersion($fromVersion);
+        if(version_compare($open, '17_4', '<=')) $needProcess['changeEngine'] = true;
+
         return $needProcess;
     }
 
@@ -6746,27 +6774,6 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
-    }
-
-    /**
-     * Change search table engine.
-     *
-     * @access public
-     * @return void
-     */
-    public function changeTableEngine()
-    {
-        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        $tables = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'")->fetchAll();
-        foreach($tables as $table)
-        {
-            $tableName = $table->Name;
-            $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
-
-            if(stripos($tableName, 'searchindex') !== false and $mysqlVersion < 5.6) continue;
-            $this->dao->exec($sql);
-        }
-        return true;
     }
 
     /**

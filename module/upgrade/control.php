@@ -907,6 +907,69 @@ class upgrade extends control
     }
 
     /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine()
+    {
+        $response = array();
+        $response['result']      = 'continue';
+        $response['message']     = '';
+        $response['nextMessage'] = '';
+
+        $stmt = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'");
+
+        $table = $stmt->fetch();
+        if(empty($table))
+        {
+            $response['result']  = 'finished';
+            $response['message'] = $this->lang->upgrade->finishedChange;
+            return print(json_encode($response));
+        }
+
+        $nextTable = $stmt->fetch();
+        if(stripos($nextTable->Name, 'searchindex') !== false)
+        {
+            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+            if($mysqlVersion < 5.6) return print(json_encode($response));
+
+            $nextTable = $stmt->fetch();
+        }
+
+        $tableName = $table->Name;
+
+        $response['table'] = $tableName;
+        $response['next']  = $nextTable->Name;
+        if($response['next']) $response['nextMessage'] = sprintf($this->lang->upgrade->changingTable, $response['next']);
+
+        if(stripos($tableName, 'searchindex') !== false)
+        {
+            $stmt    = $this->dao->query("show index from `$tableName`");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE `{$tableName}` ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE `{$tableName}` DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE `{$tableName}` DROP INDEX `content`");
+
+            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+            if($mysqlVersion < 5.6) return print(json_encode($response));
+        }
+
+        $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+        $this->dao->exec($sql);
+
+        $response['message'] = sprintf($this->lang->upgrade->finishedTable, $tableName);
+        return print(json_encode($response));
+    }
+
+    /**
      * Move Extent files.
      *
      * @param  string $fromVersion

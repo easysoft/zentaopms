@@ -2,10 +2,6 @@ ALTER TABLE `zt_task` ADD `order` mediumint(8) NOT NULL DEFAULT 0 AFTER `activat
 ALTER TABLE `zt_task` ADD INDEX `order` (`order`);
 ALTER TABLE `zt_story` ADD COLUMN `linkRequirements` varchar(255) NOT NULL AFTER `linkStories`;
 
-ALTER TABLE `zt_searchindex` ADD FULLTEXT `title_content` (`title`, `content`);
-ALTER TABLE `zt_searchindex` DROP INDEX `title`;
-ALTER TABLE `zt_searchindex` DROP INDEX `content`;
-
 ALTER TABLE `zt_productplan` ADD `createdBy` varchar(30) NOT NULL AFTER `closedReason`;
 ALTER TABLE `zt_productplan` ADD `createdDate` datetime NOT NULL AFTER `createdBy`;
 
