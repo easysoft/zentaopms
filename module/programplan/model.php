@@ -177,8 +177,10 @@ class programplanModel extends model
         {
             $planIdList[$plan->id] = $plan->id;
 
-            $start = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
-            $end   = helper::isZeroDate($plan->end)   ? '' : $plan->end;
+            $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
+            $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
+            $realBegan = helper::isZeroDate($plan->realBegan) ? '' : $plan->realBegan;
+            $realEnd   = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
 
             $data = new stdclass();
             $data->id         = $plan->id;
@@ -191,12 +193,12 @@ class programplanModel extends model
             $data->status     = $this->processStatus('execution', $plan);
             $data->begin      = $start;
             $data->deadline   = $end;
-            $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : $plan->realBegan;
-            $data->realEnd    = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
+            $data->realBegan  = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd    = $realEnd ? substr($realEnd, 0, 10) : '';;
             $data->parent     = $plan->grade == 1 ? 0 :$plan->parent;
             $data->open       = true;
-            $data->start_date = $data->realBegan ? $data->realBegan : $data->begin;
-            $data->endDate    = $data->realEnd ? $data->realEnd : $data->deadline;
+            $data->start_date = $realBegan ? $realBegan : $start;
+            $data->endDate    = $realEnd ? $realEnd : $end;
             $data->duration   = 1;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
@@ -262,8 +264,8 @@ class programplanModel extends model
             $data->milestone    = '';
             $data->begin        = $start;
             $data->deadline     = $end;
-            $data->realBegan    = $realBegan;
-            $data->realEnd      = $realEnd;
+            $data->realBegan    = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd      = $realEnd ? substr($realEnd, 0, 10) : '';
             $data->pri          = $task->pri;
             $data->parent       = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
             $data->open         = true;
@@ -453,8 +455,8 @@ class programplanModel extends model
                 $data->milestone    = '';
                 $data->begin        = $start;
                 $data->deadline     = $end;
-                $data->realBegan    = $realBegan;
-                $data->realEnd      = $realEnd;
+                $data->realBegan    = $realBegan ? substr($realBegan, 0, 10) : '';
+                $data->realEnd      = $realEnd ? substr($realEnd, 0, 10) : '';
                 $data->pri          = $task->pri;
                 $data->parent       = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
                 $data->open         = true;
@@ -488,8 +490,8 @@ class programplanModel extends model
             }
 
             /* Calculate group realBegan and realEnd. */
-            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d H:i:s', min($realStartDate));
-            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d H:i:s', max($realEndDate));
+            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
+            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
         }
 
         /* Calculate the progress of the phase. */

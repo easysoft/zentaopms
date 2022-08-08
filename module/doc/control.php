@@ -319,19 +319,8 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
-            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess);
-
-            if(isonlybody() and $docResult['docType'] == 'text')
-            {
-                $link = helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$objectType&objectID=$objectID&libID={$docResult['libID']}");
-
-                $response['callback'] = "redirect2Edit($docID, \"$objectType\", $objectID, {$docResult['libID']})";
-            }
-            else
-            {
-                $response['locate'] = "$link";
-            }
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params) . '#app=' . $this->app->tab;
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link);
 
             return $this->send($response);
         }
@@ -390,6 +379,45 @@ class doc extends control
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->fromGlobal       = $fromGlobal;
         $this->view->from             = $from;
+
+        $this->display();
+    }
+
+    /**
+     * Create basic info for doc of text type.
+     *
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  int|string $libID
+     * @param  int        $moduleID
+     * @param  string     $docType
+     * @access public
+     * @return void
+     */
+    public function createBasicInfo($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
+    {
+        /* Get libs and the default lib id. */
+        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs       = $this->doc->getLibs($objectType, $extra = "withObject,$unclosed", $libID, $objectID);
+        if(!$libID and !empty($libs)) $libID = key($libs);
+
+        $lib     = $this->doc->getLibByID($libID);
+        $type    = isset($lib->type) ? $lib->type : 'product';
+        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
+
+        $this->view->title = $libName . $this->lang->doc->create;
+
+        $this->view->objectType       = $objectType;
+        $this->view->objectID         = zget($lib, $lib->type, 0);
+        $this->view->libID            = $libID;
+        $this->view->lib              = $lib;
+        $this->view->libs             = $libs;
+        $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+        $this->view->docType          = $docType;
+        $this->view->groups           = $this->loadModel('group')->getPairs();
+        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
 
         $this->display();
     }

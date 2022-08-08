@@ -353,4 +353,5 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = '日期';
 $lang->taskestimate           = new stdclass();
 $lang->taskestimate->consumed = '工时';
 
-$lang->task->overTime = '已超出%s计划时间，请先修改%s时间';
+$lang->task->overEsStartDate = '已超出%s计划开始时间，请先修改%s计划开始时间';
+$lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s计划结束时间';

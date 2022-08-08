@@ -1,3 +1,8 @@
+$(function()
+{
+    $("input[name=objectType]").trigger('change');
+})
+
 /**
  * Redirect the parent window.
  *

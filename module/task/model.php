@@ -3931,17 +3931,18 @@ class taskModel extends model
     }
 
     /**
-     * Save Task Drag.
+     * Update estimate date by gantt.
      *
      * @param  int     $objectID
      * @param  string  $objectType
      * @access public
      * @return bool
      */
-    public function saveTaskDrag($objectID, $objectType)
+    public function updateEsDateByGantt($objectID, $objectType)
     {
+        $this->app->loadLang('project');
         $post = fixer::input('post')->get();
-        $post->end_date = date('Y-m-d', strtotime('-1 day', strtotime($post->end_date)));
+        $post->endDate = date('Y-m-d', strtotime('-1 day', strtotime($post->endDate)));
         if($objectType == 'task')
         {
             $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
@@ -3965,15 +3966,21 @@ class taskModel extends model
                 $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
             }
 
-            if(helper::diffDate($start, $post->start_date) > 0)
+            if(helper::diffDate($start, $post->startDate) > 0)
             {
                 $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
-                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+                return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+            }
+
+            if(helper::diffDate($end, $post->endDate) < 0)
+            {
+                $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+                return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
             }
 
             $this->dao->update(TABLE_TASK)
-                ->set('estStarted')->eq($post->start_date)
-                ->set('deadline')->eq($post->end_date)
+                ->set('estStarted')->eq($post->startDate)
+                ->set('deadline')->eq($post->endDate)
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->where('id')->eq($objectID)
                 ->exec();
@@ -3996,15 +4003,21 @@ class taskModel extends model
             $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
             $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
 
-            if(helper::diffDate($start, $post->start_date) > 0)
+            if(helper::diffDate($start, $post->startDate) > 0)
             {
                 $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+                return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+            }
+
+            if(helper::diffDate($end, $post->endDate) < 0)
+            {
+                $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+                return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
             }
 
             $this->dao->update(TABLE_PROJECT)
-                ->set('begin')->eq($post->start_date)
-                ->set('end')->eq($post->end_date)
+                ->set('begin')->eq($post->startDate)
+                ->set('end')->eq($post->endDate)
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->where('id')->eq($objectID)
                 ->exec();
@@ -4018,73 +4031,22 @@ class taskModel extends model
     }
 
     /**
-     * Save task order.
+     * Update order by gantt.
      *
-     * @param int     $productID
      * @access public
      * @return void
      */
-    public function saveTaskMove($productID = 0)
+    public function updateOrderByGantt()
     {
-        $data        = fixer::input('post')->get();
-        $IdList      = explode('-', $data->id);
-        $executionID = $IdList[0];
-        $taskID      = $IdList[1];
-        $oldTask     = $this->loadModel('task')->getByID($taskID);
-        $index       = (int)$data->index;
+        $data = fixer::input('post')->get();
 
-        $hasZeroOrder = $this->dao->select('id')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->andWhere('execution')->eq($executionID)
-            ->andWhere('`order`')->eq(0)
-            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-            ->limit(1)
-            ->fetch('id');
-
-        if($hasZeroOrder)
+        $order = 1;
+        foreach($data->tasks as $task)
         {
-            $tasks = $this->dao->select('id')->from(TABLE_TASK)
-                ->where('execution')->eq($executionID)
-                ->andWhere('deleted')->eq(0)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->orderBy('order_asc, id_desc')
-                ->fetchPairs('id');
-
-            $order = 1;
-            foreach($tasks as $task)
-            {
-                $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($task)->exec();
-                $order ++;
-            }
-
-            $oldTask  = $this->loadModel('task')->getByID($taskID);
+            $idList = explode('-', $task);
+            $taskID = $idList[1];
+            $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
+            $order ++;
         }
-
-        $order    = ++ $index;
-        $oldOrder = (int)$oldTask->order;
-        if($order > $oldOrder)
-        {
-            $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
-                ->where('execution')->eq($executionID)
-                ->andWhere('`order`')->le($order)
-                ->andWhere('`order`')->gt($oldOrder)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->exec();
-        }
-        else if($order < $oldOrder)
-        {
-            $this->dao->update(TABLE_TASK)->set('`order`=`order`+1')
-                ->where('execution')->eq($executionID)
-                ->andWhere('`order`')->lt($oldOrder)
-                ->andWhere('`order`')->ge($order)
-                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
-                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
-                ->exec();
-        }
-
-        $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
     }
 }

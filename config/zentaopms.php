@@ -222,6 +222,7 @@ $config->openMethods[] = 'kanban.deleteobjectcard';
 $config->openMethods[] = 'admin.ignore';
 $config->openMethods[] = 'personnel.unbindwhitelist';
 $config->openMethods[] = 'tree.viewhistory';
+$config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 
 /* Define the tables. */
