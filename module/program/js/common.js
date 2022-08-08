@@ -276,6 +276,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -291,13 +292,13 @@ $(function()
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(programID)
+function setBudgetTipsAndAclList(parentID)
 {
-    if(programID != 0)
+    if(parentID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + programID), function(budgetLeft)
+        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentID), function(budgetLeft)
         {
-            parentProgram = programList[programID];
+            parentProgram = programList[parentID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
@@ -311,4 +312,33 @@ function setBudgetTipsAndAclList(programID)
         $('#budget').removeAttr('placeholder');
         $('.aclBox').html($('#PGMAcl').html());
     }
+
+    if(typeof(programID) == 'undefined') programID = 0;
+    budgetOverrunTips();
+}
+
+/**
+ * Append prompt when the budget exceeds the parent project set.
+ *
+ * @access public
+ * @return void
+ */
+function budgetOverrunTips()
+{
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+    if(selectedProgramID == 0)
+    {
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        return false;
+    }
+
+    if(typeof(programID) == 'undefined') programID = 0;
+    $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    {
+        var data = JSON.parse(data);
+
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        $('#budgetBox').after(data);
+    });
 }

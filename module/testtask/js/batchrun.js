@@ -1,3 +1,12 @@
+$(function()
+{
+    if(from == 'testcase')
+    {
+        $("#navbar li[data-id='testtask']").toggleClass('active');
+        $("#navbar li[data-id='testcase']").toggleClass('active');
+    }
+});
+
 $(document).on('keyup', 'form input:text', function()
 {
     var preSelect = $(this).parent().prev().find('select');

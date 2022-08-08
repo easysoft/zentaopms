@@ -65,7 +65,7 @@
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
               <span class='label-name'>
               <?php
-              if(($config->edition == 'max' and strpos($config->action->assetType, $action->objectType) !== false) and empty($action->objectName))
+              if(($config->edition == 'max' and strpos($config->action->assetType, ",{$action->objectType},") !== false) and empty($action->objectName))
               {
                   echo '#' . $action->objectID;
               }

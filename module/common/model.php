@@ -1521,10 +1521,12 @@ class commonModel extends model
     public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
-        global $app;
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1966,7 +1968,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -3372,6 +3374,45 @@ EOD;
         $Parsedown->voidElementSuffix = '>'; // HTML5
 
         return $Parsedown->text($markdown);
+    }
+
+    /**
+     * Sort featureBar.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function sortFeatureMenu($module = '', $method = '')
+    {
+        global $lang, $app;
+
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
+
+        /* It will be sorted according to the workflow in the future */
+        if(!empty($lang->featureBarSort[$module][$method]))
+        {
+            $featureBar = array();
+            if(empty($lang->$module->featureBar[$method])) return false;
+            foreach($lang->$module->featureBar[$method] as $key => $label)
+            {
+                foreach($lang->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                {
+                    if($key == $currentKey) continue;
+                    $featureBar[$method][$key] = $label;
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
+                }
+            }
+            $lang->$module->featureBar = $featureBar;
+        }
+
+        return true;
     }
 }
 

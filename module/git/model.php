@@ -172,7 +172,10 @@ class gitModel extends model
                     if($printLog) $this->printLog("parsing log {$log->revision}");
                     if($printLog) $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
-                    $objects = $this->repo->parseComment($log->msg);
+                    $objects     = $this->repo->parseComment($log->msg);
+                    $lastVersion = $version;
+                    $version     = $this->repo->saveOneCommit($repo->id, $log, $version, $branch);
+
                     if($objects)
                     {
                         if($printLog) $this->printLog('extract' .
@@ -180,7 +183,7 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
+                        if($lastVersion != $version) $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
                     }
                     else
                     {
@@ -196,7 +199,6 @@ class gitModel extends model
                             if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
                         }
                     }
-                    $version  = $this->repo->saveOneCommit($repo->id, $log, $version, $branch);
                     $commits += count($logs);
                 }
             }

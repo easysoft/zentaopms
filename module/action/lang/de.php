@@ -240,10 +240,10 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> hat ein
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> hate eine Fallverknüpfung aufgelöst <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();

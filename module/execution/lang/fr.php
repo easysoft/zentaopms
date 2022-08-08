@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'Tous';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -412,6 +413,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is still 
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = "Pour s électionner l'élément%s";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -511,6 +513,11 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
 
 $lang->execution->myExecutions = "J'étais impliqué";
 $lang->execution->doingProject = 'Projets en cours';

@@ -1,4 +1,9 @@
 #executionList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #executionList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
+#executionsSummary {padding-left: 10px;}
 #mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
 .main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child { padding-left: 8px; }
+
+th.table-nest-title-edit {padding-left: 50px !important;}
+th.table-nest-title-edit .table-nest-toggle {left: 28px;}
+th.table-nest-title .check-all {position: absolute; left: 15px; top: 7px;}

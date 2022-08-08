@@ -1223,15 +1223,17 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
-        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $bugs         = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
-        $modulePath   = $this->tree->getParents($story->module);
-        $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $story->files  = $this->loadModel('file')->getByObject($story->type, $storyID);
+        $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
+        $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $modulePath    = $this->tree->getParents($story->module);
+        $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
+        $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
 
         /* Set the menu. */
         $from = $this->app->tab;
@@ -1284,6 +1286,7 @@ class story extends control
         $this->view->actions            = $this->action->getList('story', $storyID);
         $this->view->storyModule        = $storyModule;
         $this->view->modulePath         = $modulePath;
+        $this->view->storyProducts      = $storyProducts;
         $this->view->version            = $version == 0 ? $story->version : $version;
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
@@ -2171,6 +2174,67 @@ class story extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
+    }
+
+    /**
+     * Link related stories.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Get story, product, products, and queryID. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
+
+        /* Build search form. */
+        $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+
+        $this->view->story        = $story;
+        $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
+        $this->view->products     = $products;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * Link related requirements.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkRequirements($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+
+        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

@@ -996,14 +996,7 @@ class baseRouter
             if($writable)
             {
                 $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-                session_set_save_handler(
-                    array($ztSessionHandler, "open"),
-                    array($ztSessionHandler, "close"),
-                    array($ztSessionHandler, "read"),
-                    array($ztSessionHandler, "write"),
-                    array($ztSessionHandler, "destroy"),
-                    array($ztSessionHandler, "gc")
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -1532,8 +1525,14 @@ class baseRouter
     public function checkModuleName($var, $exit = true)
     {
         global $filter;
-        $rule = $filter->default->moduleName;
-        if(validater::checkByRule($var, $rule)) return true;
+        static $checkedModule = array();
+        if(!isset($checkedModule[$var]))
+        {
+            $rule   = $filter->default->moduleName;
+            $result = validater::checkByRule($var, $rule);
+            $checkedModule[$var] = $result;
+        }
+        if($checkedModule[$var]) return true;
         if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
@@ -3107,7 +3106,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $tagID;

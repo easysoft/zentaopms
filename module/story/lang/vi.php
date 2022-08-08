@@ -439,3 +439,6 @@ $lang->story->subDivideTip['subStory']  = 'The Sub-stories cannot be subdivided.
 $lang->story->subDivideTip['planned']   = 'The Story has been planned and cannot be subdivided.';
 $lang->story->subDivideTip['projected'] = 'The Story has been initiated and cannot be subdivided.';
 $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be subdivided.';
+
+$lang->story->featureBar['browse']['all']      = $lang->all;
+$lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;

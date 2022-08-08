@@ -37,6 +37,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {

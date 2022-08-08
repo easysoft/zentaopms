@@ -112,9 +112,9 @@ function computeEndDate(delta)
     delta     = parseInt(delta);
     if(delta == 999)
     {
-        $('#end').val(longTime);
+        $('#end').val(longTime).trigger('mousedown');
         $('#daysBox').addClass('hidden');
-        $('#days').val(0);
+        $('#days').val(0).trigger('mousedown');
         return false;
     }
     $('#daysBox').removeClass('hidden');
@@ -125,8 +125,9 @@ function computeEndDate(delta)
     }
 
     endDate = $.zui.formatDate(beginDate.addDays(delta - 1), 'yyyy-MM-dd');
-    $('#end').val(endDate).datetimepicker('update');
+    $('#end').val(endDate).datetimepicker('update').trigger('mousedown');
     computeWorkDays();
+    $('#days').trigger('mousedown');
 }
 
 /**
@@ -287,6 +288,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -343,3 +345,34 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
         }
     });
 });
+
+/**
+ * Append prompt when the budget exceeds the parent project set.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function budgetOverrunTips()
+{
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+
+    if(selectedProgramID == 0)
+    {
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        return false;
+    }
+
+    if(typeof(projectID) == 'undefined') projectID = 0;
+    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    {
+        var data = JSON.parse(data);
+
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        $('#budgetBox').after(data.tip);
+
+        if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
+        $('#budget').attr('placeholder', data.placeholder);
+    });
+}

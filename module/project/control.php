@@ -220,6 +220,40 @@ class project extends control
     }
 
     /**
+     * Ajax get available budget.
+     *
+     * @param  int    $programID
+     * @param  int    $selectedProgramID
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAvailableBudget($projectID, $selectedProgramID, $budget)
+    {
+        if(!empty($projectID))
+        {
+            $project         = $this->project->getByID($projectID);
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
+            $availableBudget = $project->parent == $selectedProgramID ? $budgetLeft + $project->budget : $budgetLeft;
+        }
+        else
+        {
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+        }
+
+        $tip = '';
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
+
+        $placeholder = '';
+        if($selectedProgram and $selectedProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget;
+
+        $tipList = array('tip' => $tip, 'placeholder' => $placeholder);
+        echo json_encode($tipList);
+    }
+
+    /**
      * Project index view.
      *
      * @param  int    $projectID
@@ -964,6 +998,7 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
+        $this->session->set('executionList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
@@ -1092,6 +1127,10 @@ class project extends control
             }
         }
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {

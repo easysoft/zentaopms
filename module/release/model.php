@@ -61,7 +61,8 @@ class releaseModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -143,6 +144,8 @@ class releaseModel extends model
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
+            ->setDefault('createdBy',   $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
@@ -166,14 +169,16 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->project   = $projectID;
-                $build->product   = (int)$productID;
-                $build->branch    = (int)$branch;
-                $build->name      = $release->name;
-                $build->date      = $release->date;
-                $build->builder   = $this->app->user->account;
-                $build->desc      = $release->desc;
-                $build->execution = 0;
+                $build->project     = $projectID;
+                $build->product     = (int)$productID;
+                $build->branch      = (int)$branch;
+                $build->name        = $release->name;
+                $build->date        = $release->date;
+                $build->builder     = $this->app->user->account;
+                $build->desc        = $release->desc;
+                $build->execution   = 0;
+                $build->createdBy   = $this->app->user->account;
+                $build->createdDate = helper::now();
 
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->app->loadLang('build');
