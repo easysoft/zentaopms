@@ -20,9 +20,9 @@ Gitea名称为空    >> name
 $gitea = new giteaTest();
 
 $_POST = array();
-$_POST['name']     = '';
-$_POST['url']      = 'http://10.0.7.242:9020';
-$_POST['token']    = 'c6769e6761a7d719129b2421dcb3112d936e2b1f';
+$_POST['name']  = '';
+$_POST['url']   = 'http://10.0.7.242:9020';
+$_POST['token'] = 'c6769e6761a7d719129b2421dcb3112d936e2b1f';
 
 r($gitea->create()) && p() && e('name');    // Gitea名称为空
 
