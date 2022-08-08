@@ -6,8 +6,8 @@ class giteaTest
     public function __construct()
     {
         global $tester;
-        $this->tester   = $tester;
-        $this->gitea = $this->tester->loadModel('gitea');
+        $this->tester = $tester;
+        $this->gitea  = $this->tester->loadModel('gitea');
     }
 
     /**
