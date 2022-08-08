@@ -376,18 +376,17 @@ function outOfDateTip()
             if(typeof(projectID) == 'undefined') projectID = 0;
             $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
             {
-                var data        = JSON.parse(data);
-                var parentEnd   = new Date(data.selectedProgramEnd);
-                var parentBegin = new Date(data.selectedProgramBegin);
-                var objectEnd   = new Date(end);
-                var objectBegin = new Date(begin);
+                var data         = JSON.parse(data);
+                var parentEnd    = new Date(data.selectedProgramEnd);
+                var parentBegin  = new Date(data.selectedProgramBegin);
+                var projectEnd   = new Date(end);
+                var projectBegin = new Date(begin);
 
                 var dateTip = "";
-                if(objectBegin < parentBegin && objectEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
-                if(objectBegin >= parentBegin && objectEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
-                if((objectBegin < parentBegin && objectEnd > parentEnd) || (objectEnd <= parentBegin && objectBegin <= parentBegin) || (objectBegin >= parentEnd && objectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dataExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+                if(projectBegin < parentBegin && projectEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+                if(projectBegin >= parentBegin && projectEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+                if((projectBegin < parentBegin && projectEnd > parentEnd) || (projectEnd <= parentBegin && projectBegin <= parentBegin) || (projectBegin >= parentEnd && projectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
                 if($('#dateTip').length > 0) $('#dateTip').remove();
-                console.log(dateTip);
                 $('#dateBox').after(dateTip);
             });
         }

@@ -705,6 +705,27 @@ class program extends control
     }
 
     /**
+     * ajax get childish information.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetChildInfo($programID)
+    {
+        $children = $this->program->getChildren($programID);
+
+        if($children > 0)
+        {
+            $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->orderBy('begin_asc')->fetch();
+            $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch();
+        }
+
+        $data = array('minChildBegin' => $minChildBegin->minBegin, 'maxChildEnd' => $maxChildEnd->maxEnd);
+        echo json_encode($data);
+    }
+
+    /**
      * Update program order.
      *
      * @access public

@@ -44,7 +44,7 @@
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
-<?php js::set('dataExceedParent', $lang->program->dataExceedParent);?>
+<?php js::set('dateExceedParent', $lang->program->dateExceedParent);?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>

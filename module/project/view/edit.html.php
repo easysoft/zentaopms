@@ -35,7 +35,7 @@
 <?php js::set('parentBudget', $lang->project->parentBudget);?>
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
-<?php js::set('dataExceedParent', $lang->project->dataExceedParent);?>
+<?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

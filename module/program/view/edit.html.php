@@ -30,7 +30,10 @@
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
-<?php js::set('dataExceedParent', $lang->program->dataExceedParent);?>
+<?php js::set('dateExceedParent', $lang->program->dateExceedParent);?>
+<?php js::set('beginGreateChild', $lang->program->beginGreateChild);?>
+<?php js::set('endLetterChild', $lang->program->endLetterChild);?>
+<?php js::set('dateExceedChild', $lang->program->dateExceedChild);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
