@@ -228,7 +228,7 @@ class gitlab extends control
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $oldGitlab = $this->loadModel('pipeline')->getByID($id);
+        $oldGitLab = $this->loadModel('pipeline')->getByID($id);
         $actionID  = $this->pipeline->delete($id, 'gitlab');
         if(!$actionID) return print(js::error($this->lang->pipeline->delError));
 
