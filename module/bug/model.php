@@ -3532,24 +3532,20 @@ class bugModel extends model
      * Get related objects id lists.
      *
      * @param  int    $object
-     * @param  string $name
+     * @param  string $pairs
      * @access public
      * @return void
      */
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)
-            ->fetchAll('id');
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->fetchAll('id');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();
         $relatedObjects      = array();
 
-        foreach($bugs as $bug)
-        {
-            $relatedObjectIdList[$bug->$object]  = $bug->$object;
-        }
+        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
 
         if($object == 'openedBuild') $object = 'build';
 

@@ -332,10 +332,7 @@ class portModel extends model
     {
         $values = $fieldValue['values'];
 
-        if($values and (strpos($this->portConfig->sysDataFields, $values) !== false))
-        {
-            return $this->portConfig->sysDataList[$values];
-        }
+        if($values and (strpos($this->portConfig->sysDataFields, $values) !== false)) return $this->portConfig->sysDataList[$values];
 
         if(!$fieldValue['dataSource']) return $values;
 
