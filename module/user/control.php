@@ -964,6 +964,7 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
+                if(dao::isError()) $response['message'] = dao::getError();
                 return $this->send($response);
             }
         }
@@ -1119,7 +1120,7 @@ class user extends control
             $code = uniqid();
             $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
 
-            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), true);
+            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
             if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));

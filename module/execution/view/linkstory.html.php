@@ -19,9 +19,11 @@
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent">
   <div class="cell space-sm">

@@ -132,15 +132,15 @@ class treeModel extends model
             if(!is_array($branch)) return $modulePairs;
 
             $modules = array();
-            foreach($branch as $b) $modules[$b] = $modulePairs;
+            foreach($branch as $branchID) $modules[$branchID] = $modulePairs;
             return $modules;
         }
 
         /* If type of $branch is array, get modules of these branches. */
-        if(gettype($branch) == 'array')
+        if(is_array($branch))
         {
             $modules = array();
-            foreach($branch as $b) $modules[$b] = $this->getOptionMenu($rootID, $type, $startModule, $b, $param);
+            foreach($branch as $branchID) $modules[$branchID] = $this->getOptionMenu($rootID, $type, $startModule, $branchID, $param);
 
             return $modules;
         }
@@ -148,13 +148,13 @@ class treeModel extends model
         if($type == 'line') $rootID = 0;
 
         $branches = array($branch => '');
-        if(strpos('story|bug|case', $type) !== false)
+        if($branch != 'all' and strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if($product and $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                $branches    = $branch === 'all' ? $branchPairs : array($branch => $branchPairs[$branch]);
+                $branches    = array($branch => $branchPairs[$branch]);
             }
             elseif($product and $product->type == 'normal')
             {
@@ -1221,6 +1221,8 @@ class treeModel extends model
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
         $param      = "root={$module->root}&branch=&type=byModule&param={$module->id}";
+
+        $extra['type'] = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
         if($this->app->tab == 'execution') $param = "execuitonID={$extra['executionID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         if($this->app->tab == 'project') $param = "projectID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         return html::a(helper::createLink($moduleName, $methodName, $param), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
@@ -1691,7 +1693,7 @@ class treeModel extends model
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
 
                 $newModule = $this->getByID($moduleID);
-                if(!empty(common::createChanges($oldModule, $newModule)))
+                if(common::createChanges($oldModule, $newModule))
                 {
                     $editIdList[]             = $moduleID;
                     $moduleChanges[$moduleID] = common::createChanges($oldModule, $newModule);

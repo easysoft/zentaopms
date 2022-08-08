@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
+$lang->execution->allProject          = '全部项目';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -170,7 +171,6 @@ $lang->execution->cfdTypeList['story'] = "按{$lang->SRCommon}查看";
 $lang->execution->cfdTypeList['task']  = "按任务查看";
 $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 
-$lang->team = new stdclass();
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';
@@ -369,8 +369,8 @@ $lang->execution->noMembers            = '暂时没有团队成员。';
 $lang->execution->workloadTotal        = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip      = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队来复制";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队来复制";
+if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您确定删除{$lang->executionCommon}[%s]吗？";
@@ -413,6 +413,7 @@ $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草�
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 $lang->execution->week                        = '周';
+$lang->execution->checkedExecutions           = '已选择%s项';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -462,6 +463,7 @@ $lang->execution->orderList['stage_desc'] = "{$lang->SRCommon}阶段倒序";
 
 $lang->execution->kanban        = "看板";
 $lang->execution->kanbanSetting = "看板设置";
+$lang->execution->setKanban     = "设置看板";
 $lang->execution->resetKanban   = "恢复默认";
 $lang->execution->printKanban   = "打印看板";
 $lang->execution->fullScreen    = "看板全屏展示";
@@ -511,6 +513,11 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = '所有';
+$lang->execution->featureBar['bug']['unresolved'] = '未解决';
+
+$lang->execution->featureBar['build']['all'] = '所有版本';
 
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';

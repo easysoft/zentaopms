@@ -70,10 +70,12 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th id='dateRange'><?php echo $lang->execution->dateRange;?></th>
           <td>
@@ -89,7 +91,7 @@
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control'");?>
+              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : ''), "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td><td></td><td></td>
@@ -221,18 +223,6 @@
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, 0));?></td>
-        </tr>
-        <tr>
-          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
-          <td class='laneHeightBox' colspan='3'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'auto', "onclick='setCardCount(this.value);'"));?></td>
-        </tr>
-        <tr class="hidden" id='cardBox'>
-          <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', '', "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
         </tr>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc;?></th>

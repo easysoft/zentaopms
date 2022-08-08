@@ -1207,6 +1207,10 @@ class kanbanModel extends model
                     ->andWhere('action')->eq('opened')
                     ->fetchPairs();
             }
+            elseif($fromType == 'execution')
+            {
+                $executionProgress = $this->loadModel('project')->computerProgress($objects);
+            }
 
             /* Data for constructing the card. */
             foreach($objectCards as $objectID => $cardsInfo)
@@ -1231,6 +1235,7 @@ class kanbanModel extends model
                             if($delay > 0) $objectCard->delay = $delay;
                         }
                         $objectCard->execType = $object->type;
+                        $objectCard->progress = isset($executionProgress[$objectID]->progress) ? $executionProgress[$objectID]->progress : 0;
                     }
 
                     $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
@@ -1393,7 +1398,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'pri_asc')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'id_asc')
     {
         if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
@@ -1521,13 +1526,13 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
+    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'id_asc')
     {
         /* Get card  data. */
         $cardList = array();
         if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
         if($browseType == 'task' and $groupBy == 'assignedTo')
         {
@@ -1547,7 +1552,7 @@ class kanbanModel extends model
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
         if($browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $cardList, 'task');
 
-        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
         if(empty($lanes)) return array();
 
@@ -1600,7 +1605,7 @@ class kanbanModel extends model
             {
                 $columnData[0]['id']         = 0;
                 $columnData[0]['type']       = 'story';
-                $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+                $columnData[0]['name']       = $this->lang->SRCommon;
                 $columnData[0]['color']      = '#333';
                 $columnData[0]['limit']      = '-1';
                 $columnData[0]['laneType']   = $browseType;
@@ -1720,7 +1725,7 @@ class kanbanModel extends model
      *
      * @return array
      */
-    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'pri_asc')
+    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'id_asc')
     {
         $lanes       = array();
         $groupByList = array();
@@ -1938,6 +1943,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
+            ->stripTags($this->config->kanban->editor->createspace['id'], $this->config->allowedTags)
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -1981,6 +1987,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
+            ->stripTags($this->config->kanban->editor->editspace['id'], $this->config->allowedTags)
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -2193,7 +2200,8 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID,copyRegion')
+            ->stripTags($this->config->kanban->editor->create['id'], $this->config->allowedTags)
+            ->remove('contactListMenu,type,import,importObjectList,uid,copyKanbanID,copyRegion')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2235,6 +2243,13 @@ class kanbanModel extends model
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
+            if(isset($_POST['team']) or isset($_POST['whitelist']))
+            {
+                $type = isset($_POST['team']) ? 'team' : 'whitelist';
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
+                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
+            }
+
             return $kanbanID;
         }
     }
@@ -2254,15 +2269,56 @@ class kanbanModel extends model
         $kanban    = fixer::input('post')
             ->setDefault('lastEditedBy', $account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('displayCards', 0)
             ->setDefault('whitelist', '')
             ->setDefault('team', '')
-            ->setIF($this->post->import == 'off', 'object', '')
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu,import,importObjectList,heightType')
+            ->stripTags($this->config->kanban->editor->edit['id'], $this->config->allowedTags)
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
+            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+            if(isset($_POST['team']) or isset($_POST['whitelist']))
+            {
+                $type = isset($_POST['team']) ? 'team' : 'whitelist';
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
+                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
+            }
+
+            return common::createChanges($oldKanban, $kanban);
+        }
+    }
+
+    /**
+     * Setting kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setting($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $account   = $this->app->user->account;
+        $oldKanban = $this->getByID($kanbanID);
+        $kanban    = fixer::input('post')
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('displayCards', 0)
+            ->setIF($this->post->import == 'off', 'object', '')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->remove('import,importObjectList,heightType')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2280,11 +2336,10 @@ class kanbanModel extends model
 
         if(!dao::isError())
         {
-            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
-            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
-
             return common::createChanges($oldKanban, $kanban);
         }
+
+        return false;
     }
 
     /**
@@ -2556,6 +2611,32 @@ class kanbanModel extends model
         {
             $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
+        }
+    }
+
+    /**
+     * Add space members.
+     *
+     * @param  int    $spaceID
+     * @param  array  $type team|whitelist
+     * @param  array  $kanbanMembers
+     * @access public
+     * @return void
+     */
+    public function addSpaceMembers($spaceID, $type, $kanbanMembers = array())
+    {
+        $space = $this->getSpaceById($spaceID);
+        if(empty($space)) return;
+
+        $spaceMembers = empty($space->{$type}) ? array() : explode(',', $space->{$type});
+        $members      = $space->{$type};
+        $addMembers   = array_diff($kanbanMembers, $spaceMembers);
+
+        if(!empty($addMembers))
+        {
+            $addMembers = implode(',', $addMembers);
+            $members   .= ',' . trim($addMembers, ',');
+            $this->dao->update(TABLE_KANBANSPACE)->set($type)->eq($members)->where('id')->eq($spaceID)->exec();
         }
     }
 
@@ -3157,20 +3238,18 @@ class kanbanModel extends model
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
-        $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion')));
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or ($kanban->status == 'active' and common::hasPriv('kanban', 'close')) or common::hasPriv('kanban', 'delete') or ($kanban->status == 'closed' and common::hasPriv('kanban', 'activate')));
 
-        if($printRegionBtn or $printKanbanBtn)
+        if($printKanbanBtn)
         {
-            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-edit"></i> ' . $this->lang->edit . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
 
             $columnActions = '';
             $actions .= $columnActions;
 
             $commonActions = '';
-            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
-            $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
+            $importWidth   = $this->app->getClientLang() == 'en' ? '700' : '550';
 
             if($columnActions and $commonActions)
             {
@@ -3179,7 +3258,7 @@ class kanbanModel extends model
             $actions .= $commonActions;
 
             $kanbanActions = '';
-            if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
+            if(common::hasPriv('kanban', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
             if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
@@ -3192,6 +3271,8 @@ class kanbanModel extends model
 
             $actions .= "</ul>";
         }
+
+        if(common::hasPriv('kanban', 'setting')) $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='60%'");
 
         $actions .= "</div>";
 
@@ -3263,7 +3344,7 @@ class kanbanModel extends model
     {
         $groupBy = ($this->session->execGroupBy and ($this->app->tab == 'execution' or $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
-        $fromCell = $this->dao->select('cards, lane')->from(TABLE_KANBANCELL)
+        $fromCell = $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($fromColID)
             ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
             ->beginIF($groupBy and $groupBy != 'default')
@@ -3273,20 +3354,36 @@ class kanbanModel extends model
             ->fetch();
 
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
+        $fromCells[$fromCell->id] = $fromCell;
 
-        $fromCellCards = $fromCell->cards;
-        $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
-        $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        /* Remove all cells with cardID in fromCell. */
+        $fromLane   = $this->getLaneById($fromLaneID);
+        $fromCells += $this->dao->select('t1.id as id,t1.cards,t1.lane')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->where('t1.type')->eq($fromLane->type)
+            ->andWhere('t1.id')->ne($fromCell->id)
+            ->andWhere('t2.region')->eq($fromLane->region)
+            ->andWhere('t1.cards')->like("%,$cardID,%")
+            ->fetchAll('id');
 
-        $kanbanID = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
+        foreach($fromCells as $fromCell)
+        {
+            $fromCellCards = explode(',', $fromCell->cards);
+            $fromCellCards = array_unique($fromCellCards);
+            $fromCellCards = array_filter($fromCellCards);
+            $fromCellCards = implode(',', $fromCellCards);
+            $fromCardList  = str_replace(",$cardID,", ',', ",$fromCellCards,");
+            if($fromCardList == ',') $fromCardList = '';
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('id')->eq($fromCell->id)->exec();
+        }
 
+        /* Add cardID to toCell. */
+        $toCell      = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
+        $toCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        $kanbanID    = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
         if(!$toCell) $this->addKanbanCell($kanbanID, $toLaneID, $toColID, 'common');
 
-        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
-        $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
-
-        if($fromCardList == ',') $fromCardList = '';
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
+        $toCardList = rtrim($toCellCards, ',') . ",$cardID,";
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
 

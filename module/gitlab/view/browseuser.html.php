@@ -38,17 +38,17 @@
         <tr>
           <?php $vars = "gitlabID=$gitlabID&orderBy=%s";?>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->user->id);?></th>
-          <th class='c-name text-left w-60px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->user->name);?></th>
-          <th class='c-name text-left'></th>
-          <th class='text-left'><?php echo $lang->gitlab->user->createOn;?></th>
-          <th class='text-left'><?php echo $lang->gitlab->user->lastActivity;?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-name text w-60px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->user->name);?></th>
+          <th class='c-name text w-400px'></th>
+          <th class='text'><?php echo $lang->gitlab->user->createOn;?></th>
+          <th class='text'><?php echo $lang->gitlab->user->lastActivity;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabUserList as $id => $gitlabUser): ?>
         <tr>
-          <td class='text-center'><?php echo $gitlabUser->id;?></td>
+          <td class='text'><?php echo $gitlabUser->id;?></td>
           <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
           <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>

@@ -113,6 +113,7 @@ $lang->program->readjustTime       = '重新调整项目集起止时间';
 $lang->program->accessDenied       = '你无权访问该项目集';
 $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
 $lang->program->checkedProjects    = '已选择%s项';
+$lang->program->budgetOverrun      = '项目集的预算已超出父项目集的剩余预算：';
 
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
@@ -139,12 +140,12 @@ $lang->program->statusList['doing']     = '进行中';
 $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
-$lang->program->featureBar['all']       = '所有';
-$lang->program->featureBar['undone']    = '未完成';
-$lang->program->featureBar['wait']      = '未开始';
-$lang->program->featureBar['doing']     = '进行中';
-$lang->program->featureBar['suspended'] = '已挂起';
-$lang->program->featureBar['closed']    = '已关闭';
+$lang->program->featureBar['browse']['all']       = '所有';
+$lang->program->featureBar['browse']['unclosed']  = '未关闭';
+$lang->program->featureBar['browse']['wait']      = '未开始';
+$lang->program->featureBar['browse']['doing']     = '进行中';
+$lang->program->featureBar['browse']['suspended'] = '已挂起';
+$lang->program->featureBar['browse']['closed']    = '已关闭';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';

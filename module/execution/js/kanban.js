@@ -361,6 +361,7 @@ function hideKanbanAction()
     $('.contextmenu').removeClass('contextmenu-show');
     $('.contextmenu .contextmenu-menu').removeClass('open').removeClass('in');
     $('#moreTasks, #moreColumns').animate({right: -400}, 500);
+    $('.storyColumn').parent().removeClass('open');
 }
 
 /**
@@ -760,8 +761,15 @@ function renderCount($count, count, column)
 {
     if(groupBy == 'story' && column.type == 'story')
     {
-        $count.prev().addClass('storyColumn');
-        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
+            + '<ul class="dropdown-menu">';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(rdSearchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        orderButton += '</ul>';
+
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
         $count.remove();
         return;
     }
@@ -1477,6 +1485,8 @@ $(function()
 
     if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
 
+    changeOrder = false;
+
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
@@ -1590,11 +1600,10 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
-    $(document).on('click', '#kanban span.caret.changeOrderBy', function(event)
+    document.addEventListener('scroll', function()
     {
-        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
-        searchCards(rdSearchValue);
-    })
+        hideKanbanAction();
+    }, true);
 
     /* Init sortable */
     var sortType = '';
@@ -1813,7 +1822,7 @@ function toggleRDSearchBox()
     }
     else
     {
-        $(".querybox-toggle").css("color", "3c495c");
+        $(".querybox-toggle").css("color", "#3c495c");
         $('#rdKanbanSearchInput').attr('value', '');
         searchCards('');
     }
@@ -1823,12 +1832,16 @@ function toggleRDSearchBox()
  * Search all cards.
  *
  * @param  string $value
+ * @param  string order
+ *
  * @access public
  * @return void
  */
-function searchCards(value)
+function searchCards(value, order = '')
 {
     rdSearchValue = value;
+    orderBy       = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;

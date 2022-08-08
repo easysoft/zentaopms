@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -170,7 +171,6 @@ $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
 $lang->execution->cfdTypeList['bug']   = "View By bug";
 
-$lang->team = new stdclass();
 $lang->team->account    = 'Konto';
 $lang->team->role       = 'Rolle';
 $lang->team->join       = 'Beigetreten';
@@ -413,6 +413,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is still 
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = 'Seleted %s items';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -462,6 +463,7 @@ $lang->execution->orderList['stage_desc'] = "Phase Ab.";
 
 $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Kanban Einstellung";
+$lang->execution->setKanban     = "Kanban Einstellung";
 $lang->execution->resetKanban   = "Einstellungen zurücksetzen";
 $lang->execution->printKanban   = "Kanban drucken";
 $lang->execution->fullScreen    = "Full Screen";
@@ -511,6 +513,11 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
 
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = 'Laufende Projekte';

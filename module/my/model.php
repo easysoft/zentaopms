@@ -322,7 +322,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $objectType = '')
     {
         $module = $objectType == 'requirement' ? 'story' : $objectType;
         $this->loadModel($module);
@@ -332,22 +332,54 @@ class myModel extends model
             ->andWhere('objectType')->eq($module)
             ->andWhere('action')->eq('assigned')
             ->fetchAll('objectID');
-
-        $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
-            ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_keys($objectIDList))
-            ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('type')->eq($objectType)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        if(empty($objectIDList)) return array();
 
         if($objectType == 'task')
         {
-            $executionList = array();
-            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
-            $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
-            foreach($objectList as $task) $task->executionName = zget($objectPairs, $task->execution, '');
+            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'risk' or $objectType == 'issue' or $objectType == 'nc')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in(array_keys($objectIDList))
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
+        if($objectType == 'task')
+        {
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
             return $objectList;
         }
@@ -518,7 +550,7 @@ class myModel extends model
         $taskIDList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'task');
+            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, '', $orderBy, 'task');
             foreach($tasksAssignedByMe as $taskID => $task)
             {
                 $taskIDList[$taskID] = $taskID;
@@ -693,7 +725,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'risk');
 
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
@@ -790,7 +822,7 @@ class myModel extends model
         $storyIDList = array();
         if($type == 'contribute')
         {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'story');
             foreach($storiesAssignedByMe as $storyID => $story)
             {
                 $storyIDList[$storyID] = $storyID;
@@ -909,7 +941,7 @@ class myModel extends model
         $requirementIDList = array();
         if($type == 'contribute')
         {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'requirement');
             foreach($requirementsAssignedByMe as $requirementID => $requirement)
             {
                 $requirementIDList[$requirementID] = $requirementID;

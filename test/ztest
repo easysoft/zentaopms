@@ -178,6 +178,12 @@ switch($argv[1])
     case 'user':
         ztfRun('model/user');
         break;
+    case 'gitlab':
+        ztfRun('model/gitlab');
+        break;
+    case 'gitea':
+        ztfRun('model/gitea');
+        break;
 
     default:
         ztfExtract($argv[1]);

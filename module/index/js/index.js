@@ -187,7 +187,7 @@
      * @param {string} [appCode] The code of target app to open
      * @return {void}
      */
-    function openTab(url, appCode)
+    function openTab(url, appCode, forceReload)
     {
         /* Check params */
         if(!appCode)
@@ -264,7 +264,9 @@
         }
 
         /* Show page app and update iframe source */
-        if (url)
+        var iframe = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+        if (url && (!isSameUrl || forceReload !== false))
         {
             app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
@@ -441,7 +443,8 @@
         if(url === true) url = app.url;
         else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
 
-        var iframe = app.$iframe[0];
+        var iframe    = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
 
         /* Add hook to page before reload it */
         if (iframe && iframe.contentWindow.beforeAppReload)
@@ -451,7 +454,7 @@
 
         try
         {
-            if(url) iframe.contentWindow.location.assign(url);
+            if(url && !isSameUrl) iframe.contentWindow.location.assign(url);
             else iframe.contentWindow.location.reload(true);
         }
         catch(_)
@@ -462,7 +465,7 @@
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
         if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
-        app.$app.addClass('loading');
+        if(!isSameUrl) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
         {
@@ -751,8 +754,8 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var assetType    = 'story,issue,risk,opportunity,doc';
-                if(assetType.indexOf(searchModule) > -1)
+                var assetType    = ',story,issue,risk,opportunity,doc,';
+                if(assetType.indexOf(',' + searchModule + ',') > -1)
                 {
                     var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);
                     $.get(link, function(data)

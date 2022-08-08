@@ -58,6 +58,10 @@ $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
 
+$lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
+$lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
+$lang->action->codeRepeatChange = '系统内已有同代号的%s，恢复后代号为\"%s\"。';
+
 $lang->action->history = new stdclass();
 $lang->action->history->action = '关联日志';
 $lang->action->history->field  = '字段';
@@ -133,6 +137,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
+$lang->action->objectTypes['giteauser']        = 'Gitea用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板区域';
@@ -143,6 +148,7 @@ $lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
+$lang->action->objectTypes['repo']             = '代码库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -210,6 +216,8 @@ $lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->tolib                = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
 $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 从' . $lang->testcase->common . '更新。' . "\n";
 $lang->action->desc->adjusttasktowait     = '$date, 系统判断由于消耗工时调整为0，将任务状态置为未开始。' . "\n";
+$lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 重新打开。' . "\n";
+$lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -232,10 +240,14 @@ $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关
 $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述计划关联和移除需求、bug时的历史操作记录。*/
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+
+/* 用来描述gantt chat相关操作记录。 */
+$lang->action->desc->ganttdrag = '$date, 由 <strong>$actor</strong> 拖动了任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->ganttmove = '$date, 由 <strong>$actor</strong> 排序了任务 <strong>$extra</strong>。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
@@ -374,6 +386,8 @@ $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
 $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
+$lang->action->label->ganttdrag             = '拖动了';
+$lang->action->label->ganttmove             = '排序了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

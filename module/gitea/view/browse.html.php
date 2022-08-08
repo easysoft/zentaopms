@@ -35,16 +35,16 @@
       <thead>
         <tr>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitea->id);?></th>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitea->name);?></th>
-          <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitea->url);?></th>
-          <th class='c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitea->id);?></th>
+          <th class='c-name w-300px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitea->name);?></th>
+          <th class='text'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitea->url);?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($giteaList as $id => $gitea): ?>
         <tr class='text'>
-          <td class='text-center'><?php echo $id;?></td>
+          <td class='text'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $gitea->name;?>'>
             <?php if(common::hasPriv('gitea', 'view')):?>
             <a class="iframe" href="<?php echo $this->createLink('gitea', 'view', "giteaID=$id", '', true); ?>"><?php echo $gitea->name;?></a>
@@ -53,9 +53,10 @@
             <?php endif;?>
           </td>
           <td class='text' title='<?php echo $gitea->url;?>'><?php echo html::a($gitea->url, $gitea->url, '_target');?></td>
-          <td class='c-actions text-left'>
+          <td class='c-actions'>
             <?php
             common::printIcon('gitea', 'edit', "giteaID=$id", '', 'list', 'edit');
+            echo common::buildIconButton('gitea', 'bindUser', "giteaID=$id", '', 'list', 'link', '', '', false, '', '', 0, $gitea->isBindUser);
             common::printIcon('gitea', 'delete', "giteaID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>

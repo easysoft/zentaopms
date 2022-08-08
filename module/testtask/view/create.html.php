@@ -88,7 +88,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
+          <td colspan='2'>
+            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=testtask&link=desc');?>
+            <?php echo html::textarea('desc', '', "rows=10 class='form-control'");?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>

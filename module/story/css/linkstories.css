@@ -1,0 +1,6 @@
+.main-table  {height: 80% !important}
+#mainContent {min-height: 400px;}
+.c-id, .c-status, .c-user {width: 80px;}
+.c-pri {width: 60px;}
+.c-product {width: 150px;}
+.c-title {width: auto;}

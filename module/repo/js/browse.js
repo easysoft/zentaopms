@@ -36,7 +36,7 @@ function getCloneHtml(cloneLang, url)
 {
     var content = '';
     content += "<tr>";
-    content += "<th>" + cloneLang + "</th>";
+    content += "<td>" + cloneLang + "</td>";
     content += "</tr>";
     content += "<tr>";
     content += "<td><input type='input' class='form-control' value='" + url + "' readonly></td>";
@@ -47,13 +47,21 @@ function getCloneHtml(cloneLang, url)
 
 $(function()
 {
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover, #downloadCode');
+        if(!$toggle.length) $('#downloadCode').popover('hide');
+    });
+
     /* Init popover. */
     var options = {
         container: 'body',
         content: getDownload(),
         html: true,
         placement: 'bottom',
-        template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div',
+        template: '<div class="popover"><h3 class="popover-title strong repo-popover"></h3><div class="popover-content"></div></div',
         tipClass: 'download-popover',
         trigger: 'manual'
     };
@@ -78,7 +86,7 @@ $(function()
 
             /* Set popover area. */
             var left = parseFloat($('.download-popover').css('left')) - 155;
-            $('.download-popover').css('left', left + 'px')
+            $('.download-popover').css('left', left + 'px');
         }
     })
 

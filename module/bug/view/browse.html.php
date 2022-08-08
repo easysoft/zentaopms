@@ -37,6 +37,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {
@@ -159,11 +160,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -377,7 +373,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule and $branch !== 'all'):?>
+          <?php if($canBatchChangeModule and ($product->type == 'normal' or $branch !== 'all')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 6;?>
@@ -460,10 +456,5 @@ $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='fo
 <?php if(count($bugs) <= 2):?>
 $('#bugForm .table-footer .table-actions #assignedTo').closest('.btn-group.dropup').removeClass('dropup').addClass('dropdown');
 <?php endif;?>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -21,6 +21,7 @@ $config->upgrade->maxVersion['max3_1']       = '17_0';
 $config->upgrade->maxVersion['max3_2']       = '17_1';
 $config->upgrade->maxVersion['max3_3']       = '17_2';
 $config->upgrade->maxVersion['max3_4']       = '17_3';
+$config->upgrade->maxVersion['max3_5']       = '17_4';
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']       = '9_5_1';
@@ -80,6 +81,7 @@ $config->upgrade->bizVersion['biz7_0']       = '17_0';
 $config->upgrade->bizVersion['biz7_1']       = '17_1';
 $config->upgrade->bizVersion['biz7_2']       = '17_2';
 $config->upgrade->bizVersion['biz7_3']       = '17_3';
+$config->upgrade->bizVersion['biz7_4']       = '17_4';
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -365,6 +367,59 @@ $config->delete['17_2'][] = 'extension/lite/workflowrelation/ext/view/admin.flow
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/browse.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/view.flow.html.hook.php';
 
-$config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea');
+$config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'port');
 
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea');
+
+global $lang;
+$config->upgrade->defaultActions = array();
+$config->upgrade->defaultActions['type']          = 'single';
+$config->upgrade->defaultActions['extensionType'] = 'none';
+$config->upgrade->defaultActions['batchMode']     = 'different';
+$config->upgrade->defaultActions['layout']        = 'normal';
+$config->upgrade->defaultActions['show']          = 'direct';
+$config->upgrade->defaultActions['order']         = 0;
+$config->upgrade->defaultActions['buildin']       = 1;
+$config->upgrade->defaultActions['role']          = 'buildin';
+$config->upgrade->defaultActions['virtual']       = 0;
+$config->upgrade->defaultActions['status']        = 'enable';
+$config->upgrade->defaultActions['vision']        = 'rnd';
+
+$config->upgrade->recoveryActions = new stdclass();
+$config->upgrade->recoveryActions->feedback = new stdclass();
+$config->upgrade->recoveryActions->feedback->review = array();
+$config->upgrade->recoveryActions->feedback->review['action']   = 'review';
+$config->upgrade->recoveryActions->feedback->review['module']   = 'feedback';
+$config->upgrade->recoveryActions->feedback->review['name']     = $lang->upgrade->recoveryActions->review;
+$config->upgrade->recoveryActions->feedback->review['method']   = 'operate';
+$config->upgrade->recoveryActions->feedback->review['open']     = 'modal';
+$config->upgrade->recoveryActions->feedback->review['position'] = 'browseandview';
+$config->upgrade->recoveryActions->feedback->review['hasLite']  = true;
+
+$config->upgrade->recoveryActions->task = new stdclass();
+$config->upgrade->recoveryActions->task->review = array();
+$config->upgrade->recoveryActions->task->review['action']   = 'cancel';
+$config->upgrade->recoveryActions->task->review['module']   = 'task';
+$config->upgrade->recoveryActions->task->review['name']     = $lang->upgrade->recoveryActions->cancel;
+$config->upgrade->recoveryActions->task->review['method']   = 'operate';
+$config->upgrade->recoveryActions->task->review['open']     = 'modal';
+$config->upgrade->recoveryActions->task->review['position'] = 'view';
+$config->upgrade->recoveryActions->task->review['hasLite']  = true;
+
+$config->upgrade->recoveryActions->story = new stdclass();
+$config->upgrade->recoveryActions->story->review = array();
+$config->upgrade->recoveryActions->story->review['action']   = 'review';
+$config->upgrade->recoveryActions->story->review['module']   = 'story';
+$config->upgrade->recoveryActions->story->review['name']     = $lang->upgrade->recoveryActions->review;
+$config->upgrade->recoveryActions->story->review['method']   = 'operate';
+$config->upgrade->recoveryActions->story->review['open']     = 'normal';
+$config->upgrade->recoveryActions->story->review['position'] = 'browseandview';
+
+$config->upgrade->recoveryActions->testcase = new stdclass();
+$config->upgrade->recoveryActions->testcase->review = array();
+$config->upgrade->recoveryActions->testcase->review['action']   = 'review';
+$config->upgrade->recoveryActions->testcase->review['module']   = 'testcase';
+$config->upgrade->recoveryActions->testcase->review['name']     = $lang->upgrade->recoveryActions->review;
+$config->upgrade->recoveryActions->testcase->review['method']   = 'operate';
+$config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
+$config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';

@@ -96,7 +96,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all'] = 'All';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'Waiting';
+$lang->program->featureBar['browse']['doing']     = 'Doing';
+$lang->program->featureBar['browse']['suspended'] = 'Suspended';
+$lang->program->featureBar['browse']['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

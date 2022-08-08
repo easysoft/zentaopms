@@ -137,11 +137,12 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = 'List';
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
-$lang->execution->estimate = 'estimate';
-$lang->execution->consumed = 'consumed';
+$lang->execution->estimate = 'Estimate';
+$lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
 if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "copy Project/{$lang->execution->common} team members";
@@ -170,7 +171,6 @@ $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
 $lang->execution->cfdTypeList['bug']   = "View By bug";
 
-$lang->team = new stdclass();
 $lang->team->account    = 'User';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';
@@ -413,6 +413,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is still 
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = 'Seleted %s items';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -462,6 +463,7 @@ $lang->execution->orderList['stage_desc'] = "Story Phase Descending";
 
 $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Settings";
+$lang->execution->setKanban     = "Set Kanban";
 $lang->execution->resetKanban   = "Reset";
 $lang->execution->printKanban   = "Print";
 $lang->execution->fullScreen    = "Full Screen";
@@ -511,6 +513,11 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
 
 $lang->execution->myExecutions = 'Mine';
 $lang->execution->doingProject = 'Ongoing Projects';

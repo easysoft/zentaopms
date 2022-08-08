@@ -33,7 +33,8 @@
   </div>
   <?php endif;?>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->project->featureBar as $key => $label):?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->project->featureBar['browse'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

@@ -94,6 +94,7 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->nextStep     = 'Next';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -136,22 +137,23 @@ $lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName        = 'Bibliothèque de Documents';
-$lang->doc->libType        = 'Catégorie';
-$lang->doc->custom         = 'Personnaliser Bibliothèque de Documents';
-$lang->doc->customAB       = 'Person. Bib Doc';
-$lang->doc->createLib      = 'Document Library';
-$lang->doc->allLibs        = 'Liste des Bibliothèque';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Bibliothèque";
-$lang->doc->showFiles      = 'Pièces Jointes';
-$lang->doc->editLib        = 'Edit Document Library';
-$lang->doc->deleteLib      = 'Supprimer Bibliothèque';
-$lang->doc->fixedMenu      = 'Coller au Menu';
-$lang->doc->removeMenu     = 'Décoller du Menu';
-$lang->doc->search         = 'Rechercher';
-$lang->doc->allCollections = 'All Collections';
-$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
-$lang->doc->sortLibs       = 'Sort Libs';
+$lang->doc->libName          = 'Bibliothèque de Documents';
+$lang->doc->libType          = 'Catégorie';
+$lang->doc->custom           = 'Personnaliser Bibliothèque de Documents';
+$lang->doc->customAB         = 'Person. Bib Doc';
+$lang->doc->createLib        = 'Document Library';
+$lang->doc->allLibs          = 'Liste des Bibliothèque';
+$lang->doc->objectLibs       = "{$lang->productCommon}/{$lang->executionCommon} Bibliothèque";
+$lang->doc->showFiles        = 'Pièces Jointes';
+$lang->doc->editLib          = 'Edit Document Library';
+$lang->doc->deleteLib        = 'Supprimer Bibliothèque';
+$lang->doc->fixedMenu        = 'Coller au Menu';
+$lang->doc->removeMenu       = 'Décoller du Menu';
+$lang->doc->search           = 'Rechercher';
+$lang->doc->allCollections   = 'All Collections';
+$lang->doc->keywordsTips     = 'Please use commas to separate multiple keywords.';
+$lang->doc->sortLibs         = 'Sort Libs';
+$lang->doc->titlePlaceholder = 'Veuillez saisir le titre';
 
 global $config;
 /* Query condition list. */

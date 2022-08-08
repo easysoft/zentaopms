@@ -1049,10 +1049,11 @@ class story extends control
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function change($storyID)
+    public function change($storyID, $from = '')
     {
         if(!empty($_POST))
         {
@@ -1095,7 +1096,7 @@ class story extends control
                         $kanbanData    = json_encode($kanbanData);
                         return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                     }
-                    else
+                    if($from == 'taskkanban')
                     {
                         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                         $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -1205,8 +1206,13 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList', $uri . "#app={$this->app->tab}", 'product');
+        $uri        = $this->app->getURI(true);
+        $tab        = $this->app->tab;
+        $buildApp   = $tab == 'product' ?   'project' : $tab;
+        $releaseApp = $tab == 'execution' ? 'product' : $tab;
+        $this->session->set('productList', $uri . "#app={$tab}", 'product');
+        $this->session->set('releaseList', $uri, $releaseApp);
+        $this->session->set('buildList',   $uri, $buildApp);
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -1217,15 +1223,17 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
-        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $bugs         = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
-        $modulePath   = $this->tree->getParents($story->module);
-        $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $story->files  = $this->loadModel('file')->getByObject($story->type, $storyID);
+        $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
+        $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $modulePath    = $this->tree->getParents($story->module);
+        $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
+        $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
 
         /* Set the menu. */
         $from = $this->app->tab;
@@ -1278,10 +1286,13 @@ class story extends control
         $this->view->actions            = $this->action->getList('story', $storyID);
         $this->view->storyModule        = $storyModule;
         $this->view->modulePath         = $modulePath;
+        $this->view->storyProducts      = $storyProducts;
         $this->view->version            = $version == 0 ? $story->version : $version;
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
         $this->view->param              = $param;
+        $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
 
         $this->display();
     }
@@ -1378,7 +1389,7 @@ class story extends control
                         $kanbanData    = json_encode($kanbanData);
                         return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                     }
-                    else
+                    if($from == 'taskkanban')
                     {
                         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                         $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -1474,14 +1485,17 @@ class story extends control
      * Recall the story review.
      *
      * @param  int    $storyID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function recall($storyID)
+    public function recall($storyID, $from = 'list')
     {
         $story = $this->story->getById($storyID);
         $this->story->recall($storyID);
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
+
+        if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         echo js::locate($locateLink, 'parent');
@@ -2163,6 +2177,67 @@ class story extends control
     }
 
     /**
+     * Link related stories.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Get story, product, products, and queryID. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
+
+        /* Build search form. */
+        $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+
+        $this->view->story        = $story;
+        $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
+        $this->view->products     = $products;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * Link related requirements.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkRequirements($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+
+        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
      * Process story change.
      *
      * @param  int    $storyID
@@ -2426,260 +2501,10 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $this->loadModel('file');
-            $this->loadModel('branch');
-            $storyLang   = $this->lang->story;
-            $storyConfig = $this->config->story;
-
+            $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
-            foreach($fields as $key => $fieldName)
-            {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = isset($storyLang->$fieldName) ? $storyLang->$fieldName : $fieldName;
-                unset($fields[$key]);
-            }
-
-            /* Get stories. */
-            $stories = array();
-            if($this->session->storyOnlyCondition)
-            {
-                if($this->post->exportType == 'selected')
-                {
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
-                }
-                else
-                {
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
-                }
-            }
-            else
-            {
-                $field = $executionID ? 't2.id' : 't1.id';
-                if($this->post->exportType == 'selected')
-                {
-                    $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
-                }
-                else
-                {
-                    $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
-                }
-                while($row = $stmt->fetch()) $stories[$row->id] = $row;
-            }
-            $storyIdList = array_keys($stories);
-
-            if($stories)
-            {
-                $children = array();
-                foreach($stories as $story)
-                {
-                    if($story->parent > 0 and isset($stories[$story->parent]))
-                    {
-                        $children[$story->parent][$story->id] = $story;
-                        unset($stories[$story->id]);
-                    }
-                }
-
-                if(!empty($children))
-                {
-                    $reorderStories = array();
-                    foreach($stories as $story)
-                    {
-                        $reorderStories[$story->id] = $story;
-                        if(isset($children[$story->id]))
-                        {
-                            foreach($children[$story->id] as $childrenID => $childrenStory)
-                            {
-                                $reorderStories[$childrenID] = $childrenStory;
-                            }
-                        }
-                        unset($stories[$story->id]);
-                    }
-                    $stories = $reorderStories;
-                }
-            }
-
-            /* Get users, products and relations. */
-            $users     = $this->loadModel('user')->getPairs('noletter');
-            $products  = $this->product->getPairs('nocode');
-            $relations = $this->story->getStoryRelationByIds($storyIdList, $type);
-
-            /* Get related objects id lists. */
-            $relatedProductIdList = array();
-            $relatedStoryIdList   = array();
-            $relatedPlanIdList    = array();
-            $relatedBranchIdList  = array();
-            $relatedStoryIds      = array();
-
-            foreach($stories as $story)
-            {
-                $relatedProductIdList[$story->product] = $story->product;
-                $relatedPlanIdList[$story->plan]       = $story->plan;
-                $relatedBranchIdList[$story->branch]   = $story->branch;
-                $relatedStoryIds[$story->id]           = $story->id;
-
-                if(isset($relations[$story->id])) $story->childStories = $story->childStories . ',' . $relations[$story->id];
-
-                /* Process related stories. */
-                $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
-                $relatedStories = explode(',', $relatedStories);
-                foreach($relatedStories as $storyID)
-                {
-                    if($storyID) $relatedStoryIdList[$storyID] = trim($storyID);
-                }
-            }
-
-            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
-            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
-            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
-
-            /* Get related objects title or names. */
-            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($type)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-            $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs();
-
-            foreach($stories as $story)
-            {
-                $story->spec   = '';
-                $story->verify = '';
-                if(isset($relatedSpecs[$story->id]))
-                {
-                    $storySpec     = $relatedSpecs[$story->id][0];
-                    $story->title  = $storySpec->title;
-                    $story->spec   = $storySpec->spec;
-                    $story->verify = $storySpec->verify;
-                }
-
-                if($this->post->fileType == 'csv')
-                {
-                    $story->spec = htmlspecialchars_decode($story->spec);
-                    $story->spec = str_replace("<br />", "\n", $story->spec);
-                    $story->spec = str_replace('"', '""', $story->spec);
-                    $story->spec = str_replace('&nbsp;', ' ', $story->spec);
-
-                    $story->verify = htmlspecialchars_decode($story->verify);
-                    $story->verify = str_replace("<br />", "\n", $story->verify);
-                    $story->verify = str_replace('"', '""', $story->verify);
-                    $story->verify = str_replace('&nbsp;', ' ', $story->verify);
-                }
-                /* fill some field with useful value. */
-                if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
-                if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
-                if(isset($story->plan))
-                {
-                    $plans = '';
-                    foreach(explode(',', $story->plan) as $planID)
-                    {
-                        if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID])) $plans .= $this->post->fileType == 'word' ? $relatedPlans[$planID] : $relatedPlans[$planID] . "(#$planID)";
-                    }
-                    $story->plan = $plans;
-                }
-                if(isset($relatedStories[$story->duplicateStory]) and $story->closedReason != 'duplicate') $story->duplicateStory = $relatedStories[$story->duplicateStory];
-
-                if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
-                if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
-                if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
-                if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
-                if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
-                if(isset($storyLang->sourceList[$story->sourceNote]))   $story->sourceNote   = $storyLang->sourceList[$story->sourceNote];
-
-                if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
-                if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo] . "(#$story->assignedTo)";
-                if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
-                if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy];
-
-                if(isset($storyTasks[$story->id]))     $story->taskCountAB = $storyTasks[$story->id];
-                if(isset($storyBugs[$story->id]))      $story->bugCountAB  = $storyBugs[$story->id];
-                if(isset($storyCases[$story->id]))     $story->caseCountAB = $storyCases[$story->id];
-
-                $story->openedDate     = substr($story->openedDate, 0, 10);
-                $story->assignedDate   = substr($story->assignedDate, 0, 10);
-                $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
-                $story->closedDate     = substr($story->closedDate, 0, 10);
-
-                if($story->linkStories)
-                {
-                    $tmpLinkStories    = array();
-                    $linkStoriesIdList = explode(',', $story->linkStories);
-                    foreach($linkStoriesIdList as $linkStoryID)
-                    {
-                        $linkStoryID = trim($linkStoryID);
-                        $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
-                    }
-                    $story->linkStories = join("; \n", $tmpLinkStories);
-                }
-
-                if($story->childStories)
-                {
-                    $tmpChildStories = array();
-                    $childStoriesIdList = explode(',', $story->childStories);
-                    foreach($childStoriesIdList as $childStoryID)
-                    {
-                        if(empty($childStoryID)) continue;
-
-                        $childStoryID = trim($childStoryID);
-                        $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
-                    }
-                    $story->childStories = join("; \n", $tmpChildStories);
-                }
-
-                /* Set related files. */
-                $story->files = '';
-                if(isset($relatedFiles[$story->id]))
-                {
-                    foreach($relatedFiles[$story->id] as $file)
-                    {
-                        $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID=$file->id");
-                        $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
-                    }
-                }
-
-                $story->mailto = trim(trim($story->mailto), ',');
-                $mailtos = explode(',', $story->mailto);
-                $story->mailto = '';
-                foreach($mailtos as $mailto)
-                {
-                    $mailto = trim($mailto);
-                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
-                }
-                $story->mailto = rtrim($story->mailto, ',');
-
-                $story->reviewedBy = trim(trim($story->reviewedBy), ',');
-                $reviewedBys = explode(',', $story->reviewedBy);
-                $story->reviewedBy = '';
-                foreach($reviewedBys as $reviewedBy)
-                {
-                    $reviewedBy = trim($reviewedBy);
-                    if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
-                }
-                $story->reviewedBy = rtrim($story->reviewedBy, ',');
-
-                /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
-            }
-
-            if($executionID)
-            {
-                $header = new stdclass();
-                $header->name      = 'execution';
-                $header->tableName = TABLE_EXECUTION;
-
-                $this->post->set('header', $header);
-            }
-            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
-
-            if($this->config->edition != 'open') list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
-
-            $this->post->set('fields', $fields);
-            $this->post->set('rows', $stories);
-            $this->post->set('kind', 'story');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
+            $this->fetch('port', 'export', 'model=story');
         }
 
         $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
@@ -2704,7 +2529,7 @@ class story extends control
         }
 
         $this->view->fileName        = $fileName;
-        $this->view->allExportFields = $this->config->story->list->exportFields;
+        $this->view->allExportFields = $this->config->story->exportFields;
         $this->view->customExport    = true;
         $this->display();
     }

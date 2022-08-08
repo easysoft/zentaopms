@@ -90,7 +90,6 @@ class kanban extends control
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
-        $space->desc = strip_tags(htmlspecialchars_decode($space->desc));
 
         $typeList = $this->lang->kanbanspace->typeList;
         if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
@@ -221,8 +220,8 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $enableImport  = 'off';
-        $importObjects = array();
+        $enableImport  = 'on';
+        $importObjects = array_keys($this->lang->kanban->importObjectList);
         if($copyKanbanID)
         {
             $copyKanban    = $this->kanban->getByID($copyKanbanID);
@@ -236,11 +235,11 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
-        $users      = isset($spacePairs[$spaceID]) ? $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : array();
-        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $ownerPairs = (isset($spacePairs[$spaceID])) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : $users;
 
         $this->view->users         = $users;
-        $this->view->whitelist     = isset($spacePairs[$spaceID]) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist) : array();
+        $this->view->ownerPairs    = $ownerPairs;
         $this->view->spaceID       = $spaceID;
         $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
@@ -277,20 +276,46 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban       = $this->kanban->getByID($kanbanID);
-        $kanban->desc = strip_tags(htmlspecialchars_decode($kanban->desc));
+        $kanban = $this->kanban->getByID($kanbanID);
 
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
-        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
-        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $ownerPairs = $this->user->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
-        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
+        $this->view->ownerPairs = $ownerPairs;
         $this->view->spacePairs = array(0 => '') + array($kanban->space => $space->name) + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
 
+        $this->display();
+    }
+
+    /**
+     * Setting kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setting($kanbanID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->setting($kanbanID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $kanban = $this->kanban->getByID($kanbanID);
+
+        $this->view->kanban        = $kanban;
         $this->view->laneCount     = $this->kanban->getLaneCount($kanbanID);
         $this->view->heightType    = $kanban->displayCards > 2 ? 'custom' : 'auto';
         $this->view->displayCards  = $kanban->displayCards ? $kanban->displayCards : '';
@@ -1512,7 +1537,7 @@ class kanban extends control
         $this->loadModel($objectType)->delete(constant($table), $objectID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $kanbanID    = $regionID ? $this->kanban->getKanbanIDByregion($regionID) : $this->session->execution;
+        $kanbanID    = $regionID ? $this->kanban->getKanbanIDByRegion($regionID) : $this->session->execution;
         $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->execLaneType;
         $groupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
         $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType, 'id_desc', 0, $groupBy);
@@ -1844,20 +1869,20 @@ class kanban extends control
     /**
      * Ajax get contact users.
      *
+     * @param  string $field
      * @param  int    $contactListID
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID)
+    public function ajaxGetContactUsers($field, $contactListID)
     {
         $this->loadModel('user');
-        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $users = $this->user->getPairs('nodeleted|noclosed', '', $this->config->maxCount);
 
-        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+        if(!$contactListID or !isset($list->userList)) return print(html::select($field . '[]', $users, '', "class='form-control picker-select' multiple"));
 
-        if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
-
-        return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
+        return print(html::select($field . '[]', $users, $list->userList, "class='form-control picker-select' multiple"));
     }
 
     /**
@@ -1913,18 +1938,16 @@ class kanban extends control
      * @param  int    $spaceID
      * @param  string $field team|whitelist|owner
      * @param  string $selectedUser
+     * @param  string $space all|space
      * @access public
      * @return string
      */
-    public function ajaxLoadSpaceUsers($spaceID, $field = '', $selectedUser = '')
+    public function ajaxLoadUsers($spaceID, $field = '', $selectedUser = '', $type = 'space')
     {
         $space    = $this->kanban->getSpaceById($spaceID);
         $accounts = '';
-        if(!empty($space))
-        {
-            if($space->type == 'private' and !empty($space->whitelist)) $accounts = $space->whitelist;
-            if($space->type != 'private') $accounts = trim($space->owner) . ',' . trim($space->team);
-        }
+
+        if(!empty($space) and $field == 'owner' and $type != 'all') $accounts = trim($space->owner) . ',' . trim($space->team);
 
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $accounts);
         $multiple  = in_array($field, array('team', 'whitelist')) ? 'multiple' : '';

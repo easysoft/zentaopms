@@ -19,3 +19,8 @@
 .timeline>li.active:before {left: -30px;}
 .timeline>li>div:after {left: -27px;}
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+#cfdChart {margin-top: -20px;}
+
+#triggerModal .modal-dialog {top: 15% !important; overflow-y: auto; max-height: 80%;}
+#triggerModal .modal-dialog::-webkit-scrollbar-track {background-color: white;}

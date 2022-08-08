@@ -1232,8 +1232,7 @@ class commonModel extends model
     /**
      * Print the module menu.
      *
-     * @param  string $actveMenu
-     * @param  string $methodName
+     * @param  string $activeMenu
      * @static
      * @access public
      * @return void
@@ -1423,6 +1422,9 @@ class commonModel extends model
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
+            echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
+            echo "<li><div class='mobile-qrcode'><img src='{$config->webRoot}theme/default/images/main/mobile_qrcode.png' /><div class='mobile-version'><span>v1.2</span></div></div></li>";
+            echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';
         }
@@ -1521,10 +1523,12 @@ class commonModel extends model
     public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
-        global $app;
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1966,7 +1970,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -2379,8 +2383,7 @@ EOD;
                 }
 
                 $referer = helper::safe64Encode($uri);
-                print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
-                helper::end();
+                die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
             }
         }
         catch(EndResponseException $endResponseException)
@@ -3084,11 +3087,13 @@ EOD;
      * @param  string|array $data
      * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
      * @param  array        $headers   Set request headers.
+     * @param  string       $dataType
+     * @param  string       $method    POST|PATCH|PUT
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST')
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3125,7 +3130,8 @@ EOD;
         if(!empty($data))
         {
             if(is_object($data)) $data = (array) $data;
-            curl_setopt($curl, CURLOPT_POST, true);
+            if($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
+            if(in_array($method, array('PATCH', 'PUT'))) curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
@@ -3370,6 +3376,45 @@ EOD;
         $Parsedown->voidElementSuffix = '>'; // HTML5
 
         return $Parsedown->text($markdown);
+    }
+
+    /**
+     * Sort featureBar.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function sortFeatureMenu($module = '', $method = '')
+    {
+        global $lang, $config, $app;
+
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
+
+        /* It will be sorted according to the workflow in the future */
+        if(!empty($config->featureBarSort[$module][$method]))
+        {
+            $featureBar = array();
+            if(empty($lang->$module->featureBar[$method])) return false;
+            foreach($lang->$module->featureBar[$method] as $key => $label)
+            {
+                foreach($config->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                {
+                    if($key == $currentKey) continue;
+                    $featureBar[$method][$key] = $label;
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
+                }
+            }
+            $lang->$module->featureBar = $featureBar;
+        }
+
+        return true;
     }
 }
 

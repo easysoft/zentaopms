@@ -142,12 +142,16 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'Project';
+
+$lang->repo->serviceHost    = 'Host';
+$lang->repo->serviceProject = 'Project';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
@@ -195,6 +199,7 @@ $lang->repo->error->linkedJob     = "Deletion of the repository failed. The curr
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
+$lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";

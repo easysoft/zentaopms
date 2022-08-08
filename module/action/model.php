@@ -787,7 +787,7 @@ class actionModel extends model
      */
     public function getHistory($actionID)
     {
-        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->orderBy('id')->fetchGroup('action');
+        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
@@ -858,7 +858,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -984,24 +984,31 @@ class actionModel extends model
         $executions = array();
         if(!$this->app->user->admin)
         {
-            if($productID == 'all')   $authedProducts   = $this->app->user->view->products;
-            if($projectID == 'all')   $authedProjects   = $this->app->user->view->projects;
-            if($executionID == 'all') $authedExecutions = $this->app->user->view->sprints;
+            $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
+            if($productID == 'all')   $authedProducts   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
-                $productCondition   = "product " . helper::dbIN($authedProducts);
+                $productCondition = '';
+                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+
                 $projectCondition   = "project " . helper::dbIN($authedProjects);
                 $executionCondition = isset($authedExecutions) ? "execution " . helper::dbIN($authedExecutions) : '';
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+                $executions = $this->loadModel('execution')->getPairs($projectID);
 
-                $productCondition   = "product " . helper::dbIN(array_keys($products));
+                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+
+                $productCondition = '';
+                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+
                 $projectCondition   = "project = $projectID";
-                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+                $executionCondition = "execution " . helper::dbIN($authedExecutions);
             }
             elseif(is_numeric($productID) and $projectID == 'all')
             {
@@ -1009,15 +1016,18 @@ class actionModel extends model
                 $projects   = $this->product->getProjectPairsByProduct($productID);
                 $executions = $this->product->getExecutionPairsByProduct($productID);
 
-                $productCondition   = "product = $productID";
-                $projectCondition   = "project " . helper::dbIN(array_keys($projects));
-                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+                $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
+                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+
+                $productCondition   = "product like '%,$productID,%'";
+                $projectCondition   = 'project ' . helper::dbIN($authedProjects);
+                $executionCondition = 'execution ' . helper::dbIN($authedExecutions);
             }
 
-            $condition = "((product =',0,' or product=0) AND project = '0' AND execution = 0)";
-            if(!empty($productCondition))   $condition .= ' OR ' . $productCondition;
-            if(!empty($projectCondition))   $condition .= ' OR ' . $projectCondition;
-            if(!empty($executionCondition)) $condition .= ' OR ' . $executionCondition;
+            $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
+            if(!empty($productCondition))   $condition .= " OR $productCondition";
+            if(!empty($projectCondition))   $condition .= " OR $projectCondition";
+            if(!empty($executionCondition)) $condition .= " OR $executionCondition";
         }
 
         $actionCondition = $this->getActionCondition();
@@ -1033,6 +1043,8 @@ class actionModel extends model
             /* When query all dynamic then query the data of the last two years at most. */
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
         }
+
+        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -1060,6 +1072,7 @@ class actionModel extends model
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
+            ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1086,6 +1099,7 @@ class actionModel extends model
 
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
+                if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
                 $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
@@ -1208,8 +1222,17 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
+        $aclViews         = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
+        $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? ",{$this->app->user->view->projects}," : '';
+        $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? ",{$this->app->user->view->sprints},": '';
+
         foreach($actions as $i => $action)
         {
+            if(($action->execution != '0' and strpos($authedExecutions, ",$action->execution,") === false) or ($action->execution == '0' and $action->project != '0' and strpos($authedProjects, ",$action->project,") === false))
+            {
+                unset($actions[$i]);
+                continue;
+            }
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
@@ -1254,15 +1277,11 @@ class actionModel extends model
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
-            /* Get gitlab objectname. */
-            if(empty($action->objectName) and substr($objectType, 0, 6) == 'gitlab') $action->objectName = $action->extra;
+            /* Get gitlab or gitea objectname. */
+            if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
-            if(!$this->setObjectLink($action, $deptUsers))
-            {
-                unset($actions[$i]);
-                continue;
-            }
+            $this->setObjectLink($action, $deptUsers);
 
             /* Set merge request link. */
             if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
@@ -1437,7 +1456,6 @@ class actionModel extends model
 
             /* Fix bug #2961. */
             $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
-            if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) return false;
 
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
@@ -1451,7 +1469,7 @@ class actionModel extends model
             }
 
             if($this->config->edition == 'max'
-               and strpos($this->config->action->assetType, $action->objectType) !== false
+               and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
                 if($action->objectType == 'doc')
@@ -1536,11 +1554,12 @@ class actionModel extends model
                     $action->objectLink = !isset($deptUsers[$action->objectID]) ? 'javascript:void(0)' : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
                 }
             }
+            if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) $action->objectLink = '';
         }
         elseif($action->objectType == 'team')
         {
-            if($action->project)   $action->objectLink = helper::createLink('project',   'team', 'projectID=' . $action->project);
-            if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
+            if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
+            if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';

@@ -38,6 +38,9 @@ class repoModel extends model
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
+        /* Init switcher menu. */
+        $this->lang->switcherMenu = '';
+
         /* Check the privilege. */
         if($repoID)
         {
@@ -54,7 +57,7 @@ class repoModel extends model
                 return print(js::locate('back'));
             }
 
-            if($repo->SCM != 'Gitlab') unset($this->lang->devops->menu->mr);
+            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
             $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 
@@ -119,7 +122,8 @@ class repoModel extends model
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
         {
-            $repo->acl = json_decode($repo->acl);
+            $repo->acl      = json_decode($repo->acl);
+            $repo->codePath = $repo->path;
             if(!$this->checkPriv($repo))
             {
                 unset($repos[$i]);
@@ -138,7 +142,7 @@ class repoModel extends model
                 }
             }
 
-            if($repo->SCM == 'Gitlab') $repo = $this->processGitlab($repo);
+            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
         }
 
         return $repos;
@@ -163,9 +167,10 @@ class repoModel extends model
         foreach($repos as $i => $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-            $repo->acl = json_decode($repo->acl);
+            $repo->acl      = json_decode($repo->acl);
+            $repo->codePath = $repo->path;
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
-            if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
+            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
         }
 
         return $repos;
@@ -182,19 +187,20 @@ class repoModel extends model
         if(!$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
-        if($this->post->SCM == 'Gitlab')
+        $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+        if($isPipelineServer)
         {
-            if($this->post->gitlabHost == '')    dao::$errors['gitlabHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabHost);
-            if($this->post->gitlabProject == '') dao::$errors['gitlabProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabProject);
+            if($this->post->serviceHost == '')    dao::$errors['serviceHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->serviceHost);
+            if($this->post->serviceProject == '') dao::$errors['serviceProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->serviceProject);
             if(dao::isError()) return false;
         }
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
-            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
-            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
+            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'path', '')
+            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
+            ->setIf($isPipelineServer, 'prefix', '')
             ->setIf($this->post->SCM == 'Git', 'account', '')
             ->setIf($this->post->SCM == 'Git', 'password', '')
             ->skipSpecial('path,client,account,password')
@@ -202,14 +208,14 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab')
+        if($isPipelineServer)
         {
             $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq('Gitlab')
-                ->andWhere('client')->eq($data->client)
-                ->andWhere('path')->eq($data->path)
+                ->where('SCM')->eq($this->post->SCM)
+                ->andWhere('serviceHost')->eq($data->client)
+                ->andWhere('serviceProject')->eq($data->path)
                 ->fetch();
-            if(!empty($repo)) dao::$errors['gitlabProject'] = sprintf($this->lang->error->unique, $this->lang->repo->gitlabProject, $repo->id);
+            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
             if(dao::isError()) return false;
         }
 
@@ -226,10 +232,12 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
+        $this->dao->insert(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'Gitlab', 'gitlabProject', 'notempty')
+            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
+            ->checkIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Gitea', $this->config->repo->gitea->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git'")
             ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion'")
             ->autoCheck()
@@ -262,17 +270,18 @@ class repoModel extends model
     {
         $repo = $this->getRepoByID($id);
 
-        if($this->post->SCM == 'Gitlab')
+        $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+        if($isPipelineServer)
         {
-            if($this->post->gitlabHost == '')    dao::$errors['gitlabHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabHost);
-            if($this->post->gitlabProject == '') dao::$errors['gitlabProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabProject);
+            if($this->post->serviceHost == '')    dao::$errors['serviceHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->serviceHost);
+            if($this->post->serviceProject == '') dao::$errors['serviceProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->serviceProject);
         }
 
         $data = fixer::input('post')
-            ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
-            ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
-            ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
+            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
+            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'path', '')
+            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
             ->setDefault('prefix', $repo->prefix)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
             ->setDefault('client', 'svn')
@@ -299,15 +308,15 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($this->post->SCM == 'Gitlab')
+        if($isPipelineServer)
         {
             $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq('Gitlab')
-                ->andWhere('client')->eq($data->client)
-                ->andWhere('path')->eq($data->path)
+                ->where('SCM')->eq($this->post->SCM)
+                ->andWhere('serviceHost')->eq($data->client)
+                ->andWhere('serviceProject')->eq($data->path)
                 ->andWhere('id')->ne($id)
                 ->fetch();
-            if(!empty($repo)) dao::$errors['gitlabProject'] = sprintf($this->lang->error->unique, $this->lang->repo->gitlabProject, $repo->id);
+            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
             if(dao::isError()) return false;
         }
 
@@ -315,8 +324,9 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data, $skip = 'gitlabHost,gitlabToken,gitlabProject')
+        $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
+            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
             ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git' and `id` <> $id")
@@ -416,10 +426,8 @@ class repoModel extends model
     {
         $repoPairs = $this->getRepoPairs($type, $projectID);
 
-        $repos           = array();
-        $repos['Gitlab'] = array();
-        $repos['SVN']    = array();
-        $repos['Git']    = array();
+        $repos = array();
+        foreach($this->lang->repo->scmList as $scmType => $scm) $repos[$scmType] = array();
 
         foreach($repoPairs as $id => $repo)
         {
@@ -427,6 +435,11 @@ class repoModel extends model
             {
                 $repo = str_replace('[gitlab]', '', $repo);
                 $repos['Gitlab'][$id] = $repo;
+            }
+            if(strpos($repo, '[gitea]') !== false)
+            {
+                $repo = str_replace('[gitea]', '', $repo);
+                $repos['Gitea'][$id] = $repo;
             }
             if(strpos($repo, '[svn]') !== false)
             {
@@ -455,7 +468,8 @@ class repoModel extends model
         if(!$repo) return false;
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
+        $repo->codePath = $repo->path;
+        if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -882,14 +896,17 @@ class repoModel extends model
             {
                 $commitID = $this->dao->lastInsertID();
                 if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
-                foreach($logs['files'][$i] as $file)
+                if(!empty($logs['files']))
                 {
-                    $parentPath = dirname($file->path);
+                    foreach($logs['files'][$i] as $file)
+                    {
+                        $parentPath = dirname($file->path);
 
-                    $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
-                    $file->revision = $commitID;
-                    $file->repo     = $repoID;
-                    $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                        $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
+                        $file->revision = $commitID;
+                        $file->repo     = $repoID;
+                        $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                    }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
                 $version++;
@@ -1396,6 +1413,28 @@ class repoModel extends model
 
                 dao::$errors['submit'] = $this->lang->repo->error->connect . "<br>" . nl2br($message);
                 return false;
+            }
+        }
+        elseif($scm == 'Gitea')
+        {
+            if($this->post->name != '' and $this->post->serviceProject != '')
+            {
+                $project = $this->loadModel('gitea')->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
+                if(isset($project->tokenCloneUrl))
+                {
+                    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/repo/' . $this->post->name . '_gitea';
+                    if(!realpath($path))
+                    {
+                        $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"';
+                        exec($cmd);
+                    }
+                    $_POST['path'] = $path;
+                }
+                else
+                {
+                    dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
+                    return false;
+                }
             }
         }
         elseif($scm == 'Git')
@@ -2016,21 +2055,30 @@ class repoModel extends model
     }
 
     /**
-     * Process gitlab repo.
+     * Process git service repo.
      *
      * @param  object    $repo
      * @access public
      * @return object
      */
-    public function processGitlab($repo)
+    public function processGitService($repo)
     {
-        $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // The $repo->client is gitlabID.
+        $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
+        if($repo->SCM == 'Gitlab')
+        {
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
 
-        $repo->gitlab   = $gitlab ? $gitlab->id : 0;
-        $repo->project  = $gitlab ? $repo->path : ''; // The projectID in gitlab.
-        $repo->path     = $gitlab ? sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path) : '';
-        $repo->client   = $gitlab ? $gitlab->url : '';
-        $repo->password = $gitlab ? $gitlab->token : '';
+            $repo->path     = $service ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : '';
+            $repo->client   = $service ? $service->url : '';
+            $repo->password = $service ? $service->token : '';
+            $repo->codePath = $project ? $project->web_url : $repo->path;
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
+        }
+        $repo->gitService = $repo->serviceHost;
+        $repo->project    = $repo->serviceProject;
         return $repo;
     }
 
@@ -2041,13 +2089,12 @@ class repoModel extends model
      * @param  int $projectID
      * @return array
      */
-    public function getGitLabRepoList($gitlabID, $projectID = 0)
+    public function getRepoListByClient($gitlabID, $projectID = 0)
     {
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq('Gitlab')
             ->andWhere('synced')->eq(1)
-            ->andWhere('client')->eq($gitlabID)
-            ->beginIF($projectID)->andWhere('path')->eq($projectID)->fi()
+            ->andWhere('serviceHost')->eq($gitlabID)
+            ->beginIF($projectID)->andWhere('serviceProject')->eq($projectID)->fi()
             ->fetchAll();
     }
 
@@ -2151,11 +2198,20 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitlab')
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitlab, $repo->project);
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, $repo->project);
             if(isset($project->id))
             {
                 $url->http = $project->http_url_to_repo;
                 $url->ssh  = $project->ssh_url_to_repo;
+            }
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, $repo->project);
+            if(isset($project->id))
+            {
+                $url->http = $project->clone_url;
+                $url->ssh  = $project->ssh_url;
             }
         }
         else

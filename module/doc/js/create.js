@@ -26,12 +26,12 @@ $(function()
         if($(this).hasClass('ke-selected'))
         {
             $('#submit').removeClass('fullscreen-save')
-            $('#submit').addClass('btn-wide')
+            $('.form-actions #submit').addClass('btn-wide')
         }
         else
         {
             $('#submit').addClass('fullscreen-save')
-            $('#submit').removeClass('btn-wide')
+            $('.form-actions #submit').removeClass('btn-wide')
         }
     });
 
@@ -61,6 +61,68 @@ $(function()
     });
 
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
+
+    if(!fromGlobal && textType.indexOf(docType) != -1)
+    {
+        var basicInfo = JSON.parse(sessionStorage.getItem('docBasicInfo'));
+
+        var libID       = 0;
+        var moduleID    = 0;
+        var title       = '';
+        var keywords    = '';
+        var type        = '';
+        var acl         = '';
+        var contentType = '';
+        var fileNames   = [];
+        var mailto      = [];
+        var groups      = [];
+        var users       = [];
+
+        $.each(basicInfo, function(index, value)
+        {
+            switch(value.name)
+            {
+                case 'lib':
+                    libID = value.value;
+                    break;
+                case 'module':
+                    moduleID = value.value;
+                    break;
+                case 'title':
+                    title = value.value;
+                    break;
+                case 'keywords':
+                    keywords = value.value;
+                    break;
+                case 'type':
+                    type = value.value;
+                    break;
+                case 'acl':
+                    acl = value.value;
+                    break;
+                case 'contentType':
+                    contentType = value.value;
+                    break;
+                case 'mailto[]':
+                    mailto.push(value.value);
+                    break;
+                case 'groups[]':
+                    groups.push(value.value);
+                    break;
+                case 'users[]':
+                    users.push(value.value);
+                    break;
+            }
+        })
+
+        $('#title').val(title);
+        $('#modalBasicInfo #keywords').val(keywords);
+        $('#modalBasicInfo #mailto').data('zui.picker').setValue(mailto);
+        $('#modalBasicInfo input:radio[value='+ acl +']').attr('checked', 'checked');
+        toggleAcl($('input[name="acl"]:checked').val(), 'doc');
+        setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(groups)}, 1000);
+        setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(users)}, 1000);
+    }
 })
 
 function toggleEditor(type)
@@ -87,7 +149,7 @@ function initPage(type)
         {
             $('#contentBox .contentmarkdown').removeClass('hidden');
             $('#contentBox .contenthtml').addClass('hidden');
-            $('#contentBox #contentType').val(type);
+            $('#contentType').val(type);
         }
     }
     else if(type == 'url')
@@ -149,4 +211,18 @@ function loadWhitelist(libID)
             $('#users').picker();
         }
     });
+}
+
+/**
+ * Redirect to edit page when create the doc of text type.
+ *
+ * @param  int     docID
+ * @param  string  objectType
+ * @param  int     objectID
+ * @param  int     libID
+ * @return void
+ */
+function redirect2Edit(docID, objectType, objectID, libID)
+{
+    parent.location.href = createLink('doc', 'edit', 'docID=' + docID + '&comment=false&objectType=' + objectType + '&objectID=' + objectID + '&libID=' + libID + '&from=create');
 }

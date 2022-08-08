@@ -72,6 +72,9 @@ class storyModel extends model
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
 
+        $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
+        if($story->{$linkStoryField}) $story->linkStoryTitles = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchPairs();
+
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
@@ -265,7 +268,11 @@ class storyModel extends model
             $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
             $this->file->saveUpload($story->type, $storyID, $extra = 1);
 
-            if(!empty($story->plan)) $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+            if(!empty($story->plan))
+            {
+                $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+                $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            }
 
             $data          = new stdclass();
             $data->story   = $storyID;
@@ -537,8 +544,7 @@ class storyModel extends model
             $data[$i] = $story;
         }
 
-        $planStories = array();
-
+        $link2Plans = array();
         foreach($data as $i => $story)
         {
             $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->exec();
@@ -552,7 +558,11 @@ class storyModel extends model
             $this->setStage($storyID);
 
             /* Update product plan stories order. */
-            if($story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan);
+            if($story->plan)
+            {
+                $this->updateStoryOrderOfPlan($storyID, $story->plan);
+                $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+            }
 
             $specData = new stdclass();
             $specData->story   = $storyID;
@@ -629,7 +639,11 @@ class storyModel extends model
             if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['storyImagesFile']);
         }
-        if(!dao::isError())  $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchCreate');
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+        }
         return $mails;
     }
 
@@ -780,7 +794,7 @@ class storyModel extends model
             ->cleanFloat('estimate')
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('reviewedBy', '')
+            ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('mailto', '')
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
@@ -801,9 +815,13 @@ class storyModel extends model
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
+            ->join('linkRequirements', ',')
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,stages,reviewer')
             ->get();
+
+        if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
+        if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
@@ -890,6 +908,13 @@ class storyModel extends model
             }
 
             $this->loadModel('action');
+
+            if($story->plan != $oldStory->plan)
+            {
+                if(!empty($oldStory->plan)) $this->action->create('productplan', $oldStory->plan, 'unlinkstory', '', $storyID);
+                if(!empty($story->plan)) $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            }
+
             $changed = $story->parent != $oldStory->parent;
             if($oldStory->parent > 0)
             {
@@ -947,7 +972,7 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            if($oldStory->stage != $story->stage)
+            if(isset($story->stage) and $oldStory->stage != $story->stage)
             {
                 $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -963,6 +988,29 @@ class storyModel extends model
             unset($oldStory->parent);
             unset($story->parent);
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+
+            $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
+            $linkStories    = explode(',', $story->{$linkStoryField});
+            $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
+            $addStories     = array_diff($linkStories, $oldLinkStories);
+            $removeStories  = array_diff($oldLinkStories, $linkStories);
+            $changeStories  = array_merge($addStories, $removeStories);
+            $changeStories  = $this->dao->select("id,$linkStoryField")->from(TABLE_STORY)->where('id')->in(array_filter($changeStories))->fetchPairs();
+            foreach($changeStories as $changeStoryID => $changeStory)
+            {
+                if(in_array($changeStoryID, $addStories))
+                {
+                    $stories = empty($changeStory) ? $storyID : $changeStory . ',' . $storyID;
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($stories)->where('id')->eq((int)$changeStoryID)->exec();
+                }
+
+                if(in_array($changeStoryID, $removeStories))
+                {
+                    $linkStories = str_replace(",$storyID,", ',', ",$changeStory,");
+                    $linkStories = trim($linkStories, ',');
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
+                }
+            }
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1189,6 +1237,8 @@ class storyModel extends model
         $now         = helper::now();
         $data        = fixer::input('post')->get();
         $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
 
         /* Init $stories. */
         if(!empty($storyIdList))
@@ -1254,6 +1304,13 @@ class storyModel extends model
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
                 if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
 
+                if($story->plan != $oldStory->plan)
+                {
+                    if($story->plan != $oldStory->plan and !empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                    if($story->plan != $oldStory->plan and !empty($story->plan))    $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                }
+
+
                 foreach($extendFields as $extendField)
                 {
                     $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
@@ -1310,7 +1367,15 @@ class storyModel extends model
                 }
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+
+        }
         return $allChanges;
     }
 
@@ -1745,6 +1810,8 @@ class storyModel extends model
         $oldStories     = $this->getByList($storyIdList);
         $plan           = $this->loadModel('productplan')->getById($planID);
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
+        $unlinkPlans    = array();
+        $link2Plans     = array();
 
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
@@ -1774,15 +1841,20 @@ class storyModel extends model
             if($oldStory->branch) $story->plan = $planID;
 
             /* Append the plan id to plan field if product is multi and story is all branch. */
-            if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0)
+            if($this->session->currentProductType != 'normal' and empty($story->branch))
             {
                 $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
                     ->where('product')->eq($oldStory->product)
                     ->andWhere('id')->in($oldStory->plan)
                     ->fetchPairs();
-                if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
-
-                $story->plan = $oldStory->plan ? ',' . implode(',', $branchPlanPairs) : ",$planID";
+                if($planID == 0 and !empty($oldStory->plan) and isset($branchPlanPairs[0]) and $branchPlanPairs[0] != $planID) $unlinkPlans[$branchPlanPairs[0]] = empty($unlinkPlans[$branchPlanPairs[0]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[0]]},$storyID";
+                if($planID != 0)
+                {
+                    if(!empty($oldStory->plan) and isset($branchPlanPairs[$plan->branch]) and $branchPlanPairs[$plan->branch] != $planID) $unlinkPlans[$branchPlanPairs[$plan->branch]] = empty($unlinkPlans[$branchPlanPairs[$plan->branch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$plan->branch]]},$storyID";
+                    if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
+                    $story->plan = $oldStory->plan ? ',' . implode(',', $branchPlanPairs) : ",$planID";
+                    if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
+                }
             }
 
             /* Change stage. */
@@ -1808,8 +1880,21 @@ class storyModel extends model
 
             if(!$planID) $this->setStage($storyID);
 
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError())
+            {
+                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos($story->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($story->plan) and strpos($story->plan, ',') === false) $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+            }
         }
+
+        if(!dao::isError())
+        {
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+        }
+
         return $allChanges;
     }
 
@@ -2329,39 +2414,49 @@ class storyModel extends model
      * Get stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $type
+     * @param  string  $type linkStories|linkRelateSR|linkRelateUR
      * @param  string  $browseType
      * @param  int     $queryID
-     * @param  varchar $storyType
+     * @param  string  $storyType
+     * @param  object  $pager
+     * @param  string  $excludeStories
      * @access public
      * @return array
      */
-    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story')
+    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story', $pager = null, $excludeStories = '')
     {
         $story         = $this->getById($storyID);
-        $linkedStories = $this->getRelation($storyID, $story->type);
-        $linkedStories = empty($linkedStories) ? array() : $linkedStories;
         $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
-
-        if($browseType == 'bySearch')
+        $stories2Link  = array();
+        if($type == 'linkRelateSR' or $type == 'linkRelateUR')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id', '', $tmpStoryType);
-            foreach($stories2Link as $key => $story2Link)
-            {
-                if($story2Link->id == $storyID) unset($stories2Link[$key]);
-                if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
-            }
+            $tmpStoryType   = $story->type;
+            $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
+            $storyIDList    = $story->id . ',' . $excludeStories . ',' . $story->{$linkStoryField};
         }
         else
         {
-            $status = $storyType == 'story' ? 'active' : 'all';
-            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc');
+            $linkedStories = $this->getRelation($storyID, $story->type);
+            $linkedStories = empty($linkedStories) ? array() : $linkedStories;
+            $storyIDList   = array_keys($linkedStories);
         }
 
-        foreach($stories2Link as $id => $story)
+        if($browseType == 'bySearch')
         {
-            if(in_array($story->id, array_keys($linkedStories))) unset($stories2Link[$id]);
-            if($storyType == 'story' && $story->status == 'draft') unset($stories2Link[$id]);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
+        }
+        elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
+        {
+            $status = $storyType == 'story' ? 'active' : 'all';
+            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc', true, $storyIDList, $pager);
+        }
+
+        if($type != 'linkRelateSR' and $type != 'linkRelateUR')
+        {
+            foreach($stories2Link as $id => $story)
+            {
+                if($storyType == 'story' and $story->status == 'draft') unset($stories2Link[$id]);
+            }
         }
 
         return $stories2Link;
@@ -3945,7 +4040,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
-            $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', '', 'showinonlybody');
             $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
 
             if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
@@ -5325,5 +5420,222 @@ class storyModel extends model
             ->exec();
 
         return $story;
+    }
+
+    /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($object, $pairs = '')
+    {
+        /* Get bugs. */
+        $storys = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->fetchAll('id');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($storys as $story) $relatedObjectIdList[$story->$object]  = $story->$object;
+
+        if($object == 'plan') $object = 'productplan';
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+        return $relatedObjects;
+    }
+
+    /**
+     * Get export storys .
+     *
+     * @param  int    $executionID
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getExportStorys($executionID, $orderBy = 'id_desc')
+    {
+        $this->loadModel('file');
+        $this->loadModel('branch');
+        $storyLang   = $this->lang->story;
+        $storyConfig = $this->config->story;
+
+        /* Create field lists. */
+        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($storyLang->$fieldName) ? $storyLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        /* Get stories. */
+        $stories = array();
+        if($this->session->storyOnlyCondition)
+        {
+            if($this->post->exportType == 'selected')
+            {
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
+            }
+            else
+            {
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
+            }
+        }
+        else
+        {
+            $field = $executionID ? 't2.id' : 't1.id';
+            if($this->post->exportType == 'selected')
+            {
+                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+            }
+            else
+            {
+                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+            }
+            while($row = $stmt->fetch()) $stories[$row->id] = $row;
+        }
+        $storyIdList = array_keys($stories);
+
+        if($stories)
+        {
+            $children = array();
+            foreach($stories as $story)
+            {
+                if($story->parent > 0 and isset($stories[$story->parent]))
+                {
+                    $children[$story->parent][$story->id] = $story;
+                    unset($stories[$story->id]);
+                }
+            }
+
+            if(!empty($children))
+            {
+                $reorderStories = array();
+                foreach($stories as $story)
+                {
+                    $reorderStories[$story->id] = $story;
+                    if(isset($children[$story->id]))
+                    {
+                        foreach($children[$story->id] as $childrenID => $childrenStory)
+                        {
+                            $reorderStories[$childrenID] = $childrenStory;
+                        }
+                    }
+                    unset($stories[$story->id]);
+                }
+                $stories = $reorderStories;
+            }
+        }
+
+        /* Get users, products and relations. */
+        $users           = $this->loadModel('user')->getPairs('noletter');
+        $products        = $this->product->getPairs('nocode');
+        $relatedStoryIds = array();
+
+        foreach($stories as $story) $relatedStoryIds[$story->id] = $story->id;
+
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
+
+        /* Get related objects title or names. */
+        $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+
+        foreach($stories as $story)
+        {
+            $story->spec   = '';
+            $story->verify = '';
+            if(isset($relatedSpecs[$story->id]))
+            {
+                $storySpec     = $relatedSpecs[$story->id][0];
+                $story->title  = $storySpec->title;
+                $story->spec   = $storySpec->spec;
+                $story->verify = $storySpec->verify;
+            }
+
+            if($this->post->fileType == 'csv')
+            {
+                $story->spec = htmlspecialchars_decode($story->spec);
+                $story->spec = str_replace("<br />", "\n", $story->spec);
+                $story->spec = str_replace('"', '""', $story->spec);
+                $story->spec = str_replace('&nbsp;', ' ', $story->spec);
+
+                $story->verify = htmlspecialchars_decode($story->verify);
+                $story->verify = str_replace("<br />", "\n", $story->verify);
+                $story->verify = str_replace('"', '""', $story->verify);
+                $story->verify = str_replace('&nbsp;', ' ', $story->verify);
+            }
+            /* fill some field with useful value. */
+
+            if(isset($storyTasks[$story->id])) $story->taskCountAB = $storyTasks[$story->id];
+            if(isset($storyBugs[$story->id]))  $story->bugCountAB  = $storyBugs[$story->id];
+            if(isset($storyCases[$story->id])) $story->caseCountAB = $storyCases[$story->id];
+
+            if($story->linkStories)
+            {
+                $tmpLinkStories    = array();
+                $linkStoriesIdList = explode(',', $story->linkStories);
+                foreach($linkStoriesIdList as $linkStoryID)
+                {
+                    $linkStoryID = trim($linkStoryID);
+                    $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
+                }
+                $story->linkStories = join("; \n", $tmpLinkStories);
+            }
+
+            if($story->childStories)
+            {
+                $tmpChildStories = array();
+                $childStoriesIdList = explode(',', $story->childStories);
+                foreach($childStoriesIdList as $childStoryID)
+                {
+                    if(empty($childStoryID)) continue;
+
+                    $childStoryID = trim($childStoryID);
+                    $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
+                }
+                $story->childStories = join("; \n", $tmpChildStories);
+            }
+
+            /* Set related files. */
+            $story->files = '';
+            if(isset($relatedFiles[$story->id]))
+            {
+                foreach($relatedFiles[$story->id] as $file)
+                {
+                    $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID=$file->id");
+                    $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                }
+            }
+
+            $story->mailto = trim(trim($story->mailto), ',');
+            $mailtos = explode(',', $story->mailto);
+            $story->mailto = '';
+            foreach($mailtos as $mailto)
+            {
+                $mailto = trim($mailto);
+                if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+            }
+            $story->mailto = rtrim($story->mailto, ',');
+
+            $story->reviewedBy = trim(trim($story->reviewedBy), ',');
+            $reviewedBys = explode(',', $story->reviewedBy);
+            $story->reviewedBy = '';
+            foreach($reviewedBys as $reviewedBy)
+            {
+                $reviewedBy = trim($reviewedBy);
+                if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
+            }
+            $story->reviewedBy = rtrim($story->reviewedBy, ',');
+
+            /* Set child story title. */
+            if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
+        }
+
+        return $stories;
     }
 }

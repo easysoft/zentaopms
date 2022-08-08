@@ -424,7 +424,7 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('vision')->eq('rnd')->andWhere('path')->eq('')->andWhere('type')->ne('program')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
@@ -559,9 +559,9 @@ class upgrade extends control
         if($type == 'sprint')
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->eq(0)
-                ->andWhere('path')->eq('')
+                ->where('project')->eq(0)
                 ->andWhere('vision')->eq('rnd')
+                ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll('id');
@@ -578,9 +578,9 @@ class upgrade extends control
         if($type == 'moreLink')
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->eq(0)
+                ->where('project')->eq(0)
                 ->andWhere('vision')->eq('rnd')
-                ->andWhere('path')->eq('')
+                ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll('id');
@@ -904,6 +904,69 @@ class upgrade extends control
     public function ajaxGetProgramStatus($programID)
     {
         echo $this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status');
+    }
+
+    /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine()
+    {
+        $response = array();
+        $response['result']      = 'continue';
+        $response['message']     = '';
+        $response['nextMessage'] = '';
+
+        $stmt = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'");
+
+        $table = $stmt->fetch();
+        if(empty($table))
+        {
+            $response['result']  = 'finished';
+            $response['message'] = $this->lang->upgrade->finishedChange;
+            return print(json_encode($response));
+        }
+
+        $nextTable = $stmt->fetch();
+        if(stripos($nextTable->Name, 'searchindex') !== false)
+        {
+            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+            if($mysqlVersion < 5.6) return print(json_encode($response));
+
+            $nextTable = $stmt->fetch();
+        }
+
+        $tableName = $table->Name;
+
+        $response['table'] = $tableName;
+        $response['next']  = $nextTable->Name;
+        if($response['next']) $response['nextMessage'] = sprintf($this->lang->upgrade->changingTable, $response['next']);
+
+        if(stripos($tableName, 'searchindex') !== false)
+        {
+            $stmt    = $this->dao->query("show index from `$tableName`");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE `{$tableName}` ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE `{$tableName}` DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE `{$tableName}` DROP INDEX `content`");
+
+            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+            if($mysqlVersion < 5.6) return print(json_encode($response));
+        }
+
+        $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+        $this->dao->exec($sql);
+
+        $response['message'] = sprintf($this->lang->upgrade->finishedTable, $tableName);
+        return print(json_encode($response));
     }
 
     /**

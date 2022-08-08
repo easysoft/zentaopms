@@ -94,6 +94,7 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->nextStep     = 'Next';
 
 $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';
@@ -136,22 +137,23 @@ $lang->doc->menuTitle        = 'Direcotory';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName        = 'Document Library';
-$lang->doc->libType        = 'Category';
-$lang->doc->custom         = 'Custom Document Library';
-$lang->doc->customAB       = 'Custom Doc Lib';
-$lang->doc->createLib      = 'Document Library';
-$lang->doc->allLibs        = 'Library List';
-$lang->doc->objectLibs     = "Document View of Library";
-$lang->doc->showFiles      = 'Attachments';
-$lang->doc->editLib        = 'Edit Document Library';
-$lang->doc->deleteLib      = 'Delete Document Library';
-$lang->doc->fixedMenu      = 'Fix to Menu';
-$lang->doc->removeMenu     = 'Remove from Menu';
-$lang->doc->search         = 'Search';
-$lang->doc->allCollections = 'All Collections';
-$lang->doc->keywordsTips   = 'Please use commas to separate keywords.';
-$lang->doc->sortLibs       = 'Sort Libs';
+$lang->doc->libName          = 'Document Library';
+$lang->doc->libType          = 'Category';
+$lang->doc->custom           = 'Custom Document Library';
+$lang->doc->customAB         = 'Custom Doc Lib';
+$lang->doc->createLib        = 'Document Library';
+$lang->doc->allLibs          = 'Library List';
+$lang->doc->objectLibs       = "Document View of Library";
+$lang->doc->showFiles        = 'Attachments';
+$lang->doc->editLib          = 'Edit Document Library';
+$lang->doc->deleteLib        = 'Delete Document Library';
+$lang->doc->fixedMenu        = 'Fix to Menu';
+$lang->doc->removeMenu       = 'Remove from Menu';
+$lang->doc->search           = 'Search';
+$lang->doc->allCollections   = 'All Collections';
+$lang->doc->keywordsTips     = 'Please use commas to separate keywords.';
+$lang->doc->sortLibs         = 'Sort Libs';
+$lang->doc->titlePlaceholder = 'Please enter the title';
 
 global $config;
 /* Query condition list. */

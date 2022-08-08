@@ -12,6 +12,7 @@
 $lang->programplan->common        = '项目阶段';
 $lang->programplan->browse        = '浏览甘特图';
 $lang->programplan->gantt         = '甘特图';
+$lang->programplan->ganttEdit     = '甘特图编辑';
 $lang->programplan->list          = '阶段列表';
 $lang->programplan->create        = '设置阶段';
 $lang->programplan->edit          = '编辑';
@@ -25,6 +26,7 @@ $lang->programplan->emptyParent      = '无';
 $lang->programplan->name             = '阶段名称';
 $lang->programplan->status           = '阶段进度';
 $lang->programplan->PM               = '阶段负责人';
+$lang->programplan->PMAB             = '负责人';
 $lang->programplan->acl              = '访问控制';
 $lang->programplan->subStageName     = '子阶段名称';
 $lang->programplan->percent          = '工作量占比';
@@ -49,6 +51,8 @@ $lang->programplan->openedDate       = '创建日期';
 $lang->programplan->editedBy         = '由谁编辑';
 $lang->programplan->editedDate       = '编辑日期';
 $lang->programplan->duration         = '工期';
+$lang->programplan->estimate         = '工时';
+$lang->programplan->consumed         = '消耗工时';
 $lang->programplan->version          = '版本号';
 $lang->programplan->full             = '全屏';
 $lang->programplan->today            = '今天';
@@ -84,3 +88,9 @@ $lang->programplan->error->createdTask     = '已分解任务，不可添加子�
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
 $lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
+$lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
+$lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
+
+
+$lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
+$lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

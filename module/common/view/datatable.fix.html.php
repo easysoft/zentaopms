@@ -24,12 +24,6 @@ $(function()
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=requirement')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
-            else if(typeof(from) != 'undefined')
-            {
-                <?php $fromPage = isset($fromPage) ? $fromPage : '';?>
-                <?php $fromPage = ($fromPage == 'project' and isset($isStage) and $isStage) ? 'stage' : $fromPage;?>
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . "&extra=$fromPage")?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
-            }
             else
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");

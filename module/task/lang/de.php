@@ -49,7 +49,7 @@ $lang->task->case                = 'Fall';
 $lang->task->confirmStoryChange  = "Storyäanderung bestätigen";
 $lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = 'Fortschritt';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Fortschritt';
 $lang->task->progressTips        = 'Genutzt/(Genutzt+Rest)';
 $lang->task->copy                = 'Aufgabe kopieren';
 $lang->task->waitTask            = 'Waiting Task';
@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = 'Select Story Tested';
 $lang->task->selectAllUser     = 'Alle';
 $lang->task->noStory           = 'Keine Story';
 $lang->task->noAssigned        = 'Nicht zugeordnet';
@@ -215,6 +215,7 @@ $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->confirmDelete             = "Möchten Sie diese Aufgabe löschen?";
+$lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
 $lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = "Story kopieren";
 $lang->task->afterSubmit               = "Nach der Erstellung,";
@@ -351,3 +352,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Datum';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Schätzung';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

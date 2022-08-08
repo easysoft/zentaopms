@@ -49,7 +49,7 @@ $lang->task->case                = 'Associée CasTest';
 $lang->task->confirmStoryChange  = "Confirmer Changement";
 $lang->task->storyChange         = "Story Changée";
 $lang->task->progress            = 'Progression';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Progression';
 $lang->task->progressTips        = 'Coût/(Coût+Reste)';
 $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
@@ -352,3 +352,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Estimés';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

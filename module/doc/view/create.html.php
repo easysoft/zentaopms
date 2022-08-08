@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(strpos($config->doc->textTypes, $docType) !== false and $from == 'doc'):?>
+<?php include 'createtexttype.html.php';?>
+<?php else:?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id="mainContent" class="main-content">
@@ -69,21 +72,20 @@ $("a[href^='###']").click(function()
             <th><?php echo $lang->doc->keywords;?></th>
             <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
           </tr>
-          <tr>
+          <tr id='contentBox'>
+            <th><?php echo $lang->doc->content;?></th>
+            <td colspan='2'>
+              <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
+              <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;height:200px'");?></div>
+            </td>
+          </tr>
+          <tr class='hidden'>
             <th><?php echo $lang->doc->type;?></th>
             <?php
             $typeKeyList = array();
             foreach($lang->doc->types as $typeKey => $typeName) $typeKeyList[$typeKey] = $typeKey;
             ?>
             <td><?php echo html::radio('type', $lang->doc->types, zget($typeKeyList, $docType, 'text'));?></td>
-          </tr>
-          <tr id='contentBox'>
-            <th><?php echo $lang->doc->content;?></th>
-            <td colspan='2'>
-              <div class='contenthtml'><?php echo html::textarea('content', '', "style='width:100%;height:200px'");?></div>
-              <div class='contentmarkdown hidden'><?php echo html::textarea('contentMarkdown', '', "style='width:100%;height:200px'");?></div>
-              <?php echo html::hidden('contentType', 'html');?>
-            </td>
           </tr>
           <tr id='urlBox' class='hidden'>
             <th><?php echo $lang->doc->url;?></th>
@@ -128,9 +130,12 @@ $("a[href^='###']").click(function()
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
+              <?php echo html::hidden('contentType', 'html');?>
               <?php echo html::submitButton();?>
+              <?php if($config->showMainMenu):?>
               <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
               <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
+              <?php endif;?>
             </td>
           </tr>
         </tbody>
@@ -138,7 +143,10 @@ $("a[href^='###']").click(function()
     </form>
   </div>
 </div>
+<?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
+<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
+<?php endif;?>
 <?php endif;?>

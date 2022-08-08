@@ -204,7 +204,7 @@
               <?php if(!$isLibCase):?>
               <tr>
                 <th><?php echo $lang->testcase->story;?></th>
-                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control chosen"');?></div>
+                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control picker-select"');?></div>
                 </td>
               </tr>
               <?php endif;?>

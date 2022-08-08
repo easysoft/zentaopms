@@ -599,7 +599,7 @@ class block extends control
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
-        $uri   = $this->app->getURI(true);
+        $uri   = $this->createLink('my', 'index');
 
         $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'qa');
@@ -629,7 +629,7 @@ class block extends control
      */
     public function printTaskBlock()
     {
-        $this->session->set('taskList',  $this->app->getURI(true), 'execution');
+        $this->session->set('taskList',  $this->createLink('my', 'index'), 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $account = $this->app->user->account;
@@ -647,7 +647,7 @@ class block extends control
      */
     public function printBugBlock()
     {
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
@@ -663,7 +663,7 @@ class block extends control
      */
     public function printCaseBlock()
     {
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caseList', $this->createLink('my', 'index'), 'qa');
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -708,9 +708,10 @@ class block extends control
     {
         $this->app->loadLang('testtask');
 
-        $this->session->set('productList',  $this->app->getURI(true), 'product');
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('buildList',    $this->app->getURI(true), 'execution');
+        $uri = $this->createLink('my', 'index');
+        $this->session->set('productList',  $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
+        $this->session->set('buildList',    $uri, 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
@@ -736,7 +737,7 @@ class block extends control
      */
     public function printStoryBlock()
     {
-        $this->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadClass('pager', $static = true);
@@ -897,7 +898,7 @@ class block extends control
 
         /* Get projects. */
         $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
-        $projects      = $this->loadModel('project')->getOverviewList('byStatus', $status, 'id_desc', $count, $excludedModel);
+        $projects      = $this->loadModel('project')->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -1686,17 +1687,30 @@ class block extends control
      */
     public function printExecutionBlock()
     {
-        $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
         $status = isset($this->params->type)  ? $this->params->type : 'all';
-        $pager  = pager::init(0, $count, 1);
+
+        $this->app->loadLang('execution');
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
 
         $projectPairs = array();
         if($this->config->systemMode == 'new') $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
 
-        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $this->view->executionStats = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
+        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $executions = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
+
+        foreach($executions as $index => $execution)
+        {
+            if(empty($execution->children)) continue;
+
+            foreach($execution->children as $child) $executions[] = $child;
+            unset($executions[$index]);
+        }
+
+        $this->view->executionStats = $executions;
         $this->view->projectPairs   = $projectPairs;
     }
 
@@ -1748,6 +1762,7 @@ class block extends control
                 ->beginIF($objectType == 'story' or $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
+                ->beginIF($objectType == 'issue' or $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
@@ -1757,6 +1772,7 @@ class block extends control
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
+                ->beginIF($objectType == 'issue' or $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -1788,7 +1804,13 @@ class block extends control
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
 
-                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo');
+
+                foreach($objects as $k => $task)
+                {
+                    if(in_array($task->status, array('closed', 'cancel', 'pause'))) unset($objects[$k]);
+                }
+                if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');
@@ -1813,16 +1835,18 @@ class block extends control
             $now          = date('H:i:s', strtotime(helper::now()));
             $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
-            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
-                ->where('deleted')->eq('0')
-                ->andWhere('(date')->gt($today)
-                ->orWhere('(begin')->gt($now)
-                ->andWhere('date')->eq($today)
+            $meetings = $this->dao->select('*')->from(TABLE_MEETING)->alias('t1')
+                ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('(t1.date')->gt($today)
+                ->orWhere('(t1.begin')->gt($now)
+                ->andWhere('t1.date')->eq($today)
                 ->markRight(2)
-                ->andwhere('(host')->eq($this->app->user->account)
-                ->orWhere('participant')->in($this->app->user->account)
+                ->andwhere('(t1.host')->eq($this->app->user->account)
+                ->orWhere('t1.participant')->in($this->app->user->account)
                 ->markRight(1)
-                ->orderBy('id_desc')
+                ->orderBy('t1.id_desc')
                 ->beginIF($meetingCount)->limit($meetingCount)->fi()
                 ->fetchAll();
 

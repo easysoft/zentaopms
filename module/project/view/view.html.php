@@ -19,9 +19,11 @@
         <div class="panel block-dynamic" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
+            <?php if($project->model != 'kanban' and common::hasPriv('project', 'dynamic')):?>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body scrollbar-hover">
             <ul class="timeline timeline-tag-left no-margin">
@@ -41,9 +43,11 @@
         <div class="panel block-team" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
+            <?php if(common::hasPriv('project', 'team')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'manageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body">
             <div class="row row-grid">
@@ -107,7 +111,8 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
+            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
@@ -190,7 +195,7 @@
                   <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                   <tr>
                     <td colspan="4">
-                      <?php $progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;?>
+                      <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>
                       <?php echo $lang->project->progress;?> <?php echo $progress . $lang->percent;?> &nbsp;
                       <div class="progress inline-block">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>

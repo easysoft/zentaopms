@@ -90,3 +90,7 @@ $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
 $lang->release->notifyList['PT'] = "所在项目团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

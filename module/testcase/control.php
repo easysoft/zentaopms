@@ -910,13 +910,16 @@ class testcase extends control
                 $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
             }
 
+            $moduleIdList = $case->module;
+            if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
+
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, 0, 'all','id_desc', 0, 'full', 'story', false);
+            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
@@ -1034,8 +1037,7 @@ class testcase extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($tab == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
-                ->beginIF($tab != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
+                ->andWhere('t1.id')->in($caseIDList)
                 ->fetchAll('id');
             $caseIDList = array_keys($cases);
 
@@ -1728,7 +1730,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($productID)
+    public function exportTemplate($productID)
     {
         if($_POST)
         {

@@ -113,6 +113,7 @@ $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->checkedProjects    = 'Seleted %s items';
+$lang->program->budgetOverrun      = "The program's budget has exceeded the remaining budget of the parent program:";
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
@@ -139,12 +140,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all']       = 'All';
-$lang->program->featureBar['undone']    = 'Unfinished';
-$lang->program->featureBar['wait']      = 'Waiting';
-$lang->program->featureBar['doing']     = 'Doing';
-$lang->program->featureBar['suspended'] = 'Suspended';
-$lang->program->featureBar['closed']    = 'Closed';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'Waiting';
+$lang->program->featureBar['browse']['doing']     = 'Doing';
+$lang->program->featureBar['browse']['suspended'] = 'Suspended';
+$lang->program->featureBar['browse']['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

@@ -46,6 +46,8 @@ class compile extends control
 
             $this->view->job = $job;
         }
+
+        $this->app->loadLang('job');
         $this->loadModel('ci')->setMenu($repoID);
 
         $this->app->loadClass('pager', $static = true);

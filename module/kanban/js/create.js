@@ -1,6 +1,10 @@
 $(function()
 {
-    if(enableImport == 'off') $("input[name^='importObjectList']").attr('disabled', 'disabled');
+    if(enableImport == 'off')
+    {
+        $("input[name^='importObjectList']").attr('disabled', 'disabled');
+        $('td.objectBox').hide();
+    }
     $("input[id='copyContentbasicInfo']").click(function(){return false;})
 
     copyRegion = $("input[id='copyContentregion']").prop('checked');
@@ -15,10 +19,12 @@ $(function()
         if($(this).val() == 'off')
         {
             $("input[name^='importObjectList']").attr('disabled', 'disabled');
+            $('td.objectBox').hide();
         }
         else
         {
             $("input[name^='importObjectList']").removeAttr('disabled');
+            $('td.objectBox').show();
         }
     })
 
@@ -82,7 +88,7 @@ function changeValue(spaceID, type)
 function loadUsers(spaceID)
 {
     var field = spaceType == 'private' ? 'whitelist' : 'team';
-    var link  = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=' + field + '&selectedUser=' + $('#' + field).val());
+    var link  = createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=' + field + '&selectedUser=' + $('#' + field).val());
     $.get(link, function(data)
     {
         $('#' + field).replaceWith(data);
@@ -91,24 +97,4 @@ function loadUsers(spaceID)
     });
 
     if(spaceType != 'private') loadOwners(spaceID);
-}
-
-/**
- * The owners that loads kanban.
- *
- * @oaram  int    spaceID
- * @access public
- * @return void
- */
-function loadOwners(spaceID)
-{
-    var link = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
-
-    $.get(link, function(data)
-    {
-        $('#owner').replaceWith(data);
-        $('#owner' + "_chosen").remove();
-        $('#owner').next('.picker').remove();
-        $('#owner').chosen();
-    });
 }

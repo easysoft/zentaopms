@@ -48,6 +48,7 @@ $lang->kanban->removeCard          = 'Remove Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->settingSpace        = 'Setting Space';
+$lang->kanban->settingKanban       = 'Setting Kanban';
 $lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->closeSpace          = 'Close Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
@@ -87,6 +88,7 @@ $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'cla
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
+$lang->kanban->allUsers            = 'Charger Tous';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -199,7 +201,6 @@ $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 $lang->kanban->limitExceeded      = 'Limit Exceeded';
 $lang->kanban->fullScreen         = 'Full Screen';
-$lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 $lang->kanban->showWIP            = 'Show WIP';
@@ -215,8 +216,13 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
-$lang->kanban->orderList['pri_asc']  = 'Story Priorité Ascendante';
-$lang->kanban->orderList['pri_desc'] = 'Story Priorité Descendante';
+$lang->kanban->orderList['id_asc']          = 'Story ID Ascendante';
+$lang->kanban->orderList['id_desc']         = 'Story ID Descendante';
+$lang->kanban->orderList['pri_asc']         = 'Story Priorité Ascendante';
+$lang->kanban->orderList['pri_desc']        = 'Story Priorité Descendante';
+$lang->kanban->orderList['stage_asc']       = 'Story Phase Ascendante';
+$lang->kanban->orderList['stage_desc']      = 'Story Phase Descendante';
+$lang->kanban->orderList['assignedTo_desc'] = 'Assigné à';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
@@ -345,8 +351,8 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
-$lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Largeur standard pour toutes les colonnes)</span>";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapter selon la largeur de voie)</span>";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et 32767.';

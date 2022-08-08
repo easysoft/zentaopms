@@ -229,6 +229,40 @@ class project extends control
     }
 
     /**
+     * Ajax get available budget.
+     *
+     * @param  int    $programID
+     * @param  int    $selectedProgramID
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAvailableBudget($projectID, $selectedProgramID, $budget)
+    {
+        if(!empty($projectID))
+        {
+            $project         = $this->project->getByID($projectID);
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
+            $availableBudget = $project->parent == $selectedProgramID ? $budgetLeft + $project->budget : $budgetLeft;
+        }
+        else
+        {
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+        }
+
+        $tip = '';
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
+
+        $placeholder = '';
+        if($selectedProgram and $selectedProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget;
+
+        $tipList = array('tip' => $tip, 'placeholder' => $placeholder);
+        echo json_encode($tipList);
+    }
+
+    /**
      * Project index view.
      *
      * @param  int    $projectID
@@ -765,7 +799,8 @@ class project extends control
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
-        $project = $this->project->getById($projectID);
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
 
         if($this->config->systemMode == 'new')
         {
@@ -779,8 +814,6 @@ class project extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
         }
-
-        $this->project->setMenu($projectID);
 
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
@@ -974,6 +1007,7 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
+        $this->session->set('executionList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
@@ -1082,7 +1116,7 @@ class project extends control
         foreach($teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
 
         $showBranch      = false;
@@ -1102,6 +1136,10 @@ class project extends control
             }
         }
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {
@@ -1844,16 +1882,17 @@ class project extends control
      * Delete a project.
      *
      * @param  int     $projectID
-     * @param  string  $from
+     * @param  string  $confirm
+     * @param  string  $from browse|view
      * @access public
      * @return void
      */
-    public function delete($projectID, $confirm = 'no')
+    public function delete($projectID, $confirm = 'no', $from = 'browse')
     {
         if($confirm == 'no')
         {
             $project = $this->project->getByID($projectID);
-            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes")));
+            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
         }
         else
         {
@@ -1865,10 +1904,7 @@ class project extends control
             $this->user->updateUserView($projectID, 'project');
 
             /* Delete the execution under the project. */
-            $executionIdList = $this->loadModel('execution')->getByProject($projectID);
-
-            $url = $this->createLink('project', 'browse');
-            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
+            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
@@ -1876,7 +1912,8 @@ class project extends control
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                return print(js::locate($url, 'parent'));
+                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+                return print(js::reload('parent'));
             }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
@@ -1886,7 +1923,8 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
-            return print(js::locate($url, 'parent'));
+            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -1932,6 +1970,10 @@ class project extends control
      */
     public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
+        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
 
@@ -1948,6 +1990,10 @@ class project extends control
      */
     public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
     {
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
+        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 
@@ -1996,8 +2042,7 @@ class project extends control
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
-            if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
-            if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
+            if($from == 'program')  $locateLink = $this->session->projectList;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 

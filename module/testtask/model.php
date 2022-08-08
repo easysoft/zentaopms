@@ -31,6 +31,8 @@ class testtaskModel extends model
         $task = fixer::input('post')
             ->setDefault('build', '')
             ->setIF($this->config->systemMode == 'new', 'project', $projectID)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -86,7 +88,7 @@ class testtaskModel extends model
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(strtolower($scopeAndStatus[1]) != 'totalstatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
@@ -94,6 +96,10 @@ class testtaskModel extends model
             ->orWhere('(t1.build')->eq('trunk')
             ->andWhere('t1.product')->eq((int)$productID)
             ->markRight(1)
+            ->fi()
+            ->beginIF($scopeAndStatus[1] == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -292,7 +298,9 @@ class testtaskModel extends model
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.owner')->eq($account)
             ->andWhere('t2.id')->in($this->app->user->view->sprints)
@@ -1109,8 +1117,10 @@ class testtaskModel extends model
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftjoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
@@ -1441,7 +1451,13 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'runcase' and isset($testtask->auto) and $testtask->auto == 'unit')  return false;
-        if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
+
+        if($action == 'runcase')
+        {
+            if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
+            return $testtask->status != 'wait';
+        }
+
         return true;
     }
 
@@ -1529,7 +1545,7 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
                 }
@@ -1594,7 +1610,7 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
                     break;

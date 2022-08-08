@@ -264,7 +264,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->testreport          = 'testreport';
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
-    $lang->resource->project->createGuide         = 'createGuide';
     $lang->resource->project->updateOrder         = 'updateOrder';
     $lang->resource->project->team                = 'teamAction';
     $lang->resource->project->unlinkMember        = 'unlinkMember';
@@ -304,10 +303,9 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[160] = 'testreport';
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
-    $lang->project->methodOrder[175] = 'createGuide';
-    $lang->project->methodOrder[180] = 'updateOrder';
-    $lang->project->methodOrder[185] = 'team';
-    $lang->project->methodOrder[190] = 'unlinkMember';
+    $lang->project->methodOrder[175] = 'updateOrder';
+    $lang->project->methodOrder[180] = 'team';
+    $lang->project->methodOrder[185] = 'unlinkMember';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
@@ -513,6 +511,9 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'trackAB';
 $lang->resource->story->processStoryChange = 'processStoryChange';
+$lang->resource->story->linkStories        = 'linkStoriesAB';
+
+if($config->URAndSR) $lang->resource->story->linkRequirements = 'linkRequirementsAB';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -542,6 +543,9 @@ $lang->story->methodOrder[125] = 'batchChangeModule';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'track';
 $lang->story->methodOrder[140] = 'processStoryChange';
+$lang->story->methodOrder[145] = 'linkStories';
+
+if($config->URAndSR) $lang->story->methodOrder[150] = 'linkRequirements';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -624,6 +628,7 @@ $lang->resource->kanban->activateSpace      = 'activateSpace';
 $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
+$lang->resource->kanban->setting            = 'setting';
 $lang->resource->kanban->view               = 'view';
 $lang->resource->kanban->activate           = 'activate';
 $lang->resource->kanban->close              = 'close';
@@ -767,6 +772,7 @@ $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->storyView         = 'storyView';
 if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
+$lang->resource->execution->setKanban         = 'setKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -825,6 +831,7 @@ $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[265] = 'executionkanban';
 $lang->execution->methodOrder[270] = 'kanban';
+$lang->execution->methodOrder[275] = 'setKanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -974,7 +981,7 @@ $lang->resource->testcase->batchEdit               = 'batchEdit';
 $lang->resource->testcase->delete                  = 'deleteAction';
 $lang->resource->testcase->batchDelete             = 'batchDelete';
 $lang->resource->testcase->export                  = 'exportAction';
-$lang->resource->testcase->exportTemplet           = 'exportTemplet';
+$lang->resource->testcase->exportTemplate          = 'exportTemplate';
 $lang->resource->testcase->import                  = 'importAction';
 $lang->resource->testcase->showImport              = 'showImport';
 $lang->resource->testcase->confirmChange           = 'confirmChange';
@@ -1111,7 +1118,7 @@ $lang->resource->caselib->delete           = 'deleteAction';
 $lang->resource->caselib->view             = 'view';
 $lang->resource->caselib->createCase       = 'createCase';
 $lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
-$lang->resource->caselib->exportTemplet    = 'exportTemplet';
+$lang->resource->caselib->exportTemplate   = 'exportTemplate';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
@@ -1123,7 +1130,7 @@ $lang->caselib->methodOrder[20] = 'delete';
 $lang->caselib->methodOrder[25] = 'view';
 $lang->caselib->methodOrder[30] = 'createCase';
 $lang->caselib->methodOrder[35] = 'batchCreateCase';
-$lang->caselib->methodOrder[40] = 'exportTemplet';
+$lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
@@ -1284,6 +1291,7 @@ $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 $lang->resource->custom->kanban             = 'kanban';
+$lang->resource->custom->code               = 'code';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1300,6 +1308,8 @@ $lang->custom->methodOrder[60] = 'editStoryConcept';
 $lang->custom->methodOrder[65] = 'browseStoryConcept';
 $lang->custom->methodOrder[70] = 'setDefaultConcept';
 $lang->custom->methodOrder[75] = 'deleteStoryConcept';
+$lang->custom->methodOrder[80] = 'kanban';
+$lang->custom->methodOrder[85] = 'code';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1344,17 +1354,11 @@ $lang->resource->gitlab->browseBranch         = 'browseBranch';
 $lang->resource->gitlab->webhook              = 'webhook';
 $lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
-$lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
-$lang->resource->gitlab->createBranchPriv     = 'createBranchPriv';
-$lang->resource->gitlab->editBranchPriv       = 'editBranchPriv';
-$lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
+$lang->resource->gitlab->manageBranchPriv     = 'browseBranchPriv';
+$lang->resource->gitlab->manageTagPriv        = 'browseTagPriv';
 $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
-$lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
-$lang->resource->gitlab->createTagPriv        = 'createTagPriv';
-$lang->resource->gitlab->editTagPriv          = 'editTagPriv';
-$lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1381,23 +1385,27 @@ $lang->gitlab->methodOrder[115] = 'browseBranch';
 $lang->gitlab->methodOrder[120] = 'webhook';
 $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
-$lang->gitlab->methodOrder[135] = 'browseTag';
-$lang->gitlab->methodOrder[140] = 'browseTagPriv';
-$lang->gitlab->methodOrder[145] = 'deleteTagPriv';
+$lang->gitlab->methodOrder[135] = 'manageBranchPriv';
+$lang->gitlab->methodOrder[140] = 'manageTagPriv';
+$lang->gitlab->methodOrder[145] = 'browseTag';
+$lang->gitlab->methodOrder[150] = 'createTag';
+$lang->gitlab->methodOrder[155] = 'deleteTag';
 
 /* Gitea. */
 $lang->resource->gitea = new stdclass();
-$lang->resource->gitea->browse = 'browse';
-$lang->resource->gitea->create = 'create';
-$lang->resource->gitea->edit   = 'edit';
-$lang->resource->gitea->view   = 'view';
-$lang->resource->gitea->delete = 'delete';
+$lang->resource->gitea->browse   = 'browse';
+$lang->resource->gitea->create   = 'create';
+$lang->resource->gitea->edit     = 'edit';
+$lang->resource->gitea->view     = 'view';
+$lang->resource->gitea->delete   = 'delete';
+$lang->resource->gitea->bindUser = 'bindUser';
 
 $lang->gitea->methodOrder[5]  = 'browse';
 $lang->gitea->methodOrder[10] = 'create';
 $lang->gitea->methodOrder[15] = 'edit';
 $lang->gitea->methodOrder[20] = 'view';
 $lang->gitea->methodOrder[25] = 'delete';
+$lang->gitea->methodOrder[30] = 'bindUser';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();

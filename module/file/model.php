@@ -1017,7 +1017,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return getimagesize($file->realPath);
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
         }
         else if($this->config->file->storageType == 's3')
         {

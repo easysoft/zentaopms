@@ -49,7 +49,7 @@ $lang->task->case                = 'Linked Case';
 $lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = 'Progress';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = 'Select Story Tested';
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
 $lang->task->noAssigned        = 'Unassigned';
@@ -352,3 +352,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Estimates';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

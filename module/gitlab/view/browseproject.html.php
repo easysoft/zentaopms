@@ -42,26 +42,28 @@
       <thead>
         <tr>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
-          <th class='text-left'></th>
-          <th class='text-left'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-8'><?php echo $lang->actions;?></th>
+          <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
+          <th class='text'></th>
+          <th class='text'><?php echo $lang->gitlab->lastUpdate;?></th>
+          <th class='c-actions-9 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabProjectList as $id => $gitlabProject): ?>
         <tr class='text'>
-          <td class='text-center'><?php echo $gitlabProject->id;?></td>
+          <td class='text'><?php echo $gitlabProject->id;?></td>
           <td class='text-c-name' title='<?php echo $gitlabProject->name;?>'><?php echo $gitlabProject->name_with_namespace;?></td>
           <td class='text text-c-counts'>
             <span title="<?php echo $lang->gitlab->project->star;?>"><i class="icon icon-star"></i> <?php echo $gitlabProject->star_count;?></span>
             <span title="<?php echo $lang->gitlab->project->fork;?>"><i class="icon icon-code-fork"></i> <?php echo $gitlabProject->forks_count;?></span>
           </td>
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
-          <td class='c-actions text-left'>
+          <td class='c-actions'>
             <?php
-            echo common::buildIconButton('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
-            echo common::buildIconButton('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'treemap', '', '', false, '', $this->lang->gitlab->browseBranch, 0, $gitlabProject->default_branch);
+            echo common::buildIconButton('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag', '', '', false, '', $this->lang->gitlab->browseTag, 0, $gitlabProject->default_branch);
+            echo common::buildIconButton('gitlab', 'manageBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', $this->lang->gitlab->browseBranchPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'manageTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', $this->lang->gitlab->browseTagPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
             echo common::buildIconButton('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
             echo common::buildIconButton('gitlab', 'createWebhook', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'change', 'hiddenwin', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
             echo common::buildIconButton('gitlab', 'importIssue', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'link', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));

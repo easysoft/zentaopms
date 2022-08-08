@@ -12,25 +12,25 @@
 $lang->caselib->common = '用例库';
 $lang->caselib->all    = '所有用例库';
 
-$lang->caselib->index            = "用例库首页";
-$lang->caselib->create           = "创建用例库";
-$lang->caselib->edit             = '编辑用例库';
-$lang->caselib->browse           = '浏览用例库';
-$lang->caselib->view             = '查看库概况';
-$lang->caselib->createCase       = '创建用例';
-$lang->caselib->delete           = "删除";
-$lang->caselib->linkVersion      = "版本";
-$lang->caselib->deleted          = '已删除';
-$lang->caselib->exportTemplet    = '导出模板';
-$lang->caselib->batchCreateCase  = '批量创建用例';
-$lang->caselib->import           = '导入';
-$lang->caselib->showImport       = '显示导入数据';
-$lang->caselib->type             = '类型';
-$lang->caselib->product          = '所属' . $lang->productCommon;
-$lang->caselib->browseAction     = '用例库列表';
-$lang->caselib->deleteAction     = "删除用例库";
-$lang->caselib->importAction     = '导入用例';
-$lang->caselib->linkVersion      = "版本";
+$lang->caselib->index           = "用例库首页";
+$lang->caselib->create          = "创建用例库";
+$lang->caselib->edit            = '编辑用例库';
+$lang->caselib->browse          = '浏览用例库';
+$lang->caselib->view            = '查看库概况';
+$lang->caselib->createCase      = '创建用例';
+$lang->caselib->delete          = "删除";
+$lang->caselib->linkVersion     = "版本";
+$lang->caselib->deleted         = '已删除';
+$lang->caselib->exportTemplate  = '导出模板';
+$lang->caselib->batchCreateCase = '批量创建用例';
+$lang->caselib->import          = '导入';
+$lang->caselib->showImport      = '显示导入数据';
+$lang->caselib->type            = '类型';
+$lang->caselib->product         = '所属' . $lang->productCommon;
+$lang->caselib->browseAction    = '用例库列表';
+$lang->caselib->deleteAction    = "删除用例库";
+$lang->caselib->importAction    = '导入用例';
+$lang->caselib->linkVersion     = "版本";
 
 $lang->caselib->id             = '编号';
 $lang->caselib->name           = '名称';
@@ -44,3 +44,6 @@ $lang->caselib->legendDesc = '描述';
 
 $lang->caselib->libraryDelete = '您确认要删除该用例库吗？';
 $lang->caselib->noModule      = '<div>您现在还没有模块信息</div><div>请维护用例库模块</div>';
+
+$lang->caselib->featureBar['browse']['all']  = '所有';
+$lang->caselib->featureBar['browse']['wait'] = '待评审';

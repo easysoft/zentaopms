@@ -47,20 +47,26 @@
       <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanban->owner;?></th>
-        <td><?php echo html::select('owner', $users, isset($copyKanban->owner) ? $copyKanban->owner : '', "class='form-control chosen' data-drop_direction='down'");?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::select('owner', $ownerPairs, isset($copyKanban->owner) ? $copyKanban->owner : '', "class='form-control chosen' data-drop_direction='down'");?>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->kanban->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->kanban->team;?></th>
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, isset($copyKanban->team) ? $copyKanban->team : '', "class='form-control picker-select' multiple data-dropDirection='bottom'");?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=team");?>
           </div>
         </td>
       </tr>
       <?php endif;?>
       <tr>
         <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
-        <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0));?></td>
+        <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0));?></td>
       </tr>
       <tr>
         <th rowspan='2'><?php echo $lang->kanban->import?></th>
@@ -72,11 +78,11 @@
       <tr id='emptyTip' class='hidden'><th></th><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
       <tr>
         <th class='w-90px'><?php echo $lang->kanban->archive;?></th>
-        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '0'));?></td>
+        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->manageProgress;?></th>
-        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '0'));?></td>
+        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->alignment;?></th>
@@ -91,7 +97,12 @@
       <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
-        <td><?php echo html::select('whitelist[]', $whitelist, isset($copyKanban->whitelist) ? $copyKanban->whitelist : '', 'class="form-control picker-select" multiple');?></td>
+        <td colspan='2'>
+          <div class="input-group">
+            <?php echo html::select('whitelist[]', $users, isset($copyKanban->whitelist) ? $copyKanban->whitelist : '', 'class="form-control picker-select" multiple');?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist&attr=data-drop_direction='up'");?>
+          </div>
+        </td>
       </tr>
       <?php endif;?>
       <tr>

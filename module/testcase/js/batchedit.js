@@ -99,17 +99,16 @@ $(function()
             var id        = $(this).attr('id');
             var num       = id.substring(5);
             var moduleID  = $('#modules' + num).val();
-            var branchID  = $('#branches' + num).val();
+            var branchID  = typeof($('#branches' + num).val()) == 'undefined' ? 0 : $('#branches' + num).val();
             var storyID   = $("#story" + num).val();
-            var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+            var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=' + storyID +'&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
             $.get(storyLink, function(stories)
             {
                 if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
                 $('#story' + num).replaceWith(stories);
                 $('#story' + num + "_chosen").remove();
                 $('#story' + num).next('.picker').remove();
-                $('#story' + num).attr('name', 'story[' + num + ']').chosen();
-                $('#story' + num).val(storyID).trigger('chosen:updated');
+                $('#story' + num).attr('name', 'story[' + num + ']').picker();
             });
         });
     }

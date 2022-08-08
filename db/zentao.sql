@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
   `type` char(40) NOT NULL DEFAULT 'whitelist',
   `source` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` int(9) unsigned NOT NULL auto_increment,
@@ -29,9 +29,9 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   KEY `project` (`project`),
   KEY `action` (`action`),
   KEY `objectID` (`objectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
-CREATE TABLE `zt_api_lib_release` (
+CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `desc` varchar(255) NOT NULL DEFAULT '',
@@ -40,9 +40,9 @@ CREATE TABLE `zt_api_lib_release` (
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_api`;
-CREATE TABLE `zt_api` (
+CREATE TABLE IF NOT EXISTS `zt_api` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `product` varchar(255) NOT NULL DEFAULT '',
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
@@ -68,9 +68,9 @@ CREATE TABLE `zt_api` (
   `editedDate` datetime NOT NULL,
   `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_apispec`;
-CREATE TABLE `zt_apispec` (
+CREATE TABLE IF NOT EXISTS `zt_apispec` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `doc` int UNSIGNED NOT NULL DEFAULT 0,
   `module` int UNSIGNED NOT NULL DEFAULT 0,
@@ -91,9 +91,9 @@ CREATE TABLE `zt_apispec` (
   `addedBy` varchar(30)  NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_apistruct`;
-CREATE TABLE `zt_apistruct` (
+CREATE TABLE IF NOT EXISTS `zt_apistruct` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(30)  NOT NULL DEFAULT '',
@@ -107,9 +107,9 @@ CREATE TABLE `zt_apistruct` (
   `editedDate` datetime NOT NULL,
   `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
   primary key (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_apistruct_spec`;
-CREATE TABLE `zt_apistruct_spec` (
+CREATE TABLE IF NOT EXISTS `zt_apistruct_spec` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
@@ -119,9 +119,9 @@ CREATE TABLE `zt_apistruct_spec` (
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NOT NULL,
   primary key (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approval`;
-CREATE TABLE `zt_approval` (
+CREATE TABLE IF NOT EXISTS `zt_approval` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `flow` mediumint(8) NOT NULL,
   `objectType` varchar(30) NOT NULL,
@@ -134,9 +134,9 @@ CREATE TABLE `zt_approval` (
   `createdDate` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalflow`;
-CREATE TABLE `zt_approvalflow` (
+CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `code` varchar(100) NOT NULL,
@@ -147,9 +147,9 @@ CREATE TABLE `zt_approvalflow` (
   `type` varchar(30) NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalflowobject`;
-CREATE TABLE `zt_approvalflowobject` (
+CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `root` int(8) NOT NULL,
   `flow` int(8) NOT NULL,
@@ -157,9 +157,9 @@ CREATE TABLE `zt_approvalflowobject` (
   `objectID` mediumint(9) NOT NULL,
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalflowspec`;
-CREATE TABLE `zt_approvalflowspec` (
+CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `flow` mediumint(8) NOT NULL,
   `version` mediumint(8) NOT NULL,
@@ -167,9 +167,9 @@ CREATE TABLE `zt_approvalflowspec` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalnode`;
-CREATE TABLE `zt_approvalnode` (
+CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `approval` mediumint(8) NOT NULL,
   `type` enum('review','cc') NOT NULL,
@@ -189,18 +189,18 @@ CREATE TABLE `zt_approvalnode` (
   `reviewedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_reviewed_date` (`reviewedDate`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalobject`;
-CREATE TABLE `zt_approvalobject` (
+CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `approval` int(8) NOT NULL,
   `objectType` char(30) NOT NULL,
   `objectID` mediumint(8) NOT NULL,
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_approvalrole`;
-CREATE TABLE `zt_approvalrole` (
+CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `code` char(30) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -208,7 +208,7 @@ CREATE TABLE `zt_approvalrole` (
   `users` longtext NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_block`;
 CREATE TABLE IF NOT EXISTS `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_vision_module_type_order` (`account`,`vision`,`module`,`type`,`order`),
   KEY `account` (`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_branch`;
 CREATE TABLE IF NOT EXISTS `zt_branch` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_bug`;
 CREATE TABLE IF NOT EXISTS `zt_bug` (
   `id` mediumint(8) NOT NULL auto_increment,
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   KEY `toStory` (`toStory`),
   KEY `result` (`result`),
   KEY `assignedTo` (`assignedTo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -331,11 +331,13 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `bugs` text NOT NULL,
   `builder` char(30) NOT NULL default '',
   `desc` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `execution` (`execution`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
   `execution` mediumint(8) unsigned NOT NULL,
@@ -347,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `consumed` float NOT NULL,
   `storyPoint` float NOT NULL,
   PRIMARY KEY  (`execution`,`date`,`task`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -398,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   KEY `story` (`story`),
   KEY `fromBug` (`fromBug`),
   KEY `module` (`module`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_casestep`;
 CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -411,9 +413,9 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   PRIMARY KEY  (`id`),
   KEY `case` (`case`),
   KEY `version` (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_cfd`;
-CREATE TABLE `zt_cfd` (
+CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `id` int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `execution` int(8) NOT NULL,
   `type` char(30) NOT NULL,
@@ -421,7 +423,7 @@ CREATE TABLE `zt_cfd` (
   `count` smallint NOT NULL,
   `date` date NOT NULL,
   UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -436,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `admins` char(255) default NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_compile`;
 CREATE TABLE IF NOT EXISTS `zt_compile` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -454,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `updateDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -466,7 +468,7 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `value` longtext NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `unique` (`vision`,`owner`,`module`,`section`,`key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_cron`;
 CREATE TABLE IF NOT EXISTS `zt_cron` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -483,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -498,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
   KEY `path` (`path`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -522,7 +524,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `version` smallint(6) NOT NULL,
   `type` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `design` mediumint(8) NOT NULL,
@@ -531,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `desc` mediumtext NOT NULL,
   `files` varchar(255) NOT NULL,
   UNIQUE KEY `design` (`design`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -561,7 +563,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   KEY `product` (`product`),
   KEY `execution` (`execution`),
   KEY `lib` (`lib`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doccontent`;
 CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -574,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `version` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `doc_version` (`doc`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
@@ -596,7 +598,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   PRIMARY KEY  (`id`),
   KEY `product` (`product`),
   KEY `execution` (`execution`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -613,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `status` enum('1','2','3') NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `user` (`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_entry`;
 CREATE TABLE IF NOT EXISTS `zt_entry` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -631,7 +633,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE IF NOT EXISTS `zt_expect` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -642,7 +644,7 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_extension`;
 CREATE TABLE IF NOT EXISTS `zt_extension` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -664,7 +666,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   UNIQUE KEY `code` (`code`),
   KEY `name` (`name`),
   KEY `installedTime` (`installedTime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_file`;
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -682,7 +684,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   PRIMARY KEY (`id`),
   KEY `objectType` (`objectType`),
   KEY `objectID` (`objectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -693,14 +695,14 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
   `desc` char(255) NOT NULL default '',
   `acl` text,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_grouppriv`;
 CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `group` mediumint(8) unsigned NOT NULL default '0',
   `module` char(30) NOT NULL default '',
   `method` char(30) NOT NULL default '',
   UNIQUE KEY `group` (`group`,`module`,`method`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_holiday`;
 CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -713,7 +715,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
   `id` int(9) unsigned NOT NULL auto_increment,
@@ -724,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `diff` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_job`;
 CREATE TABLE IF NOT EXISTS `zt_job` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -752,9 +754,9 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `lastTag` varchar(255) DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanspace`;
-CREATE TABLE `zt_kanbanspace` (
+CREATE TABLE IF NOT EXISTS `zt_kanbanspace` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `type` varchar(50) NOT NULL,
@@ -775,9 +777,9 @@ CREATE TABLE `zt_kanbanspace` (
   `activatedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanban`;
-CREATE TABLE `zt_kanban` (
+CREATE TABLE IF NOT EXISTS `zt_kanban` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `space` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -805,9 +807,9 @@ CREATE TABLE `zt_kanban` (
   `activatedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanregion`;
-CREATE TABLE `zt_kanbanregion` (
+CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `space` mediumint(8) unsigned NOT NULL,
   `kanban` mediumint(8) unsigned NOT NULL,
@@ -819,9 +821,9 @@ CREATE TABLE `zt_kanbanregion` (
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbancard`;
-CREATE TABLE `zt_kanbancard` (
+CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
@@ -852,9 +854,9 @@ CREATE TABLE `zt_kanbancard` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbancell`;
-CREATE TABLE `zt_kanbancell` (
+CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) NOT NULL,
   `lane` mediumint(8) NOT NULL,
@@ -863,15 +865,15 @@ CREATE TABLE `zt_kanbancell` (
   `cards` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
-CREATE TABLE `zt_kanbangroup` (
+CREATE TABLE IF NOT EXISTS `zt_kanbangroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
   `order` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanlane`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -887,7 +889,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `lastEditedTime` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -902,7 +904,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_lang`;
 CREATE TABLE IF NOT EXISTS `zt_lang` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -915,7 +917,7 @@ CREATE TABLE IF NOT EXISTS `zt_lang` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`,`vision`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -930,7 +932,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   PRIMARY KEY `id` (`id`),
   KEY `objectType` (`objectType`),
   KEY `obejctID` (`objectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_module`;
 CREATE TABLE IF NOT EXISTS `zt_module` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -951,14 +953,14 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   KEY `root` (`root`),
   KEY `type` (`type`),
   KEY `path` (`path`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mr`;
 CREATE TABLE IF NOT EXISTS `zt_mr` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `gitlabID` mediumint(8) unsigned NOT NULL,
-  `sourceProject` int unsigned NOT NULL,
+  `hostID` mediumint(8) unsigned NOT NULL,
+  `sourceProject` varchar(50) NOT NULL,
   `sourceBranch` varchar(100) NOT NULL,
-  `targetProject` int unsigned NOT NULL,
+  `targetProject` varchar(50) NOT NULL,
   `targetBranch` varchar(100) NOT NULL,
   `mriid` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -987,7 +989,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
   `diffs` longtext COLLATE 'utf8_general_ci' NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mrapproval`;
 CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -997,7 +999,7 @@ CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
   `action` char(30) NOT NULL,
   `comment` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -1015,7 +1017,7 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `failReason` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `objectType_toList_status` (`objectType`,`toList`,`status`)
-) ENGINE='MyISAM' COLLATE 'utf8_general_ci';
+) ENGINE='InnoDB' COLLATE 'utf8_general_ci';
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
   `account` varchar(30) NOT NULL,
@@ -1025,7 +1027,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
   KEY `account` (`account`),
   KEY `providerType` (`providerType`),
   KEY `providerID` (`providerID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_pipeline`;
 CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1042,14 +1044,14 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_planstory`;
 CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL,
   `story` mediumint(8) unsigned NOT NULL,
   `order` mediumint(9) NOT NULL,
   UNIQUE KEY `plan_story` (`plan`,`story`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1077,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   PRIMARY KEY (`id`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_productplan`;
 CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1091,11 +1093,13 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `end` date NOT NULL,
   `order` text NOT NULL,
   `closedReason` varchar(20) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `end` (`end`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_project`;
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1157,9 +1161,9 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   KEY `status` (`status`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectadmin`;
-CREATE TABLE `zt_projectadmin` (
+CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
   `group` smallint(6) NOT NULL,
   `account` char(30) NOT NULL,
   `programs` text NOT NULL,
@@ -1167,7 +1171,7 @@ CREATE TABLE `zt_projectadmin` (
   `products` text NOT NULL,
   `executions` text NOT NULL,
   UNIQUE KEY `group_account` (`group`, `account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1177,7 +1181,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `version` smallint(6) NOT NULL DEFAULT '1',
   `order` smallint(6) unsigned NOT NULL,
   UNIQUE KEY `project` (`project`,`case`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `project` mediumint(8) unsigned NOT NULL,
@@ -1185,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `branch` mediumint(8) unsigned NOT NULL,
   `plan` varchar(255) NOT NULL,
   PRIMARY KEY  (`project`, `product`, `branch`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `project` mediumint(8) NOT NULL,
@@ -1195,7 +1199,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   UNIQUE KEY `project` (`project`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectstory`;
 CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `project` mediumint(8) unsigned NOT NULL default '0',
@@ -1206,7 +1210,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `order` smallint(6) unsigned NOT NULL,
   UNIQUE KEY `project` (`project`,`story`),
   KEY `story` (`story`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -1223,7 +1227,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `extra` char(30) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `relation` (`product`,`relation`,`AType`,`BType`, `AID`, `BID`)
-) ENGINE='MyISAM' DEFAULT CHARSET=utf8;
+) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1242,11 +1246,13 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `notify` varchar(255),
   `status` varchar(20) NOT NULL default 'normal',
   `subStatus` varchar(30) NOT NULL default '',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `build` (`build`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -1257,6 +1263,8 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `encoding` varchar(20) NOT NULL,
   `SCM` varchar(10) NOT NULL,
   `client` varchar(100) NOT NULL,
+  `serviceHost` varchar(50) NOT NULL,
+  `serviceProject` varchar(100) NOT NULL,
   `commits` mediumint(8) unsigned NOT NULL,
   `account` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,
@@ -1273,7 +1281,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `fileServerPassword` varchar(100) NOT NULL default '',
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_repobranch`;
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL,
@@ -1282,7 +1290,7 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1297,7 +1305,7 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   KEY `parent` (`parent`),
   KEY `repo` (`repo`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_repohistory`;
 CREATE TABLE IF NOT EXISTS `zt_repohistory` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -1310,7 +1318,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
   PRIMARY KEY (`id`),
   KEY `repo` (`repo`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE IF NOT EXISTS `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
@@ -1326,13 +1334,13 @@ CREATE TABLE IF NOT EXISTS `zt_score` (
   KEY `account` (`account`),
   KEY `model` (`module`),
   KEY `method` (`method`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   `key` smallint(5) unsigned NOT NULL,
   `value` char(3) NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1346,9 +1354,8 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `object` (`objectType`,`objectID`),
   KEY `addedDate` (`addedDate`),
-  FULLTEXT KEY `content` (`content`),
-  FULLTEXT KEY `title` (`title`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  FULLTEXT KEY `title_content` (`title`, `content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1361,7 +1368,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1377,7 +1384,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `editedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL,
   KEY `objectID` (`objectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1419,6 +1426,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `toBug` mediumint(8) unsigned NOT NULL,
   `childStories` varchar(255) NOT NULL,
   `linkStories` varchar(255) NOT NULL,
+  `linkRequirements` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL default '1',
   `feedbackBy` varchar(100) NOT NULL,
@@ -1429,7 +1437,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   KEY `product` (`product`),
   KEY `status` (`status`),
   KEY `assignedTo` (`assignedTo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` mediumint(9) NOT NULL,
@@ -1438,7 +1446,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `result` varchar(30) NOT NULL,
   `reviewDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`version`,`reviewer`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storyestimate`;
 CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `story` mediumint(9) NOT NULL,
@@ -1448,7 +1456,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `openedBy` varchar(30) NOT NULL,
   `openedDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`round`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `story` mediumint(9) NOT NULL,
@@ -1457,7 +1465,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `spec` mediumtext NOT NULL,
   `verify` mediumtext NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storystage`;
 CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,
@@ -1466,7 +1474,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `stagedBy` char(30) NOT NULL,
   UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_suitecase`;
 CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` mediumint(8) unsigned NOT NULL,
@@ -1474,7 +1482,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `case` mediumint(8) unsigned NOT NULL,
   `version` smallint(5) unsigned NOT NULL,
   UNIQUE KEY `suitecase` (`suite`,`case`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1521,6 +1529,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lastEditedBy` varchar(30) NOT NULL,
   `lastEditedDate` datetime NOT NULL,
   `activatedDate` datetime NOT NULL,
+  `order` mediumint(8) unsigned NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `mr` mediumint(8) unsigned NOT NULL,
   `entry` varchar(255) NOT NULL,
@@ -1533,8 +1542,9 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   KEY `execution` (`execution`),
   KEY `story` (`story`),
   KEY `parent` (`parent`),
-  KEY `assignedTo` (`assignedTo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `assignedTo` (`assignedTo`),
+  KEY `order` (`order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1546,7 +1556,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `work` text,
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `task` mediumint(8) NOT NULL,
@@ -1555,7 +1565,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `estStarted` date NOT NULL,
   `deadline` date NOT NULL,
   UNIQUE KEY `task` (`task`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1573,7 +1583,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `order` TINYINT(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `team` (`root`,`type`,`account`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1597,7 +1607,7 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testresult`;
 CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1616,7 +1626,7 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   KEY `case` (`case`),
   KEY `version` (`version`),
   KEY `run` (`run`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testrun`;
 CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1630,7 +1640,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `status` char(30) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `task` (`task`,`case`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testsuite`;
 CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1646,7 +1656,7 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product` (`product`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1668,11 +1678,13 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `testreport` mediumint(8) unsigned NOT NULL,
   `auto` varchar(10) NOT NULL DEFAULT 'no',
   `subStatus` varchar(30) NOT NULL default '',
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `build` (`build`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1703,7 +1715,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   KEY `assignedTo` (`assignedTo`),
   KEY `finishedBy` (`finishedBy`),
   KEY `date` (`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1751,7 +1763,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   KEY `email` (`email`),
   KEY `commiter` (`commiter`),
   KEY `deleted` (`deleted`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usercontact`;
 CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1760,14 +1772,14 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `userList` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account` (`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usergroup`;
 CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
   `project` text NOT NULL,
   UNIQUE KEY `account` (`account`,`group`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userquery`;
 CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1781,7 +1793,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   PRIMARY KEY  (`id`),
   KEY `account` (`account`),
   KEY `module` (`module`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usertpl`;
 CREATE TABLE IF NOT EXISTS `zt_usertpl` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1792,7 +1804,7 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
   `public` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `account` (`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
@@ -1801,7 +1813,7 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `projects` mediumtext NOT NULL,
   `sprints` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
 CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1817,7 +1829,7 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `workload` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `week` (`project`,`weekStart`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1839,7 +1851,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
@@ -6165,7 +6177,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   KEY `public` (`public`),
   KEY `createdBy` (`createdBy`),
   KEY `editedBy` (`editedBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_chatuser`;
 CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
@@ -6189,7 +6201,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   KEY `star` (`star`),
   KEY `hide` (`hide`),
   UNIQUE KEY `chatuser` (`cgid`, `user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_client`;
 CREATE TABLE IF NOT EXISTS `zt_im_client` (
@@ -6205,7 +6217,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_client` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `status` enum('released','wait') NOT NULL DEFAULT 'wait',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message`;
 CREATE TABLE IF NOT EXISTS `zt_im_message` (
@@ -6225,7 +6237,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
   KEY `mtype` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message_backup`;
 CREATE TABLE IF NOT EXISTS `zt_im_message_backup` (
@@ -6240,7 +6252,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message_backup` (
   `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
   `data` text NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_message_index`;
 CREATE TABLE IF NOT EXISTS `zt_im_message_index` (
@@ -6257,7 +6269,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message_index` (
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
   KEY `endDate` (`endDate`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_chat_message_index`;
 CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
@@ -6279,7 +6291,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
   KEY `endDate` (`endDate`),
   KEY `chatstartindex` (`gid`,`startIndex`),
   KEY `chatendindex` (`gid`,`endIndex`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_messagestatus`;
 CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
@@ -6287,7 +6299,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
   `message` int(11) unsigned NOT NULL,
   `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
   UNIQUE KEY `user` (`user`,`message`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_queue`;
 CREATE TABLE IF NOT EXISTS `zt_im_queue` (
@@ -6299,7 +6311,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_queue` (
   `result` text NOT NULL,
   `status` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_conference`;
 CREATE TABLE IF NOT EXISTS `zt_im_conference` (
@@ -6312,7 +6324,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `openedBy` mediumint(8) NOT NULL DEFAULT 0,
   `openedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_conferenceaction`;
 CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
@@ -6324,7 +6336,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `device` char(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_userdevice`;
 CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
@@ -6341,7 +6353,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
   KEY `lastLogin` (`lastLogin`),
   KEY `lastLogout` (`lastLogout`),
   UNIQUE KEY `userdevice` (`user`, `device`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_file` CHANGE `pathname` `pathname` char(100) NOT NULL;
 ALTER TABLE `zt_user` ADD `clientStatus` enum('online', 'away', 'busy', 'offline', 'meeting') NOT NULL DEFAULT 'offline';
@@ -6818,7 +6830,7 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `addedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
 CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
@@ -6942,7 +6954,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `mailto` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_bug`   ADD `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `caseVersion`;
 ALTER TABLE `zt_story` ADD `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `fromBug`;
@@ -6954,7 +6966,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedbackview` (
   `account` char(30) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   UNIQUE KEY `account_product` (`account`,`product`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_serverroom`;
 CREATE TABLE IF NOT EXISTS `zt_serverroom` (
@@ -6971,7 +6983,7 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_account`;
 CREATE TABLE IF NOT EXISTS `zt_account` (
@@ -6995,7 +7007,7 @@ CREATE TABLE IF NOT EXISTS `zt_account` (
   key `name` (`name`),
   key `provider` (`provider`),
   key `status` (`status`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_asset`;
 CREATE TABLE IF NOT EXISTS `zt_asset` (
@@ -7010,7 +7022,7 @@ CREATE TABLE IF NOT EXISTS `zt_asset` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_host`;
 CREATE TABLE IF NOT EXISTS `zt_host` (
@@ -7057,7 +7069,7 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `cloudPassword` varchar(255) NOT NULL DEFAULT '',
   `couldVPC` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_service`;
 CREATE TABLE IF NOT EXISTS `zt_service` (
@@ -7088,7 +7100,7 @@ CREATE TABLE IF NOT EXISTS `zt_service` (
   `order` smallint(5) unsigned NOT NULL default '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES (1, 'tree', 'editHost');
 
@@ -7118,7 +7130,7 @@ CREATE TABLE IF NOT EXISTS `zt_attend` (
   KEY `reviewStatus` (`reviewStatus`),
   KEY `reviewedBy` (`reviewedBy`),
   UNIQUE KEY `attend` (`date`,`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_attendstat`;
 CREATE TABLE IF NOT EXISTS `zt_attendstat` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7144,7 +7156,7 @@ CREATE TABLE IF NOT EXISTS `zt_attendstat` (
   KEY `month` (`month`),
   KEY `status` (`status`),
   UNIQUE KEY `attend` (`month`,`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_overtime`;
 CREATE TABLE IF NOT EXISTS `zt_overtime` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7168,7 +7180,7 @@ CREATE TABLE IF NOT EXISTS `zt_overtime` (
   KEY `type` (`type`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_holiday`;
 CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7181,7 +7193,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_leave`;
 CREATE TABLE IF NOT EXISTS `zt_leave` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7204,7 +7216,7 @@ CREATE TABLE IF NOT EXISTS `zt_leave` (
   KEY `type` (`type`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_lieu`;
 CREATE TABLE IF NOT EXISTS `zt_lieu` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7226,7 +7238,7 @@ CREATE TABLE IF NOT EXISTS `zt_lieu` (
   KEY `year` (`year`),
   KEY `status` (`status`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_trip`;
 CREATE TABLE IF NOT EXISTS `zt_trip` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7246,7 +7258,7 @@ CREATE TABLE IF NOT EXISTS `zt_trip` (
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `createdBy` (`createdBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_deploy`;
 CREATE TABLE IF NOT EXISTS `zt_deploy` (
@@ -7265,7 +7277,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `result` varchar(20) NOT NULL,
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_deployproduct`;
 CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `deploy` mediumint(8) unsigned NOT NULL,
@@ -7273,7 +7285,7 @@ CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `release` mediumint(8) unsigned NOT NULL,
   `package` varchar(255) NOT NULL,
   UNIQUE KEY `deploy_product_release` (`deploy`,`product`,`release`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_deploystep`;
 CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -7292,7 +7304,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `zt_testresult` ADD `deploy` mediumint(8) unsigned NOT NULL;
 -- DROP TABLE IF EXISTS `zt_deployscope`;
 CREATE TABLE IF NOT EXISTS `zt_deployscope` (
@@ -7301,7 +7313,7 @@ CREATE TABLE IF NOT EXISTS `zt_deployscope` (
   `hosts` text NOT NULL,
   `remove` text NOT NULL,
   `add` text NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_vm`;
 CREATE TABLE IF NOT EXISTS `zt_vm` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -7333,7 +7345,7 @@ CREATE TABLE IF NOT EXISTS `zt_vm` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `public` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_baseimage`;
 CREATE TABLE IF NOT EXISTS `zt_baseimage` (
   `id` SMALLINT(7) unsigned NOT NULL AUTO_INCREMENT,
@@ -7348,7 +7360,7 @@ CREATE TABLE IF NOT EXISTS `zt_baseimage` (
   `suggestMemory` mediumint(6) unsigned NOT NULL DEFAULT 0,
   `suggestVolume` mediumint(6) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_vmtemplate`;
 CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -7364,7 +7376,7 @@ CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `diskSize` int NOT NULL DEFAULT 0,
   `osArch` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_browser`;
 CREATE TABLE IF NOT EXISTS `zt_browser` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -7375,16 +7387,16 @@ CREATE TABLE IF NOT EXISTS `zt_browser` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_baseimagebrowser`;
 CREATE TABLE IF NOT EXISTS `zt_baseimagebrowser` (
   `vmBackingID` int(10) NOT NULL,
   `browserID` int(10) NOT NULL,
   PRIMARY KEY (`vmBackingID`, `browserID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_traincourse`;
-CREATE TABLE `zt_traincourse` (
+CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `code` varchar(50) NOT NULL,
   `category` mediumint(8) NOT NULL,
@@ -7398,7 +7410,7 @@ CREATE TABLE `zt_traincourse` (
   `editedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_traincontents`;
 CREATE TABLE IF NOT EXISTS `zt_traincontents` (
@@ -7417,7 +7429,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincontents` (
   `editedDate` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_traincategory`;
 CREATE TABLE IF NOT EXISTS `zt_traincategory` (
@@ -7431,7 +7443,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincategory` (
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
   KEY `path` (`path`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_trainrecords`;
 CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
@@ -7440,7 +7452,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
   `objectType` varchar(10) NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`user`, `objectId`, `objectType`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_doc`
 ADD `parent` smallint(5) unsigned NOT NULL DEFAULT '0' AFTER `type`,
@@ -7470,7 +7482,7 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
 `answer` text NOT NULL,
 `addedtime` datetime NOT NULL,
 PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_task` ADD `feedback` mediumint(8) unsigned NOT NULL AFTER `fromBug`;
 ALTER TABLE `zt_todo` ADD `feedback` mediumint(8) unsigned NOT NULL AFTER `end`;
@@ -7492,7 +7504,7 @@ CREATE TABLE IF NOT EXISTS `zt_domain`(
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   key `domain` (`domain`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP VIEW IF EXISTS `view_datasource_5`;
 CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
@@ -8528,7 +8540,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   KEY `module` (`module`),
   KEY `order` (`order`),
   UNIQUE KEY `unique` (`app`, `module`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowaction`;
 CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
@@ -8567,7 +8579,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   KEY `action` (`action`),
   KEY `order` (`order`),
   UNIQUE KEY `unique` (`module`, `action`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowdatasource`;
 CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
@@ -8586,7 +8598,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `editedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowfield`;
 CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
@@ -8621,7 +8633,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   KEY `field` (`field`),
   KEY `order` (`order`),
   UNIQUE KEY `unique` (`module`, `field`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowlayout`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
@@ -8642,7 +8654,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   KEY `action` (`action`),
   KEY `order` (`order`),
   UNIQUE KEY `unique` (`module`, `action`, `field`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowlabel`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
@@ -8662,7 +8674,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
   `editedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `module` (`module`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowlinkdata`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
@@ -8673,7 +8685,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   UNIQUE KEY `unique` (`objectType`, `objectID`, `linkedType`, `linkedID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowrelation`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
@@ -8687,7 +8699,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowrelationlayout`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
@@ -8703,7 +8715,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
   KEY `action` (`action`),
   KEY `order` (`order`),
   UNIQUE KEY `unique` (`prev`, `next`, `action`, `field`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowrule`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
@@ -8717,7 +8729,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
   `editedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `type` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowsql`;
 CREATE TABLE IF NOT EXISTS `zt_workflowsql` (
@@ -8735,7 +8747,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowsql` (
   KEY `module` (`module`),
   KEY `field` (`field`),
   KEY `action` (`action`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowversion`;
 CREATE TABLE IF NOT EXISTS `zt_workflowversion` (
@@ -8753,7 +8765,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowversion` (
   UNIQUE KEY `moduleversion` (`module`, `version`),
   KEY `module` (`module`),
   KEY `version` (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workflowreport`;
 CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
@@ -8769,7 +8781,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_action` CHANGE `action` `action` varchar(80) NOT NULL DEFAULT '';
 ALTER TABLE `zt_action` CHANGE `extra` `extra` text;
@@ -8992,7 +9004,7 @@ CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE IF NOT EXISTS `zt_workestimation` (
@@ -9012,7 +9024,7 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `dayHour` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_intervention`;
 CREATE TABLE IF NOT EXISTS `zt_intervention` (
@@ -9029,7 +9041,7 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`activity`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_activity`;
 CREATE TABLE IF NOT EXISTS `zt_activity` (
@@ -9050,7 +9062,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_auditcl`;
 CREATE TABLE IF NOT EXISTS `zt_auditcl` (
@@ -9071,7 +9083,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_auditplan`;
 CREATE TABLE IF NOT EXISTS `zt_auditplan` (
@@ -9099,7 +9111,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `checkBy` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_auditresult`;
 CREATE TABLE IF NOT EXISTS `zt_auditresult` (
@@ -9120,7 +9132,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_nc`;
 CREATE TABLE IF NOT EXISTS `zt_nc` (
@@ -9149,7 +9161,7 @@ CREATE TABLE IF NOT EXISTS `zt_nc` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_zoutput`;
 CREATE TABLE IF NOT EXISTS `zt_zoutput` (
@@ -9167,7 +9179,7 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_process`;
 CREATE TABLE IF NOT EXISTS `zt_process` (
@@ -9188,7 +9200,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_programactivity`;
 CREATE TABLE IF NOT EXISTS `zt_programactivity` (
@@ -9206,7 +9218,7 @@ CREATE TABLE IF NOT EXISTS `zt_programactivity` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_programoutput`;
 CREATE TABLE IF NOT EXISTS `zt_programoutput` (
@@ -9225,7 +9237,7 @@ CREATE TABLE IF NOT EXISTS `zt_programoutput` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_programprocess`;
 CREATE TABLE IF NOT EXISTS `zt_programprocess` (
@@ -9242,7 +9254,7 @@ CREATE TABLE IF NOT EXISTS `zt_programprocess` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_basicmeas`;
 CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
@@ -9269,7 +9281,7 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE IF NOT EXISTS `zt_budget` (
@@ -9286,7 +9298,7 @@ CREATE TABLE IF NOT EXISTS `zt_budget` (
   `lastEditedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_researchplan`;
 CREATE TABLE IF NOT EXISTS `zt_researchplan` (
@@ -9309,7 +9321,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchplan` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_researchreport`;
 CREATE TABLE IF NOT EXISTS `zt_researchreport` (
@@ -9331,7 +9343,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchreport` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_meeting`;
 CREATE TABLE IF NOT EXISTS `zt_meeting` (
@@ -9359,7 +9371,7 @@ CREATE TABLE IF NOT EXISTS `zt_meeting` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=InnoDB CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_meetingroom`;
 CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
@@ -9375,7 +9387,7 @@ CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=InnoDB CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_assetlib`;
 CREATE TABLE IF NOT EXISTS `zt_assetlib` (
@@ -9389,7 +9401,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=InnoDB CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_meastemplate`;
 CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
@@ -9401,7 +9413,7 @@ CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_programreport`;
 CREATE TABLE IF NOT EXISTS `zt_programreport` (
@@ -9415,7 +9427,7 @@ CREATE TABLE IF NOT EXISTS `zt_programreport` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_measrecords`;
 CREATE TABLE IF NOT EXISTS `zt_measrecords` (
@@ -9437,7 +9449,7 @@ CREATE TABLE IF NOT EXISTS `zt_measrecords` (
   KEY `product` (`product`),
   KEY `project` (`project`),
   KEY `time` (`year`, `month`, `day`, `week`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_object`;
 CREATE TABLE IF NOT EXISTS `zt_object` (
@@ -9460,7 +9472,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_review`;
 CREATE TABLE IF NOT EXISTS `zt_review` (
@@ -9487,7 +9499,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `auditResult` char(30) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_reviewcl`;
 CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
@@ -9506,7 +9518,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_reviewresult`;
 CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
@@ -9520,7 +9532,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
   `createdDate` date NOT NULL,
   `consumed` float NOT NULL,
   UNIQUE KEY `reviewer` (`review`,`reviewer`,`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_reviewissue`;
 CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
@@ -9543,7 +9555,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_reviewlist`;
 CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
@@ -9560,7 +9572,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
   `assignedBy` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_cmcl`;
 CREATE TABLE IF NOT EXISTS `zt_cmcl` (
@@ -9577,7 +9589,7 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_solutions`;
 CREATE TABLE IF NOT EXISTS `zt_solutions` (
@@ -9594,7 +9606,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
  `editedDate` date NOT NULL,
  `deleted` enum('0','1') NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_measqueue`;
 CREATE TABLE IF NOT EXISTS `zt_measqueue` (
@@ -9610,7 +9622,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `updateDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
@@ -9648,7 +9660,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `approvedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_risk`;
 CREATE TABLE IF NOT EXISTS `zt_risk` (
@@ -9694,14 +9706,14 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `approvedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_riskissue`;
 CREATE TABLE IF NOT EXISTS `zt_riskissue` (
   `risk` mediumint(8) unsigned NOT NULL,
   `issue` mediumint(8) unsigned NOT NULL,
   UNIQUE KEY `risk_issue` (`risk`,`issue`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_opportunity`;
 CREATE TABLE IF NOT EXISTS `zt_opportunity` (
@@ -9747,7 +9759,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `lastCheckedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_trainplan`;
 CREATE TABLE IF NOT EXISTS `zt_trainplan` (
@@ -9768,7 +9780,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_gapanalysis`;
 CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
@@ -9785,7 +9797,7 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_account` (`project`,`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_bug`
 ADD `injection` mediumint(8) unsigned NOT NULL AFTER `product`,
@@ -13568,7 +13580,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SET global log_bin_trust_function_creators = 1;
 SET global sql_mode = '';
 USE `__TABLE__`;

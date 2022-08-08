@@ -139,13 +139,86 @@ class action extends control
      *
      * @param  int    $actionID
      * @param  string $browseType
+     * @param  string $confirmChange
      * @access public
      * @return void
      */
-    public function undelete($actionID, $browseType = 'all')
+    public function undelete($actionID, $browseType = 'all', $confirmChange = 'no')
     {
         $oldAction = $this->action->getById($actionID);
         $extra     = $oldAction->extra == ACTIONMODEL::BE_HIDDEN ? 'hidden' : 'all';
+
+        if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product')))
+        {
+            if($oldAction->objectType == 'product')
+            {
+                $product      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->eq($oldAction->objectID)->fetch();
+                $programID    = isset($product->program) ? $product->program : 0;
+                $repeatObject = $this->dao->select('*')->from(TABLE_PRODUCT)
+                    ->where('id')->ne($oldAction->objectID)
+                    ->andWhere("(name = '{$product->name}' and program = {$programID})", true)
+                    ->beginIF($product->code)->orWhere("code = '{$product->code}'")->fi()
+                    ->markRight(1)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch();
+            }
+            else
+            {
+                $project       = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($oldAction->objectID)->fetch();
+                $sprintProject = isset($project->project) ? $project->project : '0';
+                $repeatObject  = $this->dao->select('*')->from(TABLE_PROJECT)
+                    ->where('id')->ne($oldAction->objectID)
+                    ->beginIF($oldAction->objectType == 'program' or $oldAction->objectType == 'project')->andWhere("(name = '{$project->name}' and parent = {$project->parent})", true)->fi()
+                    ->beginIF($oldAction->objectType == 'execution')->andWhere("(name = '{$project->name}' and project = {$sprintProject})", true)->fi()
+                    ->beginIF($oldAction->objectType == 'project' and $project->code)->orWhere("(code = '{$project->code}' and model = '$project->model')")->fi()
+                    ->beginIF($oldAction->objectType == 'execution' and $project->code)->orWhere("code = '{$project->code}'")->fi()
+                    ->markRight(1)
+                    ->beginIF($oldAction->objectType == 'program')->andWhere('type')->eq('program')->fi()
+                    ->beginIF($oldAction->objectType == 'project')->andWhere('type')->eq('project')->fi()
+                    ->beginIF($oldAction->objectType == 'execution')->andWhere('type')->in('sprint,stage,kanban')->fi()
+                    ->andWhere('deleted')->eq('0')
+                    ->fetch();
+            }
+
+            if($repeatObject)
+            {
+                $table  = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+                $object = $oldAction->objectType == 'product' ? $product : $project;
+
+                $existNames = $this->dao->select('name')->from($table)->where('name')->like($repeatObject->name . '_%')->fetchPairs();
+                for($i = 1; $i < 10000; $i ++)
+                {
+                    $replaceName = $repeatObject->name . '_' . $i;
+                    if(!in_array($replaceName, $existNames)) break;
+                }
+                $replaceCode = '';
+                if($object->code)
+                {
+                    $existCodes = $this->dao->select('code')->from($table)->where('code')->like($repeatObject->code . '_%')->fetchPairs();
+                    for($i = 1; $i < 10000; $i ++)
+                    {
+                        $replaceCode = $repeatObject->code . '_' . $i;
+                        if(!in_array($replaceCode, $existCodes)) break;
+                    }
+                }
+
+                if($repeatObject->name == $object->name and $repeatObject->code and $repeatObject->code == $object->code)
+                {
+                    if($confirmChange == 'no') return print(js::confirm(sprintf($this->lang->action->repeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName, $replaceCode), $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));
+                    if($confirmChange == 'yes') $this->dao->update($table)->set('name')->eq($replaceName)->set('code')->eq($replaceCode)->where('id')->eq($oldAction->objectID)->exec();
+                }
+                elseif($repeatObject->name == $object->name)
+                {
+                    if($confirmChange == 'no') return print(js::confirm(sprintf($this->lang->action->nameRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName), $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));
+                    if($confirmChange == 'yes') $this->dao->update($table)->set('name')->eq($replaceName)->where('id')->eq($oldAction->objectID)->exec();
+                }
+                elseif($repeatObject->code and $repeatObject->code == $object->code)
+                {
+                    if($confirmChange == 'no') return print(js::confirm(sprintf($this->lang->action->codeRepeatChange, $this->lang->{$oldAction->objectType}->common, $replaceCode), $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));
+                    if($confirmChange == 'yes') $this->dao->update($table)->set('code')->eq($replaceCode)->where('id')->eq($oldAction->objectID)->exec();
+                }
+            }
+        }
 
         $this->action->undelete($actionID);
 

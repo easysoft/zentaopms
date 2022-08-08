@@ -11,3 +11,11 @@
 #repoList .tree li > a {max-width: 100%;}
 #repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
 #repoList .tree li > a {line-height: 20px; border-radius: 2px;}
+
+.c-id {width: 60px;}
+.c-title {width: 150px;}
+.c-branch {width: 200px;}
+.c-status {width: 120px;}
+.c-author {width: 80px;}
+.c-date {width: 100px;}
+[lang^='zh-'] .c-status {width: 100px;}

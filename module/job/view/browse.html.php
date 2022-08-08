@@ -35,7 +35,7 @@
     <table id='jobList' class='table has-sort-head table-fixed'>
       <thead>
         <tr class='text-left'>
-          <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+          <?php $vars = "repoID=$repoID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name);?></th>
           <th class='c-repo'><?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo);?></th>
@@ -45,7 +45,7 @@
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='c-status text-center'><?php common::printOrderLink('lastStatus', $orderBy, $vars, $lang->job->lastStatus);?></th>
           <th class='c-exec'><?php common::printOrderLink('lastExec', $orderBy, $vars, $lang->job->lastExec);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -72,7 +72,7 @@
           <td><?php if($job->lastStatus) echo $job->lastExec;?></td>
           <td class='c-actions text-center'>
             <?php
-            common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
+            common::printIcon('compile', 'browse', "repoID={$job->repo}&jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
             common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");

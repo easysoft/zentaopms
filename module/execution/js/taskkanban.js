@@ -341,9 +341,16 @@ function renderColumnCount($count, count, col)
 {
     if(groupBy == 'story' && col.type == 'story')
     {
-        $count.prev().addClass('storyColumn');
-        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
-        $count.remove();
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
+            + '<ul class="dropdown-menu">';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        orderButton += '</ul>';
+
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
+        $count.hide();
         return;
     }
 
@@ -1220,6 +1227,7 @@ $(function()
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', window.kanbanScaleSize <= 1 ? 'disabled' : null);
 
+    changeOrder = false;
     /* Common options */　
     var commonOptions =
     {
@@ -1274,12 +1282,6 @@ $(function()
         event.preventDefault();
     });
 
-    $(document).on('click', '#kanbans span.caret.changeOrderBy', function(event)
-    {
-        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
-        searchCards(searchValue);
-    })
-
     /* Init contextmenu */
     $('#kanbans').on('click', '[data-contextmenu]', function(event)
     {
@@ -1332,6 +1334,11 @@ $(function()
         }
     });
 
+    document.addEventListener('scroll', function()
+    {
+        $('.storyColumn').parent().removeClass('open');
+    }, true);
+
     $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 
@@ -1339,7 +1346,7 @@ $(function()
     lastUpdateData = '';
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy' + orderBy), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy=' + orderBy), function(data)
         {
             if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
@@ -1459,7 +1466,7 @@ function toggleSearchBox()
     }
     else
     {
-        $(".querybox-toggle").css("color", "3c495c");
+        $(".querybox-toggle").css("color", "#3c495c");
         $('#taskKanbanSearchInput').attr('value', '');
         searchCards('');
     }
@@ -1469,12 +1476,16 @@ function toggleSearchBox()
  * Search kanban cards.
  *
  * @param  string value
+ * @param  string order
+ *
  * @access public
  * @return void
  */
-function searchCards(value)
+function searchCards(value, order = '')
 {
     searchValue = value;
+    orderBy     = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;

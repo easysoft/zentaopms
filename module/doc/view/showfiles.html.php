@@ -45,9 +45,20 @@
                 <?php echo str_replace('.' . $file->extension, '', $file->title);?>
               </td>
               <td class='c-name'>
-                <?php echo ($file->objectType == 'requirement' ? $lang->URCommon : $lang->{$file->objectType}->common) . ' : ';?>
-                <a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'>
-                  <?php echo $sourcePairs[$file->objectType][$file->objectID];?>
+                <?php
+                if($file->objectType == 'requirement')
+                {
+                    $commonTitle = $lang->URCommon . ' : ';
+                }
+                else
+                {
+                    if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
+                    $commonTitle = $lang->{$file->objectType}->common . ' : ';
+                }
+                echo $commonTitle;
+                ?>
+                <a title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'>
+                  <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                 </a>
               </td>
               <td><?php echo $file->extension;?></td>
@@ -101,9 +112,20 @@
                 </a>
                 <div class='file-name' title='<?php echo $file->title;?>'><?php echo $file->title;?></a></div>
                 <div class='file-name text-muted'>
-                  <?php echo ($file->objectType == 'requirement' ? $lang->URCommon : $lang->{$file->objectType}->common) . ' : ';?>
-                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'>
-                    <?php echo $sourcePairs[$file->objectType][$file->objectID];?>
+                  <?php
+                  if($file->objectType == 'requirement')
+                  {
+                      $commonTitle = $lang->URCommon . ' : ';
+                  }
+                  else
+                  {
+                      if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
+                      $commonTitle = $lang->{$file->objectType}->common . ' : ';
+                  }
+                  echo $commonTitle;
+                  ?>
+                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'>
+                    <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                   </a>
                 </div>
               </div>
