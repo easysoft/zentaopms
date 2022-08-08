@@ -663,7 +663,7 @@ $(function()
             $.ajax({
             url: link,
                 dataType: "json",
-                data: {tasks: tasks},
+                data: {id: id, tasks: tasks},
                 type: "post",
                 success: function(result){}
             });

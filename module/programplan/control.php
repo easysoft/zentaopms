@@ -274,18 +274,21 @@ class programplan extends control
     /**
      * Response gantt move event.
      *
-     * @param  int    $productID
-     *
      * @access public
      * @access public
      * @return void
      */
-    public function ajaxResponseGanttMoveEvent($productID = 0)
+    public function ajaxResponseGanttMoveEvent()
     {
         if(!empty($_POST))
         {
-            $this->loadModel('task')->updateOrderByGantt($productID);
+            $idList = explode('-', $_POST['id']);
+            $taskID = $idList[1];
+
+            $this->loadModel('task')->updateOrderByGantt();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action')->create('task', $taskID, 'ganttMove', '', $this->app->user->account);
+
             return $this->send(array('result' => 'success'));
         }
     }
