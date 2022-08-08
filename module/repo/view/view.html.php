@@ -20,7 +20,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link' data-app='{$app->tab}'");?>
+    <?php echo html::a($this->session->repoList, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary' data-app='{$app->tab}'");?>
     <div class="divider"></div>
     <div class="page-title">
       <strong>
@@ -53,7 +53,21 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
   <div class="main-col repoCode main">
     <div class="content panel">
       <div class='panel-heading'>
-        <div class='panel-title'><?php echo $entry?></div>
+        <div class='btn-toolbar'>
+          <div class='panel-title'>
+            <?php echo $pathInfo['basename'];?>
+            <div class='btn-group'>
+              <div class='btn-group'>
+                <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "data-toggle='dropdown'", 'btn dropdown-toggle btn-sm')?>
+                <ul class='dropdown-menu' role='menu'>
+                  <?php foreach($lang->repo->encodingList as $key => $val):?>
+                  <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->tab}'")?></li>
+                  <?php endforeach;?>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
           <?php
@@ -61,14 +75,6 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>
-          <div class='btn-group'>
-            <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn btn-sm btn-primary dropdown-toggle')?>
-            <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>
-              <?php foreach($lang->repo->encodingList as $key => $val):?>
-              <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&showBug=$showBug&encoding=$key", 'html', isonlybody()), $val, '', "data-app='{$app->tab}'")?></li>
-              <?php endforeach;?>
-            </ul>
-          </div>
         </div>
       </div>
       <?php if(strpos($config->repo->images, "|$suffix|") !== false):?>

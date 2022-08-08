@@ -192,3 +192,4 @@ h3 {font-size: 16px;}
 .dropdown-menu li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
 
 .tips-git a {padding-bottom: 1px;}
+.bug-lines {font-size: revert;}
