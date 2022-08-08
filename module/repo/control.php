@@ -343,6 +343,7 @@ class repo extends control
         $this->view->pager        = $pager;
         $this->view->logType      = $logType;
         $this->view->info         = $info;
+        $this->view->pathInfo     = $pathInfo;
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->position[] = $this->lang->repo->common;
