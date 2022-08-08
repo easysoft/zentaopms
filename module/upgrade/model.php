@@ -1228,7 +1228,7 @@ class upgradeModel extends model
     public function getOpenVersion($version)
     {
         $edition = $this->getEditionByVersion($version);
-        return is_numeric($version[0]) ? $version : zget($this->config->upgrade{$edition . 'Version'}, $version);
+        return is_numeric($version[0]) ? $version : zget($this->config->upgrade->{$edition . 'Version'}, $version);
     }
 
     /**
