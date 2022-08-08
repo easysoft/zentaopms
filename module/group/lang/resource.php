@@ -981,7 +981,7 @@ $lang->resource->testcase->batchEdit               = 'batchEdit';
 $lang->resource->testcase->delete                  = 'deleteAction';
 $lang->resource->testcase->batchDelete             = 'batchDelete';
 $lang->resource->testcase->export                  = 'exportAction';
-$lang->resource->testcase->exportTemplet           = 'exportTemplet';
+$lang->resource->testcase->exportTemplate          = 'exportTemplate';
 $lang->resource->testcase->import                  = 'importAction';
 $lang->resource->testcase->showImport              = 'showImport';
 $lang->resource->testcase->confirmChange           = 'confirmChange';
@@ -1118,7 +1118,7 @@ $lang->resource->caselib->delete           = 'deleteAction';
 $lang->resource->caselib->view             = 'view';
 $lang->resource->caselib->createCase       = 'createCase';
 $lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
-$lang->resource->caselib->exportTemplet    = 'exportTemplet';
+$lang->resource->caselib->exportTemplate   = 'exportTemplate';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
@@ -1130,7 +1130,7 @@ $lang->caselib->methodOrder[20] = 'delete';
 $lang->caselib->methodOrder[25] = 'view';
 $lang->caselib->methodOrder[30] = 'createCase';
 $lang->caselib->methodOrder[35] = 'batchCreateCase';
-$lang->caselib->methodOrder[40] = 'exportTemplet';
+$lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 

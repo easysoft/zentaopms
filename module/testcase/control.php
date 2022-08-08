@@ -1730,7 +1730,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($productID)
+    public function exportTemplate($productID)
     {
         if($_POST)
         {
