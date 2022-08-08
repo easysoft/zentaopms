@@ -1727,6 +1727,16 @@ class actionModel extends model
             if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
         }
 
+        if($action->objectType == 'repo')
+        {
+            $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($action->objectID)->fetch();
+            if($repo and in_array($repo->SCM, array('Gitlab', 'Gitea', 'Gogs')))
+            {
+                $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($repo->serviceHost)->andWhere('deleted')->eq('0')->fetch();
+                if(empty($server)) return print(js::error($this->lang->action->repoNoServer));
+            }
+        }
+
         if($action->objectType == 'product')
         {
             $product = $this->dao->select('id,name,code,acl')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
