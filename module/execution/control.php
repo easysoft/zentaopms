@@ -1384,6 +1384,9 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
+        $minDate = !helper::isZeroDate($execution->openedDate) ? $execution->openedDate : $execution->begin;
+        $maxDate = !helper::isZeroDate($execution->closedDate) ? $execution->closedDate : helper::today();
+
         if(!empty($_POST))
         {
             $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
@@ -1424,6 +1427,8 @@ class execution extends control
         $this->view->chartData     = $chartData;
         $this->view->begin         = $begin;
         $this->view->end           = $end;
+        $this->view->minDate       = $minDate;
+        $this->view->maxDate       = $maxDate;
         $this->display();
     }
 
@@ -2290,9 +2295,7 @@ class execution extends control
         {
             $this->app->loadClass('date');
 
-            $begin     = date('Y-m-d', strtotime('-13 days'));
-            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($begin, $execution->begin) > 0) ? $begin : $execution->begin;
-            $end       = helper::today();
+            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
             $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
             $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
             if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
