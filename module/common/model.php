@@ -1232,8 +1232,7 @@ class commonModel extends model
     /**
      * Print the module menu.
      *
-     * @param  string $actveMenu
-     * @param  string $methodName
+     * @param  string $activeMenu
      * @static
      * @access public
      * @return void
