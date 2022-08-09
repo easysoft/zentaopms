@@ -1750,7 +1750,6 @@ class story extends control
 
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
 
-        $this->loadModel('task');
         $stories    = $this->story->getByList($_POST['storyIdList']);
         $storyGroup = array();
         foreach($stories as $story)
@@ -1769,7 +1768,7 @@ class story extends control
         $this->view->storyGroup     = $storyGroup;
         $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
         $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-        $this->view->storyTasks     = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
+        $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
 
         $this->display();
     }

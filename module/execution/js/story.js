@@ -71,7 +71,7 @@ $(function()
             alert(hourPointNotError);
             return false;
         }
-        hourPoint = typeof(hourPoint) != 'undefined' ? 0 : hourPoint;
+        hourPoint = typeof(hourPoint) == 'undefined' ? 0 : hourPoint;
 
         if(linedTaskIdList)
         {

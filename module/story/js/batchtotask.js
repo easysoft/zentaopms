@@ -3,7 +3,13 @@ $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
     toggleCheck($(this));
 });
 
-/* Set the story module. */
+/**
+ * Set story related.
+ *
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
 function setStoryRelated(num)
 {
     setPreview(num);
@@ -33,10 +39,18 @@ function toggleCheck(obj)
     }
 }
 
-/* Get select of stories.*/
+/**
+ * Set stories.
+ *
+ * @param  int    $moduleID
+ * @param  int    $executionID
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
 function setStories(moduleID, executionID, num)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
+    var link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();
@@ -44,18 +58,7 @@ function setStories(moduleID, executionID, num)
         $('#story' + num).replaceWith(stories);
         if(num != 0 && (moduleID == 0 || moduleID == 'ditto')) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>");
         $('#story' + num).val(storyID);
-        if($('#zeroTaskStory').hasClass('checked'))
-        {
-            $('#story' + num).find('option').each(function()
-            {
-                value = $(this).attr('value');
-                if(value != 'ditto' && storyTasks[value] > 0)
-                {
-                    $(this).hide();
-                    if(storyID == value) $('#story' + num).val('');
-                }
-            })
-        }
+
         var chosenWidth = $("#story" + num + "_chosen").css('max-width');
         $("#story" + num + "_chosen").remove();
         $("#story" + num).next('.picker').remove();
@@ -64,7 +67,13 @@ function setStories(moduleID, executionID, num)
     });
 }
 
-/* Copy story title as task title. */
+/**
+ * Copy story title.
+ *
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
 function copyStoryTitle(num)
 {
     var $story     = $('#story' + num);
@@ -120,7 +129,12 @@ function setPreview(num)
     }
 }
 
-// see http://pms.zentao.net/task-view-5086.html
+/**
+ * Mark story task.
+ *
+ * @access public
+ * @return void
+ */
 function markStoryTask()
 {
     $('select[name^="story"]').each(function()
@@ -128,8 +142,8 @@ function markStoryTask()
         var $select = $(this);
         $select.find('option').each(function()
         {
-            var $option = $(this);
-            var value = $option.attr('value');
+            var $option    = $(this);
+            var value      = $option.attr('value');
             var tasksCount = storyTasks[value];
             $option.attr('data-data', value).toggleClass('has-task', !!(tasksCount && tasksCount !== '0'));
         });
@@ -150,7 +164,7 @@ function markStoryTask()
         return storiesHasTask;
     };
 
-    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
+    $('#batchToTaskForm').on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
     {
         var storiesHasTask = getStoriesHasTask();
         var $container     = $(this).closest('td').find('.chosen-container');

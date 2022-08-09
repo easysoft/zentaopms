@@ -137,11 +137,20 @@ function setPreview(num)
         {
             $('#module' + num).val(parseInt(storyInfo.moduleID));
             $('#module' + num).trigger("chosen:updated");
+
+            $('#storyEstimate' + num).val(storyInfo.estimate);
+            $('#storyPri'      + num).val(storyInfo.pri);
+            $('#storyDesc'     + num).val(storyInfo.spec);
+
         });
 
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
-        var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+        if(!isonlybody)
+        {
+            var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
+            storyLink  = storyLink + concat + 'onlybody=yes';
+        }
+
 
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});
