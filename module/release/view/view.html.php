@@ -96,7 +96,7 @@
                     <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'>
                       <?php
-                      if($story->parent > 0) echo "<span class='label label-badge label-light' title='<?php echo $lang->story->childrenAB}?>'>{$lang->story->childrenAB}</span>";
+                      if($story->parent > 0) echo "<span class='label label-badge label-light' title='{$lang->story->childrenAB}'>{$lang->story->childrenAB}</span>";
                       echo html::a($storyLink,$story->title, '', "class='preview'");
                       ?>
                     </td>
