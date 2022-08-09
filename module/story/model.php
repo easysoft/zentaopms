@@ -4422,6 +4422,11 @@ class storyModel extends model
             {
                 $title = $story->feedbackBy;
             }
+            elseif($id =='version')
+            {
+                $title = $story->version;
+                $class = 'text-center';
+            }
             elseif($id == 'notifyEmail')
             {
                 $title = $story->notifyEmail;
