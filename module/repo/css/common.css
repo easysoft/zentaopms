@@ -111,12 +111,12 @@ h3 {font-size: 16px;}
 .repoCode .comment-cell .bug-edit-form,  {padding: 10px; display: none;}
 .repoCode .comment-cell .editing .bug-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}
 
-.repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px; margin-bottom: 10px;}
+.repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px 1px; margin-bottom: 10px;}
 .repoCode .comment .comment-edit-form {margin-top: 10px;}
 .repoCode .panel-bug .steps {background: #f1f1f1; padding: 5px 10px;}
 .repoCode .panel-bug .bug-edit-form {margin-bottom: 10px;}
 .repoCode .panel-bug .panel-body {display: none;}
-.repoCode .panel-bug .panel-heading {cursor: pointer;}
+.repoCode .panel-bug .panel-heading {cursor: pointer; border-bottom: 1px solid #edf3ff;}
 .repoCode .panel-bug.show .panel-body {display: block;}
 .repoCode .panel-bug.show .icon-chevron-sign-down:before {content: '\e711';}
 .repoCode .panel-bug.show-edit-form .bug-edit-form,
@@ -128,7 +128,7 @@ h3 {font-size: 16px;}
 .repoCode .comment .comment-edit-form,
 .repoCode .panel-bug.show-edit-form .panel-body .title,
 .repoCode .panel-bug.show-edit-form .bug-date,
-.repoCode .comment.show-form .comment-content, .repoCode .comment.show-form .comment-date {display: none;}
+.repoCode .comment.show-form .comment-content {display: none;}
 
 .repoCode .text-content {white-space: normal; white-space: pre-line;}
 .repoCode .text-muted {color: #aaa;}
@@ -193,3 +193,6 @@ h3 {font-size: 16px;}
 
 .tips-git a {padding-bottom: 1px;}
 .bug-lines {font-size: revert;}
+
+.comment.show-form .comment-form-div {margin-top: 20px; padding-bottom: 10px;}
+.comment .avatar {margin-right: 10px;}
