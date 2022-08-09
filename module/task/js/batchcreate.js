@@ -141,7 +141,6 @@ function setPreview(num)
             $('#storyEstimate' + num).val(storyInfo.estimate);
             $('#storyPri'      + num).val(storyInfo.pri);
             $('#storyDesc'     + num).val(storyInfo.spec);
-
         });
 
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
@@ -150,7 +149,6 @@ function setPreview(num)
             var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
-
 
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});

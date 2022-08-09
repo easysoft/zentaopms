@@ -95,9 +95,9 @@ function copyStoryTitle(num)
         }
     }
 
-    startPosition = storyTitle.indexOf(':') + 1;
-    endPosition   = storyTitle.lastIndexOf('[');
-    storyTitle    = storyTitle.substr(startPosition, endPosition - startPosition);
+    var startPosition = storyTitle.indexOf(':') + 1;
+    var endPosition   = storyTitle.lastIndexOf('[');
+    storyTitle        = storyTitle.substr(startPosition, endPosition - startPosition);
 
     $('#name\\[' + num + '\\]').val(storyTitle);
 }
