@@ -332,14 +332,15 @@ function compareChildDate()
 {
     if(page == 'create') return;
 
-    var end   = $('#end').val();
-    var begin = $('#begin').val();
+    var end               = $('#end').val();
+    var begin             = $('#begin').val();
+    var selectedProgramID = $('#parent').val();
     if(end.length > 0 && begin.length > 0)
     {
         var programEnd   = new Date(end);
         var programBegin = new Date(begin);
         
-        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
+        $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var dateTip    = '';
             var childInfo  = JSON.parse(data);
