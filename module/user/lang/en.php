@@ -224,8 +224,13 @@ $lang->user->placeholder->loginAccount  = 'Enter your account';
 $lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
 $lang->user->placeholder->email         = 'Enter your email';
 
+$lang->user->placeholder->passwordStrength[0] = '≥6 letters.';
 $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
+
+$lang->user->placeholder->passwordStrengthCheck[0] = 'The password should be ≥ 6 letters.';
+$lang->user->placeholder->passwordStrengthCheck[1] = 'The password should be ≥ 6 letters, combination of uppercase, lowercase letters and numbers.';
+$lang->user->placeholder->passwordStrengthCheck[2] = 'The password should be ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account        = "ID %s，account must be >= 3 letters, underline or numbers";
