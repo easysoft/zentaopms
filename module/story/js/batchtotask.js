@@ -83,7 +83,7 @@ function copyStoryTitle(num)
 
     if(storyValue === 'ditto')
     {
-        for(var i = begin; i <= begin && i >= 0; i--)
+        for(var i = begin; i >= 0; i--)
         {
             var selectedValue = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').val();
             var selectedTitle = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').find('option:selected').text();
