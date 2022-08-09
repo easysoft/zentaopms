@@ -90,14 +90,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='bugTypeInputGroup'>
                 <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");?>
-                <?php if($showOS):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
-                <?php endif;?>
-                <?php if($showBrowser):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
-                <?php endif;?>
               </div>
             </td>
             <?php endif;?>
@@ -173,8 +165,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           </tr>
           <?php endif;?>
           <?php if($showExecution):?>
-          <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
-          <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
             <th><?php echo $lang->bug->type;?></th>
             <td>
@@ -182,24 +172,37 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col' id='typeBox'>
                   <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");?>
                 </div>
-                <?php if($showOS):?>
-                <div class='table-col' id='osBox'>
-                  <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                    <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
-                  </div>
-                </div>
-                <?php endif;?>
-                <?php if($showBrowser):?>
-                <div class='table-col'>
-                  <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                    <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
-                  </div>
-                </div>
-                <?php endif;?>
               </div>
             </td>
+          </tr>
+          <?php endif;?>
+          <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
+          <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
+          <?php if($showOS or $showBrowser):?>
+          <tr>
+            <?php if($showOS):?>
+            <th><?php echo $lang->bug->os;?></th>
+            <td>
+              <div class='table-row'>
+                <div class='table-col' id='osBox'>
+                  <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
+                </div>
+              </div>
+            </td>
+            <?php else:?>
+            <th></th>
+            <td></td>
+            <?php endif;?>
+            <?php if($showBrowser):?>
+            <td>
+              <div class='table-row'>
+                <div class='input-group' id='browserBox'>
+                  <span class='input-group-addon'><?php echo $lang->bug->browser?></span>
+                  <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
+                </div>
+              </div>
+            </td>
+            <?php endif;?>
           </tr>
           <?php endif;?>
           <?php if(isset($executionType) and $executionType == 'kanban'):?>
