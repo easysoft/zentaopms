@@ -10,9 +10,9 @@ title=测试 groupModel->getGroupAccounts();
 cid=1
 pid=1
 
-测试获取 group 的 account td79  >> td79
-测试获取 group 的 account pm1   >> pm1
-测试获取 group 的 account po75  >> po75
+测试获取 group 的 account td79 >> td79
+测试获取 group 的 account pm1 >> pm1
+测试获取 group 的 account po75 >> po75
 测试获取 group 的 account top88 >> top88
 
 */

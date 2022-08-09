@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -18,4 +19,4 @@ $setting = new settingTest();
 
 r($setting->setSNTest()) && p() && e('1'); //测试正常设置SN
 
-system("./ztest init");
+$db->restoreDB();

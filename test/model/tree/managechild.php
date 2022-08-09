@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -47,4 +48,4 @@ r($tree->manageChildTest($root[0], $type, $tree1)) && p() && e(',修改名称的
 r($tree->manageChildTest($root[0], $type, $tree2)) && p() && e(',新建产品子模块3,新建产品子模块4');                                     // 测试管理module 2621 的子模块
 r($tree->manageChildTest($root[1], $type, $tree3)) && p() && e(',修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6'); // 测试管理module 1981 的子模块
 r($tree->manageChildTest($root[1], $type, $tree4)) && p() && e(',新建产品子模块7,新建产品子模块8');                                     // 测试管理module 1982 的子模块
-system("./ztest init");
+$db->restoreDB();

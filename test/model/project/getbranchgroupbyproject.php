@@ -9,6 +9,10 @@ title=测试 projectModel->getBranchGroupByProject();
 cid=1
 pid=1
 
+获取id为11的项目的关联产品的分支数组数量，按产品分组 >> 1
+获取id为11的项目的关联产品的分支数组，获取第一个数组的键 >> 2
+获取id为12的项目的关联产品的分支数组数量，按产品分组 >> 1
+
 */
 
 global $tester;

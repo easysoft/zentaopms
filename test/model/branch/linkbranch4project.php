@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +28,4 @@ r($branch->linkBranch4ProjectTest($productID[1])) && p() && e('4'); // 测试关
 r($branch->linkBranch4ProjectTest($productID[2])) && p() && e('4'); // 测试关联产品 43 的分支到项目
 r($branch->linkBranch4ProjectTest($productID[3])) && p() && e('4'); // 测试关联产品 44 的分支到项目
 r($branch->linkBranch4ProjectTest($productID[4])) && p() && e('4'); // 测试关联产品 45 的分支到项目
-system("./ztest init");
+$db->restoreDB();

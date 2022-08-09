@@ -10,6 +10,9 @@ title=测试 tutorialModel->getProductStats();
 cid=1
 pid=1
 
+测试是否能拿到数据 >> test
+测试是否能拿到数据 >> Test branch
+
 */
 
 $tutorial = new tutorialTest();

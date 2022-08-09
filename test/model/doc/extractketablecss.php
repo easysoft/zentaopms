@@ -10,7 +10,8 @@ title=测试 docModel->extractKETableCSS();
 cid=1
 pid=1
 
-
+未过滤数据查询 >> 0
+过滤后数据查询 >> .ke-table1{border:1px #000000 solid}
 
 */
 global $tester;

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +29,4 @@ r($execution->unlinkMemberTest($executionIDList[0], $accountList[0], $count[1]))
 r($execution->unlinkMemberTest($executionIDList[1], $accountList[1], $count[0])) && p()                 && e('0');           // 瀑布执行解除团队成员
 r($execution->unlinkMemberTest($executionIDList[2], $accountList[2], $count[0])) && p('0:account,role') && e('test52,测试'); // 看板执行解除团队成员
 r($execution->unlinkMemberTest($executionIDList[2], $accountList[2], $count[1])) && p()                 && e('1');           // 看板执行解除团队成员后统计
-system("./ztest init");
+$db->restoreDB();

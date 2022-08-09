@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/design.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -41,4 +42,4 @@ r($design->batchCreateTest($projectIDList[4], $productIDList[0], $noTypeDesign))
 r($design->batchCreateTest($projectIDList[5], $productIDList[0], $noNameDesign))        && p()            && e('0');                     //不输入名字
 r($design->batchCreateTest($projectIDList[6], $productIDList[0], $noDescDesign))        && p('0:desc')    && e('');                      //不输入详情
 
-system("./ztest init");
+$db->restoreDB();

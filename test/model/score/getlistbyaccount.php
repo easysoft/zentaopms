@@ -10,6 +10,11 @@ title=测试 scoreModel->getListByAccount();
 cid=1
 pid=1
 
+查看account为admin，每页展示15条，第一页的第一条数据 >> admin
+查看account为dev10, 每页展示15条，第一页的数据总量 >> 15
+查看account为top10, 不传pager(默认分页)的第一条数据 >> top10
+查看account为adminn(不存在的用户)的数据 >> 0
+
 */
 global $tester;
 $tester->app->loadClass('pager', $static = true);

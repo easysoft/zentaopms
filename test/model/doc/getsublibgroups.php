@@ -10,7 +10,10 @@ title=测试 docModel->getSubLibGroups();
 cid=1
 pid=1
 
-
+all查询 >> 0
+产品库查询 >> 产品主库;附件库
+执行库查询 >> 0
+产品库查询统计 >> 2
 
 */
 global $tester;

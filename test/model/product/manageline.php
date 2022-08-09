@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
+$db->switchDB();
 
 /**
 
@@ -37,4 +38,4 @@ r($product->manageLineTest($lines1, 2)) && p('name') && e('产品线2');  // 测
 r($product->manageLineTest($lines2, 1)) && p('root') && e('1');        // 测试修改所属项目集
 r($product->manageLineTest($lines3))    && p('name') && e('产品线21'); // 测试创建新的产品线
 r($product->manageLineTest($lines4))    && p()       && e('');         // 测试创建没有项目集的产品线
-system("./ztest init");
+$db->restoreDB();

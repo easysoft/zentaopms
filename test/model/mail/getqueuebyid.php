@@ -10,6 +10,10 @@ title=测试 mailModel->getQueueById();
 cid=1
 pid=1
 
+获取id为1的邮件主题 >> 主题1
+获取id为10的收件人 >> top10
+获取id不存在的邮件信息 >> 0
+
 */
 
 $mail = new mailTest();

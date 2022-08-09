@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +32,4 @@ r($stories)        && p('3:module') && e('1366'); // 批量修改6个需求的�
 r($stories)        && p('4:module') && e('1366'); // 批量修改6个需求的模块，查看需求4修改后的模块ID
 r($stories)        && p('5:module') && e('1366'); // 批量修改6个需求的模块，查看需求5修改后的模块ID
 r($stories)        && p('6:module') && e('1366'); // 批量修改6个需求的模块，查看需求6修改后的模块ID
-system("./ztest init");
+$db->restoreDB();

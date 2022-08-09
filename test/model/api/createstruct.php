@@ -10,6 +10,9 @@ title=测试 apiModel->createStruct();
 cid=1
 pid=1
 
+创建数据结构 >> struct
+创建没有结构名的数据结构 >> 『Name』should not be blank.
+
 */
 
 global $tester;

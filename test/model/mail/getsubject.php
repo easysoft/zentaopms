@@ -10,6 +10,12 @@ title=测试 mailModel->getSubject();
 cid=1
 pid=1
 
+获取关闭测试单时邮件主题 >> admin关闭了测试单 #1:测试单1
+获取创建文档时的邮件主题 >> admin创建了文档 #1:文档标题901
+获取操作需求时的邮件主题 >> STORY #1 test - 正常产品1
+获取操作任务时的邮件主题 >> TASK #1 test - 迭代1
+获取操作BUG时的邮件主题 >> BUG #1 test - 正常产品1
+
 */
 
 $mail = new mailTest();

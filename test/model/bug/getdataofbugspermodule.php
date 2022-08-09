@@ -9,7 +9,7 @@ title=bugModel->getDataOfBugsPerModule();
 cid=1
 pid=1
 
-获取module0数据    >> /,306
+获取module0数据 >> /,306
 获取module1821数据 >> /产品模块1,1
 获取module1822数据 >> /产品模块2,1
 获取module1823数据 >> /产品模块3,1
@@ -20,9 +20,7 @@ pid=1
 获取module1832数据 >> /产品模块12,1
 获取module1833数据 >> /产品模块13,1
 
-
 */
-
 
 $bug=new bugTest();
 r($bug->getDataOfBugsPerModuleTest()) && p('0:name,value')    && e('/,306');         // 获取module0数据
