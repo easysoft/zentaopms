@@ -360,34 +360,45 @@ function budgetOverrunTips()
  */
 function outOfDateTip()
 {
-        var end   = $('#end').val();
-        var begin = $('#begin').val();
-        if(end.length > 0 && begin.length > 0)
-        {
-            var selectedProgramID = $('#parent').val();
-            var budget            = $('#budget').val();
+    var end   = $('#end').val();
+    var begin = $('#begin').val();
+    if(end.length > 0 && begin.length > 0)
+    {
+        var selectedProgramID = $('#parent').val();
 
-            if(selectedProgramID == 0)
+        if(selectedProgramID == 0)
+        {
+            if($('#dateTip').length > 0) $('#dateTip').remove();
+            return;
+        }
+
+        if(typeof(projectID) == 'undefined') projectID = 0;
+        $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
+        {
+            var data         = JSON.parse(data);
+            var parentEnd    = new Date(data.selectedProgramEnd);
+            var parentBegin  = new Date(data.selectedProgramBegin);
+            var projectEnd   = new Date(end);
+            var projectBegin = new Date(begin);
+
+            if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
+
+            var dateTip = "";
+            if(projectBegin < parentBegin && projectEnd <= parentEnd)
             {
-                if($('#dateTip').length > 0) $('#dateTip').remove();
-                return false;
+                dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+            }
+            else if(projectBegin >= parentBegin && projectEnd > parentEnd)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+            }
+            else
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
             }
 
-            if(typeof(projectID) == 'undefined') projectID = 0;
-            $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
-            {
-                var data         = JSON.parse(data);
-                var parentEnd    = new Date(data.selectedProgramEnd);
-                var parentBegin  = new Date(data.selectedProgramBegin);
-                var projectEnd   = new Date(end);
-                var projectBegin = new Date(begin);
-
-                var dateTip = "";
-                if(projectBegin < parentBegin && projectEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
-                if(projectBegin >= parentBegin && projectEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
-                if((projectBegin < parentBegin && projectEnd > parentEnd) || (projectEnd <= parentBegin && projectBegin <= parentBegin) || (projectBegin >= parentEnd && projectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
-                if($('#dateTip').length > 0) $('#dateTip').remove();
-                $('#dateBox').after(dateTip);
-            });
-        }
+            if($('#dateTip').length > 0) $('#dateTip').remove();
+            $('#dateBox').after(dateTip);
+        });
+    }
 }

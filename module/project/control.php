@@ -230,12 +230,20 @@ class project extends control
      */
     public function ajaxGetParentInfo($objectType, $objectID, $selectedProgramID)
     {
+        $data = array();
+        $minChildBegin = '';
+        $maxChildEnd   = '';
         if(!empty($objectID))
         {
             $object          = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
             $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
             $availableBudget = $object->parent == $selectedProgramID ? $budgetLeft + $object->budget : $budgetLeft;
+            if($objectType == 'program')
+            {
+                $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
+                $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
+            }
         }
         else
         {
@@ -244,6 +252,11 @@ class project extends control
         }
 
         $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => $availableBudget, 'budgetUnit' => $selectedProgram->budgetUnit);
+        if($objectType == 'program')
+        {
+            $data['minChildBegin'] = $minChildBegin;
+            $data['maxChildEnd']   = $maxChildEnd;
+        }
         echo json_encode($data);
     }
 

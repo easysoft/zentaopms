@@ -45,7 +45,7 @@
 <?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
 <?php js::set('dateExceedParent', $lang->program->dateExceedParent);?>
-<?php js::set('getMethodName', $this->app->getMethodName());?>
+<?php js::set('page', $this->app->getMethodName());?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
