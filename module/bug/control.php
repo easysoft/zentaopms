@@ -2293,7 +2293,7 @@ class bug extends control
         if($_POST)
         {
             $this->loadModel('port');
-            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
