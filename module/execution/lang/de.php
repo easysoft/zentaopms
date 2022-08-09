@@ -154,6 +154,7 @@ $lang->execution->putoff   = 'Zurückstellen';
 $lang->execution->suspend  = 'Aussetzen';
 $lang->execution->close    = 'Schließen';
 $lang->execution->export   = 'Export';
+$lang->execution->next     = "Next";
 
 $lang->execution->endList[7]   = '1 Woche';
 $lang->execution->endList[14]  = '2 Wochen';

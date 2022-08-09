@@ -32,7 +32,7 @@ $(function()
     })
 
     /* Get checked stories. */
-    $('#batchToTaskButton').on('click', function()
+    $(document).on('click', '#batchToTaskButton', function()
     {
         storyIdList      = '';
         linedTaskIdList  = '';
@@ -53,6 +53,26 @@ $(function()
 
     $('#submit').click(function()
     {
+        var taskType  = $('#type').val();
+        var hourPoint = $('#hourPointValue').val();
+        if(taskType.length == 0)
+        {
+            alert(typeNotEmpty);
+            return false;
+        }
+
+        if(hourPoint == 0)
+        {
+            alert(hourPointNotEmpty);
+            return false;
+        }
+        else if(typeof(hourPoint) != 'undefined' && (isNaN(hourPoint) || hourPoint < 0))
+        {
+            alert(hourPointNotError);
+            return false;
+        }
+        hourPoint = typeof(hourPoint) != 'undefined' ? 0 : hourPoint;
+
         if(linedTaskIdList)
         {
             confirmStoryToTask = confirmStoryToTask.replace('%s', linedTaskIdList);

@@ -154,6 +154,7 @@ $lang->execution->putoff   = "延期";
 $lang->execution->suspend  = "挂起";
 $lang->execution->close    = "关闭";
 $lang->execution->export   = "导出";
+$lang->execution->next     = "下一步";
 
 $lang->execution->endList[7]   = '一星期';
 $lang->execution->endList[14]  = '两星期';

@@ -1730,29 +1730,49 @@ class story extends control
      * Batch stories convert to tasks.
      *
      * @param  int    $executionID
+     * @param  int    $projectID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchToTask($executionID = 0)
+    public function batchToTask($executionID = 0, $projectID = 0, $extra = '')
     {
-        if(!empty($_POST))
+        if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $tasks = $this->story->batchToTask($executionID, $this->session->project);
-
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $tasks = $this->story->batchToTask($executionID, $projectID);
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
-            $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
-            return $this->send($response);
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID"), 'parent'));
         }
+
+        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+
+        $this->loadModel('task');
+        $stories    = $this->story->getByList($_POST['storyIdList']);
+        $storyGroup = array();
+        foreach($stories as $story)
+        {
+            if(strpos('draft,closed', $story->status) !== false) continue;
+            if(isset($storyGroup[$story->module])) continue;
+            $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
+        }
+
+        $this->view->title          = $this->lang->story->batchToTask;
+        $this->view->executionID    = $executionID;
+        $this->view->syncFields     = empty($_POST['fields']) ? array() : $_POST['fields'];
+        $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0 : $_POST['hourPointValue'];
+        $this->view->taskType       = empty($_POST['type']) ? '' : $_POST['type'];
+        $this->view->stories        = $stories;
+        $this->view->storyGroup     = $storyGroup;
+        $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
+        $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $this->view->storyTasks     = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
+
+        $this->display();
     }
 
     /**
