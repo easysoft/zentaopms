@@ -336,7 +336,7 @@ function budgetOverrunTips()
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
 
@@ -373,7 +373,7 @@ function outOfDateTip()
         }
 
         if(typeof(projectID) == 'undefined') projectID = 0;
-        $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var data         = JSON.parse(data);
             var parentEnd    = new Date(data.selectedProgramEnd);

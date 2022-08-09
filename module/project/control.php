@@ -220,7 +220,7 @@ class project extends control
     }
 
     /**
-     * Ajax: Get selected program's information.
+     * Ajax: Get selected object's information.
      *
      * @param  str    $objectType
      * @param  int    $objectID
@@ -228,7 +228,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetParentInfo($objectType, $objectID, $selectedProgramID)
+    public function ajaxGetObjectInfo($objectType, $objectID, $selectedProgramID)
     {
         $data = array();
         $minChildBegin = '';
