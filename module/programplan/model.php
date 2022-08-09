@@ -183,23 +183,27 @@ class programplanModel extends model
             $realEnd   = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
 
             $data = new stdclass();
-            $data->id         = $plan->id;
-            $data->type       = 'plan';
-            $data->text       = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
-            $data->percent    = $plan->percent;
-            $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
-            $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
-            $data->owner_id   = $plan->PM;
-            $data->status     = $this->processStatus('execution', $plan);
-            $data->begin      = $start;
-            $data->deadline   = $end;
-            $data->realBegan  = $realBegan ? substr($realBegan, 0, 10) : '';
-            $data->realEnd    = $realEnd ? substr($realEnd, 0, 10) : '';;
-            $data->parent     = $plan->grade == 1 ? 0 :$plan->parent;
-            $data->open       = true;
-            $data->start_date = $realBegan ? $realBegan : $start;
-            $data->endDate    = $realEnd ? $realEnd : $end;
-            $data->duration   = 1;
+            $data->id            = $plan->id;
+            $data->type          = 'plan';
+            $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+            $data->percent       = $plan->percent;
+            $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
+            $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->owner_id      = $plan->PM;
+            $data->status        = $this->processStatus('execution', $plan);
+            $data->begin         = $start;
+            $data->deadline      = $end;
+            $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
+            $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->open          = true;
+            $data->start_date    = $realBegan ? $realBegan : $start;
+            $data->endDate       = $realEnd ? $realEnd : $end;
+            $data->duration      = 1;
+            $data->color         = $this->lang->execution->gantt->stage->color;
+            $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
@@ -254,29 +258,33 @@ class programplanModel extends model
             if($start > $end) $end = $start;
 
             $data = new stdclass();
-            $data->id           = $task->execution . '-' . $task->id;
-            $data->type         = 'task';
-            $data->text         = $taskSign . $priIcon . $task->name;
-            $data->percent      = '';
-            $data->status       = $this->processStatus('task', $task);
-            $data->owner_id     = $task->assignedTo;
-            $data->attribute    = '';
-            $data->milestone    = '';
-            $data->begin        = $start;
-            $data->deadline     = $end;
-            $data->realBegan    = $realBegan ? substr($realBegan, 0, 10) : '';
-            $data->realEnd      = $realEnd ? substr($realEnd, 0, 10) : '';
-            $data->pri          = $task->pri;
-            $data->parent       = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
-            $data->open         = true;
-            $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
-            $data->progress     = $progress;
-            $data->taskProgress = ($progress * 100) . '%';
-            $data->start_date   = $start;
-            $data->endDate      = $end;
-            $data->duration     = 1;
-            $data->estimate     = $task->estimate;
-            $data->consumed     = $task->consumed;
+            $data->id            = $task->execution . '-' . $task->id;
+            $data->type          = 'task';
+            $data->text          = $taskSign . $priIcon . $task->name;
+            $data->percent       = '';
+            $data->status        = $this->processStatus('task', $task);
+            $data->owner_id      = $task->assignedTo;
+            $data->attribute     = '';
+            $data->milestone     = '';
+            $data->begin         = $start;
+            $data->deadline      = $end;
+            $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
+            $data->pri           = $task->pri;
+            $data->parent        = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
+            $data->open          = true;
+            $progress            = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+            $data->progress      = $progress;
+            $data->taskProgress  = ($progress * 100) . '%';
+            $data->start_date    = $start;
+            $data->endDate       = $end;
+            $data->duration      = 1;
+            $data->estimate      = $task->estimate;
+            $data->consumed      = $task->consumed;
+            $data->color         = zget($this->lang->execution->gantt->color, $task->pri);
+            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri);
+            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             /* If multi task then show the teams. */
             if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
@@ -337,7 +345,6 @@ class programplanModel extends model
         }
 
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
-
         return $returnJson ? json_encode($datas) : $datas;
     }
 
@@ -426,6 +433,7 @@ class programplanModel extends model
             $dataGroup->open       = true;
             $dataGroup->progress   = '';
             $dataGroup->taskProgress = '';
+            $dataGroup->bar_height   = $this->lang->execution->gantt->bar_height;
 
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $dataGroup;
@@ -474,6 +482,10 @@ class programplanModel extends model
                 $data->duration     = 1;
                 $data->estimate     = $task->estimate;
                 $data->consumed     = $task->consumed;
+                $data->color         = zget($this->lang->execution->gantt->color, $task->pri);
+                $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri);
+                $data->textColor     = $this->lang->execution->gantt->textColor;
+                $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
 

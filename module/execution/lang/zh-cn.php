@@ -547,11 +547,26 @@ $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
 if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
-$lang->execution->gantt->color[0] = 'bbb';
-$lang->execution->gantt->color[1] = 'ff5d5d';
-$lang->execution->gantt->color[2] = 'ff9800';
-$lang->execution->gantt->color[3] = '16a8f8';
-$lang->execution->gantt->color[4] = '00da88';
+$lang->execution->gantt->progressColor[0] = '#B7B7B7';
+$lang->execution->gantt->progressColor[1] = '#FF8287';
+$lang->execution->gantt->progressColor[2] = '#FFC73A';
+$lang->execution->gantt->progressColor[3] = '#6BD5F5';
+$lang->execution->gantt->progressColor[4] = '#9DE88A';
+$lang->execution->gantt->progressColor[5] = '#9BA8FF';
+
+$lang->execution->gantt->color[0] = '#E7E7E7';
+$lang->execution->gantt->color[1] = '#FFDADB';
+$lang->execution->gantt->color[2] = '#FCECC1';
+$lang->execution->gantt->color[3] = '#D3F3FD';
+$lang->execution->gantt->color[4] = '#DFF5D9';
+$lang->execution->gantt->color[5] = '#EBDCF9';
+
+$lang->execution->gantt->stage = new stdclass();
+$lang->execution->gantt->stage->progressColor = '#70B8FE';
+$lang->execution->gantt->stage->color         = '#D2E7FC';
+
+$lang->execution->gantt->textColor  = '000000';
+$lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = '导出图片';
 $lang->execution->gantt->exportPDF  = '导出 PDF';

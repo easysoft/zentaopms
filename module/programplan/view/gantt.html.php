@@ -19,12 +19,6 @@
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
 #ganttPris > span {display: inline-block; line-height: 20px; min-width: 20px; border-radius: 2px;}
-.gantt_task_line {background: #<?php echo $lang->execution->gantt->color[0]?>; border-color: #<?php echo $lang->execution->gantt->color[0]?>;}
-.gantt_task_progress {background: rgba(0,0,0,.1)}
-.gantt_task_line.pri-1 {background: #<?php echo $lang->execution->gantt->color[1]?>; border-color: #<?php echo $lang->execution->gantt->color[1]?>}
-.gantt_task_line.pri-2 {background: #<?php echo $lang->execution->gantt->color[2]?>; border-color: #<?php echo $lang->execution->gantt->color[2]?>}
-.gantt_task_line.pri-3 {background: #<?php echo $lang->execution->gantt->color[3]?>; border-color: #<?php echo $lang->execution->gantt->color[3]?>}
-.gantt_task_line.pri-4 {background: #<?php echo $lang->execution->gantt->color[4]?>; border-color: #<?php echo $lang->execution->gantt->color[4]?>}
 .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .gantt_link_arrow_right {border-left-color: #2196F3;}
 .gantt_link_arrow_left {border-right-color: #2196F3;}
@@ -65,7 +59,11 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt-fullscreen #footer {display: none!important;}
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
 .gantt_grid_head_cell.gantt_grid_head_text{overflow:visible;}
-
+.gantt_grid_head_cell, .gantt_scale_cell{color:#000000!important;}
+.gantt_tree_content{color:#838A9D;}
+.gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
+.gantt_task_line.gantt_task_inline_color{border:0px;}
+.gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -85,8 +83,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       </div>
       <div class='btn btn-link' id='ganttPris'>
         <strong><?php echo $lang->task->pri . " : "?></strong>
-        <?php foreach($lang->execution->gantt->color as $pri => $color):?>
-        <span style="background:#<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+        <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
+        <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
         <?php endforeach;?>
       </div>
     </div>
@@ -470,7 +468,6 @@ $(function()
     var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
     if(!ganttData.data) ganttData.data = [];
 
-
     <?php
     $userList = array();
     foreach($users as $account => $realname)
@@ -494,11 +491,11 @@ $(function()
     gantt.config.smart_scales        = true;
     gantt.config.static_background   = true;
     gantt.config.show_task_cells     = false;
-    gantt.config.row_height          = 25;
+    gantt.config.row_height          = 32;
     gantt.config.min_column_width    = 40;
     gantt.config.details_on_create   = false;
     gantt.config.scales              = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
-    gantt.config.scale_height        = 22 * gantt.config.scales.length;
+    gantt.config.scale_height        = 18 * gantt.config.scales.length;
     gantt.config.duration_unit       = "day";
 
     gantt.config.columns = [
