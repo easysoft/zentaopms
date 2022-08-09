@@ -20,6 +20,7 @@ packages:
 unit test:
   script:
   - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
   only:
   - master merge_requests
 #notify:
