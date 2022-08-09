@@ -3783,7 +3783,7 @@ class taskModel extends model
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
         $list .= '<td>';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
-        $list .= html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'");
+        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
         $list .= '</td>';
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
