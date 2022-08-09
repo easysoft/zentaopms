@@ -330,13 +330,14 @@ function setBudgetTipsAndAclList(parentID)
  */
 function compareChildDate()
 {
+    if(getMethodName == 'create') return;
     var end   = $('#end').val();
     var begin = $('#begin').val();
     if(end.length > 0 && begin.length > 0)
     {
-        var programEnd        = new Date(end);
-        var programBegin      = new Date(begin);
-
+        var programEnd   = new Date(end);
+        var programBegin = new Date(begin);
+        
         $.get(createLink('program', 'ajaxGetChildInfo', 'programID=' + programID), function(data)
         {
             var dateTip    = '';
