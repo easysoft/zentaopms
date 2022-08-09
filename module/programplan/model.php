@@ -320,7 +320,7 @@ class programplanModel extends model
             $progress = ($progress * 100) . '%';
             $datas['data'][$index]->taskProgress = $progress;
             $datas['data'][$index]->estimate = $stage['progress']['totalEstimate'];
-            $datas['data'][$index]->consumed = $stage['progress']['consumed'];
+            $datas['data'][$index]->consumed = $stage['progress']['totalConsumed'];
         }
 
         $datas['links'] = array();
