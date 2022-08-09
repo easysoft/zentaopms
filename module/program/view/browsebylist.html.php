@@ -11,7 +11,7 @@
         <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='c-user'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
         <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-        <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
+        <th class='c-date text-center'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
         <th class='c-progress'><?php echo $lang->project->progress;?></th>
         <?php
@@ -81,7 +81,7 @@
         </td>
         <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
-        <td><?php echo $program->begin;?></td>
+        <td class='text-center'><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
           <?php if(isset($progressList[$program->id])):?>
