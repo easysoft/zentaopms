@@ -571,7 +571,7 @@ class project extends control
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
-        $this->display();
+        $this->display('project', 'create');
     }
 
     /**

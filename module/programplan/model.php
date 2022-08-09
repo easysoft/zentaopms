@@ -655,8 +655,11 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        $names = array_filter($names);
-        if(count(array_unique($names)) != count($names)) return dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+        if(!$this->checkNameUnique($names))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+            return false;
+        }
 
         $datas = array();
         foreach($names as $key => $name)
@@ -1171,6 +1174,20 @@ class programplanModel extends model
 
         if($action == 'create' and $plan->grade > 1) return false;
 
+        return true;
+    }
+
+    /**
+     * Check name unique.
+     *
+     * @param  array  $names
+     * @access public
+     * @return bool
+     */
+    public function checkNameUnique($names)
+    {
+        $names = array_filter($names);
+        if(count(array_unique($names)) != count($names)) return false;
         return true;
     }
 
