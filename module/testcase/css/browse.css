@@ -27,3 +27,4 @@ tbody > tr > td   .icon-share {font-size: 9px;}
 
 #importToLib .select-lib {width: 100px; text-align: right;}
 #subHeader #currentBranch + #dropMenu .col-left {padding-bottom: 30px;}
+th.c-lastEditedBy {width: 92px !important;}
