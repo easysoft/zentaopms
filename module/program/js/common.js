@@ -347,7 +347,7 @@ function compareChildDate()
 
             if(programBegin > childBegin) dateTip = "<span id='dateTip' class='text-remind'>" + beginGreateChild + childInfo.minChildBegin + "</span>";
             if(programEnd < childEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endLetterChild + childInfo.maxChildEnd + "</span>";
-            if((programEnd < childBegin && programEnd < childEnd) || (programBegin > childBegin && programBegin > childEnd) || (programBegin > childBegin && programEnd < childEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateLetterChild + childInfo.minChildBegin + "~" + childInfo.maxChildEnd + "</span>";
+            if((programEnd < childBegin && programEnd < childEnd) || (programBegin > childBegin && programBegin > childEnd) || (programBegin > childBegin && programEnd < childEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedChild + childInfo.minChildBegin + "~" + childInfo.maxChildEnd + "</span>";
 
             if($('#dateTip').length > 0) $('#dateTip').remove();
             $('#dateBox').after(dateTip);
@@ -392,8 +392,10 @@ function outOfDateTip()
 
             if($('#dateTip').length > 0) $('#dateTip').remove();
             $('#dateBox').after(dateTip);
+            if(dateTip.length != 0) return;
+
+            compareChildDate();
         });
-        compareChildDate();
     }
 }
 

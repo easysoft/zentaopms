@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('getMethodName', $this->app->getMethodName();?>
+<?php js::set('getMethodName', $this->app->getMethodName());?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('longTime', $lang->program->longTime);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
@@ -84,7 +84,7 @@
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div id='dateBox' class='input-group'>
-              <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
+              <?php echo html::input('begin', $program->begin, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
                 $end = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
