@@ -1,12 +1,13 @@
-$(function()
-{
-    for(var i = 1; i <= storyCount; i ++) setPreview(i);
-});
-
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
 {
     toggleCheck($(this));
-})
+});
+
+/* Set the story module. */
+function setStoryRelated(num)
+{
+    setPreview(num);
+}
 
 /**
  * Toggle checkbox.
@@ -66,15 +67,17 @@ function setStories(moduleID, executionID, num)
 /* Copy story title as task title. */
 function copyStoryTitle(num)
 {
-    var storyTitle = $('#story' + num).find('option:selected').text();
-    var storyValue = $('#story' + num).find('option:selected').val();
+    var $story     = $('#story' + num);
+    var storyTitle = $story.find('option:selected').text();
+    var storyValue = $story.find('option:selected').val();
+    var begin      = parseInt($story.closest('tr').children('.c-id').text()) - 2;
 
     if(storyValue === 'ditto')
     {
-        for(var i = num; i <= num && i >= 1; i--)
+        for(var i = begin; i <= begin && i >= 0; i--)
         {
-            var selectedValue = $('select[id="story' + i +'"]').val();
-            var selectedTitle = $('select[id="story' + i +'"]').find('option:selected').text();
+            var selectedValue = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').val();
+            var selectedTitle = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').find('option:selected').text();
             if(selectedValue !== 'ditto')
             {
                 storyTitle = selectedTitle;
@@ -102,17 +105,6 @@ function setPreview(num)
     var storyID = $('#story' + num).val();
     if(storyID != 0  && storyID != 'ditto')
     {
-        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
-        $.getJSON(link, function(storyInfo)
-        {
-            $('#module' + num).val(parseInt(storyInfo.moduleID));
-            $('#module' + num).trigger("chosen:updated");
-
-            $('#storyEstimate' + num).val(storyInfo.estimate);
-            $('#storyPri'      + num).val(storyInfo.pri);
-            $('#storyDesc'     + num).val(storyInfo.spec);
-        });
-
         storyLink  = createLink('story', 'view', "storyID=" + storyID, '', true);
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});
@@ -245,3 +237,54 @@ $(function()
         }
     });
 });
+
+/**
+ * Add row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addRow(obj)
+{
+    var row = $('#addRow').html().replace(/%i%/g, rowIndex + 1);
+    $('<tr class="addedRow">' + row  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    var $beginRow = $row = $(obj).closest('tr').next();
+
+    $row.find(".form-date").datepicker();
+    $row.find("input[name^=color]").colorPicker();
+    $row.find('div[id$=_chosen]').remove();
+    $row.find('.picker').remove();
+    $row.find('.chosen').chosen();
+
+    var begin     = parseInt($(obj).parent().siblings('.c-id').text()) + 1;
+    var count     = $('#tableBody tbody > tr').length;
+    for(var i = begin; i <= count; i++)
+    {
+        $beginRow.children('.c-id').text(i);
+        $beginRow = $beginRow.next();
+    }
+    rowIndex ++;
+}
+
+/**
+ * Delete row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteRow(obj)
+{
+    var $beginRow = $(obj).closest('tr').next();
+    var begin     = parseInt($(obj).parent().siblings('.c-id').text());
+    var count     = $('#tableBody tbody > tr').length;
+    for(var i = begin; i <= count; i++)
+    {
+        $beginRow.children('.c-id').text(i);
+        $beginRow = $beginRow.next();
+    }
+
+    $(obj).closest('tr').remove();
+}
