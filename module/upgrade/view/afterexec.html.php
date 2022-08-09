@@ -91,12 +91,13 @@ function finishedShow()
 <?php if(isset($needProcess['changeEngine'])):?>
 $(function()
 {
-    $('.col-md-6:first').append("<div id='changeEngineBox' class='alert alert-info'><p><?php echo $lang->upgrade->changeEngine;?></p></div>");
+    $('.col-md-6:first').append("<div id='changeEngineBox' class='alert alert-info'><p><?php echo $lang->upgrade->changeEngine;?></p><div class='info'></div></div>");
     changeEngine();
 })
 function changeEngine()
 {
-    var link = '<?php echo inlink('ajaxChangeTableEngine')?>';
+    var link     = '<?php echo inlink('ajaxChangeTableEngine')?>';
+    var $infoBox = $('#changeEngineBox .info');
     $.getJSON(link, function(response)
     {
         if(response == null)
@@ -107,14 +108,14 @@ function changeEngine()
         else if(response.result == 'finished')
         {
             changeEngineFinish = true;
-            $('#changeEngineBox').prepend("<div class='text-success'>" + response.message + "</div>");
+            $infoBox.prepend("<div class='text-success'>" + response.message + "</div>");
             finishedShow();
         }
         else
         {
-            if($('#changeEngineBox').find('.' + response.table).length == 0) $('#changeEngineBox').prepend("<div class='text-success " + response.table + "'></div>");
-            $('#changeEngineBox').find('.' + response.table).html(response.message);
-            if(response.next) $('#changeEngineBox').prepend("<div class='text-success " + response.next + "'>" + response.nextMessage + "</div>");
+            if($infoBox.find('.' + response.table).length == 0) $infoBox.prepend("<div class='text-success " + response.table + "'></div>");
+            $infoBox.find('.' + response.table).html(response.message);
+            if(response.next) $infoBox.prepend("<div class='text-success " + response.next + "'>" + response.nextMessage + "</div>");
             changeEngine();
         }
     });

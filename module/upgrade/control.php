@@ -930,7 +930,7 @@ class upgrade extends control
         }
 
         $nextTable = $stmt->fetch();
-        if(stripos($nextTable->Name, 'searchindex') !== false)
+        if($nextTable and stripos($nextTable->Name, 'searchindex') !== false)
         {
             $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
             if($mysqlVersion < 5.6) return print(json_encode($response));
@@ -941,8 +941,11 @@ class upgrade extends control
         $tableName = $table->Name;
 
         $response['table'] = $tableName;
-        $response['next']  = $nextTable->Name;
-        if($response['next']) $response['nextMessage'] = sprintf($this->lang->upgrade->changingTable, $response['next']);
+        if($nextTable)
+        {
+            $response['next']  = $nextTable->Name;
+            if($response['next']) $response['nextMessage'] = sprintf($this->lang->upgrade->changingTable, $response['next']);
+        }
 
         if(stripos($tableName, 'searchindex') !== false)
         {
