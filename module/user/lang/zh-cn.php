@@ -224,13 +224,13 @@ $lang->user->placeholder->loginAccount  = '请输入用户名';
 $lang->user->placeholder->loginUrl      = '请输入禅道系统网址';
 $lang->user->placeholder->email         = '请输入邮箱';
 
-$lang->user->placeholder->passwordStrength[0] = '密码必须6位以上。';
-$lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
-$lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
+$lang->user->placeholder->passwordStrength[0] = '密码必须6位及以上。';
+$lang->user->placeholder->passwordStrength[1] = '6位及以上，包含大小写字母，数字。';
+$lang->user->placeholder->passwordStrength[2] = '10位及以上，包含大小写字母，数字，特殊字符。';
 
-$lang->user->placeholder->passwordStrengthCheck[0] = '密码须6位以上。';
-$lang->user->placeholder->passwordStrengthCheck[1] = '密码必须6位以上，且包含大小写字母、数字。';
-$lang->user->placeholder->passwordStrengthCheck[2] = '密码必须10位以上，且包含大小写字母、数字、特殊符号。';
+$lang->user->placeholder->passwordStrengthCheck[0] = '密码须6位及以上。';
+$lang->user->placeholder->passwordStrengthCheck[1] = '密码必须6位及以上，且包含大小写字母、数字。';
+$lang->user->placeholder->passwordStrengthCheck[2] = '密码必须10位及以上，且包含大小写字母、数字、特殊符号。';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account        = "【ID %s】的用户名应该为：三位以上的英文、数字或下划线的组合";
