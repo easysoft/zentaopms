@@ -220,7 +220,7 @@ class project extends control
     }
 
     /**
-     * Ajax get selected program's information.
+     * Ajax: Get selected program's information.
      *
      * @param  str    $objectType
      * @param  int    $objectID

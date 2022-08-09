@@ -339,6 +339,7 @@ function compareChildDate()
 
         $.get(createLink('program', 'ajaxGetChildInfo', 'programID=' + programID), function(data)
         {
+            var dateTip    = '';
             var childInfo  = JSON.parse(data);
             var childBegin = new Date(childInfo.minChildBegin);
             var childEnd   = new Date(childInfo.maxChildEnd);
@@ -379,7 +380,6 @@ function outOfDateTip()
         if(typeof(programID) == 'undefined') programID = 0;
         $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
-            console.log('789');
             var data        = JSON.parse(data);
             var parentEnd   = new Date(data.selectedProgramEnd);
             var parentBegin = new Date(data.selectedProgramBegin);
@@ -387,7 +387,7 @@ function outOfDateTip()
             var dateTip = "";
             if(programBegin < parentBegin && programEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
             if(programBegin >= parentBegin && programEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
-            if((programBegin < parentBegin && programEnd > parentEnd) || (projectEnd <= parentBegin && projectBegin <= parentBeg    in) || (projectBegin >= parentEnd && projectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+            if((programBegin < parentBegin && programEnd > parentEnd) || (programEnd <= parentBegin && programBegin <= parentBegin) || (programBegin >= parentEnd && programEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
 
             if($('#dateTip').length > 0) $('#dateTip').remove();
             $('#dateBox').after(dateTip);
