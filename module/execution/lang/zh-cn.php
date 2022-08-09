@@ -172,7 +172,8 @@ $lang->execution->cfdTypeList['task']  = "按任务查看";
 $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 
 $lang->team->account    = '用户';
-$lang->team->role       = '我的角色';
+$lang->team->role       = '角色';
+$lang->team->roleAB     = '我的角色';
 $lang->team->join       = '加盟日';
 $lang->team->hours      = '可用工时/天';
 $lang->team->days       = '可用工日';
