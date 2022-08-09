@@ -98,27 +98,37 @@ function changeEngine()
 {
     var link     = '<?php echo inlink('ajaxChangeTableEngine')?>';
     var $infoBox = $('#changeEngineBox .info');
-    $.getJSON(link, function(response)
+    $.ajax(
     {
-        if(response == null)
+        type: "GET",
+        url: link,
+        success: function(response)
         {
-            changeEngineFinish = true;
-            finishedShow();
-        }
-        else if(response.result == 'finished')
+            response = JSON.parse(response);
+            if(response == null)
+            {
+                changeEngineFinish = true;
+                finishedShow();
+            }
+            else if(response.result == 'finished')
+            {
+                changeEngineFinish = true;
+                $infoBox.prepend("<div class='text-success'>" + response.message + "</div>");
+                finishedShow();
+            }
+            else
+            {
+                if($infoBox.find('.' + response.table).length == 0) $infoBox.prepend("<div class='text-success " + response.table + "'></div>");
+                $infoBox.find('.' + response.table).html(response.message);
+                if(response.next) $infoBox.prepend("<div class='text-success " + response.next + "'>" + response.nextMessage + "</div>");
+                changeEngine();
+            }
+        },
+        error: function()
         {
-            changeEngineFinish = true;
-            $infoBox.prepend("<div class='text-success'>" + response.message + "</div>");
-            finishedShow();
-        }
-        else
-        {
-            if($infoBox.find('.' + response.table).length == 0) $infoBox.prepend("<div class='text-success " + response.table + "'></div>");
-            $infoBox.find('.' + response.table).html(response.message);
-            if(response.next) $infoBox.prepend("<div class='text-success " + response.next + "'>" + response.nextMessage + "</div>");
             changeEngine();
         }
-    });
+    })
 }
 <?php endif;?>
 <?php if(isset($needProcess['updateFile'])):?>

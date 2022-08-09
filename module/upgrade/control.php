@@ -933,9 +933,7 @@ class upgrade extends control
         if($nextTable and stripos($nextTable->Name, 'searchindex') !== false)
         {
             $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-            if($mysqlVersion < 5.6) return print(json_encode($response));
-
-            $nextTable = $stmt->fetch();
+            if($mysqlVersion < 5.6) $nextTable = $stmt->fetch();
         }
 
         $tableName = $table->Name;
