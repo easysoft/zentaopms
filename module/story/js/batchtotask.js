@@ -1,29 +1,19 @@
-/* Remove 'ditto' in first row and control task name width and tips for tasks that consume. */
-$(function()
-{
-    removeDitto();
-    $name = $('th.c-name');
-    if($name.width() < 165) $name.width(165);
-    if(taskConsumed > 0) bootbox.alert(addChildTask);
-    $('#customField').on('click', function(){$('#tableBody .chosen-with-drop').removeClass('chosen-with-drop chosen-container-active')});
-
-    $('#customField').click(function()
-    {
-        hiddenRequireFields();
-    });
-
-    /* Implement a custom form without feeling refresh. */
-    $('#formSettingForm .btn-primary').click(function()
-    {
-        saveCustomFields('batchCreateFields', 9, $name, 165);
-        return false;
-    });
-});
-
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
 {
     toggleCheck($(this));
-})
+});
+
+/**
+ * Set story related.
+ *
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
+function setStoryRelated(num)
+{
+    setPreview(num);
+}
 
 /**
  * Toggle checkbox.
@@ -49,10 +39,18 @@ function toggleCheck(obj)
     }
 }
 
-/* Get select of stories.*/
+/**
+ * Set stories.
+ *
+ * @param  int    $moduleID
+ * @param  int    $executionID
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
 function setStories(moduleID, executionID, num)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
+    var link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&num=' + num + '&type=short');
     $.get(link, function(stories)
     {
         var storyID = $('#story' + num).val();
@@ -60,18 +58,7 @@ function setStories(moduleID, executionID, num)
         $('#story' + num).replaceWith(stories);
         if(num != 0 && (moduleID == 0 || moduleID == 'ditto')) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>");
         $('#story' + num).val(storyID);
-        if($('#zeroTaskStory').hasClass('checked'))
-        {
-            $('#story' + num).find('option').each(function()
-            {
-                value = $(this).attr('value');
-                if(value != 'ditto' && storyTasks[value] > 0)
-                {
-                    $(this).hide();
-                    if(storyID == value) $('#story' + num).val('');
-                }
-            })
-        }
+
         var chosenWidth = $("#story" + num + "_chosen").css('max-width');
         $("#story" + num + "_chosen").remove();
         $("#story" + num).next('.picker').remove();
@@ -80,18 +67,26 @@ function setStories(moduleID, executionID, num)
     });
 }
 
-/* Copy story title as task title. */
+/**
+ * Copy story title.
+ *
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
 function copyStoryTitle(num)
 {
-    var storyTitle = $('#story' + num).find('option:selected').text();
-    var storyValue = $('#story' + num).find('option:selected').val();
+    var $story     = $('#story' + num);
+    var storyTitle = $story.find('option:selected').text();
+    var storyValue = $story.find('option:selected').val();
+    var begin      = parseInt($story.closest('tr').children('.c-id').text()) - 2;
 
     if(storyValue === 'ditto')
     {
-        for(var i = num; i <= num && i >= 1; i--)
+        for(var i = begin; i >= 0; i--)
         {
-            var selectedValue = $('select[id="story' + i +'"]').val();
-            var selectedTitle = $('select[id="story' + i +'"]').find('option:selected').text();
+            var selectedValue = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').val();
+            var selectedTitle = $('#tableBody tbody > tr').eq(i).find('select[name^="story"]').find('option:selected').text();
             if(selectedValue !== 'ditto')
             {
                 storyTitle = selectedTitle;
@@ -100,23 +95,11 @@ function copyStoryTitle(num)
         }
     }
 
-    startPosition  = storyTitle.indexOf(':') + 1;
-    endPosition    = storyTitle.lastIndexOf('[');
-    storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
+    var startPosition = storyTitle.indexOf(':') + 1;
+    var endPosition   = storyTitle.lastIndexOf('[');
+    storyTitle        = storyTitle.substr(startPosition, endPosition - startPosition);
 
     $('#name\\[' + num + '\\]').val(storyTitle);
-    $('#estimate\\[' + num + '\\]').val($('#storyEstimate' + num).val());
-    $('#desc\\[' + num + '\\]').val(($('#storyDesc' + num).val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
-
-    var storyPri = $('#storyPri' + num).val();
-    if(storyPri == 0) $('#pri' + num ).val('3');
-    if(storyPri != 0) $('#pri' + num ).val(storyPri);
-}
-
-/* Set the story module. */
-function setStoryRelated(num)
-{
-    setPreview(num);
 }
 
 /**
@@ -128,28 +111,10 @@ function setStoryRelated(num)
  */
 function setPreview(num)
 {
-    var storyID   = $('#story' + num).val();
-    var storyLink = '#';
+    var storyID = $('#story' + num).val();
     if(storyID != 0  && storyID != 'ditto')
     {
-        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
-        $.getJSON(link, function(storyInfo)
-        {
-            $('#module' + num).val(parseInt(storyInfo.moduleID));
-            $('#module' + num).trigger("chosen:updated");
-
-            $('#storyEstimate' + num).val(storyInfo.estimate);
-            $('#storyPri'      + num).val(storyInfo.pri);
-            $('#storyDesc'     + num).val(storyInfo.spec);
-        });
-
-        storyLink  = createLink('story', 'view', "storyID=" + storyID);
-        if(!isonlybody)
-        {
-            var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
-            storyLink  = storyLink + concat + 'onlybody=yes';
-        }
-
+        storyLink  = createLink('story', 'view', "storyID=" + storyID, '', true);
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});
         $('#preview' + num).css('pointer-events', 'auto');
@@ -157,38 +122,19 @@ function setPreview(num)
     }
     else
     {
+        storyLink  = '#';
         $('#preview' + num).attr('disabled', true);
         $('#preview' + num).css('pointer-events', 'none');
         $('#preview' + num).attr('href', storyLink);
     }
 }
 
-/* Toggle zero task story. */
-function toggleZeroTaskStory()
-{
-    var $toggle = $('#zeroTaskStory').toggleClass('checked');
-    var zeroTask = $toggle.hasClass('checked');
-    $.cookie('zeroTask', zeroTask, {expires:config.cookieLife, path:config.webRoot});
-    $('select[name^="story"]').each(function()
-    {
-        var $select = $(this);
-        var selectVal = $select.val();
-        $select.find('option').each(function()
-        {
-            var $option = $(this);
-            var value = $option.attr('value');
-            $option.show();
-            if(value != 'ditto' && storyTasks[value] > 0 && zeroTask)
-            {
-                $option.hide();
-                if(selectVal == value) selectVal = '';
-            }
-        })
-        $select.val(selectVal).trigger("chosen:updated");
-    });
-}
-
-// see http://pms.zentao.net/task-view-5086.html
+/**
+ * Mark story task.
+ *
+ * @access public
+ * @return void
+ */
 function markStoryTask()
 {
     $('select[name^="story"]').each(function()
@@ -196,8 +142,8 @@ function markStoryTask()
         var $select = $(this);
         $select.find('option').each(function()
         {
-            var $option = $(this);
-            var value = $option.attr('value');
+            var $option    = $(this);
+            var value      = $option.attr('value');
             var tasksCount = storyTasks[value];
             $option.attr('data-data', value).toggleClass('has-task', !!(tasksCount && tasksCount !== '0'));
         });
@@ -218,7 +164,7 @@ function markStoryTask()
         return storiesHasTask;
     };
 
-    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
+    $('#batchToTaskForm').on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
     {
         var storiesHasTask = getStoriesHasTask();
         var $container     = $(this).closest('td').find('.chosen-container');
@@ -230,27 +176,6 @@ function markStoryTask()
                 $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
             });
         }, 100);
-    });
-}
-
-/**
- * Set lane.
- *
- * @param  int $regionID
- * @param  int $num
- * @access public
- * @return void
- */
-function setLane(regionID, num)
-{
-    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + num);
-    $.get(laneLink, function(lanes)
-    {
-        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
-        $('#lanes' + num).replaceWith(lanes);
-        $("#lanes" + num + "_chosen").remove();
-        $("#lanes" + num).next('.picker').remove();
-        $("#lanes" + num).chosen();
     });
 }
 
@@ -300,10 +225,7 @@ $(function()
     $('.chosen-container[id^=story]').width(chosenWidth);
     $('.chosen-container[id^=story]').css('max-width', chosenWidth);
 
-    if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
-
-    if(storyID != 0) setStoryRelated($('#batchCreateForm table tbody tr:first [id^=story]:first').attr('id').replace('story', ''));
 
     $(document).keydown(function(event)
     {
@@ -329,3 +251,54 @@ $(function()
         }
     });
 });
+
+/**
+ * Add row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addRow(obj)
+{
+    var row = $('#addRow').html().replace(/%i%/g, rowIndex + 1);
+    $('<tr class="addedRow">' + row  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    var $beginRow = $row = $(obj).closest('tr').next();
+
+    $row.find(".form-date").datepicker();
+    $row.find("input[name^=color]").colorPicker();
+    $row.find('div[id$=_chosen]').remove();
+    $row.find('.picker').remove();
+    $row.find('.chosen').chosen();
+
+    var begin     = parseInt($(obj).parent().siblings('.c-id').text()) + 1;
+    var count     = $('#tableBody tbody > tr').length;
+    for(var i = begin; i <= count; i++)
+    {
+        $beginRow.children('.c-id').text(i);
+        $beginRow = $beginRow.next();
+    }
+    rowIndex ++;
+}
+
+/**
+ * Delete row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteRow(obj)
+{
+    var $beginRow = $(obj).closest('tr').next();
+    var begin     = parseInt($(obj).parent().siblings('.c-id').text());
+    var count     = $('#tableBody tbody > tr').length;
+    for(var i = begin; i <= count; i++)
+    {
+        $beginRow.children('.c-id').text(i);
+        $beginRow = $beginRow.next();
+    }
+
+    $(obj).closest('tr').remove();
+}
