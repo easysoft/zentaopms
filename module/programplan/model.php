@@ -202,7 +202,7 @@ class programplanModel extends model
             $data->duration      = 1;
             $data->color         = $this->lang->execution->gantt->stage->color;
             $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
-            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->textColor     = $this->lang->execution->gantt->stage->textColor;
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
@@ -281,9 +281,9 @@ class programplanModel extends model
             $data->duration      = 1;
             $data->estimate      = $task->estimate;
             $data->consumed      = $task->consumed;
-            $data->color         = zget($this->lang->execution->gantt->color, $task->pri);
-            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri);
-            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+            $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             /* If multi task then show the teams. */
