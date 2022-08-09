@@ -503,7 +503,7 @@ $(function()
 
     gantt.config.columns = [
     {name: 'text',       width: '*', tree: true, resize: true, width:200},
-    {name: 'owner_id',   align: 'center', resize: true, width: 80},
+    {name: 'owner_id',   align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}},
     {name: 'status',     align: 'center', resize: true, width: 80},
     {name: 'start_date', align: 'center', resize: true, width: 80},
     {name: 'end_date',   align: 'center', resize: true, width: 80},
@@ -517,7 +517,7 @@ $(function()
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
     {name: 'realBegan',    align: 'center', resize: true, width: 60},
     {name: 'realEnd',      align: 'center', resize: true, width: 60},
-    {name: 'consumed',     align: 'center', resize: true, width: 60},
+    {name: 'consumed',     align: 'center', resize: false, width: 60},
     ];
 
     gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
