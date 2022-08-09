@@ -1,4 +1,10 @@
+stages:
+  - sonar
+  - unit_test
+  - cleanup_packages
+  - package
 sonarqube:
+  stage: sonar
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -11,13 +17,15 @@ sonarqube:
   allow_failure: true
   only:
     - master # or the name of your main branch
-packages:
+package:
+  stage: package
   script:
     - make cizip
   allow_failure: true
   only:
     - master
-unit test:
+unit_test:
+  stage: unit_test
   script:
   - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
   allow_failure: true
@@ -31,6 +39,7 @@ unit test:
 #  only:
 #   - master
 cleanup_packages:
+  stage: cleanup_packages
   script:
     - make clean
   when: on_failure
