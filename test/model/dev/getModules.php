@@ -10,9 +10,9 @@ title=测试 devModel::getModules();
 cid=1
 pid=1
 
-获取所有模块的my分组第一个      >> index
+获取所有模块的my分组第一个 >> index
 获取所有模块的product分组第三个 >> product
-获取所有模块的system分组第二个  >> file
+获取所有模块的system分组第二个 >> file
 
 */
 

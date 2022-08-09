@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +28,4 @@ $normalUser['password'] = array(998 => 'e10adc3949ba59abbe56e057f20f883e', 999 =
 r($user->batchEditUserTest($normalUser)) && p('998:account')   && e('newtestuser1'); //获取编辑后的第一个用户的account
 r($user->batchEditUserTest($normalUser)) && p('1000:realname') && e('新测试用户3');  //获取编辑的最后一个用户的真实姓名
 
-system("./ztest init");
+$db->restoreDB();

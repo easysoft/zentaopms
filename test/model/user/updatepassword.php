@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +34,4 @@ r($user->updatePasswordTest(1000, $normalUser))         && p('password')    && e
 r($user->updatePasswordTest(1000, $differentPassword))  && p('password:0')  && e('两次密码应该相同。');               //两次密码不相同的情况
 r($user->updatePasswordTest(1000, $weakPassword))       && p('password1:0') && e('您的密码强度小于系统设定。');       //密码小于设定强度的情况
 
-system("./ztest init");
+$db->restoreDB();

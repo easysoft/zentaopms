@@ -10,10 +10,10 @@ title=测试 todoModel->getById();
 cid=1
 pid=1
 
-获取id为1的todo信息    >> 自定义1的待办,custom,wait
-获取id为2的todo信息    >> BUG1,bug,doing
-获取id为3的todo信息    >> 开发任务12,task,done
-获取id为4的todo信息    >> 用户需求3,story,closed
+获取id为1的todo信息 >> 自定义1的待办,custom,wait
+获取id为2的todo信息 >> BUG1,bug,doing
+获取id为3的todo信息 >> 开发任务12,task,done
+获取id为4的todo信息 >> 用户需求3,story,closed
 获取id不存在的todo信息 >> 0
 
 */

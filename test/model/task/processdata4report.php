@@ -10,31 +10,29 @@ title=taskModel->processData4Report();
 cid=1
 pid=1
 
-计算executionID为101的执行下按迭代任务数统计的图表数据 101  >> 101,14
-计算executionID为101的执行下按模块任务统计的图表数据 27     >> 27,1
-计算executionID为101的执行下按模块任务统计的图表数据 21     >> 21,12
-计算executionID为101的执行下按指派给统计的图表数据          >> po82,1
-计算executionID为101的执行下按任务类型统计的图表数据 ui     >> ui,1
-计算executionID为101的执行下按任务类型统计的图表数据 test   >> test,2
-计算executionID为101的执行下按优先级统计的图表数据 1        >> 1,5
-计算executionID为101的执行下按优先级统计的图表数据 2        >> 2,4
-计算executionID为101的执行下按任务状态统计的图表数据 -8day  >> 2
+计算executionID为101的执行下按迭代任务数统计的图表数据 101 >> 101,14
+计算executionID为101的执行下按模块任务统计的图表数据 27 >> 27,1
+计算executionID为101的执行下按模块任务统计的图表数据 21 >> 21,12
+计算executionID为101的执行下按指派给统计的图表数据 >> po82,1
+计算executionID为101的执行下按任务类型统计的图表数据 ui >> ui,1
+计算executionID为101的执行下按任务类型统计的图表数据 test >> test,2
+计算executionID为101的执行下按优先级统计的图表数据 1 >> 1,5
+计算executionID为101的执行下按优先级统计的图表数据 2 >> 2,4
+计算executionID为101的执行下按任务状态统计的图表数据 -8day >> 2
 计算executionID为101的执行下按任务状态统计的图表数据 -15day >> 1
-计算executionID为101的执行下按截止时间统计的图表数据 0      >> 0,3
-计算executionID为101的执行下按截止时间统计的图表数据 5      >> 5,1
-计算executionID为101的执行下按预计时间统计的图表数据 0      >> 0,2
-计算executionID为101的执行下按预计时间统计的图表数据 6      >> 6,1
-计算executionID为101的执行下按剩余时间统计的图表数据 3      >> 3,2
-计算executionID为101的执行下按剩余时间统计的图表数据 7      >> 7,1
-计算executionID为101的执行下按消耗时间统计的图表数据        >> ,11
-计算executionID为101的执行下按由谁完成统计的图表数据        >> ,14
-计算executionID为101的执行下按关闭原因统计的图表数据        >> void
-计算executionID为101的执行下按每天完成统计的图表数据 wait   >> wait,4
-计算executionID为101的执行下按每天完成统计的图表数据 done   >> done,3
+计算executionID为101的执行下按截止时间统计的图表数据 0 >> 0,3
+计算executionID为101的执行下按截止时间统计的图表数据 5 >> 5,1
+计算executionID为101的执行下按预计时间统计的图表数据 0 >> 0,2
+计算executionID为101的执行下按预计时间统计的图表数据 6 >> 6,1
+计算executionID为101的执行下按剩余时间统计的图表数据 3 >> 3,2
+计算executionID为101的执行下按剩余时间统计的图表数据 7 >> 7,1
+计算executionID为101的执行下按消耗时间统计的图表数据 >> ,11
+计算executionID为101的执行下按由谁完成统计的图表数据 >> ,14
+计算executionID为101的执行下按关闭原因统计的图表数据 >> void
+计算executionID为101的执行下按每天完成统计的图表数据 wait >> wait,4
+计算executionID为101的执行下按每天完成统计的图表数据 done >> done,3
 
 */
-
-
 
 $task = new taskTest();
 r($task->processData4ReportTest('', "execution"))         && p('101:name,value')  && e('101,14');  //计算executionID为101的执行下按迭代任务数统计的图表数据 101

@@ -10,6 +10,8 @@ title=测试 mailModel->mailExist();
 cid=1
 pid=1
 
+检查系统是否至少存在邮件 >> 10001000@qq.com
+
 */
 
 $mail = new mailTest();

@@ -10,6 +10,9 @@ title=测试 mailModel->setCC();
 cid=1
 pid=1
 
+获取MTA主机 >> localhost
+获取MTAdebug设置 >> 0
+
 */
 
 $mail = new mailTest();

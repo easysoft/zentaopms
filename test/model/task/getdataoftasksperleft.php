@@ -21,7 +21,6 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerLeftTest()) && p('0:name,value') && e('0,83'); //统计剩余工时为0的任务数量
 r($task->getDataOfTasksPerLeftTest()) && p('1:name,value') && e('1,83'); //统计剩余工时为1的任务数量

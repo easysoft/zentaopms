@@ -8,11 +8,11 @@ title=测试 gitlabModel::createTag();
 cid=1
 pid=1
 
-使用空的gitlabID、projectID、标签创建GitLab标签       >> return false
-使用空的gitlabID、projectID，正确的标签创建GitLab标签 >> return false
+使用空的gitlabID,projectID,标签对象创建GitLab标签 >> return false
+使用空的gitlabID、projectID,正确的标签对象创建GitLab标签 >> return false
 使用正确的gitlabID、标签信息，错误的projectID创建标签 >> return false
-使用正确的gitlabID,projectID，标签创建GitLab标签      >> return true
-使用重复的标签信息创建标签                            >> return false
+通过gitlabID,projectID,标签对象正确创建GitLab标签 >> return true
+使用重复的标签信息创建标签 >> return false
 
 */
 

@@ -22,4 +22,4 @@ $afterRecall  = $tester->story->getByID(2);
 
 r($beforeRecall) && p('id,title,status') && e('2,用户需求版本一62,active'); // 撤回评审之前的状态信息
 r($afterRecall)  && p('id,title,status') && e('2,用户需求版本一62,draft');  // 撤回评审之后的状态信息
-system("./ztest init");
+$db->restoreDB();

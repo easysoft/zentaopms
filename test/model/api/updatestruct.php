@@ -10,6 +10,9 @@ title=测试 apiModel->updateStruct();
 cid=1
 pid=1
 
+正常的修改 >> editStruct
+没有名称的修改 >> 『Name』should not be blank.
+
 */
 
 global $tester;

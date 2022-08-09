@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +54,4 @@ r($doc->createLibTest($noProject))       && p('project:0')         && e('『proj
 r($doc->createLibTest($noExecution))     && p('execution:0')       && e('『迭代库』应当是数字。');        //新建无执行执行文档库
 r($doc->createLibTest($noAcl))           && p('acl')               && e('');                              //新建无权限控制文档库
 
-system("./ztest init");
+$db->restoreDB();

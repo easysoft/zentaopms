@@ -10,28 +10,28 @@ title=测试 todoModel->getList();
 cid=1
 pid=1
 
-获取type为today 当前用户的代办数量      >> 0
-获取type为yesterday 当前用户的代办数量  >> 0
-获取type为thisweek 当前用户的代办数量   >> 0
-获取type为lastweek 当前用户的代办数量   >> 1
-获取type为thismonth 当前用户的代办数量  >> 1
-获取type为lastmonth 当前用户的代办数量  >> 1
+获取type为today 当前用户的代办数量 >> 0
+获取type为yesterday 当前用户的代办数量 >> 0
+获取type为thisweek 当前用户的代办数量 >> 0
+获取type为lastweek 当前用户的代办数量 >> 1
+获取type为thismonth 当前用户的代办数量 >> 1
+获取type为lastmonth 当前用户的代办数量 >> 1
 获取type为thisseason 当前用户的代办数量 >> 2
-获取type为thisyear 当前用户的代办数量   >> 2
-获取type为future 当前用户的代办数量     >> 0
-获取type为before 当前用户的代办数量     >> 2
-获取type为cycle 当前用户的代办数量      >> 1
-获取type为today user1的代办数量         >> 0
-获取type为yesterday user1的代办数量     >> 0
-获取type为thisweek user1的代办数量      >> 0
-获取type为lastweek user1的代办数量      >> 1
-获取type为thismonth user1的代办数量     >> 1
-获取type为lastmonth user1的代办数量     >> 1
-获取type为thisseason user1的代办数量    >> 2
-获取type为thisyear user1的代办数量      >> 2
-获取type为future user1的代办数量        >> 0
-获取type为before user1的代办数量        >> 2
-获取type为cycle user1的代办数量         >> 1
+获取type为thisyear 当前用户的代办数量 >> 2
+获取type为future 当前用户的代办数量 >> 0
+获取type为before 当前用户的代办数量 >> 2
+获取type为cycle 当前用户的代办数量 >> 1
+获取type为today user1的代办数量 >> 0
+获取type为yesterday user1的代办数量 >> 0
+获取type为thisweek user1的代办数量 >> 0
+获取type为lastweek user1的代办数量 >> 1
+获取type为thismonth user1的代办数量 >> 1
+获取type为lastmonth user1的代办数量 >> 1
+获取type为thisseason user1的代办数量 >> 2
+获取type为thisyear user1的代办数量 >> 2
+获取type为future user1的代办数量 >> 0
+获取type为before user1的代办数量 >> 2
+获取type为cycle user1的代办数量 >> 1
 
 */
 

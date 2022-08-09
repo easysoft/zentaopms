@@ -10,6 +10,8 @@ title=测试 apiModel->update();
 cid=1
 pid=1
 
+修改一个刚创建的api >> edittestapi
+
 */
 
 $api = new apiTest();
@@ -49,7 +51,6 @@ $editData = array(
     'response'        => '[]',
     'responseExample' => ''
 );
-
 
 $normalApi = $data;
 $editApi   = $editData;

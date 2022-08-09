@@ -10,6 +10,8 @@ title=测试 mailModel->send();
 cid=1
 pid=1
 
+ >> 0
+
 */
 
 $mail = new mailTest();

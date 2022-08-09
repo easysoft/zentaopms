@@ -10,9 +10,8 @@ title=测试 docModel->getToAndCcList();
 cid=1
 pid=1
 
-查询文档type为text的数据 >> admin;
-查询文档type为markdown的数据 >>admin;
-查询文档type为url的数据 >>admin;
+
+
 */
 $docID = array('1', '2', '3');
 

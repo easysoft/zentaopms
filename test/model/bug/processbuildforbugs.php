@@ -9,16 +9,14 @@ title=bugModel->processBuildForBugs();
 cid=1
 pid=1
 
-测试处理bug1 2 3的openedBuild resolvedBuild字段    >> 产品发布9,;0,;产品发布9,
-测试处理bug4 5 6的openedBuild resolvedBuild字段    >> 主干,;主干,;主干,
+测试处理bug1 2 3的openedBuild resolvedBuild字段 >> 产品发布9,;0,;产品发布9,
+测试处理bug4 5 6的openedBuild resolvedBuild字段 >> 主干,;主干,;主干,
 测试处理bug51 52 53的openedBuild resolvedBuild字段 >> 主干,;主干,;主干,
 测试处理bug54 55 56的openedBuild resolvedBuild字段 >> 主干,;主干,;主干,主干
 测试处理bug81 82 83的openedBuild resolvedBuild字段 >> 主干,;主干,;主干,
 测试处理bug84 85 86的openedBuild resolvedBuild字段 >> 主干,;主干,;主干,
 
-
 */
-
 
 $bugIDList1 = array('1', '2', '3');
 $bugIDList2 = array('4', '5', '6');
