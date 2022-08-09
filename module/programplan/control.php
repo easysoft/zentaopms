@@ -116,7 +116,6 @@ class programplan extends control
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->ganttType    = $type;
-
         $this->display();
     }
 
