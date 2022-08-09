@@ -28,6 +28,7 @@ td.flex span.project-type-label {min-width: 40px;}
 .has-child > span {margin-right: 5px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
 .c-code, .c-project {overflow: hidden; white-space: nowrap;}
+th.c-status {text-align: center}
 
 .c-project{text-overflow: unset !important;}
 canvas {height: 28px;}

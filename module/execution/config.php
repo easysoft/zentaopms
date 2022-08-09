@@ -188,14 +188,14 @@ $config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['width']    = '70';
 $config->execution->datatable->fieldList['id']['required'] = 'yes';
 
-$config->execution->datatable->fieldList['name']['title']    = 'name';
+$config->execution->datatable->fieldList['name']['title']    = 'execName';
 $config->execution->datatable->fieldList['name']['fixed']    = 'left';
 $config->execution->datatable->fieldList['name']['width']    = 'auto';
 $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
 if(!isset($config->setCode) or $config->setCode == 1)
 {
-    $config->execution->datatable->fieldList['code']['title']    = 'code';
+    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
     $config->execution->datatable->fieldList['code']['fixed']    = 'no';
     $config->execution->datatable->fieldList['code']['width']    = '95';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
@@ -211,7 +211,7 @@ $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
 $config->execution->datatable->fieldList['PM']['width']    = '70';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 
-$config->execution->datatable->fieldList['status']['title']    = 'status';
+$config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 $config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';
