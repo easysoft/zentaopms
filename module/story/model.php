@@ -5533,7 +5533,7 @@ class storyModel extends model
 
         /* Get users, products and relations. */
         $users           = $this->loadModel('user')->getPairs('noletter');
-        $products        = $this->product->getPairs('nocode');
+        $products        = $this->loadModel('product')->getPairs('nocode');
         $relatedStoryIds = array();
 
         foreach($stories as $story) $relatedStoryIds[$story->id] = $story->id;

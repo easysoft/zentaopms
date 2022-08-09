@@ -109,6 +109,7 @@ $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
 $config->story->datatable->fieldList['plan']['width']      = '90';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
+$config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
 
 $config->story->datatable->fieldList['source']['title']    = 'source';

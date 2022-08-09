@@ -1302,9 +1302,9 @@ class portModel extends model
 
                 elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $options, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
 
-                elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date autocomplete='off'") . '</td>';
+                elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date' autocomplete='off'") . '</td>';
 
-                elseif($control == 'datetime') $html .= '<td>' . html::input("$name", $selected, "class='form-control form-datetime autocomplete='off'") . '</td>';
+                elseif($control == 'datetime') $html .= '<td>' . html::input("$name", $selected, "class='form-control form-datetime' autocomplete='off'") . '</td>';
 
                 elseif($control == 'hidden')   $html .= html::hidden("$name", $selected);
 
