@@ -534,6 +534,7 @@ class upgradeModel extends model
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
+                $this->updateSearchIndex();
                 break;
         }
 
@@ -6879,5 +6880,18 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Update story search index.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSearchIndex()
+    {
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq('story')->exec();
+        $this->loadModel('search')->buildAllIndex('story');
+        $this->search->buildAllIndex('requirement');
     }
 }

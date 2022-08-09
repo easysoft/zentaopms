@@ -64,6 +64,9 @@ $lang->release->mailContent   = '<p>Dear users,</p><p style="margin-left: 30px;"
 $lang->release->storyList     = '<p style="margin-left: 30px;">Story List：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 
+$lang->release->storyTitle = 'Story Name';
+$lang->release->bugTitle   = 'Bug Name';
+
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Pfad : ';
 

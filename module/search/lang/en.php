@@ -95,7 +95,8 @@ $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = $lang->executionCommon;
-$lang->search->modules['story']       = 'Story';
+$lang->search->modules['story']       = 'Software Requirement';
+$lang->search->modules['requirement'] = 'User Requirement';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;

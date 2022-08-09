@@ -231,6 +231,20 @@ class search extends control
         $pager   = new pager(0, $this->config->search->recPerPage, $pageID);
         $results = $this->search->getList($words, $type, $pager);
 
+        if($words)
+        {
+            $typeCount = $this->search->getList($words, 'all', null, true);
+            $typeList  = array('all' => $this->lang->search->modules['all']);
+            foreach($typeCount as $objectType => $count)
+            {
+                $typeList[$objectType] = $this->lang->search->modules[$objectType];
+            }
+        }
+        else
+        {
+            $typeList = $this->lang->search->modules;
+        }
+
         /* Set session. */
         $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
@@ -266,6 +280,7 @@ class search extends control
         $this->view->consumed   = time() - $begin;
         $this->view->title      = $this->lang->search->index;
         $this->view->type       = $type;
+        $this->view->typeList   = $typeList;
         $this->view->pager      = $pager;
         $this->view->words      = $words;
         $this->view->referer    = $this->session->referer;

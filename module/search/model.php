@@ -590,10 +590,11 @@ class searchModel extends model
      * @param  string    $keywords
      * @param  string    $type
      * @param  object    $pager
+     * @param  bool      $getCount
      * @access public
      * @return array
      */
-    public function getList($keywords, $type, $pager = null)
+    public function getList($keywords, $type, $pager = null, $getCount = false)
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
@@ -635,6 +636,20 @@ class searchModel extends model
                 if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
                 if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
+        }
+
+        if($getCount)
+        {
+            $typeCount = $this->dao->select("objectType, count(*) as objectCount")
+                ->from(TABLE_SEARCHINDEX)
+                ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+                ->andWhere('vision')->eq($this->config->vision)
+                ->andWhere('objectType')->in($allowedObject)
+                ->andWhere('addedDate')->le(helper::now())
+                ->groupBy('objectType')
+                ->fetchPairs('objectType', 'objectCount');
+            arsort($typeCount);
+            return $typeCount;
         }
 
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
@@ -685,7 +700,7 @@ class searchModel extends model
             if($module == 'issue') $fields = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project') $fields = 'id,model';
             if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
+            if($module == 'story' or $module == 'requirement') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
             if(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max') $fields = 'id,lib';
             if($module == 'doc' and $this->config->edition == 'max') $fields = 'id,assetLib,assetLibType';
             if(empty($fields)) continue;
@@ -738,9 +753,9 @@ class searchModel extends model
                 $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
                 $record->extraType = empty($execution->type) ? '' : $execution->type;
             }
-            elseif($module == 'story')
+            elseif($module == 'story' or $module == 'requirement')
             {
-                $story = $objectList['story'][$record->objectID];
+                $story = $objectList[$module][$record->objectID];
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';
@@ -1127,9 +1142,13 @@ class searchModel extends model
     public function buildIndexQuery($type, $testDeleted = true)
     {
         $table = $this->config->objectTables[$type];
-        if($type == 'story')
+        if($type == 'story' or $type == 'requirement')
         {
-            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')->where('t1.deleted')->eq(0)->andWhere('t1.version=t2.version');
+            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')
+                ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('type')->eq($type)
+                ->andWhere('t1.version=t2.version');
         }
         elseif($type == 'doc')
         {
