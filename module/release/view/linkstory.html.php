@@ -32,7 +32,7 @@
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='c-user'><?php echo $lang->assignedToAB;?></th>
           <th class='c-estimate text-right'><?php echo $lang->story->estimateAB;?></th>
-          <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
           <th class='c-stage'><?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
@@ -57,7 +57,7 @@
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td><span class='status-story status-<?php echo $story->status?>'><?php echo $this->processStatus('story', $story);?></span></td>
+          <td class='text-center'><span class='status-story status-<?php echo $story->status?>'><?php echo $this->processStatus('story', $story);?></span></td>
           <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         </tr>
         <?php $unlinkedCount++;?>
