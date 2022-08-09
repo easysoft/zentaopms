@@ -1731,11 +1731,10 @@ class story extends control
      *
      * @param  int    $executionID
      * @param  int    $projectID
-     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchToTask($executionID = 0, $projectID = 0, $extra = '')
+    public function batchToTask($executionID = 0, $projectID = 0)
     {
         if(!empty($_POST['name']))
         {
