@@ -1,3 +1,8 @@
+$(function()
+{
+    for(var i = 1; i <= storyCount; i ++) setPreview(i);
+});
+
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
 {
     toggleCheck($(this));
@@ -83,12 +88,6 @@ function copyStoryTitle(num)
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
 
     $('#name\\[' + num + '\\]').val(storyTitle);
-}
-
-/* Set the story module. */
-function setStoryRelated(num)
-{
-    setPreview(num);
 }
 
 /**
