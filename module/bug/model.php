@@ -3199,7 +3199,7 @@ class bugModel extends model
                     $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
                     break;
                 case 'plan':
-                    $title = "title='" . zget($plans, $bug->plan) . "'";
+                    $title = "title='" . zget($plans, $bug->plan,'') . "'";
                     break;
                 case 'execution':
                     $title = "title='" . zget($executions, $bug->execution) . "'";
