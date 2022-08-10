@@ -2090,7 +2090,7 @@ class bug extends control
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
         $bugIDList = array_unique($this->post->bugIDList);
-        $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
@@ -2293,7 +2293,7 @@ class bug extends control
         if($_POST)
         {
             $this->loadModel('port');
-            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }

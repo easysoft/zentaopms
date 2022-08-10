@@ -486,7 +486,7 @@ class blockModel extends model
         $this->app->loadLang('project');
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->project->featureBar;
+        $params->type['options'] = $this->lang->project->featureBar['browse'];
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;

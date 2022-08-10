@@ -945,6 +945,7 @@ class bugModel extends model
 
         if(empty($bugIDList)) return $activateBugs;
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($bugIDList as $bugID)
         {
             if($data->statusList[$bugID] == 'active') continue;
@@ -967,6 +968,15 @@ class bugModel extends model
             $activateBugs[$bugID]['toStory']        = 0;
             $activateBugs[$bugID]['lastEditedBy']   = $this->app->user->account;
             $activateBugs[$bugID]['lastEditedDate'] = $now;
+
+            foreach($extendFields as $extendField)
+            {
+                $postFieldData = $this->post->{$extendField->field};
+
+                if(is_array($postFieldData[$bugID])) $postFieldData[$bugID] = join(',', $postFieldData[$bugID]);
+
+                $activateBugs[$bugID][$extendField->field] = htmlSpecialString($postFieldData[$bugID]);
+            }
         }
 
         /* Update bugs. */
@@ -976,6 +986,8 @@ class bugModel extends model
             if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
 
             $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+
+            $this->executeHooks($bugID);
         }
 
         return $activateBugs;
@@ -3557,13 +3569,13 @@ class bugModel extends model
 
         foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
 
-        if($object == 'openedBuild') $object = 'build';
+        if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
 
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
-        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
 
-        if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
 
         return $relatedObjects;
     }
