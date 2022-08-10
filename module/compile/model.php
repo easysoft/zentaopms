@@ -135,6 +135,59 @@ class compileModel extends model
     }
 
     /**
+     * Get compile logs.
+     *
+     * @param  object $job
+     * @param  object $compile
+     * @access public
+     * @return string
+     */
+    public function getLogs($job, $compile)
+    {
+        $logs = '';
+
+        if($job->engine == 'jenkins')
+        {
+            $jenkins         = $this->loadModel('jenkins')->getByID($job->server);
+            $jenkinsUser     = $jenkins->account;
+            $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+            $userPWD         = "$jenkinsUser:$jenkinsPassword";
+
+            $infoUrl  = sprintf('%s/job/%s/api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $jenkins->url, $job->pipeline, $compile->queue);
+            $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
+            if($response)
+            {
+                $buildInfo   = simplexml_load_string($response);
+                $buildNumber = $buildInfo->number;
+                if(empty($buildNumber)) return '';
+
+                $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkins->url, $job->pipeline, $buildNumber);
+                $logs   = common::http($logUrl, '', array(CURLOPT_USERPWD => $userPWD));
+                $this->dao->update(TABLE_COMPILE)->set('logs')->eq($logs)->where('id')->eq($compile->id)->exec();
+            }
+        }
+        else
+        {
+            /* Get jobs by pipeline. */
+            $pipeline  = json_decode($job->pipeline);
+            $projectID = isset($pipeline->project) ? $pipeline->project : '';
+            $jobs      = $this->loadModel('gitlab')->apiGetJobs($job->server, $projectID, $compile->queue);
+
+            $this->loadModel('ci');
+            foreach($jobs as $gitlabJob)
+            {
+                if(empty($gitlabJob->duration) or $gitlabJob->duration == '') $gitlabJob->duration = '-';
+                $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
+                $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
+                $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, $projectID, $gitlabJob->id));
+            }
+        }
+
+        if(!empty($logs)) $this->dao->update(TABLE_COMPILE)->set('logs')->eq($logs)->where('id')->eq($compile->id)->exec();
+        return $logs;
+    }
+
+    /**
      * Save build by job
      *
      * @param  int    $jobID
@@ -155,6 +208,141 @@ class compileModel extends model
         $build->createdDate = helper::now();
 
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+    }
+
+    /**
+     * Sync compiles.
+     *
+     * @param  int    $repoID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function syncCompile($repoID = 0, $jobID = 0)
+    {
+        if($jobID)
+        {
+            $jobList[$jobID] = $this->loadModel('job')->getByID($jobID);
+        }
+        else
+        {
+            $jobList = $this->loadModel('job')->getList($repoID);
+        }
+
+        $jenkinsPairs = $this->loadModel('pipeline')->getList('jenkins');
+        $gitlabPairs  = $this->loadModel('pipeline')->getList('gitlab');
+
+        foreach($jobList as $job)
+        {
+            if($job->engine == 'jenkins')
+            {
+                $server = zget($jenkinsPairs, $job->server);
+                $this->syncJenkinsBuildList($server, $job);
+            }
+            else
+            {
+                $server = zget($gitlabPairs, $job->server);
+                $this->syncGitLabBuildList($server, $job);
+            }
+        }
+    }
+
+    /**
+     * Sync jenkins build list.
+     *
+     * @param  object $jenkins
+     * @param  object $job
+     * @access public
+     * @return void
+     */
+    public function syncJenkinsBuildList($jenkins, $job)
+    {
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+
+        /* Get build list by API. */
+        $url      = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        $response = common::http($url, '', array(CURLOPT_USERPWD => "$jenkinsUser:$jenkinsPassword"));
+        if(!$response) return false;
+
+        $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
+        $jobInfo      = json_decode($response);
+        foreach($jobInfo->builds as $build)
+        {
+            $lastSyncTime = strtotime($job->lastSyncDate);
+            if($build->timestamp < $lastSyncTime) break;
+            if(isset($compilePairs[$build->queueId])) continue;
+
+            $data = new stdclass();
+            $data->name        = $job->name;
+            $data->job         = $job->id;
+            $data->queue       = $build->queueId;
+            $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
+            $data->createdBy   = 'guest';
+            $data->createdDate = date('Y-m-d H:i:s', $build->timestamp);
+            $data->updateDate  = $data->createdDate;
+
+            $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+        }
+
+        $now = helper::now();
+        $this->dao->update(TABLE_JOB)->set('lastSyncDate')->eq($now)->where('id')->eq($job->id)->exec();
+    }
+
+    /**
+     * Sync gitlab build list.
+     *
+     * @param  object $gitlab
+     * @param  object $job
+     * @access public
+     * @return void
+     */
+    public function syncGitlabBuildList($gitlab, $job)
+    {
+        $pipeline  = json_decode($job->pipeline);
+        $projectID = isset($pipeline->project) ? $pipeline->project : '';
+        $ref       = isset($pipeline->reference) ? $pipeline->reference : '';
+        $url       = sprintf($this->loadModel('gitlab')->getApiRoot($gitlab->id, false), "/projects/{$projectID}/pipelines");
+
+        /* Get build list by API. */
+        $builds       = array();
+        $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&ref={$ref}&order_by=id&sort=desc&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results))
+            {
+                /* Check whether it has been synchronized by create time. */
+                $build      = $results[0];
+                $createDate = date('Y-m-d H:i:s', strtotime($build->created_at));
+                if($createDate < $job->lastSyncDate) break;
+
+                $builds = array_merge($builds, $results);
+            }
+            if(count($results) < 100) break;
+        }
+
+        foreach($builds as $build)
+        {
+            $createDate = date('Y-m-d H:i:s', strtotime($build->created_at));
+            if($createDate < $job->lastSyncDate) break;
+            if(isset($compilePairs[$build->id])) continue;
+
+            $data = new stdclass();
+            $data->name        = $job->name;
+            $data->job         = $job->id;
+            $data->queue       = $build->id;
+            $data->status      = $build->status;
+            $data->createdBy   = 'guest';
+            $data->createdDate = $createDate;
+            $data->updateDate  = date('Y-m-d H:i:s', strtotime($build->updated_at));
+
+            $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+        }
+
+        $now = helper::now();
+        $this->dao->update(TABLE_JOB)->set('lastSyncDate')->eq($now)->where('id')->eq($job->id)->exec();
     }
 
     /**

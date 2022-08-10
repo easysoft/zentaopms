@@ -191,8 +191,8 @@ class repoModel extends model
 
         $data = fixer::input('post')
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'path', '')
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'path', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
             ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
             ->setIf($isPipelineServer, 'prefix', '')
             ->setIf($this->post->SCM == 'Git', 'account', '')

@@ -47,6 +47,8 @@ class compile extends control
             $this->view->job = $job;
         }
 
+        $this->compile->syncCompile($repoID, $jobID);
+
         $this->app->loadLang('job');
         $this->loadModel('ci')->setMenu($repoID);
 
@@ -77,6 +79,8 @@ class compile extends control
         $build = $this->compile->getByID($buildID);
         $job   = $this->loadModel('job')->getByID($build->job);
 
+        if(empty($build->logs) and !in_array($build->status, array('created', 'pending'))) $build->logs = $this->compile->getLogs($job, $build);
+
         $this->view->logs  = str_replace("\r\n","<br />", $build->logs);
         $this->view->build = $build;
         $this->view->job   = $job;
@@ -86,6 +90,24 @@ class compile extends control
         $this->view->position[] = html::a($this->createLink('compile', 'browse', "jobID=" . $build->job), $this->lang->compile->browse);
         $this->view->position[] = $this->lang->compile->logs;
         $this->display();
+    }
+
+    /**
+     * Sync compiles.
+     *
+     * @access public
+     * @return bool
+     */
+    public function syncCompile()
+    {
+        $this->compile->syncCompile();
+
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+            return true;
+        }
+        echo 'success';
     }
 }
 
