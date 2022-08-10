@@ -423,3 +423,5 @@ $config->upgrade->recoveryActions->testcase->review['name']     = $lang->upgrade
 $config->upgrade->recoveryActions->testcase->review['method']   = 'operate';
 $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
+
+$config->upgrade->workflowRequiredField = array('product', 'execution', 'program', 'project', 'release', 'story', 'bug', 'task', 'testcase', 'testtask', 'feedback');

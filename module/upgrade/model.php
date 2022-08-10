@@ -533,7 +533,6 @@ class upgradeModel extends model
             case '17_4':
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
-                $this->updateApproval();
                 break;
         }
 
@@ -679,8 +678,9 @@ class upgradeModel extends model
             case 'biz7.0':
                 $this->processFlowPosition();
                 break;
-            case 'biz7.3':
+            case 'biz7.4':
                 $this->updateApproval();
+                $this->addDefaultRuleToWorkflow();
                 break;
         }
     }
@@ -6876,6 +6876,32 @@ class upgradeModel extends model
             }
 
             $this->dao->update(TABLE_WORKFLOWACTION)->set('conditions')->eq(json_encode($conditions))->where('id')->eq($id)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Add requred rule to the built-in workflow status field.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultRuleToWorkflow()
+    {
+        $notemptyRule = $this->dao->select('id')->from(TABLE_WORKFLOWRULE)->where('rule')->eq('notempty')->fetch();
+        if(empty($notemptyRule)) return false;
+
+        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('module')->in($this->config->upgrade->workflowRequiredField)->fetchAll();
+
+        foreach($fields as $field)
+        {
+            if(strpos(',' . $field->rules . ',', ',' . $notemptyRule->id . ',') !== false) continue;
+
+            $rules = $notemptyRule->id;
+            if(!empty($field->rules)) $rules = $field->rules . ',' . $rules;
+
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('rules')->eq($rules)->where('id')->eq($field->id)->exec();
         }
 
         return !dao::isError();
