@@ -25,7 +25,7 @@
 .kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
 .kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-6px;}
 .kanbans .panel-body {padding: 0 16px 16px;}
-.kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; display: -webkit-box; float:left;}
+.kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; float:left;}
 .kanbans .kanban-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
 .kanbans .kanban-members {float: left; height: 24px; line-height: 24px;}
 .kanbans .kanban-members > div {display: inline-block; height: 24px;}
