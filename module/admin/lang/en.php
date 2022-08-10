@@ -87,5 +87,6 @@ $lang->admin->safe->loginCaptchaList[0] = 'No';
 $lang->admin->safe->resetPWDList[1] = 'ON';
 $lang->admin->safe->resetPWDList[0] = 'Off';
 
-$lang->admin->safe->noticeMode   = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
-$lang->admin->safe->noticeStrong = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
+$lang->admin->safe->noticeMode     = 'The password will be checked when creating and modifying user information, and changing passwords.';
+$lang->admin->safe->noticeWeakMode = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
+$lang->admin->safe->noticeStrong   = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
