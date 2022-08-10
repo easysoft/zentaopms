@@ -4,8 +4,6 @@ $(function()
     {
         var programID = $(this).val();
         setAclList(programID);
-        budgetOverrunTips();
-        outOfDateTip();
 
         /* Determine whether the project can change the project set. */
         link = createLink('project', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);
@@ -59,6 +57,9 @@ $(function()
 
             if(!changed) $("#parent").val(oldParent).trigger("chosen:updated");
             oldParent = $('#parent').val();
+
+            budgetOverrunTips();
+            outOfDateTip();
         });
     });
 

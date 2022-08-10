@@ -230,19 +230,17 @@ class project extends control
      */
     public function ajaxGetObjectInfo($objectType, $objectID, $selectedProgramID)
     {
-        $data = array();
-        $minChildBegin = '';
-        $maxChildEnd   = '';
+        if($selectedProgramID)
+        {
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+        }
+
         if(!empty($objectID))
         {
-            $object          = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
-            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
 
-            if($selectedProgram->budget)
-            {
-                $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
-                $availableBudget = $object->parent == $selectedProgramID ? $budgetLeft + $object->budget : $budgetLeft;
-            }
+            if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + $object->budget : $availableBudget;
 
             if($objectType == 'program')
             {
@@ -250,19 +248,18 @@ class project extends control
                 $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
             }
         }
-        else
-        {
-            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
-            if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
-        }
 
-        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'budgetUnit' => $selectedProgram->budgetUnit);
-        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
-        if($objectType == 'program')
+        $data = array();
+        if(isset($selectedProgram))
         {
-            $data['minChildBegin'] = $minChildBegin;
-            $data['maxChildEnd']   = $maxChildEnd;
+            $data['selectedProgramBegin'] = $selectedProgram->begin;
+            $data['selectedProgramEnd']   = $selectedProgram->end;
+            $data['budgetUnit']           = $selectedProgram->budgetUnit;
         }
+        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
+        if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
+        if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;
+
         echo json_encode($data);
     }
 

@@ -346,13 +346,14 @@ function compareChildDate()
 
         $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
-            var dateTip    = '';
-            var childInfo  = JSON.parse(data);
+            var childInfo = JSON.parse(data);
+            if(childInfo.maxChildEnd == '' || childInfo.minChildBegin == '') return;
+
             var childBegin = new Date(childInfo.minChildBegin);
             var childEnd   = new Date(childInfo.maxChildEnd);
-
             if(programBegin <= childBegin && programEnd >= childEnd) return;
 
+            var dateTip = '';
             if(programBegin > childBegin && programEnd >= childEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + beginGreateChild + childInfo.minChildBegin + "</span>";
