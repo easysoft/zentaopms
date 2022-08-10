@@ -410,11 +410,11 @@ function outOfDateTip()
                 return;
             }
 
-            if(programBegin < parentBegin && programEnd <= parentEnd)
+            if(programBegin < parentBegin && programEnd <= parentEnd && programEnd >= parentBegin)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
             }
-            else if(programBegin >= parentBegin && programEnd > parentEnd)
+            else if(programEnd > parentEnd && programBegin >= parentBegin && programBegin <= parentEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
             }

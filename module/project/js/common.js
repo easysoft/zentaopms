@@ -388,11 +388,11 @@ function outOfDateTip()
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
             var dateTip = "";
-            if(projectBegin < parentBegin && projectEnd <= parentEnd)
+            if(projectBegin < parentBegin && projectEnd <= parentEnd && projectEnd >= parentBegin)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
             }
-            else if(projectBegin >= parentBegin && projectEnd > parentEnd)
+            else if(projectEnd > parentEnd && projectBegin >= parentBegin && projectBegin <= parentEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
             }
