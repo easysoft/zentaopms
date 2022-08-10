@@ -69,7 +69,7 @@ h3 {font-size: 16px;}
 /* Comment-btn */
 .comment-btn {position: relative; margin: 0; padding: 0; display: none;}
 .repoCode tr.over .comment-btn {display: block;}
-.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: -2; line-height: 20px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.2s;}
+.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: -2; line-height: 20px; text-align: center; color: #fff; cursor: pointer;}
 .comment-btn .icon-wrapper:before {display: block; content: ' '; right: -4px; top: 6px; position: absolute; border-left: 4px solid #4183C4; border-right: 0 solid transparent; border-bottom: 4px solid transparent; border-top: 4px solid transparent; width: 0; height: 0;}
 .comment-btn .icon-wrapper:hover {background: #169; transform: scale(1.1);}
 .comment-btn .icon-wrapper:hover:before {border-left-color: #169;}
@@ -79,7 +79,7 @@ h3 {font-size: 16px;}
 .repoCode tr.commented .comment-btn {display: block; float:left;}
 .repoCode tr.commented .comment-btn .icon-wrapper {background: none; border: none; width: 24px; line-height: 18px; height: 18px; left: -6px; color: #4183c4;}
 .repoCode tr.commented .comment-btn .icon-wrapper:hover {border-color: #169; color: #169;}
-.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; transform: scale(-1, 1); display: inline-block;}
+.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; display: inline-block;}
 .repoCode tr.commented .comment-btn .icon-wrapper:before {display: none;}
 
 .repoCode tr.over.commented .comment-btn {margin-left: -20px; width: 25px; height:18px;}
