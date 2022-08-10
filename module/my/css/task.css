@@ -21,3 +21,9 @@ td.delayed {background: #e84e0f !important; color: white;}
 
 html[lang="en"] .c-date {width: 80px;}
 html[lang="en"] .c-user-short {width: 88px;}
+[lang^=en] #taskTable .assigned-title{width: 115px !important;}
+[lang^=de] #taskTable .assigned-title{width: 145px !important;}
+[lang^=de] #taskTable .c-date {width: 80px;}
+[lang^=de] #taskTable .c-user {width: 120px;}
+[lang^=de] #taskTable .c-hours {width: 88px;}
+[lang^=fr] #taskTable .assigned-title{width: 130px !important;}
