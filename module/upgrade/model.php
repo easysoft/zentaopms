@@ -6882,7 +6882,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Add requred rule to the built-in workflow status field.
+     * Add required rule to the built-in workflow status field.
      *
      * @access public
      * @return void
@@ -6892,7 +6892,7 @@ class upgradeModel extends model
         $notemptyRule = $this->dao->select('id')->from(TABLE_WORKFLOWRULE)->where('rule')->eq('notempty')->fetch();
         if(empty($notemptyRule)) return false;
 
-        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('module')->in($this->config->upgrade->workflowRequiredField)->fetchAll();
+        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('buildin')->eq(1)->fetchAll();
 
         foreach($fields as $field)
         {
