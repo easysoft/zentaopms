@@ -191,7 +191,7 @@ class search extends control
             }
             else
             {
-                $type = zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
+                $type = zget($this->lang->search->modules, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
                 return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }
@@ -216,6 +216,12 @@ class search extends control
     {
         $this->lang->admin->menu->search = "{$this->lang->search->common}|search|index";
 
+        $requirementIds = $this->dao->select('t1.id')->from(TABLE_SEARCHINDEX)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t2.type')->eq('requirement')
+            ->fetchPairs('id');
+        $this->dao->update(TABLE_SEARCHINDEX)->set('objectType')->eq('requirement')->where('id')->in($requirementIds)->exec();
         if(empty($words)) $words = $this->get->words;
         if(empty($words)) $words = $this->post->words;
         if(empty($words) and ($recTotal != 0 or $pageID != 1)) $words = $this->session->searchIngWord;
@@ -233,7 +239,7 @@ class search extends control
 
         if($words)
         {
-            $typeCount = $this->search->getList($words, 'all', null, true);
+            $typeCount = $this->search->getListCount($words);
             $typeList  = array('all' => $this->lang->search->modules['all']);
             foreach($typeCount as $objectType => $count)
             {

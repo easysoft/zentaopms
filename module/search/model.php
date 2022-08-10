@@ -585,16 +585,14 @@ class searchModel extends model
     }
 
     /**
-     * get search results of keywords.
+     * Get counts of keyword search results.
      *
      * @param  string    $keywords
      * @param  string    $type
-     * @param  object    $pager
-     * @param  bool      $getCount
      * @access public
-     * @return array
+     * @return void
      */
-    public function getList($keywords, $type, $pager = null, $getCount = false)
+    public function getListCount($keywords, $type = 'all')
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
@@ -638,18 +636,69 @@ class searchModel extends model
             }
         }
 
-        if($getCount)
+        $typeCount = $this->dao->select("objectType, count(*) as objectCount")
+            ->from(TABLE_SEARCHINDEX)
+            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('addedDate')->le(helper::now())
+            ->groupBy('objectType')
+            ->fetchPairs('objectType', 'objectCount');
+        arsort($typeCount);
+        return $typeCount;
+    }
+
+    /**
+     * get search results of keywords.
+     *
+     * @param  string    $keywords
+     * @param  string    $type
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getList($keywords, $type, $pager = null)
+    {
+        $spliter = $this->app->loadClass('spliter');
+        $words   = explode(' ', self::unify($keywords, ' '));
+
+        $against     = '';
+        $againstCond = '';
+
+        foreach($words as $word)
         {
-            $typeCount = $this->dao->select("objectType, count(*) as objectCount")
-                ->from(TABLE_SEARCHINDEX)
-                ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
-                ->andWhere('vision')->eq($this->config->vision)
-                ->andWhere('objectType')->in($allowedObject)
-                ->andWhere('addedDate')->le(helper::now())
-                ->groupBy('objectType')
-                ->fetchPairs('objectType', 'objectCount');
-            arsort($typeCount);
-            return $typeCount;
+            $splitedWords = $spliter->utf8Split($word);
+            $trimedWord   = trim($splitedWords['words']);
+            $against     .= '"' . $trimedWord . '" ';
+            $againstCond .= '(+"' . $trimedWord . '") ';
+
+            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
+        }
+
+        $likeCondition = '';
+        /* Assisted lookup by like condition when only one word. */
+        if(count($words) == 1 and strpos($words[0], ' ') === false) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
+
+        $words = str_replace('"', '', $against);
+        $words = str_pad($words, 5, '_');
+
+        $allowedObject = array();
+
+        if($type != 'all')
+        {
+            foreach($type as $module) $allowedObject[] = $module;
+        }
+        else
+        {
+            foreach($this->config->search->fields as $objectType => $fields)
+            {
+                $module = $objectType;
+                if($module == 'case') $module = 'testcase';
+                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
+
+                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
+            }
         }
 
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
