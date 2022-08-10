@@ -59,7 +59,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/release-story.png';?>' class='content-icon'/>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/story.png';?>' class='content-icon'/>
                 <span><?php echo $this->lang->release->stories . '（' . count($stories) . '）';?></span>
               </td>
             </tr>
@@ -85,7 +85,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/release-bug.png';?>' class='content-icon'/>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/bug.png';?>' class='content-icon'/>
                 <span><?php echo $this->lang->release->bugs . '（' . count($bugs) . '）';?></span>
               </td>
             </tr>
@@ -111,7 +111,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/release-leftbug.png';?>' class='content-icon'/>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/leftbug.png';?>' class='content-icon'/>
                 <span><?php echo $this->lang->release->leftBugs . '（' . count($leftBugs) . '）';?></span>
               </td>
             </tr>
