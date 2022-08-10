@@ -346,13 +346,14 @@ function compareChildDate()
 
         $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
-            var dateTip    = '';
-            var childInfo  = JSON.parse(data);
+            var childInfo = JSON.parse(data);
+            if(childInfo.maxChildEnd == '' || childInfo.minChildBegin == '') return;
+
             var childBegin = new Date(childInfo.minChildBegin);
             var childEnd   = new Date(childInfo.maxChildEnd);
-
             if(programBegin <= childBegin && programEnd >= childEnd) return;
 
+            var dateTip = '';
             if(programBegin > childBegin && programEnd >= childEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + beginGreateChild + childInfo.minChildBegin + "</span>";
@@ -410,11 +411,11 @@ function outOfDateTip()
                 return;
             }
 
-            if(programBegin < parentBegin && programEnd <= parentEnd)
+            if(programBegin < parentBegin && programEnd <= parentEnd && programEnd >= parentBegin)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
             }
-            else if(programBegin >= parentBegin && programEnd > parentEnd)
+            else if(programEnd > parentEnd && programBegin >= parentBegin && programBegin <= parentEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
             }
