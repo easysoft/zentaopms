@@ -656,6 +656,8 @@ class build extends control
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getBuildPairs($build->product, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        $this->config->bug->search['params']['os']['values']            = $this->bug->getObjectList('os');
+        $this->config->bug->search['params']['browser']['values']       = $this->bug->getObjectList('browser');
 
         unset($this->config->bug->search['fields']['product']);
         unset($this->config->bug->search['params']['product']);

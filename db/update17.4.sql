@@ -29,3 +29,6 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
 
 UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';
+
+ALTER TABLE `zt_bug` MODIFY COLUMN `os` varchar(255) NOT NULL default '';
+ALTER TABLE `zt_bug` MODIFY COLUMN `browser` varchar(255) NOT NULL default '';

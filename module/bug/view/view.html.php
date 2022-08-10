@@ -232,11 +232,33 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                  <td>
+                  <?php
+                  $os     = '';
+                  $osList = explode(',', $bug->os);
+                  foreach($osList as $value)
+                  {
+                      if(empty($value)) continue;
+                      $os .= $lang->bug->osList[$value] . ',';
+                  }
+                  echo trim($os, ',');
+                  ?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                  <td>
+                  <?php
+                  $browser     = '';
+                  $browserList = explode(',', $bug->browser);
+                  foreach($browserList as $value)
+                  {
+                      if(empty($value)) continue;
+                      $browser .= $lang->bug->browserList[$value] . ',';
+                  }
+                  echo trim($browser, ',');
+                  ?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>

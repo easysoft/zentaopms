@@ -3651,6 +3651,8 @@ class executionModel extends model
      */
     public function buildBugSearchForm($products, $queryID, $actionURL, $type = 'execution')
     {
+        $this->loadModel('bug');
+
         $modules = array();
         $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
@@ -3706,6 +3708,8 @@ class executionModel extends model
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['openedBuild']['values']   = $builds;
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        $this->config->bug->search['params']['os']['values']            = $this->bug->getObjectList('os');
+        $this->config->bug->search['params']['browser']['values']       = $this->bug->getObjectList('browser');
         if($productType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

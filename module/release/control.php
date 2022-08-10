@@ -589,6 +589,8 @@ class release extends control
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, $release->branch);
+        $this->config->bug->search['params']['os']['values']            = $this->bug->getObjectList('os');
+        $this->config->bug->search['params']['browser']['values']       = $this->bug->getObjectList('browser');
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

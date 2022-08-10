@@ -534,6 +534,7 @@ class upgradeModel extends model
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
+                //$this->recordOSAndBrowserOfBug();
                 break;
         }
 
@@ -6879,5 +6880,28 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Record OS and browser of bug.
+     *
+     * @access public
+     * @return bool
+     */
+    public function recordOSAndBrowserOfBug()
+    {
+        $osList      = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchAll('os');
+        $browserList = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchAll('browser');
+        $osList      = array_filter($osList);
+        $browserList = array_filter($browserList);
+        $osList      = implode(',', array_keys($osList));
+        $browserList = implode(',', array_keys($browserList));
+
+        $items = new stdclass();
+        $items->bugOS      = $osList;
+        $items->bugBrowser = $browserList;
+
+        $this->loadModel('setting')->setItems('system.common@rnd', $items);
+        return true;
     }
 }

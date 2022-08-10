@@ -632,9 +632,11 @@ class execution extends control
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
         $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
-        $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
+        $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
+        $this->config->bug->search['params']['os']['values']        = $this->bug->getObjectList('os');
+        $this->config->bug->search['params']['browser']['values']   = $this->bug->getObjectList('browser');
 
         $this->loadModel('tree');
         $bugModules = array();

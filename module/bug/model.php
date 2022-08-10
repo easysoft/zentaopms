@@ -76,6 +76,8 @@ class bugModel extends model
             ->trim('title')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
+            ->join('os', ',')
+            ->join('browser', ',')
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
             ->get();
 
@@ -163,25 +165,24 @@ class bugModel extends model
         $execution = 0;
         $type      = '';
         $pri       = 0;
-        $os        = '';
-        $browser   = '';
         foreach($data->title as $i => $title)
         {
+            $oses     = array_filter($data->oses[$i]);
+            $browsers = array_filter($data->browsers[$i]);
+
             if($data->modules[$i]    != 'ditto') $module    = (int)$data->modules[$i];
             if($data->projects[$i]   != 'ditto') $project   = (int)$data->projects[$i];
             if($data->executions[$i] != 'ditto') $execution = (int)$data->executions[$i];
             if($data->types[$i]      != 'ditto') $type      = $data->types[$i];
             if($data->pris[$i]       != 'ditto') $pri       = $data->pris[$i];
-            if($data->oses[$i]       != 'ditto') $os        = $data->oses[$i];
-            if($data->browsers[$i]   != 'ditto') $browser   = $data->browsers[$i];
 
             $data->modules[$i]    = (int)$module;
             $data->projects[$i]   = (int)$project;
             $data->executions[$i] = (int)$execution;
             $data->types[$i]      = $type;
             $data->pris[$i]       = $pri;
-            $data->oses[$i]       = $os;
-            $data->browsers[$i]   = $browser;
+            $data->oses[$i]       = implode(',', $oses);
+            $data->browsers[$i]   = implode(',', $browsers);
         }
 
         /* Get bug data. */
@@ -689,6 +690,8 @@ class bugModel extends model
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
+            ->setDefault('os', '')
+            ->setDefault('browser', '')
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
             ->setDefault('resolvedDate', '0000-00-00 00:00:00')
@@ -699,6 +702,8 @@ class bugModel extends model
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->join('linkBug', ',')
+            ->join('os', ',')
+            ->join('browser', ',')
             ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
@@ -805,8 +810,6 @@ class bugModel extends model
                 if($data->assignedTos[$bugID] == 'ditto') $data->assignedTos[$bugID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
                 if($data->resolvedBys[$bugID] == 'ditto') $data->resolvedBys[$bugID] = isset($prev['resolvedBy']) ? $prev['resolvedBy'] : '';
                 if($data->resolutions[$bugID] == 'ditto') $data->resolutions[$bugID] = isset($prev['resolution']) ? $prev['resolution'] : '';
-                if($data->os[$bugID]          == 'ditto') $data->os[$bugID]          = isset($prev['os'])         ? $prev['os'] : '';
-                if($data->browsers[$bugID]    == 'ditto') $data->browsers[$bugID]    = isset($prev['browser'])    ? $prev['browser'] : '';
                 if(isset($data->branches[$bugID]) and $data->branches[$bugID] == 'ditto') $data->branches[$bugID] = isset($prev['branch']) ? $prev['branch'] : 0;
 
                 $prev['type']       = $data->types[$bugID];
@@ -817,8 +820,6 @@ class bugModel extends model
                 $prev['assignedTo'] = $data->assignedTos[$bugID];
                 $prev['resolvedBy'] = $data->resolvedBys[$bugID];
                 $prev['resolution'] = $data->resolutions[$bugID];
-                $prev['os']         = $data->os[$bugID];
-                $prev['browser']    = $data->browsers[$bugID];
             }
 
             /* Initialize bugs from the post data.*/
@@ -827,6 +828,9 @@ class bugModel extends model
             foreach($bugIDList as $bugID)
             {
                 $oldBug = $oldBugs[$bugID];
+
+                $os       = array_filter($data->os[$bugID]);
+                $browsers = array_filter($data->browsers[$bugID]);
 
                 $bug = new stdclass();
                 $bug->id             = $bugID;
@@ -844,8 +848,8 @@ class bugModel extends model
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];
-                $bug->os             = $data->os[$bugID];
-                $bug->browser        = $data->browsers[$bugID];
+                $bug->os             = implode(',', $os);
+                $bug->browser        = implode(',', $browsers);
                 $bug->resolution     = $data->resolutions[$bugID];
                 $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
@@ -1594,6 +1598,8 @@ class bugModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        $this->config->bug->search['params']['os']['values']            = $this->getObjectList('os');
+        $this->config->bug->search['params']['browser']['values']       = $this->getObjectList('browser');
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -3157,9 +3163,25 @@ class bugModel extends model
             }
         }
 
-        $bugLink = helper::createLink('bug', 'view', "bugID=$bug->id");
-        $account = $this->app->user->account;
-        $id = $col->id;
+        $bugLink     = helper::createLink('bug', 'view', "bugID=$bug->id");
+        $account     = $this->app->user->account;
+        $id          = $col->id;
+        $os          = '';
+        $browser     = '';
+        $osList      = explode(',', $bug->os);
+        $browserList = explode(',', $bug->browser);
+        foreach($osList as $value)
+        {
+            if(empty($value)) continue;
+            $os .= $this->lang->bug->osList[$value] . ',';
+        }
+        foreach($browserList as $value)
+        {
+            if(empty($value)) continue;
+            $browser .= $this->lang->bug->browserList[$value] . ',';
+        }
+        $os      = trim($os, ',');
+        $browser = trim($browser, ',');
         if($col->show)
         {
             $class = "c-$id";
@@ -3197,6 +3219,14 @@ class bugModel extends model
                 case 'resolvedBuild':
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $bug->resolvedBuild . "'";
+                    break;
+                case 'os':
+                    $class .= ' text-ellipsis';
+                    $title  = "title='" . $os . "'";
+                    break;
+                case 'browser':
+                    $class .= ' text-ellipsis';
+                    $title  = "title='" . $browser . "'";
                     break;
             }
 
@@ -3296,10 +3326,10 @@ class bugModel extends model
                 echo $bug->keywords;
                 break;
             case 'os':
-                echo zget($this->lang->bug->osList, $bug->os);
+                echo $os;
                 break;
             case 'browser':
-                echo zget($this->lang->bug->browserList, $bug->browser);
+                echo $browser;
                 break;
             case 'mailto':
                 $mailto = explode(',', $bug->mailto);
@@ -3556,5 +3586,29 @@ class bugModel extends model
         if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
 
         return $relatedObjects;
+    }
+
+    /**
+     * Get object list.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getObjectList($objectType = '')
+    {
+        $objectListName = $objectType . 'List';
+        if(empty($objectType) or !isset($this->lang->bug->{$objectListName})) return array();
+        $objectList       = $this->lang->bug->{$objectListName};
+        $deleteConfigName = $objectType == 'os' ? 'deleteOS' : 'delete' . ucfirst($objectType);
+        $existConfigName  = $objectType == 'os' ? 'bugOS' : 'bug' . ucfirst($objectType);
+        $deleteItems      = isset($this->config->bug->{$deleteConfigName}) ? $this->config->bug->{$deleteConfigName} : array();
+        $existItems       = isset($this->config->{$existConfigName}) ? $this->config->{$existConfigName} : '';
+        foreach($objectList as $id => $value)
+        {
+            if(in_array($id, $deleteItems) and strpos(",$existItems,", ",$id,") === false) unset($objectList[$id]);
+        }
+
+        return $objectList;
     }
 }

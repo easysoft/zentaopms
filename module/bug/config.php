@@ -388,3 +388,6 @@ $config->bug->colorList->severity[4] = '#cddc39';
 $config->bug->colorList->severity[5] = '#8bc34a';
 $config->bug->colorList->severity[6] = '#B6B4B4';
 $config->bug->colorList->severity[7] = '#BDBEBD';
+
+$config->bug->deleteBrowser = array('ie7', 'ie6', 'firefox4', 'firefox3', 'firefox2', 'oprea11', 'oprea10', 'oprea9', 'maxthon', 'uc');
+$config->bug->deleteOS      = array('vista', 'win2012', 'win2008', 'win2003', 'win2000', 'wp8', 'wp7', 'symbian', 'freebsd');
