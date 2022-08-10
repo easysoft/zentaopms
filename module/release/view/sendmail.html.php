@@ -24,15 +24,11 @@ if($onlybody) $_GET['onlybody'] = 'no';
 　　<title><?php echo $mailTitle ?></title>
 　　<meta name='viewport' content='width=device-width, initial-scale=1.0'/>
     <style>
-      .content {}
       .content tr {line-height: 30px;}
       .content tr:last-child td{border-bottom: 1px solid #D7DBDE;}
       .content th, .content td {border-top: 1px solid #D7DBDE; color: #3C4353;}
-      .content thead tr {background-color: #F4F5F7;}
       .content .id {text-align: center; width: 100px;}
       .content .title {border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;}
-      .content-head {padding: 15px 10px 15px 40px; border: none;}
-      .content-head span {vertical-align: middle; font-weight: bold; color: #1B1F28;}
       .content-icon {width: 16px; height: 16px; vertical-align: middle;}
     </style>
 　</head>
@@ -58,25 +54,25 @@ if($onlybody) $_GET['onlybody'] = 'no';
               </td>
             </tr>
             <tr>
-              <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/story.png';?>' class='content-icon'/>
-                <span><?php echo $this->lang->release->stories . '（' . count($stories) . '）';?></span>
+              <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/story.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->stories . '（' . count($stories) . '）';?></span>
               </td>
             </tr>
             <tr>
               <td>
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
-                    <tr>
-                      <th><?php echo $this->lang->idAB; ?></th>
-                      <th class='title'><?php echo $this->lang->release->storyTitle; ?></th>
+                    <tr style='background-color: #F4F5F7;'>
+                      <th style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->storyTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($stories as $story):?>
                     <tr>
-                    <td class='id'><?php echo $story->id;?></td>
-                    <td class='title'><?php echo $story->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $story->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $story->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
@@ -84,25 +80,25 @@ if($onlybody) $_GET['onlybody'] = 'no';
               </td>
             </tr>
             <tr>
-              <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/bug.png';?>' class='content-icon'/>
-                <span><?php echo $this->lang->release->bugs . '（' . count($bugs) . '）';?></span>
+              <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/bug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->bugs . '（' . count($bugs) . '）';?></span>
               </td>
             </tr>
             <tr>
               <td>
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
-                    <tr>
-                      <th><?php echo $this->lang->idAB; ?></th>
-                      <th class='title'><?php echo $this->lang->release->bugTitle; ?></th>
+                    <tr style='background-color: #F4F5F7;'>
+                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->bugTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($bugs as $bug):?>
                     <tr>
-                    <td class='id'><?php echo $bug->id;?></td>
-                    <td class='title'><?php echo $bug->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
@@ -110,25 +106,25 @@ if($onlybody) $_GET['onlybody'] = 'no';
               </td>
             </tr>
             <tr>
-              <td class='content-head'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/leftbug.png';?>' class='content-icon'/>
-                <span><?php echo $this->lang->release->leftBugs . '（' . count($leftBugs) . '）';?></span>
+              <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
+                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/leftbug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->leftBugs . '（' . count($leftBugs) . '）';?></span>
               </td>
             </tr>
             <tr>
               <td>
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
-                    <tr>
-                      <th><?php echo $this->lang->idAB; ?></th>
-                      <th class='title'><?php echo $this->lang->release->bugTitle; ?></th>
+                    <tr style='background-color: #F4F5F7;'>
+                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->bugTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($leftBugs as $bug):?>
                     <tr>
-                    <td class='id'><?php echo $bug->id;?></td>
-                    <td class='title'><?php echo $bug->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
