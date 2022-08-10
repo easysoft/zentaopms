@@ -13,10 +13,13 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 .chosen-results > li.has-task.highlighted,
 .chosen-results > li.has-new-task.highlighted {color: #fff;}
 
-.c-id {width: 30px;}
-.c-name, .c-desc {width: 150px;}
-.c-story {width: 200px;}
-.c-assigned {width: 130px;}
-.c-date {width: 120px;}
-.c-pri {width: 80px;}
-.c-actions {width: 60px;}
+#batchToTaskForm .c-id {width: 30px;}
+#batchToTaskForm .c-name, #batchToTaskForm .c-desc {width: 150px;}
+#batchToTaskForm .c-story {width: 200px;}
+#batchToTaskForm .c-assigned {width: 125px;}
+#batchToTaskForm .c-date {width: 105px;}
+#batchToTaskForm .c-pri {width: 65px;}
+#batchToTaskForm .c-actions, #batchToTaskForm .c-estimate {width: 60px;}
+#batchToTaskForm .input-group-addon {padding: 5px 6px;}
+[lang^=de] #batchToTaskForm .c-date {width: 120px;}
+[lang^=de] #batchToTaskForm .c-estimate {width: 65px;}
