@@ -29,3 +29,6 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
 
 UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';
+
+INSERT IGNORE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `buildin`, `role`, `createdBy`, `createdDate`) VALUES
+('bug', 'batchactivate', 'batchoperate', '批量激活', 'batch', 'different', 'none', 'normal', 'browse', 'normal', 'direct', '1', 'buildin', '', '2022-08-09 15:52');
