@@ -919,8 +919,7 @@ class upgrade extends control
         $response['message']     = '';
         $response['nextMessage'] = '';
 
-        $stmt = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'");
-
+        $stmt  = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'");
         $table = $stmt->fetch();
         if(empty($table))
         {
@@ -939,14 +938,28 @@ class upgrade extends control
         $tableName = $table->Name;
 
         $response['table'] = $tableName;
+
+        /* Check process this table or not. */
+        $dbProcesses = $this->dao->query("SHOW PROCESSLIST")->fetchAll();
+        foreach($dbProcesses as $dbProcess)
+        {
+            if($dbProcess->db != $this->config->db->name) continue;
+            if(strpos($dbProcess->Info, " `{$tableName}` "))
+            {
+                $response['message'] = sprintf($this->lang->upgrade->changingTable, $response['table']);
+                return print(json_encode($response));
+            }
+        }
+
         if($nextTable)
         {
-            $response['next']  = $nextTable->Name;
+            $response['next'] = $nextTable->Name;
             if($response['next']) $response['nextMessage'] = sprintf($this->lang->upgrade->changingTable, $response['next']);
         }
 
         if(stripos($tableName, 'searchindex') !== false)
         {
+            /* Change fulltext index. */
             $stmt    = $this->dao->query("show index from `$tableName`");
             $indexes = array();
             while($index = $stmt->fetch())
