@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('copyProjectID', $copyProjectID);?>

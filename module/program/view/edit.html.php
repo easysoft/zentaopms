@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('page', $this->app->getMethodName());?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('longTime', $lang->program->longTime);?>

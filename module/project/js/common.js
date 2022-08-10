@@ -116,6 +116,7 @@ function computeEndDate(delta)
         $('#end').val(longTime);
         $('#daysBox').addClass('hidden');
         $('#days').val(0);
+        outOfDateTip();
         return false;
     }
     $('#daysBox').removeClass('hidden');
@@ -363,6 +364,8 @@ function outOfDateTip()
 {
     var end   = $('#end').val();
     var begin = $('#begin').val();
+
+    if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
     {
         var selectedProgramID = $('#parent').val();

@@ -338,6 +338,7 @@ function compareChildDate()
     var selectedProgramID = $('#parent').val();
     if($('#dateTip').length > 0) $('#dateTip').remove();
 
+    if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
     {
         var programEnd   = new Date(end);
