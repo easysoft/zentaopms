@@ -30,3 +30,6 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 
 UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';
 UPDATE `zt_grouppriv` SET `method`='exportTemplate' WHERE `method` = 'exportTemplet';
+
+INSERT IGNORE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `buildin`, `role`, `createdBy`, `createdDate`) VALUES
+('bug', 'batchactivate', 'batchoperate', '批量激活', 'batch', 'different', 'none', 'normal', 'browse', 'normal', 'direct', '1', 'buildin', '', '2022-08-09 15:52');

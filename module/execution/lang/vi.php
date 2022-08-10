@@ -127,6 +127,7 @@ $lang->execution->lifeTimeList['ops']   = "DevOps";
 $lang->team = new stdclass();
 $lang->team->account    = 'Người dùng';
 $lang->team->role       = 'Vai trò';
+$lang->team->roleAB     = 'Vai trò của tôi';
 $lang->team->join       = 'Đã tham gia';
 $lang->team->hours      = 'Giờ/ngày';
 $lang->team->days       = 'Ngày';
