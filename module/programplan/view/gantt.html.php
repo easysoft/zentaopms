@@ -511,11 +511,7 @@ $(function()
     if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 80});
     gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
-    if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan)
-                                                 {
-                                                     if(plan.percent) return Math.round(plan.percent) + '%';
-                                                 }
-                                             });
+    if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
     if(showFields.indexOf('taskProgress') != -1) gantt.config.columns.push({name: 'taskProgress', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 60});
