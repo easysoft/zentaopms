@@ -174,6 +174,7 @@ $lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team->account    = 'User';
 $lang->team->role       = 'Role';
+$lang->team->roleAB     = 'My Role';
 $lang->team->join       = 'Joined';
 $lang->team->hours      = 'Hours/day';
 $lang->team->days       = 'Day';
