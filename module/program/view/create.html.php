@@ -35,6 +35,7 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->program->longTime);?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>

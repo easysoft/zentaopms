@@ -112,6 +112,7 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
+        outOfDateTip();
         return false;
     }
 
@@ -381,6 +382,7 @@ function outOfDateTip()
     var begin = $('#begin').val();
     if($('#dateTip').length > 0) $('#dateTip').remove();
 
+    if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
     {
         var selectedProgramID = $('#parent').val();
