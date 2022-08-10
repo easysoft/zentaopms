@@ -69,7 +69,7 @@ $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Stark';
 
-$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge >= 6';
+$lang->admin->safe->modeRuleList[1] = 'Beinhaltet Groß und Kleinbuchstaben sowie Ziffern. Länge >= 6.';
 $lang->admin->safe->modeRuleList[2] = 'Beinhaltet Groß und Kleinbuchstaben, Ziffern sowie Sonderzeichen.  Länge >= 10.';
 
 $lang->admin->safe->reasonList['weak']     = 'Bekannte Schwache Passwörter';
@@ -87,5 +87,5 @@ $lang->admin->safe->loginCaptchaList[0] = 'Nein';
 $lang->admin->safe->resetPWDList[1] = 'ON';
 $lang->admin->safe->resetPWDList[0] = 'Off';
 
-$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
-$lang->admin->safe->noticeStrong = '';
+$lang->admin->safe->noticeMode   = 'The password will be checked when logging into the system, creating and modifying user information, and changing passwords.';
+$lang->admin->safe->noticeStrong = 'The longer the password, the more letters, numbers, or special characters it contains, and the less repetitive the password, the more secure it is!';
