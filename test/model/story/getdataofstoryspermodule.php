@@ -10,7 +10,8 @@ title=测试 storyModel->getDataOfStorysPerModule();
 cid=1
 pid=1
 
-
+按照模块分组，获取分组后的需求数量 >> 100
+按照模块分组，获取各个模块下的需求数量，查看模块2150下的数据 >> /产品模块330,1,83
 
 */
 

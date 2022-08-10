@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +30,4 @@ r($execution->activateTest($executionIDList[1]))               && p('0:field,old
 r($execution->activateTest($executionIDList[2]))               && p('0:field,old,new') && e('status,suspended,doing'); // 看板执行激活
 r($execution->activateTest($executionIDList[3],$readjustTime)) && p('1:field')         && e('begin');                  // 修改激活时间
 r($execution->activateTest($executionIDList[4],$readjustTask)) && p('1:field')         && e('begin');                  // 修改顺延
-system("./ztest init");
+$db->restoreDB();

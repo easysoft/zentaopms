@@ -3179,24 +3179,8 @@ class executionModel extends model
      */
     public function getBeginEnd4CFD($execution)
     {
-        $begin = $execution->begin;
-        $end   = $execution->end;
-        if(helper::today() < $execution->begin)
-        {
-            $begin = helper::today();
-            $end   = helper::today();
-        }
-        elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
-        {
-            $begin = (date('Y-m-d', strtotime('-13 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-13 days'));
-            $end   = helper::today();
-        }
-        elseif((helper::today() > $execution->end))
-        {
-            $begin = date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) > $execution->begin ? date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) : $execution->begin;
-            $end   = $execution->end;
-        }
-
+        $end   = (!helper::isZeroDate($execution->closedDate) and date('Y-m-d', strtotime($execution->closedDate)) < helper::today()) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+        $begin = (!helper::isZeroDate($execution->openedDate) and date('Y-m-d', strtotime($execution->openedDate)) > date('Y-m-d', strtotime('-13 days', strtotime($end)))) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime('-13 days', strtotime($end)));
         return array($begin, $end);
     }
 
@@ -4385,7 +4369,7 @@ class executionModel extends model
         }
         echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
         echo '<td>' . zget($users, $execution->PM) . '</td>';
-        echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td>' . $execution->begin . '</td>';
         if(!helper::isZeroDate($execution->end))

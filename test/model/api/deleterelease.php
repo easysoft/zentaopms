@@ -10,6 +10,8 @@ title=测试 apiModel->deleteRelease();
 cid=1
 pid=1
 
+删除一个创建的发布 >> 0
+
 */
 
 global $tester;

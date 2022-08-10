@@ -30,7 +30,6 @@ pid=1
 
 */
 
-
 $bugIDList1 = array('1', '2', '3');
 $bugIDList2 = array('4', '5', '6');
 $bugIDList3 = array('51', '52', '53');

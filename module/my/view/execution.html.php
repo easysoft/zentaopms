@@ -39,7 +39,7 @@
         <?php endif;?>
         <th class='c-date'><?php echo $lang->execution->begin;?></th>
         <th class='c-date'><?php echo $lang->execution->end;?></th>
-        <th class='c-status'><?php echo $lang->statusAB;?></th>
+        <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='c-hours'><?php echo $lang->my->hours;?></th>
@@ -53,13 +53,13 @@
       <tr class='text-left'>
         <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
-          <?php if($config->systemMode == 'new'):?>  
+          <?php if($config->systemMode == 'new'):?>
           <?php
           if($execution->type === 'stage') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->stage}</span> ";
           if($execution->type === 'sprint') echo "<span class='project-type-label label label-outline label-info'>{$lang->executionCommon}</span> ";
           if($execution->type === 'kanban') echo "<span class='project-type-label label label-outline label-info'>{$lang->execution->kanban}</span> ";
           ?>
-          <?php endif;?>  
+          <?php endif;?>
           <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <?php if($config->systemMode == 'new'):?>
@@ -69,7 +69,7 @@
         <?php endif;?>
         <td><?php echo $execution->begin;?></td>
         <td><?php echo $execution->end;?></td>
-        <td class="c-status">
+        <td class="c-status text-center">
           <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
           <?php else:?>

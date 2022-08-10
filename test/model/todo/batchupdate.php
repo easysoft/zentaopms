@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,9 +11,9 @@ title=测试 todoModel->batchUpdate();
 cid=1
 pid=1
 
-批量修改todo类型   >> type,task,custom
+批量修改todo类型 >> type,task,custom
 批量修改todo优先级 >> pri,2,1
-批量修改todo状态   >> status,wait,doing
+批量修改todo状态 >> status,wait,doing
 
 */
 
@@ -31,4 +32,4 @@ $todo = new todoTest();
 r($todo->batchUpdateTest($changeType, '3'))   && p('0:field,old,new') && e('type,task,custom');   // 批量修改todo类型
 r($todo->batchUpdateTest($changePri, '2'))    && p('0:field,old,new') && e('pri,2,1');            // 批量修改todo优先级
 r($todo->batchUpdateTest($changeStatus, '1')) && p('0:field,old,new') && e('status,wait,doing');  // 批量修改todo状态
-system("./ztest init");
+$db->restoreDB();

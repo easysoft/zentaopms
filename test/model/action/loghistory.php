@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +35,4 @@ r($action->logHistoryTest($actionIDList[1], $changes2)) && p('0:field,old,new') 
 r($action->logHistoryTest($actionIDList[2], $changes3)) && p('0:field,old,new')                 && e('name,name1,name2');                                      // 测试新增actionID 10003 历史记录
 r($action->logHistoryTest($actionIDList[3], $changes4)) && p('0:field,old,new')                 && e('code,code1,code2');                                      // 测试新增actionID 10004 历史记录
 r($action->logHistoryTest($actionIDList[4], $changes5)) && p('0:field,old,new')                 && e('assignedTo,test2,test1');                                // 测试新增actionID 10005 历史记录
-system("./ztest init");
+$db->restoreDB();

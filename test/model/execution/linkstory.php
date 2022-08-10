@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +35,4 @@ r($execution->linkStoryTest($executionIDList[0], $count[1], $story)) && p()     
 r($execution->linkStoryTest($executionIDList[1], $count[1], $story)) && p()                          && e('3');       // 瀑布执行关联需求统计
 r($execution->linkStoryTest($executionIDList[2], $count[1], $story)) && p()                          && e('3');       // 看板执行关联需求统计
 
-system("./ztest init");
+$db->restoreDB();

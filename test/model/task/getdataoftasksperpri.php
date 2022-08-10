@@ -17,7 +17,6 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerPriTest()) && p('1:name,value') && e('1,228'); //统计优先级为1的任务数量
 r($task->getDataOfTasksPerPriTest()) && p('2:name,value') && e('2,228'); //统计优先级为2的任务数量

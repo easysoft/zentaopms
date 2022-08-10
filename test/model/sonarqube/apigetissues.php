@@ -10,9 +10,9 @@ title=测试 sonarqubeModel::apiGetIssues();
 cid=1
 pid=1
 
-通过sonarqubeID,获取SonarQube问题列表        >> 1
+通过sonarqubeID,获取SonarQube问题列表 >> 1
 通过sonarqubeID,项目key获取SonarQube问题列表 >> 1
-当sonarqubeID为0时,获取SonarQube问题列表     >> return empty
+当sonarqubeID为0时,获取SonarQube问题列表 >> return empty
 
 */
 

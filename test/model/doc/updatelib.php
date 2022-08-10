@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -54,4 +55,4 @@ r($doc->updateLibTest($docLibIds[0],$noProject))       && p('project:0')       &
 r($doc->updateLibTest($docLibIds[0],$noExecution))     && p('execution:0')     && e('『迭代库』应当是数字。');   //正常修改无迭代
 r($doc->updateLibTest($docLibIds[0],$noName))          && p('name:0')          && e('『文档库名称』不能为空。'); //正常修改无文档库名
 
-system("./ztest init");
+$db->restoreDB();

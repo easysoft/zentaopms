@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +38,4 @@ r($testcase->batchReviewTest($caseIDList[1], $resultList[1])) && p()      && e('
 r($testcase->batchReviewTest($caseIDList[2], $resultList[1])) && p('405') && e('106'); // 测试评审case 405 406 为pass
 r($testcase->batchReviewTest($caseIDList[3], $resultList[1])) && p()      && e('0');   // 测试评审case 407 408 为pass
 r($testcase->batchReviewTest($caseIDList[4], $resultList[1])) && p('409') && e('107'); // 测试评审case 409 410 为pass
-system("./ztest init");
+$db->restoreDB();

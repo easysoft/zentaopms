@@ -56,6 +56,7 @@ $lang->file->uploadImagesExplain = "Note : Chargez images au format .jpg, .jpeg,
 $lang->file->saveAndNext         = 'Enregistrer et poursuivre';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> de <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  Vous pouvez avoir <strong>%s</strong> items/page, vous devez donc importer <strong id='times'>%s</strong> fois.";
+$lang->file->accessDenied        = 'Access denied to this file!';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' non trouvé.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' non inscriptible. Changez les permissions. Entrez la commande <span class='code'>sudo chmod -R 777 '%s'</span></span> sous Linux.";

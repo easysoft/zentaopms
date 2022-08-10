@@ -10,9 +10,8 @@ title=测试 docModel->checkAutoloadPage();
 cid=1
 pid=1
 
-查询文档type为text时数据 >>1
-查询文档type为markdown时数据 >>1
-查询文档不存在时数据 >>1
+
+
 */
 $docID = array('1', '3', '');
 

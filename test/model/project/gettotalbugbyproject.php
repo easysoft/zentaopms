@@ -9,7 +9,7 @@ title=测试 projectModel->getTotalBugByProject();
 cid=1
 pid=1
 
-状态一致时正常打印id为11的项目bug数量 >> 3
+获取id为11的项目下激活的bug数量 >> 4
 
 */
 

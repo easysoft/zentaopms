@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +33,4 @@ r($execution->linkCasesTest($executionIDList[0], $count[1], $products[0], $stori
 r($execution->linkCasesTest($executionIDList[1], $count[1], $products[1], $stories[1])) && p()                         && e('4');          // 瀑布执行关联用例统计
 r($execution->linkCasesTest($executionIDList[2], $count[1], $products[2], $stories[2])) && p()                         && e('4');          // 看板执行关联用例统计
 
-system("./ztest init");
+$db->restoreDB();

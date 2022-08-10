@@ -3191,8 +3191,18 @@ class bugModel extends model
                     $class .= ' c-user';
                     $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
                     break;
+                case 'openedBy':
+                    $class .= ' c-user';
+                    $title  = "title='" . zget($users, $bug->openedBy) . "'";
+                    break;
                 case 'project':
                     $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
+                    break;
+                case 'plan':
+                    $title = "title='" . zget($plans, $bug->plan) . "'";
+                    break;
+                case 'execution':
+                    $title = "title='" . zget($executions, $bug->execution) . "'";
                     break;
                 case 'resolvedBuild':
                     $class .= ' text-ellipsis';

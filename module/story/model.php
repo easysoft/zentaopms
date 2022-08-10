@@ -2020,72 +2020,159 @@ class storyModel extends model
     {
         /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
-        $data = fixer::input('post')->get();
-        $now  = helper::now();
+        $this->loadModel('task');
 
-        /* Judgment of required items. */
-        if(empty($data->type))
-        {
-            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->task->type);
-        }
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        $tasks   = fixer::input('post')
+            ->remove('syncFields')
+            ->get();
 
-        if(isset($data->hourPointValue) and empty($data->hourPointValue))
-        {
-            dao::$errors['hourPointValue'] = sprintf($this->lang->error->notempty, $this->lang->story->convertRelations);
-        }
-        elseif(isset($data->hourPointValue) and !is_numeric($data->hourPointValue))
-        {
-            dao::$errors['hourPointValue'] = sprintf($this->lang->error->float, $this->lang->story->convertRelations);
-        }
-        if(dao::isError()) return false;
+        if(!empty($_POST['syncFields'])) $stories = empty($tasks->story) ? array() : $this->getByList($tasks->story);
 
         /* Create tasks. */
-        $tasks   = array();
-        $stories = empty($data->storyIdList) ? array() : $this->getByList($data->storyIdList);
-        foreach($stories as $story)
+        $preStory  = 0;
+        $storyIDs  = array();
+        $taskNames = array();
+        foreach($tasks->story as $key => $storyID)
         {
-            if(strpos('draft,closed', $story->status) !== false) continue;
+            $tasks->name[$key] = trim($tasks->name[$key]);
+            if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
 
-            $task = new stdclass();
-            $task->execution    = $executionID;
-            $task->project      = $projectID ? $projectID : 0;
-            $task->name         = $story->title;
-            $task->story        = $story->id;
-            $task->type         = $data->type;
-            $task->estimate     = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
-            $task->left         = $task->estimate;
-            $task->openedBy     = $this->app->user->account;
-            $task->openedDate   = $now;
-            $task->storyVersion = $story->version;
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
 
-            if(isset($data->fields))
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
             {
-                foreach($data->fields as $field)
-                {
-                    $task->$field = $story->$field;
-
-                    if($field == 'assignedTo') $task->assignedDate = $now;
-                    if($field == 'spec')
-                    {
-                        unset($task->$field);
-                        $task->desc = $story->$field;
-                    }
-                }
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
             }
 
+            $inNames = in_array($tasks->name[$key], $taskNames);
+            if(!$inNames or ($inNames && !in_array($storyID, $storyIDs)))
+            {
+                $storyIDs[]  = $storyID;
+                $taskNames[] = $tasks->name[$key];
+            }
+            else
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
+                return false;
+            }
+        }
+
+        $story          = 0;
+        $module         = 0;
+        $type           = '';
+        $assignedTo     = '';
+        $estStarted     = '0000-00-00';
+        $deadline       = '0000-00-00';
+        $data           = array();
+        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+        foreach($tasks->name as $i => $task)
+        {
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
+
+            if(empty($tasks->name[$i])) continue;
+
+            $data[$i]             = new stdclass();
+            $data[$i]->story      = (int)$story;
+            $data[$i]->type       = $type;
+            $data[$i]->module     = (int)$module;
+            $data[$i]->assignedTo = $assignedTo;
+            $data[$i]->color      = $tasks->color[$i];
+            $data[$i]->name       = $tasks->name[$i];
+            $data[$i]->pri        = $tasks->pri[$i];
+            $data[$i]->estimate   = $tasks->estimate[$i];
+            $data[$i]->left       = $tasks->estimate[$i];
+            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
+            $data[$i]->execution  = $executionID;
+            $data[$i]->estStarted = $estStarted;
+            $data[$i]->deadline   = $deadline;
+            $data[$i]->status     = 'wait';
+            $data[$i]->openedBy   = $account;
+            $data[$i]->openedDate = $now;
+            $data[$i]->vision     = 'rnd';
+            if($story)
+            {
+                $data[$i]->storyVersion = $stories[$story]->version;
+                if(strpos(",{$_POST['syncFields']},", ',spec,') !== false) $data[$i]->desc = $stories[$story]->spec;
+                if(strpos(",{$_POST['syncFields']},", 'mailto') !== false) $data[$i]->mailto = $stories[$story]->mailto;
+            }
+
+            if($assignedTo) $data[$i]->assignedDate = $now;
+            if(strpos($requiredFields, ',estStarted,') !== false and empty($estStarted)) $data[$i]->estStarted = '';
+            if(strpos($requiredFields, ',deadline,') !== false and empty($deadline))     $data[$i]->deadline   = '';
+        }
+
+        /* check data. */
+        foreach($data as $i => $task)
+        {
+            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            foreach(explode(',', $requiredFields) as $field)
+            {
+                $field = trim($field);
+                if(empty($field)) continue;
+
+                if(!isset($task->$field)) continue;
+                if(!empty($task->$field)) continue;
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        $taskIdList = array();
+        foreach($data as $i => $task)
+        {
+            $task->version = 1;
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
 
             if(dao::isError()) return false;
-            $taskID  = $this->dao->lastInsertID();
-            $tasks[] = $taskID;
+
+            $taskID       = $this->dao->lastInsertID();
+            $taskIdList[] = $taskID;
+
+            $taskSpec = new stdClass();
+            $taskSpec->task       = $taskID;
+            $taskSpec->version    = $task->version;
+            $taskSpec->name       = $task->name;
+            $taskSpec->estStarted = $task->estStarted;
+            $taskSpec->deadline   = $task->deadline;
+
+            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            if(dao::isError()) return false;
+
+            if($task->story) $this->setStage($task->story);
+
             $this->action->create('task', $taskID, 'Opened', '');
         }
 
         $this->loadModel('kanban')->updateLane($executionID, 'task');
-        return $tasks;
+        return $taskIdList;
     }
 
     /**
@@ -4421,6 +4508,11 @@ class storyModel extends model
             elseif($id == 'feedbackBy')
             {
                 $title = $story->feedbackBy;
+            }
+            elseif($id =='version')
+            {
+                $title = $story->version;
+                $class = 'text-center';
             }
             elseif($id == 'notifyEmail')
             {

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/release.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -23,4 +24,4 @@ $release   = new releaseTest();
 r($release->linkStoryTest($releaseID[0],$stories)) && p('id,stories') && e('1,,2,4'); //正常任务关联需求
 r($release->linkStoryTest($releaseID[1],$stories)) && p('id,stories') && e('6,,2,4'); //停止维护任务关联需求
 
-system("./ztest init");
+$db->restoreDB();

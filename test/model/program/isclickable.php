@@ -9,7 +9,12 @@ title=测试 programModel::createStakeholder();
 cid=1
 pid=1
 
-创建id=1的项目集的干系人dev1,dev2并查看。 >> dev2;dev1
+传入项目集1，动作为closed，判断是否可点击 >> 1
+传入项目集1，动作为activate，判断是否可点击 >> 0
+传入项目集1，动作为suspend，判断是否可点击 >> 1
+传入项目集2，动作为closed，判断是否可点击 >> 1
+传入项目集2，动作为activate，判断是否可点击 >> 0
+传入项目集2，动作为activate，判断是否可点击 >> 1
 
 */
 

@@ -10,6 +10,9 @@ title=测试 mailModel->getConfigByMXRR();
 cid=1
 pid=1
 
+获取qq相关信息 >> smtp.qq.com
+获取sohu相关信息 >> smtp.sohu.com
+
 */
 
 $mail = new mailTest();

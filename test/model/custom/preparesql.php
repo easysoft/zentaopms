@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/custom.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -47,4 +48,4 @@ r($custom->prepareSQLTest($paramString[2], $method[1])) && p()                &&
 r($custom->prepareSQLTest($paramString[3], $method[1])) && p()                && e('0');             //测试method为delete，paramString参数为lang,key,section
 r($custom->prepareSQLTest($paramString[4], $method[1])) && p()                && e('0');             //测试method为delete，paramString参数为lang,key,section,module
 r($custom->prepareSQLTest($paramString[5], $method[1])) && p()                && e('0');             //测试method为delete，paramString参数为lang,key,section,module,vision
-system("./ztest init");
+$db->restoreDB();

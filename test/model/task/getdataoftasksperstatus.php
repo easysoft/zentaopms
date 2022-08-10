@@ -19,7 +19,6 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerStatusTest()) && p('done:name,value')   && e('已完成,152'); //统计状态为已完成的任务数量
 r($task->getDataOfTasksPerStatusTest()) && p('wait:name,value')   && e('未开始,152'); //统计状态为未开始的任务数量

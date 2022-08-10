@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stakeholder.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -22,4 +23,4 @@ r($stakeholder->communicateTest($userIDList[0], $comment)) && p('0:comment')  &&
 r($stakeholder->communicateTest($userIDList[2]))           && p('0:comment')  && e('');
 r($stakeholder->communicateTest($userIDList[1], $comment)) && p('objectID:0') && e('『对象ID』应当是数字。');
 
-system("./ztest init");
+$db->restoreDB();

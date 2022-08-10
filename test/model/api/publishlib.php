@@ -10,6 +10,9 @@ title=测试 apiModel->publishLib();
 cid=1
 pid=1
 
+没有版本名的发布 >> 『Version』should not be blank.
+正常的发布 >> Version1
+
 */
 
 global $tester;
