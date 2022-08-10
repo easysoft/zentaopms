@@ -3805,26 +3805,19 @@ class taskModel extends model
         $list .= '<td>';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
         $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
-        $list .= '</td>';
-        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
-        $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
-        $list .= '<td></td>';
-        $list .= helper::isZeroDate($task->estStarted) ? '<td></td>' : '<td>' . $task->estStarted . '</td>';
         if(!helper::isZeroDate($task->deadline))
         {
-            if($task->status != 'done')
+            if($task->status != done)
             {
-                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" ' . 'title="' . $this->lang->execution->delayed . '">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
-            }
-            else
-            {
-                $list .= '<td>' . $task->deadline . '</td>';
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
             }
         }
-        else
-        {
-            $list .= '<td></td>';
-        }
+        $list .= '</td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
+        $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
+        $list .= '<td></td>';
+        $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
+        $list .= helper::isZeroDate($task->deadline) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->deadline . '</td>';
         $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
