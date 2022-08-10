@@ -2255,6 +2255,7 @@ class bugModel extends model
             }
         }
 
+        $this->app->loadLang('report');
         foreach($datas as $buildID => $data)
         {
             $data->name = isset($builds[$buildID]) ? $builds[$buildID] : $this->lang->report->undefined;
