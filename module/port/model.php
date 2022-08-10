@@ -600,28 +600,27 @@ class portModel extends model
         {
             foreach($values as $field => $value)
             {
-                if(empty($value)) continue;
                 if(in_array($field, $dataSourceList))
                 {
                     if($fieldList[$field]['control'] == 'multiple')
                     {
-                        $value = explode(',', $value);
                         $multiple = '';
-                        foreach($value as $tmpValue) $multiple .= "\n" . zget($exportDatas[$field], $tmpValue);
+                        $multipleLsit = explode(',', $value);
+                        foreach($multipleLsit as $tmpValue) $multiple .= "\n" . zget($exportDatas[$field], $tmpValue);
                         $rows[$id]->$field = $multiple;
                     }
                     else
                     {
-                        $rows[$id]->$field = zget($exportDatas[$field], $value);
+                        $rows[$id]->$field = zget($exportDatas[$field], $value, '');
                     }
                 }
                 elseif(strpos($this->config->port->userFields, $field) !== false)
                 {
-                    $rows[$id]->$field = zget($exportDatas['user'], $value);
+                    $rows[$id]->$field = zget($exportDatas['user'], $value, '');
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''*/
-                if(!$value or helper::isZeroDate($value))
+                if(helper::isZeroDate($value))
                 {
                     $rows[$id]->$field = '';
                 }
