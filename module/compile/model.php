@@ -270,7 +270,7 @@ class compileModel extends model
         foreach($jobInfo->builds as $build)
         {
             $lastSyncTime = strtotime($job->lastSyncDate);
-            if($build->timestamp < $lastSyncTime) break;
+            if($build->timestamp < $lastSyncTime * 1000) break;
             if(isset($compilePairs[$build->queueId])) continue;
 
             $data = new stdclass();
@@ -279,7 +279,7 @@ class compileModel extends model
             $data->queue       = $build->queueId;
             $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
             $data->createdBy   = 'guest';
-            $data->createdDate = date('Y-m-d H:i:s', $build->timestamp);
+            $data->createdDate = date('Y-m-d H:i:s', $build->timestamp / 1000);
             $data->updateDate  = $data->createdDate;
 
             $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
@@ -305,40 +305,36 @@ class compileModel extends model
         $url       = sprintf($this->loadModel('gitlab')->getApiRoot($gitlab->id, false), "/projects/{$projectID}/pipelines");
 
         /* Get build list by API. */
-        $builds       = array();
-        $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&ref={$ref}&order_by=id&sort=desc&page={$page}&per_page=100"));
-            if(!is_array($results)) break;
-            if(!empty($results))
+            $param   = $job->lastSyncDate ? '&updated_after=' . date('YYYY-MM-DDThh:mm:ssZ', strtotime($job->lastSyncDate)) : '';
+            $builds  = json_decode(commonModel::http($url . "&ref={$ref}&order_by=id&sort=asc&page={$page}&per_page=100" . $param));
+            if(!is_array($builds)) break;
+
+            if(!empty($builds))
             {
-                /* Check whether it has been synchronized by create time. */
-                $build      = $results[0];
-                $createDate = date('Y-m-d H:i:s', strtotime($build->created_at));
-                if($createDate < $job->lastSyncDate) break;
+                $queueIDList = array();
+                foreach($builds as $build) $queueIDList[] = $build->id;
+                $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->in($queueIDList)->fetchPairs();
 
-                $builds = array_merge($builds, $results);
+                foreach($builds as $build)
+                {
+                    if(isset($compilePairs[$build->id])) continue;
+
+                    $data = new stdclass();
+                    $data->name        = $job->name;
+                    $data->job         = $job->id;
+                    $data->queue       = $build->id;
+                    $data->status      = $build->status;
+                    $data->createdBy   = 'guest';
+                    $data->createdDate = date('Y-m-d H:i:s', strtotime($build->created_at));
+                    $data->updateDate  = date('Y-m-d H:i:s', strtotime($build->updated_at));
+
+                    $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+                }
             }
-            if(count($results) < 100) break;
-        }
 
-        foreach($builds as $build)
-        {
-            $createDate = date('Y-m-d H:i:s', strtotime($build->created_at));
-            if($createDate < $job->lastSyncDate) break;
-            if(isset($compilePairs[$build->id])) continue;
-
-            $data = new stdclass();
-            $data->name        = $job->name;
-            $data->job         = $job->id;
-            $data->queue       = $build->id;
-            $data->status      = $build->status;
-            $data->createdBy   = 'guest';
-            $data->createdDate = $createDate;
-            $data->updateDate  = date('Y-m-d H:i:s', strtotime($build->updated_at));
-
-            $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+            if(count($builds) < 100) break;
         }
 
         $now = helper::now();
