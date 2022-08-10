@@ -245,13 +245,16 @@ class build extends control
 
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select('t1.*, t2.stage')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_STORYSTAGE)->alias('t2')->on('t1.id = t2.story')
-            ->where('t1.id')->in($build->stories)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'story')->orderBy("t1.$orderBy")->fi()
+        $stories    = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('id')->in($build->stories)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'story')->orderBy($orderBy)->fi()
             ->page($storyPager)
             ->fetchAll('id');
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
+        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+
 
         /* Set menu. */
         if($this->app->tab == 'project')
