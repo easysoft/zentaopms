@@ -115,7 +115,7 @@ function computeEndDate(delta)
     {
         $('#end').val(longTime);
         $('#daysBox').addClass('hidden');
-        $('#days').val(0);
+        $('#days').val(0).trigger('mousedown');
         outOfDateTip();
         return false;
     }
