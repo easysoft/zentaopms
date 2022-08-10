@@ -420,6 +420,8 @@ class executionModel extends model
             /* Update the path. */
             if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
+            $this->updateProducts($executionID);
+
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
             array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
