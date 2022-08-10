@@ -237,8 +237,13 @@ class project extends control
         {
             $object          = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
-            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
-            $availableBudget = $object->parent == $selectedProgramID ? $budgetLeft + $object->budget : $budgetLeft;
+
+            if($selectedProgram->budget)
+            {
+                $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
+                $availableBudget = $object->parent == $selectedProgramID ? $budgetLeft + $object->budget : $budgetLeft;
+            }
+
             if($objectType == 'program')
             {
                 $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
@@ -248,10 +253,11 @@ class project extends control
         else
         {
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
-            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+            if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
-        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => $availableBudget, 'budgetUnit' => $selectedProgram->budgetUnit);
+        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'budgetUnit' => $selectedProgram->budgetUnit);
+        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
         if($objectType == 'program')
         {
             $data['minChildBegin'] = $minChildBegin;

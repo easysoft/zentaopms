@@ -339,6 +339,7 @@ function budgetOverrunTips()
     $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
+        if(data.availableBudget == 'undefined') return;
 
         var tip = "";
         if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</span>"
