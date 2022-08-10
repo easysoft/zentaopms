@@ -585,14 +585,14 @@ class searchModel extends model
     }
 
     /**
-     * Get counts of keyword search results.
+     * Get list sql params.
      *
      * @param  string    $keywords
      * @param  string    $type
-     * @access public
-     * @return void
+     * @access protected
+     * @return array
      */
-    public function getListCount($keywords, $type = 'all')
+    protected function getSqlParams($keywords, $type)
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
@@ -635,6 +635,21 @@ class searchModel extends model
                 if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
         }
+
+        return array($words, $againstCond, $likeCondition, $allowedObject);
+    }
+
+    /**
+     * Get counts of keyword search results.
+     *
+     * @param  string    $keywords
+     * @param  string    $type
+     * @access public
+     * @return array
+     */
+    public function getListCount($keywords, $type = 'all')
+    {
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 
         $typeCount = $this->dao->select("objectType, count(*) as objectCount")
             ->from(TABLE_SEARCHINDEX)
@@ -659,47 +674,7 @@ class searchModel extends model
      */
     public function getList($keywords, $type, $pager = null)
     {
-        $spliter = $this->app->loadClass('spliter');
-        $words   = explode(' ', self::unify($keywords, ' '));
-
-        $against     = '';
-        $againstCond = '';
-
-        foreach($words as $word)
-        {
-            $splitedWords = $spliter->utf8Split($word);
-            $trimedWord   = trim($splitedWords['words']);
-            $against     .= '"' . $trimedWord . '" ';
-            $againstCond .= '(+"' . $trimedWord . '") ';
-
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
-        }
-
-        $likeCondition = '';
-        /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
-
-        $words = str_replace('"', '', $against);
-        $words = str_pad($words, 5, '_');
-
-        $allowedObject = array();
-
-        if($type != 'all')
-        {
-            foreach($type as $module) $allowedObject[] = $module;
-        }
-        else
-        {
-            foreach($this->config->search->fields as $objectType => $fields)
-            {
-                $module = $objectType;
-                if($module == 'case') $module = 'testcase';
-                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-
-                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
-            }
-        }
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
         $stmt = $this->dao->select("*, {$scoreColumn} as score")
