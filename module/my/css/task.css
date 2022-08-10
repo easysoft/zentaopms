@@ -21,9 +21,9 @@ td.delayed {background: #e84e0f !important; color: white;}
 
 html[lang="en"] .c-date {width: 80px;}
 html[lang="en"] .c-user-short {width: 88px;}
-[lang^='de'] .c-user-short, [lang^='fr'] .c-user-short {width: 75px;}
-[lang^='de'] .c-date, [lang^='fr'] .c-date {width: 100px;}
-[lang^='de'] .c-user, [lang^='fr'] .c-user {width: 118px;}
-[lang^='de'] .c-hours.consumed {width: 70px;}
-[lang^='de'] .c-hours.estimate {width: 75px;}
-[lang^='de'] .c-project {width: 100px;}
+[lang^=en] #taskTable .assigned-title{width: 115px !important;}
+[lang^=de] #taskTable .assigned-title{width: 145px !important;}
+[lang^=de] #taskTable .c-date {width: 80px;}
+[lang^=de] #taskTable .c-user {width: 120px;}
+[lang^=de] #taskTable .c-hours {width: 88px;}
+[lang^=fr] #taskTable .assigned-title{width: 130px !important;}
