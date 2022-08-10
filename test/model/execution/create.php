@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -61,4 +62,4 @@ r($task->createObject($noCode, $projectIDList[1], $dayNum, $days))              
 r($task->createObject($equallyName, $projectIDList[1], $dayNum, $days))             && p('name:0')      && e('『执行名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');     // 测试一样的执行名称
 r($task->createObject($equallyCode, $projectIDList[1], $dayNum, $days))             && p('code:0')      && e('『执行代号』已经有『新增私有敏捷执行code』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试一样的执行代号
 
-system("./ztest init");
+$db->restoreDB();

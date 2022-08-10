@@ -35,10 +35,18 @@
 <?php js::set('holders', $lang->execution->placeholder);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('longTime', $lang->program->longTime);?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->program->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('dateExceedParent', $lang->program->dateExceedParent);?>
+<?php js::set('page', $this->app->getMethodName());?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -69,9 +77,9 @@
         <tr>
           <th><?php echo $lang->program->budget;?></th>
           <td>
-            <div class='input-group'>
-              <?php $placeholder = $parentProgram ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';?>
-              <?php echo html::input('budget', '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+            <div id='budgetBox' class='input-group'>
+              <?php $placeholder = $parentProgram ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft . '"' : '';?>
+              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips()' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
@@ -80,7 +88,7 @@
               <?php endif;?>
             </div>
           </td>
-          <td>
+          <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
@@ -90,10 +98,10 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
+            <div id='dateBox' class='input-group'>
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
-              <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>
+              <?php echo html::input('end', '', "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
           <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList, '', "onclick='computeEndDate(this.value)'");?></td>

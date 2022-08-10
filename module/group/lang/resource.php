@@ -265,7 +265,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->testreport          = 'testreport';
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
-    $lang->resource->project->createGuide         = 'createGuide';
     $lang->resource->project->updateOrder         = 'updateOrder';
     $lang->resource->project->team                = 'teamAction';
     $lang->resource->project->unlinkMember        = 'unlinkMember';
@@ -305,10 +304,9 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[160] = 'testreport';
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
-    $lang->project->methodOrder[175] = 'createGuide';
-    $lang->project->methodOrder[180] = 'updateOrder';
-    $lang->project->methodOrder[185] = 'team';
-    $lang->project->methodOrder[190] = 'unlinkMember';
+    $lang->project->methodOrder[175] = 'updateOrder';
+    $lang->project->methodOrder[180] = 'team';
+    $lang->project->methodOrder[185] = 'unlinkMember';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
@@ -514,6 +512,9 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'trackAB';
 $lang->resource->story->processStoryChange = 'processStoryChange';
+$lang->resource->story->linkStories        = 'linkStoriesAB';
+
+if($config->URAndSR) $lang->resource->story->linkRequirements = 'linkRequirementsAB';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -543,6 +544,9 @@ $lang->story->methodOrder[125] = 'batchChangeModule';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'track';
 $lang->story->methodOrder[140] = 'processStoryChange';
+$lang->story->methodOrder[145] = 'linkStories';
+
+if($config->URAndSR) $lang->story->methodOrder[150] = 'linkRequirements';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -625,6 +629,7 @@ $lang->resource->kanban->activateSpace      = 'activateSpace';
 $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
+$lang->resource->kanban->setting            = 'setting';
 $lang->resource->kanban->view               = 'view';
 $lang->resource->kanban->activate           = 'activate';
 $lang->resource->kanban->close              = 'close';
@@ -977,7 +982,7 @@ $lang->resource->testcase->batchEdit               = 'batchEdit';
 $lang->resource->testcase->delete                  = 'deleteAction';
 $lang->resource->testcase->batchDelete             = 'batchDelete';
 $lang->resource->testcase->export                  = 'exportAction';
-$lang->resource->testcase->exportTemplet           = 'exportTemplet';
+$lang->resource->testcase->exportTemplate          = 'exportTemplate';
 $lang->resource->testcase->import                  = 'importAction';
 $lang->resource->testcase->showImport              = 'showImport';
 $lang->resource->testcase->confirmChange           = 'confirmChange';
@@ -1114,7 +1119,7 @@ $lang->resource->caselib->delete           = 'deleteAction';
 $lang->resource->caselib->view             = 'view';
 $lang->resource->caselib->createCase       = 'createCase';
 $lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
-$lang->resource->caselib->exportTemplet    = 'exportTemplet';
+$lang->resource->caselib->exportTemplate   = 'exportTemplate';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
@@ -1126,7 +1131,7 @@ $lang->caselib->methodOrder[20] = 'delete';
 $lang->caselib->methodOrder[25] = 'view';
 $lang->caselib->methodOrder[30] = 'createCase';
 $lang->caselib->methodOrder[35] = 'batchCreateCase';
-$lang->caselib->methodOrder[40] = 'exportTemplet';
+$lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 

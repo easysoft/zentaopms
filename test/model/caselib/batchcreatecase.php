@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/caselib.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +37,4 @@ r($total) && p()                 && e('12');                        // 添加两
 r($cases) && p('411:title,type') && e('测试导入添加1,performance'); // 添加数据之后查询新加用例的名称,用例类型
 r($cases) && p('412:title,type') && e('测试导入添加2,unit');        // 添加数据之后查询新加用例的名称,用例类型
 
-system('./ztest init');
+$db->restoreDB();

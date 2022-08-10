@@ -9,7 +9,7 @@ cid=0
 pid=0
 
 使用正确的message >> success
-使用空的message   >> success
+使用空的message >> success
 
 */
 $mrModel = $tester->loadModel('mr');

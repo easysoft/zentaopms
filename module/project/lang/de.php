@@ -196,6 +196,8 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
+$lang->project->budgetOverrun          = "The project's budget has exceeded the remaining budget of the parent program:";
+$lang->project->disabledInputTip       = 'Please cancel %s first';
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';
@@ -241,12 +243,14 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
-$lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['undone']    = 'Unfinished';
-$lang->project->featureBar['wait']      = 'Waiting';
-$lang->project->featureBar['doing']     = 'Doing';
-$lang->project->featureBar['suspended'] = 'Suspended';
-$lang->project->featureBar['closed']    = 'Closed';
+$lang->project->featureBar['browse']['all']       = 'All';
+$lang->project->featureBar['browse']['undone']    = 'Unfinished';
+$lang->project->featureBar['browse']['wait']      = 'Waiting';
+$lang->project->featureBar['browse']['doing']     = 'Doing';
+$lang->project->featureBar['browse']['suspended'] = 'Suspended';
+$lang->project->featureBar['browse']['closed']    = 'Closed';
+
+$lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
@@ -316,9 +320,10 @@ $lang->project->confirmDelete        = "Do you want to delete [%s]?";
 $lang->project->cannotChangeToCat    = "It is not empty, so you cannot change it to a parent.";
 $lang->project->cannotCancelCat      = "It has child projects, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd       = "Parent begin&end date: %s ~ %s";
-$lang->project->parentBudget         = "The budget of the parent project: ";
-$lang->project->beginLetterParent    = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
-$lang->project->endGreaterParent     = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
+$lang->project->parentBudget         = "The budget of the parent program: ";
+$lang->project->beginLetterParent    = "The start date of the project was < the minimum start date of the parent program:";
+$lang->project->endGreaterParent     = "The finish date of the project was > the maximum finish date of the parent program:";
+$lang->project->dateExceedParent     = "The start and finish date of the project was > the start and finish date of the parent program:";
 $lang->project->beginGreateChild     = 'The start date of the project should be ≥ the start date of program: %s.';
 $lang->project->endLetterChild       = 'The finish date of the project should be ≤ the finish date of program: %s.';
 $lang->project->begigLetterExecution = 'The start date of project should be ≤ the minimum start date of the execution: %s.';

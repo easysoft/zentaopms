@@ -93,11 +93,12 @@ if(empty($type)) $type = 'product';
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
-                $icon  = zget($this->config->doc->iconList, $typeKey);
-                $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
-                $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                $html .= "</li>";
+                $icon   = zget($this->config->doc->iconList, $typeKey);
+                $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
+                $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+                $html  .= "<li>";
+                $html  .= html::a(helper::createLink('doc', $method, "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                $html  .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
             $html .= "</ul></div>";

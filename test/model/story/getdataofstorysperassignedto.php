@@ -9,7 +9,8 @@ title=测试 storyModel->getDataOfStorysPerAssignedTo();
 cid=1
 pid=1
 
-
+按照需求指派人分组，获取分组后的需求数量 >> 5
+按照需求指派人分组，获取各个指派人名下的需求数量，查看admin下的数据 >> admin,100
 
 */
 

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testsuite.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -22,4 +23,4 @@ $testsuite = new testsuiteTest();
 r($testsuite->deleteTest($suiteID[0])) && p() && e('1');  //测试suiteID值为1
 r($testsuite->deleteTest($suiteID[1])) && p() && e('1');  //测试suiteID值为1000
 r($testsuite->deleteTest($suiteID[2])) && p() && e('1');  //测试suiteID值为0
-system("./ztest init");
+$db->restoreDB();

@@ -9,6 +9,9 @@ title=测试 projectModel->getStoriesByProject();
 cid=1
 pid=1
 
+获取项目11关联的所有产品数量 >> 2
+获取项目11关联的产品ID为91的详情 >> 11
+
 */
 
 global $tester;

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -49,4 +50,4 @@ r($kanban->createExecutionColumnsTest($laneIDList[3], $typeList[2], $executionID
 r($kanban->createExecutionColumnsTest($laneIDList[4], $typeList[0], $executionIDList[4])) && p() && e('11'); // 创建泳道 100005 执行105 需求的看板列
 r($kanban->createExecutionColumnsTest($laneIDList[4], $typeList[1], $executionIDList[4])) && p() && e('7');  // 创建泳道 100005 执行105 任务的看板列
 r($kanban->createExecutionColumnsTest($laneIDList[4], $typeList[2], $executionIDList[4])) && p() && e('9');  // 创建泳道 100005 执行105 bug 的看板列
-system("./ztest init");
+$db->restoreDB();

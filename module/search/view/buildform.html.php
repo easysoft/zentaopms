@@ -17,7 +17,7 @@ include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 ?>
 <style>
-.btn-active-text .text {font-weight: 400; font-size: 14px;}
+#save-query .text {font-weight: 400; font-size: 14px;}
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}

@@ -10,8 +10,8 @@ title=taskModel->needUpdateBugStatus();
 cid=1
 pid=1
 
-计算不来源于bug的任务是否需要更新bug状态               >> 2
-计算来源于bug的任务是否需要更新bug状态 bug状态active   >> 1
+计算不来源于bug的任务是否需要更新bug状态 >> 2
+计算来源于bug的任务是否需要更新bug状态 bug状态active >> 1
 计算来源于bug的任务是否需要更新bug状态 bug状态resolved >> 2
 
 */

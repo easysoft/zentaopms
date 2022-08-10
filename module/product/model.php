@@ -272,13 +272,17 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
             ->orWhere('t1.QD')->eq($this->app->user->account)
             ->orWhere('t1.RD')->eq($this->app->user->account)
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
+            ->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -833,6 +837,7 @@ class productModel extends model
 
         $unlinkProducts = array();
         $linkProducts   = array();
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
@@ -842,7 +847,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();

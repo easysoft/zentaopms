@@ -10,6 +10,8 @@ title=测试 searchModel->markKeywords();
 cid=1
 pid=1
 
+测试查找带骤字的bug >> 12304 27493 <span class='text-danger'>骤</span> 12305 12304 32467 26524 12305 12304 26399 26395 12305
+
 */
 
 $search = new searchTest();

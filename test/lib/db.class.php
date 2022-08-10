@@ -81,6 +81,8 @@ class db
         $dbUsed = $this->getUsedDbList();
         $lastDB = 0;
         if(!empty($dbUsed)) $lastDB = max($dbUsed);
+
+        /* If all db is used. */
         if($lastDB == $this->config->test->dbNum)
         {
             shell_exec("> $this->dbLogFile");
@@ -139,12 +141,12 @@ class db
      */
     function initDB()
     {
-        for($i = 1; $i < 11; $i++)
+        for($i = 1; $i <= $this->config->test->dbNum; $i++)
         {
             $this->dao->query('DROP DATABASE ' . $this->config->test->dbPrefix . $i);
             $this->dao->query('CREATE DATABASE ' . $this->config->test->dbPrefix . $i);
 
-            shell_exec("mysql -u" . $this->config->db->user . ' -p' . $this->config->db->password . ' ' .  $this->config->test->dbPrefix . $i . '  <  ' . $this->sqlFile);
+            shell_exec("mysql -h{$this->config->db->host} -u {$this->config->db->user} -p{$this->config->db->password} -P {$this->config->db->port} {$this->config->test->dbPrefix}{$i} < {$this->sqlFile}");
         }
     }
 }

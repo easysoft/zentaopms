@@ -2,7 +2,9 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/holiday.class.php';
+$db->switchDB();
 include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -48,4 +50,4 @@ r($holiday->updateProjectRealDurationTest($newProjectID, $holidayIDList[1])) && 
 r($holiday->updateProjectRealDurationTest($newProjectID, $holidayIDList[2])) && p() && e('29'); //测试新插入holiday99时项目的realDuration字段
 r($holiday->updateProjectRealDurationTest($newProjectID, $holidayIDList[3])) && p() && e('29'); //测试新插入holiday100时项目的realDuration字段
 
-system("../../ztest init");
+$db->restoreDB();

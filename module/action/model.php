@@ -787,7 +787,7 @@ class actionModel extends model
      */
     public function getHistory($actionID)
     {
-        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->orderBy('id')->fetchGroup('action');
+        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
@@ -858,7 +858,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -1469,7 +1469,7 @@ class actionModel extends model
             }
 
             if($this->config->edition == 'max'
-               and strpos($this->config->action->assetType, $action->objectType) !== false
+               and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
                 if($action->objectType == 'doc')

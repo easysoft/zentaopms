@@ -49,7 +49,7 @@
           <tr>
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
-            <th class='c-project required' style="width:100%"><?php echo $lang->execution->projectName;?></th>
+            <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
             <?php if(!isset($config->setCode) or $config->setCode == 1):?>

@@ -23,7 +23,7 @@ function closeWindow()
   <div class="container">
     <div id="mainContent" class='main-content'>
       <div class='main-header'>
-        <h2><?php echo $lang->testcase->exportTemplet;?></h2>
+        <h2><?php echo $lang->testcase->exportTemplate;?></h2>
       </div>
       <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
         <table class='table table-form'>

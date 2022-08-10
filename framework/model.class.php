@@ -157,6 +157,20 @@ class model extends baseModel
         }
         if(empty($relations)) $relations = $this->dao->select('next, actions')->from(TABLE_WORKFLOWRELATION)->where('prev')->eq($moduleName)->fetchPairs();
 
+        $this->loadModel('flow');
+
+        $approvalProgressMenu = '';
+        if($type == 'view' && !empty($this->config->openedApproval) && commonModel::hasPriv('approval', 'progress'))
+        {
+            $flow = $this->loadModel('workflow', 'flow')->getByModule($moduleName);
+            if($flow->approval == 'enabled' && !empty($data->approval))
+            {
+                $extraClass = strpos(',testsuite,build,release,productplan,', ",{$moduleName},") !== false ? 'btn-link' : '';
+                $approvalProgressMenu .= "<div class='divider'></div>";
+                $approvalProgressMenu .= baseHTML::a(helper::createLink('approval', 'progress', "approvalID={$data->approval}", '', true), $this->lang->flow->approvalProgress, "class='btn {$extraClass} iframe'");
+            }
+        }
+
         $menu = '';
         if($show)
         {
@@ -164,8 +178,10 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false || $action->show != $show) continue;
 
-                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                $menu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
+
+            if($approvalProgressMenu) $menu .= $approvalProgressMenu;
         }
         else
         {
@@ -174,9 +190,11 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false) continue;
 
-                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
-                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->flow->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
+
+            if($approvalProgressMenu) $menu .= $approvalProgressMenu;
 
             if($type == 'browse' && $dropdownMenu)
             {

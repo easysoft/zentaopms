@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +27,4 @@ r($execution->startTest($executionIDList[0]))              && p('1:field,old,new
 r($execution->startTest($executionIDList[1]))              && p('1:field,old,new') && e('status,wait,doing');              // 瀑布阶段开始
 r($execution->startTest($executionIDList[2]))              && p('1:field,old,new') && e('status,wait,doing');              // 看板执行开始
 r($execution->startTest($executionIDList[0],$noRealBegan)) && p()                  && e('此任务已被启动，不能重复启动！'); // 重复执行开始
-system("./ztest init");
+$db->restoreDB();

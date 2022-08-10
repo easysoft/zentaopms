@@ -220,6 +220,50 @@ class project extends control
     }
 
     /**
+     * Ajax: Get selected object's information.
+     *
+     * @param  str    $objectType
+     * @param  int    $objectID
+     * @param  int    $selectedProgramID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetObjectInfo($objectType, $objectID, $selectedProgramID)
+    {
+        if($selectedProgramID)
+        {
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+        }
+
+        if(!empty($objectID))
+        {
+            $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
+
+            if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + $object->budget : $availableBudget;
+
+            if($objectType == 'program')
+            {
+                $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
+                $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
+            }
+        }
+
+        $data = array();
+        if(isset($selectedProgram))
+        {
+            $data['selectedProgramBegin'] = $selectedProgram->begin;
+            $data['selectedProgramEnd']   = $selectedProgram->end;
+            $data['budgetUnit']           = $selectedProgram->budgetUnit;
+        }
+        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
+        if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
+        if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;
+
+        echo json_encode($data);
+    }
+
+    /**
      * Project index view.
      *
      * @param  int    $projectID
@@ -537,7 +581,7 @@ class project extends control
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
-        $this->display();
+        $this->display('project', 'create');
     }
 
     /**
@@ -964,6 +1008,7 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
+        $this->session->set('executionList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
@@ -1092,6 +1137,10 @@ class project extends control
             }
         }
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {
@@ -1144,7 +1193,7 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->project->getPairsByProgram();

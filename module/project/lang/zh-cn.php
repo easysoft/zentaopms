@@ -196,6 +196,8 @@ $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->exe
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
 $lang->project->productTip             = '点击新建产品后，项目将不会关联已选中的产品。';
 $lang->project->noDevStage             = '该项目下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。';
+$lang->project->budgetOverrun          = '项目的预算已超出父项目集的剩余预算：';
+$lang->project->disabledInputTip       = '请先取消%s';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
@@ -241,12 +243,14 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
 
-$lang->project->featureBar['all']       = '所有';
-$lang->project->featureBar['undone']    = '未完成';
-$lang->project->featureBar['wait']      = '未开始';
-$lang->project->featureBar['doing']     = '进行中';
-$lang->project->featureBar['suspended'] = '已挂起';
-$lang->project->featureBar['closed']    = '已关闭';
+$lang->project->featureBar['browse']['all']       = '所有';
+$lang->project->featureBar['browse']['undone']    = '未完成';
+$lang->project->featureBar['browse']['wait']      = '未开始';
+$lang->project->featureBar['browse']['doing']     = '进行中';
+$lang->project->featureBar['browse']['suspended'] = '已挂起';
+$lang->project->featureBar['browse']['closed']    = '已关闭';
+
+$lang->project->featureBar['build']['all'] = '所有版本';
 
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
@@ -316,9 +320,10 @@ $lang->project->confirmDelete        = '您确定删除项目“%s”吗？';
 $lang->project->cannotChangeToCat    = "该项目已经有实际的内容，无法修改为父项目";
 $lang->project->cannotCancelCat      = "该项目下已经有子项目，无法取消父项目标记";
 $lang->project->parentBeginEnd       = "父项目起止时间：%s ~ %s";
-$lang->project->parentBudget         = "父项目预算：";
-$lang->project->beginLetterParent    = "父项目的开始日期：%s，开始日期不能小于父项目的开始日期";
-$lang->project->endGreaterParent     = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
+$lang->project->parentBudget         = "父项目集预算：";
+$lang->project->beginLetterParent    = "项目的开始日期已小于父项目集的最小开始日期：";
+$lang->project->endGreaterParent     = "项目的完成日期已大于父项目集的最大完成日期：";
+$lang->project->dateExceedParent     = "项目的起止日期已超出父项目集的起止日期：";
 $lang->project->beginGreateChild     = '项目的开始日期应大于等于项目集的最小开始日期：%s';
 $lang->project->endLetterChild       = '项目的完成日期应小于等于项目集的最大完成日期：%s';
 $lang->project->begigLetterExecution = '项目的开始日期应小于等于执行的最小开始日期：%s';

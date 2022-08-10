@@ -56,6 +56,7 @@ $lang->file->uploadImagesExplain = '注：请上传"jpg, jpeg, gif, png"格式�
 $lang->file->saveAndNext         = '保存并跳转下一页';
 $lang->file->importPager         = '共有<strong>%s</strong>条记录，当前第<strong>%s</strong>页，共有<strong>%s</strong>页';
 $lang->file->importSummary       = "本次导入共有<strong id='allCount'>%s</strong>条记录，每页导入%s条，需要导入<strong id='times'>%s</strong>次";
+$lang->file->accessDenied        = '您无权下载该附件！';
 
 $lang->file->errorNotExists   = "<span class='text-red'>文件夹 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令: <span class='code'>sudo chmod -R 777 %s</span></span>";

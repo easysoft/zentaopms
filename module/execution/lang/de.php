@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -153,6 +154,7 @@ $lang->execution->putoff   = 'Zurückstellen';
 $lang->execution->suspend  = 'Aussetzen';
 $lang->execution->close    = 'Schließen';
 $lang->execution->export   = 'Export';
+$lang->execution->next     = "Next";
 
 $lang->execution->endList[7]   = '1 Woche';
 $lang->execution->endList[14]  = '2 Wochen';
@@ -172,6 +174,7 @@ $lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team->account    = 'Konto';
 $lang->team->role       = 'Rolle';
+$lang->team->roleAB     = 'Meine Rolle';
 $lang->team->join       = 'Beigetreten';
 $lang->team->hours      = 'Stunde/Tag';
 $lang->team->days       = 'Arbeitstage';
@@ -412,6 +415,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is still 
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = 'Seleted %s items';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -512,6 +516,11 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
+
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = 'Laufende Projekte';
 
@@ -539,11 +548,37 @@ $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
 if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
-$lang->execution->gantt->color[0] = 'bbb';
-$lang->execution->gantt->color[1] = 'ff5d5d';
-$lang->execution->gantt->color[2] = 'ff9800';
-$lang->execution->gantt->color[3] = '16a8f8';
-$lang->execution->gantt->color[4] = '00da88';
+$lang->execution->gantt->progressColor[0] = '#B7B7B7';
+$lang->execution->gantt->progressColor[1] = '#FF8287';
+$lang->execution->gantt->progressColor[2] = '#FFC73A';
+$lang->execution->gantt->progressColor[3] = '#6BD5F5';
+$lang->execution->gantt->progressColor[4] = '#9DE88A';
+$lang->execution->gantt->progressColor[5] = '#9BA8FF';
+
+$lang->execution->gantt->color[0] = '#E7E7E7';
+$lang->execution->gantt->color[1] = '#FFDADB';
+$lang->execution->gantt->color[2] = '#FCECC1';
+$lang->execution->gantt->color[3] = '#D3F3FD';
+$lang->execution->gantt->color[4] = '#DFF5D9';
+$lang->execution->gantt->color[5] = '#EBDCF9';
+
+$lang->execution->gantt->textColor[0] = '#2D2D2D';
+$lang->execution->gantt->textColor[1] = '#8D0308';
+$lang->execution->gantt->textColor[2] = '#9D4200';
+$lang->execution->gantt->textColor[3] = '#006D8E';
+$lang->execution->gantt->textColor[4] = '#1A8100';
+$lang->execution->gantt->textColor[5] = '#660ABC';
+
+$lang->execution->gantt->stage = new stdclass();
+$lang->execution->gantt->stage->progressColor = '#70B8FE';
+$lang->execution->gantt->stage->color         = '#D2E7FC';
+$lang->execution->gantt->stage->textColor     = '#0050A7';
+
+$lang->execution->gantt->defaultColor         = '#EBDCF9';
+$lang->execution->gantt->defaultProgressColor = '#9BA8FF';
+$lang->execution->gantt->defaultTextColor     = '#660ABC';
+
+$lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = 'Export as Image';
 $lang->execution->gantt->exportPDF  = 'Export as PDF';

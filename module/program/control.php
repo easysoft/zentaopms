@@ -705,20 +705,6 @@ class program extends control
     }
 
     /**
-     * Ajax get budget left.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetBudgetLeft($programID)
-    {
-        $program    = $this->program->getByID($programID);
-        $budgetLeft = $this->program->getBudgetLeft($program);
-        echo number_format($budgetLeft, 2);
-    }
-
-    /**
      * Update program order.
      *
      * @access public

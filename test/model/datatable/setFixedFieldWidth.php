@@ -10,9 +10,9 @@ title=测试 datatableModel::setFixedFieldWidth();
 cid=1
 pid=1
 
-获取产品模块browse方法设置宽度     >> 550
-获取项目模块browse方法设置宽度     >> 180
-获取执行模块task方法设置宽度       >> 550
+获取产品模块browse方法设置宽度 >> 550
+获取项目模块browse方法设置宽度 >> 180
+获取执行模块browse方法设置宽度 >> 550
 获取测试用例模块browse方法设置宽度 >> 150
 
 */

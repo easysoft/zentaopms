@@ -1037,8 +1037,7 @@ class testcase extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($tab == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
-                ->beginIF($tab != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
+                ->andWhere('t1.id')->in($caseIDList)
                 ->fetchAll('id');
             $caseIDList = array_keys($cases);
 
@@ -1731,7 +1730,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($productID)
+    public function exportTemplate($productID)
     {
         if($_POST)
         {

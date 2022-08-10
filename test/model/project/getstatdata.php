@@ -9,9 +9,9 @@ title=测试 projectModel->getStatData();
 cid=1
 pid=1
 
-统计id=13的项目bug数量 >> 3
+统计id=13的项目bug数量 >> 4
 任务数量 >> 13
-暂停数量 >> 2
+未开始数量 >> 2
 进行的数量 >> 2
 完成的数量 >> 0
 

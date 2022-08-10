@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/custom.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -146,4 +147,4 @@ r($custom->saveRequiredFieldsTest($moduleName[5], $requiredFields['testcaseField
 r($custom->saveRequiredFieldsTest($moduleName[5], $requiredFields['testcaseFields6'], $fieldsType[0]))  && p('value') && e('stage,story,title,type');           //测试moduleName为testcase，requiredFields中的create,edit各存在多个值
 r($custom->saveRequiredFieldsTest($moduleName[3], $requiredFields['taskFields6'], $fieldsType[2]))      && p('value') && e('comment,realStarted,finishedDate,currentConsumed');//测试moduleName为task，requiredFields中的finish存在一个值
 
-system('./ztest init');
+$db->restoreDB();

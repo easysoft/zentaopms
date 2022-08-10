@@ -505,7 +505,6 @@ function computePasswordStrength(password)
     var strength = 0;
     var length   = password.length;
 
-    var uniqueChars = '';
     var complexity  = new Array();
     for(i = 0; i < length; i++)
     {
@@ -513,7 +512,7 @@ function computePasswordStrength(password)
         var asc = letter.charCodeAt();
         if(asc >= 48 && asc <= 57)
         {
-            complexity[2] = 2;
+            complexity[0] = 1;
         }
         else if((asc >= 65 && asc <= 90))
         {
@@ -521,28 +520,19 @@ function computePasswordStrength(password)
         }
         else if(asc >= 97 && asc <= 122)
         {
-            complexity[0] = 1;
+            complexity[2] = 4;
         }
         else
         {
-            complexity[3] = 3;
+            complexity[3] = 8;
         }
-        if(uniqueChars.indexOf(letter) == -1) uniqueChars += letter;
     }
 
-    if(uniqueChars.length > 4) strength += uniqueChars.length - 4;
     var sumComplexity = 0;
-    var complexitySize = 0;
-    for(i in complexity)
-    {
-        complexitySize += 1;
-        sumComplexity += complexity[i];
-    }
-    strength += sumComplexity + (2 * (complexitySize - 1));
-    if(length < 6 && strength >= 10) strength = 9;
+    for(i in complexity) sumComplexity += complexity[i];
 
-    strength = strength > 29 ? 29 : strength;
-    strength = Math.floor(strength / 10);
+    if((sumComplexity == 7 || sumComplexity == 15) && password.length >= 6) strength = 1;
+    if(sumComplexity == 15 && password.length >= 10) strength = 2;
 
     return strength;
 }

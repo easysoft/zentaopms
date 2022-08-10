@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +27,4 @@ r($task->activateTest($taskIDList[1])) && p('0:field,old,new') && e('status,done
 r($task->activateTest($taskIDList[2])) && p('0:field,old,new') && e('status,pause,doing');  //pause状态任务激活
 r($task->activateTest($taskIDList[3])) && p('0:field,old,new') && e('status,cancel,doing'); //cancel状态任务激活
 r($task->activateTest($taskIDList[4])) && p('0:field,old,new') && e('status,closed,doing'); //closed状态任务激活
-system("./ztest init");
+$db->restoreDB();

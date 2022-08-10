@@ -18,14 +18,14 @@
 .kanbans .panel {margin: 0 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 160px; margin-bottom: 5px;}
 .kanbans .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 .kanbans .panel-heading {padding: 4px 2px 10px 16px;}
-.kanbans .kanban-name {overflow: hidden; white-space:nowrap; width: 78%; float: left; padding-top: 8px;}
+.kanbans .kanban-name {overflow: hidden; white-space:nowrap; width: 90%; float: left; padding-top: 8px;}
 .kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-1px !important;}
 .kanbans .kanban-actions {float: right; visibility: hidden;}
 .kanbans .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
 .kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
 .kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-6px;}
 .kanbans .panel-body {padding: 0 16px 16px;}
-.kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; display: -webkit-box; float:left;}
+.kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; float:left;}
 .kanbans .kanban-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
 .kanbans .kanban-members {float: left; height: 24px; line-height: 24px;}
 .kanbans .kanban-members > div {display: inline-block; height: 24px;}

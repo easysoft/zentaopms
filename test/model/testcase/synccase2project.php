@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +28,4 @@ r($testcase->syncCase2ProjectTest($caseIDList[1])) && p() && e('2'); // 测试�
 r($testcase->syncCase2ProjectTest($caseIDList[2])) && p() && e('2'); // 测试同步用例 3 到关联项目中
 r($testcase->syncCase2ProjectTest($caseIDList[3])) && p() && e('2'); // 测试同步用例 4 到关联项目中
 r($testcase->syncCase2ProjectTest($caseIDList[4])) && p() && e('2'); // 测试同步用例 5 到关联项目中
-system("./ztest init");
+$db->restoreDB();

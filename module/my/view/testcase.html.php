@@ -43,14 +43,12 @@
       <?php
       $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
-      $canBatchRun    = (common::hasPriv('testtask', 'batchRun')  and $type == 'assigntome');
-      $canBatchEdit   = (common::hasPriv('testcase', 'batchEdit') and $type == 'assigntome');
-      $canBatchAction = ($canBatchRun or $canBatchEdit);
+      $canBatchEdit = (common::hasPriv('testcase', 'batchEdit') and $type == 'assigntome');
       ?>
       <thead>
         <tr>
-        <th class="<?php echo $canBatchAction ? 'w-100px' : 'w-50px';?>">
-            <?php if($canBatchAction):?>
+        <th class="<?php echo $canBatchEdit ? 'w-100px' : 'w-50px';?>">
+            <?php if($canBatchEdit):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
@@ -75,12 +73,12 @@
         <?php foreach($cases as $case):?>
         <?php
         $caseID       = $type == 'assigntome' ? $case->case : $case->id;
-        $runID        = $type == 'assigntome' ? $case->id   : 0;
+        $runID        = $type == 'assigntome' ? $case->run  : 0;
         $canBeChanged = common::canBeChanged('testcase', $case);
         ?>
         <tr>
           <td class="c-id">
-            <?php if($canBatchAction):?>
+            <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
               <input type='checkbox' name='caseIDList[]' value='<?php echo $case->id;?>' <?php if(!$canBeChanged) echo 'disabled';?> />
               <label></label>
@@ -105,11 +103,12 @@
             <?php
             if($canBeChanged)
             {
-                $disabled =  $case->status == 'wait' ? 'disabled' : '';
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', 'iframe', 'true', "data-app='qa' data-toggle=''");
+                $disabled = (isset($case->lastRunResult) and $case->lastRunResult != 'fail') ? 'disabled' : '';
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', "iframe $disabled", 'true', "data-app='qa' data-toggle=''");
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$caseID&version=$case->version", '', 'list', 'play', '', "iframe $disabled", true, "data-width='95%'", '', $case->project);
-                common::printIcon('testtask', 'results', "runID=0&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
+                $disabled = $case->status == 'wait' ? 'disabled' : '';
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', "iframe $disabled", true, "data-width='95%'", '', $case->project);
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', 'iframe', true, "data-width='95%'", '', $case->project);
             }
             ?>
@@ -119,7 +118,7 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if($canBatchAction):?>
+      <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <?php endif;?>
       <div class="table-actions btn-toolbar">
@@ -129,12 +128,6 @@
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&tab=my");
             $misc       = "data-form-action='$actionLink'";
             echo html::commonButton($lang->edit, $misc);
-        }
-        if($canBatchRun)
-        {
-            $actionLink = $this->createLink('testtask', 'batchRun', 'productID=0');
-            $misc       = "data-form-action='$actionLink'";
-            echo html::commonButton($lang->testtask->runCase, $misc);
         }
         ?>
       </div>

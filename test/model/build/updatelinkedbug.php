@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/build.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +37,4 @@ r($executionLink)    && p('311:resolvedBuild') && e('1');      //执行版本修
 r($noResolvedByLink) && p('302:resolvedBy')    && e('');       //不设置解决人
 r($noBugs)           && p()                    && e('0');      //不设置bugID
 
-system("./ztest init");
+$db->restoreDB();

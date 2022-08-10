@@ -31,12 +31,17 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php
-    $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    $module    = $type != 'bysearch' ?  "&param=$param" : '';
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type=unresolved$module"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
-    ?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->execution->featureBar['bug'] as $featureType => $label):?>
+    <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
+    <?php $label  = "<span class='text'>$label</span>";?>
+    <?php if($type == $featureType):?>
+    <?php $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php $label .= $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';?>
+    <?php endif;?>
+    <?php $module = $type != 'bysearch' ? "&param=$param" : '';?>
+    <?php echo html::a(inlink('bug', "executionID=$execution->id&productID={$productID}&branch={$branchID}&orderBy=status,id_desc&build=$buildID&type={$featureType}$module"), $label, '', "class='btn btn-link $active' id='{$featureType}Tab'");?>
+    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">

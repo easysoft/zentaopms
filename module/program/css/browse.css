@@ -14,5 +14,7 @@ tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
 
 .has-suffix > a {max-width: calc(100% - 100px); padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
 
-div.checkbox-primary + span.table-nest-icon {margin-left:0px !important;}
+div.checkbox-primary + span.table-nest-icon {margin-left: 0px !important;}
 #checkAll + label.hover:after {border-width: 0px;}
+.c-budget {padding-right: 16px !important; width: 100px !important;}
+.c-status {width: 65px !important;}

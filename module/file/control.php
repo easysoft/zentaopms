@@ -127,6 +127,12 @@ class file extends control
             return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
 
+        if(!$this->file->checkPriv($file))
+        {
+            echo(js::alert($this->lang->file->accessDenied));
+            return print(js::locate(helper::createLink('my', 'index')));
+        }
+
         /* Judge the mode, down or open. */
         $mode      = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
@@ -341,12 +347,10 @@ class file extends control
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
+            $newFile = $this->file->getByID($fileID);
 
-            return print(js::reload('parent.parent'));
+            echo json_encode($newFile);
         }
-
-        $this->view->file = $this->file->getById($fileID);
-        $this->display();
     }
 
     /**
