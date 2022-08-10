@@ -185,7 +185,7 @@ $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->testcase->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->testcase->datatable->fieldList['lastEditedBy']['width']    = '92';
 $config->testcase->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
