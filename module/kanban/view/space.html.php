@@ -50,7 +50,7 @@
           <?php $spaceDescTitle = empty($space->desc) ? $lang->kanban->emptyDesc : str_replace("\n", '', strip_tags($space->desc));?>
           <?php $pattern        = '/<br[^>]*>|<img[^>]*>/';?>
           <?php $spaceDesc      = empty($space->desc) ? $lang->kanban->emptyDesc : preg_replace($pattern, '', $space->desc);?>
-          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo $spaceDescTitle;?>'><?php echo $spaceDesc;?></p>
+          <p><div><span class="text-limit hidden" data-limit-size="20"><?php echo $spaceDesc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>

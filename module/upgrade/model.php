@@ -680,8 +680,9 @@ class upgradeModel extends model
             case 'biz7.0':
                 $this->processFlowPosition();
                 break;
-            case 'biz7.3':
+            case 'biz7.4':
                 $this->updateApproval();
+                $this->addDefaultRuleToWorkflow();
                 break;
         }
     }
@@ -6896,6 +6897,30 @@ class upgradeModel extends model
             ->andWhere('t2.type')->eq('requirement')
             ->fetchPairs('id');
         $this->dao->update(TABLE_SEARCHINDEX)->set('objectType')->eq('requirement')->where('id')->in($requirementIds)->exec();
+    }
+
+    /**
+     * Add required rule to the built-in workflow status field.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultRuleToWorkflow()
+    {
+        $notemptyRule = $this->dao->select('id')->from(TABLE_WORKFLOWRULE)->where('rule')->eq('notempty')->fetch();
+        if(empty($notemptyRule)) return false;
+
+        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('buildin')->eq(1)->fetchAll();
+
+        foreach($fields as $field)
+        {
+            if(strpos(',' . $field->rules . ',', ',' . $notemptyRule->id . ',') !== false) continue;
+
+            $rules = $notemptyRule->id;
+            if(!empty($field->rules)) $rules = $field->rules . ',' . $rules;
+
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('rules')->eq($rules)->where('id')->eq($field->id)->exec();
+        }
 
         return !dao::isError();
     }

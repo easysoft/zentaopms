@@ -80,6 +80,16 @@ $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = 'Show Date';
 $lang->programplan->stageCustom->task = 'Show Task';
 
+$lang->programplan->ganttCustom['PM']           ='Manager';
+$lang->programplan->ganttCustom['deadline']     ='Deadline';
+$lang->programplan->ganttCustom['status']       ='Status';
+$lang->programplan->ganttCustom['realBegan']    ='Actual Began';
+$lang->programplan->ganttCustom['realEnd']      ='Actual End';
+$lang->programplan->ganttCustom['progress']     ='Workload Ratio';
+$lang->programplan->ganttCustom['taskProgress'] ='Task Progress';
+$lang->programplan->ganttCustom['estimate']     ='Estimate';
+$lang->programplan->ganttCustom['consumed']     ='Consumed';
+
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
