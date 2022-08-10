@@ -4464,7 +4464,8 @@ class storyModel extends model
             }
             elseif($id == 'title')
             {
-                $title = $story->title;
+                $title  = $story->title;
+                $class .= ' text-ellipsis';
                 if(!empty($story->children)) $class .= ' has-child';
             }
             elseif($id == 'plan')
