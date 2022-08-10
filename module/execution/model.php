@@ -4370,25 +4370,33 @@ class executionModel extends model
             echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
         echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
-        echo '<td>' . zget($users, $execution->PM) . '</td>';
-        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
-        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
-        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td class="c-date">' . $execution->begin . '</td>';
-        if(!helper::isZeroDate($execution->end))
+        if(empty($execution->children))
         {
-            if($execution->status != 'closed')
+            echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+            if(!helper::isZeroDate($execution->end))
             {
-                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed c-date" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td class="c-date">' . $execution->end . '</td>';
-            }
-            else
-            {
-                echo '<td class="c-date">' . $execution->end . '</td>';
+                if($execution->status != 'closed')
+                {
+                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+                }
             }
         }
         else
         {
-            echo '<td></td>';
+            echo $execution->name;
+            if(!helper::isZeroDate($execution->end))
+            {
+                if($execution->status != 'closed')
+                {
+                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+                }
+            }
         }
+        echo '<td>' . zget($users, $execution->PM) . '</td>';
+        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
+        echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
