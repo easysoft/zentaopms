@@ -10,6 +10,11 @@ title=测试 mailModel->getConfigByDetectingSMTP();
 cid=1
 pid=1
 
+根据域名获取smtp >> smtp.qq.com
+根据域名获取secure >> ssl
+当端口号不为465时获取secure >> 0
+当域名不存在时 >> 0
+
 */
 
 $mail = new mailTest();

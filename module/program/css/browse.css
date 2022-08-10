@@ -16,3 +16,4 @@ tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
 
 div.checkbox-primary + span.table-nest-icon {margin-left:0px !important;}
 #checkAll + label.hover:after {border-width: 0px;}
+.c-budget {padding-right:16px !important;}

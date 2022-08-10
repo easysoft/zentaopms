@@ -89,11 +89,11 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
+          <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>' title='<?php echo $story->title;?>'>
             <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
-          <td class='c-product'><?php echo $story->productTitle;?></td>
+          <td class='c-product' title='<?php echo $story->productTitle;?>'><?php echo $story->productTitle;?></td>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>

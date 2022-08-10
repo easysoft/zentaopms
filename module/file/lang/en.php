@@ -56,6 +56,7 @@ $lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, or .png imag
 $lang->file->saveAndNext         = 'Save and Next';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
+$lang->file->accessDenied        = 'Access denied to this file!';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' is not writable. Please change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";

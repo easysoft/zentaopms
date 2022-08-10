@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -56,4 +57,4 @@ r($execution->updateObject($executionIDList[1], $noName))         && p('name:0')
 r($execution->updateObject($executionIDList[1], $noCode))         && p('code:0')          && e('『迭代代号』不能为空。');     // 测试修改code为空
 r($execution->updateObject($executionIDList[1], $noChange))       && p()                  && e('没有数据更新');               // 测试无修改
 
-system("./ztest init");
+$db->restoreDB();

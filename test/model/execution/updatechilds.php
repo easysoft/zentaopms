@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +38,4 @@ r($execution->updateChildsTest($executionIDList[0], $count[1], $sprintChilds)) &
 r($execution->updateChildsTest($executionIDList[1], $count[1], $stageChilds))  && p()            && e('2');          // 修改敏捷执行的父执行
 r($execution->updateChildsTest($executionIDList[2], $count[1], $kanbanChilds)) && p()            && e('2');          // 修改敏捷执行的父执行
 
-system("./ztest init");
+$db->restoreDB();

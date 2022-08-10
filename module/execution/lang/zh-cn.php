@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
+$lang->execution->allProject          = '全部项目';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -153,6 +154,7 @@ $lang->execution->putoff   = "延期";
 $lang->execution->suspend  = "挂起";
 $lang->execution->close    = "关闭";
 $lang->execution->export   = "导出";
+$lang->execution->next     = "下一步";
 
 $lang->execution->endList[7]   = '一星期';
 $lang->execution->endList[14]  = '两星期';
@@ -172,6 +174,7 @@ $lang->execution->cfdTypeList['bug']   = "按Bug查看";
 
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
+$lang->team->roleAB     = '我的角色';
 $lang->team->join       = '加盟日';
 $lang->team->hours      = '可用工时/天';
 $lang->team->days       = '可用工日';
@@ -412,6 +415,7 @@ $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草�
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 $lang->execution->week                        = '周';
+$lang->execution->checkedExecutions           = '已选择%s项';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -512,6 +516,11 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['bug']['all']        = '所有';
+$lang->execution->featureBar['bug']['unresolved'] = '未解决';
+
+$lang->execution->featureBar['build']['all'] = '所有版本';
+
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';
 
@@ -539,11 +548,37 @@ $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
 if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
-$lang->execution->gantt->color[0] = 'bbb';
-$lang->execution->gantt->color[1] = 'ff5d5d';
-$lang->execution->gantt->color[2] = 'ff9800';
-$lang->execution->gantt->color[3] = '16a8f8';
-$lang->execution->gantt->color[4] = '00da88';
+$lang->execution->gantt->progressColor[0] = '#B7B7B7';
+$lang->execution->gantt->progressColor[1] = '#FF8287';
+$lang->execution->gantt->progressColor[2] = '#FFC73A';
+$lang->execution->gantt->progressColor[3] = '#6BD5F5';
+$lang->execution->gantt->progressColor[4] = '#9DE88A';
+$lang->execution->gantt->progressColor[5] = '#9BA8FF';
+
+$lang->execution->gantt->color[0] = '#E7E7E7';
+$lang->execution->gantt->color[1] = '#FFDADB';
+$lang->execution->gantt->color[2] = '#FCECC1';
+$lang->execution->gantt->color[3] = '#D3F3FD';
+$lang->execution->gantt->color[4] = '#DFF5D9';
+$lang->execution->gantt->color[5] = '#EBDCF9';
+
+$lang->execution->gantt->textColor[0] = '#2D2D2D';
+$lang->execution->gantt->textColor[1] = '#8D0308';
+$lang->execution->gantt->textColor[2] = '#9D4200';
+$lang->execution->gantt->textColor[3] = '#006D8E';
+$lang->execution->gantt->textColor[4] = '#1A8100';
+$lang->execution->gantt->textColor[5] = '#660ABC';
+
+$lang->execution->gantt->stage = new stdclass();
+$lang->execution->gantt->stage->progressColor = '#70B8FE';
+$lang->execution->gantt->stage->color         = '#D2E7FC';
+$lang->execution->gantt->stage->textColor     = '#0050A7';
+
+$lang->execution->gantt->defaultColor         = '#EBDCF9';
+$lang->execution->gantt->defaultProgressColor = '#9BA8FF';
+$lang->execution->gantt->defaultTextColor     = '#660ABC';
+
+$lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = '导出图片';
 $lang->execution->gantt->exportPDF  = '导出 PDF';

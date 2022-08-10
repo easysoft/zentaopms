@@ -99,6 +99,7 @@ class testsuiteModel extends model
             ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'all') === false)->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")->fi()
+            ->beginIF(strpos($param, 'review') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

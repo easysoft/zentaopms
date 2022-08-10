@@ -41,25 +41,29 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       </ul>
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
-$lang->upgrade->selectVersion = 'Version';
-$lang->upgrade->continue      = 'Continuer';
-$lang->upgrade->noteVersion   = "Sélectionnez une version compatible où vous pourriez perdre des données.";
-$lang->upgrade->fromVersion   = 'De';
-$lang->upgrade->toVersion     = 'à';
-$lang->upgrade->confirm       = 'Confirmez SQL';
-$lang->upgrade->sureExecute   = 'Executez';
-$lang->upgrade->upgradingTips = 'La mise à jour est en cours, veuillez être patient. Ne pas actualiser la page ou éteindre votre ordinateur!';
-$lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la version. Elle a été désactivée :';
-$lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
-$lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
-$lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
-$lang->upgrade->mergeProgram  = 'Data Merge';
-$lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
-$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
-$lang->upgrade->to15Desc      = <<<EOD
+$lang->upgrade->selectVersion  = 'Version';
+$lang->upgrade->continue       = 'Continuer';
+$lang->upgrade->noteVersion    = "Sélectionnez une version compatible où vous pourriez perdre des données.";
+$lang->upgrade->fromVersion    = 'De';
+$lang->upgrade->toVersion      = 'à';
+$lang->upgrade->confirm        = 'Confirmez SQL';
+$lang->upgrade->sureExecute    = 'Executez';
+$lang->upgrade->upgradingTips  = 'La mise à jour est en cours, veuillez être patient. Ne pas actualiser la page ou éteindre votre ordinateur!';
+$lang->upgrade->forbiddenExt   = 'Cette extension est incompatible avec la version. Elle a été désactivée :';
+$lang->upgrade->updateFile     = "Le fichier information a besoin d'une mise à jour.";
+$lang->upgrade->changeEngine   = 'The database engine needs to be modified.';
+$lang->upgrade->changingTable  = 'Replacing data table %s engine...';
+$lang->upgrade->finishedTable  = 'The data table %s engine has been changed to InnoDB.';
+$lang->upgrade->finishedChange = 'The replacement of the database engine is completed.';
+$lang->upgrade->noticeSQL      = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
+$lang->upgrade->afterDeleted   = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
+$lang->upgrade->mergeProgram   = 'Data Merge';
+$lang->upgrade->mergeTips      = 'Data Migration Tips';
+$lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide   = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide    = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide     = 'ZenTao ultimate version upgrade';
+$lang->upgrade->to15Desc       = <<<EOD
 <p>ZenTao version 15.0 has major upgrade of features, including:</p>
 <p><strong>1. Add the concept of Program</strong></p>
 <p>A program is a collection of interrelated and coordinated projects. It is at the highest level and belongs to the concept of a strategic level. It has multi-level project management, helping managers to form strategic directions and allocate resources at a macro level.</p>
@@ -156,3 +160,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 EOT;
 
 include dirname(__FILE__) . '/version.php';
+
+$lang->upgrade->recoveryActions = new stdclass();
+$lang->upgrade->recoveryActions->cancel = 'Cancel';
+$lang->upgrade->recoveryActions->review = 'Review';

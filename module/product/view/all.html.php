@@ -13,6 +13,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
@@ -131,7 +132,7 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName'])):?>
+          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products'])):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)

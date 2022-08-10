@@ -21,7 +21,7 @@
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form method='post' class='form-ajax'>
     <table align='center' class='table table-form w-320px'>
       <tr>
         <th class='rowhead thWidth'><?php echo $lang->user->account;?></th>
@@ -35,7 +35,7 @@
         <th><?php echo $lang->user->newPassword;?></th>
         <td>
           <span class='input-group'>
-            <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+            <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>
@@ -45,7 +45,10 @@
         <td><?php echo html::password('password2', '', "class='form-control'");?></td>
       </tr>
       <tr>
-        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
+        <td colspan='2' class='text-center form-actions'>
+          <?php echo html::hidden('passwordLength', 0);?>
+          <?php echo html::submitButton();?>
+        </td>
       </tr>
     </table>
     <?php if(!empty($this->app->user->modifyPasswordReason)):?>

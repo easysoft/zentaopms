@@ -8,6 +8,12 @@ title=测试 gitlabModel::apiGetGroups();
 cid=1
 pid=1
 
+使用空的数据查询群组 >> return null
+使用正确的gitlabID查询群组 >> return true
+使用错误的orderBy查询群组 >> return true
+通过gitlabID,orderBy查询群组 >> return true
+通过错误的minRole查询群组 >> return true
+
 */
 
 $gitlab = $tester->loadModel('gitlab');

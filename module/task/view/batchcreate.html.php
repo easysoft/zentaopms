@@ -118,7 +118,7 @@ $colspan = count($visibleFields) + 3;
           <tr>
             <td class='text-left c-id'><?php echo $i;?></td>
             <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
-              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'")?>
+              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, $i)'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
             <?php if($execution->lifetime != 'ops' and $execution->attribute != 'request' and $execution->attribute != 'review'):?>

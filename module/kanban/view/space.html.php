@@ -47,8 +47,10 @@
               <?php echo $space->name;?>
             </p>
           </div>
-          <?php $space->desc = empty($space->desc) ? $lang->kanban->emptyDesc : strip_tags(htmlspecialchars_decode($space->desc));?>
-          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo $space->desc;?>'><?php echo $space->desc;?></p>
+          <?php $spaceDescTitle = empty($space->desc) ? $lang->kanban->emptyDesc : str_replace("\n", '', strip_tags($space->desc));?>
+          <?php $pattern        = '/<br[^>]*>|<img[^>]*>/';?>
+          <?php $spaceDesc      = empty($space->desc) ? $lang->kanban->emptyDesc : preg_replace($pattern, '', $space->desc);?>
+          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo $spaceDescTitle;?>'><?php echo $spaceDesc;?></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
@@ -126,7 +128,9 @@
               <?php $kanbanCount ++;?>
             </div>
             <div class='panel-body'>
-              <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>
+              <?php $kanbanDescTitle = str_replace("\n", '', strip_tags($kanban->desc));?>
+              <?php $kanbanDesc      = str_replace("\n", '', preg_replace($pattern, '', $kanban->desc));?>
+              <div class='kanban-desc' title="<?php echo $kanbanDescTitle;?>"><?php echo $kanbanDesc;?></div>
               <div class='kanban-footer'>
               <?php $count     = 0;?>
               <?php $teamPairs = array_filter(explode(',', ",$kanban->createdBy,$kanban->owner,$kanban->team"));?>

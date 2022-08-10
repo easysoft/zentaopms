@@ -14,6 +14,5 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerClosedReasonTest()) && p() && e('0'); //统计没有完成原因的任务数量

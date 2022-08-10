@@ -18,8 +18,12 @@
 <?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
 <?php js::set('executionID', $execution->id);?>
+<?php js::set('projectID', $execution->project);?>
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
+<?php js::set('typeNotEmpty', sprintf($this->lang->error->notempty, $this->lang->task->type));?>
+<?php js::set('hourPointNotEmpty', sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));?>
+<?php js::set('hourPointNotError', sprintf($this->lang->story->float, $this->lang->story->convertRelations));?>
 <?php js::set('workingHourError', sprintf($this->lang->error->notempty, $this->lang->workingHour))?>
 <?php js::set('linkedTaskStories', $linkedTaskStories);?>
 <?php js::set('confirmStoryToTask', $lang->execution->confirmStoryToTask);?>
@@ -49,13 +53,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php
-    if(common::hasPriv('execution', 'story'))
-    {
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->all}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
-    }
-    ?>
+    <?php foreach($lang->story->featureBar['browse'] as $featureType => $label):?>
+    <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
+    <?php $label  = "<span class='text'>$label</span>";?>
+    <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('story', "executionID=$execution->id&orderBy=order_desc&type=$featureType"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -319,7 +322,7 @@
         <h4 class="modal-title"><?php echo $lang->story->batchToTask;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post' class='form-ajax' action='<?php echo $this->createLink('story', 'batchToTask', "executionID=$execution->id");?>'>
+        <form method='post' class='not-watch' action='<?php echo $this->createLink('story', 'batchToTask', "executionID=$execution->id&projectID=$execution->project");?>'>
           <table class='table table-form'>
             <tr>
               <th class="<?php echo strpos($this->app->getClientLang(), 'zh') === false ? 'w-140px' : 'w-80px';?>"><?php echo $lang->task->type?></th>
@@ -329,7 +332,7 @@
             <?php if($lang->hourCommon !== $lang->workingHour):?>
             <tr>
               <th><?php echo $lang->story->one . $lang->hourCommon?></th>
-              <td><div class='input-group'><span class='input-group-addon'><?php echo "=";?></span><?php echo html::input('hourPointValue', '', "class='form-control' required");?> <span class='input-group-addon'><?php echo $lang->workingHour;?></span></div></td>
+              <td><div class='input-group'><span class='input-group-addon'><?php echo "≈";?></span><?php echo html::input('hourPointValue', '', "class='form-control' required");?> <span class='input-group-addon'><?php echo $lang->workingHour;?></span></div></td>
               <td></td>
             </tr>
             <?php endif;?>
@@ -343,7 +346,7 @@
             <tr>
               <td colspan='3' class='text-center'>
                 <?php echo html::hidden('storyIdList', '');?>
-                <?php echo html::submitButton($lang->story->toTask, '', 'btn btn-primary');?>
+                <?php echo html::submitButton($lang->execution->next, '', 'btn btn-primary');?>
               </td>
             </tr>
           </table>

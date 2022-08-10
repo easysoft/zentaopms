@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/dept.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +34,4 @@ r($dept->updateTest($deptIDList[1], $noParent))   && p('parent:0')              
 r($dept->updateTest($deptIDList[3], $noName))     && p('name:0')                      && e('『部门名称』不能为空。');     //部门名称为空
 r($dept->updateTest($deptIDList[4], $noManager))  && p('20:name,parent,path,manager') && e('无负责人部门,1,,1,20,,');     //无负责人
 
-system("./ztest init");
+$db->restoreDB();

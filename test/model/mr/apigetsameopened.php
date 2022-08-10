@@ -8,17 +8,17 @@ title=测试 mrModel::apiGetSameOpened();
 cid=0
 pid=0
 
-使用正确的gitlabID,sourceProject,sourceBranch,targetProject,targetBranch >> success
-使用空的gitlabID                         >> null
-使用空的sourceProject                    >> null
-使用空的sourceBranch                     >> null
-使用空的targetProject                    >> null
-使用空的targetBranch                     >> null
-使用错误的gitlabID                       >> null
-使用错误的sourceProject                  >> null
-使用错误的sourceBranch                   >> null
-使用错误的targetProject                  >> null
-使用错误的targetBranch                   >> null
+使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch >> success
+使用空的gitlabID >> null
+使用空的sourceProject >> null
+使用空的sourceBranch >> null
+使用空的targetProject >> null
+使用空的targetBranch >> null
+使用错误的gitlabID >> null
+使用错误的sourceProject >> null
+使用错误的sourceBranch >> null
+使用错误的targetProject >> null
+使用错误的targetBranch >> null
 
 */
 $mrModel = $tester->loadModel('mr');

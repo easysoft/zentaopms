@@ -9,6 +9,11 @@ title=测试 projectModel->updateProducts();
 cid=1
 pid=1
 
+查看更新项目关联的产品之前的产品数量 >> 3
+查看更新项目关联的产品之后的产品数量 >> 4
+查看更新项目关联的产品之前的产品名称 >> 多平台产品81
+查看更新项目关联的产品之后的产品名称 >> 正常产品4
+
 */
 
 global $tester;
@@ -26,4 +31,4 @@ r(count($beforeProducts)) && p()     && e('3');            // 查看更新项目
 r(count($afterProducts))  && p()     && e('4');            // 查看更新项目关联的产品之后的产品数量
 r($beforeProducts)        && p('81') && e('多平台产品81'); // 查看更新项目关联的产品之前的产品名称
 r($afterProducts)         && p('4')  && e('正常产品4');    // 查看更新项目关联的产品之后的产品名称
-system("./ztest init");
+$db->restoreDB();

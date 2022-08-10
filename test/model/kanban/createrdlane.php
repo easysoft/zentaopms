@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +29,4 @@ r($kanban->createRDLaneTest($executionIDList[1], $regionIDList[1])) && p() && e(
 r($kanban->createRDLaneTest($executionIDList[2], $regionIDList[2])) && p() && e('6'); // 测试创建执行103的执行看板的泳道
 r($kanban->createRDLaneTest($executionIDList[3], $regionIDList[3])) && p() && e('6'); // 测试创建执行104的执行看板的泳道
 r($kanban->createRDLaneTest($executionIDList[4], $regionIDList[4])) && p() && e('6'); // 测试创建执行105的执行看板的泳道
-system("./ztest init");
+$db->restoreDB();

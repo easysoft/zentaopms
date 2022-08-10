@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/build.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -24,4 +25,4 @@ r($build->unlinkStoryTest($buildIDList[0],$stories,$stories[0])) && p('1:stories
 r($build->unlinkStoryTest($buildIDList[1],$stories,$stories[1])) && p('11:stories,execution') && e(',2,101');                //解除执行版本需求
 r($build->unlinkStoryTest($buildIDList[0],$stories,''))          && p('objectID:0')           && e('『对象ID』应当是数字。');//需求id为空
 
-system("./ztest init");
+$db->restoreDB();

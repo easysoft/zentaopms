@@ -17,8 +17,6 @@ pid=1
 检查deadline在resolvedDate前 状态为已关闭的bug是否延期 >> 15,13,11
 检查deadline在resolvedDate后 状态为已关闭的bug是否延期 >> 6,4,2
 
-
-
 */
 
 $productIDList = array('1', '7','18', '20', '28', '33');

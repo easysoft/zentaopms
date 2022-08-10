@@ -10,6 +10,10 @@ title=测试 userModel->getTeamMemberPairs();
 cid=1
 pid=1
 
+获取ID为11的项目的团队成员数量 >> 3
+获取ID为11的项目的团队成员数量，追加用户test2 >> 4
+获取ID为110的执行的团队成员成员 >> T:测试1
+
 */
 
 $user = new userTest();

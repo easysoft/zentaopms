@@ -9,33 +9,32 @@ title=bugModel->getCaseBugs();
 cid=1
 pid=1
 
-测试获取runID为0 caseID为2的bug          >> 测试单转Bug1,测试单转Bug11
-测试获取runID为0 caseID为6的bug          >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为0 caseID为10的bug         >> 测试单转Bug3,测试单转Bug13
-测试获取runID为0 caseID不存在的bug       >> 0
-测试获取runID为2 caseID为0的bug          >> 测试单转Bug1,测试单转Bug11
-测试获取runID为2 caseID为2的bug          >> 测试单转Bug1,测试单转Bug11
-测试获取runID为2 caseID为6的bug          >> 测试单转Bug1,测试单转Bug11
-测试获取runID为2 caseID为10的bug         >> 测试单转Bug1,测试单转Bug11
-测试获取runID为2 caseID不存在的bug       >> 测试单转Bug1,测试单转Bug11
-测试获取runID为6 caseID为0的bug          >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为6 caseID为2的bug          >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为6 caseID为6的bug          >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为6 caseID为10的bug         >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为6 caseID不存在的bug       >> SonarQube_Bug2,SonarQube_Bug12
-测试获取runID为10 caseID为0的bug         >> 测试单转Bug3,测试单转Bug13
-测试获取runID为10 caseID为2的bug         >> 测试单转Bug3,测试单转Bug13
-测试获取runID为10 caseID为6的bug         >> 测试单转Bug3,测试单转Bug13
-测试获取runID为10 caseID为10的bug        >> 测试单转Bug3,测试单转Bug13
-测试获取runID为10 caseID不存在的bug      >> 测试单转Bug3,测试单转Bug13
-测试获取runID为不存在 caseID为0的bug     >> 0
-测试获取runID为不存在 caseID为2的bug     >> 0
-测试获取runID为不存在 caseID为6的bug     >> 0
-测试获取runID为不存在 caseID为10的bug    >> 0
-测试获取runID为不存在 caseID不存在的bug  >> 0
+测试获取runID为0 caseID为2的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为0 caseID为6的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为0 caseID为10的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为0 caseID不存在的bug >> 0                         
+测试获取runID为2 caseID为0的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为2 caseID为2的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为2 caseID为6的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为2 caseID为10的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为2 caseID不存在的bug >> 测试单转Bug1,测试单转Bug11
+测试获取runID为6 caseID为0的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为6 caseID为2的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为6 caseID为6的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为6 caseID为10的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为6 caseID不存在的bug >> SonarQube_Bug2,SonarQube_Bug12
+测试获取runID为10 caseID为0的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为10 caseID为2的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为10 caseID为6的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为10 caseID为10的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为10 caseID不存在的bug >> 测试单转Bug3,测试单转Bug13
+测试获取runID为不存在 caseID为0的bug >> 0
+测试获取runID为不存在 caseID为2的bug >> 0
+测试获取runID为不存在 caseID为6的bug >> 0
+测试获取runID为不存在 caseID为10的bug >> 0
+测试获取runID为不存在 caseID不存在的bug >> 0
 
 */
-
 
 $runIDList       = array('0', '2', '6', '10', '1000001');
 $caseIDList      = array('0', '2', '6', '10', '1000001');

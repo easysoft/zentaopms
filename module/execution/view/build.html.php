@@ -16,14 +16,14 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->execution->build}</span>";
-    $active = '';
-    if($type == 'all')
+    common::sortFeatureMenu();
+    foreach($lang->execution->featureBar['build'] as $featureType => $label)
     {
-        $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        $label       = "<span class='text'>$label</span>";
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        echo html::a(inlink('build', "executionID=$executionID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id='$featureType'");
     }
-    echo html::a(inlink('build', "executionID={$executionID}&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
   </div>

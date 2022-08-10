@@ -10,7 +10,11 @@ title=测试 blockModel->getScrumListParams();
 cid=1
 pid=1
 
-
+测试name和select >> 类型,select
+测试options >> 未完成
+测试options >> 进行中
+测试options >> 全部
+测试options >> 我参与
 
 */
 

@@ -11,36 +11,35 @@ cid=1
 pid=1
 
 状态为active confirmed为0的bug能否执行confirmbug动作 >> 1
-状态为active confirmed为0的bug能否执行resolve动作    >> 1
-状态为active confirmed为0的bug能否执行close动作      >> 2
-状态为active confirmed为0的bug能否执行activate动作   >> 2
-状态为active confirmed为0的bug能否执行tostory动作    >> 1
-状态为active confirmed为0的bug能否执行test动作       >> 1
+状态为active confirmed为0的bug能否执行resolve动作 >> 1
+状态为active confirmed为0的bug能否执行close动作 >> 2
+状态为active confirmed为0的bug能否执行activate动作 >> 2
+状态为active confirmed为0的bug能否执行tostory动作 >> 1
+状态为active confirmed为0的bug能否执行test动作 >> 1
 状态为active confirmed为1的bug能否执行confirmbug动作 >> 2
-状态为active confirmed为1的bug能否执行resolve动作    >> 1
-状态为active confirmed为1的bug能否执行close动作      >> 2
-状态为active confirmed为1的bug能否执行activate动作   >> 2
-状态为active confirmed为1的bug能否执行tostory动作    >> 1
-状态为active confirmed为1的bug能否执行test动作       >> 1
-状态为resolved的bug能否执行confirmbug动作            >> 2
-状态为resolved的bug能否执行resolve动作               >> 2
-状态为resolved的bug能否执行close动作                 >> 1
-状态为resolved的bug能否执行activate动作              >> 1
-状态为resolved的bug能否执行tostory动作               >> 2
-状态为resolved的bug能否执行test动作                  >> 1
-状态为closed的bug能否执行confirmbug动作              >> 2
-状态为closed的bug能否执行resolve动作                 >> 2
-状态为closed的bug能否执行close动作                   >> 2
-状态为closed的bug能否执行activate动作                >> 1
-状态为closed的bug能否执行tostory动作                 >> 2
-状态为closed的bug能否执行test动作                    >> 1
+状态为active confirmed为1的bug能否执行resolve动作 >> 1
+状态为active confirmed为1的bug能否执行close动作 >> 2
+状态为active confirmed为1的bug能否执行activate动作 >> 2
+状态为active confirmed为1的bug能否执行tostory动作 >> 1
+状态为active confirmed为1的bug能否执行test动作 >> 1
+状态为resolved的bug能否执行confirmbug动作 >> 2
+状态为resolved的bug能否执行resolve动作 >> 2
+状态为resolved的bug能否执行close动作 >> 1
+状态为resolved的bug能否执行activate动作 >> 1
+状态为resolved的bug能否执行tostory动作 >> 2
+状态为resolved的bug能否执行test动作 >> 1
+状态为closed的bug能否执行confirmbug动作 >> 2
+状态为closed的bug能否执行resolve动作 >> 2
+状态为closed的bug能否执行close动作 >> 2
+状态为closed的bug能否执行activate动作 >> 1
+状态为closed的bug能否执行tostory动作 >> 2
+状态为closed的bug能否执行test动作 >> 1
 
 */
 
 $object1 = new stdclass();
 $object1->status   = 'active';
 $object1->confirmed = 0;
-
 
 $object2 = new stdclass();
 $object2->status   = 'active';

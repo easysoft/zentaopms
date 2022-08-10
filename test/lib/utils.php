@@ -100,7 +100,7 @@ function zdRun()
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
         system("cp -r {$zdRoot}common $tmpCommonPath");
-        system("rm {$zdRoot}sql/*");
+        system("find {$zdRoot}sql/ -type f -delete");
 
         /* Generate SQL files. */
         $tables = array();
@@ -219,11 +219,11 @@ function copyDB()
 {
     global $config, $dao;
 
-    $dumpCommand = "mysqldump -u%s -p%s %s > %s";
+    $dumpCommand = "mysqldump -h%s -P%s -u%s -p%s %s --add-drop-table=false > %s";
     $sqlFile     = TEST_BASEHPATH . DS . 'tmp/raw.sql';
 
     $currentDBNum = $dao->query("select count(*) as num from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'")->fetch();
-    $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    $dumpCommand  = sprintf($dumpCommand, $config->db->host, $config->db->port, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
     shell_exec($dumpCommand);
 
     $dbNum = $config->test->dbNum;
@@ -238,8 +238,8 @@ function copyDB()
     {
         if ($currentDBNum->num > 0) $dao->query('drop database ' . $db);
         $dao->query('CREATE DATABASE ' . $db);
-        shell_exec("mysql -u" . $config->db->user . ' -p' . $config->db->password . ' ' .  $db . '  <  ' . $sqlFile);
-        echo '数据库<' . $db . '>复制成功！';
+        shell_exec("mysql -h{$config->db->host} -P {$config->db->port} -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
+        echo '数据库<' . $db . '>复制成功！' . PHP_EOL;
     }
 }
 

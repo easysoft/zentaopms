@@ -10,6 +10,8 @@ title=测试 apiModel->getStructByID();
 cid=1
 pid=1
 
+获取刚创建的数据结构 >> struct
+
 */
 
 global $tester;

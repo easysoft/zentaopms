@@ -10,14 +10,14 @@ title=taskModel->processTasks();
 cid=1
 pid=1
 
-根据tasks计算executionID为1的执行下所有任务的进度 任务1   >> ,100
+根据tasks计算executionID为1的执行下所有任务的进度 任务1 >> ,100
 根据tasks计算executionID为1的执行下所有任务的进度 任务601 >> 7,100
 根据tasks计算executionID为1的执行下所有任务的进度 任务602 >> 8,80
-根据tasks计算executionID为1的执行下所有任务的进度 任务602 >> ,71
-根据tasks计算executionID为2的执行下所有任务的进度 任务2   >> ,80
-根据tasks计算executionID为2的执行下所有任务的进度 任务602 >> 10,67
-根据tasks计算executionID为2的执行下所有任务的进度 任务602 >> ,64
-根据tasks计算executionID为2的执行下所有任务的进度 任务602 >> ,62
+根据tasks计算executionID为1的执行下所有任务的进度 任务603 >> ,71
+根据tasks计算executionID为2的执行下所有任务的进度 任务2 >> ,80
+根据tasks计算executionID为2的执行下所有任务的进度 任务604 >> 10,67
+根据tasks计算executionID为2的执行下所有任务的进度 任务605 >> ,64
+根据tasks计算executionID为2的执行下所有任务的进度 任务606 >> ,62
 
 */
 

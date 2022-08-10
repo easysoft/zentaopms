@@ -12,25 +12,25 @@
 $lang->caselib->common = 'Case Library';
 $lang->caselib->all    = 'All Case Libraries';
 
-$lang->caselib->index            = "Library Home";
-$lang->caselib->create           = "Create Case Library";
-$lang->caselib->edit             = 'Edit Case Library';
-$lang->caselib->browse           = 'View Cases in Library';
-$lang->caselib->view             = 'Library Detail';
-$lang->caselib->createCase       = 'Create Case';
-$lang->caselib->delete           = "Delete Suite";
-$lang->caselib->linkVersion      = "Version";
-$lang->caselib->deleted          = 'Deleted';
-$lang->caselib->exportTemplet    = 'Export Template';
-$lang->caselib->batchCreateCase  = 'Batch Create';
-$lang->caselib->import           = 'Import';
-$lang->caselib->showImport       = 'Imported Data';
-$lang->caselib->type             = 'Type';
-$lang->caselib->product          = $lang->productCommon;
-$lang->caselib->browseAction     = 'Caselib List';
-$lang->caselib->deleteAction     = "Delete Caselib";
-$lang->caselib->importAction     = 'Import Case';
-$lang->caselib->linkVersion      = "Version";
+$lang->caselib->index           = "Library Home";
+$lang->caselib->create          = "Create Case Library";
+$lang->caselib->edit            = 'Edit Case Library';
+$lang->caselib->browse          = 'View Cases in Library';
+$lang->caselib->view            = 'Library Detail';
+$lang->caselib->createCase      = 'Create Case';
+$lang->caselib->delete          = "Delete Suite";
+$lang->caselib->linkVersion     = "Version";
+$lang->caselib->deleted         = 'Deleted';
+$lang->caselib->exportTemplate  = 'Export Template';
+$lang->caselib->batchCreateCase = 'Batch Create';
+$lang->caselib->import          = 'Import';
+$lang->caselib->showImport      = 'Imported Data';
+$lang->caselib->type            = 'Type';
+$lang->caselib->product         = $lang->productCommon;
+$lang->caselib->browseAction    = 'Caselib List';
+$lang->caselib->deleteAction    = "Delete Caselib";
+$lang->caselib->importAction    = 'Import Case';
+$lang->caselib->linkVersion     = "Version";
 
 $lang->caselib->id             = 'ID';
 $lang->caselib->name           = 'Name';
@@ -44,3 +44,6 @@ $lang->caselib->legendDesc = 'Description';
 
 $lang->caselib->libraryDelete = 'Do you want to delete this library？';
 $lang->caselib->noModule      = '<div>You have no modules.</div><div>Manage it now.</div>';
+
+$lang->caselib->featureBar['browse']['all']  = 'All';
+$lang->caselib->featureBar['browse']['wait'] = 'Waiting';

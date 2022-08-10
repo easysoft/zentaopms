@@ -609,7 +609,7 @@ class custom extends control
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
-            $locate = $this->config->systemMode == 'new' ? 'parent' : 'top';
+            $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }

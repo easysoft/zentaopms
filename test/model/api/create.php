@@ -10,6 +10,11 @@ title=测试 apiModel->create();
 cid=1
 pid=1
 
+测试创建api >> 910
+测试没有lib创建api >> 『API Library』should not be blank.
+测试没有title创建api >> 『Name』should not be blank.
+测试没有path创建api >> 『Request Path』should not be blank.
+
 */
 
 $api = new apiTest();

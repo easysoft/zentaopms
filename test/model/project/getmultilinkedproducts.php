@@ -9,6 +9,10 @@ title=测试 projectModel::getInfoList;
 cid=1
 pid=1
 
+查询项目1的关联产品数量 >> 0
+查询项目11的关联产品数量 >> 3
+查询项目11关联的产品名称 >> 正常产品1,多平台产品91,多平台产品81
+
 */
 
 global $tester;

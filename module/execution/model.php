@@ -100,7 +100,7 @@ class executionModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        if($execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
+        if(isset($execution->cal) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
         if($execution and $execution->lifetime == 'ops')
         {
@@ -420,6 +420,8 @@ class executionModel extends model
             /* Update the path. */
             if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
+            $this->updateProducts($executionID);
+
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
             array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
@@ -670,6 +672,7 @@ class executionModel extends model
             }
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $extendFields = $this->getFlowExtendFields();
         foreach($data->executionIDList as $executionID)
         {
@@ -788,8 +791,8 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
-                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
+                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
                 ->limit(1)
@@ -948,6 +951,8 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('closedBy', '')
+            ->setDefault('closedDate', '')
             ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
@@ -3176,24 +3181,8 @@ class executionModel extends model
      */
     public function getBeginEnd4CFD($execution)
     {
-        $begin = $execution->begin;
-        $end   = $execution->end;
-        if(helper::today() < $execution->begin)
-        {
-            $begin = helper::today();
-            $end   = helper::today();
-        }
-        elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
-        {
-            $begin = (date('Y-m-d', strtotime('-13 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-13 days'));
-            $end   = helper::today();
-        }
-        elseif((helper::today() > $execution->end))
-        {
-            $begin = date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) > $execution->begin ? date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) : $execution->begin;
-            $end   = $execution->end;
-        }
-
+        $end   = (!helper::isZeroDate($execution->closedDate) and date('Y-m-d', strtotime($execution->closedDate)) < helper::today()) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+        $begin = (!helper::isZeroDate($execution->openedDate) and date('Y-m-d', strtotime($execution->openedDate)) > date('Y-m-d', strtotime('-13 days', strtotime($end)))) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime('-13 days', strtotime($end)));
         return array($begin, $end);
     }
 
@@ -4358,6 +4347,8 @@ class executionModel extends model
         $this->loadModel('execution');
         $this->loadModel('programplan');
 
+        $today = helper::today();
+
         if(!$isChild)
         {
             $trClass = 'is-top-level table-nest-child-hide';
@@ -4380,10 +4371,24 @@ class executionModel extends model
         }
         echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
         echo '<td>' . zget($users, $execution->PM) . '</td>';
-        echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
-        echo '<td>' . $execution->begin . '</td>';
-        echo '<td>' . $execution->end . '</td>';
+        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td class="c-date">' . $execution->begin . '</td>';
+        if(!helper::isZeroDate($execution->end))
+        {
+            if($execution->status != 'closed')
+            {
+                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed c-date" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td class="c-date">' . $execution->end . '</td>';
+            }
+            else
+            {
+                echo '<td class="c-date">' . $execution->end . '</td>';
+            }
+        }
+        else
+        {
+            echo '<td></td>';
+        }
         echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
@@ -4720,5 +4725,24 @@ class executionModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /*
+     * Build search form
+     *
+     * @param int     $queryID
+     * @param string  $actionURL
+     * @return void
+     * */
+    public function buildSearchFrom($queryID, $actionURL)
+    {
+        $this->config->execution->all->search['queryID']   = $queryID;
+        $this->config->execution->all->search['actionURL'] = $actionURL;
+
+        $projectPairs  = array(0 => '');
+        $projectPairs += $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->all->search['params']['project']['values'] = $projectPairs + array('all' => $this->lang->execution->allProject);
+
+        $this->loadModel('search')->setSearchParams($this->config->execution->all->search);
     }
 }

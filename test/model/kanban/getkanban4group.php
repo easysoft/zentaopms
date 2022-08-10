@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -47,4 +48,4 @@ r($kanban->getKanban4GroupTest($executionIDList[2], $browseTypeList[2], $groupBy
 r($kanban->getKanban4GroupTest($executionIDList[2], $browseTypeList[2], $groupByList[6])) && p() && e('lanes:4'); //获取执行103 类型bug 分组severity的看板信息
 r($kanban->getKanban4GroupTest($executionIDList[3], $browseTypeList[0], $groupByList[0])) && p() && e('lanes:3'); //获取执行104 类型story 分组pri的看板信息
 r($kanban->getKanban4GroupTest($executionIDList[4], $browseTypeList[0], $groupByList[0])) && p() && e('lanes:3'); //获取执行105 类型story 分组pri的看板信息
-system("./ztest init");
+$db->restoreDB();

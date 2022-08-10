@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testsuite.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +43,4 @@ r($testsuite->createTest($productID[1], $name[0], $type[1])) && p() && e('206');
 r($testsuite->createTest($productID[1], $name[1], $type[1])) && p('name:0') && e('『名称』不能为空。');  //测试productID为0,name为空,type为public
 r($testsuite->createTest($productID[1], $name[0], $type[2])) && p() && e('207');                         //测试productID为0,name正常存在,type为空
 r($testsuite->createTest($productID[1], $name[1], $type[2])) && p('name:0') && e('『名称』不能为空。');  //测试productID为0,name为空,type为空
-system("./ztest init");
+$db->restoreDB();

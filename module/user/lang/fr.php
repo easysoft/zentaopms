@@ -224,8 +224,13 @@ $lang->user->placeholder->loginAccount  = 'Enter your account';
 $lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
 $lang->user->placeholder->email         = 'Enter your email';
 
+$lang->user->placeholder->passwordStrength[0] = 'Le mot de passe doit ≥  6 caractè res.';
 $lang->user->placeholder->passwordStrength[1] = '>= 6 lettres et chiffres';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 lettres, chiffres et caractères spéciaux';
+
+$lang->user->placeholder->passwordStrengthCheck[0] = 'Le mot de passe doit ≥ 6 caractères.';
+$lang->user->placeholder->passwordStrengthCheck[1] = 'Le mot de passe doit ≥ 6 caractères, combinaison de lettres majuscules, minuscules et de chiffres.';
+$lang->user->placeholder->passwordStrengthCheck[2] = 'Le mot de passe doit ≥ 10 caractères, combinaison de lettres majuscules, minuscules, de chiffres et de symboles spéciaux.';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account        = "ID %s，compte doit être >= 3 lettres, souligné ou chiffres";
@@ -251,6 +256,7 @@ $lang->user->error->noEmail          = 'The user does not register email. Please
 $lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
 $lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
 $lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
+$lang->user->error->loginTimeoutTip  = 'Échec de la connexion, veuillez vérifier si le service proxy est activé.';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
