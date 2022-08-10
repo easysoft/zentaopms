@@ -231,11 +231,10 @@ class projectrelease extends control
         }
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select('t1.*, t2.stage')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_STORYSTAGE)->alias('t2')->on('t1.id = t2.story')
-            ->where('t1.id')->in($release->stories)
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'story')->orderBy("t1.$orderBy")->fi()
+        $stories    = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('id')->in($release->stories)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'story')->orderBy($orderBy)->fi()
             ->page($storyPager)
             ->fetchAll('id');
 
