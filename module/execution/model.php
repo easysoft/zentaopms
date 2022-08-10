@@ -4371,16 +4371,16 @@ class executionModel extends model
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
-        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td>' . $execution->begin . '</td>';
+        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td class="c-date">' . $execution->begin . '</td>';
         if(!helper::isZeroDate($execution->end))
         {
             if($execution->status != 'closed')
             {
-                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
+                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed c-date" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td class="c-date">' . $execution->end . '</td>';
             }
             else
             {
-                echo '<td>' . $execution->end . '</td>';
+                echo '<td class="c-date">' . $execution->end . '</td>';
             }
         }
         else

@@ -39,7 +39,7 @@
         <?php endif;?>
         <th class='c-date'><?php echo $lang->execution->begin;?></th>
         <th class='c-date'><?php echo $lang->execution->end;?></th>
-        <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
+        <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='c-hours'><?php echo $lang->my->hours;?></th>
@@ -67,9 +67,9 @@
           <?php echo isset($execution->projectName) ? html::a($this->createLink('project', 'index', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'") : '';?>
         </td>
         <?php endif;?>
-        <td><?php echo $execution->begin;?></td>
-        <td><?php echo $execution->end;?></td>
-        <td class="c-status text-center">
+        <td class='c-date'><?php echo $execution->begin;?></td>
+        <td class='c-date'><?php echo $execution->end;?></td>
+        <td class="c-status">
           <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
           <?php else:?>
@@ -78,7 +78,7 @@
           <?php endif;?>
         </td>
         <td><?php echo $execution->role;?></td>
-        <td><?php echo $execution->join;?></td>
+        <td class='c-date'><?php echo $execution->join;?></td>
         <td><?php echo $execution->hours;?></td>
         <td><?php echo $execution->assignedToMeTasks;?></td>
         <td>

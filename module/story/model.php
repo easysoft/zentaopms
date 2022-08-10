@@ -4637,25 +4637,25 @@ class storyModel extends model
                 echo zget($users, $story->openedBy, $story->openedBy);
                 break;
             case 'openedDate':
-                echo substr($story->openedDate, 5, 11);
+                echo helper::isZeroDate($story->openedDate) ? '' : substr($story->openedDate, 5, 11);
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($story, $users);
                 break;
             case 'assignedDate':
-                echo substr($story->assignedDate, 5, 11);
+                echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
                 echo $story->reviewedBy;
                 break;
             case 'reviewedDate':
-                echo substr($story->reviewedDate, 5, 11);
+                echo helper::isZeroDate($story->reviewedDate) ? '' : substr($story->reviewedDate, 5, 11);
                 break;
             case 'closedBy':
                 echo zget($users, $story->closedBy, $story->closedBy);
                 break;
             case 'closedDate':
-                echo substr($story->closedDate, 5, 11);
+                echo helper::isZeroDate($story->closedDate) ? '' : substr($story->closedDate, 5, 11);
                 break;
             case 'closedReason':
                 echo zget($this->lang->story->reasonList, $story->closedReason, $story->closedReason);
@@ -4664,7 +4664,7 @@ class storyModel extends model
                 echo zget($users, $story->lastEditedBy, $story->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($story->lastEditedDate, 5, 11);
+                echo helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 5, 11);
                 break;
             case 'feedbackBy':
                 echo $story->feedbackBy;
