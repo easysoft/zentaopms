@@ -69,8 +69,8 @@ $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';
 $lang->admin->safe->modeList[2] = '强';
 
-$lang->admin->safe->modeRuleList[1] = '6位以上，包含大小写字母，数字。';
-$lang->admin->safe->modeRuleList[2] = '10位以上，包含字母，数字，特殊字符。';
+$lang->admin->safe->modeRuleList[1] = '6位及以上，包含大小写字母，数字。';
+$lang->admin->safe->modeRuleList[2] = '10位及以上，包含字母，数字，特殊字符。';
 
 $lang->admin->safe->reasonList['weak']     = '常用弱口令';
 $lang->admin->safe->reasonList['account']  = '与帐号相同';
