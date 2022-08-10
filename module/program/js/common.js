@@ -335,11 +335,13 @@ function compareChildDate()
     var end               = $('#end').val();
     var begin             = $('#begin').val();
     var selectedProgramID = $('#parent').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
     if(end.length > 0 && begin.length > 0)
     {
         var programEnd   = new Date(end);
         var programBegin = new Date(begin);
-        
+
         $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var dateTip    = '';
@@ -347,7 +349,6 @@ function compareChildDate()
             var childBegin = new Date(childInfo.minChildBegin);
             var childEnd   = new Date(childInfo.maxChildEnd);
 
-            if($('#dateTip').length > 0) $('#dateTip').remove();
             if(programBegin <= childBegin && programEnd >= childEnd) return;
 
             if(programBegin > childBegin && programEnd >= childEnd)
@@ -378,6 +379,8 @@ function outOfDateTip()
 {
     var end   = $('#end').val();
     var begin = $('#begin').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
     if(end.length > 0 && begin.length > 0)
     {
         var selectedProgramID = $('#parent').val();
@@ -387,7 +390,7 @@ function outOfDateTip()
         if(selectedProgramID == 0)
         {
             compareChildDate();
-            return false;
+            return;
         }
 
         if(typeof(programID) == 'undefined') programID = 0;
@@ -417,7 +420,6 @@ function outOfDateTip()
                 dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
             }
 
-            if($('#dateTip').length > 0) $('#dateTip').remove();
             $('#dateBox').after(dateTip);
         });
     }
