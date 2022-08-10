@@ -95,6 +95,7 @@ function computeWorkDays(currentID)
     {
         computeEndDate();
     }
+    outOfDateTip();
 }
 
 /**
@@ -115,6 +116,7 @@ function computeEndDate(delta)
         $('#end').val(longTime).trigger('mousedown');
         $('#daysBox').addClass('hidden');
         $('#days').val(0).trigger('mousedown');
+        outOfDateTip();
         return false;
     }
     $('#daysBox').removeClass('hidden');
@@ -297,35 +299,6 @@ $(function()
     });
 })
 
-/**
- * Set budget tips and acl list.
- *
- * @param  int    $parentProgramID
- * @access public
- * @return void
- */
-function setBudgetTipsAndAclList(programID)
-{
-    if(programID != 0)
-    {
-        $.get(createLink('project', 'ajaxGetBudgetLeft', "programID=" + programID), function(budgetLeft)
-        {
-            parentProgram = PGMList[programID];
-            projectBudget = parentProgram.budget;
-            PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
-
-            budgetNotes = projectBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
-            $('#budget').attr('placeholder', budgetNotes);
-        });
-        $('.aclBox').html($('#subPGMAcl').html());
-    }
-    else
-    {
-        $('#budget').removeAttr('placeholder');
-        $('.aclBox').html($('#PGMAcl').html());
-    }
-}
-
 $(document).on('change', "#plansBox select[name^='plans']", function()
 {
     var $plan = $(this);
@@ -365,14 +338,68 @@ function budgetOverrunTips()
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
+        if(typeof(data.availableBudget) == 'undefined') return;
 
+        var tip = "";
+        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(data.tip);
+        $('#budgetBox').after(tip);
 
+        var placeholder = '';
+        if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2);
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
-        $('#budget').attr('placeholder', data.placeholder);
+        $('#budget').attr('placeholder', placeholder);
     });
+}
+
+/**
+ *The date is out of the range of the parent project set, and a prompt is given.
+ *
+ * @access public
+ * @return void
+ */
+function outOfDateTip()
+{
+    var end   = $('#end').val();
+    var begin = $('#begin').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
+    if(end == longTime) end = LONG_TIME;
+    if(end.length > 0 && begin.length > 0)
+    {
+        var selectedProgramID = $('#parent').val();
+
+        if(selectedProgramID == 0) return;
+
+        if(typeof(projectID) == 'undefined') projectID = 0;
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
+        {
+            var data         = JSON.parse(data);
+            var parentEnd    = new Date(data.selectedProgramEnd);
+            var parentBegin  = new Date(data.selectedProgramBegin);
+            var projectEnd   = new Date(end);
+            var projectBegin = new Date(begin);
+
+            if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
+
+            var dateTip = "";
+            if(projectBegin < parentBegin && projectEnd <= parentEnd && projectEnd >= parentBegin)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+            }
+            else if(projectEnd > parentEnd && projectBegin >= parentBegin && projectBegin <= parentEnd)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+            }
+            else
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+            }
+
+            $('#dateBox').after(dateTip);
+        });
+    }
 }
