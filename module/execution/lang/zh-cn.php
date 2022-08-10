@@ -561,11 +561,22 @@ $lang->execution->gantt->color[3] = '#D3F3FD';
 $lang->execution->gantt->color[4] = '#DFF5D9';
 $lang->execution->gantt->color[5] = '#EBDCF9';
 
+$lang->execution->gantt->textColor[0] = '#2D2D2D';
+$lang->execution->gantt->textColor[1] = '#8D0308';
+$lang->execution->gantt->textColor[2] = '#9D4200';
+$lang->execution->gantt->textColor[3] = '#006D8E';
+$lang->execution->gantt->textColor[4] = '#1A8100';
+$lang->execution->gantt->textColor[5] = '#660ABC';
+
 $lang->execution->gantt->stage = new stdclass();
 $lang->execution->gantt->stage->progressColor = '#70B8FE';
 $lang->execution->gantt->stage->color         = '#D2E7FC';
+$lang->execution->gantt->stage->textColor     = '#0050A7';
 
-$lang->execution->gantt->textColor  = '000000';
+$lang->execution->gantt->defaultColor         = '#EBDCF9';
+$lang->execution->gantt->defaultProgressColor = '#9BA8FF';
+$lang->execution->gantt->defaultTextColor     = '#660ABC';
+
 $lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = '导出图片';

@@ -202,7 +202,7 @@ class programplanModel extends model
             $data->duration      = 1;
             $data->color         = $this->lang->execution->gantt->stage->color;
             $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
-            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->textColor     = $this->lang->execution->gantt->stage->textColor;
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
@@ -213,7 +213,6 @@ class programplanModel extends model
             $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
-        $taskSign = "<span class='task-label'>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
@@ -260,7 +259,7 @@ class programplanModel extends model
             $data = new stdclass();
             $data->id            = $task->execution . '-' . $task->id;
             $data->type          = 'task';
-            $data->text          = $taskSign . $priIcon . $task->name;
+            $data->text          = $priIcon . $task->name;
             $data->percent       = '';
             $data->status        = $this->processStatus('task', $task);
             $data->owner_id      = $task->assignedTo;
@@ -281,9 +280,9 @@ class programplanModel extends model
             $data->duration      = 1;
             $data->estimate      = $task->estimate;
             $data->consumed      = $task->consumed;
-            $data->color         = zget($this->lang->execution->gantt->color, $task->pri);
-            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri);
-            $data->textColor     = $this->lang->execution->gantt->textColor;
+            $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+            $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
             /* If multi task then show the teams. */
@@ -370,7 +369,6 @@ class programplanModel extends model
 
         foreach($plans as $plan) $planIdList[$plan->id] = $plan->id;
 
-        $taskSign = "<span class='task-label'>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
@@ -432,8 +430,11 @@ class programplanModel extends model
             $dataGroup->parent     = 0;
             $dataGroup->open       = true;
             $dataGroup->progress   = '';
-            $dataGroup->taskProgress = '';
-            $dataGroup->bar_height   = $this->lang->execution->gantt->bar_height;
+            $dataGroup->taskProgress  = '';
+            $dataGroup->color         = $this->lang->execution->gantt->stage->color;
+            $dataGroup->progressColor = $this->lang->execution->gantt->stage->progressColor;
+            $dataGroup->textColor     = $this->lang->execution->gantt->stage->textColor;
+            $dataGroup->bar_height    = $this->lang->execution->gantt->bar_height;
 
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $dataGroup;
@@ -461,7 +462,7 @@ class programplanModel extends model
                 $data = new stdclass();
                 $data->id           = $task->id;
                 $data->type         = 'task';
-                $data->text         = $taskSign . $priIcon . $task->name;
+                $data->text         = $priIcon . $task->name;
                 $data->percent      = '';
                 $data->status       = $this->processStatus('task', $task);
                 $data->owner_id     = $task->assignedTo;
@@ -482,9 +483,9 @@ class programplanModel extends model
                 $data->duration     = 1;
                 $data->estimate     = $task->estimate;
                 $data->consumed     = $task->consumed;
-                $data->color         = zget($this->lang->execution->gantt->color, $task->pri);
-                $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri);
-                $data->textColor     = $this->lang->execution->gantt->textColor;
+                $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+                $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+                $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
                 $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
