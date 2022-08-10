@@ -33,3 +33,6 @@ UPDATE `zt_grouppriv` SET `method`='exportTemplate' WHERE `method` = 'exportTemp
 
 INSERT IGNORE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `buildin`, `role`, `createdBy`, `createdDate`) VALUES
 ('bug', 'batchactivate', 'batchoperate', '批量激活', 'batch', 'different', 'none', 'normal', 'browse', 'normal', 'direct', '1', 'buildin', '', '2022-08-09 15:52');
+
+INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'reply' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
+INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'ask' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');

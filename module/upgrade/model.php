@@ -683,6 +683,7 @@ class upgradeModel extends model
             case 'biz7.4':
                 $this->updateApproval();
                 $this->addDefaultRuleToWorkflow();
+                $this->addFlowActions('biz7.3');
                 break;
         }
     }
@@ -6921,7 +6922,43 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_WORKFLOWFIELD)->set('rules')->eq($rules)->where('id')->eq($field->id)->exec();
         }
+        return !dao::isError();
+    }
 
+    /**
+     * Add workflow actions.
+     *
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function addFlowActions($version)
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $upgradeLang   = $this->lang->workflowaction->upgrade[$version];
+        $upgradeConfig = $this->config->workflowaction->upgrade[$version];
+        if(empty($upgradeLang) || empty($upgradeConfig)) return true;
+
+        $this->lang->workflowaction->upgrade   = new stdclass();
+        $this->config->workflowaction->upgrade = new stdclass();
+        foreach($upgradeLang as $module => $labels)
+        {
+            $this->lang->workflowaction->upgrade->actions = $labels;
+            foreach($upgradeConfig[$module] as $code => $config) $this->config->workflowaction->upgrade->$code = $config;
+
+            $flow = $this->workflow->getByModule($module);
+            $this->workflow->createActions($flow, 'upgrade');
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('none')->set('role')->eq('buildin')->where('module')->eq($module)->andWhere('action')->in(array_keys($labels))->exec();
+            foreach($labels as $method => $label)
+            {
+                $workflowAction = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($method)->fetch();
+                unset($workflowAction->id);
+                $workflowAction->vision = $workflowAction->vision == 'lite' ? 'rnd' : 'lite';
+                $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
+            }
+        }
         return !dao::isError();
     }
 }
