@@ -3569,13 +3569,13 @@ class bugModel extends model
 
         foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
 
-        if($object == 'openedBuild') $object = 'build';
+        if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
 
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
-        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
 
-        if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
 
         return $relatedObjects;
     }
