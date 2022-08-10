@@ -191,7 +191,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
             <?php else:?>
             <th></th>
-            <td></td>
             <?php endif;?>
             <?php if($showBrowser):?>
             <td>
