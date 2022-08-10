@@ -501,8 +501,8 @@ class executionModel extends model
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
-            ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
+            ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
+            ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
@@ -700,8 +700,8 @@ class executionModel extends model
             if(isset($data->codes)) $executions[$executionID]->code = $executionCode;
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
-            if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
-            if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
+            if($executions[$executionID]->status == 'closed' and $oldExecutions[$executionID]->status != 'closed') $executions[$executionID]->closedDate = helper::now();
+            if($executions[$executionID]->status == 'suspended' and $oldExecutions[$executionID]->status != 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
