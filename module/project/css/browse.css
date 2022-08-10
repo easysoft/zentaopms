@@ -4,6 +4,7 @@ body {margin-bottom: 25px;}
 #sidebar>.cell {width: 100%;}
 
 th.c-budget {text-align: right; padding-right:16px !important;}
+td.c-budget {text-align: right; padding-right:16px !important;}
 td.c-actions {overflow: visible;}
 td.c-PM {white-space: nowrap; overflow: hidden;}
 .c-actions .btn {overflow: visible;}

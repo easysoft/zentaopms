@@ -69,7 +69,7 @@ $config->project->datatable->fieldList['PM']['pri']      = '2';
 
 $config->project->datatable->fieldList['status']['title']    = 'status';
 $config->project->datatable->fieldList['status']['fixed']    = 'left';
-$config->project->datatable->fieldList['status']['width']    = '80';
+$config->project->datatable->fieldList['status']['width']    = '65';
 $config->project->datatable->fieldList['status']['required'] = 'no';
 $config->project->datatable->fieldList['status']['sort']     = 'yes';
 $config->project->datatable->fieldList['status']['pri']      = '2';
@@ -88,7 +88,7 @@ $config->project->datatable->fieldList['end']['pri']      = '3';
 
 $config->project->datatable->fieldList['budget']['title']    = 'budget';
 $config->project->datatable->fieldList['budget']['fixed']    = 'no';
-$config->project->datatable->fieldList['budget']['width']    = '80';
+$config->project->datatable->fieldList['budget']['width']    = '100';
 $config->project->datatable->fieldList['budget']['required'] = 'yes';
 $config->project->datatable->fieldList['budget']['pri']      = '3';
 
