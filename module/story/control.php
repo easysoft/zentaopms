@@ -241,7 +241,8 @@ class story extends control
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
                 if($this->session->storyList)
                 {
-                    if($copyStoryID and strpos($this->session->storyList, 'productplan-view') !== false)
+                    /* When copying story in the product plan, return to different pages for story#32949. */
+                    if($copyStoryID and strpos($this->session->storyList, 'productplan') !== false)
                     {
                         $storyInfo = $this->story->getByList(array($storyID, $copyStoryID));
                         if($storyInfo[$storyID]->plan == $storyInfo[$copyStoryID]->plan or $storyInfo[$storyID]->product != $storyInfo[$copyStoryID]->product) $response['locate'] = $this->session->storyList;
