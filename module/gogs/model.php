@@ -415,7 +415,6 @@ class gogsModel extends model
             if(empty($result->data)) break;
             $response = array_merge($response, $result->data);
             $page += 1;
-            break;
         }
 
         if(empty($response)) return array();
