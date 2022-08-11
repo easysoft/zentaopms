@@ -89,6 +89,8 @@ class actionTest
 
         $objects[$objectID]->extra = str_replace($dirname, '', $objects[$objectID]->extra);
         $objects[$objectID]->extra = trim($objects[$objectID]->extra, "\n");
+        if(strpos($objects[$objectID]->extra, 'href') !== false) $objects[$objectID]->extra = 'a';
+
         return $objects[$objectID];
     }
 
@@ -294,31 +296,6 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $object;
-    }
-
-    /**
-     * Test set objectLink.
-     *
-     * @param  int    $actionID
-     * @access public
-     * @return object
-     */
-    public function setObjectLinkTest($actionID)
-    {
-        global $tester;
-        $deptUsers = isset($tester->app->user->dept) ? $tester->loadModel('dept')->getDeptUserPairs($tester->app->user->dept, 'id') : '';
-
-        $action = $this->objectModel->getByID($actionID);
-        $action->objectLabel = $this->objectModel->getObjectLabel($action->objectType, $action->objectID, $action->action, array('25' => '25'));
-
-        $object = $this->objectModel->setObjectLink($action, $deptUsers);
-
-        if(dao::isError()) return dao::getError();
-
-        $dirname = dirname(__DIR__) . DS;
-
-        $object->objectLink = str_replace($dirname, '', $object->objectLink);
         return $object;
     }
 
