@@ -80,8 +80,7 @@
             <th><?php echo $lang->mr->removeSourceBranch;?></th>
             <td colspan='1'>
               <div class="checkbox-primary" title="<?php echo $lang->mr->notDelbranch;?>">
-                <?php $checked = $MR->canDeleteBranch and $MR->removeSourceBranch== '1' ? 'checked' : '' ?>
-                <input type="checkbox" <?php echo $checked;?> <?php if(!$MR->canDeleteBranch) echo 'disabled';?> name="removeSourceBranch" value="1" id="removeSourceBranch">
+                <input type="checkbox" <?php echo ($MR->canDeleteBranch and $MR->removeSourceBranch == '1') ? 'checked' : '';?> <?php if(!$MR->canDeleteBranch) echo 'disabled';?> name="removeSourceBranch" value="1" id="removeSourceBranch">
                 <label for="removeSourceBranch"></label>
               </div>
             </td>
