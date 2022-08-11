@@ -49,6 +49,10 @@ $(function()
             }
             storyIdList += $(this).val() + ',';
         });
+
+        $('#type').val('').trigger("chosen:updated");
+        $('#hourPointValue').val('');
+        $('input[name^=fields]').prop('checked', true);
     });
 
     $('#submit').click(function()

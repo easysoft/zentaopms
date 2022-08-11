@@ -420,6 +420,8 @@ class executionModel extends model
             /* Update the path. */
             if($this->config->systemMode == 'new') $this->setTreePath($executionID);
 
+            $this->updateProducts($executionID);
+
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
             array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
@@ -499,8 +501,8 @@ class executionModel extends model
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
-            ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
+            ->setIF($this->post->status == 'closed' and $oldExecution->status != 'closed', 'closedDate', helper::now())
+            ->setIF($this->post->status == 'suspended' and $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
             ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
@@ -698,8 +700,8 @@ class executionModel extends model
             if(isset($data->codes)) $executions[$executionID]->code = $executionCode;
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
-            if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
-            if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
+            if($executions[$executionID]->status == 'closed' and $oldExecutions[$executionID]->status != 'closed') $executions[$executionID]->closedDate = helper::now();
+            if($executions[$executionID]->status == 'suspended' and $oldExecutions[$executionID]->status != 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
@@ -4367,26 +4369,33 @@ class executionModel extends model
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
-        echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
-        echo '<td>' . zget($users, $execution->PM) . '</td>';
-        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
-        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
-        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td>' . $execution->begin . '</td>';
-        if(!helper::isZeroDate($execution->end))
+        if(empty($execution->children))
         {
-            if($execution->status != 'closed')
+            echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+            if(!helper::isZeroDate($execution->end))
             {
-                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
-            }
-            else
-            {
-                echo '<td>' . $execution->end . '</td>';
+                if($execution->status != 'closed')
+                {
+                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+                }
             }
         }
         else
         {
-            echo '<td></td>';
+            echo $execution->name;
+            if(!helper::isZeroDate($execution->end))
+            {
+                if($execution->status != 'closed')
+                {
+                    echo strtotime($today) > strtotime($execution->end) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+                }
+            }
         }
+        echo '<td>' . zget($users, $execution->PM) . '</td>';
+        echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
+        echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';

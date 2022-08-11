@@ -17,7 +17,7 @@ $config->port->datetimeFeilds = '';
 $config->port->listFields     = '';
 $config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change';
 $config->port->sysDataFields  = 'execution,product,user';
-$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,';
+$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy';
 
 $config->port->import = new stdClass();
 

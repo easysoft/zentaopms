@@ -93,6 +93,7 @@ function computeWorkDays(currentID)
     {
         computeEndDate();
     }
+    outOfDateTip();
 }
 
 /**
@@ -111,6 +112,7 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
+        outOfDateTip();
         return false;
     }
 
@@ -294,15 +296,18 @@ $(function()
  */
 function setBudgetTipsAndAclList(parentID)
 {
+    var selectedProgramID = $('#parent').val();
+
     if(parentID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentID), function(budgetLeft)
+        $.get(createLink('project', 'ajaxGetObjectInfo', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
+            var data      = JSON.parse(data);
             parentProgram = programList[parentID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
+            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + data.availableBudget) : '';
             $('#budget').attr('placeholder', budgetNotes);
         });
         $('.aclBox').html($('#subPGMAcl').html());
@@ -315,6 +320,113 @@ function setBudgetTipsAndAclList(parentID)
 
     if(typeof(programID) == 'undefined') programID = 0;
     budgetOverrunTips();
+    outOfDateTip();
+}
+
+/**
+ * compare childlish date.
+ *
+ * @access public
+ * @return void
+ */
+function compareChildDate()
+{
+    if(page == 'create') return;
+
+    var end               = $('#end').val();
+    var begin             = $('#begin').val();
+    var selectedProgramID = $('#parent').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
+    if(end == longTime) end = LONG_TIME;
+    if(end.length > 0 && begin.length > 0)
+    {
+        var programEnd   = new Date(end);
+        var programBegin = new Date(begin);
+
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
+        {
+            var childInfo = JSON.parse(data);
+            if(childInfo.maxChildEnd == '' || childInfo.minChildBegin == '') return;
+
+            var childBegin = new Date(childInfo.minChildBegin);
+            var childEnd   = new Date(childInfo.maxChildEnd);
+            if(programBegin <= childBegin && programEnd >= childEnd) return;
+
+            var dateTip = '';
+            if(programBegin > childBegin && programEnd >= childEnd)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + beginGreateChild + childInfo.minChildBegin + "</span>";
+            }
+            else if(programEnd < childEnd && programBegin <= childBegin)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + endLetterChild + childInfo.maxChildEnd + "</span>";
+            }
+            else
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedChild + childInfo.minChildBegin + "~" + childInfo.maxChildEnd + "</span>";
+            }
+
+            $('#dateBox').after(dateTip);
+        });
+    }
+}
+
+/**
+ * The date is out of the range of the parent project set, and a prompt is given.
+ *
+ * @access public
+ * @return void
+ */
+function outOfDateTip()
+{
+    var end   = $('#end').val();
+    var begin = $('#begin').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
+    if(end == longTime) end = LONG_TIME;
+    if(end.length > 0 && begin.length > 0)
+    {
+        var selectedProgramID = $('#parent').val();
+        var programEnd        = new Date(end);
+        var programBegin      = new Date(begin);
+
+        if(selectedProgramID == 0)
+        {
+            compareChildDate();
+            return;
+        }
+
+        if(typeof(programID) == 'undefined') programID = 0;
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+        {
+            var dateTip     = '';
+            var data        = JSON.parse(data);
+            var parentEnd   = new Date(data.selectedProgramEnd);
+            var parentBegin = new Date(data.selectedProgramBegin);
+
+            if(programBegin >= parentBegin && programEnd <= parentEnd)
+            {
+                compareChildDate();
+                return;
+            }
+
+            if(programBegin < parentBegin && programEnd <= parentEnd && programEnd >= parentBegin)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+            }
+            else if(programEnd > parentEnd && programBegin >= parentBegin && programBegin <= parentEnd)
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+            }
+            else
+            {
+                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+            }
+
+            $('#dateBox').after(dateTip);
+        });
+    }
 }
 
 /**
@@ -334,11 +446,13 @@ function budgetOverrunTips()
     }
 
     if(typeof(programID) == 'undefined') programID = 0;
-    $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
 
+        var tip = "";
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(data);
+        $('#budgetBox').after(tip);
     });
 }

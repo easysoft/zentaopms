@@ -70,8 +70,13 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
 <?php js::set('ganttType', $ganttType);?>
+<?php js::set('showFields', $showFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
+  <div class="pull-right btn-toolbar">
+    <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields')?>
+    <?php include '../../common/view/customfield.html.php';?>
+  </div>
   <form class="main-form form-ajax not-watch">
     <div class="example">
       <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
@@ -498,24 +503,23 @@ $(function()
     gantt.config.scale_height        = 18 * gantt.config.scales.length;
     gantt.config.duration_unit       = "day";
 
-    gantt.config.columns = [
-    {name: 'text',       width: '*', tree: true, resize: true, width:200},
-    {name: 'owner_id',   align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}},
-    {name: 'status',     align: 'center', resize: true, width: 80},
-    {name: 'start_date', align: 'center', resize: true, width: 80},
-    {name: 'end_date',   align: 'center', resize: true, width: 80},
-    {name: 'duration',   align: 'center', resize: true, width: 60},
-    {name: 'estimate',   align: 'center', resize: true, width: 60},
-    {name: 'percent',    align: 'center', resize: true, width:70, template: function(plan)
-        {
-            if(plan.percent) return Math.round(plan.percent) + '%';
-        }
-    },
-    {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realBegan',    align: 'center', resize: true, width: 60},
-    {name: 'realEnd',      align: 'center', resize: true, width: 60},
-    {name: 'consumed',     align: 'center', resize: false, width: 60},
-    ];
+    gantt.config.columns = [];
+    gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, width:200});
+    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
+    if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
+    gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('deadline') != -1) gantt.config.columns.push({name: 'end_date', align: 'center', resize: true, width: 80});
+    gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
+    if(showFields.indexOf('taskProgress') != -1) gantt.config.columns.push({name: 'taskProgress', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: false, width: 60});
+
+    endField = gantt.config.columns.pop();
+    endField.resize = false;
+    gantt.config.columns.push(endField);
 
     gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
     gantt.locale.labels.column_owner_id     = "<?php echo $lang->programplan->PMAB;?>";
@@ -684,7 +688,7 @@ $(function()
         if(task) gantt[task.$open ? 'close' : 'open'](task.id);
     });
 
-    $(".checkbox-primary").on('click', function()
+    $(".example .checkbox-primary").on('click', function()
     {
         var stageCustom = [];
         $("input[name='stageCustom[]']:checked").each(function()

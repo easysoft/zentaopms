@@ -16,6 +16,7 @@ if($currentLang != 'en') js::import($jsRoot . 'dhtmlxgantt/lang/' . $currentLang
 ?>
 <style>
 .gantt_message_area{display:none;}
+#ganttPris:hover{background:unset;color:unset;cursor: unset;}
 </style>
 <script>
 gantt.plugins({
