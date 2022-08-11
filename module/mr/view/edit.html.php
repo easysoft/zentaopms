@@ -50,7 +50,7 @@
              <th style="white-space: nowrap;"><?php echo $lang->mr->targetProject;?></th>
              <td>
                <div class='input-group'>
-                 <?php if($MR->status == 'merged' or $MR->status == 'closed'):?>
+                 <?php if($MR->status == 'merged' or $MR->status == 'closed' or $host->type == 'gogs'):?>
                  <span class='fix-border text-left'>
                  <?php echo $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;?>:
                  <?php echo $MR->targetBranch;?>
