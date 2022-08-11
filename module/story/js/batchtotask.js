@@ -271,6 +271,7 @@ function addRow(obj)
     $row.find('div[id$=_chosen]').remove();
     $row.find('.picker').remove();
     $row.find('.chosen').chosen();
+    $row.find('.picker-select').picker();
 
     var begin     = parseInt($(obj).parent().siblings('.c-id').text()) + 1;
     var count     = $('#tableBody tbody > tr').length;
