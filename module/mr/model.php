@@ -485,6 +485,7 @@ class mrModel extends model
 
         $this->loadModel('gitlab');
         $this->loadModel('gitea');
+        $this->loadModel('gogs');
         foreach($MRList as $key => $MR)
         {
             if($MR->status != 'opened') continue;
@@ -512,7 +513,8 @@ class mrModel extends model
                 }
                 else
                 {
-                    $users = $this->gitea->getUserAccountIdPairs($MR->hostID, 'openID,account');
+                    $scm   = strtolower($scm);
+                    $users = $this->$scm->getUserAccountIdPairs($MR->hostID, 'openID,account');
                 }
 
                 $newMR = new stdclass;
