@@ -38,7 +38,7 @@
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gogs->id);?></th>
           <th class='c-name w-300px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gogs->name);?></th>
           <th class='text'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gogs->url);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -56,6 +56,7 @@
           <td class='c-actions'>
             <?php
             common::printIcon('gogs', 'edit', "gogsID=$id", '', 'list', 'edit');
+            echo common::buildIconButton('gogs', 'bindUser', "gogsID=$id", '', 'list', 'link', '', '', false, '', '', 0, $gogs->isBindUser);
             common::printIcon('gogs', 'delete', "gogsID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>

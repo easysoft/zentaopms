@@ -410,12 +410,12 @@ class gogsModel extends model
 
         for($page = 1; true; $page++)
         {
-            $url    = sprintf($apiRoot, "/users/search") . "&page={$page}&limit=50";
+            $url    = sprintf($apiRoot, "/admin/users") . "&page={$page}&limit=20";
             $result = json_decode(commonModel::http($url));
             if(empty($result->data)) break;
-
             $response = array_merge($response, $result->data);
             $page += 1;
+            break;
         }
 
         if(empty($response)) return array();
@@ -436,7 +436,7 @@ class gogsModel extends model
             $user->email          = zget($gogsUser, 'email', '');
             $user->avatar         = $gogsUser->avatar_url;
             $user->createdAt      = zget($gogsUser, 'created', '');
-            $user->lastActivityOn = zget($gogsUser, 'last_login', '');
+            $user->lastActivityOn = zget($gogsUser, 'login', '');
 
             $users[] = $user;
         }
