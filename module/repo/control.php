@@ -1254,10 +1254,11 @@ class repo extends control
     public function ajaxGetGogsProjects($gogsID)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
-        if(!$projects) $this->send(array('message' => array()));
-
         $options = "<option value=''></option>";
-        foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
+        if(!empty($projects))
+        {
+            foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
+        }
 
         return print($options);
     }

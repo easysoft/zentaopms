@@ -34,7 +34,7 @@ class mr extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $repos = $this->loadModel('repo')->getListBySCM(array('Gitlab', 'Gitea'));
+        $repos = $this->loadModel('repo')->getListBySCM(array('Gitlab', 'Gitea', 'Gogs'));
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
 
         $repoID = $this->repo->saveState($repoID, $objectID);
@@ -69,9 +69,13 @@ class mr extends control
             {
                 $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
             }
-            else
+            elseif($repo->SCM == 'Gitea')
             {
                 $openIDList = $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
+            }
+            elseif($repo->SCM == 'Gogs')
+            {
+                $openIDList = $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
             }
         }
 
@@ -108,22 +112,26 @@ class mr extends control
         $repoID = $this->loadModel('repo')->saveState(0);
         $repo   = $this->repo->getRepoByID($repoID);
 
+        $this->loadModel('gitlab');
         $this->loadModel('gitea');
+        $this->loadModel('gogs');
         if($repo->SCM == 'Gitea')
         {
             $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
             if(empty($project) or !$project->allow_merge_commits) $repo = array();
         }
 
-        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab', 'gogs'));
         if(!$this->app->user->admin)
         {
-            $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
+            $gitlabUsers = $this->gitlab->getGitLabListByAccount();
             $giteaUsers  = $this->gitea->getGiteaListByAccount();
+            $gogsUsers   = $this->gogs->getGogsListByAccount();
             foreach($hosts as $hostID => $host)
             {
                 if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
-                if($host->type == 'gitea' and isset($giteaUsers[$hostID])) continue;
+                if($host->type == 'gitea'  and isset($giteaUsers[$hostID]))  continue;
+                if($host->type == 'gogs'   and isset($gogsUsers[$hostID]))   continue;
 
                 unset($hosts[$hostID]);
             }
@@ -1039,7 +1047,7 @@ class mr extends control
        $targetBranch  = $this->post->targetBranch;
 
        $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-       echo json_encode($result);
+       return print(json_encode($result));
    }
 
    /**
@@ -1054,15 +1062,11 @@ class mr extends control
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         $scm  = $host->type;
-        if($scm == 'gitea') $project = urldecode(base64_decode($project));
+        if(in_array($scm, array('gitea', 'gogs'))) $project = urldecode(base64_decode($project));
 
         $branchPrivs = array();
-
-        if($scm != 'gogs')
-        {
-            $branches = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
-            foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
-        }
-        echo json_encode($branchPrivs);
+        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
+        foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
+        return print(json_encode($branchPrivs));
    }
 }
