@@ -126,7 +126,7 @@
             <?php endif;?>
             <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
             <?php if($type != 'assignedTo'): ?>
-            <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
+            <td class="c-assignedTo has-btn" title="<?php echo zget($users, $task->assignedTo);?>"> <?php $this->task->printAssignedHtml($task, $users);?></td>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
@@ -196,7 +196,7 @@
               <?php endif;?>
               <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
               <?php if($type != 'assignedTo'): ?>
-              <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
+              <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
               <?php endif;?>
               <?php if($type != 'finishedBy'): ?>
               <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>

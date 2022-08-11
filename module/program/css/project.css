@@ -7,3 +7,4 @@
 .has-prefix > a {padding-left: 5px;}
 
 .has-suffix > a {max-width: calc(100% - 100px); padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.c-budget {width:100px; text-align: right; padding-right:16px !important;}
