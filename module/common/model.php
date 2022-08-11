@@ -2417,10 +2417,10 @@ EOD;
            $module == 'tutorial' or
            $module == 'install' or
            $module == 'upgrade' or
+           $module == 'sso' or
           ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
-          ($module == 'sso' and $method == 'login') or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
           ($module == 'execution' and $method == 'printkanban') or
