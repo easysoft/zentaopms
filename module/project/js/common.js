@@ -89,13 +89,16 @@ function computeWorkDays(currentID)
     if(beginDate && endDate)
     {
         if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
+        if(!isBactchEdit)
+        {
+            $('#days').val(computeDaysDelta(beginDate, endDate));
+            outOfDateTip();
+        }
     }
     else if($('input[checked="true"]').val())
     {
         computeEndDate();
     }
-    outOfDateTip();
 }
 
 /**
