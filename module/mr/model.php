@@ -903,13 +903,13 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
 
             $newMR->base = $MR->targetBranch;
             $newMR->body = $MR->description;
             if($MR->assignee)
             {
-                $assignee = $this->gitea->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $newMR->assignee = $assignee;
             }
 
