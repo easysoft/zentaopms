@@ -10,6 +10,11 @@ title=测试 testtaskModel->getLinkableCasesBySuite();
 cid=1
 pid=1
 
+根据测试套件1获取测试单1可关联的用例数量 >> 1
+根据测试套件2获取测试单2可关联的用例数量 >> 1
+根据测试套件1获取测试单1可关联的用例详情 >> 2,这个是测试用例2,normal,performance
+根据测试套件2获取测试单2可关联的用例详情 >> 6,这个是测试用例6,normal,interface
+
 */
 
 global $tester;

@@ -1093,7 +1093,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
-        if(!isset($this->config->setCode) or $this->config->setCode == 1) unset($project->code);
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         $linkedProductsCount = 0;
         if(isset($_POST['products']))
@@ -2029,7 +2029,7 @@ class projectModel extends model
                     echo $project->end;
                     break;
                 case 'status':
-                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
+                    echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
                 case 'budget':
                     echo $budgetTitle;

@@ -17,14 +17,16 @@ $insert         = $this->session->insert;
 ?>
 <style>
 form{overflow-x: scroll}
+#maxImport:focus {outline: none;}
 .c-pri{width:100px}
-.c-estimate, .c-severity, .c-openedBuild, .c-title{width:150px !important;}
+#showData > thead > tr > th{min-width:150px !important;}
 .c-story{width:150px;}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}
 .c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
 </style>
 <?php if(!empty($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php die;?>
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">

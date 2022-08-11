@@ -8,10 +8,10 @@ title=测试 gitlabModel::apiGetBranchPrivs();
 cid=1
 pid=1
 
-获取指定项目下受保护分支列表                   >> master
-获取指定项目下受保护分支数量                   >> 3
-获取无保护分支的项目下受保护分支数量           >> 0
-通过不存在projectID,获取受保护分支列表         >> 404 Project Not Found
+获取指定项目下受保护分支列表 >> master
+获取指定项目下受保护分支数量 >> 3
+获取无保护分支的项目下受保护分支数量 >> 0
+通过不存在projectID,获取受保护分支列表 >> 404 Project Not Found
 当gitlabID,projectID都为0时,获取受保护分支列表 >> return empty
 
 */

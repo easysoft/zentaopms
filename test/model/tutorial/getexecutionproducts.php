@@ -10,6 +10,10 @@ title=测试 tutorialModel->getExecutionProducts();
 cid=1
 pid=1
 
+测试拿到的数据是否正确 >> normal
+测试拿到的数据是否正确 >> Test branch
+测试拿到的数据是否正确 >> Test plan
+
 */
 
 $tutorial = new tutorialTest();

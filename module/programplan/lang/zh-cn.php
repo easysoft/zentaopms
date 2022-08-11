@@ -80,6 +80,16 @@ $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = '显示日期';
 $lang->programplan->stageCustom->task = '显示任务';
 
+$lang->programplan->ganttCustom['PM']           ='负责人';
+$lang->programplan->ganttCustom['deadline']     ='计划完成';
+$lang->programplan->ganttCustom['status']       ='状态';
+$lang->programplan->ganttCustom['realBegan']    ='实际开始';
+$lang->programplan->ganttCustom['realEnd']      ='实际完成';
+$lang->programplan->ganttCustom['progress']     ='工作量占比';
+$lang->programplan->ganttCustom['taskProgress'] ='任务进度';
+$lang->programplan->ganttCustom['estimate']     ='工时';
+$lang->programplan->ganttCustom['consumed']     ='消耗工时';
+
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量比例"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';

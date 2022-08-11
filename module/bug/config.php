@@ -340,6 +340,8 @@ $config->bug->datatable->fieldList['resolvedBuild']['title']    = 'resolvedBuild
 $config->bug->datatable->fieldList['resolvedBuild']['fixed']    = 'no';
 $config->bug->datatable->fieldList['resolvedBuild']['width']    = '120';
 $config->bug->datatable->fieldList['resolvedBuild']['required'] = 'no';
+$config->bug->datatable->fieldList['resolvedBuild']['control']  = 'select';
+$config->bug->datatable->fieldList['resolvedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'resolvedBuild&id,name');
 
 $config->bug->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->bug->datatable->fieldList['closedBy']['fixed']    = 'no';

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -40,4 +41,4 @@ $branch = new branchTest();
 r($branch->mergeBranchTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p() && e('2'); // 测试合并分支 1 到 分支 2
 r($branch->mergeBranchTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p() && e('2'); // 测试合并分支 2 到 新建分支
 r($branch->mergeBranchTest($productID[1], $mergedBranches[2], $mergeBranch3)) && p() && e('12'); // 测试合并分支 3 4 到 主干
-system("./ztest init");
+$db->restoreDB();

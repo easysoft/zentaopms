@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->execution->weekend);?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
 <?php js::set('errorSamePlans', $lang->project->errorSamePlans);?>
@@ -30,6 +31,12 @@
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <?php js::set('budget', $project->budget);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->project->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
+<?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -95,7 +102,7 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
+            <div id='dateBox' class='input-group'>
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php

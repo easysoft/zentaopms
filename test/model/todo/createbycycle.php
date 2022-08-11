@@ -11,6 +11,7 @@ title=测试 todoModel->createByCycle();
 cid=1
 pid=1
 
+ >> + days
 测试创建周期日待办 >> 11
 测试创建周期周待办 >> 9
 测试创建周期月待办 >> `%d`

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($branch->updateTest($changeStatus)) && p('0:field,old,new') && e('status,activ
 r($branch->updateTest($changeDesc))   && p('0:field,old,new') && e('desc,,修改后的分支1描述');  // 测试修改分支描述
 r($branch->updateTest($emptyName))    && p('name:0')          && e('『名称』不能为空。');       // 测试修改分支名称
 r($branch->updateTest($repeatName))   && p('name:0')          && e('分支名称已存在');           // 测试修改分支名称
-system("./ztest init");
+$db->restoreDB();

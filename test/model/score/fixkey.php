@@ -10,6 +10,11 @@ title=测试 scoreModel->fixKey();
 cid=1
 pid=1
 
+action为created >> create
+action为opened >> create
+action为bugconfirmed >> confirmBug
+action为fixed, 不存在于strings中 >> fixed
+
 */
 
 $actionList = array('created', 'opened', 'bugconfirmed', 'fixed');

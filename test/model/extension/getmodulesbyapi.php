@@ -9,6 +9,10 @@ title=测试 extensionModel->getModulesByAPI();
 cid=1
 pid=1
 
+判断返回的API中是否包含个人相关 >> 1
+判断返回的API中是否包含项目相关 >> 1
+判断返回的API中是否包含地盘相关 >> 0
+
 */
 
 global $tester;

@@ -10,21 +10,18 @@ title=bugModel->getByList();
 cid=1
 pid=1
 
-查询id为1的bug title  >> BUG1
+查询id为1的bug title >> BUG1
 查询id为2的bug status >> active
-查询id为3的bug title  >> BUG3
-查询id为1的bug title  >> BUG1
-查询id为4的bug title  >> BUG4
+查询id为3的bug title >> BUG3
+查询id为1的bug title >> BUG1
+查询id为4的bug title >> BUG4
 查询id为4的bug status >> active
-查询id为1的bug title  >> BUG1
-查询id为1的bug title  >> BUG1
-查询id为2的bug title  >> BUG2
+查询id为1的bug title >> BUG1
+查询id为1的bug title >> BUG1
+查询id为2的bug title >> BUG2
 查询id为2的bug status >> active
-查询id为7的bug title  >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-查询id为7的bug title  >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-
-
-
+查询id为7的bug title >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+查询id为7的bug title >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
 
 */
 

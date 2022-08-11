@@ -9,14 +9,13 @@ title=bugModel->getToAndCcList();
 cid=1
 pid=1
 
-测试获取bug1的联系人  >> admin,admin
-测试获取bug2的联系人  >> admin,admin
-测试获取bug3的联系人  >> admin,admin
+测试获取bug1的联系人 >> admin,admin
+测试获取bug2的联系人 >> admin,admin
+测试获取bug3的联系人 >> admin,admin
 测试获取bug51的联系人 >> dev1,admin
 测试获取bug81的联系人 >> test1,admin
 
 */
-
 
 $bugIDList = array('1', '2', '3', '51', '81');
 

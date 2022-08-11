@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/block.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,7 +11,10 @@ title=测试 blockModel->save();
 cid=1
 pid=1
 
-
+测试修改block 名称 >> 欢迎test,my,8,welcome
+测试修改block 模块 >> 我的贡献,my,8,dynamic
+测试修改block 区块 >> 项目统计,my,8,projectteam
+测试修改block 变量 >> 未关闭的产品,product,8,statistic
 
 */
 
@@ -51,4 +55,4 @@ r($block->saveTest($changeTitle,   $blockID[0], $changeTitle->modules))         
 r($block->saveTest($changeModules, $blockID[0], $changModules->modules))                                      && p('title,module,grid,block') && e('我的贡献,my,8,dynamic');            // 测试修改block 模块
 r($block->saveTest($changeBlock,   $blockID[1], $changeBlock->modules,  $changeBlock->moduleBlock))           && p('title,module,grid,block') && e('项目统计,my,8,projectteam');        // 测试修改block 区块
 r($block->saveTest($changeParams,  $blockID[2], $changeParams->modules, $changeParams->moduleBlock, $module)) && p('title,module,grid,block') && e('未关闭的产品,product,8,statistic'); // 测试修改block 变量
-system('./ztest init');
+$db->restoreDB();

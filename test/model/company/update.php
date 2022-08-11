@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/company.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -39,4 +40,4 @@ r($company->updateObject($companyID, $changeWebsite))  && p('website')  && e('ww
 r($company->updateObject($companyID, $changeBackyard)) && p('backyard') && e('https://');      // 修改公司网址前缀
 r($company->updateObject($companyID, $changeGuest))    && p('guest')    && e('1');             // 修改公司游客访问控制
 
-system("./ztest init");
+$db->restoreDB();

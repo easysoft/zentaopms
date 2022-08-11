@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
+<?php js::set('page', $this->app->getMethodName());?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('longTime', $lang->program->longTime);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
@@ -25,6 +27,15 @@
 <?php js::set('exRateNum', sprintf($lang->error->float, $lang->program->exchangeRate));?>
 <?php js::set('exRateNotNegative', $lang->program->exRateNotNegative);?>
 <?php js::set('programID', $program->id);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->program->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('dateExceedParent', $lang->program->dateExceedParent);?>
+<?php js::set('beginGreateChild', $lang->program->beginGreateChild);?>
+<?php js::set('endLetterChild', $lang->program->endLetterChild);?>
+<?php js::set('dateExceedChild', $lang->program->dateExceedChild);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -73,12 +84,12 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
-              <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
+            <div id='dateBox' class='input-group'>
+              <?php echo html::input('begin', $program->begin, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
                 $end = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
-                echo html::input('end', $end, "class='form-control form-date' placeholder='" . $lang->project->end . "' required");
+                echo html::input('end', $end, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
           </td>

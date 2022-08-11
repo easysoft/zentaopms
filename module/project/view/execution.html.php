@@ -72,7 +72,7 @@
           <?php echo $lang->nameAB;?>
           </th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
-          <th class='c-status'><?php echo $lang->project->status;?></th>
+          <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-hours'><?php echo $lang->project->progress;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>

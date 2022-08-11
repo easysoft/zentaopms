@@ -10,6 +10,10 @@ title=测试 testtaskModel->getDataOfTestTaskPerModule();
 cid=1
 pid=1
 
+获取测试单0的模块分组 >> 0
+获取测试单1模块分组，查看各个模块的数量 >> /,4
+获取测试单2模块分组，查看各个模块的数量 >> /,4
+
 */
 
 global $tester;

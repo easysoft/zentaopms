@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -58,4 +59,4 @@ r($program->create($emptyBeginProgram)) && p('message[begin]:0')          && e('
 r($program->create($emptyEndProgram))   && p('message[end]:0')            && e('『计划完成』不能为空。');                                             // 项目集的完成时间为空
 r($program->create($beginGtEndProgram)) && p('message[end]:0')            && e('『计划完成』应当大于『2022-01-12』。');                               // 项目集的计划完成时间大于计划开始时间
 r($program->create($moreThanParent))    && p('message:begin;message:end') && e('父项目集的开始日期：2022-01-16，开始日期不能小于父项目集的开始日期'); // 项目集的完成日期大于父项目集的完成日期(需要实时更新日期)
-system("./ztest init");
+$db->restoreDB();

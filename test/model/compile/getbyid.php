@@ -10,6 +10,9 @@ title=测试 compileModel->getByID();
 cid=1
 pid=1
 
+检查当id存在的时候是否能拿到数据 >> 这是一个Job1
+检查当id不存在的时候返回的结果 >> 0
+
 */
 
 $compile = new compileTest();

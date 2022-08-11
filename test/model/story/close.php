@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +30,4 @@ r($changes1) && p('2:field,old,new') && e('stage,wait,closed');    // 关闭一�
 r($changes2) && p('0:field,old,new') && e('closedReason,subdivided,willnotdo'); // 关闭一个软件需求，查看变更的字段1
 r($changes2) && p('1:field,old,new') && e('assignedTo,,closed');                // 关闭一个软件需求，查看变更的字段2
 r($changes2) && p('2:field,old,new') && e('status,active,closed');              // 关闭一个软件需求，查看变更的字段3
-system("./ztest init");
+$db->restoreDB();

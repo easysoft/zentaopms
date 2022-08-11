@@ -9,8 +9,10 @@ title=测试 storyModel->getPlanStories();
 cid=1
 pid=1
 
+获取计划1下的需求数量，每页10条 >> 10
+获取计划1下的需求数量，不分页 >> 20
 获取计划1下的需求列表，每页10条 >> 软件需求290,active,story
-获取计划1下的需求列表，不分页 >> 软件需求290,active,story
+获取计划1下的需求列表，不分页 >> 软件需求2,active,story
 
 */
 

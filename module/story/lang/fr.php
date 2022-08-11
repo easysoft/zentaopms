@@ -84,9 +84,10 @@ $lang->story->reportAction    = "Rapport de Story";
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
+$lang->story->batchToTaskTips = "The closed {$lang->SRCommon} will not be converted into tasks.";
 $lang->story->successToTask   = "Converted to task.";
 $lang->story->storyRound      = '%s time estimation';
+$lang->story->float           = "『 %s 』doit avoir des nombres positifs ou décimaux.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';

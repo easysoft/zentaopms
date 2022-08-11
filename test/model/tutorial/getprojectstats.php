@@ -10,6 +10,10 @@ title=测试 tutorialModel->getProjectStats();
 cid=1
 pid=1
 
+测试是否能拿到数据 >> scrum
+测试是否能拿到数据 >> 0
+测试是否能拿到数据 >> admin
+
 */
 
 $tutorial = new tutorialTest();

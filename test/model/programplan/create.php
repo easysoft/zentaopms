@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/programplan.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +54,4 @@ r($programplan->createTest($errorEnd))        && p() && e("阶段的结束时间
 r($programplan->createTest($percentOver))     && p() && e('工作量占比累计不应当超过100%');             // 测试创建用例 工作量占比之和大于100
 r($programplan->createTest())                 && p() && e('7');                                        // 测试正常更新阶段信息 获取阶段数量
 r($programplan->createTest($create))          && p() && e('8');                                        // 测试正常创建一条阶段信息 获取阶段数量
-system("./ztest init");
+$db->restoreDB();

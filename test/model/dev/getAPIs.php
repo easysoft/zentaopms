@@ -10,7 +10,7 @@ title=测试 devModel::getAPIs();
 cid=1
 pid=1
 
-获取todo模块api名字    >> create
+获取todo模块api名字 >> create
 获取product模块api名字 >> index
 获取project模块api描述 >> Project create guide.
 

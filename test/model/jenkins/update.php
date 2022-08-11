@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/jenkins.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,9 +11,9 @@ title=测试jenkinsModel->update();
 cid=1
 pid=1
 
-Jenkins名称为空    >> name
-服务器地址为空     >> url
-正确Jenkins数据    >> Changed Jenkins
+Jenkins名称为空 >> name
+服务器地址为空 >> url
+正确Jenkins数据 >> Changed Jenkins
 
 */
 
@@ -36,4 +37,4 @@ r($jenkins->update($jenkinsID)) && p() && e('url');    // 服务器地址为空
 $_POST['url'] = 'http://10.0.1.161:58080';
 r($jenkins->update($jenkinsID)) && p('name') && e('Changed Jenkins');    // 正确Jenkins数据
 
-system("./ztest init");
+$db->restoreDB();

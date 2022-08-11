@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +35,4 @@ r($action->createTest($objectTypeList[3], $objectIDList[0], $actionTypeList[3]))
 r($action->createTest($objectTypeList[4], $objectIDList[0], $actionTypeList[4], $comment))       && p('objectType,objectId,action,comment') && e('story,,comments,测试备注'); // 测试创建story 1 comment动态
 r($action->createTest($objectTypeList[4], $objectIDList[0], $actionTypeList[4]))                 && p()                                     && e('');                        // 测试创建story 1 comment动态 不填写备注
 r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[5], '', '', $actor)) && p()                                     && e('0');                        // 测试创建游客 logout动态
-system("./ztest init");
+$db->restoreDB();

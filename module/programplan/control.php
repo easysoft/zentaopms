@@ -84,6 +84,11 @@ class programplan extends control
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
             $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
         }
 
         if($type == 'assignedTo')
@@ -96,6 +101,11 @@ class programplan extends control
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
             $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
         }
 
         if($type == 'lists')
@@ -116,7 +126,6 @@ class programplan extends control
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->ganttType    = $type;
-
         $this->display();
     }
 

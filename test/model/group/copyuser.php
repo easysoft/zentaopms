@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/group.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +21,4 @@ $toGroup   = 7;
 $group = new groupTest();
 
 r($group->copyUserTest($fromGroup, $toGroup)) && p() && e('1'); // 复制分组6用户到分组7
-system("./ztest init");
+$db->restoreDB();

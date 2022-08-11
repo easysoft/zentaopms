@@ -10,6 +10,8 @@ title=测试 apiModel->getReleaseListByApi();
 cid=1
 pid=1
 
+获取刚插入的发布信息 >> 910
+
 */
 
 global $tester;

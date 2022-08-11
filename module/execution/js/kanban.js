@@ -1861,7 +1861,7 @@ function searchCards(value, order = '')
 
         if(hideAll && rdSearchValue != '')
         {
-            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbanLang.empty + '</span></p></div>');
+            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbancardLang.empty + '</span></p></div>');
         }
         else
         {

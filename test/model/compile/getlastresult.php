@@ -10,6 +10,9 @@ title=测试 compileModel->getLastResult();
 cid=1
 pid=1
 
+检查id存在的时候是否能拿到数据 >> admin
+检查id不存在的时候返回的结果 >> 0
+
 */
 
 $compile = new compileTest();

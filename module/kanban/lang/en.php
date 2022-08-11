@@ -134,11 +134,11 @@ $lang->kanban->aclGroup['extend']  = 'Extend';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->archiveList['0'] = 'Disable';
 $lang->kanban->archiveList['1'] = 'Enable';
+$lang->kanban->archiveList['0'] = 'Disable';
 
-$lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+$lang->kanban->enableList['0'] = 'Disable';
 
 $lang->kanban->alignmentList['center'] = 'Center';
 $lang->kanban->alignmentList['left']   = 'Left';
@@ -225,8 +225,8 @@ $lang->kanban->orderList['stage_desc']      = 'Story Stage Descending';
 $lang->kanban->orderList['assignedTo_desc'] = 'Assigned To';
 
 $lang->kanban->importList = array();
-$lang->kanban->importList['off'] = 'Import is not enabled';
 $lang->kanban->importList['on']  = 'Enable import function (You can import content that you have permission to view as cards.)';
+$lang->kanban->importList['off'] = 'Import is not enabled';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = 'Product Plan';

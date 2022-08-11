@@ -1165,10 +1165,9 @@ class bugTest
      */
     public function activateObject($bugID)
     {
-        $change = $this->objectModel->activate($bugID, '');
-        $_POST['assignedTo'] = 'admin';
+        $changes = $this->objectModel->activate($bugID, '');
 
-        if($change == array()) $change = '没有数据更新';
+        if($changes == array()) $changes = '没有数据更新';
 
         if(dao::isError())
         {
@@ -1176,7 +1175,10 @@ class bugTest
         }
         else
         {
-            return $change;
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'activatedCount') return $change;
+            }
         }
     }
 

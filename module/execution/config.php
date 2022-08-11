@@ -125,7 +125,7 @@ $config->execution->all->search['module'] = 'execution';
 $config->execution->all->search['fields']['name']           = $lang->execution->execName;
 $config->execution->all->search['fields']['id']             = $lang->execution->execId;
 $config->execution->all->search['fields']['status']         = $lang->execution->execStatus;
-$config->execution->all->search['fields']['project']        = $lang->execution->project;
+if($config->systemMode == 'new') $config->execution->all->search['fields']['project'] = $lang->execution->project;
 $config->execution->all->search['fields']['PM']             = $lang->execution->owner;
 $config->execution->all->search['fields']['openedBy']       = $lang->execution->openedBy;
 $config->execution->all->search['fields']['openedDate']     = $lang->execution->openedDate;
@@ -140,7 +140,7 @@ $config->execution->all->search['fields']['closedDate']     = $lang->execution->
 $config->execution->all->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->all->search['params']['id']             = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->all->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => array('') + $lang->execution->statusList);
-$config->execution->all->search['params']['project']        = array('operator' => '=',       'control' => 'select', 'values' => '');
+if($config->systemMode == 'new') $config->execution->all->search['params']['project'] = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->all->search['params']['PM']             = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['openedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
@@ -188,14 +188,14 @@ $config->execution->datatable->fieldList['id']['fixed']    = 'left';
 $config->execution->datatable->fieldList['id']['width']    = '70';
 $config->execution->datatable->fieldList['id']['required'] = 'yes';
 
-$config->execution->datatable->fieldList['name']['title']    = 'name';
+$config->execution->datatable->fieldList['name']['title']    = 'execName';
 $config->execution->datatable->fieldList['name']['fixed']    = 'left';
 $config->execution->datatable->fieldList['name']['width']    = 'auto';
 $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
 if(!isset($config->setCode) or $config->setCode == 1)
 {
-    $config->execution->datatable->fieldList['code']['title']    = 'code';
+    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
     $config->execution->datatable->fieldList['code']['fixed']    = 'no';
     $config->execution->datatable->fieldList['code']['width']    = '95';
     $config->execution->datatable->fieldList['code']['required'] = 'no';
@@ -211,7 +211,7 @@ $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
 $config->execution->datatable->fieldList['PM']['width']    = '70';
 $config->execution->datatable->fieldList['PM']['required'] = 'no';
 
-$config->execution->datatable->fieldList['status']['title']    = 'status';
+$config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 $config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';

@@ -15,11 +15,10 @@ pid=1
 测试获取buildID为14 productID为4的bug >> BUG10,BUG11,BUG12,SonarQube_Bug4
 测试获取buildID为15 productID为5的bug >> BUG13,BUG14,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,测试单转Bug5
 测试获取buildID为16 productID为6的bug >> bug16,BUG17,BUG18,SonarQube_Bug6
-测试获取不存在的build的bug            >> 0
-测试获取不存在的product的bug          >> 0
+测试获取不存在的build的bug >> 0
+测试获取不存在的product的bug >> 0
 
 */
-
 
 $buildIDList   = array('11', '12', '13', '14', '15', '16', '1000001');
 $productIDList = array('1', '2', '3', '4', '5', '6', '1000001');
