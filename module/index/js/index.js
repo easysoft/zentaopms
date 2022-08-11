@@ -268,6 +268,7 @@
         var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
         if (url && (!isSameUrl || forceReload !== false))
         {
+          debugger;
             app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
         }
@@ -464,7 +465,6 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
-        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
         if(!isSameUrl) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
