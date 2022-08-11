@@ -117,16 +117,38 @@ class myTest
     /**
      * Get testcases by search.
      *
-     * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
      * @access public
      * @return array
      */
-    public function getTestcasesBySearchTest($queryID, $type, $orderBy, $pager)
+    public function getTestcasesBySearchTest($type, $orderBy)
     {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 20;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        if($type == 'contribute')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
+                ->where($myTestcaseQuery)
+                ->andWhere('t1.openedBy')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        else
+        {
+            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where($myTestcaseQuery)
+                ->andWhere('t2.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        return $cases;
     }
 
     /**
