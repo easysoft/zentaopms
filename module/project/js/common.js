@@ -89,16 +89,13 @@ function computeWorkDays(currentID)
     if(beginDate && endDate)
     {
         if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit)
-        {
-            $('#days').val(computeDaysDelta(beginDate, endDate));
-            outOfDateTip();
-        }
+        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
     }
     else if($('input[checked="true"]').val())
     {
         computeEndDate();
     }
+    outOfDateTip(isBactchEdit ? index : 0);
 }
 
 /**
@@ -364,20 +361,22 @@ function budgetOverrunTips()
  * @access public
  * @return void
  */
-function outOfDateTip()
+function outOfDateTip(currentID = 0)
 {
-    var end   = $('#end').val();
-    var begin = $('#begin').val();
-    if($('#dateTip').length > 0) $('#dateTip').remove();
+    var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
+    var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
+    if($('#dateTip.text-remind').length > 0) $('#dateTip').remove();
+    if(currentID) $('#dateTip\\[' + currentID + '\\]').remove();
 
     if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
     {
-        var selectedProgramID = $('#parent').val();
+        var selectedProgramID = currentID ? $("select[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
 
         if(selectedProgramID == 0) return;
 
         if(typeof(projectID) == 'undefined') projectID = 0;
+        projectID = currentID ? $('#projectIdList\\['+ currentID + '\\]').val() : projectID;
         $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
         {
             var data         = JSON.parse(data);
@@ -386,23 +385,34 @@ function outOfDateTip()
             var projectEnd   = new Date(end);
             var projectBegin = new Date(begin);
 
+            var beginLetterParentTip = beginLetterParent + data.selectedProgramBegin;
+            var endGreaterParentTip  = endGreaterParent + data.selectedProgramEnd;
+            var dateExceedParentTip  = dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd;
+
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
             var dateTip = "";
             if(projectBegin < parentBegin && projectEnd <= parentEnd && projectEnd >= parentBegin)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+                dateTip = currentID ? beginLetterParentTip + "'>" + beginLetterParentTip : beginLetterParentTip;
             }
             else if(projectEnd > parentEnd && projectBegin >= parentBegin && projectBegin <= parentEnd)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+                dateTip = currentID ? endGreaterParentTip + "'>" + endGreaterParentTip : endGreaterParentTip;
             }
             else
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+                dateTip = currentID ? dateExceedParentTip + "'>" + dateExceedParentTip : dateExceedParentTip;
             }
 
-            $('#dateBox').after(dateTip);
+            if(currentID)
+            {
+                $("#projects\\[" + currentID + "\\]").after("<tr id='dateTip[" + currentID + "]'><td colspan='5'></td><td id='dateTip' class='c-name' colspan='3'><span class='text-remind' title='" + dateTip + "</span></td></tr>");
+            }
+            else
+            {
+                $('#dateBox').after("<span id='dateTip' class='text-remind'>" + dateTip + "</span>");
+            }
         });
     }
 }
