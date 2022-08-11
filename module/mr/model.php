@@ -437,9 +437,9 @@ class mrModel extends model
             {
                 $gitUsers = $this->loadModel('gitlab')->getUserIdAccountPairs($MR->hostID);
             }
-            elseif($rawMR->gitService == 'gitea')
+            else
             {
-                $gitUsers = $this->loadModel('gitea')->getUserAccountIdPairs($MR->hostID, 'openID,account');
+                $gitUsers = $this->loadModel($rawMR->gitService)->getUserAccountIdPairs($MR->hostID, 'openID,account');
             }
 
             $newMR = new stdclass;
@@ -670,21 +670,21 @@ class mrModel extends model
             }
             return json_decode(commonModel::http($url, $MRObject));
         }
-        elseif($host->type == 'gitea')
+        elseif(in_array($host->type, array('gitea', 'gogs')))
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls");
 
             $MRObject->head = $MR->sourceBranch;
             $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
             if($MR->assignee)
             {
-                $assignee = $this->gitea->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                $assignee = $this->{$host->type}->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
                 if($assignee) $MRObject->assignee = $assignee;
             }
 
             $mergeResult = json_decode(commonModel::http($url, $MRObject));
-            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
+            if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
             if(isset($mergeResult->mergeable))
             {
                 if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
@@ -731,6 +731,22 @@ class mrModel extends model
                 $MR->description       = $MR->body;
                 $MR->target_branch     = $MR->base->ref;
                 $MR->source_branch     = $MR->head->ref;
+                $MR->source_project_id = $projectID;
+                $MR->target_project_id = $projectID;
+            }
+        }
+        elseif($scm == 'Gogs')
+        {
+            foreach($response as $MR)
+            {
+                $MR->iid   = $MR->id;
+                $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
+                if($MR->merged) $MR->state = 'merged';
+
+                $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+                $MR->description       = $MR->body;
+                $MR->target_branch     = $MR->base_branch;
+                $MR->source_branch     = $MR->head_branch;
                 $MR->source_project_id = $projectID;
                 $MR->target_project_id = $projectID;
             }
@@ -786,7 +802,7 @@ class mrModel extends model
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
             $MR  = json_decode(commonModel::http($url));
         }
-        else
+        else if($host->type == 'gitea')
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
@@ -804,6 +820,29 @@ class mrModel extends model
                 $MR->description       = $MR->body;
                 $MR->target_branch     = $MR->base->ref;
                 $MR->source_branch     = $MR->head->ref;
+                $MR->source_project_id = $projectID;
+                $MR->target_project_id = $projectID;
+                $MR->has_conflicts     = empty($diff) ? true : false;
+            }
+        }
+        else if($host->type == 'gogs')
+        {
+            $url = sprintf($this->loadModel('gogs')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $MR  = json_decode(commonModel::http($url));
+            if(isset($MR->html_url))
+            {
+                $diff = $this->apiGetDiffs($hostID, $projectID, $MRID);
+
+                $MR->web_url = $MR->html_url;
+                $MR->iid     = $MR->id;
+                $MR->state   = $MR->state == 'open' ? 'opened' : $MR->state;
+                if($MR->merged) $MR->state = 'merged';
+
+                $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+                $MR->changes_count     = empty($diff) ? 0 : 1;
+                $MR->description       = $MR->body;
+                $MR->target_branch     = $MR->base_branch;
+                $MR->source_branch     = $MR->head_branch;
                 $MR->source_project_id = $projectID;
                 $MR->target_project_id = $projectID;
                 $MR->has_conflicts     = empty($diff) ? true : false;
@@ -873,7 +912,7 @@ class mrModel extends model
             }
 
             $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
-            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
+            if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
             if(isset($mergeResult->mergeable))
             {
                 if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
@@ -936,7 +975,7 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
         }
     }
@@ -959,7 +998,7 @@ class mrModel extends model
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
-        else
+        elseif($host->type == 'gitea')
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
@@ -971,6 +1010,23 @@ class mrModel extends model
             $MR->description       = $MR->body;
             $MR->target_branch     = $MR->base->ref;
             $MR->source_branch     = $MR->head->ref;
+            $MR->source_project_id = $projectID;
+            $MR->target_project_id = $projectID;
+
+            return $MR;
+        }
+        elseif($host->type == 'gogs')
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $MR  = json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
+            $MR->iid   = $MR->id;
+            $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
+            if($MR->merged) $MR->state = 'merged';
+
+            $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+            $MR->description       = $MR->body;
+            $MR->target_branch     = $MR->base_branch;
+            $MR->source_branch     = $MR->head_branch;
             $MR->source_project_id = $projectID;
             $MR->target_project_id = $projectID;
 
