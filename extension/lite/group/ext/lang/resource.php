@@ -551,7 +551,7 @@ $lang->resource->task->recordEstimate     = 'recordEstimateAction';
 $lang->resource->task->editEstimate       = 'editEstimate';
 $lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
-if($config->edition != 'open') $lang->resource->task->exportTemplet = 'exportTemplet';
+if($config->edition != 'open') $lang->resource->task->exportTemplate = 'exportTemplate';
 if($config->edition != 'open') $lang->resource->task->import        = 'import';
 
 $lang->task->methodOrder[5]   = 'create';
@@ -577,7 +577,7 @@ $lang->task->methodOrder[100] = 'editEstimate';
 $lang->task->methodOrder[105] = 'deleteEstimate';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
-$lang->task->methodOrder[120] = 'exportTemplet';
+$lang->task->methodOrder[120] = 'exportTemplate';
 $lang->task->methodOrder[125] = 'import';
 
 /* Doc. */
