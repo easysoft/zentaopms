@@ -3807,7 +3807,7 @@ class taskModel extends model
         $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
         if(!helper::isZeroDate($task->deadline))
         {
-            if($task->status != done)
+            if($task->status != 'done')
             {
                 $list .= strtotime($today) > strtotime($task->deadline) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
             }
