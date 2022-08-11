@@ -504,7 +504,7 @@ $(function()
     gantt.config.duration_unit       = "day";
 
     gantt.config.columns = [];
-    gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, width:200});
+    gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, min_width:100, width:200});
     if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'center', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
     if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
     gantt.config.columns.push({name: 'start_date', align: 'center', resize: true, width: 80});
