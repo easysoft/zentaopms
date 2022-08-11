@@ -187,7 +187,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['17.5'][]       = array('title' => "Optimize ZenTao performance, the database engine is adjusted from MyISAM to InnoDB. Optimize gantt chart, the copy project of max version can copy the task and more information. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.5'][]       = array('title' => "Optimize ZenTao performance, the database engine is adjusted from MyISAM to InnoDB. Gantt chart is optimized and upgraded, and the Copy items of the Max version can replicate more information. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.4'][]       = array('title' => "Optimization of details Page visualization and jumping page logic. Improvement of Kanban function. Optimization of document creating and editing pages. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.3'][]       = array('title' => "UI optimization of the modules such as statistics and background, the use case library will synchronize the function optimization information. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.2'][]       = array('title' => "Adjust the display of agile project block; optimize the UI of programs, projects and tests; optimize the detailed experience. Fix bugs.", 'desc' => '');
