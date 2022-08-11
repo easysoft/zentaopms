@@ -4369,7 +4369,6 @@ class executionModel extends model
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
-        echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
         if(empty($execution->children))
         {
             echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);

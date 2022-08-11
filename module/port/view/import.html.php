@@ -1,4 +1,5 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
+<style>input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus {outline: none;}</style>
 <main>
   <div class="container">
     <div id="mainContent" class='main-content'>

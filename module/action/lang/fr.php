@@ -249,6 +249,7 @@ $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove storie
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Used to describe the historical operation records of gantt. */
+$lang->action->desc->ganttdrag = '$date, <strong>$actor</strong> tasks dragged <strong>$extra</strong>.' . "\n";
 $lang->action->desc->ganttmove = '$date, <strong>$actor</strong> tasks sorted <strong>$extra</strong>.' . "\n";
 
 /* Used to display dynamic information. */
@@ -388,6 +389,8 @@ $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
 $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
+$lang->action->label->ganttdrag             = 'dragged';
+$lang->action->label->ganttmove             = 'sorted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

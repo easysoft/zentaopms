@@ -3,7 +3,7 @@ body {margin-bottom: 25px;}
 .side-col {padding-right: 20px; width: 18%;}
 #sidebar>.cell {width: 100%;}
 
-.c-budget {padding-right:16px !important;}
+.c-budget {text-align: right; padding-right:16px !important;}
 td.c-actions {overflow: visible;}
 td.c-PM {white-space: nowrap; overflow: hidden;}
 .c-actions .btn {overflow: visible;}

@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme
 $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R & D affairs in <span style='color: #0c60e1'>[R&D]</span> and daily office affairs in <span style='color: #0c60e1'>[Lite]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+$lang->misc->releaseDate['17.5']        = '2022-08-11';
 $lang->misc->releaseDate['17.4']        = '2022-07-27';
 $lang->misc->releaseDate['17.3']        = '2022-07-13';
 $lang->misc->releaseDate['17.2']        = '2022-06-29';
@@ -186,6 +187,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['17.5'][]       = array('title' => "Optimize ZenTao performance, the database engine is adjusted from MyISAM to InnoDB. Gantt chart is optimized and upgraded, and the Copy items of the Max version can replicate more information. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.4'][]       = array('title' => "Optimization of details Page visualization and jumping page logic. Improvement of Kanban function. Optimization of document creating and editing pages. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.3'][]       = array('title' => "UI optimization of the modules such as statistics and background, the use case library will synchronize the function optimization information. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.2'][]       = array('title' => "Adjust the display of agile project block; optimize the UI of programs, projects and tests; optimize the detailed experience. Fix bugs.", 'desc' => '');

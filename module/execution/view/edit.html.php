@@ -23,6 +23,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->execution->edit;?></small>
       </h2>
     </div>
+    <?php echo html::hidden('project', $project->id);?>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <?php if($config->systemMode == 'new' and isset($project)):?>

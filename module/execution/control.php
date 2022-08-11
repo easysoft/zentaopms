@@ -1384,22 +1384,37 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
-        $minDate = !helper::isZeroDate($execution->openedDate) ? $execution->openedDate : $execution->begin;
-        $maxDate = !helper::isZeroDate($execution->closedDate) ? $execution->closedDate : helper::today();
+        $minDate = !helper::isZeroDate($execution->openedDate) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime($execution->begin));
+        $maxDate = !helper::isZeroDate($execution->closedDate) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
 
         if(!empty($_POST))
         {
             $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
             $end   = htmlspecialchars($this->post->end, ENT_QUOTES);
 
-            if(empty($begin)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin));
-            if(empty($end)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end));
+            $dateError = array();
+
+            if(empty($begin)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin);
+            if(empty($end)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end);
+            if(empty($dateError))
+            {
+                if($begin < $minDate) $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->begin, $minDate);
+                if($begin > $maxDate) $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->begin, $maxDate);
+                if($end < $minDate)   $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->end, $minDate);
+                if($end > $maxDate)   $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->end, $maxDate);
+            }
+            if(!empty($dateError))
+            {
+                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error) . '<br/>';
+                return $this->sendError($dateError);
+            }
+
             if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
             if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
 
             $this->execution->computeCFD($executionID);
             $this->execution->checkCFDData($executionID, $begin);
-            return print(js::locate($this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end))), 'parent'));
+            return $this->send(array('result' => 'success', 'locate' => $this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end)))));
         }
 
         if($begin and $end)
