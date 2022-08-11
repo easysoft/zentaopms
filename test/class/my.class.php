@@ -114,4 +114,80 @@ class myTest
         return count($objects);
     }
 
+    /**
+     * Get testcases by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getTestcasesBySearchTest($queryID, $type, $orderBy, $pager)
+    {
+
+    }
+
+    /**
+     * Get tasks by search.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getTasksBySearchTest($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)
+    {
+
+    }
+
+    /**
+     * Get risks by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getRisksBySearchTest($queryID, $type, $orderBy, $pager)
+    {
+
+    }
+
+    /**
+     * Get stories by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getStoriesBySearchTest($queryID, $type, $orderBy, $pager)
+    {
+
+    }
+
+    /**
+     * Get requirements by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getRequirementsBySearchTest($queryID, $type, $orderBy, $pager)
+    {
+
+    }
+
 }

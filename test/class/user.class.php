@@ -9,8 +9,8 @@ class userTest
 
     /**
      * Test get user list.
-     * 
-     * @param  bool $count 
+     *
+     * @param  bool $count
      * @access public
      * @return void
      */
@@ -29,10 +29,10 @@ class userTest
     }
 
     /**
-     * Test get user information by accounts. 
-     * 
-     * @param  array  $accounts 
-     * @param  bool   $count 
+     * Test get user information by accounts.
+     *
+     * @param  array  $accounts
+     * @param  bool   $count
      * @access public
      * @return void
      */
@@ -52,11 +52,11 @@ class userTest
 
     /**
      * Test user get pairs.
-     * 
-     * @param  string $params 
-     * @param  string $usersToAppended 
-     * @param  int    $maxCount 
-     * @param  array  $accounts 
+     *
+     * @param  string $params
+     * @param  string $usersToAppended
+     * @param  int    $maxCount
+     * @param  array  $accounts
      * @access public
      * @return void
      */
@@ -76,7 +76,7 @@ class userTest
 
     /**
      * Test get avatar pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -96,7 +96,7 @@ class userTest
 
     /**
      * Test get user commiters.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -116,8 +116,8 @@ class userTest
 
     /**
      * Test get user realname and emails.
-     * 
-     * @param  array $accounts 
+     *
+     * @param  array $accounts
      * @access public
      * @return void
      */
@@ -137,9 +137,9 @@ class userTest
 
     /**
      * Test get user roles.
-     * 
-     * @param  array  $accounts 
-     * @param  bool   $needRole 
+     *
+     * @param  array  $accounts
+     * @param  bool   $needRole
      * @access public
      * @return void
      */
@@ -158,11 +158,11 @@ class userTest
     }
 
     /**
-     * Test get user display infos. 
-     * 
-     * @param  int    $accounts 
-     * @param  int    $deptID 
-     * @param  string $type 
+     * Test get user display infos.
+     *
+     * @param  int    $accounts
+     * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -182,9 +182,9 @@ class userTest
 
     /**
      * Test get user by id.
-     * 
-     * @param  int|string $userID 
-     * @param  string     $field 
+     *
+     * @param  int|string $userID
+     * @param  string     $field
      * @access public
      * @return void
      */
@@ -204,10 +204,10 @@ class userTest
 
     /**
      * Test get user by query.
-     * 
-     * @param  string $browseType 
-     * @param  string $query 
-     * @param  string $orderBy 
+     *
+     * @param  string $browseType
+     * @param  string $query
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -227,8 +227,8 @@ class userTest
 
     /**
      * Test create a user.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -252,7 +252,7 @@ class userTest
 
     /**
      * Test batch create users.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -279,9 +279,9 @@ class userTest
 
     /**
      * Test edit a user.
-     * 
+     *
      * @param  int   $userID
-     * @param  array $params 
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -305,8 +305,8 @@ class userTest
 
     /**
      * Test batch edit users.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -326,7 +326,7 @@ class userTest
         {
             $users      = array();
             $userIDList = array_keys($params['account']);
-            foreach($userIDList as $userID) 
+            foreach($userIDList as $userID)
             {
                 $user = $this->objectModel->getByID($userID, 'id');
                 $users[$user->id] = $user;
@@ -338,9 +338,9 @@ class userTest
 
     /**
      * Test edit a user password.
-     * 
+     *
      * @param  int   $userID
-     * @param  array $params 
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -363,8 +363,8 @@ class userTest
 
     /**
      * Reset user password.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -388,8 +388,8 @@ class userTest
 
     /**
      * Check user password.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -412,7 +412,7 @@ class userTest
 
     /**
      * Identify user.
-     * 
+     *
      * @param  string $account
      * @param  string $password
      * @access public
@@ -430,7 +430,7 @@ class userTest
 
     /**
      * Test authorize user.
-     * 
+     *
      * @param  string $account
      * @access public
      * @return void
@@ -444,7 +444,7 @@ class userTest
 
     /**
      * Test login user.
-     * 
+     *
      * @param  object $user
      * @access public
      * @return void
@@ -465,7 +465,7 @@ class userTest
 
     /**
      * Test get groups by user.
-     * 
+     *
      * @param  string $account
      * @param  string $password
      * @access public
@@ -487,8 +487,8 @@ class userTest
 
     /**
      * Test get groups by visions.
-     * 
-     * @param  string $visions 
+     *
+     * @param  string $visions
      * @access public
      * @return void
      */
@@ -508,11 +508,11 @@ class userTest
 
     /**
      * Test get my objects.
-     * 
-     * @param  string $account 
-     * @param  string $type 
-     * @param  string $status 
-     * @param  string $orderBy 
+     *
+     * @param  string $account
+     * @param  string $type
+     * @param  string $status
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -526,8 +526,8 @@ class userTest
 
     /**
      * Test get contact list.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @param  string $params
      * @access public
      * @return void
@@ -542,8 +542,8 @@ class userTest
 
     /**
      * Test get list by account method.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -554,8 +554,8 @@ class userTest
 
     /**
      * Test get parent stage authed users.
-     * 
-     * @param  int    $stageID 
+     *
+     * @param  int    $stageID
      * @access public
      * @return void
      */
@@ -566,8 +566,8 @@ class userTest
 
     /**
      * Test get contact list by id.
-     * 
-     * @param  int    $listID 
+     *
+     * @param  int    $listID
      * @access public
      * @return void
      */
@@ -578,8 +578,8 @@ class userTest
 
     /**
      * Test get contact user pairs.
-     * 
-     * @param  array $accountList 
+     *
+     * @param  array $accountList
      * @access public
      * @return void
      */
@@ -590,15 +590,15 @@ class userTest
 
     /**
      * Test create contact list.
-     * 
-     * @param  string $listName 
-     * @param  array  $userList 
+     *
+     * @param  string $listName
+     * @param  array  $userList
      * @access public
      * @return void
      */
     public function createContactListTest($listName = '', $userList = array())
     {
-        $listID = $this->objectModel->createContactList($listName, $userList); 
+        $listID = $this->objectModel->createContactList($listName, $userList);
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->getContactListByID($listID);
@@ -606,10 +606,10 @@ class userTest
 
     /**
      * Test update contact list.
-     * 
-     * @param  int    $listID 
-     * @param  string $listName 
-     * @param  array  $userList 
+     *
+     * @param  int    $listID
+     * @param  string $listName
+     * @param  array  $userList
      * @access public
      * @return void
      */
@@ -623,8 +623,8 @@ class userTest
 
     /**
      * Test delete a contact list.
-     * 
-     * @param  int    $listID 
+     *
+     * @param  int    $listID
      * @access public
      * @return void
      */
@@ -638,7 +638,7 @@ class userTest
 
     /**
      * Test delete a contact list.
-     * 
+     *
      * @param  object $user
      * @access public
      * @return void
@@ -652,8 +652,8 @@ class userTest
     }
 
     /**
-     * Test get weak users. 
-     * 
+     * Test get weak users.
+     *
      * @access public
      * @return void
      */
@@ -666,8 +666,8 @@ class userTest
     }
 
     /**
-     * Test compute password strength. 
-     * 
+     * Test compute password strength.
+     *
      * @access public
      * @return void
      */
@@ -681,9 +681,9 @@ class userTest
 
     /**
      * Test compute user view.
-     * 
-     * @param  string $account 
-     * @param  bool   $force 
+     *
+     * @param  string $account
+     * @param  bool   $force
      * @access public
      * @return void
      */
@@ -697,9 +697,9 @@ class userTest
 
     /**
      * Test get product members.
-     * 
-     * @param  string $account 
-     * @param  bool   $force 
+     *
+     * @param  string $account
+     * @param  bool   $force
      * @access public
      * @return void
      */
@@ -713,9 +713,9 @@ class userTest
 
     /**
      * Test get product members.
-     * 
-     * @param  string $account 
-     * @param  bool   $force 
+     *
+     * @param  string $account
+     * @param  bool   $force
      * @access public
      * @return void
      */
@@ -729,9 +729,9 @@ class userTest
 
     /**
      * Test update program view.
-     * 
-     * @param  array  $programIdList 
-     * @param  array  $users 
+     *
+     * @param  array  $programIdList
+     * @param  array  $users
      * @access public
      * @return void
      */
@@ -745,7 +745,7 @@ class userTest
 
     /**
      * Test check program priv.
-     * 
+     *
      * @param  object $program
      * @param  string $account
      * @param  array  $stakeholders
@@ -760,7 +760,7 @@ class userTest
 
     /**
      * Test check project priv.
-     * 
+     *
      * @param  object $project
      * @param  string $account
      * @param  array  $stakeholders
@@ -775,7 +775,7 @@ class userTest
     }
     /**
      * Test check sprint priv.
-     * 
+     *
      * @param  object $sprint
      * @param  string $account
      * @param  array  $stakeholders
@@ -790,7 +790,7 @@ class userTest
     }
     /**
      * Test check product priv.
-     * 
+     *
      * @param  object $program
      * @param  string $account
      * @param  array  $groups
@@ -807,11 +807,11 @@ class userTest
 
     /**
      * Test get project authed users.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $stakeholders 
-     * @param  array  $teams 
-     * @param  array  $whiteList 
+     *
+     * @param  int    $projectID
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
      * @access public
      * @return void
      */
@@ -824,10 +824,10 @@ class userTest
 
     /**
      * Test get program authed users.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $stakeholders 
-     * @param  array  $whiteList 
+     *
+     * @param  int    $projectID
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
      * @access public
      * @return void
      */
@@ -840,11 +840,11 @@ class userTest
 
     /**
      * Test get product view list users.
-     * 
-     * @param  int    $productID 
-     * @param  array  $teams 
-     * @param  array  $stakeholders 
-     * @param  array  $whiteList 
+     *
+     * @param  int    $productID
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
      * @access public
      * @return void
      */
@@ -857,8 +857,8 @@ class userTest
 
     /**
      * Test get product view list users.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $type
      * @param  string $params
      * @param  array  $usersToAppended
@@ -872,7 +872,7 @@ class userTest
 
     /**
      * Test save user template.
-     * 
+     *
      * @param  string $type
      * @access public
      * @return void
@@ -888,7 +888,7 @@ class userTest
 
     /**
      * Test get user templates.
-     * 
+     *
      * @param  string $type
      * @access public
      * @return void
@@ -900,7 +900,7 @@ class userTest
 
     /**
      * Test get person data.
-     * 
+     *
      * @param  string $account
      * @access public
      * @return void
@@ -912,7 +912,7 @@ class userTest
 
     /**
      * Test get user details for api.
-     * 
+     *
      * @param  array $userList
      * @access public
      * @return void
@@ -924,7 +924,7 @@ class userTest
 
     /**
      * Test get vision list.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -942,5 +942,17 @@ class userTest
     public function getCanCreateStoryUsersTest()
     {
         return $this->objectModel->getCanCreateStoryUsers();
+    }
+
+    /**
+     * Put the current user first.
+     *
+     * @param  array    $users
+     * @access public
+     * @return array
+     */
+    public function processAccountSortTest($users = array())
+    {
+        return $this->objectModel->processAccountSort($users);
     }
 }
