@@ -164,19 +164,19 @@
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}]", $productPlan, $plan->id, "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}][]", $productPlan, $plan->id, "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][][]", $productPlan, '', "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>

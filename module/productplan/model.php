@@ -116,16 +116,21 @@ class productplanModel extends model
 
         if(!empty($plans))
         {
-            $plans      = $this->reorder4Children($plans);
-            $planIdList = array_keys($plans);
+            $plans        = $this->reorder4Children($plans);
+            $planIdList   = array_keys($plans);
+            $planProjects = array();
 
-            $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($product)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.plan')->in(array_keys($plans))
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->fetchPairs('plan', 'project');
+            foreach($planIdList as $planID)
+            {
+                $planProjects[$planID] = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($product)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t1.plan')->like(",$planID,")
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
+                    ->orderBy('project_desc')
+                    ->fetch('project');
+            }
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
