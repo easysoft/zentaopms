@@ -674,14 +674,14 @@ class upgradeModel extends model
             case 'biz7.0':
                 $this->processFlowPosition();
                 break;
-            case 'biz7.3':
+            case 'biz7.4':
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
                 $this->addDefaultRuleToWorkflow();
                 $this->processReviewLinkages();
-                $this->addFlowActions('biz7.3');
-                $this->addFlowFields('biz7.3');
+                $this->addFlowActions('biz7.4');
+                $this->addFlowFields('biz7.4');
                 break;
         }
     }
