@@ -531,9 +531,6 @@ class upgradeModel extends model
                 $this->processBugLinkBug();
                 break;
             case '17_4':
-                $this->processCreatedInfo();
-                $this->processCreatedBy();
-                $this->updateApproval();
                 $this->updateSearchIndex();
                 break;
         }
@@ -681,9 +678,12 @@ class upgradeModel extends model
                 $this->processFlowPosition();
                 break;
             case 'biz7.4':
+                $this->processCreatedInfo();
+                $this->processCreatedBy();
                 $this->updateApproval();
                 $this->addDefaultRuleToWorkflow();
-                $this->addFlowActions('biz7.3');
+                $this->addFlowActions('biz7.4');
+                $this->addFlowFields('biz7.4');
                 break;
         }
     }
@@ -6959,6 +6959,45 @@ class upgradeModel extends model
                 $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
             }
         }
+        return !dao::isError();
+    }
+
+    /**
+     * Add flow fields.
+     *
+     * @param  int    $version
+     * @access public
+     * @return bool
+     */
+    public function addFlowFields($version)
+    {
+        $this->loadModel('workflowfield');
+
+        $upgradeLang   = $this->lang->workflowfield->upgrade[$version];
+        $upgradeConfig = $this->config->workflowfield->upgrade[$version];
+
+        $now = helper::now();
+        foreach($upgradeLang as $module => $fields)
+        {
+            $field = new stdclass();
+            $field->buildin     = '1';
+            $field->role        = 'buildin';
+            $field->module      = $module;
+            $field->createdBy   = $this->app->user->account;
+            $field->createdDate = $now;
+
+            foreach($fields as $code => $name)
+            {
+                $field->field = $code;
+                $field->name  = $name;
+
+                $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                foreach($fieldConfig as $key => $value) $field->$key = $value;
+
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+            }
+        }
+
         return !dao::isError();
     }
 }
