@@ -114,6 +114,8 @@ class story extends control
             $this->view->$fromObjectName  = $fromObject;
         }
 
+        $copyStoryID = $storyID;
+
         if(!empty($_POST))
         {
             $response['result'] = 'success';
@@ -237,7 +239,19 @@ class story extends control
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
-                if($this->session->storyList) $response['locate'] = $this->session->storyList;
+                if($this->session->storyList)
+                {
+                    /* When copying story in the product plan, return to different pages for story#32949. */
+                    if($copyStoryID and strpos($this->session->storyList, 'productplan') !== false)
+                    {
+                        $storyInfo = $this->story->getByList(array($storyID, $copyStoryID));
+                        if($storyInfo[$storyID]->plan == $storyInfo[$copyStoryID]->plan or $storyInfo[$storyID]->product != $storyInfo[$copyStoryID]->product) $response['locate'] = $this->session->storyList;
+                    }
+                    else
+                    {
+                        $response['locate'] = $this->session->storyList;
+                    }
+                }
             }
             else
             {
