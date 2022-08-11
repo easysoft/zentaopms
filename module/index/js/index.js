@@ -268,7 +268,6 @@
         var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
         if (url && (!isSameUrl || forceReload !== false))
         {
-          debugger;
             app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
         }
