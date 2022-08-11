@@ -189,6 +189,6 @@ class port extends control
 
         $name = $field . "[$index]";
         if($multiple == 'multiple') $name .= "[]";
-        return print(html::select($name, $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
+        return print(html::select($name, $fieldList[$field]['values'], $value, "class='form-control picker-select' data-field='$field' data-index='$index' $multiple"));
     }
 }
