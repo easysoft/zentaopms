@@ -18,6 +18,7 @@ $insert         = $this->session->insert;
 <style>
 form{overflow-x: scroll}
 #maxImport:focus {outline: none;}
+.pointorNone{pointer-events:none;}
 .c-pri{width:100px}
 #showData > thead > tr > th{width:150px;}
 .c-id{width:50px}
