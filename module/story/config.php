@@ -162,15 +162,21 @@ $config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['assignedDate']['width']    = '90';
 $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
-$config->story->datatable->fieldList['reviewedBy']['title']    = 'reviewedBy';
-$config->story->datatable->fieldList['reviewedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['reviewedBy']['width']    = '80';
-$config->story->datatable->fieldList['reviewedBy']['required'] = 'no';
+$config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
+$config->story->datatable->fieldList['reviewedBy']['width']      = '80';
+$config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
+$config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'user', 'method' => 'getPairs', 'params' => 'devfirst|noclosed|nodeleted');
 
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';
 $config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
+
+$config->story->datatable->fieldList['needReview']['title']      = 'needReview';
+$config->story->datatable->fieldList['needReview']['control']    = 'select';
+$config->story->datatable->fieldList['needReview']['dataSource'] = array('lang' => 'reviewList');
 
 $config->story->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->story->datatable->fieldList['closedBy']['fixed']    = 'no';

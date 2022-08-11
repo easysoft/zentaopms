@@ -1305,7 +1305,7 @@ class portModel extends model
                 if($control == 'select' or $control == 'multiple')
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
-                    if(!empty($values[$selected]) and isset($values[0])) $options = array_slice($values, 0, 1);
+                    if(empty($options) and isset($values[0])) $options = array_slice($values, 0, 1);
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
