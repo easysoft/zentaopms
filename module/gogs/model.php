@@ -517,4 +517,53 @@ class gogsModel extends model
             ->andWhere('providerID')->eq($gogsID)
             ->fetchPairs();
     }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $branchName
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($gogsID, $project, $branchName)
+    {
+        $url    = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branchName");
+        $branch = json_decode(commonModel::http($url));
+        if($branch)
+        {
+            $gogs = $this->getByID($gogsID);
+            $branch->web_url = "{$gogs->url}/$project/src/branch/$branchName";
+        }
+
+        return $branch;
+    }
+
+    /**
+     * Get protect branches of one project.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $keyword
+     * @access public
+     * @return array
+     */
+    public function apiGetBranchPrivs($gogsID, $project, $keyword = '')
+    {
+        $keyword  = urlencode($keyword);
+        $url      = sprintf($this->getApiRoot($gogsID), "/repos/$project/branch_protections");
+        $branches = json_decode(commonModel::http($url));
+
+        if(!is_array($branches)) return array();
+
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            $branch->name = $branch->branch_name;
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[] = $branch;
+        }
+
+        return $newBranches;
+    }
 }
