@@ -530,11 +530,6 @@ class upgradeModel extends model
             case '17_3':
                 $this->processBugLinkBug();
                 break;
-            case '17_4':
-                $this->processCreatedInfo();
-                $this->processCreatedBy();
-                $this->updateApproval();
-                break;
         }
 
         $this->deletePatch();
@@ -680,7 +675,10 @@ class upgradeModel extends model
                 $this->processFlowPosition();
                 break;
             case 'biz7.3':
+                $this->processCreatedInfo();
+                $this->processCreatedBy();
                 $this->updateApproval();
+                $this->addDefaultRuleToWorkflow();
                 $this->addFlowActions('biz7.3');
                 $this->addFlowFields('biz7.3');
                 break;
