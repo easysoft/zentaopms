@@ -148,7 +148,7 @@ class port extends control
         if($model == 'task') $filter = 'estimate';
 
         $this->loadModel($model);
-        $importFields = $this->config->$model->templateFields;
+        $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
         $fields       = $this->port->initFieldList($model, $importFields, false);
         $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);

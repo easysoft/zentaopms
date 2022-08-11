@@ -220,7 +220,7 @@ class portModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value) and array_key_exists($field, $this->config->$model->fieldList) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    if(is_array($value) and isset($this->config->$model->fieldList[$field]) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -258,7 +258,7 @@ class portModel extends model
             foreach ($portFieldList as $portField => $value)
             {
                 $funcName = 'init' . ucfirst($portField);
-                if((!array_key_exists($portField, $modelFieldList)) or $portField == 'title')
+                if((!isset($modelFieldList[$portField])) or $portField == 'title')
                 {
                   $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
                   if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
@@ -287,15 +287,15 @@ class portModel extends model
         $this->commonActions($model);
 
         if(!empty($this->modelConfig->fieldList[$field]['title'])) return $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
-        if(array_key_exists($field, $this->lang->$model))
+        if(isset($this->lang->$model->$field))
         {
             $title = $this->lang->$model->$field;
         }
-        elseif(array_key_exists(($field . 'AB'), $this->lang->$model))
+        elseif(isset($this->lang->$model->{$field . 'AB'}))
         {
             $title = $this->lang->$model->{$field . 'AB'};
         }
-        elseif(array_key_exists($field, $this->lang->port->reservedWord))
+        elseif(isset($this->lang->port->reservedWord[$field]))
         {
             $title = $this->lang->port->reservedWord[$field];
         }
@@ -313,7 +313,9 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
+        if(isset($this->modelFieldList[$field]['control'])) return $this->modelFieldList[$field]['control'];
         if(isset($this->modelLang->{$field.'List'}))        return 'select';
+
         if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
         return $this->portConfig->fieldList['control'];
     }
@@ -408,50 +410,6 @@ class portModel extends model
     }
 
     /**
-     * Init tmpFile.
-     *
-     * @param  int    $created
-     * @access public
-     * @return void
-     */
-    public function initTmpFile($created = true)
-    {
-        $taskLang = $this->lang->task;
-        $file     = $this->session->fileImportFileName;
-        $tmpPath  = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile  = $tmpPath . DS . md5(basename($file));
-
-        if(file_exists($tmpFile)) return $tmpFile;
-
-        $rows = $this->file->getRowsFromExcel($file);
-
-        /* Check empty.*/
-        if(is_string($rows))
-        {
-            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            $response['result']  = 'fail';
-            $response['message'] = $rows;
-            return $response;
-        }
-
-        $fields = $this->config->task->templateFields;
-        array_unshift($fields, 'id');
-
-        foreach($fields as $key => $fieldName)
-        {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($taskLang->$fieldName) ? $taskLang->$fieldName : $fieldName;
-            unset($fields[$key]);
-        }
-
-        if($created) $this->createTmpFile($tmpFile, $objectDatas);
-
-        return $objectDatas;
-    }
-
-    /**
      * Get showImport datas.
      *
      * @param  string $model
@@ -520,7 +478,7 @@ class portModel extends model
      */
     public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
     {
-        $getParams = $this->session->{$model.'PortParams'};
+        $getParams = $this->session->{$model . 'PortParams'};
 
         if($params)
         {
@@ -760,7 +718,7 @@ class portModel extends model
     {
         $modelDatas = $this->getQueryDatas($model);
 
-        if(array_key_exists('files', $fieldList))
+        if(isset($fieldList['files']) or property_exists($fieldList, 'files'))
         {
             $modelDatas = $this->getFiles($model, $modelDatas);
         }
@@ -1231,7 +1189,7 @@ class portModel extends model
 
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
 
-        $importFields = $this->config->$model->templateFields;
+        $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
         $this->getWorkFlowFields($model);
 
@@ -1264,7 +1222,7 @@ class portModel extends model
         $html  = '';
         $key   = key($list);
         $addID = 1;
-        $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
+        if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
@@ -1300,6 +1258,10 @@ class portModel extends model
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
                 $selected = !empty($object->$field) ? $object->$field : '';
+                if($model)
+                {
+                    if($control == 'hidden' and isset($this->session->{$model.'PortParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'PortParams'}[$field. 'ID'];
+                }
 
                 $options = array();
                 if($control == 'select' or $control == 'multiple')
