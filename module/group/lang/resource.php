@@ -1181,11 +1181,13 @@ $lang->ci->methodOrder[5]  = 'commitResult';
 $lang->ci->methodOrder[10] = 'checkCompileStatus';
 
 $lang->resource->compile = new stdclass();
-$lang->resource->compile->browse = 'browse';
-$lang->resource->compile->logs   = 'logs';
+$lang->resource->compile->browse      = 'browse';
+$lang->resource->compile->logs        = 'logs';
+$lang->resource->compile->syncCompile = 'syncCompile';
 
 $lang->compile->methodOrder[5]  = 'browse';
 $lang->compile->methodOrder[10] = 'logs';
+$lang->compile->methodOrder[15] = 'syncCompile';
 
 $lang->resource->jenkins = new stdclass();
 $lang->resource->jenkins->browse = 'browseAction';

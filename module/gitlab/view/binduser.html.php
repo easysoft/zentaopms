@@ -56,7 +56,7 @@
             <td><?php echo $gitlabUser->email;?></td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
-              <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
+              <?php if(in_array($gitlabUser->id, $bindedUsers)):?>
               <?php $zentaoAccount = zget($userPairs, $gitlabUser->zentaoAccount, '');?>
               <?php if(!empty($zentaoAccount)):?>
               <?php echo $lang->gitlab->binded;?>

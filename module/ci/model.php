@@ -182,11 +182,12 @@ class ciModel extends model
         $data = new stdclass;
         $data->status     = $pipeline->status;
         $data->updateDate = $now;
+        $data->logs       = '';
 
         foreach($jobs as $job)
         {
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
-            $data->logs  = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
+            $data->logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
             $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->project, $job->id));
         }
