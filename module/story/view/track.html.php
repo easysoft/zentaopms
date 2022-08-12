@@ -33,7 +33,7 @@
                 <?php echo html::a('javascript:;', "<i class='icon icon-product'></i><div class='product-name'>{$projectProducts[$productID]->name}</div><span class='caret'></span>", '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
                 <ul class="dropdown-menu">
                   <?php foreach($projectProducts as $product): ?>
-                  <li><?php echo html::a($this->createLink('projectstory', 'track', "projectID={$this->session->project}&productID=$product->id"), $product->name);?></li>
+                  <li class= "<?php if($productID == $product->id) echo 'active';?>"><?php echo html::a($this->createLink('projectstory', 'track', "projectID={$this->session->project}&productID=$product->id"), $product->name);?></li>
                   <?php endforeach;?>
                 </ul>
               </div>
