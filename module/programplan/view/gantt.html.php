@@ -75,7 +75,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <div class="pull-right btn-toolbar">
   <?php
-  if($this->app->getMethodName() == 'browse')
+  if($this->app->getModuleName() == 'programplan')
   {
       $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields');
       include '../../common/view/customfield.html.php';
