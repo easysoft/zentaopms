@@ -70,12 +70,17 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
 <?php js::set('ganttType', $ganttType);?>
-<?php js::set('showFields', $showFields);?>
+<?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <div class="pull-right btn-toolbar">
-    <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields')?>
-    <?php include '../../common/view/customfield.html.php';?>
+  <?php
+  if($this->app->getMethodName() == 'browse')
+  {
+      $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields');
+      include '../../common/view/customfield.html.php';
+  }
+  ?>
   </div>
   <form class="main-form form-ajax not-watch">
     <div class="example">
@@ -475,12 +480,15 @@ $(function()
 
     <?php
     $userList = array();
-    foreach($users as $account => $realname)
+    if(!empty($users))
     {
-        $user = array();
-        $user['key']   = $account;
-        $user['label'] = $realname;
-        $userList[]    = $user;
+        foreach($users as $account => $realname)
+        {
+            $user = array();
+            $user['key']   = $account;
+            $user['label'] = $realname;
+            $userList[]    = $user;
+        }
     }
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
