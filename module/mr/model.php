@@ -1934,7 +1934,7 @@ class mrModel extends model
      */
     public function logMergedAction($MR)
     {
-        $this->loadModel('action')->create('mr', $MR->id, 'merged');
+        $this->loadModel('action')->create('mr', $MR->id, 'mergedmr');
         $product = $this->getMRProduct($MR);
 
         $stories = $this->getLinkList($MR->id, $product->id, 'story');
