@@ -578,6 +578,6 @@ class gogsModel extends model
     public function apiDeleteBranch($gogsID, $project, $branch)
     {
         $url = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branch");
-        return json_decode(commonModel::http($url, null, array(), array(), 'json', 'DELETE'));
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 }
