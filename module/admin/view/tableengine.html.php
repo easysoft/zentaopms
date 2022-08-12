@@ -54,12 +54,10 @@ function changeAllEngines()
 
     $('.btn.changeEngine').hide();
     $engineBox.empty();
-    for(i in tables);
     $.each(tables, function(_, table)
     {
         changeEngine(table);
     });
-    $engineBox.append("<div><a href='javascript:location.reload();' class='btn'>{$lang->refresh}</a>"?></div>");
 }
 
 /**

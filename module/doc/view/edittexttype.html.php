@@ -49,12 +49,7 @@
 
 #noticeAcl {margin-left: 10px; vertical-align: middle;}
 
-#moreList {display: inline-block; padding: 7px;}
-#moreList .icon-more-circle {font-size: 20px;}
-#moreList ul.dropdown-menu {left: -77px;}
-
-#backBtn {border: unset;}
-#backBtn i {font-size: 20px;}
+#basicInfoLink {border: unset;}
 
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
 </style>
@@ -64,20 +59,11 @@
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
-          <?php if($from == 'create'):?>
-          <td width='50px'><?php echo html::linkButton("<i class='icon icon-back-circle'></i>", $backLink, 'self', "id='backBtn'");?></td>
-          <?php else:?>
-          <td width='50px'><?php echo html::backButton("<i class='icon icon-back-circle'></i>", "id='backBtn'", '');?></td>
-          <?php endif;?>
+          <td width='90px'><?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, "id='backBtn'", 'btn btn-secondary');?></td>
           <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' required");?></td>
           <td class="text-right">
             <?php echo html::submitButton('', "data-placement='bottom'", 'btn btn-primary');?>
-            <div id="moreList" class="dropdown dropdown-hover">
-              <?php echo html::a('#', "<i class='icon icon-more-circle'></i>");?>
-              <ul class="dropdown-menu">
-                <li><?php echo html::a('#modalBasicInfo', $lang->doc->basicInfo, '', "data-toggle='modal' id='basicInfoLink'");?><li>
-              </ul>
-            </div>
+            <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
           </td>
         </tr>
         <tr>
@@ -155,7 +141,7 @@
               </tr>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->close, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
