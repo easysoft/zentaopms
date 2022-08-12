@@ -89,7 +89,9 @@ h3 {font-size: 16px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}
 
 /* repo action form */
-.repoCode .comment-list, .repoCode .comment-actions {max-width: 900px;}
+.repoCode .comment-actions {max-width: 900px;}
+.repoCode table {table-layout: fixed;}
+.repoCode table td {white-space: pre-line;}
 .repoCode .bugFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff;}
 .repoCode .bugFormContainer th {width: 70px;}
 
@@ -175,8 +177,8 @@ h3 {font-size: 16px;}
 .transparent {border-color:transparent; background: none repeat scroll 0 0 transparent;}
 .transparent:hover {border-color:transparent; background: none repeat scroll 0 0 transparent;}
 
-.side-col {width: 600px;}
-#sidebar > .side-body {width: 580px;}
+.side-col {width: 550px;}
+#sidebar > .side-body {width: 530px;}
 .hide-sidebar #sidebar > .side-body {display: none;}
 
 #sidebar>.sidebar-toggle {left: 5px; right: auto;}

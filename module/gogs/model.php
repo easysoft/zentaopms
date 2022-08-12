@@ -559,7 +559,7 @@ class gogsModel extends model
         $newBranches = array();
         foreach($branches as $branch)
         {
-            $branch->name = $branch->branch_name;
+            $branch->name = $branch->Name;
             if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[] = $branch;
         }
 

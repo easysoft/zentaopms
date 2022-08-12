@@ -177,13 +177,10 @@ class mr extends control
         $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
 
         $MR->canDeleteBranch = true;
-        if($scm != 'gogs')
+        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
+        foreach($branchPrivs as $priv)
         {
-            $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-            foreach($branchPrivs as $priv)
-            {
-                if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
-            }
+            if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
         }
 
         $targetBranchList = array();

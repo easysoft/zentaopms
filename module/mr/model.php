@@ -1059,9 +1059,9 @@ class mrModel extends model
             $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
-        elseif($host->type == 'gitea')
+        else
         {
-            $apiRoot = $this->loadModel('gitea')->getApiRoot($hostID);
+            $apiRoot = $this->loadModel($host->type)->getApiRoot($hostID);
             $url     = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
 
             $merge = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
@@ -1244,7 +1244,7 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
         }
         return json_decode(commonModel::http($url));
     }
