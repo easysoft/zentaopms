@@ -4024,10 +4024,10 @@ class taskModel extends model
         }
         
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
-        $changes       = common::createChanges($oldObject, $newObject);
-        $actionID      = $this->loadModel('action')->create($actionType, $objectID, 'edited');
+        $changes   = common::createChanges($oldObject, $newObject);
+        $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');
         if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
-        
+
         return true;
     }
 
