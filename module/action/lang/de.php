@@ -382,6 +382,7 @@ $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
 $lang->action->label->tolib                 = 'imported';
 $lang->action->label->updatetolib           = 'updated';
+$lang->action->label->ganttmove             = 'sorted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -539,6 +540,7 @@ $lang->action->dynamicAction->task['undeleted']           = 'Restore Task';
 $lang->action->dynamicAction->task['hidden']              = 'Hide Task';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
+$lang->action->dynamicAction->task['ganttmove']           = 'Order';
 
 $lang->action->dynamicAction->build['opened']  = 'Create Build';
 $lang->action->dynamicAction->build['edited']  = 'Edit Build';

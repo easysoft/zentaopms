@@ -382,6 +382,7 @@ $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
 $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
+$lang->action->label->ganttmove             = '排序了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -539,6 +540,7 @@ $lang->action->dynamicAction->task['undeleted']           = '还原任务';
 $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
+$lang->action->dynamicAction->task['ganttmove']           = '排序';
 
 $lang->action->dynamicAction->build['opened']  = '创建版本';
 $lang->action->dynamicAction->build['edited']  = '编辑版本';
