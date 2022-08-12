@@ -3936,6 +3936,9 @@ class taskModel extends model
         $this->app->loadLang('project');
         $post = fixer::input('post')->get();
         $post->endDate = date('Y-m-d', strtotime('-1 day', strtotime($post->endDate)));
+        $changeTable = $objectType == 'task' ? TABLE_TASK : TABLE_PROJECT;
+        $actionType  = $objectType == 'task' ? 'task' : 'execution';
+        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         if($objectType == 'task')
         {
             $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
@@ -4019,7 +4022,12 @@ class taskModel extends model
         {
             return false;
         }
-
+        
+        $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
+        $changes       = common::createChanges($oldObject, $newObject);
+        $actionID      = $this->loadModel('action')->create($actionType, $objectID, 'edited');
+        if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
+        
         return true;
     }
 
