@@ -231,10 +231,11 @@ class search extends control
         $pager   = new pager(0, $this->config->search->recPerPage, $pageID);
         $results = $this->search->getList($words, $type, $pager);
 
-        $typeCount = $this->search->getListCount('');
+        $typeCount = $this->search->getListCount();
         $typeList  = array('all' => $this->lang->search->modules['all']);
         foreach($typeCount as $objectType => $count)
         {
+            if(!isset($this->lang->search->modules[$objectType])) continue;
             $typeList[$objectType] = $this->lang->search->modules[$objectType];
         }
 
