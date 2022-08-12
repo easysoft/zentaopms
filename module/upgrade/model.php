@@ -536,8 +536,8 @@ class upgradeModel extends model
                 if(!$executedXuanxuan)
                 {
                     $table  = $this->config->db->prefix . 'im_chat';
-                    $result = $this->checkFieldsExists($table, 'adminInvite');
-                    if($result->rowCount() == 0)
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    if(!$exists)
                     {
                         $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
                     }
@@ -7081,10 +7081,12 @@ class upgradeModel extends model
      * @param  string  $table
      * @param  string  $field
      * @access public
-     * @return object
+     * @return bool
      */
     public function checkFieldsExists($table, $field)
     {
-        return $this->dbh->query("show columns from `$table` like '$field'");
+        $result = $this->dbh->query("show columns from `$table` like '$field'");
+
+        return $result->rowCount() > 0;
     }
 }
