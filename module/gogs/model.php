@@ -565,4 +565,19 @@ class gogsModel extends model
 
         return $newBranches;
     }
+
+    /**
+     * Api delete branch.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function apiDeleteBranch($gogsID, $project, $branch)
+    {
+        $url = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branch");
+        return json_decode(commonModel::http($url, null, array(), array(), 'json', 'DELETE'));
+    }
 }

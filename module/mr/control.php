@@ -368,7 +368,7 @@ class mr extends control
             }
         }
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $MR);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR);
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
