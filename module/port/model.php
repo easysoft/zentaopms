@@ -401,10 +401,8 @@ class portModel extends model
         $dataList = array();
 
         $sysDataFields = explode(',', $this->portConfig->sysDataFields);
-        foreach($sysDataFields as $field)
-        {
-            $dataList[$field] =  $this->loadModel($field)->getPairs();
-        }
+
+        foreach($sysDataFields as $field) $dataList[$field] = $this->loadModel($field)->getPairs();
 
         return $dataList;
     }
@@ -523,8 +521,7 @@ class portModel extends model
      */
     public function getSourceByLang($lang)
     {
-        $lang = isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
-        return $lang;
+        return isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
     }
 
     /**
@@ -733,10 +730,7 @@ class portModel extends model
         }
 
         /* Deal children datas and multiple tasks .*/
-        if($modelDatas)
-        {
-           $modelDatas = $this->updateChildDatas($modelDatas);
-        }
+        if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
         return $modelDatas;
     }
@@ -790,10 +784,7 @@ class portModel extends model
         $relatedObjectIdList = array();
         $relatedObjects      = array();
 
-        foreach($datas as $data)
-        {
-            $relatedObjectIdList[$data->$object]  = $data->$object;
-        }
+        foreach($datas as $data) $relatedObjectIdList[$data->$object] = $data->$object;
 
         if($object == 'openedBuild') $object = 'build';
 
