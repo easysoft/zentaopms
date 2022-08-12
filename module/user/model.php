@@ -796,6 +796,7 @@ class userModel extends model
         }
 
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
+        $_SESSION['user']->password      = $user->password;
         $this->app->user->password       = $user->password;
         $this->app->user->modifyPassword = false;
         if(!dao::isError())

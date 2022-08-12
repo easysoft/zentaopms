@@ -438,10 +438,16 @@ class task extends control
             $customFields[$field] = $this->lang->task->$field;
         }
 
-        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') unset($customFields['story']);
+        $showFields = $this->config->task->custom->batchCreateFields;
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
+        {
+            unset($customFields['story']);
+            $showFields = str_replace(',story,', ',', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
 
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->batchCreateFields;
+        $this->view->showFields   = $showFields;
 
         if($execution->type == 'kanban')
         {

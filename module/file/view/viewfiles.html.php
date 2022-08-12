@@ -114,7 +114,6 @@
           data: postData,
           success: function(data)
           {
-              console.log(data['title']);
               $('#fileTitle' + fileID).html("<i class='icon icon-file-text'></i> &nbsp;" + data['title']);
               $('#renameFile' + fileID).closest('li').removeClass('hidden');
               $('#renameBox' + fileID).addClass('hidden');
