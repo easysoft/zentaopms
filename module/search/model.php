@@ -612,7 +612,7 @@ class searchModel extends model
 
         $likeCondition = '';
         /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
+        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
