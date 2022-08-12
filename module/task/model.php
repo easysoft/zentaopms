@@ -3941,92 +3941,122 @@ class taskModel extends model
         $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         if($objectType == 'task')
         {
-            $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
-            $parent     = $objectData->parent;
-            $project    = $objectData->project;
-            $execution  = $objectData->execution;
-            $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
-
-            if($parent <= 0)
-            {
-                $parentData = $stage;
-
-                $start = $parentData->begin;
-                $end   = $parentData->end;
-            }
-            else
-            {
-                $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
-
-                $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
-                $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
-            }
-
-            if(helper::diffDate($start, $post->startDate) > 0)
-            {
-                $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
-                return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
-            }
-
-            if(helper::diffDate($end, $post->endDate) < 0)
-            {
-                $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
-                return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
-            }
-
-            $this->dao->update(TABLE_TASK)
-                ->set('estStarted')->eq($post->startDate)
-                ->set('deadline')->eq($post->endDate)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->where('id')->eq($objectID)
-                ->exec();
+            $this->updateTaskEsDateByGantt($objectID, $objectType, $post);
         }
         elseif($objectType == 'plan')
         {
-            $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-            $parent     = $objectData->parent;
-            $project    = $objectData->project;
-
-            if(empty($parent))
-            {
-                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
-            }
-            else
-            {
-                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
-            }
-
-            $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
-            $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
-
-            if(helper::diffDate($start, $post->startDate) > 0)
-            {
-                $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-                return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
-            }
-
-            if(helper::diffDate($end, $post->endDate) < 0)
-            {
-                $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
-                return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
-            }
-
-            $this->dao->update(TABLE_PROJECT)
-                ->set('begin')->eq($post->startDate)
-                ->set('end')->eq($post->endDate)
-                ->set('lastEditedBy')->eq($this->app->user->account)
-                ->where('id')->eq($objectID)
-                ->exec();
+            $this->updateExecutionEsDateByGantt($objectID, $objectType, $post);
         }
-        else
-        {
-            return false;
-        }
+        
+        if(dao::isError()) return false;
         
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
         $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');
         if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
+
+        return true;
+    }
+
+    /**
+     * Update Task estimate date by gantt.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @param  object  $postData
+     * @access private
+     * @return bool
+     */
+    private function updateTaskEsDateByGantt($objectID, $objectType, $postData)
+    {
+        $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
+        $parent     = $objectData->parent;
+        $project    = $objectData->project;
+        $execution  = $objectData->execution;
+        $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
+
+        if($parent <= 0)
+        {
+            $parentData = $stage;
+
+            $start = $parentData->begin;
+            $end   = $parentData->end;
+        }
+        else
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
+
+            $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
+            $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
+        }
+
+        if(helper::diffDate($start, $postData->startDate) > 0)
+        {
+            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        }
+
+        if(helper::diffDate($end, $postData->endDate) < 0)
+        {
+            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+        }
+
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($postData->startDate)
+            ->set('deadline')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($objectID)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Update Execution estimate date by gantt.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @param  object  $postData
+     * @access private
+     * @return bool
+     */
+    private function updateExecutionEsDateByGantt($objectID, $objectType, $postData)
+    {
+        $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+        $parent     = $objectData->parent;
+        $project    = $objectData->project;
+
+        if(empty($parent))
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
+        }
+        else
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
+        }
+
+        $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
+        $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
+
+        if(helper::diffDate($start, $postData->startDate) > 0)
+        {
+            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        }
+
+        if(helper::diffDate($end, $postData->endDate) < 0)
+        {
+            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+        }
+
+        $this->dao->update(TABLE_PROJECT)
+            ->set('begin')->eq($postData->startDate)
+            ->set('end')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($objectID)
+            ->exec();
 
         return true;
     }
