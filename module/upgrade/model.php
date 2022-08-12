@@ -532,6 +532,15 @@ class upgradeModel extends model
                 break;
             case '17_4':
                 $this->updateSearchIndex();
+                if(!$executedXuanxuan)
+                {
+                    $table  = $this->config->db->prefix . 'im_chat';
+                    $result = $this->checkFieldsExists($table, 'adminInvite');
+                    if($result->rowCount() == 0)
+                    {
+                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+                    }
+                }
                 break;
         }
 
@@ -7035,5 +7044,18 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Check whether the field exists.
+     *
+     * @param  string  $table
+     * @param  string  $field
+     * @access public
+     * @return object
+     */
+    public function checkFieldsExists($table, $field)
+    {
+        return $this->dbh->query("show columns from `$table` like '$field'");
     }
 }
