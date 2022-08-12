@@ -288,11 +288,12 @@ $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
 $lang->devops->set      = 'Set';
 
-$lang->admin->system     = 'System';
-$lang->admin->entry      = 'Application';
-$lang->admin->data       = 'Data';
-$lang->admin->cron       = 'Cron';
-$lang->admin->buildIndex = 'Full Text Search';
+$lang->admin->system      = 'System';
+$lang->admin->entry       = 'Application';
+$lang->admin->data        = 'Data';
+$lang->admin->cron        = 'Cron';
+$lang->admin->buildIndex  = 'Full Text Search';
+$lang->admin->tableEngine = 'Table Engine';
 
 $lang->convert->importJira = 'Import Jira';
 
