@@ -221,6 +221,19 @@ class scm
     }
 
     /**
+     * Get commits by MR branches.
+     *
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return array
+     */
+    public function getMRCommits($sourceBranch, $targetBranch)
+    {
+        return $this->engine->getMRCommits($sourceBranch, $targetBranch);
+    }
+
+    /**
      * Get clone url.
      *
      * @access public

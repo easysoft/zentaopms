@@ -620,6 +620,27 @@ class Gogs
     }
 
     /**
+     * Get commits by MR branches.
+     *
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return array
+     */
+    public function getMRCommits($sourceBranch, $targetBranch)
+    {
+        execCmd(escapeCmd("$this->client checkout $sourceBranch"));
+        execCmd(escapeCmd("$this->client pull"));
+        execCmd(escapeCmd("$this->client checkout $targetBranch"));
+        execCmd(escapeCmd("$this->client pull"));
+
+        $commits = execCmd(escapeCmd("$this->client log origin/$sourceBranch ^origin/$targetBranch"), 'array');
+        $commits = $this->parseLog($commits);
+        foreach($commits as $commit) $commit->id = $commit->revision;
+        return $commits;
+    }
+
+    /**
      * Get clone url.
      *
      * @access public

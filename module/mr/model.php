@@ -1227,29 +1227,6 @@ class mrModel extends model
     }
 
     /**
-     * Get diff commits of MR from GitLab API.
-     *
-     * @param  int    $hostID
-     * @param  int    $projectID
-     * @param  int    $MRID
-     * @access public
-     * @return object
-     */
-    public function apiGetDiffCommits($hostID, $projectID, $MRID)
-    {
-        $host = $this->loadModel('pipeline')->getByID($hostID);
-        if($host->type == 'gitlab')
-        {
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
-        }
-        else
-        {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
-        }
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
      * Get diff of MR from Gitea API.
      *
      * @param  int    $hostID
@@ -1738,6 +1715,33 @@ class mrModel extends model
     }
 
     /**
+     * Get diff commits of MR.
+     *
+     * @param  object $MR
+     * @access public
+     * @return array
+     */
+    public function getDiffCommits($MR)
+    {
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
+        if($host->type == 'gogs')
+        {
+            $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
+            $scm  = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            return $scm->getMRCommits($MR->sourceBranch, $MR->targetBranch);
+        }
+        else
+        {
+            $projectID = $MR->projectID;
+            $MRID      = $MR->mriid;
+            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($this->hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($this->hostID), "/repos/$projectID/pulls/$MRID/commits");
+            return json_decode(commonModel::http($url));
+        }
+    }
+
+    /**
      * Create an mr link.
      *
      * @param int    $MRID
@@ -1868,21 +1872,19 @@ class mrModel extends model
     /**
      * Get links by mr commites.
      *
-     * @param int    $hostID
-     * @param int    $projectID
-     * @param int    $MRID
-     * @param string $type
+     * @param  object $MR
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getCommitedLink($hostID, $projectID, $MRID, $type)
+    public function getCommitedLink($MR, $type)
     {
-        $DiffCommits = $this->apiGetDiffCommits($hostID, $projectID, $MRID);
+        $diffCommits = $this->getDiffCommits($MR);
 
         $commits = array();
-        foreach($DiffCommits as $DiffCommit)
+        foreach($diffCommits as $diffCommit)
         {
-            if(isset($DiffCommit->id)) $commits[] = substr($DiffCommit->id, 0, 10);
+            if(isset($diffCommit->id)) $commits[] = substr($diffCommit->id, 0, 10);
         }
 
         return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
