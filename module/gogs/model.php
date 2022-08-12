@@ -533,7 +533,7 @@ class gogsModel extends model
         if($branch)
         {
             $gogs = $this->getByID($gogsID);
-            $branch->web_url = "{$gogs->url}/$project/src/branch/$branchName";
+            $branch->web_url = "{$gogs->url}/$project/src/$branchName";
         }
 
         return $branch;
