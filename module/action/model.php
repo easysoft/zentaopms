@@ -1262,6 +1262,10 @@ class actionModel extends model
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
             }
+            elseif($action->objectType == 'mr' and $action->action == 'deleted')
+            {
+                $action->objectName = $action->extra;
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
@@ -1284,7 +1288,7 @@ class actionModel extends model
             $this->setObjectLink($action, $deptUsers);
 
             /* Set merge request link. */
-            if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
+            if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
