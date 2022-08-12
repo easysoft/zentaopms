@@ -91,7 +91,7 @@
           <td class='text' title='<?php echo $MR->createdDate;?>'><?php echo $MR->createdDate;?></td>
           <td class='c-actions'>
             <?php
-            $canDelete = ($app->user->admin or (isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
+            $canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
             if($repo->SCM == 'Gitlab')
             {
                 $canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
