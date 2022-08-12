@@ -4924,17 +4924,17 @@ class upgradeModel extends model
 
         if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
 
         /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
