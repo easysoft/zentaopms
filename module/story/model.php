@@ -5525,8 +5525,7 @@ class storyModel extends model
      */
     public function getRelatedObjects($object, $pairs = '')
     {
-        /* Get bugs. */
-        $storys = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->fetchAll('id');
+        $storys = $this->loadModel('port')->getQueryDatas('story');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

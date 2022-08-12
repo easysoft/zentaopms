@@ -88,12 +88,14 @@ $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
+$config->story->datatable->fieldList['product']['control']    = 'hidden';
 $config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']      = 'no';
 $config->story->datatable->fieldList['branch']['width']      = '100';
 $config->story->datatable->fieldList['branch']['required']   = 'no';
+$config->story->datatable->fieldList['branch']['control']    = 'multiple';
 $config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
 
 $config->story->datatable->fieldList['module']['title']      = 'module';
