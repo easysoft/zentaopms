@@ -824,7 +824,7 @@ class story extends control
         $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
         $reviewerList   = array_keys($reviewerList);
         $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(array_diff($reviewerList, $reviewedBy) and strpos('draft,changed', $story->status) !== false) $isShowReviewer = true;
+        if($story->status == 'draft' or (array_diff($reviewerList, $reviewedBy) and strpos('draft,changing', $story->status) !== false)) $isShowReviewer = true;
 
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
@@ -1448,9 +1448,9 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->lang->story->resultList = $this->lang->story->reviewResultList;
 
-        if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->resultList['revert']);
+        if($story->status == 'reviewing' and $story->version == 1) unset($this->lang->story->resultList['revert']);
 
-        if($story->status == 'changed') unset($this->lang->story->resultList['reject']);
+        if($story->status == 'changing') unset($this->lang->story->resultList['reject']);
 
         if(count($reviewers) > 1) unset($this->lang->story->resultList['revert']);
 
@@ -1513,6 +1513,79 @@ class story extends control
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         echo js::locate($locateLink, 'parent');
+    }
+
+    /**
+     * Recall story change.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function recallChange($storyID, $confirm = 'no')
+    {
+        $story = $this->story->getById($storyID);
+
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->story->recallChangeTips, $this->createLink('story', 'recallChange', "story=$storyID&confirm=yes")));
+        }
+        else
+        {
+            $this->story->recallChange($storyID);
+            $this->loadModel('action')->create('story', $storyID, 'recalledChange');
+
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            echo js::locate($locateLink, 'parent');
+        }
+    }
+
+    /**
+     * Submit review.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function submitReview($storyID)
+    {
+        if($_POST)
+        {
+            $changes = $this->story->submitReview($storyID);
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('story', $storyID, 'submitReview');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        /* Get story and product. */
+        $story   = $this->story->getById($storyID);
+        $product = $this->product->getById($story->product);
+
+        /* Set menu. */
+        $this->product->setMenu($story->product, $story->branch);
+
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+
+        /* Get story reviewer. */
+        $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
+        $story->reviewer = array_keys($reviewerList);
+
+        $this->view->story      = $story;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
+        $this->view->needReview = (($this->app->user->account == $product->PO || $this->config->story->needReview == 0) and empty($story->reviewer)) ? "checked='checked'" : "";
+
+        $this->display();
     }
 
     /**
@@ -2608,9 +2681,9 @@ class story extends control
         {
             $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
             $status   = $oldStory->status;
-            if($params['changed'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changed';
-            if($params['changed'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changed';
-            if($params['changed'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
+            if($params['changing'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changing';
+            if($params['changing'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changing';
+            if($params['changing'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
         }
         elseif($method == 'review')
         {

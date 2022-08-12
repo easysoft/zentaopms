@@ -1025,7 +1025,7 @@ class productplanModel extends model
             {
                 foreach($planStory as $id => $story)
                 {
-                    if($story->status == 'draft')
+                    if($story->status == 'draft' or $story->status == 'reviewing')
                     {
                         unset($planStory[$id]);
                         continue;

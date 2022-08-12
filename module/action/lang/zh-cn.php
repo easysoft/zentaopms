@@ -218,6 +218,7 @@ $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->adjusttasktowait     = '$date, 系统判断由于消耗工时调整为0，将任务状态置为未开始。' . "\n";
 $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 重新打开。' . "\n";
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
+$lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -275,6 +276,7 @@ $lang->action->label->blocked               = '阻塞了';
 $lang->action->label->resolved              = '解决了';
 $lang->action->label->reviewed              = '评审了';
 $lang->action->label->recalled              = '撤销评审';
+$lang->action->label->recalledchange        = '撤销变更';
 $lang->action->label->moved                 = '移动了';
 $lang->action->label->confirmed             = "确认了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed          = '确认了';
@@ -388,6 +390,7 @@ $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttdrag             = '拖动了';
 $lang->action->label->ganttmove             = '排序了';
+$lang->action->label->submitreview          = '提交了评审';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

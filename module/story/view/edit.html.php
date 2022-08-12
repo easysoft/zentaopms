@@ -34,7 +34,7 @@
     <div class='main-row'>
       <div class='main-col col-8'>
         <div class='cell'>
-          <div class='form-group'>
+          <div class='form-group titleBox'>
             <div class="input-control has-icon-right">
               <div class="colorpicker">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -43,16 +43,20 @@
                 </ul>
                 <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
               </div>
-              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title" disabled="disabled"');?>
+              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title"' . ($story->status == 'draft' ? '' : ' disabled="disabled"'));?>
             </div>
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
-            <div class='detail-content article-content'><?php echo $story->spec;?></div>
+            <div class='detail-content article-content'>
+              <?php echo $story->status == 'draft' ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
+            </div>
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->verify;?></div>
-            <div class='detail-content article-content'><?php echo $story->verify;?></div>
+            <div class='detail-content article-content'>
+              <?php echo $story->status == 'draft' ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
+            </div>
           </div>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
@@ -241,15 +245,14 @@
 
           <?php $this->printExtendFields($story, 'div', 'position=right');?>
 
+          <?php if($story->status == 'closed'):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
-              <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
                 <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
               </tr>
-              <?php endif;?>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $lang->story->linkStory;?></th>
                 <td>
@@ -280,6 +283,7 @@
               </tr>
            </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
     </div>

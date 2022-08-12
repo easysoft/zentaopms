@@ -49,7 +49,7 @@
                 <th class="c-date"><?php echo $lang->productplan->end;?></th>
                 <th class="c-count"><?php echo $lang->story->statusList['draft'];?></th>
                 <th class="c-count"><?php echo $lang->story->statusList['active'];?></th>
-                <th class="c-count"><?php echo $lang->story->statusList['changed'];?></th>
+                <th class="c-count"><?php echo $lang->story->statusList['changing'];?></th>
                 <th class="c-count"><?php echo $lang->story->statusList['closed'];?></th>
                 <th class="c-count"><?php echo $lang->report->total;?></th>
               </tr>
@@ -71,10 +71,10 @@
                     <td class="<?php echo $class;?>"><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
                     <td class="<?php echo $class;?>"><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                     <?php
-                    $draftCount   = isset($plan->status['draft'])   ? $plan->status['draft']   : 0;
-                    $activeCount  = isset($plan->status['active'])  ? $plan->status['active']  : 0;
-                    $changedCount = isset($plan->status['changed']) ? $plan->status['changed'] : 0;
-                    $closedCount  = isset($plan->status['closed'])  ? $plan->status['closed']  : 0;
+                    $draftCount   = isset($plan->status['draft'])    ? $plan->status['draft']    : 0;
+                    $activeCount  = isset($plan->status['active'])   ? $plan->status['active']   : 0;
+                    $changedCount = isset($plan->status['changing']) ? $plan->status['changing'] : 0;
+                    $closedCount  = isset($plan->status['closed'])   ? $plan->status['closed']   : 0;
                     ?>
                     <td class="<?php echo $class;?>"><?php echo $draftCount;?></td>
                     <td class="<?php echo $class;?>"><?php echo $activeCount;?></td>

@@ -23,10 +23,13 @@ $lang->story->change             = "Changer";
 $lang->story->changed            = 'Changée';
 $lang->story->assignTo           = 'Affecter';
 $lang->story->review             = 'Valider';
+$lang->story->submitReview       = "Submit Review";
 $lang->story->recall             = 'Revoke';
+$lang->story->recallChange       = 'Undo Changes';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
 $lang->story->edit               = "Editer Story";
+$lang->story->editDraft          = "Modifier le projet";
 $lang->story->batchEdit          = "Editer par Lot";
 $lang->story->subdivide          = 'Décomposer';
 $lang->story->link               = 'Link';
@@ -70,6 +73,7 @@ $lang->story->batchToTask        = 'Batch Convert to Task';
 $lang->story->convertRelations   = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
+$lang->story->saveDraft          = 'Save as draft';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";
@@ -130,6 +134,8 @@ $lang->story->closedBy         = 'Fermée par';
 $lang->story->closedDate       = 'Date Fermeture';
 $lang->story->closedReason     = 'Raison';
 $lang->story->rejectedReason   = 'Raison du Rejet';
+$lang->story->changedBy        = 'ChangedBy';
+$lang->story->changedDate      = 'ChangedDate';
 $lang->story->reviewedBy       = 'Validée par';
 $lang->story->reviewer         = $lang->story->reviewedBy;
 $lang->story->reviewers        = 'Reviewers';
@@ -181,11 +187,12 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Oui';
 $lang->story->useList[1] = 'Non';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = 'Brouillon';
-$lang->story->statusList['active']  = 'Active';
-$lang->story->statusList['closed']  = 'Fermée';
-$lang->story->statusList['changed'] = 'Changée';
+$lang->story->statusList['']        　= '';
+$lang->story->statusList['draft']   　= 'Brouillon';
+$lang->story->statusList['reviewing'] = 'Examen en cours';
+$lang->story->statusList['active']    = 'Active';
+$lang->story->statusList['closed']    = 'Fermée';
+$lang->story->statusList['changing']  = 'Changée';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'En Attente';
@@ -294,6 +301,7 @@ $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
+$lang->story->recallChangeTips     = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -324,6 +332,7 @@ $lang->story->action->linkrelatedstory      = array('main' => '$date, associée 
 $lang->story->action->subdividestory        = array('main' => '$date, décomposée par <strong>$actor</strong> en Story <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
+$lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

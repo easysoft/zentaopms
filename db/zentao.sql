@@ -1403,7 +1403,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `category` varchar(30) NOT NULL default 'feature',
   `pri` tinyint(3) unsigned NOT NULL default '3',
   `estimate` float unsigned NOT NULL,
-  `status` enum('','changed','active','draft','closed') NOT NULL default '',
+  `status` enum('','changing','active','draft', 'reviewing', 'closed') NOT NULL default '',
   `subStatus` varchar(30) NOT NULL default '',
   `color` char(7) NOT NULL,
   `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released', 'closed') NOT NULL DEFAULT 'wait',

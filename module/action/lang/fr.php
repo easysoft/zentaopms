@@ -218,6 +218,7 @@ $lang->action->desc->updatetolib          = '$date, MàJ de ' . $lang->testcase-
 $lang->action->desc->adjusttasktowait     = '$date, System Reminder: The task status will be set to Not Started as the consumed work hour is adjusted to 0. ' . "\n";
 $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -275,6 +276,7 @@ $lang->action->label->blocked               = 'a bloqué ';
 $lang->action->label->resolved              = 'a résolu ';
 $lang->action->label->reviewed              = 'a revu ';
 $lang->action->label->recalled              = 'recalled';
+$lang->action->label->recalledchange        = 'undo changes';
 $lang->action->label->moved                 = 'a déplacé ';
 $lang->action->label->confirmed             = 'a confirmé Story ';
 $lang->action->label->bugconfirmed          = 'a confirmé le Bug ';
@@ -388,6 +390,7 @@ $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttdrag             = 'dragged';
 $lang->action->label->ganttmove             = 'sorted';
+$lang->action->label->submitreview          = 'submitted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

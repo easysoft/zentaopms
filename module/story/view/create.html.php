@@ -270,10 +270,6 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <th><?php echo $lang->story->verify;?></th>
             <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
-          <tr class='hide'>
-            <th><?php echo $lang->story->status;?></th>
-            <td><?php echo html::hidden('status', 'draft');?></td>
-          </tr>
           <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
@@ -300,7 +296,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php echo html::hidden('type', $type) . html::submitButton();?>
+              <?php echo html::hidden('type', $type);?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
               <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>

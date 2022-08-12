@@ -23,10 +23,13 @@ $lang->story->change             = "变更";
 $lang->story->changed            = "{$lang->SRCommon}变更";
 $lang->story->assignTo           = '指派';
 $lang->story->review             = '评审';
+$lang->story->submitReview       = "提交评审";
 $lang->story->recall             = '撤销评审';
+$lang->story->recallChange       = '撤销变更';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";
+$lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
 $lang->story->subdivide          = '细分';
 $lang->story->link               = '关联';
@@ -70,6 +73,7 @@ $lang->story->batchToTask        = '批量转任务';
 $lang->story->convertRelations   = '换算关系';
 $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
+$lang->story->saveDraft          = '存为草稿';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
@@ -130,6 +134,8 @@ $lang->story->closedBy         = '由谁关闭';
 $lang->story->closedDate       = '关闭日期';
 $lang->story->closedReason     = '关闭原因';
 $lang->story->rejectedReason   = '拒绝原因';
+$lang->story->changedBy        = '由谁变更';
+$lang->story->changedDate      = '变更时间';
 $lang->story->reviewedBy       = '由谁评审';
 $lang->story->reviewer         = $lang->story->reviewedBy;
 $lang->story->reviewers        = '评审人员';
@@ -181,11 +187,12 @@ $lang->story->needNotReviewList[1] = '不需要评审';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已关闭';
-$lang->story->statusList['changed'] = '已变更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已关闭';
+$lang->story->statusList['changing']  = '变更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
@@ -294,6 +301,7 @@ $lang->story->estimateMustBePlus    = '估算值不能是负数';
 $lang->story->confirmChangeBranch   = $lang->SRCommon . '%s已关联在之前所属分支的计划中，调整分支后，' . $lang->SRCommon . '将从之前所属分支的计划中移除，请确认是否继续修改上述' . $lang->SRCommon . '的分支。';
 $lang->story->confirmChangePlan     = $lang->SRCommon . '%s已关联在之前计划的所属分支中，调整分支后，' . $lang->SRCommon . '将会从计划中移除，请确认是否继续修改计划的所属分支。';
 $lang->story->errorDuplicateStory   = $lang->SRCommon . '%s不存在';
+$lang->story->recallChangeTips      = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
@@ -324,6 +332,7 @@ $lang->story->action->linkrelatedstory      = array('main' => "\$date, 由 <stro
 $lang->story->action->subdividestory        = array('main' => "\$date, 由 <strong>\$actor</strong> 细分为{$lang->SRCommon}   <strong>\$extra</strong>。");
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
+$lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();

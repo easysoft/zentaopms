@@ -55,12 +55,6 @@
           <th><?php echo $lang->story->childStories;?></th>
           <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
         </tr>
-        <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-        <tr id='preVersionBox' class='hide'>
-          <th><?php echo $lang->story->preVersion;?></th>
-          <td colspan='2'><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
-        </tr>
-        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>

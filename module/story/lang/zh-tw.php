@@ -172,11 +172,12 @@ $lang->story->needNotReviewList[1] = '不需要評審';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已關閉';
-$lang->story->statusList['changed'] = '已變更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已關閉';
+$lang->story->statusList['changing']  = '變更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';

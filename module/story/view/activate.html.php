@@ -34,6 +34,8 @@
             <?php
             unset($lang->story->statusList['']);
             unset($lang->story->statusList['closed']);
+            unset($lang->story->statusList['changing']);
+            unset($lang->story->statusList['reviewing']);
             echo html::select('status', $lang->story->statusList, 'active', 'class="form-control chosen"');
             ?>
           </td>

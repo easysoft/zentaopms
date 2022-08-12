@@ -23,10 +23,13 @@ $lang->story->change            = "Thay đổi";
 $lang->story->changed           = "Đã đổi";
 $lang->story->assignTo          = 'Giao cho';
 $lang->story->review            = 'Xét duyệt';
+$lang->story->submitReview      = "Submit Review";
 $lang->story->recall            = 'Revoke';
+$lang->story->recallChange       = 'Undo Changes';
 $lang->story->needReview        = 'Duyệt nhu cầu';
 $lang->story->batchReview       = 'Duyệt hàng loạt';
 $lang->story->edit              = "Sửa câu chuyện";
+$lang->story->editDraft         = "Sửa soạn thảo";
 $lang->story->batchEdit         = "Sửa hàng loạt";
 $lang->story->subdivide         = 'Phân rã';
 $lang->story->link              = 'Link';
@@ -68,6 +71,7 @@ $lang->story->batchToTask       = 'Batch Convert to Task';
 $lang->story->convertRelations  = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
+$lang->story->saveDraft          = 'Save as draft';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
@@ -124,6 +128,8 @@ $lang->story->closedBy       = 'Người đóng';
 $lang->story->closedDate     = 'Ngày đóng';
 $lang->story->closedReason   = 'Lý do';
 $lang->story->rejectedReason = 'Lý do từ chối';
+$lang->story->changedBy      = 'ChangedBy';
+$lang->story->changedDate    = 'ChangedDate';
 $lang->story->reviewedBy     = 'Người duyệt';
 $lang->story->reviewer       = $lang->story->reviewedBy;
 $lang->story->reviewers      = 'Reviewers';
@@ -174,11 +180,12 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Có';
 $lang->story->useList[1] = 'Không';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = 'Nháp';
-$lang->story->statusList['active']  = 'Kích hoạt';
-$lang->story->statusList['closed']  = 'Đã đóng';
-$lang->story->statusList['changed'] = 'Đã thay đổi';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = 'Nháp';
+$lang->story->statusList['reviewing'] = 'Đang xem xét';
+$lang->story->statusList['active']    = 'Kích hoạt';
+$lang->story->statusList['closed']    = 'Đã đóng';
+$lang->story->statusList['changing']  = 'Đã thay đổi';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Đang đợi';
@@ -285,6 +292,7 @@ $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
+$lang->story->recallChangeTips     = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';
@@ -315,6 +323,7 @@ $lang->story->action->linkrelatedstory      = array('main' => '$date, liên kế
 $lang->story->action->subdividestory        = array('main' => '$date, được phân rã bởi <strong>$actor</strong> tới Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, bị hủy bởi <strong>$actor</strong> Câu chuyện được phân rã <strong>$extra</strong>.');
+$lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

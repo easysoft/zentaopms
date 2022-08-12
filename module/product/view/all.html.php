@@ -179,8 +179,8 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'];
+          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'];
 
           $trClass = '';
           if($product->line)
@@ -217,12 +217,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo $product->requirements['draft'];?></td>
             <td><?php echo $product->requirements['active'];?></td>
-            <td><?php echo $product->requirements['changed'];?></td>
+            <td><?php echo $product->requirements['changing'];?></td>
             <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $product->stories['draft'];?></td>
             <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changed'];?></td>
+            <td><?php echo $product->stories['changing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
             <td><?php echo $product->closedBugs;?></td>

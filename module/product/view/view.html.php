@@ -142,8 +142,8 @@
                     <td><strong><?php echo $product->bugs?></strong></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->story->statusList['changed']  . $space . $lang->story->common;?></th>
-                    <td><strong><?php echo $product->stories['changed']?></strong></td>
+                    <th><?php echo $lang->story->statusList['changing']  . $space . $lang->story->common;?></th>
+                    <td><strong><?php echo $product->stories['changing']?></strong></td>
                     <th><?php echo $lang->product->releases?></th>
                     <td><strong><?php echo $product->releases?></strong></td>
                     <th><?php echo $lang->product->cases?></th>

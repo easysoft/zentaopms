@@ -178,6 +178,7 @@ $lang->action->desc->syncproject     = '$date, starting the execution sets the p
 $lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->reopen          = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged          = '$date, merged by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->submitreview    = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -223,6 +224,7 @@ $lang->action->label->blocked               = 'blocked ';
 $lang->action->label->resolved              = 'resolved ';
 $lang->action->label->reviewed              = 'reviewed ';
 $lang->action->label->recalled              = 'recalled';
+$lang->action->label->recalledchange        = 'undo changes';
 $lang->action->label->moved                 = 'moved ';
 $lang->action->label->confirmed             = 'confirmed Story ';
 $lang->action->label->bugconfirmed          = 'Đã xác nhận';
@@ -298,6 +300,7 @@ $lang->action->label->syncprogram           = 'start';
 $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
+$lang->action->label->submitreview          = 'submitted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
