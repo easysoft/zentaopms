@@ -104,13 +104,11 @@ class port extends control
             $file      = $this->loadModel('file')->getUpload('file');
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
-            if(empty($shortName))
-            {
-                die(js::alert($this->lang->excel->emptyFileName));
-            }
-            $extension = $file['extension'];
 
-            $fileName = $this->file->savePath . $shortName;
+            if(empty($shortName)) die(js::alert($this->lang->excel->emptyFileName));
+
+            $extension = $file['extension'];
+            $fileName  = $this->file->savePath . $shortName;
 
             move_uploaded_file($file['tmpname'], $fileName);
 
