@@ -531,7 +531,17 @@ class upgradeModel extends model
                 $this->processBugLinkBug();
                 break;
             case '17_4':
+                $this->rebuildFULLTEXT();
                 $this->updateSearchIndex();
+                if(!$executedXuanxuan)
+                {
+                    $table  = $this->config->db->prefix . 'im_chat';
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    if(!$exists)
+                    {
+                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+                    }
+                }
                 break;
         }
 
@@ -3198,25 +3208,25 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
-        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
             if(strpos($fromVersion, 'pro') !== false)
             {
-                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(strpos($fromVersion, 'biz') !== false)
             {
-                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(version_compare($fromVersion, '15.0.rc1', '<'))
             {
-                $needProcess['search'] = true;
+                $needProcess['search'] = 'notice';
             }
         }
 
         $openVersion = $this->getOpenVersion($fromVersion);
-        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = true;
+        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
 
         return $needProcess;
     }
@@ -7035,5 +7045,48 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Change FULLTEXT index for searchindex table.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildFULLTEXT()
+    {
+        try
+        {
+            $table   = TABLE_SEARCHINDEX;
+            $stmt    = $this->dao->query("show index from $table");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE {$table} ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `content`");
+        }
+        catch(PDOException $e){}
+
+        return true;
+    }
+
+    /**
+     * Check whether the field exists.
+     *
+     * @param  string  $table
+     * @param  string  $field
+     * @access public
+     * @return bool
+     */
+    public function checkFieldsExists($table, $field)
+    {
+        $result = $this->dbh->query("show columns from `$table` like '$field'");
+
+        return $result->rowCount() > 0;
     }
 }

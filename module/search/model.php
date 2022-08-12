@@ -647,7 +647,7 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public function getListCount($keywords, $type = 'all')
+    public function getListCount($keywords = '', $type = 'all')
     {
         list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 

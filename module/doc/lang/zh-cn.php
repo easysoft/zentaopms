@@ -154,6 +154,7 @@ $lang->doc->allCollections   = '查看全部收藏文档';
 $lang->doc->keywordsTips     = '多个关键字请用逗号分隔。';
 $lang->doc->sortLibs         = '文档库排序';
 $lang->doc->titlePlaceholder = '请输入标题';
+$lang->doc->confirm          = '确认';
 
 global $config;
 /* 查询条件列表 */

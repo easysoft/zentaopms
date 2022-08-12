@@ -2618,9 +2618,10 @@ class projectModel extends model
     public function setMenu($objectID)
     {
         global $lang;
-        $project = $this->getByID($objectID);
 
-        $model = 'scrum';
+        $model    = 'scrum';
+        $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
+        $project  = $this->getByID($objectID);
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2657,7 +2658,6 @@ class projectModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
-        $project = $this->getById($objectID);
 
         if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
