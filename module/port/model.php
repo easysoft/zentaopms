@@ -759,7 +759,10 @@ class portModel extends model
         }
         elseif($queryCondition)
         {
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : ''));
+            $selectKey = 't1.id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t1") == false) $selectKey = 't2.id';
+
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
             while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
         }
 
@@ -1214,6 +1217,7 @@ class portModel extends model
         $key   = key($list);
         $addID = 1;
         if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
+        $this->session->set('insert', true);
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
