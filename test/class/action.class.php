@@ -53,6 +53,23 @@ class actionTest
     }
 
     /**
+     * Get the unread actions.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return object
+     */
+    public function getUnreadActionsTest($actionID = 0)
+    {
+        $objects = $this->objectModel->getUnreadActions($actionID);
+        $objects = json_decode($objects);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test get product, project, execution of the object.
      *
      * @param String $objectType
@@ -131,6 +148,26 @@ class actionTest
     }
 
     /**
+     * getTrashesBySearchTest
+     *
+     * @param  string $objectType
+     * @param  string $type all|hidden
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return void
+     */
+    public function getTrashesBySearchTest($objectType, $type, $queryID, $orderBy, $pager = null)
+    {
+        $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test get deleted objects.
      *
      * @param  string $objectType
@@ -197,6 +234,21 @@ class actionTest
 
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+        return $objects;
+    }
+
+    /**
+     * Get dynamic show action.
+     *
+     * @access public
+     * @return string
+     */
+    public function getActionConditionTest()
+    {
+        $objects = $this->objectModel->getActionCondition();
+
+        if(dao::isError()) return dao::getError();
+
         return $objects;
     }
 
@@ -326,6 +378,25 @@ class actionTest
         extract(date::$func());
         if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
         if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
+    }
+
+    /**
+     * Delete action by objectType.
+     *
+     * @param  string    $objectType
+     * @access public
+     * @return bool
+     */
+    public function deleteByTypeTest($objectType)
+    {
+        $this->objectModel->deleteByType($objectType);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->fetchAll();
+
+        return empty($objects);
     }
 
     /**
