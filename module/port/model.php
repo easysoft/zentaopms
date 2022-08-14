@@ -313,8 +313,8 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
-        if(isset($this->modelFieldList[$field]['control']))      return $this->modelFieldList[$field]['control'];
-        if(isset($this->modelLang->{$field.'List'}))             return 'select';
+        if(isset($this->modelFieldList[$field]['control']))    return $this->modelFieldList[$field]['control'];
+        if(isset($this->modelLang->{$field.'List'}))           return 'select';
         if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
 
         if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
