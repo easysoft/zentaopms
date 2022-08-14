@@ -212,6 +212,7 @@ class portModel extends model
      */
     public function initPostFields($model = '')
     {
+        $this->commonActions($model);
         $datas = fixer::input('post')->get();
         $objectData = array();
         foreach ($datas as $field => $data)
@@ -220,7 +221,7 @@ class portModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value) and isset($this->config->$model->fieldList[$field]) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    if(is_array($value)) $value = join(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -268,7 +269,6 @@ class portModel extends model
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
-
         return $fieldList;
     }
 
@@ -313,8 +313,9 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
-        if(isset($this->modelFieldList[$field]['control'])) return $this->modelFieldList[$field]['control'];
-        if(isset($this->modelLang->{$field.'List'}))        return 'select';
+        if(isset($this->modelFieldList[$field]['control']))      return $this->modelFieldList[$field]['control'];
+        if(isset($this->modelLang->{$field.'List'}))             return 'select';
+        if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
 
         if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
         return $this->portConfig->fieldList['control'];
@@ -549,7 +550,7 @@ class portModel extends model
 
         if(empty($rows)) return $exportDatas;
 
-        $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+        $exportDatas['user'] = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
 
         foreach ($rows as $id => $values)
         {
@@ -816,6 +817,7 @@ class portModel extends model
         {
             foreach($data as $field => $cellValue)
             {
+                if(strpos($this->portConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
                 if(strpos($filter, $field) !== false) continue;
                 if(is_array($cellValue)) continue;
                 if(strrpos($cellValue, '(#') === false)
@@ -1262,7 +1264,7 @@ class portModel extends model
                 if($control == 'select' or $control == 'multiple')
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
-                    if(empty($options) and isset($values[0])) $options = array_slice($values, 0, 1);
+                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1);
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';

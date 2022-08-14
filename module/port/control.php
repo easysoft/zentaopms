@@ -182,7 +182,7 @@ class port extends control
         $fieldList = $this->port->initFieldList($model, $fields, false);
 
         if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
-        if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
+
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
         $name = $field . "[$index]";

@@ -19,6 +19,9 @@ $config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resol
 $config->port->sysDataFields  = 'execution,product,user';
 $config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy,reviewedBy';
 
+$config->port->defaultZeroField  = 'severity,pri';
+$config->port->defaultEmptyField = '';
+
 $config->port->import = new stdClass();
 
 $config->port->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';

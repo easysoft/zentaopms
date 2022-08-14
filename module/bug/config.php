@@ -309,6 +309,7 @@ $config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->bug->datatable->fieldList['assignedTo']['width']    = '120';
 $config->bug->datatable->fieldList['assignedTo']['required'] = 'no';
+$config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'bug', 'method' =>'getProductMemberPairs', 'params' => '$productID&$branch');
 
 $config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';
