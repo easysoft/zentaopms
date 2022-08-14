@@ -760,8 +760,9 @@ class portModel extends model
         }
         elseif($queryCondition)
         {
-            $selectKey = 't1.id';
-            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t1") == false) $selectKey = 't2.id';
+            $selectKey = 'id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t1") == false) $selectKey = 't1.id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t2") == false) $selectKey = 't2.id';
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
             while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;

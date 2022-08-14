@@ -44,7 +44,7 @@
         <?php include $app->getModuleRoot() . 'port/view/tfoot.html.php';?>
       </tfoot>
     </table>
-    <?php if(!$insert and $dataInsert === '') include $app->getModuleRoot() . 'common/view/noticeimport.html.php';?>
+    <?php if(!$this->session->insert) include $app->getModuleRoot() . 'common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php include $app->getModuleRoot() . 'port/view/footer.html.php';?>
