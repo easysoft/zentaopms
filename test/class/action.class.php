@@ -253,6 +253,29 @@ class actionTest
     }
 
     /**
+     * Get dynamic by search.
+     *
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicBySearchTest($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    {
+        $objects = $this->objectModel->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test get actions as dynamic.
      *
      * @param  string $account
@@ -469,6 +492,59 @@ class actionTest
 
         $object = $this->objectModel->getByID($actionID);
         return $object;
+    }
+
+    /**
+     * Check Has pre or next.
+     *
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return bool
+     */
+    public function hasPreOrNextTest($date, $direction = 'next')
+    {
+        global $tester;
+        $tester->session->set('actionQueryCondition', '1=1');
+        $result = $this->objectModel->hasPreOrNext($date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Save global search object index information.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @access public
+     * @return bool
+     */
+    public function saveIndexTest($objectType, $objectID, $actionType)
+    {
+        $result = $this->objectModel->saveIndex($objectType, $objectID, $actionType);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array  $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPITest($dynamics)
+    {
+        $objects = $this->objectModel->processDynamicForAPI($dynamics);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($objects) ? $objects : $objects[0];
     }
 
     /**
