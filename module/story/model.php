@@ -5635,8 +5635,8 @@ class storyModel extends model
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
         /* Get related objects title or names. */
-        $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-
+        $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         foreach($stories as $story)
         {
             $story->spec   = '';

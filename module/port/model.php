@@ -836,6 +836,17 @@ class portModel extends model
                 {
                     $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                     $datas[$key]->$field = $id;
+                    $control = !empty($this->modelFieldList[$field]['control']) ? $this->modelFieldList[$field]['control'] : '';
+                    if($control == 'multiple')
+                    {
+                        $cellValue = explode("\n", $cellValue);
+                        foreach($cellValue as &$value)
+                        {
+                            $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
+                        }
+                        $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
+                        $datas[$key]->$field = join(',', $cellValue);
+                    }
                 }
             }
 
@@ -1264,7 +1275,7 @@ class portModel extends model
                 }
 
                 $options = array();
-                if($control == 'select' or $control == 'multiple')
+                if($control == 'select')
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
                     if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1);
@@ -1272,7 +1283,7 @@ class portModel extends model
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
 
-                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $options, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
+                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $values, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
 
                 elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date' autocomplete='off'") . '</td>';
 

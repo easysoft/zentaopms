@@ -303,7 +303,7 @@ $config->bug->datatable->fieldList['openedBuild']['fixed']      = 'no';
 $config->bug->datatable->fieldList['openedBuild']['width']      = '120';
 $config->bug->datatable->fieldList['openedBuild']['required']   = 'no';
 $config->bug->datatable->fieldList['openedBuild']['control']    = 'multiple';
-$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'openedBuild&id,name');
+$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
 
 $config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
