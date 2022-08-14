@@ -3577,7 +3577,6 @@ class bugModel extends model
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
 
         if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
-
-        return $relatedObjects;
+        return array('' => '', 0 => '') + $relatedObjects;
     }
 }

@@ -171,6 +171,10 @@ $config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 
+$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
+
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';

@@ -884,10 +884,15 @@ class portModel extends model
             $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
 
-        if(!$maxImport)  $this->maxImport   = $result->allCount;
+        if(!$maxImport) $this->maxImport = $result->allCount;
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
+
+        foreach($datas as $data)
+        {
+            if(isset($data->id)) $this->session->set('insert', false);
+        }
 
         if(empty($datas)) die(js::locate('back'));
         return $result;
@@ -1219,7 +1224,6 @@ class portModel extends model
         $key   = key($list);
         $addID = 1;
         if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
-        $this->session->set('insert', true);
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
@@ -1239,7 +1243,6 @@ class portModel extends model
             if(!empty($object->id))
             {
                 $html .= $object->id . html::hidden("id[$row]", $object->id);
-                $this->session->set('insert', false);
             }
             else
             {
