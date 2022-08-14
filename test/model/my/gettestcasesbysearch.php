@@ -10,15 +10,21 @@ title=测试 myModel->getTestcasesBySearch();
 cid=1
 pid=1
 
-当插入一条action为admin指派了task的动态时，查询结果为1条数据 >> 1
-当插入一条action为admin指派了bug的动态时，查询结果为1条数据 >> 1
+获取testcase状态的项目 >> com.ngtesting.autotest.test.TestLogin账号过期,normal
+获取testcase的统计 >> 20
+获取testcase状态的项目 >> com.ngtesting.autotest.test.TestLogin密码错误,normal
+获取testcase的统计 >> 18
 
 */
 
 $my    = new myTest();
 $type  = array('contribute', 'openedbyme');
 $order = 'id_desc';
-a(1111);exit;
-r($my->getTestcasesBySearchTest($type[0], $order))  && p() && e('1'); // 
-r($my->getTestcasesBySearchTest($type[1], $order))  && p() && e('1'); // 
 
+$cases1 = $my->getTestcasesBySearchTest($type[0], $order);
+$cases2 = $my->getTestcasesBySearchTest($type[1], $order);
+
+r($cases1)           && p('560:title,status') && e('com.ngtesting.autotest.test.TestLogin账号过期,normal');//获取testcase状态的项目
+r(count($cases1))    && p()                   && e('20');                                                 //获取testcase的统计
+r($cases2)           && p('439:title,status') && e('com.ngtesting.autotest.test.TestLogin密码错误,normal');//获取testcase状态的项目
+r(count($cases2))    && p()                   && e('18');                                                 //获取testcase的统计

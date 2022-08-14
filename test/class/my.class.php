@@ -131,24 +131,11 @@ class myTest
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        if($type == 'contribute')
-        {
-            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
-                ->where($myTestcaseQuery)
-                ->andWhere('t1.openedBy')->eq($this->app->user->account)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll('id');
-        }
-        else
-        {
-            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                ->where($myTestcaseQuery)
-                ->andWhere('t2.assignedTo')->eq($this->app->user->account)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll('id');
-        }
-        return $cases;
+        $objects = $this->objectModel->getTestcasesBySearch(0, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -156,15 +143,23 @@ class myTest
      *
      * @param  string $account
      * @param  int    $limit
-     * @param  object $pager
-     * @param  string $orderBy
-     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getTasksBySearchTest($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)
+    public function getTasksBySearchTest($account, $limit = 0)
     {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 20;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $objects = $this->objectModel->getTasksBySearch($account, $limit, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
