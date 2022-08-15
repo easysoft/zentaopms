@@ -1039,37 +1039,37 @@ class mrModel extends model
     /**
      * Accept MR by API.
      *
-     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
-     * @param  int    $hostID
-     * @param  int    $projectID
-     * @param  int    $MRID
      * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiAcceptMR($hostID, $projectID, $MRID, $MR = null)
+    public function apiAcceptMR($MR)
     {
-        $host = $this->loadModel('pipeline')->getByID($hostID);
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         if($host->type == 'gitlab')
         {
-            $apiRoot    = $this->gitlab->getApiRoot($hostID);
-            $approveUrl = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/approved");
+            $apiRoot    = $this->gitlab->getApiRoot($MR->hostID);
+            $approveUrl = sprintf($apiRoot, "/projects/$MR->targetProject/merge_requests/$MR->mriid/approved");
             commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
 
-            $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
+            $url = sprintf($apiRoot, "/projects/$MR->targetProject/merge_requests/$MR->mriid/merge");
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
         else
         {
-            $apiRoot = $this->loadModel($host->type)->getApiRoot($hostID);
-            $url     = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
+            $apiRoot = $this->loadModel($host->type)->getApiRoot($MR->hostID);
+            $url     = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
 
             $merge = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
             $data  = array('Do' => $merge);
-            if($MR and $MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
+            if($MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
 
             $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
-            if(!isset($rowMR->massage)) $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+            if(!isset($rowMR->massage))
+            {
+                $rowMR = $this->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+                if($data['delete_branch_after_merge'] == true) $this->loadModel('gogs')->apiDeleteBranch($MR->hostID, $MR->targetProject, $MR->sourceBranch);
+            }
 
             return $rowMR;
         }
@@ -1934,7 +1934,7 @@ class mrModel extends model
      */
     public function logMergedAction($MR)
     {
-        $this->loadModel('action')->create('mr', $MR->id, 'merged');
+        $this->loadModel('action')->create('mr', $MR->id, 'mergedmr');
         $product = $this->getMRProduct($MR);
 
         $stories = $this->getLinkList($MR->id, $product->id, 'story');

@@ -251,6 +251,7 @@ class mr extends control
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+        $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
 
         echo js::locate(inlink('browse'), 'parent');
     }
@@ -367,7 +368,7 @@ class mr extends control
             }
         }
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $MR);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR);
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
