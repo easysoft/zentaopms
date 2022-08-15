@@ -393,22 +393,36 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function ajaxChangeTableEngine($tableName)
+    public function ajaxChangeTableEngine()
     {
         $response = array();
-        $response['result']  = 'success';
-        $response['message'] = '';
+        $response['result']    = 'success';
+        $response['message']   = '';
+        $response['thisTable'] = '';
+        $response['nextTable'] = '';
 
         $tableEngines = $this->loadModel('misc')->getTableEngines();
-        if(!isset($tableEngines[$tableName]))
+
+        $thisTable = '';
+        $nextTable = '';
+        foreach($tableEngines as $table => $engine)
         {
-            $response['result'] = 'fail';
-            return print(json_encode($response));
+            if($engine == 'InnoDB') continue;
+
+            if(stripos($table, 'searchindex') !== false)
+            {
+                $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+                if($mysqlVersion < 5.6) continue;
+            }
+
+            if($thisTable and empty($nextTable)) $nextTable = $table;
+            if(empty($thisTable)) $thisTable = $table;
+            if($thisTable and $nextTable) break;
         }
 
-        if($tableEngines[$tableName] == 'InnoDB')
+        if(empty($thisTable))
         {
-            $response['message'] = sprintf($this->lang->admin->changeSuccess, $tableName);
+            $response['result'] = 'finished';
             return print(json_encode($response));
         }
 
@@ -419,36 +433,28 @@ class admin extends control
             foreach($dbProcesses as $dbProcess)
             {
                 if($dbProcess->db != $this->config->db->name) continue;
-                if(strpos($dbProcess->Info, " {$tableName} ") !== false)
+                if(strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
-                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $tableName);
+                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
                     return print(json_encode($response));
                 }
             }
         }
         catch(PDOException $e){}
 
-        if(stripos($tableName, 'searchindex') !== false)
-        {
-            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-            if($mysqlVersion < 5.6)
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->admin->errorInnodb;
-                return print(json_encode($response));
-            }
-        }
+        $response['thisTable'] = $thisTable;
+        $response['nextTable'] = $nextTable;
 
         try
         {
-            $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+            $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
             $this->dao->exec($sql);
-            $response['message'] = sprintf($this->lang->admin->changeSuccess, $tableName);
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
         }
         catch(PDOException $e)
         {
             $response['result']  = 'fail';
-            $response['message'] = sprintf($this->lang->admin->changeFail, $tableName, htmlspecialchars($e->getMessage()));
+            $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
         }
 
         return print(json_encode($response));

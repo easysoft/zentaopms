@@ -35,6 +35,7 @@ $lang->admin->changingTable  = 'Replacing data table %s engine...';
 $lang->admin->changeSuccess  = 'The data table %s engine has been changed to InnoDB.';
 $lang->admin->changeFail     = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
 $lang->admin->errorInnodb    = 'Your MySQL does not support InnoDB data table engine.';
+$lang->admin->changeFinished = "Database engine replacement completed.";
 $lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
