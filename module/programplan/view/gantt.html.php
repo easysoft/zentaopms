@@ -94,7 +94,9 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       <div class='btn btn-link' id='ganttPris'>
         <strong><?php echo $lang->task->pri . " : "?></strong>
         <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
+        <?php if($pri <=4):?>
         <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+        <?php endif;?>
         <?php endforeach;?>
       </div>
     </div>
