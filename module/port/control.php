@@ -104,13 +104,11 @@ class port extends control
             $file      = $this->loadModel('file')->getUpload('file');
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
-            if(empty($shortName))
-            {
-                die(js::alert($this->lang->excel->emptyFileName));
-            }
-            $extension = $file['extension'];
 
-            $fileName = $this->file->savePath . $shortName;
+            if(empty($shortName)) die(js::alert($this->lang->excel->emptyFileName));
+
+            $extension = $file['extension'];
+            $fileName  = $this->file->savePath . $shortName;
 
             move_uploaded_file($file['tmpname'], $fileName);
 
@@ -146,9 +144,13 @@ class port extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
+        if($model == 'story')
+        {
+            if($this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
+        }
 
         $this->loadModel($model);
-        $importFields = $this->config->$model->templateFields;
+        $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
         $fields       = $this->port->initFieldList($model, $importFields, false);
         $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
@@ -184,9 +186,11 @@ class port extends control
         $fieldList = $this->port->initFieldList($model, $fields, false);
 
         if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
-        if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
+
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
-        return print(html::select($field . "[$index]", $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
+        $name = $field . "[$index]";
+        if($multiple == 'multiple') $name .= "[]";
+        return print(html::select($name, $fieldList[$field]['values'], $value, "class='form-control picker-select' data-field='$field' data-index='$index' $multiple"));
     }
 }

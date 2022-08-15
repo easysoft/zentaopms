@@ -25,4 +25,4 @@ $normalRelease->addedBy   = $tester->app->user->account;
 $normalRelease->addedDate = helper::now();
 
 $release = $api->publishLibTest($normalRelease, false);
-r($api->getReleaseListByApiTest($release->lib, $release->id)) && p("{$release->id}:lib") && e('910'); //获取刚插入的发布信息
+r($api->getReleaseListByApiTest($release->lib, $release->id)) && p("lib") && e('910'); //获取刚插入的发布信息

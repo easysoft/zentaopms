@@ -88,17 +88,19 @@ $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
+$config->story->datatable->fieldList['product']['control']    = 'hidden';
 $config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']      = 'no';
 $config->story->datatable->fieldList['branch']['width']      = '100';
 $config->story->datatable->fieldList['branch']['required']   = 'no';
+$config->story->datatable->fieldList['branch']['control']    = 'multiple';
 $config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
 
 $config->story->datatable->fieldList['module']['title']      = 'module';
 $config->story->datatable->fieldList['module']['control']    = 'select';
-$config->story->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'story');
+$config->story->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&story&0&all');
 
 $config->story->datatable->fieldList['keywords']['title']    = 'keywords';
 $config->story->datatable->fieldList['keywords']['fixed']    = 'no';
@@ -110,7 +112,7 @@ $config->story->datatable->fieldList['plan']['fixed']      = 'no';
 $config->story->datatable->fieldList['plan']['width']      = '90';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
-$config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
+$config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->story->datatable->fieldList['source']['title']    = 'source';
 $config->story->datatable->fieldList['source']['fixed']    = 'no';
@@ -162,15 +164,25 @@ $config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['assignedDate']['width']    = '90';
 $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
-$config->story->datatable->fieldList['reviewedBy']['title']    = 'reviewedBy';
-$config->story->datatable->fieldList['reviewedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['reviewedBy']['width']    = '80';
-$config->story->datatable->fieldList['reviewedBy']['required'] = 'no';
+$config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
+$config->story->datatable->fieldList['reviewedBy']['width']      = '80';
+$config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
+$config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
+
+$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
 
 $config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
 $config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['reviewedDate']['width']    = '90';
 $config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
+
+$config->story->datatable->fieldList['needReview']['title']      = 'needReview';
+$config->story->datatable->fieldList['needReview']['control']    = 'select';
+$config->story->datatable->fieldList['needReview']['dataSource'] = array('lang' => 'reviewList');
 
 $config->story->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->story->datatable->fieldList['closedBy']['fixed']    = 'no';

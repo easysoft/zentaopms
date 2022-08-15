@@ -122,7 +122,7 @@ class mr extends control
             $giteaUsers  = $this->gitea->getGiteaListByAccount();
             foreach($hosts as $hostID => $host)
             {
-                if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
+                if($host->type == 'gitlab' and isset($gitlabUsers[$hostID])) continue;
                 if($host->type == 'gitea' and isset($giteaUsers[$hostID])) continue;
 
                 unset($hosts[$hostID]);
@@ -186,10 +186,10 @@ class mr extends control
         if(!$this->app->user->admin and $scm == 'gitlab')
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            $groups      = $this->$scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            $sourceProject = $this->scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
-            $isDeveloper   = $this->scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+            $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+            $isDeveloper   = $this->$scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
             if(!isset($gitUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
         }

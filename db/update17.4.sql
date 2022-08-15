@@ -14,16 +14,6 @@ ALTER TABLE `zt_testtask` ADD `createdDate` datetime NOT NULL AFTER `createdBy`;
 ALTER TABLE `zt_build` ADD `createdBy` varchar(30) NOT NULL AFTER `desc`;
 ALTER TABLE `zt_build` ADD `createdDate` datetime NOT NULL AFTER `createdBy`;
 
-INSERT IGNORE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `role`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
-('testtask',	'createdBy',	'varchar',	'30',	'由谁创建',	'select',	'',	'user',	'',	'',	'',	393,	0,	0,	'0',	'0',	'0',	'1',	1,      'buildin',	'',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('testtask',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	394,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('productplan',	'createdBy',	'varchar',	'30',	'由谁创建',	'select',	'',	'user',	'',	'',	'',	11,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('productplan',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	12,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('build',	'createdBy',	'varchar',	'30',	'由谁创建',	'select',	'',	'user',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('build',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	16,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('release',	'createdBy',	'varchar',	'30',	'由谁创建',	'select',	'',	'user',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
-('release',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00');
-
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' ORDER BY `id` DESC LIMIT 1) WHERE `module`='feedback' AND `field`='type';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' ORDER BY `id` DESC LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
@@ -32,8 +22,42 @@ UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'clo
 
 UPDATE `zt_grouppriv` SET `method`='exportTemplate' WHERE `method` = 'exportTemplet';
 
-INSERT IGNORE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `buildin`, `role`, `createdBy`, `createdDate`) VALUES
-('bug', 'batchactivate', 'batchoperate', '批量激活', 'batch', 'different', 'none', 'normal', 'browse', 'normal', 'direct', '1', 'buildin', '', '2022-08-09 15:52');
-
 INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'reply' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
 INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'ask' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
+
+CREATE TABLE `zt_chart` (
+  `id` mediumint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(30) NOT NULL,
+  `dataset` varchar(30) NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `settings` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_dashboard` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `module` mediumint NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `layout` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_dataset` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(155) NOT NULL,
+  `sql` text NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `objects` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

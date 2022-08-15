@@ -240,7 +240,7 @@ class project extends control
         {
             $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
 
-            if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + $object->budget : $availableBudget;
+            if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + (int)$object->budget : $availableBudget;
 
             if($objectType == 'program')
             {

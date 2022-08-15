@@ -8,27 +8,10 @@ class caselibTest
     }
 
     /**
-     * Set lib menu test.
-     * 
-     * @param mixed $libraries 
-     * @param mixed $libID 
-     * @access public
-     * @return void
-     */
-    public function setLibMenuTest($libraries, $libID)
-    {
-        $objects = $this->objectModel->setLibMenu($libraries, $libID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Save lib state test.
-     * 
-     * @param int $libID 
-     * @param array $libraries 
+     *
+     * @param int $libID
+     * @param array $libraries
      * @access public
      * @return void
      */
@@ -43,9 +26,9 @@ class caselibTest
 
     /**
      * Get by ID test.
-     * 
-     * @param mixed $libID 
-     * @param mixed $setImgSize 
+     *
+     * @param mixed $libID
+     * @param mixed $setImgSize
      * @access public
      * @return void
      */
@@ -60,8 +43,8 @@ class caselibTest
 
     /**
      * Update test.
-     * 
-     * @param mixed $libID 
+     *
+     * @param mixed $libID
      * @access public
      * @return void
      */
@@ -78,9 +61,9 @@ class caselibTest
 
     /**
      * Delete test.
-     * 
-     * @param mixed $libID 
-     * @param string $table 
+     *
+     * @param mixed $libID
+     * @param string $table
      * @access public
      * @return void
      */
@@ -97,7 +80,7 @@ class caselibTest
 
     /**
      * Get libraries test.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -112,9 +95,9 @@ class caselibTest
 
     /**
      * Get list test.
-     * 
-     * @param string $orderBy 
-     * @param mixed $pager 
+     *
+     * @param string $orderBy
+     * @param mixed $pager
      * @access public
      * @return void
      */
@@ -129,8 +112,8 @@ class caselibTest
 
     /**
      * Create test.
-     * 
-     * @param mixed $param 
+     *
+     * @param mixed $param
      * @access public
      * @return void
      */
@@ -149,13 +132,13 @@ class caselibTest
 
     /**
      * Get libcases test.
-     * 
-     * @param mixed $libID 
-     * @param mixed $browseType 
-     * @param int $queryID 
-     * @param int $moduleID 
-     * @param string $sort 
-     * @param mixed $pager 
+     *
+     * @param mixed $libID
+     * @param mixed $browseType
+     * @param int $queryID
+     * @param int $moduleID
+     * @param string $sort
+     * @param mixed $pager
      * @access public
      * @return void
      */
@@ -169,46 +152,9 @@ class caselibTest
     }
 
     /**
-     * Build searchform test.
-     * 
-     * @param mixed $libID 
-     * @param mixed $libraries 
-     * @param mixed $queryID 
-     * @param mixed $actionURL 
-     * @access public
-     * @return void
-     */
-    public function buildSearchFormTest($libID, $libraries, $queryID, $actionURL)
-    {
-        $objects = $this->objectModel->buildSearchForm($libID, $libraries, $queryID, $actionURL);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get liblink test.
-     * 
-     * @param mixed $module 
-     * @param mixed $method 
-     * @param mixed $extra 
-     * @access public
-     * @return void
-     */
-    public function getLibLinkTest($module, $method, $extra)
-    {
-        $objects = $this->objectModel->getLibLink($module, $method, $extra);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Create from import test.
-     * 
-     * @param mixed $libID 
+     *
+     * @param mixed $libID
      * @access public
      * @return void
      */
@@ -223,8 +169,8 @@ class caselibTest
 
     /**
      * Batch create case test.
-     * 
-     * @param mixed $libID 
+     *
+     * @param mixed $libID
      * @access public
      * @return void
      */

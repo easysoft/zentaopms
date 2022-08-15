@@ -245,10 +245,6 @@ $lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG
 $lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
-/* 用来描述gantt chat相关操作记录。 */
-$lang->action->desc->ganttdrag = '$date, 由 <strong>$actor</strong> 拖动了任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->ganttmove = '$date, 由 <strong>$actor</strong> 排序了任务 <strong>$extra</strong>。' . "\n";
-
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
 $lang->action->label->install               = '安装';
@@ -386,7 +382,6 @@ $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
 $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
-$lang->action->label->ganttdrag             = '拖动了';
 $lang->action->label->ganttmove             = '排序了';
 
 /* 动态信息按照对象分组 */
@@ -545,6 +540,7 @@ $lang->action->dynamicAction->task['undeleted']           = '还原任务';
 $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
+$lang->action->dynamicAction->task['ganttmove']           = '排序';
 
 $lang->action->dynamicAction->build['opened']  = '创建版本';
 $lang->action->dynamicAction->build['edited']  = '编辑版本';

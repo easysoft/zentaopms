@@ -13,14 +13,14 @@ $model          = $datas->model;
 $datas          = $datas->datas;
 $appendFields   = $this->session->appendFields;
 $notEmptyRule   = $this->session->notEmptyRule;
-$insert         = $this->session->insert;
 ?>
 <style>
 form{overflow-x: scroll}
 #maxImport:focus {outline: none;}
+.pointorNone{pointer-events:none;}
 .c-pri{width:100px}
-#showData > thead > tr > th{min-width:150px !important;}
-.c-story{width:150px;}
+#showData > thead > tr > th{width:150px;}
+.c-id{width:50px}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}
 .c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
 </style>

@@ -288,11 +288,12 @@ $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';
 
-$lang->admin->system     = '系统';
-$lang->admin->entry      = '应用';
-$lang->admin->data       = '数据';
-$lang->admin->cron       = '定时';
-$lang->admin->buildIndex = '重建索引';
+$lang->admin->system      = '系统';
+$lang->admin->entry       = '应用';
+$lang->admin->data        = '数据';
+$lang->admin->cron        = '定时';
+$lang->admin->buildIndex  = '重建索引';
+$lang->admin->tableEngine = '表引擎';
 
 $lang->convert->importJira = '导入Jira数据';
 

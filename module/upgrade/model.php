@@ -534,8 +534,17 @@ class upgradeModel extends model
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
-                $this->recordOSAndBrowserOfBug();
+                $this->rebuildFULLTEXT();
                 $this->updateSearchIndex();
+                if(!$executedXuanxuan)
+                {
+                    $table  = $this->config->db->prefix . 'im_chat';
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    if(!$exists)
+                    {
+                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+                    }
+                }
                 break;
             case '17_5':
                 $this->recordOSAndBrowserOfBug();
@@ -685,9 +694,13 @@ class upgradeModel extends model
                 $this->processFlowPosition();
                 break;
             case 'biz7.4':
+                $this->processCreatedInfo();
+                $this->processCreatedBy();
                 $this->updateApproval();
                 $this->addDefaultRuleToWorkflow();
-                $this->addFlowActions('biz7.3');
+                $this->processReviewLinkages();
+                $this->addFlowActions('biz7.4');
+                $this->addFlowFields('biz7.4');
                 break;
         }
     }
@@ -3201,25 +3214,25 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
-        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
             if(strpos($fromVersion, 'pro') !== false)
             {
-                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(strpos($fromVersion, 'biz') !== false)
             {
-                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(version_compare($fromVersion, '15.0.rc1', '<'))
             {
-                $needProcess['search'] = true;
+                $needProcess['search'] = 'notice';
             }
         }
 
         $openVersion = $this->getOpenVersion($fromVersion);
-        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = true;
+        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
 
         return $needProcess;
     }
@@ -4927,17 +4940,17 @@ class upgradeModel extends model
 
         if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
 
         /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -6987,5 +7000,122 @@ class upgradeModel extends model
             }
         }
         return !dao::isError();
+    }
+
+    /**
+     * Add flow fields.
+     *
+     * @param  int    $version
+     * @access public
+     * @return bool
+     */
+    public function addFlowFields($version)
+    {
+        $this->loadModel('workflowfield');
+
+        $upgradeLang   = $this->lang->workflowfield->upgrade[$version];
+        $upgradeConfig = $this->config->workflowfield->upgrade[$version];
+
+        $now = helper::now();
+        foreach($upgradeLang as $module => $fields)
+        {
+            $field = new stdclass();
+            $field->buildin     = '1';
+            $field->role        = 'buildin';
+            $field->module      = $module;
+            $field->createdBy   = $this->app->user->account;
+            $field->createdDate = $now;
+
+            foreach($fields as $code => $name)
+            {
+                $field->field = $code;
+                $field->name  = $name;
+
+                $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                foreach($fieldConfig as $key => $value) $field->$key = $value;
+
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process review linkages of approval.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processReviewLinkages()
+    {
+        $linkagePairs = $this->dao->select('id, linkages')->from(TABLE_WORKFLOWACTION)->where('action')->eq('approvalreview')->andWhere('role')->eq('approval')->fetchPairs();
+
+        $oldLinkages = array();
+        $oldLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $oldLinkages[0]['sources'][0]['operator'] = '==';
+        $oldLinkages[0]['sources'][0]['value']    = 'reject';
+        $oldLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $oldLinkages[0]['targets'][0]['status']   = 'show';
+
+        $newLinkages = array();
+        $newLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $newLinkages[0]['sources'][0]['operator'] = '==';
+        $newLinkages[0]['sources'][0]['value']    = 'pass';
+        $newLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $newLinkages[0]['targets'][0]['status']   = 'hide';
+
+        foreach($linkagePairs as $id => $linkages)
+        {
+            if(helper::jsonEncode($oldLinkages) == $linkages)
+            {
+                $this->dao->update(TABLE_WORKFLOWACTION)->set('linkages')->eq(helper::jsonEncode($newLinkages))->where('id')->eq($id)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Change FULLTEXT index for searchindex table.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildFULLTEXT()
+    {
+        try
+        {
+            $table   = TABLE_SEARCHINDEX;
+            $stmt    = $this->dao->query("show index from $table");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE {$table} ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `content`");
+        }
+        catch(PDOException $e){}
+
+        return true;
+    }
+
+    /**
+     * Check whether the field exists.
+     *
+     * @param  string  $table
+     * @param  string  $field
+     * @access public
+     * @return bool
+     */
+    public function checkFieldsExists($table, $field)
+    {
+        $result = $this->dbh->query("show columns from `$table` like '$field'");
+
+        return $result->rowCount() > 0;
     }
 }

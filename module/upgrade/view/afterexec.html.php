@@ -35,10 +35,10 @@ $(function()
     finishedShow();
 })
 <?php
-foreach($needProcess as $processKey => $value)
+foreach($needProcess as $processKey => $processType)
 {
-    $value = $processKey == 'search' ? 'true' : 'false';
-    echo 'var ' . $processKey . "Finish = $value;\n";
+    if($processType == 'notice') continue;
+    echo 'var ' . $processKey . "Finish = false;\n";
 }
 ?>
 
@@ -52,9 +52,9 @@ function initHideHome()
 {
     var hide = false;
     <?php
-    foreach($needProcess as $processKey => $value)
+    foreach($needProcess as $processKey => $processType)
     {
-        if($processKey == 'search') continue;
+        if($processType == 'notice') continue;
         echo "hide = true;\n";
         break;
     }
@@ -76,8 +76,9 @@ function finishedShow()
 {
     var show = true;
     <?php
-    foreach($needProcess as $processKey => $value)
+    foreach($needProcess as $processKey => $processType)
     {
+        if($processType == 'notice') continue;
         echo "if({$processKey}Finish == false) show = false;\n";
     }
     ?>
@@ -91,45 +92,8 @@ function finishedShow()
 <?php if(isset($needProcess['changeEngine'])):?>
 $(function()
 {
-    $('.col-md-6:first').append("<div id='changeEngineBox' class='alert alert-info'><p><?php echo $lang->upgrade->changeEngine;?></p><div class='info'></div></div>");
-    changeEngine();
+    $('.col-md-6:first').append("<div class='alert alert-info'><p><?php echo $lang->upgrade->needChangeEngine;?></p></div>");
 })
-function changeEngine()
-{
-    var link     = '<?php echo inlink('ajaxChangeTableEngine')?>';
-    var $infoBox = $('#changeEngineBox .info');
-    $.ajax(
-    {
-        type: "GET",
-        url: link,
-        success: function(response)
-        {
-            response = JSON.parse(response);
-            if(response == null)
-            {
-                changeEngineFinish = true;
-                finishedShow();
-            }
-            else if(response.result == 'finished')
-            {
-                changeEngineFinish = true;
-                $infoBox.prepend("<div class='text-success'>" + response.message + "</div>");
-                finishedShow();
-            }
-            else
-            {
-                if($infoBox.find('.' + response.table).length == 0) $infoBox.prepend("<div class='text-success " + response.table + "'></div>");
-                $infoBox.find('.' + response.table).html(response.message);
-                if(response.next) $infoBox.prepend("<div class='text-success " + response.next + "'>" + response.nextMessage + "</div>");
-                changeEngine();
-            }
-        },
-        error: function()
-        {
-            changeEngine();
-        }
-    })
-}
 <?php endif;?>
 <?php if(isset($needProcess['updateFile'])):?>
 $(function()
