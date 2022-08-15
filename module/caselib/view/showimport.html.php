@@ -14,11 +14,12 @@ $datas          = $datas->datas;
 ?>
 <style>
 form{overflow-x: scroll}
-.c-pri, .c-estStarted, .c-deadline{width:100px;}
+thead > tr > th{width:150px;}
 .c-estimate {width:150px;}
 .c-story{width:150px;}
-.c-team {width:100px; padding:0px 0px 8px 0px !important;}
-.c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
+.c-step{width:400px;}
+.c-pri,.c-stage{width:150px}
+.c-precondition{width:200px;}
 </style>
 <?php if(!empty($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
@@ -37,7 +38,11 @@ $(function()
     {
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
-    $('#import').click(function(){location.href = createLink('caselib', 'showImport', "libID=<?php echo $libID;?>&pageID=1&maxImport=" + $('#maxImport').val())})
+    $('#import').click(function()
+    {
+        $.cookie('maxImport', $('#maxImport').val());
+        location.href = createLink('caselib', 'showImport', "libID=<?php echo $libID;?>&pageID=1&maxImport=" + $('#maxImport').val())
+    });
 });
 </script>
 <?php else:?>
