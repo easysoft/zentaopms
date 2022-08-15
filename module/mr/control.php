@@ -630,7 +630,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $MR             = $this->mr->getByID($MRID);
-        $relatedStories = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'story');
+        $relatedStories = $this->mr->getCommitedLink($MR, 'story');
 
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
@@ -715,7 +715,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $MR          = $this->mr->getByID($MRID);
-        $relatedBugs = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'bug');
+        $relatedBugs = $this->mr->getCommitedLink($MR, 'bug');
 
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
@@ -787,7 +787,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
 
         $MR           = $this->mr->getByID($MRID);
-        $relatedTasks = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'task');
+        $relatedTasks = $this->mr->getCommitedLink($MR, 'task');
         $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get executions by product. */
