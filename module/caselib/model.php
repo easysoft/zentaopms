@@ -152,17 +152,19 @@ class caselibModel extends model
     /**
      * Get library list.
      *
+     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($type = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

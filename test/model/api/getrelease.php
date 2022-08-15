@@ -10,6 +10,8 @@ title=测试 apiModel->getRelease();
 cid=1
 pid=1
 
+获取刚创建的发布 >> Version1
+
 */
 
 global $tester;

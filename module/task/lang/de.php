@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = 'Select Story Tested';
 $lang->task->selectAllUser     = 'Alle';
 $lang->task->noStory           = 'Keine Story';
 $lang->task->noAssigned        = 'Nicht zugeordnet';
@@ -352,3 +352,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Datum';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Schätzung';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

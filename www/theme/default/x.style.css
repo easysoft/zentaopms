@@ -2,7 +2,7 @@ body{padding:0px; margin: 0px;background-color: #fff;}
 #header{display: none}
 #footer{display: none}
 #header+#main{min-width:auto}
-#main{padding: 0px;}
+#main{padding: 0px; top:0!important;}
 #main .container{padding: 0px;}
 #mainMenu{margin-top:0px;background-color: #efefef;}
 #mainContent .cell{box-shadow:none; -webkit-box-shadow: none;}

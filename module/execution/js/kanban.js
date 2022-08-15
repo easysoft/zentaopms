@@ -761,14 +761,15 @@ function renderCount($count, count, column)
 {
     if(groupBy == 'story' && column.type == 'story')
     {
-        var orderButton = '<button class="btn btn-link action storyColumn" type="button" data-toggle="dropdown">'
-            + '  <span class="text">' + (kanbanLang.orderList[orderBy] == undefined ? kanbanLang.orderList['pri_asc'] : kanbanLang.orderList[orderBy]) + '</span><span class="caret"></span>'
-            + '</button>'
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
             + '<ul class="dropdown-menu">';
         for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(rdSearchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
         orderButton += '</ul>';
 
-        $count.prev().replaceWith(orderButton);
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
         $count.remove();
         return;
     }
@@ -1484,6 +1485,8 @@ $(function()
 
     if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
 
+    changeOrder = false;
+
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
@@ -1838,6 +1841,7 @@ function searchCards(value, order = '')
 {
     rdSearchValue = value;
     orderBy       = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
@@ -1857,7 +1861,7 @@ function searchCards(value, order = '')
 
         if(hideAll && rdSearchValue != '')
         {
-            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbanLang.empty + '</span></p></div>');
+            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbancardLang.empty + '</span></p></div>');
         }
         else
         {

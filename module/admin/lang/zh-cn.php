@@ -22,12 +22,22 @@ $lang->admin->captcha         = '验证码';
 $lang->admin->getCaptcha      = '获取验证码';
 $lang->admin->register        = '登记';
 $lang->admin->resetPWDSetting = '重置密码设置';
+$lang->admin->tableEngine     = '表引擎';
 
 $lang->admin->api            = '接口';
 $lang->admin->log            = '日志';
 $lang->admin->setting        = '设置';
 $lang->admin->days           = '日志保存天数';
 $lang->admin->resetPWDByMail = '通过邮箱重置密码';
+
+$lang->admin->changeEngine   = "更换到InnoDB";
+$lang->admin->changingTable  = '正在更换数据表%s引擎...';
+$lang->admin->changeSuccess  = '已经更换数据表%s引擎为InnoDB。';
+$lang->admin->changeFail     = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb    = '您当前的数据库不支持使用InnoDB数据表引擎。';
+$lang->admin->engineInfo     = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
+$lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
+$lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
@@ -69,8 +79,8 @@ $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';
 $lang->admin->safe->modeList[2] = '强';
 
-$lang->admin->safe->modeRuleList[1] = '6位以上，包含大小写字母，数字。';
-$lang->admin->safe->modeRuleList[2] = '10位以上，包含字母，数字，特殊字符。';
+$lang->admin->safe->modeRuleList[1] = '6位及以上，包含大小写字母，数字。';
+$lang->admin->safe->modeRuleList[2] = '10位及以上，包含字母，数字，特殊字符。';
 
 $lang->admin->safe->reasonList['weak']     = '常用弱口令';
 $lang->admin->safe->reasonList['account']  = '与帐号相同';
@@ -87,5 +97,6 @@ $lang->admin->safe->loginCaptchaList[0] = '否';
 $lang->admin->safe->resetPWDList[1] = '开启';
 $lang->admin->safe->resetPWDList[0] = '关闭';
 
-$lang->admin->safe->noticeMode   = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
-$lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';
+$lang->admin->safe->noticeMode     = '系统会在创建和修改用户、修改密码的时候检查用户口令。';
+$lang->admin->safe->noticeWeakMode = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
+$lang->admin->safe->noticeStrong   = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';

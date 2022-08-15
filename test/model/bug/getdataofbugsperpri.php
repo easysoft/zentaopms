@@ -16,7 +16,6 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfBugsPerPriTest()) && p('1:name,value') && e('优先级:1,79'); // 获取pri为1的数据
 r($bug->getDataOfBugsPerPriTest()) && p('2:name,value') && e('优先级:2,79'); // 获取pri为2的数据

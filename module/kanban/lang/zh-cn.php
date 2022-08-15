@@ -87,7 +87,7 @@ $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
 $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
-$lang->kanban->alignment           = '对齐方式';
+$lang->kanban->alignment           = '列标题对齐方式';
 $lang->kanban->allUsers            = '加载所有用户';
 
 /* Fields. */
@@ -134,11 +134,11 @@ $lang->kanban->aclGroup['extend']  = '继承空间';
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
-$lang->kanban->archiveList['0'] = '不启用';
 $lang->kanban->archiveList['1'] = '启用';
+$lang->kanban->archiveList['0'] = '不启用';
 
-$lang->kanban->enableList['0'] = '不启用';
 $lang->kanban->enableList['1'] = '启用';
+$lang->kanban->enableList['0'] = '不启用';
 
 $lang->kanban->alignmentList['center'] = '居中';
 $lang->kanban->alignmentList['left']   = '居左';
@@ -225,8 +225,8 @@ $lang->kanban->orderList['stage_desc']      = '需求阶段倒序';
 $lang->kanban->orderList['assignedTo_desc'] = '指派给';
 
 $lang->kanban->importList = array();
-$lang->kanban->importList['off'] = '不启用导入功能';
 $lang->kanban->importList['on']  = '启用导入功能（可以导入自己有权查看的内容作为卡片）';
+$lang->kanban->importList['off'] = '不启用导入功能';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = '计划';

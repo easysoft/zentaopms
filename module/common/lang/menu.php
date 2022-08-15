@@ -320,7 +320,7 @@ $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execut
 $lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
-$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
+$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
@@ -568,6 +568,7 @@ $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->sec
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
 
 $lang->admin->dividerMenu = ',company,message,system,';

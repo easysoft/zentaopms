@@ -94,6 +94,7 @@ $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
 $lang->doc->updateOrder  = 'Update Order';
+$lang->doc->nextStep     = 'Next';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -153,6 +154,7 @@ $lang->doc->allCollections   = 'All Collections';
 $lang->doc->keywordsTips     = 'Please use commas to separate multiple keywords.';
 $lang->doc->sortLibs         = 'Sort Libs';
 $lang->doc->titlePlaceholder = 'Veuillez saisir le titre';
+$lang->doc->confirm          = 'Confirm';
 
 global $config;
 /* Query condition list. */

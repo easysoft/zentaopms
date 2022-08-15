@@ -70,7 +70,7 @@ $config->testcase->search['params']['stage']        = array('operator' => 'inclu
 $config->testcase->search['params']['lib']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 
 $config->testcase->search['params']['lastRunner']     = array('operator' => '=', 'control' => 'select', 'values' => 'users');
-$config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => array_diff($lang->testcase->resultList, array('n/a' => $lang->testcase->resultList['n/a'])) + array('' => ''));
+$config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => array_diff($lang->testcase->resultList, array('n/a' => $lang->testcase->resultList['n/a'])) + array('null' => $lang->testcase->unexecuted));
 $config->testcase->search['params']['lastRunDate']    = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
@@ -84,6 +84,14 @@ $config->testcase->datatable->fieldList['id']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['id']['width']    = '70';
 $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
+$config->testcase->datatable->fieldList['product']['title']      = 'priAB';
+$config->testcase->datatable->fieldList['product']['control']    = 'hidden';
+$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&product&id,name');
+
+$config->testcase->datatable->fieldList['module']['title']      = 'module';
+$config->testcase->datatable->fieldList['module']['control']    = 'select';
+$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&case');
+
 $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['pri']['width']    = '40';
@@ -95,10 +103,11 @@ $config->testcase->datatable->fieldList['title']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['title']['width']    = 'auto';
 $config->testcase->datatable->fieldList['title']['required'] = 'yes';
 
-$config->testcase->datatable->fieldList['branch']['title']    = 'branch';
-$config->testcase->datatable->fieldList['branch']['fixed']    = 'left';
-$config->testcase->datatable->fieldList['branch']['width']    = '100';
-$config->testcase->datatable->fieldList['branch']['required'] = 'no';
+$config->testcase->datatable->fieldList['branch']['title']      = 'branch';
+$config->testcase->datatable->fieldList['branch']['fixed']      = 'left';
+$config->testcase->datatable->fieldList['branch']['width']      = '100';
+$config->testcase->datatable->fieldList['branch']['required']   = 'no';
+$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
 
 $config->testcase->datatable->fieldList['type']['title']    = 'type';
 $config->testcase->datatable->fieldList['type']['fixed']    = 'no';
@@ -109,6 +118,7 @@ $config->testcase->datatable->fieldList['stage']['title']    = 'stage';
 $config->testcase->datatable->fieldList['stage']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['stage']['width']    = '110';
 $config->testcase->datatable->fieldList['stage']['required'] = 'no';
+$config->testcase->datatable->fieldList['stage']['control']  = 'multiple';
 
 $config->testcase->datatable->fieldList['precondition']['title']    = 'precondition';
 $config->testcase->datatable->fieldList['precondition']['fixed']    = 'no';
@@ -175,7 +185,7 @@ $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->testcase->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->testcase->datatable->fieldList['lastEditedBy']['width']    = '92';
 $config->testcase->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
@@ -192,6 +202,8 @@ $config->testcase->datatable->fieldList['story']['title']    = 'story';
 $config->testcase->datatable->fieldList['story']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['story']['width']    = '90';
 $config->testcase->datatable->fieldList['story']['required'] = 'no';
+$config->testcase->datatable->fieldList['story']['control']    = 'select';
+$config->testcase->datatable->fieldList['story']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&story&id,title');
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
@@ -206,6 +218,7 @@ $config->testcase->datatable->fieldList['results']['width']    = '32';
 $config->testcase->datatable->fieldList['results']['required'] = 'no';
 $config->testcase->datatable->fieldList['results']['sort']     = 'no';
 $config->testcase->datatable->fieldList['results']['name']     = $lang->testcase->results;
+$config->testcase->datatable->fieldList['results']['dataSource'] = array('lang' => 'resultList');
 
 $config->testcase->datatable->fieldList['stepNumber']['title']    = 'S';
 $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';

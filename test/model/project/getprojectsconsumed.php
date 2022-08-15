@@ -9,6 +9,10 @@ title=测试 projectModel::getProjectsConsumed;
 cid=1
 pid=1
 
+批量获取各个项目的总计消耗工时 >> 21.0
+批量获取各个项目的总计消耗工时 >> 28.0
+批量获取各个项目的总计消耗工时 >> 35.0
+
 */
 
 global $tester;

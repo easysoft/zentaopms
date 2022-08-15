@@ -320,7 +320,7 @@ class userModel extends model
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
+            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -544,7 +544,7 @@ class userModel extends model
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength')
+            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -786,7 +786,7 @@ class userModel extends model
 
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->remove('account, password1, password2, originalPassword, passwordStrength')
+            ->remove('account, password1, password2, originalPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['originalPassword']) or $this->post->originalPassword != md5($this->app->user->password . $this->session->rand))
@@ -796,10 +796,12 @@ class userModel extends model
         }
 
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
+        $_SESSION['user']->password      = $user->password;
         $this->app->user->password       = $user->password;
         $this->app->user->modifyPassword = false;
         if(!dao::isError())
         {
+            if(!empty($this->app->user->modifyPasswordReason)) $this->app->user->modifyPasswordReason = '';
             $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($this->post->password1));
         }
     }
@@ -818,7 +820,7 @@ class userModel extends model
         $user = $this->getById($this->post->account);
         if(!$user) return false;
 
-        $password = md5($this->post->password1);
+        $password = substr($this->post->password1, 0, 32);
         $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
         return !dao::isError();
     }
@@ -833,17 +835,28 @@ class userModel extends model
     {
         $_POST['password1'] = trim($_POST['password1']);
         $_POST['password2'] = trim($_POST['password2']);
-        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password) . '<br/>';
         if($this->post->password1 != false)
         {
-            if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
-            if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
+            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
 
-            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password'] = zget($this->lang->user->placeholder->passwordStrength, $this->config->safe->mode, $this->lang->user->weakPassword);
+            if(isset($_POST['passwordLength']) and $this->post->passwordLength < 6 and empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword) . '<br/>';
+
+            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame . '<br/>';
+
             if(!empty($this->config->safe->changeWeak))
             {
                 if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+
+                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+
+                $weaks = array();
+                foreach(explode(',', $this->config->safe->weak) as $weak)
+                {
+                    $weak = md5(trim($weak));
+                    $weaks[$weak] = $weak;
+                }
+                if(isset($weaks[substr($this->post->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
             }
         }
         return !dao::isError();
@@ -1656,7 +1669,6 @@ class userModel extends model
         $strength = 0;
         $length   = strlen($password);
 
-        $uniqueChars = '';
         $complexity  = array();
         $chars = str_split($password);
         foreach($chars as $letter)
@@ -1664,7 +1676,7 @@ class userModel extends model
             $asc = ord($letter);
             if($asc >= 48 && $asc <= 57)
             {
-                $complexity[2] = 2;
+                $complexity[0] = 1;
             }
             elseif($asc >= 65 && $asc <= 90)
             {
@@ -1672,20 +1684,17 @@ class userModel extends model
             }
             elseif($asc >= 97 && $asc <= 122)
             {
-                $complexity[0] = 1;
+                $complexity[2] = 4;
             }
             else
             {
-                $complexity[3] = 3;
+                $complexity[3] = 8;
             }
-            if(strpos($uniqueChars, $letter) === false) $uniqueChars .= $letter;
         }
-        if(strlen($uniqueChars) > 4)$strength += strlen($uniqueChars) - 4;
-        $strength += array_sum($complexity) + (2 * (count($complexity) - 1));
-        if($length < 6 and $strength >= 10) $strength = 9;
+        $sumComplexity = array_sum($complexity);
 
-        $strength = $strength > 29 ? 29 : $strength;
-        $strength = floor($strength / 10);
+        if(($sumComplexity == 7 or $sumComplexity == 15) and $length >= 6)  $strength = 1;
+        if($sumComplexity == 15 and $length >= 10) $strength = 2;
 
         return $strength;
     }

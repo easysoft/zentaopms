@@ -143,4 +143,19 @@ class miscModel extends model
 
         return $weakSites;
     }
+
+    /**
+     * Get table and engine pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableEngines()
+    {
+        $tableEngines = array();
+        $stmt = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null");
+        while($table = $stmt->fetch()) $tableEngines[$table->Name] = $table->Engine;
+
+        return $tableEngines;
+    }
 }

@@ -14,6 +14,7 @@ $(document).ready(function()
         var password1        = $('input#password1').val().trim();
         var passwordStrength = computePasswordStrength(password1);
         var rand             = $('input#verifyRand').val();
+        if(!password1Encrypted) $("#passwordLength").val(password1.length);
 
         if($("form input[name=passwordStrength]").length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
         $("form input[name=passwordStrength]").val(passwordStrength);

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -11,7 +12,7 @@ cid=1
 pid=1
 
 批量创建有个没有名字的待办 >> 批量创建待办1,desc1,1,custom,0;批量创建待办2,desc2,2,custom,0;批量创建待办3,desc4,4,custom,0
-批量创建的待办             >> 测试单转Bug13,desc1,1,bug,313;用户需求版本一61,desc2,2,story,1;开发任务11,desc3,3,task,1;测试单1,desc4,4,testtask,1
+批量创建的待办 >> 测试单转Bug13,desc1,1,bug,313;用户需求版本一61,desc2,2,story,1;开发任务11,desc3,3,task,1;测试单1,desc4,4,testtask,1
 
 */
 
@@ -38,4 +39,4 @@ $todo = new todoTest();
 
 r($todo->batchCreateTest($noname_create)) && p('2006:name,desc,pri,type,idvalue;2007:name,desc,pri,type,idvalue;2008:name,desc,pri,type,idvalue')                                 && e('批量创建待办1,desc1,1,custom,0;批量创建待办2,desc2,2,custom,0;批量创建待办3,desc4,4,custom,0'); // 批量创建有个没有名字的待办
 r($todo->batchCreateTest($except_create)) && p('2009:name,desc,pri,type,idvalue;2010:name,desc,pri,type,idvalue;2011:name,desc,pri,type,idvalue;2012:name,desc,pri,type,idvalue') && e('测试单转Bug13,desc1,1,bug,313;用户需求版本一61,desc2,2,story,1;开发任务11,desc3,3,task,1;测试单1,desc4,4,testtask,1'); // 批量创建的待办
-system("./ztest init");
+$db->restoreDB();

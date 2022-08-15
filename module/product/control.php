@@ -940,7 +940,7 @@ class product extends control
         $products = $this->product->getProductPairsByProject($executionID);
         if(empty($products))
         {
-            return print(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
+            return printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project');
         }
         else
         {

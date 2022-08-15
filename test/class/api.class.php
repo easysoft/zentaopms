@@ -213,13 +213,12 @@ class apiTest
     public function getReleaseListByApiTest($libID, $id = 0, $confirm = true)
     {
         $objects = $this->objectModel->getReleaseListByApi($libID);
-        a($objects);
 
         if(dao::isError()) return dao::getError();
 
         if($confirm) $this->objectModel->deleteRelease($objects[$id]->id);
 
-        return $objects;
+        return $objects[$id];
     }
 
     /**

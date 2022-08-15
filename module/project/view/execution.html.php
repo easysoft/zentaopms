@@ -4,6 +4,10 @@
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <?php js::set('cilentLang', $this->app->getClientLang());?>
+<?php js::set('defaultTaskTip', $lang->programplan->stageCustom->task);?>
+<?php js::set('disabledTaskTip', sprintf($lang->project->disabledInputTip, $lang->edit . $lang->executionCommon));?>
+<?php js::set('defaultExecutionTip', $lang->edit . $lang->executionCommon);?>
+<?php js::set('disabledExecutionTip', sprintf($lang->project->disabledInputTip, $lang->programplan->stageCustom->task));?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
@@ -68,7 +72,7 @@
           <?php echo $lang->nameAB;?>
           </th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
-          <th class='c-status'><?php echo $lang->project->status;?></th>
+          <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-hours'><?php echo $lang->project->progress;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>

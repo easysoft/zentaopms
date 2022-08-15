@@ -264,7 +264,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->testreport          = 'testreport';
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
-    $lang->resource->project->createGuide         = 'createGuide';
     $lang->resource->project->updateOrder         = 'updateOrder';
     $lang->resource->project->team                = 'teamAction';
     $lang->resource->project->unlinkMember        = 'unlinkMember';
@@ -304,10 +303,9 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[160] = 'testreport';
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
-    $lang->project->methodOrder[175] = 'createGuide';
-    $lang->project->methodOrder[180] = 'updateOrder';
-    $lang->project->methodOrder[185] = 'team';
-    $lang->project->methodOrder[190] = 'unlinkMember';
+    $lang->project->methodOrder[175] = 'updateOrder';
+    $lang->project->methodOrder[180] = 'team';
+    $lang->project->methodOrder[185] = 'unlinkMember';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
@@ -983,7 +981,7 @@ $lang->resource->testcase->batchEdit               = 'batchEdit';
 $lang->resource->testcase->delete                  = 'deleteAction';
 $lang->resource->testcase->batchDelete             = 'batchDelete';
 $lang->resource->testcase->export                  = 'exportAction';
-$lang->resource->testcase->exportTemplet           = 'exportTemplet';
+$lang->resource->testcase->exportTemplate          = 'exportTemplate';
 $lang->resource->testcase->import                  = 'importAction';
 $lang->resource->testcase->showImport              = 'showImport';
 $lang->resource->testcase->confirmChange           = 'confirmChange';
@@ -1120,7 +1118,7 @@ $lang->resource->caselib->delete           = 'deleteAction';
 $lang->resource->caselib->view             = 'view';
 $lang->resource->caselib->createCase       = 'createCase';
 $lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
-$lang->resource->caselib->exportTemplet    = 'exportTemplet';
+$lang->resource->caselib->exportTemplate   = 'exportTemplate';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
@@ -1132,7 +1130,7 @@ $lang->caselib->methodOrder[20] = 'delete';
 $lang->caselib->methodOrder[25] = 'view';
 $lang->caselib->methodOrder[30] = 'createCase';
 $lang->caselib->methodOrder[35] = 'batchCreateCase';
-$lang->caselib->methodOrder[40] = 'exportTemplet';
+$lang->caselib->methodOrder[40] = 'exportTemplate';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
@@ -1634,6 +1632,7 @@ $lang->resource->admin->sso             = 'ssoAction';
 $lang->resource->admin->register        = 'register';
 $lang->resource->admin->ztCompany       = 'ztCompany';
 $lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
+$lang->resource->admin->tableEngine     = 'tableEngine';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
@@ -1643,6 +1642,7 @@ $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[30] = 'ztCompany';
 $lang->admin->methodOrder[35] = 'resetPWDSetting';
+$lang->admin->methodOrder[40] = 'tableEngine';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

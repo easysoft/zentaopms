@@ -253,13 +253,13 @@
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $lang->story->linkStory;?></th>
                 <td>
-                  <?php if(common::hasPriv('story', 'linkStories') and $story->type == 'story') echo html::a("#", $lang->story->linkStoriesAB, '', "class='text-primary' id='linkStoriesLink'");?>
-                  <?php if(common::hasPriv('story', 'linkRequirements') and $story->type == 'requirement') echo html::a("#", $lang->story->linkRequirementsAB, '', "class='text-primary' id='linkStoriesLink'");?>
+                  <?php if(common::hasPriv('story', 'linkStories') and $story->type == 'story') echo html::a("#", $lang->story->linkStoriesAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
+                  <?php if(common::hasPriv('story', 'linkRequirements') and $story->type == 'requirement') echo html::a("#", $lang->story->linkRequirementsAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
                 </td>
               </tr>
               <tr>
                 <th></th>
-                <td>
+                <td class='linkStoryTd'>
                   <ul class='list-unstyled'>
                     <?php
                     $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';

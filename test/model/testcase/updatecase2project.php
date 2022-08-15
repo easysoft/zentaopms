@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -39,4 +40,4 @@ r($testcase->updateCase2ProjectTest($caseIDList[3], $objectTypeList[0], $objectI
 r($testcase->updateCase2ProjectTest($caseIDList[3], $objectTypeList[1], $objectIDList[3])) && p('0:project,product,case;1:project,product,case;2:project,product,case') && e('102,1,7;11,2,7;101,2,7'); // 测试修改用例 7 需求
 r($testcase->updateCase2ProjectTest($caseIDList[4], $objectTypeList[0], $objectIDList[1])) && p('0:project,product,case')                                               && e('103,1,9');                // 测试修改用例 9 产品
 r($testcase->updateCase2ProjectTest($caseIDList[4], $objectTypeList[1], $objectIDList[3])) && p('0:project,product,case;1:project,product,case;2:project,product,case') && e('103,1,9;11,3,9;101,3,9'); // 测试修改用例 9 需求
-system("./ztest init");
+$db->restoreDB();

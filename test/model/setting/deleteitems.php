@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -57,4 +58,4 @@ r($setting->deleteItemsTest($params[10])) && p() && e('0'); // 删除所有者�
 r($setting->deleteItemsTest($params[11])) && p() && e('0'); // 删除视图是rnd的数据
 r($setting->deleteItemsTest($params[12])) && p() && e('0'); // 删除所有的数据
 
-system("./ztest init");
+$db->restoreDB();

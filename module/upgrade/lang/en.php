@@ -41,25 +41,25 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       </ul>
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
-$lang->upgrade->selectVersion = 'Version';
-$lang->upgrade->continue      = 'Continue';
-$lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
-$lang->upgrade->fromVersion   = 'From';
-$lang->upgrade->toVersion     = 'To';
-$lang->upgrade->confirm       = 'Confirm SQL';
-$lang->upgrade->sureExecute   = 'Execute';
-$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
-$lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'File information has to be updated.';
-$lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'Please execute commands to delete the files. Please refresh after you delete them.';
-$lang->upgrade->mergeProgram  = 'Data Merge';
-$lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
-$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
-$lang->upgrade->to15Desc      = <<<EOD
+$lang->upgrade->selectVersion  = 'Version';
+$lang->upgrade->continue       = 'Continue';
+$lang->upgrade->noteVersion    = "Select the compatible version, or it might cause data loss.";
+$lang->upgrade->fromVersion    = 'From';
+$lang->upgrade->toVersion      = 'To';
+$lang->upgrade->confirm        = 'Confirm SQL';
+$lang->upgrade->sureExecute    = 'Execute';
+$lang->upgrade->upgradingTips  = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
+$lang->upgrade->forbiddenExt   = 'The extension is incompatible with the version. It has been deactivated:';
+$lang->upgrade->updateFile     = 'File information has to be updated.';
+$lang->upgrade->noticeSQL      = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
+$lang->upgrade->afterDeleted   = 'Please execute commands to delete the files. Please refresh after you delete them.';
+$lang->upgrade->mergeProgram   = 'Data Merge';
+$lang->upgrade->mergeTips      = 'Data Migration Tips';
+$lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide   = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide    = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide     = 'ZenTao ultimate version upgrade';
+$lang->upgrade->to15Desc       = <<<EOD
 <p>ZenTao version 15.0 has major upgrade of features, including:</p>
 <p><strong>1. Add the concept of Program</strong></p>
 <p>A program is a collection of interrelated and coordinated projects. It is at the highest level and belongs to the concept of a strategic level. It has multi-level project management, helping managers to form strategic directions and allocate resources at a macro level.</p>
@@ -130,6 +130,7 @@ $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You ca
 $lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
+$lang->upgrade->needChangeEngine   = 'The table engine needs to be replaced in this upgrade, Please go [Admin->System->TableEngine] page to replace engine.';
 $lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";

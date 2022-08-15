@@ -1605,7 +1605,7 @@ class kanbanModel extends model
             {
                 $columnData[0]['id']         = 0;
                 $columnData[0]['type']       = 'story';
-                $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+                $columnData[0]['name']       = $this->lang->SRCommon;
                 $columnData[0]['color']      = '#333';
                 $columnData[0]['limit']      = '-1';
                 $columnData[0]['laneType']   = $browseType;
@@ -3238,20 +3238,18 @@ class kanbanModel extends model
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
-        $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion')));
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or ($kanban->status == 'active' and common::hasPriv('kanban', 'close')) or common::hasPriv('kanban', 'delete') or ($kanban->status == 'closed' and common::hasPriv('kanban', 'activate')));
 
-        if($printRegionBtn or $printKanbanBtn)
+        if($printKanbanBtn)
         {
-            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-edit"></i> ' . $this->lang->edit . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
 
             $columnActions = '';
             $actions .= $columnActions;
 
             $commonActions = '';
-            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
-            $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
+            $importWidth   = $this->app->getClientLang() == 'en' ? '700' : '550';
 
             if($columnActions and $commonActions)
             {
@@ -3260,8 +3258,7 @@ class kanbanModel extends model
             $actions .= $commonActions;
 
             $kanbanActions = '';
-            if(common::hasPriv('kanban', 'edit'))    $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
-            if(common::hasPriv('kanban', 'setting')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i>' . $this->lang->kanban->settingKanban, '', "class='iframe btn btn-link' data-width='60%'") . '</li>';
+            if(common::hasPriv('kanban', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
             if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
@@ -3274,6 +3271,8 @@ class kanbanModel extends model
 
             $actions .= "</ul>";
         }
+
+        if(common::hasPriv('kanban', 'setting')) $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='60%'");
 
         $actions .= "</div>";
 
@@ -3345,7 +3344,7 @@ class kanbanModel extends model
     {
         $groupBy = ($this->session->execGroupBy and ($this->app->tab == 'execution' or $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
-        $fromCell = $this->dao->select('cards, lane')->from(TABLE_KANBANCELL)
+        $fromCell = $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($fromColID)
             ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
             ->beginIF($groupBy and $groupBy != 'default')
@@ -3355,20 +3354,36 @@ class kanbanModel extends model
             ->fetch();
 
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
+        $fromCells[$fromCell->id] = $fromCell;
 
-        $fromCellCards = $fromCell->cards;
-        $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
-        $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        /* Remove all cells with cardID in fromCell. */
+        $fromLane   = $this->getLaneById($fromLaneID);
+        $fromCells += $this->dao->select('t1.id as id,t1.cards,t1.lane')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->where('t1.type')->eq($fromLane->type)
+            ->andWhere('t1.id')->ne($fromCell->id)
+            ->andWhere('t2.region')->eq($fromLane->region)
+            ->andWhere('t1.cards')->like("%,$cardID,%")
+            ->fetchAll('id');
 
-        $kanbanID = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
+        foreach($fromCells as $fromCell)
+        {
+            $fromCellCards = explode(',', $fromCell->cards);
+            $fromCellCards = array_unique($fromCellCards);
+            $fromCellCards = array_filter($fromCellCards);
+            $fromCellCards = implode(',', $fromCellCards);
+            $fromCardList  = str_replace(",$cardID,", ',', ",$fromCellCards,");
+            if($fromCardList == ',') $fromCardList = '';
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('id')->eq($fromCell->id)->exec();
+        }
 
+        /* Add cardID to toCell. */
+        $toCell      = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
+        $toCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        $kanbanID    = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
         if(!$toCell) $this->addKanbanCell($kanbanID, $toLaneID, $toColID, 'common');
 
-        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
-        $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
-
-        if($fromCardList == ',') $fromCardList = '';
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
+        $toCardList = rtrim($toCellCards, ',') . ",$cardID,";
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
 

@@ -153,4 +153,4 @@ $config->product->statisticFields['bugs']         = array('unResolvedBugs', 'clo
 $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
 
-$config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,';
+$config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';

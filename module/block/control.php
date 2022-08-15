@@ -1687,17 +1687,30 @@ class block extends control
      */
     public function printExecutionBlock()
     {
-        $this->app->loadClass('pager', $static = true);
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
+
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
         $status = isset($this->params->type)  ? $this->params->type : 'all';
-        $pager  = pager::init(0, $count, 1);
+
+        $this->app->loadLang('execution');
+        $this->app->loadClass('pager', true);
+        $pager = pager::init(0, $count, 1);
 
         $projectPairs = array();
         if($this->config->systemMode == 'new') $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
 
-        $projectID = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $this->view->executionStats = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
+        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $executions = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
+
+        foreach($executions as $index => $execution)
+        {
+            if(empty($execution->children)) continue;
+
+            foreach($execution->children as $child) $executions[] = $child;
+            unset($executions[$index]);
+        }
+
+        $this->view->executionStats = $executions;
         $this->view->projectPairs   = $projectPairs;
     }
 
@@ -1791,7 +1804,13 @@ class block extends control
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
 
-                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo');
+
+                foreach($objects as $k => $task)
+                {
+                    if(in_array($task->status, array('closed', 'cancel', 'pause'))) unset($objects[$k]);
+                }
+                if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');

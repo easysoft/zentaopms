@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +39,4 @@ r($doc->createApiLibTest($noAcl))         && p('acl')              && e('');    
 r($doc->createApiLibTest($noBaseUrl))     && p('baseUrl')          && e('');                             //接口库地址为空
 r($doc->createApiLibTest($openApilib))    && p('name:0')           && e('『接口库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');//重复创建接口库
 
-system("./ztest init");
+$db->restoreDB();

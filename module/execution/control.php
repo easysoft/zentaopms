@@ -943,6 +943,7 @@ class execution extends control
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
@@ -1057,7 +1058,7 @@ class execution extends control
         $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
@@ -1383,19 +1384,37 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
+        $minDate = !helper::isZeroDate($execution->openedDate) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime($execution->begin));
+        $maxDate = !helper::isZeroDate($execution->closedDate) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+
         if(!empty($_POST))
         {
             $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
             $end   = htmlspecialchars($this->post->end, ENT_QUOTES);
 
-            if(empty($begin)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin));
-            if(empty($end)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end));
+            $dateError = array();
+
+            if(empty($begin)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin);
+            if(empty($end)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end);
+            if(empty($dateError))
+            {
+                if($begin < $minDate) $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->begin, $minDate);
+                if($begin > $maxDate) $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->begin, $maxDate);
+                if($end < $minDate)   $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->end, $minDate);
+                if($end > $maxDate)   $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->end, $maxDate);
+            }
+            if(!empty($dateError))
+            {
+                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error) . '<br/>';
+                return $this->sendError($dateError);
+            }
+
             if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
             if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
 
             $this->execution->computeCFD($executionID);
             $this->execution->checkCFDData($executionID, $begin);
-            return print(js::locate($this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end))), 'parent'));
+            return $this->send(array('result' => 'success', 'locate' => $this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end)))));
         }
 
         if($begin and $end)
@@ -1423,6 +1442,8 @@ class execution extends control
         $this->view->chartData     = $chartData;
         $this->view->begin         = $begin;
         $this->view->end           = $end;
+        $this->view->minDate       = $minDate;
+        $this->view->maxDate       = $maxDate;
         $this->display();
     }
 
@@ -2289,9 +2310,7 @@ class execution extends control
         {
             $this->app->loadClass('date');
 
-            $begin     = date('Y-m-d', strtotime('-13 days'));
-            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($begin, $execution->begin) > 0) ? $begin : $execution->begin;
-            $end       = helper::today();
+            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
             $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
             $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
             if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
@@ -3675,7 +3694,6 @@ class execution extends control
      * All execution.
      *
      * @param  string $status
-     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $productID
      * @param  string $param
@@ -3685,7 +3703,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3698,17 +3716,8 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
-            {
-                $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->saveState($projectID, $projects);
-                $this->project->setMenu($projectID);
-            }
-            else
-            {
-                $executionID = $this->execution->saveState(0, $this->executions);
-                $this->execution->setMenu($executionID);
-            }
+            $executionID = $this->execution->saveState(0, $this->executions);
+            $this->execution->setMenu($executionID);
         }
 
         /* Load pager and get tasks. */
@@ -3716,13 +3725,13 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('execution', 'all', "status=bySearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&param=myQueryID");
+        $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchFrom($queryID, $actionURL);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
+        $executionStats = $this->project->getStats(0, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
 
         $parentIdList = array();
         foreach($executionStats as $execution)
@@ -3733,15 +3742,13 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->project->getStats($projectID, 'all');
+        $allExecutionsNum = $this->project->getStats(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
-        $this->view->projectID      = $projectID;
         $this->view->parents        = $parents;
-        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

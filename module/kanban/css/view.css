@@ -155,3 +155,4 @@
 .region .kanban-board .kanban-header-parent-col > .kanban-header-col > .title {max-width: 100% !important;}
 .region .kanban-board .kanban-header-sub-cols .kanban-header-col > .title > span {max-width: calc(100% - 165px) !important;}
 .region .kanban-board .kanban-header-sub-cols .kanban-header-col.left > .title > span {max-width: calc(100% - 120px) !important;}
+.executionName .delayed {margin-right: 10px;}

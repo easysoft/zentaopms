@@ -109,13 +109,13 @@ $builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'))
 $builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
 $builder->usertpl      = array('rows' => 10, 'extends' => array('usertpl'));
 
-$builder->pipeline = array('rows' => 3,  'extends' => array('pipeline'));
-$builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
-$builder->repo     = array('rows' => 1,  'extends' => array('repo'));
-$builder->job      = array('rows' => 2,  'extends' => array('job'));
-$builder->mr       = array('rows' => 1,  'extends' => array('mr'));
-$builder->oauth    = array('rows' => 90, 'extends' => array('oauth'));
-$builder->notify   = array('rows' => 10, 'extends' => array('notify'));
+$builder->pipeline = array('rows' => 4,   'extends' => array('pipeline'));
+$builder->holiday  = array('rows' => 100, 'extends' => array('holiday'));
+$builder->repo     = array('rows' => 1,   'extends' => array('repo'));
+$builder->job      = array('rows' => 2,   'extends' => array('job'));
+$builder->mr       = array('rows' => 1,   'extends' => array('mr'));
+$builder->oauth    = array('rows' => 90,  'extends' => array('oauth'));
+$builder->notify   = array('rows' => 10,  'extends' => array('notify'));
 
 $builder->vm         = array('rows' => 1,  'extends' => array('vm'));
 $builder->vmtemplate = array('rows' => 1,  'extends' => array('vmtemplate'));

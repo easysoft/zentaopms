@@ -9,6 +9,8 @@ title=测试 projectModel->getTreeMenu();
 cid=1
 pid=1
 
+查看获取到的menu option的字符串数量 >> 1596
+
 */
 
 global $tester;

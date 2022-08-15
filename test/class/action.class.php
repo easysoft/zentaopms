@@ -53,6 +53,23 @@ class actionTest
     }
 
     /**
+     * Get the unread actions.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return object
+     */
+    public function getUnreadActionsTest($actionID = 0)
+    {
+        $objects = $this->objectModel->getUnreadActions($actionID);
+        $objects = json_decode($objects);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test get product, project, execution of the object.
      *
      * @param String $objectType
@@ -89,6 +106,8 @@ class actionTest
 
         $objects[$objectID]->extra = str_replace($dirname, '', $objects[$objectID]->extra);
         $objects[$objectID]->extra = trim($objects[$objectID]->extra, "\n");
+        if(strpos($objects[$objectID]->extra, 'href') !== false) $objects[$objectID]->extra = 'a';
+
         return $objects[$objectID];
     }
 
@@ -126,6 +145,26 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         return $object;
+    }
+
+    /**
+     * getTrashesBySearchTest
+     *
+     * @param  string $objectType
+     * @param  string $type all|hidden
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return void
+     */
+    public function getTrashesBySearchTest($objectType, $type, $queryID, $orderBy, $pager = null)
+    {
+        $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -195,6 +234,44 @@ class actionTest
 
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+        return $objects;
+    }
+
+    /**
+     * Get dynamic show action.
+     *
+     * @access public
+     * @return string
+     */
+    public function getActionConditionTest()
+    {
+        $objects = $this->objectModel->getActionCondition();
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Get dynamic by search.
+     *
+     * @param  array  $products
+     * @param  array  $projects
+     * @param  array  $executions
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicBySearchTest($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    {
+        $objects = $this->objectModel->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
         return $objects;
     }
 
@@ -298,31 +375,6 @@ class actionTest
     }
 
     /**
-     * Test set objectLink.
-     *
-     * @param  int    $actionID
-     * @access public
-     * @return object
-     */
-    public function setObjectLinkTest($actionID)
-    {
-        global $tester;
-        $deptUsers = isset($tester->app->user->dept) ? $tester->loadModel('dept')->getDeptUserPairs($tester->app->user->dept, 'id') : '';
-
-        $action = $this->objectModel->getByID($actionID);
-        $action->objectLabel = $this->objectModel->getObjectLabel($action->objectType, $action->objectID, $action->action, array('25' => '25'));
-
-        $object = $this->objectModel->setObjectLink($action, $deptUsers);
-
-        if(dao::isError()) return dao::getError();
-
-        $dirname = dirname(__DIR__) . DS;
-
-        $object->objectLink = str_replace($dirname, '', $object->objectLink);
-        return $object;
-    }
-
-    /**
      * Test compute the begin date and end date of a period.
      *
      * @param  string $period
@@ -349,6 +401,25 @@ class actionTest
         extract(date::$func());
         if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
         if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
+    }
+
+    /**
+     * Delete action by objectType.
+     *
+     * @param  string    $objectType
+     * @access public
+     * @return bool
+     */
+    public function deleteByTypeTest($objectType)
+    {
+        $this->objectModel->deleteByType($objectType);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->fetchAll();
+
+        return empty($objects);
     }
 
     /**
@@ -421,6 +492,59 @@ class actionTest
 
         $object = $this->objectModel->getByID($actionID);
         return $object;
+    }
+
+    /**
+     * Check Has pre or next.
+     *
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return bool
+     */
+    public function hasPreOrNextTest($date, $direction = 'next')
+    {
+        global $tester;
+        $tester->session->set('actionQueryCondition', '1=1');
+        $result = $this->objectModel->hasPreOrNext($date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Save global search object index information.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $actionType
+     * @access public
+     * @return bool
+     */
+    public function saveIndexTest($objectType, $objectID, $actionType)
+    {
+        $result = $this->objectModel->saveIndex($objectType, $objectID, $actionType);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array  $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPITest($dynamics)
+    {
+        $objects = $this->objectModel->processDynamicForAPI($dynamics);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($objects) ? $objects : $objects[0];
     }
 
     /**

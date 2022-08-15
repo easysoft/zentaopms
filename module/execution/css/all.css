@@ -28,10 +28,13 @@ td.flex span.project-type-label {min-width: 40px;}
 .has-child > span {margin-right: 5px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
 .c-code, .c-project {overflow: hidden; white-space: nowrap;}
+th.c-status, .c-begin, .c-end, .c-realBegan, .c-realEnd {text-align: center;}
 
 .c-project{text-overflow: unset !important;}
 canvas {height: 28px;}
 .parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 0px solid #cbd0db !important;}
-.parent.has-child.c-name.flex {margin-bottom: -2px !important;}
 #tableCustomBtn {padding-bottom: 5px;}
-#bysearchTab {margin-left: 5px;}
+#datatable-executionList .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db !important;}
+#datatable-executionList .table-child-bottom.table-child-top > .c-name.flex {border-bottom: 2px solid #cbd0db !important;}
+#datatable-executionList .parent.has-child.c-name.flex {border-bottom: 1px solid #cbd0db !important;}
+#datatable-executionList tr:last-child .c-name.flex {margin-top: 1px !important;}

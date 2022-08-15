@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -13,10 +14,10 @@ pid=1
 测试正常的创建开发任务 >> gitlab中新建的问题01
 测试正常的创建开发任务 >> 101
 测试正常的创建开发任务 >> 11
-测试不输入执行创建开务 >> 『所属执行』不能为空。
+测试不输入执行创建任务 >> 『所属执行』不能为空。
 测试不输入名称创建任务 >> 『任务名称』不能为空。
 
- */
+*/
 
 $executionID = 101;
 
@@ -46,4 +47,4 @@ r($task->createTaskFromGitlabIssueTest($task2, $executionID)) && p('execution') 
 r($task->createTaskFromGitlabIssueTest($task3, $executionID)) && p('project')     && e('11');                                   // 测试正常的创建开发任务
 r($task->createTaskFromGitlabIssueTest($task4, $executionID)) && p('execution:0') && e('『所属执行』不能为空。');               // 测试不输入执行创建任务
 r($task->createTaskFromGitlabIssueTest($task5, $executionID)) && p('name:0')      && e('『任务名称』不能为空。');               // 测试不输入名称创建任务
-system("./ztest init");
+$db->restoreDB();

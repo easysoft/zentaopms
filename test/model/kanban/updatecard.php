@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -56,4 +57,4 @@ r($kanban->updateCardTest($cardIDList[0], $param6)) && p()                      
 r($kanban->updateCardTest($cardIDList[0], $param7)) && p()                                                  && e('预计不能为负数!'); // 测试修改卡片预计小于0
 r($kanban->updateCardTest($cardIDList[0], $param8)) && p()                                                  && e('请输入正确的进度'); // 测试修改卡片进度小于0
 r($kanban->updateCardTest($cardIDList[0], $param9)) && p()                                                  && e('请输入正确的进度'); // 测试修改卡片进度大于100
-system("./ztest init");
+$db->restoreDB();

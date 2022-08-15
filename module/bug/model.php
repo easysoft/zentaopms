@@ -945,6 +945,7 @@ class bugModel extends model
 
         if(empty($bugIDList)) return $activateBugs;
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($bugIDList as $bugID)
         {
             if($data->statusList[$bugID] == 'active') continue;
@@ -967,6 +968,15 @@ class bugModel extends model
             $activateBugs[$bugID]['toStory']        = 0;
             $activateBugs[$bugID]['lastEditedBy']   = $this->app->user->account;
             $activateBugs[$bugID]['lastEditedDate'] = $now;
+
+            foreach($extendFields as $extendField)
+            {
+                $postFieldData = $this->post->{$extendField->field};
+
+                if(is_array($postFieldData[$bugID])) $postFieldData[$bugID] = join(',', $postFieldData[$bugID]);
+
+                $activateBugs[$bugID][$extendField->field] = htmlSpecialString($postFieldData[$bugID]);
+            }
         }
 
         /* Update bugs. */
@@ -976,6 +986,8 @@ class bugModel extends model
             if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
 
             $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+
+            $this->executeHooks($bugID);
         }
 
         return $activateBugs;
@@ -1146,13 +1158,15 @@ class bugModel extends model
             if(dao::isError()) return false;
 
             $buildData = new stdclass();
-            $buildData->product   = (int)$oldBug->product;
-            $buildData->branch    = (int)$oldBug->branch;
-            $buildData->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
-            $buildData->execution = $bug->buildExecution;
-            $buildData->name      = $bug->buildName;
-            $buildData->date      = date('Y-m-d');
-            $buildData->builder   = $this->app->user->account;
+            $buildData->product     = (int)$oldBug->product;
+            $buildData->branch      = (int)$oldBug->branch;
+            $buildData->project     = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
+            $buildData->execution   = $bug->buildExecution;
+            $buildData->name        = $bug->buildName;
+            $buildData->date        = date('Y-m-d');
+            $buildData->builder     = $this->app->user->account;
+            $buildData->createdBy   = $this->app->user->account;
+            $buildData->createdDate = helper::now();
             $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
@@ -1265,13 +1279,17 @@ class bugModel extends model
      */
     public function batchChangePlan($bugIDList, $planID)
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
+        $now         = helper::now();
+        $allChanges  = array();
+        $oldBugs     = $this->getByList($bugIDList);
+        $unlinkPlans = array();
+        $link2Plans  = array();
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
             if($planID == $oldBug->plan) continue;
+            $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+            $link2Plans[$planID]        = empty($link2Plans[$planID]) ? $bugID : "{$link2Plans[$planID]},$bugID";
 
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
@@ -1280,6 +1298,12 @@ class bugModel extends model
 
             $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+        }
+        if(!dao::isError())
+        {
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
         }
         return $allChanges;
     }
@@ -1686,7 +1710,7 @@ class bugModel extends model
         $bugIDList = array();
         if($moduleName == 'contributeBug')
         {
-            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'bug');
+            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
             foreach($bugsAssignedByMe as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
 
@@ -2231,6 +2255,7 @@ class bugModel extends model
             }
         }
 
+        $this->app->loadLang('report');
         foreach($datas as $buildID => $data)
         {
             $data->name = isset($builds[$buildID]) ? $builds[$buildID] : $this->lang->report->undefined;
@@ -3179,8 +3204,18 @@ class bugModel extends model
                     $class .= ' c-user';
                     $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
                     break;
+                case 'openedBy':
+                    $class .= ' c-user';
+                    $title  = "title='" . zget($users, $bug->openedBy) . "'";
+                    break;
                 case 'project':
                     $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
+                    break;
+                case 'plan':
+                    $title = "title='" . zget($plans, $bug->plan) . "'";
+                    break;
+                case 'execution':
+                    $title = "title='" . zget($executions, $bug->execution) . "'";
                     break;
                 case 'resolvedBuild':
                     $class .= ' text-ellipsis';
@@ -3514,5 +3549,34 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
 
         return $menu;
+    }
+
+    /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($object, $pairs = '')
+    {
+        /* Get bugs. */
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->fetchAll('id');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
+
+        if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
+
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
+
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+        return array('' => '', 0 => '') + $relatedObjects;
     }
 }

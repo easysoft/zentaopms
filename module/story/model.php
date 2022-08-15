@@ -794,7 +794,7 @@ class storyModel extends model
             ->cleanFloat('estimate')
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('reviewedBy', '')
+            ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('mailto', '')
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
@@ -2020,72 +2020,159 @@ class storyModel extends model
     {
         /* load Module and get the data from the post and get the current time. */
         $this->loadModel('action');
-        $data = fixer::input('post')->get();
-        $now  = helper::now();
+        $this->loadModel('task');
 
-        /* Judgment of required items. */
-        if(empty($data->type))
-        {
-            dao::$errors['type'] = sprintf($this->lang->error->notempty, $this->lang->task->type);
-        }
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        $tasks   = fixer::input('post')
+            ->remove('syncFields')
+            ->get();
 
-        if(isset($data->hourPointValue) and empty($data->hourPointValue))
-        {
-            dao::$errors['hourPointValue'] = sprintf($this->lang->error->notempty, $this->lang->story->convertRelations);
-        }
-        elseif(isset($data->hourPointValue) and !is_numeric($data->hourPointValue))
-        {
-            dao::$errors['hourPointValue'] = sprintf($this->lang->error->float, $this->lang->story->convertRelations);
-        }
-        if(dao::isError()) return false;
+        if(!empty($_POST['syncFields'])) $stories = empty($tasks->story) ? array() : $this->getByList($tasks->story);
 
         /* Create tasks. */
-        $tasks   = array();
-        $stories = empty($data->storyIdList) ? array() : $this->getByList($data->storyIdList);
-        foreach($stories as $story)
+        $preStory  = 0;
+        $storyIDs  = array();
+        $taskNames = array();
+        foreach($tasks->story as $key => $storyID)
         {
-            if(strpos('draft,closed', $story->status) !== false) continue;
+            $tasks->name[$key] = trim($tasks->name[$key]);
+            if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' and isset($tasks->type[$key - 1]) and $tasks->type[$key - 1] == 'affair') continue;
 
-            $task = new stdclass();
-            $task->execution    = $executionID;
-            $task->project      = $projectID ? $projectID : 0;
-            $task->name         = $story->title;
-            $task->story        = $story->id;
-            $task->type         = $data->type;
-            $task->estimate     = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
-            $task->left         = $task->estimate;
-            $task->openedBy     = $this->app->user->account;
-            $task->openedDate   = $now;
-            $task->storyVersion = $story->version;
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
 
-            if(isset($data->fields))
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
             {
-                foreach($data->fields as $field)
-                {
-                    $task->$field = $story->$field;
-
-                    if($field == 'assignedTo') $task->assignedDate = $now;
-                    if($field == 'spec')
-                    {
-                        unset($task->$field);
-                        $task->desc = $story->$field;
-                    }
-                }
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
             }
 
+            $inNames = in_array($tasks->name[$key], $taskNames);
+            if(!$inNames or ($inNames && !in_array($storyID, $storyIDs)))
+            {
+                $storyIDs[]  = $storyID;
+                $taskNames[] = $tasks->name[$key];
+            }
+            else
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
+                return false;
+            }
+        }
+
+        $story          = 0;
+        $module         = 0;
+        $type           = '';
+        $assignedTo     = '';
+        $estStarted     = '0000-00-00';
+        $deadline       = '0000-00-00';
+        $data           = array();
+        $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+        foreach($tasks->name as $i => $task)
+        {
+            $module     = (!isset($tasks->module[$i]) or $tasks->module[$i] == 'ditto')          ? $module     : $tasks->module[$i];
+            $story      = (!isset($tasks->story[$i]) or $tasks->story[$i] == 'ditto')            ? $story      : $tasks->story[$i];
+            $type       = (!isset($tasks->type[$i]) or $tasks->type[$i] == 'ditto')              ? $type       : $tasks->type[$i];
+            $assignedTo = (!isset($tasks->assignedTo[$i]) or $tasks->assignedTo[$i] == 'ditto')  ? $assignedTo : $tasks->assignedTo[$i];
+            $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
+            $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
+
+            if(empty($tasks->name[$i])) continue;
+
+            $data[$i]             = new stdclass();
+            $data[$i]->story      = (int)$story;
+            $data[$i]->type       = $type;
+            $data[$i]->module     = (int)$module;
+            $data[$i]->assignedTo = $assignedTo;
+            $data[$i]->color      = $tasks->color[$i];
+            $data[$i]->name       = $tasks->name[$i];
+            $data[$i]->pri        = $tasks->pri[$i];
+            $data[$i]->estimate   = $tasks->estimate[$i];
+            $data[$i]->left       = $tasks->estimate[$i];
+            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
+            $data[$i]->execution  = $executionID;
+            $data[$i]->estStarted = $estStarted;
+            $data[$i]->deadline   = $deadline;
+            $data[$i]->status     = 'wait';
+            $data[$i]->openedBy   = $account;
+            $data[$i]->openedDate = $now;
+            $data[$i]->vision     = 'rnd';
+            if($story)
+            {
+                $data[$i]->storyVersion = $stories[$story]->version;
+                if(strpos(",{$_POST['syncFields']},", ',spec,') !== false) $data[$i]->desc = $stories[$story]->spec;
+                if(strpos(",{$_POST['syncFields']},", 'mailto') !== false) $data[$i]->mailto = $stories[$story]->mailto;
+            }
+
+            if($assignedTo) $data[$i]->assignedDate = $now;
+            if(strpos($requiredFields, ',estStarted,') !== false and empty($estStarted)) $data[$i]->estStarted = '';
+            if(strpos($requiredFields, ',deadline,') !== false and empty($deadline))     $data[$i]->deadline   = '';
+        }
+
+        /* check data. */
+        foreach($data as $i => $task)
+        {
+            if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+
+            foreach(explode(',', $requiredFields) as $field)
+            {
+                $field = trim($field);
+                if(empty($field)) continue;
+
+                if(!isset($task->$field)) continue;
+                if(!empty($task->$field)) continue;
+                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
+
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                return false;
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        $taskIdList = array();
+        foreach($data as $i => $task)
+        {
+            $task->version = 1;
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
 
             if(dao::isError()) return false;
-            $taskID  = $this->dao->lastInsertID();
-            $tasks[] = $taskID;
+
+            $taskID       = $this->dao->lastInsertID();
+            $taskIdList[] = $taskID;
+
+            $taskSpec = new stdClass();
+            $taskSpec->task       = $taskID;
+            $taskSpec->version    = $task->version;
+            $taskSpec->name       = $task->name;
+            $taskSpec->estStarted = $task->estStarted;
+            $taskSpec->deadline   = $task->deadline;
+
+            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            if(dao::isError()) return false;
+
+            if($task->story) $this->setStage($task->story);
+
             $this->action->create('task', $taskID, 'Opened', '');
         }
 
         $this->loadModel('kanban')->updateLane($executionID, 'task');
-        return $tasks;
+        return $taskIdList;
     }
 
     /**
@@ -4377,7 +4464,8 @@ class storyModel extends model
             }
             elseif($id == 'title')
             {
-                $title = $story->title;
+                $title  = $story->title;
+                $class .= ' text-ellipsis';
                 if(!empty($story->children)) $class .= ' has-child';
             }
             elseif($id == 'plan')
@@ -4421,6 +4509,11 @@ class storyModel extends model
             elseif($id == 'feedbackBy')
             {
                 $title = $story->feedbackBy;
+            }
+            elseif($id =='version')
+            {
+                $title = $story->version;
+                $class = 'text-center';
             }
             elseif($id == 'notifyEmail')
             {
@@ -4545,25 +4638,25 @@ class storyModel extends model
                 echo zget($users, $story->openedBy, $story->openedBy);
                 break;
             case 'openedDate':
-                echo substr($story->openedDate, 5, 11);
+                echo helper::isZeroDate($story->openedDate) ? '' : substr($story->openedDate, 5, 11);
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($story, $users);
                 break;
             case 'assignedDate':
-                echo substr($story->assignedDate, 5, 11);
+                echo helper::isZeroDate($story->assignedDate) ? '' : substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
                 echo $story->reviewedBy;
                 break;
             case 'reviewedDate':
-                echo substr($story->reviewedDate, 5, 11);
+                echo helper::isZeroDate($story->reviewedDate) ? '' : substr($story->reviewedDate, 5, 11);
                 break;
             case 'closedBy':
                 echo zget($users, $story->closedBy, $story->closedBy);
                 break;
             case 'closedDate':
-                echo substr($story->closedDate, 5, 11);
+                echo helper::isZeroDate($story->closedDate) ? '' : substr($story->closedDate, 5, 11);
                 break;
             case 'closedReason':
                 echo zget($this->lang->story->reasonList, $story->closedReason, $story->closedReason);
@@ -4572,7 +4665,7 @@ class storyModel extends model
                 echo zget($users, $story->lastEditedBy, $story->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($story->lastEditedDate, 5, 11);
+                echo helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 5, 11);
                 break;
             case 'feedbackBy':
                 echo $story->feedbackBy;
@@ -5420,5 +5513,235 @@ class storyModel extends model
             ->exec();
 
         return $story;
+    }
+
+    /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($object, $pairs = '')
+    {
+        $storys = $this->loadModel('port')->getQueryDatas('story');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($storys as $story) $relatedObjectIdList[$story->$object]  = $story->$object;
+
+        if($object == 'plan') $object = 'productplan';
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+        return $relatedObjects;
+    }
+
+    /**
+     * Get export storys .
+     *
+     * @param  int    $executionID
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getExportStorys($executionID, $orderBy = 'id_desc')
+    {
+        $this->loadModel('file');
+        $this->loadModel('branch');
+        $storyLang   = $this->lang->story;
+        $storyConfig = $this->config->story;
+
+        /* Create field lists. */
+        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($storyLang->$fieldName) ? $storyLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        /* Get stories. */
+        $stories = array();
+        if($this->session->storyOnlyCondition)
+        {
+            if($this->post->exportType == 'selected')
+            {
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
+            }
+            else
+            {
+                $stories = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
+            }
+        }
+        else
+        {
+            $field = $executionID ? 't2.id' : 't1.id';
+            if($this->post->exportType == 'selected')
+            {
+                $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+            }
+            else
+            {
+                $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+            }
+            while($row = $stmt->fetch()) $stories[$row->id] = $row;
+        }
+        $storyIdList = array_keys($stories);
+
+        if($stories)
+        {
+            $children = array();
+            foreach($stories as $story)
+            {
+                if($story->parent > 0 and isset($stories[$story->parent]))
+                {
+                    $children[$story->parent][$story->id] = $story;
+                    unset($stories[$story->id]);
+                }
+            }
+
+            if(!empty($children))
+            {
+                $reorderStories = array();
+                foreach($stories as $story)
+                {
+                    $reorderStories[$story->id] = $story;
+                    if(isset($children[$story->id]))
+                    {
+                        foreach($children[$story->id] as $childrenID => $childrenStory)
+                        {
+                            $reorderStories[$childrenID] = $childrenStory;
+                        }
+                    }
+                    unset($stories[$story->id]);
+                }
+                $stories = $reorderStories;
+            }
+        }
+
+        /* Get users, products and relations. */
+        $users           = $this->loadModel('user')->getPairs('noletter');
+        $products        = $this->loadModel('product')->getPairs('nocode');
+        $relatedStoryIds = array();
+
+        foreach($stories as $story) $relatedStoryIds[$story->id] = $story->id;
+
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
+
+        /* Get related objects title or names. */
+        $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        foreach($stories as $story)
+        {
+            $story->spec   = '';
+            $story->verify = '';
+            if(isset($relatedSpecs[$story->id]))
+            {
+                $storySpec     = $relatedSpecs[$story->id][0];
+                $story->title  = $storySpec->title;
+                $story->spec   = $storySpec->spec;
+                $story->verify = $storySpec->verify;
+            }
+
+            if($this->post->fileType == 'csv')
+            {
+                $story->spec = htmlspecialchars_decode($story->spec);
+                $story->spec = str_replace("<br />", "\n", $story->spec);
+                $story->spec = str_replace('"', '""', $story->spec);
+                $story->spec = str_replace('&nbsp;', ' ', $story->spec);
+
+                $story->verify = htmlspecialchars_decode($story->verify);
+                $story->verify = str_replace("<br />", "\n", $story->verify);
+                $story->verify = str_replace('"', '""', $story->verify);
+                $story->verify = str_replace('&nbsp;', ' ', $story->verify);
+            }
+            /* fill some field with useful value. */
+
+            if(isset($storyTasks[$story->id])) $story->taskCountAB = $storyTasks[$story->id];
+            if(isset($storyBugs[$story->id]))  $story->bugCountAB  = $storyBugs[$story->id];
+            if(isset($storyCases[$story->id])) $story->caseCountAB = $storyCases[$story->id];
+
+            if($story->linkStories)
+            {
+                $tmpLinkStories    = array();
+                $linkStoriesIdList = explode(',', $story->linkStories);
+                foreach($linkStoriesIdList as $linkStoryID)
+                {
+                    $linkStoryID = trim($linkStoryID);
+                    $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
+                }
+                $story->linkStories = join("; \n", $tmpLinkStories);
+            }
+
+            if($story->childStories)
+            {
+                $tmpChildStories = array();
+                $childStoriesIdList = explode(',', $story->childStories);
+                foreach($childStoriesIdList as $childStoryID)
+                {
+                    if(empty($childStoryID)) continue;
+
+                    $childStoryID = trim($childStoryID);
+                    $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
+                }
+                $story->childStories = join("; \n", $tmpChildStories);
+            }
+
+            /* Set related files. */
+            $story->files = '';
+            if(isset($relatedFiles[$story->id]))
+            {
+                foreach($relatedFiles[$story->id] as $file)
+                {
+                    $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID=$file->id");
+                    $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                }
+            }
+
+            $story->mailto = trim(trim($story->mailto), ',');
+            $mailtos = explode(',', $story->mailto);
+            $story->mailto = '';
+            foreach($mailtos as $mailto)
+            {
+                $mailto = trim($mailto);
+                if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
+            }
+            $story->mailto = rtrim($story->mailto, ',');
+
+            $story->reviewedBy = trim(trim($story->reviewedBy), ',');
+            $reviewedBys = explode(',', $story->reviewedBy);
+            $story->reviewedBy = '';
+            foreach($reviewedBys as $reviewedBy)
+            {
+                $reviewedBy = trim($reviewedBy);
+                if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
+            }
+            $story->reviewedBy = rtrim($story->reviewedBy, ',');
+
+            /* Set child story title. */
+            if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
+        }
+
+        return $stories;
+    }
+
+    /**
+     * Get reviewer pairs for story .
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getStoriesReviewer($productID = 0)
+    {
+        $product   = $this->loadModel('product')->getByID($productID);
+        $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 }

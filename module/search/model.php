@@ -585,15 +585,14 @@ class searchModel extends model
     }
 
     /**
-     * get search results of keywords.
+     * Get list sql params.
      *
      * @param  string    $keywords
      * @param  string    $type
-     * @param  object    $pager
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getList($keywords, $type, $pager = null)
+    protected function getSqlParams($keywords, $type)
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
@@ -613,7 +612,7 @@ class searchModel extends model
 
         $likeCondition = '';
         /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
+        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
@@ -636,6 +635,46 @@ class searchModel extends model
                 if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
             }
         }
+
+        return array($words, $againstCond, $likeCondition, $allowedObject);
+    }
+
+    /**
+     * Get counts of keyword search results.
+     *
+     * @param  string    $keywords
+     * @param  string    $type
+     * @access public
+     * @return array
+     */
+    public function getListCount($keywords = '', $type = 'all')
+    {
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
+
+        $typeCount = $this->dao->select("objectType, count(*) as objectCount")
+            ->from(TABLE_SEARCHINDEX)
+            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('addedDate')->le(helper::now())
+            ->groupBy('objectType')
+            ->fetchPairs('objectType', 'objectCount');
+        arsort($typeCount);
+        return $typeCount;
+    }
+
+    /**
+     * get search results of keywords.
+     *
+     * @param  string    $keywords
+     * @param  string    $type
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getList($keywords, $type, $pager = null)
+    {
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
 
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
         $stmt = $this->dao->select("*, {$scoreColumn} as score")
@@ -685,7 +724,7 @@ class searchModel extends model
             if($module == 'issue') $fields = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project') $fields = 'id,model';
             if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
+            if($module == 'story' or $module == 'requirement') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
             if(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max') $fields = 'id,lib';
             if($module == 'doc' and $this->config->edition == 'max') $fields = 'id,assetLib,assetLibType';
             if(empty($fields)) continue;
@@ -738,9 +777,9 @@ class searchModel extends model
                 $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
                 $record->extraType = empty($execution->type) ? '' : $execution->type;
             }
-            elseif($module == 'story')
+            elseif($module == 'story' or $module == 'requirement')
             {
-                $story = $objectList['story'][$record->objectID];
+                $story = $objectList[$module][$record->objectID];
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';
@@ -1127,9 +1166,13 @@ class searchModel extends model
     public function buildIndexQuery($type, $testDeleted = true)
     {
         $table = $this->config->objectTables[$type];
-        if($type == 'story')
+        if($type == 'story' or $type == 'requirement')
         {
-            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')->where('t1.deleted')->eq(0)->andWhere('t1.version=t2.version');
+            $query = $this->dao->select('DISTINCT t1.*,t2.spec,t2.verify')->from($table)->alias('t1')
+                ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('type')->eq($type)
+                ->andWhere('t1.version=t2.version');
         }
         elseif($type == 'doc')
         {

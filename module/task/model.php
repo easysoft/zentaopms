@@ -3782,6 +3782,9 @@ class taskModel extends model
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
+        $this->app->loadLang('execution');
+
+        $today    = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
@@ -3801,13 +3804,20 @@ class taskModel extends model
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
         $list .= '<td>';
         if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
-        $list .= html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'");
+        $list .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "style='color: $task->color'", "data-app='project'") : "<span style='color:$task->color'>$task->name</span>";
+        if(!helper::isZeroDate($task->deadline))
+        {
+            if($task->status != 'done')
+            {
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<span class="label label-danger label-badge">' . $this->lang->execution->delayed . '</span>' : '';
+            }
+        }
         $list .= '</td>';
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
-        $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
+        $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td></td>';
-        $list .= '<td>' . $task->estStarted . '</td>';
-        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
+        $list .= helper::isZeroDate($task->deadline) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->deadline . '</td>';
         $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
@@ -3911,5 +3921,163 @@ class taskModel extends model
         }
 
         return $menu;
+    }
+
+    /**
+     * Update estimate date by gantt.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @access public
+     * @return bool
+     */
+    public function updateEsDateByGantt($objectID, $objectType)
+    {
+        $this->app->loadLang('project');
+        $post = fixer::input('post')->get();
+        $post->endDate = date('Y-m-d', strtotime('-1 day', strtotime($post->endDate)));
+        $changeTable = $objectType == 'task' ? TABLE_TASK : TABLE_PROJECT;
+        $actionType  = $objectType == 'task' ? 'task' : 'execution';
+        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
+        if($objectType == 'task')
+        {
+            $this->updateTaskEsDateByGantt($objectID, $objectType, $post);
+        }
+        elseif($objectType == 'plan')
+        {
+            $this->updateExecutionEsDateByGantt($objectID, $objectType, $post);
+        }
+        
+        if(dao::isError()) return false;
+        
+        $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
+        $changes   = common::createChanges($oldObject, $newObject);
+        $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');
+        if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
+
+        return true;
+    }
+
+    /**
+     * Update Task estimate date by gantt.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @param  object  $postData
+     * @access private
+     * @return bool
+     */
+    private function updateTaskEsDateByGantt($objectID, $objectType, $postData)
+    {
+        $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
+        $parent     = $objectData->parent;
+        $project    = $objectData->project;
+        $execution  = $objectData->execution;
+        $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
+
+        if($parent <= 0)
+        {
+            $parentData = $stage;
+
+            $start = $parentData->begin;
+            $end   = $parentData->end;
+        }
+        else
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
+
+            $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
+            $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
+        }
+
+        if(helper::diffDate($start, $postData->startDate) > 0)
+        {
+            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        }
+
+        if(helper::diffDate($end, $postData->endDate) < 0)
+        {
+            $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+        }
+
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($postData->startDate)
+            ->set('deadline')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($objectID)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Update Execution estimate date by gantt.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @param  object  $postData
+     * @access private
+     * @return bool
+     */
+    private function updateExecutionEsDateByGantt($objectID, $objectType, $postData)
+    {
+        $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+        $parent     = $objectData->parent;
+        $project    = $objectData->project;
+
+        if(empty($parent))
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
+        }
+        else
+        {
+            $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
+        }
+
+        $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
+        $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
+
+        if(helper::diffDate($start, $postData->startDate) > 0)
+        {
+            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+            return dao::$errors = sprintf($this->lang->task->overEsStartDate, $arg, $arg);
+        }
+
+        if(helper::diffDate($end, $postData->endDate) < 0)
+        {
+            $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+            return dao::$errors = sprintf($this->lang->task->overEsEndDate, $arg, $arg);
+        }
+
+        $this->dao->update(TABLE_PROJECT)
+            ->set('begin')->eq($postData->startDate)
+            ->set('end')->eq($postData->endDate)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($objectID)
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Update order by gantt.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrderByGantt()
+    {
+        $data = fixer::input('post')->get();
+
+        $order = 1;
+        foreach($data->tasks as $task)
+        {
+            $idList = explode('-', $task);
+            $taskID = $idList[1];
+            $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
+            $order ++;
+        }
     }
 }

@@ -964,7 +964,7 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
-                if(dao::isError() and !empty(dao::getError()[0])) $response['message'] = dao::getError()[0];
+                if(dao::isError()) $response['message'] = dao::getError();
                 return $this->send($response);
             }
         }
@@ -1068,15 +1068,14 @@ class user extends control
 
         if($_POST)
         {
-            if($needCreateFile) return print(js::reload('parent'));
+            if($needCreateFile) return $this->send(array('result' => 'success', 'locate' => 'reload'));
 
             $result = $this->user->resetPassword();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(!$result) return print(js::alert($this->lang->user->resetFail));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
-            echo js::alert($this->lang->user->resetSuccess);
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return print(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
         }
 
         /* Remove the real path for security reason. */
@@ -1174,6 +1173,7 @@ class user extends control
         $this->view->title   = $this->lang->user->resetPWD;
         $this->view->expired = $expired;
         $this->view->user    = empty($user) ? '' : $user;
+        $this->view->rand    = $this->user->updateSessionRandom();
 
         $this->display();
     }

@@ -127,6 +127,12 @@ class file extends control
             return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
 
+        if(!$this->file->checkPriv($file))
+        {
+            echo(js::alert($this->lang->file->accessDenied));
+            return print(js::locate(helper::createLink('my', 'index')));
+        }
+
         /* Judge the mode, down or open. */
         $mode      = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';

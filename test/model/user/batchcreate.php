@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +28,4 @@ $normalUser['password'] = array(1 => 'e10adc3949ba59abbe56e057f20f883e', 2 => 'e
 r($user->batchCreateUserTest($normalUser)) && p('0:account')  && e('newtestuser1'); //获取插入的第一个用户的account
 r($user->batchCreateUserTest($normalUser)) && p('2:realname') && e('新测试用户3');  //获取插入的最后一个用户的realname
 
-system("./ztest init");
+$db->restoreDB();

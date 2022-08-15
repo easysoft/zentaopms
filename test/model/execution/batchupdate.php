@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ $noName  = array('statuses'=> $statuses, 'codes' => $code, 'PMs' => $pms, 'lifet
 $execution = new executionTest();
 r($execution->batchUpdateObject($normal, $executionID))  && p('0:field,old,new') && e('name,迭代1,批量修改执行一'); // 测试批量修改任务
 r($execution->batchUpdateObject($noName, $executionID))  && p()                  && e('『name』不能为空。');        // 测试name为空
-system("./ztest init");
+$db->restoreDB();

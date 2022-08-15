@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/custom.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -18,7 +19,7 @@ pid=1
 测试moduleName为product，requiredFields中的create,edit各存在多个值 >> PO,RD,name,code
 测试moduleName为release，requiredFields为空 >> name,date
 测试moduleName为release，requiredFields中的create存在一个值 >> desc,name,date
-测试moduleName为release，requiredFields中的rdit存在一个值 >> desc,name,date
+测试moduleName为release，requiredFields中的edit存在一个值 >> desc,name,build,date
 测试moduleName为release，requiredFields中的create,edit各存在一个值 >> desc,name,date
 测试moduleName为execution，requiredFields为空 >> name,code,begin,end
 测试moduleName为execution，requiredFields中的create存在一个值 >> desc,name,code,begin,end
@@ -111,7 +112,7 @@ r($custom->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields
 r($custom->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields6'], $fieldsType[0]))   && p('value') && e('PO,RD,name,code');                  //测试moduleName为product，requiredFields中的create,edit各存在多个值
 r($custom->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields1'], $fieldsType[0]))   && p('value') && e('name,date');                        //测试moduleName为release，requiredFields为空
 r($custom->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields2'], $fieldsType[0]))   && p('value') && e('desc,name,date');                   //测试moduleName为release，requiredFields中的create存在一个值
-r($custom->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields3'], $fieldsType[1]))   && p('value') && e('desc,name,date');                   //测试moduleName为release，requiredFields中的rdit存在一个值
+r($custom->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields3'], $fieldsType[1]))   && p('value') && e('desc,name,build,date');             //测试moduleName为release，requiredFields中的edit存在一个值
 r($custom->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields4'], $fieldsType[0]))   && p('value') && e('desc,name,date');                   //测试moduleName为release，requiredFields中的create,edit各存在一个值
 r($custom->saveRequiredFieldsTest($moduleName[2], $requiredFields['executionFields1'], $fieldsType[0])) && p('value') && e('name,code,begin,end');              //测试moduleName为execution，requiredFields为空
 r($custom->saveRequiredFieldsTest($moduleName[2], $requiredFields['executionFields2'], $fieldsType[0])) && p('value') && e('desc,name,code,begin,end');         //测试moduleName为execution，requiredFields中的create存在一个值
@@ -146,4 +147,4 @@ r($custom->saveRequiredFieldsTest($moduleName[5], $requiredFields['testcaseField
 r($custom->saveRequiredFieldsTest($moduleName[5], $requiredFields['testcaseFields6'], $fieldsType[0]))  && p('value') && e('stage,story,title,type');           //测试moduleName为testcase，requiredFields中的create,edit各存在多个值
 r($custom->saveRequiredFieldsTest($moduleName[3], $requiredFields['taskFields6'], $fieldsType[2]))      && p('value') && e('comment,realStarted,finishedDate,currentConsumed');//测试moduleName为task，requiredFields中的finish存在一个值
 
-system('./ztest init');
+$db->restoreDB();

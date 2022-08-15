@@ -288,11 +288,12 @@ $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';
 
-$lang->admin->system     = '系统';
-$lang->admin->entry      = '应用';
-$lang->admin->data       = '数据';
-$lang->admin->cron       = '定时';
-$lang->admin->buildIndex = '重建索引';
+$lang->admin->system      = '系统';
+$lang->admin->entry       = '应用';
+$lang->admin->data        = '数据';
+$lang->admin->cron        = '定时';
+$lang->admin->buildIndex  = '重建索引';
+$lang->admin->tableEngine = '表引擎';
 
 $lang->convert->importJira = '导入Jira数据';
 
@@ -431,6 +432,7 @@ $lang->colorPicker->errorTip = '不是有效的颜色值';
 $lang->downNotify     = "下载桌面提醒";
 $lang->clientName     = "客户端";
 $lang->downloadClient = "下载客户端";
+$lang->downloadMobile = "下载移动端";
 $lang->clientHelp     = "客户端使用说明";
 $lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
 $lang->website        = "https://www.zentao.net";

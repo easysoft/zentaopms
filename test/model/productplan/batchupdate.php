@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -97,5 +98,5 @@ r($batchUpdate3) && p('0:new') && e('list-3'); //当product=1时,传入正常参
 r($batchUpdate4) && p('0:new') && e('list-4'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=4修改后的名字new
 r($batchUpdate5) && p('0:new') && e('list-5'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=5修改后的名字new
 r($batchUpdate6) && p('0:new') && e('list-6'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=6修改后的名字new
-system("./ztest init");
 ?>
+$db->restoreDB();

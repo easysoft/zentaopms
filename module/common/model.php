@@ -1232,8 +1232,7 @@ class commonModel extends model
     /**
      * Print the module menu.
      *
-     * @param  string $actveMenu
-     * @param  string $methodName
+     * @param  string $activeMenu
      * @static
      * @access public
      * @return void
@@ -1423,6 +1422,9 @@ class commonModel extends model
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
+            echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
+            echo "<li><div class='mobile-qrcode'><img src='{$config->webRoot}theme/default/images/main/mobile_qrcode.png' /><div class='mobile-version'><span>v1.2</span></div></div></li>";
+            echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';
         }
@@ -1521,10 +1523,12 @@ class commonModel extends model
     public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
-        global $app;
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1966,7 +1970,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -2413,10 +2417,10 @@ EOD;
            $module == 'tutorial' or
            $module == 'install' or
            $module == 'upgrade' or
+           $module == 'sso' or
           ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
-          ($module == 'sso' and $method == 'login') or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
           ($module == 'execution' and $method == 'printkanban') or
@@ -3385,19 +3389,19 @@ EOD;
      */
     public static function sortFeatureMenu($module = '', $method = '')
     {
-        global $lang, $app;
+        global $lang, $config, $app;
 
         $module = $module ? $module : $app->rawModule;
         $method = $method ? $method : $app->rawMethod;
 
         /* It will be sorted according to the workflow in the future */
-        if(!empty($lang->featureBarSort[$module][$method]))
+        if(!empty($config->featureBarSort[$module][$method]))
         {
             $featureBar = array();
             if(empty($lang->$module->featureBar[$method])) return false;
             foreach($lang->$module->featureBar[$method] as $key => $label)
             {
-                foreach($lang->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                foreach($config->featureBarSort[$module][$method] as $currentKey => $afterKey)
                 {
                     if($key == $currentKey) continue;
                     $featureBar[$method][$key] = $label;

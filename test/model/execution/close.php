@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +26,4 @@ r($execution->closeTest($executionIDList[0]))            && p('0:field,old,new')
 r($execution->closeTest($executionIDList[1]))            && p('0:field,old,new') && e('status,doing,closed');   // 瀑布执行关闭
 r($execution->closeTest($executionIDList[2]))            && p('0:field,old,new') && e('status,doing,closed');   // 看板执行关闭
 r($execution->closeTest($executionIDList[1],$noRealEnd)) && p('realEnd:0')       && e('『realEnd』不能为空。'); // 不输入实际完成时间校验
-system("./ztest init");
+$db->restoreDB();

@@ -10,7 +10,13 @@ title=测试 docModel->getLibsByObject();
 cid=1
 pid=1
 
-
+all类型查询 >> 0
+api类型查询 >> 0
+product类型查询 >> 产品主库;execution
+project类型查询 >> 0
+execution类型查询 >> 迭代主库;execution
+custom类型查询 >> 自定义库;execution
+book类型查询 >> execution
 
 */
 global $tester;

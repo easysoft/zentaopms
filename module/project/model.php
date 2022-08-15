@@ -192,7 +192,7 @@ class projectModel extends model
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->eq($projectID)
-            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('`type`')->in($type)->fi()
             ->fetch();
 
         if(!$project) return false;
@@ -437,7 +437,7 @@ class projectModel extends model
             $progressList[$projectID] = $progress;
         }
 
-        return is_numeric($projectIDList) ? $progressList[$projectIDList] : $progressList;
+        return is_numeric($projectIDList) ? (empty($progressList) ? 0 : $progressList[$projectIDList]) : $progressList;
     }
 
     /**
@@ -1093,6 +1093,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         $linkedProductsCount = 0;
         if(isset($_POST['products']))
@@ -2028,7 +2029,7 @@ class projectModel extends model
                     echo $project->end;
                     break;
                 case 'status':
-                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
+                    echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
                 case 'budget':
                     echo $budgetTitle;
@@ -2617,9 +2618,10 @@ class projectModel extends model
     public function setMenu($objectID)
     {
         global $lang;
-        $project = $this->getByID($objectID);
 
-        $model = 'scrum';
+        $model    = 'scrum';
+        $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
+        $project  = $this->getByID($objectID);
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2656,7 +2658,6 @@ class projectModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
-        $project = $this->getById($objectID);
 
         if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 

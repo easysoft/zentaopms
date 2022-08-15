@@ -84,6 +84,28 @@ class programplan extends control
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
             $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        }
+
+        if($type == 'assignedTo')
+        {
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
         }
 
         if($type == 'lists')
@@ -103,7 +125,7 @@ class programplan extends control
         $this->view->selectCustom = $selectCustom;
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->ganttType    = $type;
         $this->display();
     }
 
@@ -236,5 +258,46 @@ class programplan extends control
         $response['result']  = 'success';
         $response['message'] = '';
         return $this->send($response);
+    }
+
+    /**
+     * Response gantt drag event.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttDragEvent()
+    {
+        if(!empty($_POST))
+        {
+            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+            $objectID =  $_POST['id'];
+
+            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * Response gantt move event.
+     *
+     * @access public
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttMoveEvent()
+    {
+        if(!empty($_POST))
+        {
+            $idList = explode('-', $_POST['id']);
+            $taskID = $idList[1];
+
+            $this->loadModel('task')->updateOrderByGantt();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action')->create('task', $taskID, 'ganttMove');
+            return $this->send(array('result' => 'success'));
+        }
     }
 }

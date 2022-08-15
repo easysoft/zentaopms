@@ -620,16 +620,16 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.status')->ne('done')
-            ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF(strpos($auto, 'skip') === false and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)->page($pager)->fetchAll(strpos($auto, 'run') !== false? 'run' : 'id');
     }
 
     /**
@@ -1050,15 +1050,15 @@ class testcaseModel extends model
             if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
             if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
             $prev['story']  = $data->story[$caseID];
-            $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
+            if(isset($data->branches)) $prev['branch'] = $data->branches[$caseID];
         }
 
         /* Initialize cases from the post data.*/
@@ -1070,7 +1070,6 @@ class testcaseModel extends model
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
-            $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->status         = $data->statuses[$caseID];
             $case->story          = $data->story[$caseID];
@@ -1080,6 +1079,7 @@ class testcaseModel extends model
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
+            if(isset($data->branches[$caseID])) $case->branch = $data->branches[$caseID];
 
             foreach($extendFields as $extendField)
             {
@@ -1122,7 +1122,7 @@ class testcaseModel extends model
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
 
-                if($case->branch and isset($testtasks[$caseID]))
+                if(!empty($case->branch) and isset($testtasks[$caseID]))
                 {
                     foreach($testtasks[$caseID] as $taskID => $testtask)
                     {
@@ -2092,14 +2092,15 @@ class testcaseModel extends model
     /**
      * Append bugs and results.
      *
-     * @param  array    $cases
-     * @param  string   $type
+     * @param  int    $cases
+     * @param  string $type
+     * @param  array  $caseIdlist
      * @access public
-     * @return array
+     * @return void
      */
-    public function appendData($cases, $type = 'case')
+    public function appendData($cases, $type = 'case', $caseIdlist = array())
     {
-        $caseIdList = array_keys($cases);
+        if(empty($caseIdlist)) $caseIdList = array_keys($cases);
         if($type == 'case')
         {
             $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
@@ -2496,5 +2497,98 @@ class testcaseModel extends model
         $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
 
         return $menu;
+    }
+
+    /**
+     * processDatas
+     *
+     * @param  array  $datas
+     * @access public
+     * @return void
+     */
+    public function processDatas($datas)
+    {
+        if(isset($datas->datas)) $datas = $datas->datas;
+        $columnKey  = array();
+        $caseData   = array();
+        $stepData   = array();
+        $stepVars   = 0;
+
+        foreach($datas as $row => $cellValue)
+        {
+            foreach($cellValue as $field => $value)
+            {
+                if($field != 'stepDesc' and $field != 'stepExpect') continue;
+                if($field == 'stepDesc' or $field == 'stepExpect')
+                {
+                    $steps = $value;
+                    if(strpos($value, "\n"))
+                    {
+                        $steps = explode("\n", $value);
+                    }
+                    elseif(strpos($value, "\r"))
+                    {
+                        $steps = explode("\r", $value);
+                    }
+                    if(is_string($steps)) $steps = explode("\n", $steps);
+
+                    $stepKey  = str_replace('step', '', strtolower($field));
+
+                    $caseStep = array();
+                    foreach($steps as $step)
+                    {
+                        $trimedStep = trim($step);
+                        if(empty($trimedStep)) continue;
+                        if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out) and ($field == 'stepDesc' or ($field == 'stepExpect' and isset($stepData[$row]['desc'][$out[1]]))))
+                        {
+                            $num     = $out[1];
+                            $parent  = $out[2];
+                            $sign    = $out[3];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type']    = 'item';
+                            $caseStep[$parent]['type'] = 'group';
+                        }
+                        elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out) and ($field == 'stepDesc' or ($field == 'stepExpect' and isset($stepData[$row]['desc'][$out[1]]))))
+                        {
+                            $num     = $out[1];
+                            $sign    = $out[2];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type'] = 'step';
+                        }
+                        elseif(isset($num))
+                        {
+                            if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
+                            if(!isset($caseStep[$num]['type']))    $caseStep[$num]['type']    = 'step';
+                            $caseStep[$num]['content'] .= "\n" . $step;
+                        }
+                        else
+                        {
+                            if($field == 'stepDesc')
+                            {
+                                $num = 1;
+                                $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type']    = 'step';
+                            }
+                            if($field == 'stepExpect' and isset($stepData[$row]['desc']))
+                            {
+                                end($stepData[$row]['desc']);
+                                $num = key($stepData[$row]['desc']); $caseStep[$num]['content'] = $step;
+                            }
+                        }
+                    }
+
+                    unset($num);
+                    unset($sign);
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+                    $stepData[$row][$stepKey] = $caseStep;
+                }
+
+            }
+        }
+        return $stepData;
     }
 }

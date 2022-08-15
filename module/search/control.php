@@ -191,7 +191,7 @@ class search extends control
             }
             else
             {
-                $type = zget($this->lang->searchObjects, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
+                $type = zget($this->lang->search->modules, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
                 return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }
@@ -231,6 +231,14 @@ class search extends control
         $pager   = new pager(0, $this->config->search->recPerPage, $pageID);
         $results = $this->search->getList($words, $type, $pager);
 
+        $typeCount = $this->search->getListCount();
+        $typeList  = array('all' => $this->lang->search->modules['all']);
+        foreach($typeCount as $objectType => $count)
+        {
+            if(!isset($this->lang->search->modules[$objectType])) continue;
+            $typeList[$objectType] = $this->lang->search->modules[$objectType];
+        }
+
         /* Set session. */
         $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
@@ -266,6 +274,7 @@ class search extends control
         $this->view->consumed   = time() - $begin;
         $this->view->title      = $this->lang->search->index;
         $this->view->type       = $type;
+        $this->view->typeList   = $typeList;
         $this->view->pager      = $pager;
         $this->view->words      = $words;
         $this->view->referer    = $this->session->referer;

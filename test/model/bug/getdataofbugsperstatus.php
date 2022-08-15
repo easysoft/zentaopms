@@ -9,12 +9,11 @@ title=bugModel->getDataOfBugsPerStatus();
 cid=1
 pid=1
 
-获取状态为active的数据   >> 激活,165
+获取状态为active的数据 >> 激活,165
 获取状态为resolved的数据 >> 已解决,90
-获取状态为closed的数据   >> 已关闭,60
+获取状态为closed的数据 >> 已关闭,60
 
 */
-
 
 $bug=new bugTest();
 r($bug->getDataOfBugsPerStatusTest()) && p('active:name,value')   && e('激活,165');  // 获取状态为active的数据

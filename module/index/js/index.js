@@ -464,7 +464,6 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
-        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
         if(!isSameUrl) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
@@ -754,8 +753,8 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var assetType    = 'story,issue,risk,opportunity,doc';
-                if(assetType.indexOf(searchModule) > -1)
+                var assetType    = ',story,issue,risk,opportunity,doc,';
+                if(assetType.indexOf(',' + searchModule + ',') > -1)
                 {
                     var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);
                     $.get(link, function(data)

@@ -10,6 +10,8 @@ title=测试 messageModel->getNoticeTodos();
 cid=1
 pid=1
 
+查询notice为空的todo的信息 >> 0
+
 */
 
 $message = new messageTest();

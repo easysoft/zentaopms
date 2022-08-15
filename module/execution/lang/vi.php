@@ -127,6 +127,7 @@ $lang->execution->lifeTimeList['ops']   = "DevOps";
 $lang->team = new stdclass();
 $lang->team->account    = 'Người dùng';
 $lang->team->role       = 'Vai trò';
+$lang->team->roleAB     = 'Vai trò của tôi';
 $lang->team->join       = 'Đã tham gia';
 $lang->team->hours      = 'Giờ/ngày';
 $lang->team->days       = 'Ngày';
@@ -417,6 +418,9 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
 
 $lang->execution->featureBar['build']['all'] = 'Build List';
 

@@ -78,8 +78,8 @@
             <?php if($type != 'finishedBy'): ?>
             <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedBy);?></th>
             <?php endif;?>
-            <th class='c-hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
-            <th class='c-hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+            <th class='c-hours estimate'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+            <th class='c-hours consumed'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='c-hours'><?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->leftAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
             <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
@@ -126,7 +126,7 @@
             <?php endif;?>
             <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
             <?php if($type != 'assignedTo'): ?>
-            <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
+            <td class="c-assignedTo has-btn" title="<?php echo zget($users, $task->assignedTo);?>"> <?php $this->task->printAssignedHtml($task, $users);?></td>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
@@ -196,7 +196,7 @@
               <?php endif;?>
               <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
               <?php if($type != 'assignedTo'): ?>
-              <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
+              <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
               <?php endif;?>
               <?php if($type != 'finishedBy'): ?>
               <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>

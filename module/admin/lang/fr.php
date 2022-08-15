@@ -22,12 +22,22 @@ $lang->admin->captcha         = 'Code de vérification';
 $lang->admin->getCaptcha      = 'Obtenir le Code de vérification';
 $lang->admin->register        = 'Register';
 $lang->admin->resetPWDSetting = 'Reset password Setting';
+$lang->admin->tableEngine     = 'Table Engine';
 
 $lang->admin->api            = 'API';
 $lang->admin->log            = 'Log';
 $lang->admin->setting        = 'Paramétrage';
 $lang->admin->days           = 'Durée de conservation';
 $lang->admin->resetPWDByMail = 'Reset the password via the email';
+
+$lang->admin->changeEngine   = "Change to InnoDB";
+$lang->admin->changingTable  = 'Replacing data table %s engine...';
+$lang->admin->changeSuccess  = 'The data table %s engine has been changed to InnoDB.';
+$lang->admin->changeFail     = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb    = 'Your MySQL does not support InnoDB data table engine.';
+$lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
+$lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
+$lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'La version actuelle est %s customisée. ';
@@ -69,8 +79,8 @@ $lang->admin->safe->modeList[0] = "Contrôle Modéré";
 $lang->admin->safe->modeList[1] = 'Contrôle Moyen';
 $lang->admin->safe->modeList[2] = 'Contrôle Fort';
 
-$lang->admin->safe->modeRuleList[1] = ' >= 6 Majuscules, minuscules et chiffres';
-$lang->admin->safe->modeRuleList[2] = ' >= 10 Majuscules, minuscules, chiffres et caractères spéciaux';
+$lang->admin->safe->modeRuleList[1] = ' >= 6 Majuscules, minuscules et chiffres.';
+$lang->admin->safe->modeRuleList[2] = ' >= 10 Majuscules, minuscules, chiffres et caractères spéciaux.';
 
 $lang->admin->safe->reasonList['weak']     = 'Mots de passe faibles courants';
 $lang->admin->safe->reasonList['account']  = 'Identique au compte';
@@ -87,5 +97,6 @@ $lang->admin->safe->loginCaptchaList[0] = 'Non';
 $lang->admin->safe->resetPWDList[1] = 'ON';
 $lang->admin->safe->resetPWDList[0] = 'Off';
 
-$lang->admin->safe->noticeMode   = "Le mot de passe sera vérifié quand un utilisateur se connectera ou qu'un utilisateur sera créé ou modifier.";
-$lang->admin->safe->noticeStrong = '';
+$lang->admin->safe->noticeMode     = "Le mot de passe sera vérifié lors de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
+$lang->admin->safe->noticeWeakMode = "Le mot de passe sera vérifié lors de la connexion au système, de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
+$lang->admin->safe->noticeStrong   = "Le mot de passe est d'autant plus sécurisé qu'il est long, qu'il contient plus de lettres, de chiffres ou de caractères spéciaux, et que les lettres du mot de passe sont peu répétitives !";

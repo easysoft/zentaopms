@@ -240,8 +240,8 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> a fait 
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> a délié le CasTest <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong> to plan.' . "\n";
-$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong> to plan.' . "\n";
+$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
@@ -382,6 +382,7 @@ $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
 $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
+$lang->action->label->ganttmove             = 'sorted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -539,6 +540,7 @@ $lang->action->dynamicAction->task['undeleted']           = 'Restaurer Tâche';
 $lang->action->dynamicAction->task['hidden']              = 'Masquer Tâche';
 $lang->action->dynamicAction->task['svncommited']         = 'Committer SVN';
 $lang->action->dynamicAction->task['gitcommited']         = 'Committer GIT';
+$lang->action->dynamicAction->task['ganttmove']           = 'Order';
 
 $lang->action->dynamicAction->build['opened']  = 'Créer Build';
 $lang->action->dynamicAction->build['edited']  = 'Editer Build';
