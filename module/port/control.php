@@ -144,6 +144,10 @@ class port extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
+        if($model == 'story')
+        {
+            if($this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
+        }
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
@@ -182,7 +186,7 @@ class port extends control
         $fieldList = $this->port->initFieldList($model, $fields, false);
 
         if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
-        if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
+
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
         $name = $field . "[$index]";

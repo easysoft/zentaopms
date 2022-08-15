@@ -13,7 +13,6 @@ $model          = $datas->model;
 $datas          = $datas->datas;
 $appendFields   = $this->session->appendFields;
 $notEmptyRule   = $this->session->notEmptyRule;
-$insert         = $this->session->insert;
 ?>
 <style>
 form{overflow-x: scroll}

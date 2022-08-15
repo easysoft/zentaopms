@@ -212,6 +212,7 @@ class portModel extends model
      */
     public function initPostFields($model = '')
     {
+        $this->commonActions($model);
         $datas = fixer::input('post')->get();
         $objectData = array();
         foreach ($datas as $field => $data)
@@ -220,7 +221,7 @@ class portModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value) and isset($this->config->$model->fieldList[$field]) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    if(is_array($value)) $value = join(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -268,7 +269,6 @@ class portModel extends model
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
-
         return $fieldList;
     }
 
@@ -313,8 +313,9 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
-        if(isset($this->modelFieldList[$field]['control'])) return $this->modelFieldList[$field]['control'];
-        if(isset($this->modelLang->{$field.'List'}))        return 'select';
+        if(isset($this->modelFieldList[$field]['control']))    return $this->modelFieldList[$field]['control'];
+        if(isset($this->modelLang->{$field.'List'}))           return 'select';
+        if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
 
         if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
         return $this->portConfig->fieldList['control'];
@@ -549,7 +550,7 @@ class portModel extends model
 
         if(empty($rows)) return $exportDatas;
 
-        $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+        $exportDatas['user'] = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
 
         foreach ($rows as $id => $values)
         {
@@ -759,7 +760,11 @@ class portModel extends model
         }
         elseif($queryCondition)
         {
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : ''));
+            $selectKey = 'id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t1") == false) $selectKey = 't1.id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t2") == false) $selectKey = 't2.id';
+
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
             while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
         }
 
@@ -813,6 +818,7 @@ class portModel extends model
         {
             foreach($data as $field => $cellValue)
             {
+                if(strpos($this->portConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
                 if(strpos($filter, $field) !== false) continue;
                 if(is_array($cellValue)) continue;
                 if(strrpos($cellValue, '(#') === false)
@@ -831,6 +837,17 @@ class portModel extends model
                 {
                     $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                     $datas[$key]->$field = $id;
+                    $control = !empty($this->modelFieldList[$field]['control']) ? $this->modelFieldList[$field]['control'] : '';
+                    if($control == 'multiple')
+                    {
+                        $cellValue = explode("\n", $cellValue);
+                        foreach($cellValue as &$value)
+                        {
+                            $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
+                        }
+                        $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
+                        $datas[$key]->$field = join(',', $cellValue);
+                    }
                 }
             }
 
@@ -879,10 +896,15 @@ class portModel extends model
             $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
 
-        if(!$maxImport)  $this->maxImport   = $result->allCount;
+        if(!$maxImport) $this->maxImport = $result->allCount;
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
+
+        foreach($datas as $data)
+        {
+            if(isset($data->id)) $this->session->set('insert', false);
+        }
 
         if(empty($datas)) die(js::locate('back'));
         return $result;
@@ -1233,7 +1255,6 @@ class portModel extends model
             if(!empty($object->id))
             {
                 $html .= $object->id . html::hidden("id[$row]", $object->id);
-                $this->session->set('insert', false);
             }
             else
             {
@@ -1255,15 +1276,15 @@ class portModel extends model
                 }
 
                 $options = array();
-                if($control == 'select' or $control == 'multiple')
+                if($control == 'select')
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
-                    if(empty($options) and isset($values[0])) $options = array_slice($values, 0, 1);
+                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1);
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
 
-                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $options, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
+                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $values, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
 
                 elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date' autocomplete='off'") . '</td>';
 

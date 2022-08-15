@@ -5635,8 +5635,8 @@ class storyModel extends model
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
         /* Get related objects title or names. */
-        $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-
+        $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         foreach($stories as $story)
         {
             $story->spec   = '';
@@ -5729,5 +5729,19 @@ class storyModel extends model
         }
 
         return $stories;
+    }
+
+    /**
+     * Get reviewer pairs for story .
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getStoriesReviewer($productID = 0)
+    {
+        $product   = $this->loadModel('product')->getByID($productID);
+        $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 }
