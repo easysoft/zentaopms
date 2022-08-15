@@ -888,6 +888,7 @@ class block extends control
         /* Load models and langs. */
         $this->loadModel('project');
         $this->loadModel('weekly');
+        $this->loadModel('execution');
         $this->app->loadLang('task');
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
@@ -898,7 +899,7 @@ class block extends control
 
         /* Get projects. */
         $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
-        $projects      = $this->loadModel('project')->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
+        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, $excludedModel);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -924,7 +925,7 @@ class block extends control
                 $this->app->loadClass('pager', $static = true);
                 $pager = pager::init(0, 3, 1);
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
-                $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_desc', $pager);
+                $project->executions = $this->execution->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
             }
             elseif($project->model == 'waterfall')
             {
@@ -1356,8 +1357,8 @@ class block extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $count, 1);
-        $this->app->loadLang('execution');
-        $this->view->executionStats = !defined('TUTORIAL') ? $this->loadModel('project')->getStats($this->session->project, $type, 0, 0, 30, 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
+        $this->loadModel('execution');
+        $this->view->executionStats = !defined('TUTORIAL') ? $this->execution->getStatData($this->session->project, $type, 0, 0, false, '', 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
     /**
@@ -1692,7 +1693,7 @@ class block extends control
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
         $status = isset($this->params->type)  ? $this->params->type : 'all';
 
-        $this->app->loadLang('execution');
+        $this->loadModel('execution');
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
 
@@ -1700,17 +1701,8 @@ class block extends control
         if($this->config->systemMode == 'new') $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
 
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
-        $executions = $this->loadModel('project')->getStats($projectID, $status, 0, 0, 30, 'id_asc', $pager);
 
-        foreach($executions as $index => $execution)
-        {
-            if(empty($execution->children)) continue;
-
-            foreach($execution->children as $child) $executions[] = $child;
-            unset($executions[$index]);
-        }
-
-        $this->view->executionStats = $executions;
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
         $this->view->projectPairs   = $projectPairs;
     }
 

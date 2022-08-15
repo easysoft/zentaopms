@@ -1410,6 +1410,126 @@ class executionModel extends model
     }
 
     /**
+     * Get execution stat data.
+     
+     * @param  int        $projectID
+     * @param  string     $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  int        $productID
+     * @param  int        $branch
+     * @param  bool       $withTasks
+     * @param  string|int $param skipParent
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @access public
+     * @return array
+     */
+    public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
+    {
+        /* Construct the query SQL at search executions. */
+        $executionQuery = '';
+        if($browseType == 'bySearch')
+        {
+            $queryID = (int)$param;
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('executionQuery', $query->sql);
+                    $this->session->set('executionForm', $query->form);
+                }
+            }
+            if($this->session->executionQuery == false) $this->session->set('executionQuery', ' 1 = 1');
+
+            $executionQuery = $this->session->executionQuery;
+            $allProject = "`project` = 'all'";
+
+            if(strpos($executionQuery, $allProject) !== false) $executionQuery = str_replace($allProject, '1', $executionQuery);
+            $executionQuery = preg_replace('/(`\w*`)/', 't1.$1',$executionQuery);
+        }
+
+        /* Get involved executions. */
+        $myExecutionIDList = array();
+        if($browseType == 'involved')
+        {
+            $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
+                ->where('account')->eq($this->app->user->account)
+                ->andWhere('type')->eq('execution')
+                ->fetchPairs();
+        }
+
+        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
+            ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
+            ->beginIF($browseType == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        $hours = $this->computerProgress($executions);
+        $burns = $this->loadModel('execution')->getBurnData($executions);
+
+        if($withTasks) $executionTasks = $this->execution->getTaskGroupByExecution(array_keys($executions));
+
+        /* Process executions. */
+        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        foreach($executions as $key => $execution)
+        {
+            /* Process the end time. */
+            $execution->end = date(DT_DATE1, strtotime($execution->end));
+
+            /* Judge whether the execution is delayed. */
+            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+            {
+                $delay = helper::diffDate(helper::today(), $execution->end);
+                if($delay > 0) $execution->delay = $delay;
+            }
+
+            /* Process the burns. */
+            $execution->burns = array();
+            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
+            foreach($burnData as $data) $execution->burns[] = $data->value;
+
+            /* Process the hours. */
+            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
+
+            $this->app->loadConfig('task');
+            if(isset($executionTasks) and isset($executionTasks[$execution->id]))
+            {
+                $tasks = array_chunk($executionTasks[$execution->id], $this->config->task->defaultLoadCount, true);
+                $execution->tasks = $tasks[0];
+            }
+
+            /* In the case of the waterfall model, calculate the sub-stage. */
+            if($param == 'skipParent')
+            {
+                if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
+            }
+            else
+            {
+                if(isset($executions[$execution->parent]) and $execution->type == 'stage')
+                {
+                    $executions[$execution->parent]->children[$key] = $execution;
+                    unset($executions[$key]);
+                }
+            }
+        }
+        return $executions;
+    }
+
+    /**
      * Get executions by project.
      *
      * @param  int     $projectID
@@ -1798,6 +1918,38 @@ class executionModel extends model
         }
 
         return $tasks;
+    }
+
+    /**
+     * Get the task data group by execution id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return array
+     */
+    public function getTaskGroupByExecution($executionIdList = array())
+    {
+        if(empty($executionIdList)) return array();
+        $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->notin('closed,cancel')
+            ->andWhere('execution')->in($executionIdList)
+            ->orderBy('id_asc')
+            ->fetchGroup('execution', 'id');
+
+        foreach($executionTasks as $executionID => $tasks)
+        {
+            foreach($tasks as $task)
+            {
+                if($task->parent > 0 and isset($executionTasks[$executionID][$task->parent]))
+                {
+                    $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
+                    unset($executionTasks[$executionID][$task->id]);
+                }
+            }
+        }
+
+        return $executionTasks;
     }
 
     /**
@@ -3234,6 +3386,45 @@ class executionModel extends model
         $burnData = array_reverse($burnData);
 
         return $burnData;
+    }
+
+    /**
+     * Get execution burn data.
+     *
+     * @param  array  $executions
+     * @access public
+     * @return array
+     */
+    public function getBurnData($executions)
+    {
+        /* Get burndown charts datas. */
+        $burns = $this->dao->select('execution, date AS name, `left` AS value')
+            ->from(TABLE_BURN)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('task')->eq(0)
+            ->orderBy('date desc')
+            ->fetchGroup('execution', 'name');
+
+        foreach($burns as $executionID => $executionBurns)
+        {
+            /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
+            $begin = $executions[$executionID]->begin;
+            $end   = $executions[$executionID]->end;
+            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
+            $executionBurns = $this->processBurnData($executionBurns, $this->config->execution->defaultBurnPeriod, $begin, $end);
+
+            /* Shorter names. */
+            foreach($executionBurns as $executionBurn)
+            {
+                $executionBurn->name = substr($executionBurn->name, 5);
+                unset($executionBurn->execution);
+            }
+
+            ksort($executionBurns);
+            $burns[$executionID] = $executionBurns;
+        }
+
+        return $burns;
     }
 
     /**
