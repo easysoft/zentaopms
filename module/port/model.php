@@ -479,7 +479,7 @@ class portModel extends model
     {
         $getParams = $this->session->{$model . 'PortParams'};
 
-        if($params)
+        if($params and $getParams)
         {
             $params = explode('&', $params);
             foreach($params as $param => $value)
