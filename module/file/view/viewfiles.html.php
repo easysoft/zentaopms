@@ -14,9 +14,22 @@
   .renameFile .input-group {margin-left: 10px;}
   .renameFile .icon {margin-top: 8px;}
   .renameFile .input-group-addon {width: 60px;}
+  .backgroundColor {background: #eff5ff; }
+  .icon.icon-file-text {margin-left: 4px;}
   </style>
   <script>
-  /**
+  $(document).ready(function(){
+    $('li.file').mouseover(function(){
+      $(this).children('span.right-icon').removeClass("hidden");
+      $(this).addClass('backgroundColor');
+    });
+    $('li.file').mouseout(function(){
+      $(this).children('span.right-icon').addClass("hidden");
+      $(this).removeClass('backgroundColor');
+    });
+  });
+
+/**
    * Delete a file.
    *
    * @param  int    $fileID
@@ -165,7 +178,7 @@
           $objectType = zget($this->config->file->objectType, $file->objectType);
           if(common::hasPriv($objectType, 'edit', $object))
           {
-              echo "<span class='right-icon'>&nbsp; ";
+              echo "<span class='right-icon hidden'>&nbsp; ";
 
               /* Determines whether the file supports preview. */
               if($file->extension == 'txt')
@@ -179,7 +192,7 @@
               /* For the open source version of the file judgment. */
               if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {
-                  echo html::a($downloadLink, $lang->file->preview, '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                  echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
               }
 
               /* For the max version of the file judgment. */
@@ -192,8 +205,9 @@
                   }
               }
 
-              common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
-              if(common::hasPriv('file', 'edit')) echo html::a('###', $lang->file->edit, '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
+              common::printLink('file', 'download', "fileID=$file->id", "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
+              if(common::hasPriv('file', 'edit')) echo html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
+              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
               echo '</span>';
           }
           echo '</li>';?>
