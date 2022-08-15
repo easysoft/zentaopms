@@ -2887,13 +2887,12 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return void
+     * @return object|array
      */
     public function apiGetPipeline($gitlabID, $projectID, $branch)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
-        a($url);
         return json_decode(commonModel::http($url));
     }
 }
