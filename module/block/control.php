@@ -1703,7 +1703,6 @@ class block extends control
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
 
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
-        $this->view->projectPairs   = $projectPairs;
     }
 
     /**

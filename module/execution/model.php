@@ -1478,13 +1478,16 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $hours = $this->computerProgress($executions);
-        $burns = $this->loadModel('execution')->getBurnData($executions);
+        $hours = $this->loadModel('project')->computerProgress($executions);
+        $burns = $this->getBurnData($executions);
 
-        if($withTasks) $executionTasks = $this->execution->getTaskGroupByExecution(array_keys($executions));
+        if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         /* Process executions. */
+        $this->app->loadConfig('task');
+
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
+        $today     = helper::today();
         foreach($executions as $key => $execution)
         {
             /* Process the end time. */
@@ -1493,7 +1496,7 @@ class executionModel extends model
             /* Judge whether the execution is delayed. */
             if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
             {
-                $delay = helper::diffDate(helper::today(), $execution->end);
+                $delay = helper::diffDate($today, $execution->end);
                 if($delay > 0) $execution->delay = $delay;
             }
 
@@ -1505,7 +1508,6 @@ class executionModel extends model
             /* Process the hours. */
             $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
 
-            $this->app->loadConfig('task');
             if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
                 $tasks = array_chunk($executionTasks[$execution->id], $this->config->task->defaultLoadCount, true);
@@ -1516,6 +1518,7 @@ class executionModel extends model
             if($param == 'skipParent')
             {
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
+                if($this->config->systemMode == 'new' and $execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
             else
             {
@@ -1526,7 +1529,7 @@ class executionModel extends model
                 }
             }
         }
-        return $executions;
+        return array_values($executions);
     }
 
     /**
@@ -3397,6 +3400,8 @@ class executionModel extends model
      */
     public function getBurnData($executions)
     {
+        if(empty($executions)) return array();
+
         /* Get burndown charts datas. */
         $burns = $this->dao->select('execution, date AS name, `left` AS value')
             ->from(TABLE_BURN)
