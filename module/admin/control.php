@@ -408,6 +408,7 @@ class admin extends control
         foreach($tableEngines as $table => $engine)
         {
             if($engine == 'InnoDB') continue;
+            if(strpos(",{$this->session->errorTables},", ",{$table},") !== false) continue;
 
             if(stripos($table, 'searchindex') !== false)
             {
@@ -422,6 +423,7 @@ class admin extends control
 
         if(empty($thisTable))
         {
+            unset($_SESSION['errorTables']);
             $response['result'] = 'finished';
             return print(json_encode($response));
         }
@@ -429,7 +431,7 @@ class admin extends control
         try
         {
             /* Check process this table or not. */
-            $dbProcesses = $this->dao->query("SHOW PROCESSLIST")->fetchAll();
+            $dbProcesses = $this->dbh->query("SHOW PROCESSLIST")->fetchAll();
             foreach($dbProcesses as $dbProcess)
             {
                 if($dbProcess->db != $this->config->db->name) continue;
@@ -448,11 +450,13 @@ class admin extends control
         try
         {
             $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
-            $this->dao->exec($sql);
+            $this->dbh->exec($sql);
             $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
         }
         catch(PDOException $e)
         {
+            $this->session->set('errorTables', $this->session->errorTables . ',' . $thisTable);
+
             $response['result']  = 'fail';
             $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
         }

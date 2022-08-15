@@ -38,6 +38,7 @@
 <?php js::set('changingTable', $lang->admin->changingTable);?>
 <?php js::set('hasMyISAM', $lang->admin->engineSummary['hasMyISAM']);?>
 <script>
+var changeFails = 0;
 /**
  * Change all table engines.
  *
@@ -63,7 +64,6 @@ function changeTableEngine()
 {
     var $engineBox = $('#engineBox');
     var link       = createLink('admin', 'ajaxChangeTableEngine');
-    var fails      = 0;
     $.ajax(
     {
         type: "GET",
@@ -75,19 +75,21 @@ function changeTableEngine()
             {
                 $engineBox.append("<div class='text-success'><?php echo $lang->admin->changeFinished?></div>");
                 $engineBox.append("<div class='btn btn-sm'><a href='javascript:location.reload()'><?php echo $lang->refresh;?></a></div>");
-                if(fails == 0) $('#mainContent .main-header h2').html("<?php echo $lang->admin->engineSummary['allInnoDB']?>");
-                if(fails != 0) $('#mainContent .main-header h2').html(hasMyISAM.replace('%s', fails));
+                if(changeFails == 0) $('#mainContent .main-header h2').html("<?php echo $lang->admin->engineSummary['allInnoDB']?>");
+                if(changeFails != 0) $('#mainContent .main-header h2').html(hasMyISAM.replace('%s', changeFails));
             }
             else
             {
                 table = response.thisTable;
                 if($engineBox.find('[data-table=' + table + ']').length == 0) $engineBox.append("<li data-table='" + table + "'>" + changingTable.replace('%s', table) + "</li>");
-                $engineBox.find('[data-table=' + table + ']').html(response.message).addClass('text-success');
+                $engineBox.find('[data-table=' + table + ']').html(response.message);
+                if(response.result == 'success') $engineBox.find('[data-table=' + table + ']').addClass('text-success');
+                if(response.result == 'fail') $engineBox.find('[data-table=' + table + ']').addClass('text-warning');
 
                 nextTable = response.nextTable;
                 if(nextTable && $engineBox.find('[data-table=' + nextTable + ']').length == 0) $engineBox.append("<li data-table='" + nextTable + "'>" + changingTable.replace('%s', nextTable) + "</li>");
 
-                if(response.result == 'fail') fails += 1;
+                if(response.result == 'fail') changeFails += 1;
                 $(document).scrollTop($(document).height());
 
                 changeTableEngine();
