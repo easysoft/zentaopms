@@ -333,6 +333,10 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
+define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
+define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
+define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
