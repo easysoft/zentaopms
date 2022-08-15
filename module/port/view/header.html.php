@@ -18,8 +18,9 @@ $notEmptyRule   = $this->session->notEmptyRule;
 form{overflow-x: scroll}
 #maxImport:focus {outline: none;}
 .pointorNone{pointer-events:none;}
+thead > tr > th{width:150px;}
 .c-pri{width:100px}
-#showData > thead > tr > th{width:150px;}
+.c-precondition{width:200px;}
 .c-id{width:50px}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}
 .c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}

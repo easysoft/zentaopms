@@ -642,6 +642,7 @@ class portModel extends model
             foreach($listFields as $field)
             {
                 $listName = $field . 'List';
+                if(!empty($_POST[$listName])) continue;
                 if(!empty($fieldList[$field]))
                 {
                     $lists[$listName] = $fieldList[$field]['values'];
@@ -900,6 +901,8 @@ class portModel extends model
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
+
+        $this->session->set('insert', true);
 
         foreach($datas as $data)
         {
