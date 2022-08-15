@@ -6209,6 +6209,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `dismissDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pinnedMessages` text NOT NULL DEFAULT '',
   `mergedChats` text NOT NULL DEFAULT '',
+  `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
   KEY `name` (`name`),
