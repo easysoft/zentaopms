@@ -479,7 +479,7 @@ class portModel extends model
     {
         $getParams = $this->session->{$model . 'PortParams'};
 
-        if($params)
+        if($params and $getParams)
         {
             $params = explode('&', $params);
             foreach($params as $param => $value)
@@ -1305,7 +1305,7 @@ class portModel extends model
                 elseif($field == 'estimate')
                 {
                     $html .= '<td>';
-                    if(is_array($object->estimate))
+                    if(!empty($object->estimate) and is_array($object->estimate))
                     {
                         $html .= "<table class='table-borderless'>";
                         foreach($object->estimate as $account => $estimate)
