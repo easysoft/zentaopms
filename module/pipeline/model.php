@@ -87,6 +87,9 @@ class pipelineModel extends model
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->check('name', 'unique', "`type` = '$type'")
+            ->checkIF($type == 'jenkins', 'account', 'notempty')
+            ->checkIF($type == 'jenkins' and !$pipeline->token, 'password', 'notempty')
+            ->checkIF($type == 'jenkins' and !$pipeline->password, 'token', 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -118,6 +121,9 @@ class pipelineModel extends model
             ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->check('name', 'unique', "`type` = '$type' and id <> $id")
+            ->checkIF($type == 'jenkins', 'account', 'notempty')
+            ->checkIF($type == 'jenkins' and !$pipeline->token, 'password', 'notempty')
+            ->checkIF($type == 'jenkins' and !$pipeline->password, 'token', 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
