@@ -26,6 +26,7 @@ $lang->story->review             = '评审';
 $lang->story->submitReview       = "提交评审";
 $lang->story->recall             = '撤销评审';
 $lang->story->recallChange       = '撤销变更';
+$lang->story->recallAction       = '撤销';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";
@@ -460,3 +461,7 @@ $lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进�
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+
+$lang->story->recallList = array();
+$lang->story->recallList['recallReview'] = '撤销评审';
+$lang->story->recallList['recallChange'] = '撤销变更';

@@ -74,25 +74,6 @@ $(function()
 
         return false;
     });
-
-    $('#saveButton').on('click', function()
-    {
-        $('#saveButton').attr('disabled', true);
-        $('#saveDraftButton').attr('disabled', true);
-
-        var storyStatus = $('#reviewer').val() ? 'reviewing' : 'active';
-        $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
-        $('#dataform').submit();
-    });
-
-    $('#saveDraftButton').on('click', function()
-    {
-        $('#saveButton').attr('disabled', true);
-        $('#saveDraftButton').attr('disabled', true);
-
-        $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', 'draft').appendTo('#dataform');
-        $('#dataform').submit();
-    });
 });
 
 /**

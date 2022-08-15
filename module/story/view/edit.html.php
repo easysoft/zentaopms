@@ -43,19 +43,19 @@
                 </ul>
                 <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
               </div>
-              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title"' . ($story->status == 'draft' ? '' : ' disabled="disabled"'));?>
+              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title"' . (strpos('draft,changing', $story->status) !== false ? '' : ' disabled="disabled"'));?>
             </div>
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
             <div class='detail-content article-content'>
-              <?php echo $story->status == 'draft' ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
+              <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
             </div>
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->verify;?></div>
             <div class='detail-content article-content'>
-              <?php echo $story->status == 'draft' ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
+              <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
             </div>
           </div>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
@@ -68,7 +68,15 @@
           <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
-            echo html::submitButton($lang->save);
+            if(strpos('draft,changing', $story->status) !== false)
+            {
+                echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
+                echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
+            }
+            else
+            {
+                echo html::submitButton($lang->save);
+            }
             if(!isonlybody()) echo html::backButton();
             ?>
           </div>
@@ -157,7 +165,7 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if($story->status != 'draft' and $story->type == 'story'):?>
+              <?php if(strpos('draft,changing', $story->status) !== false and $story->type == 'story'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
                 <td>

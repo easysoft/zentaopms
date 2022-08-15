@@ -20,7 +20,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>
-    <form class="main-form" method='post' enctype='multipart/form-data' target='hiddenwin'>
+    <form class="main-form" method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
@@ -87,7 +87,8 @@
           <td colspan='2' class='text-center form-actions'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
-            echo html::submitButton();
+            echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
+            echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
             if(!isonlybody()) echo html::backButton();
             ?>
           </td>
@@ -107,4 +108,5 @@
 <?php js::set('changed', 0);?>
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('page', $this->app->rawMethod);?>
 <?php include '../../common/view/footer.html.php';?>
