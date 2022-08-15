@@ -62,7 +62,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->job->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control'");?></td>
+            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
@@ -122,9 +122,9 @@
             <th><?php echo $lang->job->customParam;?></th>
             <td colspan='2' id='paramDiv'>
               <div class='table-row input-group'>
-                <span class='input-group-addon w-50px'><?php echo $lang->job->paramName; ?></span>
+                <span class='input-group-addon <?php echo common::checkNotCN() ? 'w-60px' : 'w-50px'?>'><?php echo $lang->job->paramName; ?></span>
                 <?php echo html::input('paramName[]', '', "class='form-control'"); ?>
-                <span class='input-group-addon w-40px'><?php echo $lang->job->paramValue; ?></span>
+                <span class='input-group-addon <?php echo common::checkNotCN() ? 'w-60px' : 'w-40px'?>'><?php echo $lang->job->paramValue; ?></span>
                 <?php echo html::select('paramValue[]', $lang->job->paramValueList, '', "class='form-control' onchange='setParamName(this)'"); ?>
                 <?php echo html::input('paramValue[]', '', "class='form-control hidden' id='paramValue' disabled"); ?>
                 <span class='input-group-addon w-90px'>
