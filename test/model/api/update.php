@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/api.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -22,7 +23,7 @@ $data = array(
     'title'           => 'testapi',
     'protocol'        => 'HTTP',
     'method'          => 'GET',
-    'path'            => '/api/test/id',
+    'path'            => '/api/test/test',
     'requestType'     => 'application/json',
     'status'          => 'done',
     'owner'           => 'admin',
@@ -58,3 +59,4 @@ $editApi   = $editData;
 $apiInfo = $api->createTest($normalApi, false);
 
 r($api->updateTest($apiInfo->id, $editApi)) && p('0:new') && e('edittestapi'); //修改一个刚创建的api
+$db->restoreDB();

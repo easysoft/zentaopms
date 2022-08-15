@@ -104,7 +104,7 @@ class actionModel extends model
      *
      * @param  int    $actionID
      * @access public
-     * @return void
+     * @return string
      */
     public function getUnreadActions($actionID = 0)
     {
@@ -707,6 +707,7 @@ class actionModel extends model
      */
     public function getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager = null)
     {
+        if($objectType == 'all') return array();
         if($queryID and $queryID != 'myQueryID')
         {
             $query = $this->loadModel('search')->getQuery($queryID);
