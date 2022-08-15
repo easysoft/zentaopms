@@ -612,7 +612,7 @@ class searchModel extends model
 
         $likeCondition = '';
         /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
+        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimedWord}%' OR content like '%{$trimedWord}%'";
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
@@ -653,8 +653,7 @@ class searchModel extends model
 
         $typeCount = $this->dao->select("objectType, count(*) as objectCount")
             ->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
-            ->andWhere('vision')->eq($this->config->vision)
+            ->where('vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
