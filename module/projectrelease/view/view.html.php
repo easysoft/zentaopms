@@ -192,9 +192,9 @@
                       <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                     </td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
-                    <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                    <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                     <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                    <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                    <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('projectrelease', 'unlinkBug') and $canBeChanged)
