@@ -691,8 +691,6 @@ class mr extends control
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
 
-        $this->config->bug->search['params']['os']['values']            = $this->getObjectList('os');
-        $this->config->bug->search['params']['browser']['values']       = $this->getObjectList('browser');
         unset($this->config->bug->search['fields']['product']);
         if($product->type == 'normal')
         {

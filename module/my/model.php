@@ -652,8 +652,6 @@ class myModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products);
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        $this->config->bug->search['params']['os']['values']            = $this->bug->getObjectList('os');
-        $this->config->bug->search['params']['browser']['values']       = $this->bug->getObjectList('browser');
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }

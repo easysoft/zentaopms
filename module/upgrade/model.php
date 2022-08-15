@@ -531,9 +531,6 @@ class upgradeModel extends model
                 $this->processBugLinkBug();
                 break;
             case '17_4':
-                $this->processCreatedInfo();
-                $this->processCreatedBy();
-                $this->updateApproval();
                 $this->rebuildFULLTEXT();
                 $this->updateSearchIndex();
                 if(!$executedXuanxuan)

@@ -815,8 +815,6 @@ class productplan extends control
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getBuildPairs($productID, $branch = 'all', $params = '');
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, $plan->branch);
-        $this->config->bug->search['params']['os']['values']            = $this->bug->getObjectList('os');
-        $this->config->bug->search['params']['browser']['values']       = $this->bug->getObjectList('browser');
         if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->product->getProjectPairsByProduct($productID, $plan->branch);
 
         unset($this->config->bug->search['fields']['product']);
