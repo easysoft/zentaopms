@@ -680,7 +680,7 @@ class productModel extends model
         $programID = isset($product->program) ? $product->program : 0;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
@@ -770,10 +770,10 @@ class productModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
-        $programID = isset($product->program) ? $product->program : '';
+        $programID = isset($product->program) ? $product->program : 0;
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($productID)

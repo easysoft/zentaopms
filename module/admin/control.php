@@ -373,4 +373,84 @@ class admin extends control
         $this->view->title = $this->lang->admin->resetPWDSetting;
         $this->display();
     }
+
+    /**
+     * Show table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function tableEngine()
+    {
+        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->tableEngines = $this->loadModel('misc')->getTableEngines();
+        $this->display();
+    }
+
+    /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine($tableName)
+    {
+        $response = array();
+        $response['result']  = 'success';
+        $response['message'] = '';
+
+        $tableEngines = $this->loadModel('misc')->getTableEngines();
+        if(!isset($tableEngines[$tableName]))
+        {
+            $response['result'] = 'fail';
+            return print(json_encode($response));
+        }
+
+        if($tableEngines[$tableName] == 'InnoDB')
+        {
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $tableName);
+            return print(json_encode($response));
+        }
+
+        try
+        {
+            /* Check process this table or not. */
+            $dbProcesses = $this->dao->query("SHOW PROCESSLIST")->fetchAll();
+            foreach($dbProcesses as $dbProcess)
+            {
+                if($dbProcess->db != $this->config->db->name) continue;
+                if(strpos($dbProcess->Info, " {$tableName} ") !== false)
+                {
+                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $tableName);
+                    return print(json_encode($response));
+                }
+            }
+        }
+        catch(PDOException $e){}
+
+        if(stripos($tableName, 'searchindex') !== false)
+        {
+            $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+            if($mysqlVersion < 5.6)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->admin->errorInnodb;
+                return print(json_encode($response));
+            }
+        }
+
+        try
+        {
+            $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+            $this->dao->exec($sql);
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $tableName);
+        }
+        catch(PDOException $e)
+        {
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->changeFail, $tableName, htmlspecialchars($e->getMessage()));
+        }
+
+        return print(json_encode($response));
+    }
 }

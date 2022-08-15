@@ -154,6 +154,7 @@ $lang->doc->allCollections   = 'All Collections';
 $lang->doc->keywordsTips     = 'Please use commas to separate keywords.';
 $lang->doc->sortLibs         = 'Sort Libs';
 $lang->doc->titlePlaceholder = 'Please enter the title';
+$lang->doc->confirm          = 'Confirm';
 
 global $config;
 /* Query condition list. */

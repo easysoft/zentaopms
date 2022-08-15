@@ -212,6 +212,7 @@ class portModel extends model
      */
     public function initPostFields($model = '')
     {
+        $this->commonActions($model);
         $datas = fixer::input('post')->get();
         $objectData = array();
         foreach ($datas as $field => $data)
@@ -220,7 +221,7 @@ class portModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value) and array_key_exists($field, $this->config->$model->fieldList) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    if(is_array($value)) $value = join(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -258,7 +259,7 @@ class portModel extends model
             foreach ($portFieldList as $portField => $value)
             {
                 $funcName = 'init' . ucfirst($portField);
-                if((!array_key_exists($portField, $modelFieldList)) or $portField == 'title')
+                if((!isset($modelFieldList[$portField])) or $portField == 'title')
                 {
                   $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
                   if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
@@ -268,7 +269,6 @@ class portModel extends model
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
-
         return $fieldList;
     }
 
@@ -287,15 +287,15 @@ class portModel extends model
         $this->commonActions($model);
 
         if(!empty($this->modelConfig->fieldList[$field]['title'])) return $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
-        if(array_key_exists($field, $this->lang->$model))
+        if(isset($this->lang->$model->$field))
         {
             $title = $this->lang->$model->$field;
         }
-        elseif(array_key_exists(($field . 'AB'), $this->lang->$model))
+        elseif(isset($this->lang->$model->{$field . 'AB'}))
         {
             $title = $this->lang->$model->{$field . 'AB'};
         }
-        elseif(array_key_exists($field, $this->lang->port->reservedWord))
+        elseif(isset($this->lang->port->reservedWord[$field]))
         {
             $title = $this->lang->port->reservedWord[$field];
         }
@@ -313,7 +313,10 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
-        if(isset($this->modelLang->{$field.'List'}))        return 'select';
+        if(isset($this->modelFieldList[$field]['control']))    return $this->modelFieldList[$field]['control'];
+        if(isset($this->modelLang->{$field.'List'}))           return 'select';
+        if(isset($this->modelFieldList[$field]['dataSource'])) return 'select';
+
         if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
         return $this->portConfig->fieldList['control'];
     }
@@ -399,56 +402,10 @@ class portModel extends model
         $dataList = array();
 
         $sysDataFields = explode(',', $this->portConfig->sysDataFields);
-        foreach($sysDataFields as $field)
-        {
-            $dataList[$field] =  $this->loadModel($field)->getPairs();
-        }
+
+        foreach($sysDataFields as $field) $dataList[$field] = $this->loadModel($field)->getPairs();
 
         return $dataList;
-    }
-
-    /**
-     * Init tmpFile.
-     *
-     * @param  int    $created
-     * @access public
-     * @return void
-     */
-    public function initTmpFile($created = true)
-    {
-        $taskLang = $this->lang->task;
-        $file     = $this->session->fileImportFileName;
-        $tmpPath  = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile  = $tmpPath . DS . md5(basename($file));
-
-        if(file_exists($tmpFile)) return $tmpFile;
-
-        $rows = $this->file->getRowsFromExcel($file);
-
-        /* Check empty.*/
-        if(is_string($rows))
-        {
-            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            $response['result']  = 'fail';
-            $response['message'] = $rows;
-            return $response;
-        }
-
-        $fields = $this->config->task->templateFields;
-        array_unshift($fields, 'id');
-
-        foreach($fields as $key => $fieldName)
-        {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($taskLang->$fieldName) ? $taskLang->$fieldName : $fieldName;
-            unset($fields[$key]);
-        }
-
-        if($created) $this->createTmpFile($tmpFile, $objectDatas);
-
-        return $objectDatas;
     }
 
     /**
@@ -520,7 +477,7 @@ class portModel extends model
      */
     public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
     {
-        $getParams = $this->session->{$model.'PortParams'};
+        $getParams = $this->session->{$model . 'PortParams'};
 
         if($params)
         {
@@ -565,8 +522,7 @@ class portModel extends model
      */
     public function getSourceByLang($lang)
     {
-        $lang = isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
-        return $lang;
+        return isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
     }
 
     /**
@@ -594,7 +550,7 @@ class portModel extends model
 
         if(empty($rows)) return $exportDatas;
 
-        $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+        $exportDatas['user'] = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
 
         foreach ($rows as $id => $values)
         {
@@ -760,7 +716,7 @@ class portModel extends model
     {
         $modelDatas = $this->getQueryDatas($model);
 
-        if(array_key_exists('files', $fieldList))
+        if(isset($fieldList['files']) or property_exists($fieldList, 'files'))
         {
             $modelDatas = $this->getFiles($model, $modelDatas);
         }
@@ -775,10 +731,7 @@ class portModel extends model
         }
 
         /* Deal children datas and multiple tasks .*/
-        if($modelDatas)
-        {
-           $modelDatas = $this->updateChildDatas($modelDatas);
-        }
+        if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
         return $modelDatas;
     }
@@ -807,7 +760,11 @@ class portModel extends model
         }
         elseif($queryCondition)
         {
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : ''));
+            $selectKey = 'id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t1") == false) $selectKey = 't1.id';
+            if(strpos($queryCondition, "FROM `{$this->config->db->prefix}_$model` AS t2") == false) $selectKey = 't2.id';
+
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
             while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
         }
 
@@ -832,10 +789,7 @@ class portModel extends model
         $relatedObjectIdList = array();
         $relatedObjects      = array();
 
-        foreach($datas as $data)
-        {
-            $relatedObjectIdList[$data->$object]  = $data->$object;
-        }
+        foreach($datas as $data) $relatedObjectIdList[$data->$object] = $data->$object;
 
         if($object == 'openedBuild') $object = 'build';
 
@@ -864,6 +818,7 @@ class portModel extends model
         {
             foreach($data as $field => $cellValue)
             {
+                if(strpos($this->portConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
                 if(strpos($filter, $field) !== false) continue;
                 if(is_array($cellValue)) continue;
                 if(strrpos($cellValue, '(#') === false)
@@ -882,6 +837,17 @@ class portModel extends model
                 {
                     $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                     $datas[$key]->$field = $id;
+                    $control = !empty($this->modelFieldList[$field]['control']) ? $this->modelFieldList[$field]['control'] : '';
+                    if($control == 'multiple')
+                    {
+                        $cellValue = explode("\n", $cellValue);
+                        foreach($cellValue as &$value)
+                        {
+                            $value = trim(substr($value, strrpos($value,'(#') + 2), ')');
+                        }
+                        $cellValue = array_filter($cellValue, function($v) {return (empty($v) && $v == '0') || !empty($v);});
+                        $datas[$key]->$field = join(',', $cellValue);
+                    }
                 }
             }
 
@@ -930,10 +896,15 @@ class portModel extends model
             $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
 
-        if(!$maxImport)  $this->maxImport   = $result->allCount;
+        if(!$maxImport) $this->maxImport = $result->allCount;
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
+
+        foreach($datas as $data)
+        {
+            if(isset($data->id)) $this->session->set('insert', false);
+        }
 
         if(empty($datas)) die(js::locate('back'));
         return $result;
@@ -1231,7 +1202,7 @@ class portModel extends model
 
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
 
-        $importFields = $this->config->$model->templateFields;
+        $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
         $this->getWorkFlowFields($model);
 
@@ -1264,7 +1235,7 @@ class portModel extends model
         $html  = '';
         $key   = key($list);
         $addID = 1;
-        $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
+        if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
@@ -1284,7 +1255,6 @@ class portModel extends model
             if(!empty($object->id))
             {
                 $html .= $object->id . html::hidden("id[$row]", $object->id);
-                $this->session->set('insert', false);
             }
             else
             {
@@ -1300,17 +1270,21 @@ class portModel extends model
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
                 $selected = !empty($object->$field) ? $object->$field : '';
-
-                $options = array();
-                if($control == 'select' or $control == 'multiple')
+                if($model)
                 {
-                    if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
-                    if(!empty($values[$selected]) and isset($values[0])) $options = array_slice($values, 0, 1);
+                    if($control == 'hidden' and isset($this->session->{$model.'PortParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'PortParams'}[$field. 'ID'];
                 }
 
-                if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
+                $options = array();
+                if($control == 'select')
+                {
+                    if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
+                    if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1);
+                }
 
-                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $options, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
+                if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
+
+                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $values, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
 
                 elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date' autocomplete='off'") . '</td>';
 

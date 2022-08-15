@@ -569,6 +569,7 @@ $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->sec
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
 
 $lang->admin->dividerMenu = ',company,message,system,';

@@ -1651,6 +1651,7 @@ $lang->resource->admin->sso             = 'ssoAction';
 $lang->resource->admin->register        = 'register';
 $lang->resource->admin->ztCompany       = 'ztCompany';
 $lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
+$lang->resource->admin->tableEngine     = 'tableEngine';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
@@ -1660,6 +1661,7 @@ $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[30] = 'ztCompany';
 $lang->admin->methodOrder[35] = 'resetPWDSetting';
+$lang->admin->methodOrder[40] = 'tableEngine';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

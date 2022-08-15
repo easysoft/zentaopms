@@ -15,9 +15,12 @@ $config->port->initFunction   = 'title,control,required,';
 $config->port->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
 $config->port->datetimeFeilds = '';
 $config->port->listFields     = '';
-$config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change';
+$config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change,category';
 $config->port->sysDataFields  = 'execution,product,user';
-$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy';
+$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy,reviewedBy';
+
+$config->port->defaultZeroField  = 'severity,pri';
+$config->port->defaultEmptyField = '';
 
 $config->port->import = new stdClass();
 
