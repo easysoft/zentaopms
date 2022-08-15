@@ -1,3 +1,4 @@
-.group-item {display: block; width: 100px; float: left; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.group-item {display: block; width: 100px; float: left; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default;}
+.group-item .checkbox-primary>input {cursor: pointer;}
 .table th {vertical-align: top;}
 .main-table tbody>tr>td {border-bottom: 0px;}

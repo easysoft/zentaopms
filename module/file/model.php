@@ -1017,7 +1017,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return getimagesize($file->realPath);
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
         }
         else if($this->config->file->storageType == 's3')
         {
@@ -1045,5 +1045,24 @@ class fileModel extends model
             ->where('id')->in($IDs)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
+    }
+
+    /**
+     * Update test case version.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function updateTestcaseVersion($file)
+    {
+        $oldCase   = $this->loadModel('testcase')->getByID($file->objectID);
+        $isLibCase = ($oldCase->lib and empty($oldCase->product));
+        if($isLibCase)
+        {
+            $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');
+            $fromcaseVersion += 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
+        }
     }
 }

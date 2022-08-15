@@ -44,4 +44,9 @@ $(function()
         if(repoNum > checkedRepoNum) checked = false;
         $('#checkAllRepos').prop('checked', checked);
     })
+
+    $('#products').change(function()
+    {
+        $('#submit').removeAttr('disabled');
+    })
 })

@@ -501,8 +501,6 @@ class baseHTML
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
-        if(strpos($misc, 'data-app') === false) $misc .= " data-app='" . $tab . "'";
-
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
         {
@@ -968,8 +966,9 @@ class baseJS
         {
             $cancleAction = "$cancleTarget.location = '$cancleURL';";
         }
-
-        $js .= <<<EOT
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false)
+        {
+            $js .= <<<EOT
 if(confirm("$message"))
 {
     $confirmAction
@@ -979,6 +978,12 @@ else
     $cancleAction
 }
 EOT;
+        }
+        else
+        {
+            $js .= $confirmAction;
+        }
+
         $js .= self::end();
         return $js;
     }
@@ -1027,6 +1032,8 @@ EOT;
         }
         else
         {
+            /* Can not locate the url that has '#app', so remove it. */
+            if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
             $js .= "$target.location='$url';\n";
         }
         return $js . self::end();

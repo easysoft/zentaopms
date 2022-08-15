@@ -34,3 +34,4 @@ body {margin-bottom: 25px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 #bugForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
+[lang^='de'] th.c-confirmed {width: 100px !important;}

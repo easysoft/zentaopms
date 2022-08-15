@@ -24,7 +24,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td colspan="2">
+          <td colspan='2' id='reviewerBox'>
             <div class="input-group">
               <?php echo html::select('reviewer[]', $productReviewers, $reviewer, "class='form-control picker-select' multiple" . ($this->story->checkForceReview() ? ' required' : ''));?>
               <?php if(!$this->story->checkForceReview()):?>
@@ -32,6 +32,12 @@
               <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>
               </span>
               <?php endif;?>
+            </div>
+          </td>
+          <td colspan='1' id='assignedToBox' class='hidden'>
+            <div class='input-group'>
+              <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
+              <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
             </div>
           </td>
         </tr>
@@ -67,7 +73,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->attatch;?></th>
-          <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='2'>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'true', 'object' => $story, 'method' => 'change'));?>
+          <?php echo $this->fetch('file', 'buildform');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>

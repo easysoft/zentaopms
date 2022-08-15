@@ -51,7 +51,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->tag->name);?></th>
           <th class='text-left'><?php echo $lang->gitlab->tag->lastCommitter;?></th>
           <th class='text-left'><?php common::printOrderLink('updated', $orderBy, $vars, $lang->gitlab->tag->lastCommittedDate);?></th>
-          <th class='c-actions-1'><?php echo $lang->actions;?></th>
+          <th class='c-actions-1 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

@@ -25,6 +25,14 @@ class ciModel extends model
             session_write_close();
         }
         common::setMenuVars('devops', $this->session->repoID);
+
+        if($this->session->repoID)
+        {
+            $repo = $this->loadModel('repo')->getRepoByID($this->session->repoID);
+            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+
+            $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
+        }
     }
 
     /**

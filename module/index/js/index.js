@@ -187,7 +187,7 @@
      * @param {string} [appCode] The code of target app to open
      * @return {void}
      */
-    function openTab(url, appCode)
+    function openTab(url, appCode, forceReload)
     {
         /* Check params */
         if(!appCode)
@@ -264,7 +264,13 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url, true);
+        var iframe = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+        if (url && (!isSameUrl || forceReload !== false))
+        {
+            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
+            reloadApp(appCode, url, true);
+        }
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
@@ -437,7 +443,8 @@
         if(url === true) url = app.url;
         else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
 
-        var iframe = app.$iframe[0];
+        var iframe    = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
 
         /* Add hook to page before reload it */
         if (iframe && iframe.contentWindow.beforeAppReload)
@@ -447,7 +454,7 @@
 
         try
         {
-            if(url) iframe.contentWindow.location.assign(url);
+            if(url && !isSameUrl) iframe.contentWindow.location.assign(url);
             else iframe.contentWindow.location.reload(true);
         }
         catch(_)
@@ -457,13 +464,14 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
-        app.$app.addClass('loading');
+        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
+        if(!isSameUrl) app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()
         {
             app.$app.removeClass('loading');
             app._loadTimer = null;
-        }, 10000);
+        }, 15000);
     }
 
     /**

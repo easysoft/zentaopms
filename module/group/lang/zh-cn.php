@@ -46,6 +46,7 @@ $lang->group->group              = '分组';
 $lang->group->more               = '更多';
 $lang->group->allCheck           = '全部';
 $lang->group->noGroup            = '暂时没有分组。';
+$lang->group->repeat             = "『%s』已经有『%s』这条记录了，请调整后再试。";
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = '暂时没有项目';

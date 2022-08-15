@@ -12,16 +12,24 @@ class GitRepo
      * @param  string $username
      * @param  string $password
      * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
-        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
+
+        $branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
+        if($branch)
+        {
+            $branches = $this->branch();
+            if(isset($branches[$branch])) $branch = "origin/$branch";
+        }
+        $this->branch = $branch;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -107,11 +115,17 @@ class GitRepo
         $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
+
+        foreach($list as $key => $tag)
+        {
+            if(!$tag) unset($list[$key]);
+        }
+
         return $list;
     }
 
     /**
-     * Get branch
+     * Get branch.
      *
      * @access public
      * @return array
@@ -121,17 +135,21 @@ class GitRepo
         chdir($this->root);
 
         /* Get local branch. */
-        $cmd  = escapeCmd("$this->client branch");
+        $cmd  = escapeCmd("$this->client branch -a");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
         /* Get default branch. */
         $defaultBranch = execCmd("$this->client symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'");
+        $defaultBranch = trim($defaultBranch);
 
         $branches = array();
         foreach($list as $localBranch)
         {
+            $localBranch = trim($localBranch);
+            if(substr($localBranch, 0, 19) == 'remotes/origin/HEAD') continue;
             if(substr($localBranch, 0, 1) == '*') $localBranch = substr($localBranch, 1);
+            if(substr($localBranch, 0, 15) == 'remotes/origin/') $localBranch = substr($localBranch, 15);
 
             $localBranch = trim($localBranch);
             if(empty($localBranch))continue;
@@ -139,7 +157,7 @@ class GitRepo
         }
 
         asort($branches);
-        $branches = array($defaultBranch => $defaultBranch) + $branches;
+        if($defaultBranch) $branches = array($defaultBranch => $defaultBranch) + $branches;
 
         return $branches;
     }
@@ -527,6 +545,8 @@ class GitRepo
         $count    = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
+        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);
 
@@ -571,6 +591,25 @@ class GitRepo
             }
         }
         return $logs;
+    }
+
+    /**
+     * Get clone url.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCloneUrl()
+    {
+        $url      = new stdclass();
+        $remote   = execCmd(escapeCmd("$this->client remote -v"), 'array');
+        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+        $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+
+        if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];
+        if(preg_match($pregSSH,  $remote[0], $matches)) $url->ssh  = $matches[0];
+
+        return $url;
     }
 
     /**

@@ -51,13 +51,14 @@
           </td>
           <td><?php echo $user->realname;?></td>
           <td class='c-dept' title="<?php echo zget($depts, $user->dept);?>"><?php echo zget($depts, $user->dept);?></td>
-          <td><?php echo zget($lang->user->roleList, $user->role);?></td>
+          <td title="<?php echo zget($lang->user->roleList, $user->role)?>"><?php echo zget($lang->user->roleList, $user->role);?></td>
           <td title="<?php echo $user->phone;?>"><?php echo $user->phone;?></td>
           <td title="<?php echo $user->qq;?>"><?php echo $user->qq;?></td>
           <td title="<?php echo $user->weixin;?>"><?php echo $user->weixin;?></td>
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
+            if($this->app->tab == 'program') $module = 'program';
             if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $tab");
             ?>
           </td>

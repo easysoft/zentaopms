@@ -45,6 +45,9 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('copyExecutionID', $copyExecutionID);?>
+<?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
+<?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -67,10 +70,12 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th id='dateRange'><?php echo $lang->execution->dateRange;?></th>
           <td>
@@ -220,18 +225,6 @@
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, 0));?></td>
-        </tr>
-        <tr>
-          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
-          <td class='laneHeightBox' colspan='2'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'auto', "onclick='setCardCount(this.value);'"));?></td>
-        </tr>
-        <tr class="hidden" id='cardBox'>
-          <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', '', "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
-        </tr>
-        <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=execution&link=desc');?>
@@ -265,7 +258,10 @@
   <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4>
+      <div class='titleBox'><h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4></div>
+      <?php if($this->config->systemMode == 'new'):?>
+      <div class='projectSelect'><?php echo html::select("project", $copyProjects, $projectID, "class='form-control chosen' required onchange='loadProjectExecutions(this.value)'");?></div>
+      <?php endif;?>
     </div>
     <div class='modal-body'>
       <?php if(count($executions) == 1):?>
@@ -275,6 +271,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
+      <?php if($config->systemMode == 'new' and $projectID == 0) $executions = $copyExecutions;?>
       <?php foreach ($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>

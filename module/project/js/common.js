@@ -176,13 +176,19 @@ function loadBranches(product)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
+
+        var branchID = $('#branch' + index).val();
+        loadPlans(product, branchID);
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();
-
-    loadPlans(product);
 }
 
 function loadPlans(product, branchID)
@@ -281,6 +287,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -337,3 +344,34 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
         }
     });
 });
+
+/**
+ * Append prompt when the budget exceeds the parent project set.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function budgetOverrunTips()
+{
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+
+    if(selectedProgramID == 0)
+    {
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        return false;
+    }
+
+    if(typeof(projectIDi) == 'undefined') projectID = 0;
+    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    {
+        var data = JSON.parse(data);
+
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        $('#budgetBox').after(data.tip);
+
+        if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
+        $('#budget').attr('placeholder', data.placeholder);
+    });
+}

@@ -286,15 +286,17 @@ class doc extends control
     /**
      * Create a doc.
      *
-     * @param string $objectType
-     * @param int $objectID
-     * @param int|string $libID
-     * @param int $moduleID
-     * @param string $docType
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  int|string $libID
+     * @param  int        $moduleID
+     * @param  string     $docType
+     * @param  bool       $fromGlobal
+     * @param  string     $from
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false, $from = 'doc')
     {
         if(!empty($_POST))
         {
@@ -315,10 +317,23 @@ class doc extends control
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-            $objectID = zget($lib, $lib->type, '');
+            $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess);
+
+            if(isonlybody() and $docResult['docType'] == 'text')
+            {
+                $link = helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$objectType&objectID=$objectID&libID={$docResult['libID']}");
+
+                $response['callback'] = "redirect2Edit($docID, \"$objectType\", $objectID, {$docResult['libID']})";
+            }
+            else
+            {
+                $response['locate'] = "$link";
+            }
+
+            return $this->send($response);
         }
 
         unset($_GET['onlybody']);
@@ -347,6 +362,8 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
+
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
@@ -360,7 +377,7 @@ class doc extends control
         $this->view->title = $libName . $this->lang->doc->create;
 
         $this->view->objectType       = $objectType;
-        $this->view->objectID         = $objectID;
+        $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
         $this->view->libs             = $libs;
@@ -371,6 +388,8 @@ class doc extends control
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->fromGlobal       = $fromGlobal;
+        $this->view->from             = $from;
 
         $this->display();
     }
@@ -378,15 +397,16 @@ class doc extends control
     /**
      * Edit a doc.
      *
-     * @param int     $docID
-     * @param bool    $comment
-     * @param string  $objectType
-     * @param int     $objectID
-     * @param int     $libID
+     * @param  int     $docID
+     * @param  bool    $comment
+     * @param  string  $objectType
+     * @param  int     $objectID
+     * @param  int     $libID
+     * @param  string  $from
      * @access public
      * @return void
      */
-    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0)
+    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0, $from = 'edit')
     {
         if(!empty($_POST))
         {
@@ -406,12 +426,14 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
-            $doc  = $this->doc->getById($docID);
+            $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $doc      = $this->doc->getById($docID);
+            $lib      = $this->doc->getLibById($doc->lib);
+            $objectID = zget($lib, $lib->type, 0);
 
             if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
-                $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
+                $link = $this->createLink('doc', 'objectLibs', "type={$lib->type}&objectID=$objectID&libID={$doc->lib}&docID=$docID");
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -469,6 +491,8 @@ class doc extends control
             }
         }
 
+        $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
+
         $objects                   = $this->doc->getOrderedObjects($objectType);
         $appendLib                 = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
         $libs                      = $this->doc->getLibsByObject($objectType, $objectID, '', $appendLib);
@@ -483,8 +507,12 @@ class doc extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type             = $type;
         $this->view->libs             = $this->doc->getLibs('all', $extra = 'withObject|noBook', $libID, $objectID);
+        $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
+        $this->view->from             = $from;
+        $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
+        $this->view->objectID         = zget($lib, $type, 0);
         $this->display();
     }
 
@@ -588,7 +616,8 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $response['locate'] = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=0&libID={$doc->lib}");
+                        $objectID = $objectType == 'project' ? $doc->project : $doc->product;
+                        $response['locate'] = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID={$objectID}&libID={$doc->lib}");
                     }
                 }
                 return $this->send($response);
@@ -778,6 +807,21 @@ class doc extends control
     public function ajaxGetAllLibs()
     {
         return print(json_encode($this->doc->getAllLibGroups()));
+    }
+
+    /**
+     * AJAX: Get libs by type.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLibsByType($type)
+    {
+        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs = $this->doc->getLibs($type, "withObject,$unclosed");
+
+        return print(html::select('lib', $libs, '', 'class="form-control"'));
     }
 
     /**
@@ -1237,11 +1281,23 @@ class doc extends control
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\")";
+            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\", \"{$this->post->lib}\", \"{$this->post->type}\")";
             return $this->send($response);
         }
 
         unset($this->lang->doc->libTypeList['book']);
+
+        $globalTypeList = $this->lang->doc->libTypeList;
+        $globalTypeList = $this->config->vision == 'lite' ? $globalTypeList : $globalTypeList + $this->lang->doc->libGlobalList;
+
+        $defaultType = key($globalTypeList);
+        $unclosed    = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs        = $this->doc->getLibs($defaultType, "withObject,$unclosed");
+
+        $this->view->globalTypeList = $globalTypeList;
+        $this->view->defaultType    = $defaultType;
+        $this->view->libs           = $libs;
+
         $this->display();
     }
 

@@ -117,6 +117,7 @@ $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
+$lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
 
 $lang->project->tenThousand = '';
 
@@ -159,11 +160,13 @@ $lang->project->currencySymbol['SGD'] = 'S$';
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 
-$lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['doing']     = 'Doing';
-$lang->project->featureBar['wait']      = 'Waiting';
-$lang->project->featureBar['suspended'] = 'Suspended';
-$lang->project->featureBar['closed']    = 'Closed';
+$lang->project->featureBar['browse']['all']       = 'All';
+$lang->project->featureBar['browse']['doing']     = 'Doing';
+$lang->project->featureBar['browse']['wait']      = 'Waiting';
+$lang->project->featureBar['browse']['suspended'] = 'Suspended';
+$lang->project->featureBar['browse']['closed']    = 'Closed';
+
+$lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";

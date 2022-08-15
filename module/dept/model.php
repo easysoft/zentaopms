@@ -113,13 +113,21 @@ class deptModel extends model
         krsort($deptMenu);
         $topMenu = array_pop($deptMenu);
         $topMenu = explode("\n", trim((string)$topMenu));
-        $lastMenu[] = '/';
+        if($this->app->tab == 'report')
+        {
+            $lastMenu[] = '/' . $this->lang->dept->noDepartment;
+        }
+        else
+        {
+            $lastMenu[] = '/';
+        }
         foreach($topMenu as $menu)
         {
             if(!strpos($menu, '|')) continue;
             list($label, $deptID) = explode('|', $menu);
             $lastMenu[$deptID] = $label;
         }
+
         return $lastMenu;
     }
 
@@ -409,6 +417,7 @@ class deptModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
+            ->beginIF($deptID === '0')->andWhere('dept')->eq($deptID)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy('account')
             ->fetchPairs();

@@ -15,15 +15,17 @@ $config->doc->edit->requiredFields   = 'title';
 $config->doc->customObjectLibs = 'files,customFiles';
 $config->doc->notArticleType   = '';
 $config->doc->officeTypes      = 'word,ppt,excel';
+$config->doc->textTypes        = 'html,markdown,text';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
 $config->doc->custom->showLibs   = 'zero,children';
 
 $config->doc->editor = new stdclass();
-$config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
-$config->doc->editor->edit   = array('id' => 'content', 'tools' => 'fullTools');
-$config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simple');
+$config->doc->editor->create     = array('id' => 'content', 'tools' => 'docTools');
+$config->doc->editor->edit       = array('id' => 'content', 'tools' => 'docTools');
+$config->doc->editor->view       = array('id' => 'comment,lastComment', 'tools' => 'simple');
+$config->doc->editor->objectlibs = array('id' => 'comment,lastComment', 'tools' => 'simple');
 
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');

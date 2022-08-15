@@ -21,7 +21,7 @@ $itemRow = <<<EOT
     <td>
       <input type='text' class="form-control" value="" autocomplete="off" name="values[]">
     </td>
-    <td class='c-actions'>
+    <td class='c-actions text-left'>
       <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
       <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-close'></i></a>
     </td>
@@ -234,6 +234,7 @@ EOT;
         </tr>
       </table>
       <?php else:?>
+      <?php if(!empty($fieldList) && is_array($fieldList)):?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
           <td class='w-120px'><strong><?php echo $lang->custom->key;?></strong></td>
@@ -248,7 +249,7 @@ EOT;
             <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
-          <td class='c-actions'>
+          <td class='c-actions text-left'>
             <a href="javascript:void(0)" onclick="addItem(this)" class='btn btn-link'><i class='icon-plus'></i></a>
             <a href="javascript:void(0)" onclick="delItem(this)" class='btn btn-link'><i class='icon-close'></i></a>
           </td>
@@ -268,6 +269,7 @@ EOT;
       </table>
       <?php if(!$canAdd):?>
       <div class='alert alert-warning alert-block'><?php echo $lang->custom->notice->canNotAdd;?></div>
+      <?php endif;?>
       <?php endif;?>
       <?php endif;?>
     </form>

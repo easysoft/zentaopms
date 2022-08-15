@@ -41,15 +41,15 @@
       <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
+          <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class='w-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-70px hours'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-70px hours'><?php echo $lang->task->consumedAB;?></th>
-          <th class='w-hour hours'><?php echo $lang->task->leftAB;?></th>
-          <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-          <th class='w-70px'><?php echo $lang->statusAB;?></th>
+          <th class='w-70px hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='w-70px hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='w-hour hours'><?php common::printOrderLink('left', $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='w-date'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='w-70px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>

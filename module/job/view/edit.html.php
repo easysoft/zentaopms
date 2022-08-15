@@ -41,7 +41,7 @@
           </tr>
           <tr class='commonRepo'>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control'"); ?></td>
+            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'"); ?></td>
           </tr>
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>
@@ -187,10 +187,9 @@
             </td>
           </tr>
           <tr>
-            <th></th>
-            <td colspan="2" class='text-center form-actions'>
+            <td colspan="3" class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', "repoID={$job->repo}"), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
             </td>
           </tr>

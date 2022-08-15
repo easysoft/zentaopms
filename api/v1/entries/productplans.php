@@ -24,7 +24,7 @@ class productplansEntry extends entry
         if(!$productID) return $this->sendError(400, 'No product id.');
 
         $control = $this->loadController('productplan', 'browse');
-        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 'begin_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('query', 0), $this->param('order', 'begin_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         /* Response */
         $data = $this->getData();

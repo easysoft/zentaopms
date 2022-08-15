@@ -52,6 +52,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset          = 'Reset';
 $lang->cancel         = 'Cancel';
 $lang->refresh        = 'Refresh';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = 'Create';
 $lang->edit           = 'Edit';
 $lang->delete         = 'Delete';
@@ -149,6 +150,7 @@ $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
@@ -186,16 +188,18 @@ $lang->upgrade->common    = 'Update';
 $lang->program->list      = 'Program List';
 $lang->program->kanban    = 'Program Kanban';
 $lang->design->common     = 'Design';
-$lang->design->HLDS       = 'HLDS';
-$lang->design->DDS        = 'DDS';
-$lang->design->DBDS       = 'DBDS';
-$lang->design->ADS        = 'ADS';
+$lang->design->HLDS       = 'Preliminary Design';
+$lang->design->DDS        = 'Detailed Design';
+$lang->design->DBDS       = 'Database Design';
+$lang->design->ADS        = 'Interface Design';
 $lang->stage->common      = 'Stage';
 $lang->stage->list        = 'Stage List';
 $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -282,6 +286,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';
@@ -368,6 +373,7 @@ $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』format error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->error->repeat          = "『%s』『%s』exists.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
@@ -459,6 +465,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

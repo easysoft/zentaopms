@@ -52,6 +52,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset          = '重填';
 $lang->cancel         = '取消';
 $lang->refresh        = '刷新';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = '新建';
 $lang->edit           = '编辑';
 $lang->delete         = '删除';
@@ -149,6 +150,7 @@ $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 $lang->nameAB       = '名称';
+$lang->code         = '代号';
 
 $lang->pri     = '优先级';
 $lang->delayed = '已延期';
@@ -196,6 +198,8 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';
+$lang->app->common        = '应用';
+$lang->app->serverLink    = '服务器链接';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -279,9 +283,10 @@ $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile  = '构建';
 $lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '版本库';
+$lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
+$lang->devops->set      = '设置';
 
 $lang->admin->system     = '系统';
 $lang->admin->entry      = '应用';
@@ -368,6 +373,7 @@ $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。"
 $lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且大于『%s』。");
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";
+$lang->error->repeat          = "『%s』已经有『%s』这条记录了。";
 $lang->error->gt              = "『%s』应当大于『%s』。";
 $lang->error->ge              = "『%s』应当不小于『%s』。";
 $lang->error->lt              = "『%s』应当小于『%s』。";
@@ -459,6 +465,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2', 'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();

@@ -23,10 +23,18 @@
 <?php js::set('team', $task->team);?>
 <?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('requiredFields', $config->task->edit->requiredFields);?>
+<?php
+$requiredFields = array();
+foreach(explode(',', $config->task->edit->requiredFields) as $field)
+{
+    if($field) $requiredFields[$field] = '';
+}
+?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -262,7 +270,7 @@
     <div class="modal fade modal-team" id="modalTeam"  data-scroll-inside='false'>
       <div class="modal-dialog">
         <div class="modal-header">
-          <button type="button" class="close hidden" data-dismiss="modal">
+          <button type="button" class="close" data-dismiss="modal">
             <i class="icon icon-close"></i>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
@@ -275,7 +283,7 @@
                 <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                     <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
@@ -294,7 +302,7 @@
                 <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                     <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>

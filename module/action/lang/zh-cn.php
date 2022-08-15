@@ -58,6 +58,10 @@ $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
 
+$lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
+$lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
+$lang->action->codeRepeatChange = '系统内已有同代号的%s，恢复后代号为\"%s\"。';
+
 $lang->action->history = new stdclass();
 $lang->action->history->action = '关联日志';
 $lang->action->history->field  = '字段';
@@ -123,6 +127,7 @@ $lang->action->objectTypes['team']             = '团队';
 $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
+$lang->action->objectTypes['gitea']            = 'Gitea服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = '合并请求';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab项目';
@@ -132,6 +137,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
+$lang->action->objectTypes['giteauser']        = 'Gitea用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板区域';
@@ -142,6 +148,7 @@ $lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
+$lang->action->objectTypes['repo']             = '代码库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -208,6 +215,9 @@ $lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 从<strong>SonarQube问题</strong>转化而来。' . "\n";
 $lang->action->desc->tolib                = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
 $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 从' . $lang->testcase->common . '更新。' . "\n";
+$lang->action->desc->adjusttasktowait     = '$date, 系统判断由于消耗工时调整为0，将任务状态置为未开始。' . "\n";
+$lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 重新打开。' . "\n";
+$lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -632,8 +642,12 @@ $lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
 
 $lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
-$lang->action->dynamicAction->gitlab['edited']  = '设置GitLab服务器';
+$lang->action->dynamicAction->gitlab['edited']  = '编辑GitLab服务器';
 $lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
+
+$lang->action->dynamicAction->gitea['created'] = '创建Gitea服务器';
+$lang->action->dynamicAction->gitea['edited']  = '编辑Gitea服务器';
+$lang->action->dynamicAction->gitea['deleted'] = '删除Gitea服务器';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
@@ -680,6 +694,7 @@ $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合并请求|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab服务器|gitlab|view|id=%s';
 $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
+$lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

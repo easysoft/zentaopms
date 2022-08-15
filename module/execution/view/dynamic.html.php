@@ -78,6 +78,7 @@
       <ul class="timeline timeline-tag-left <?php if($type == 'all') echo 'margin-l-50px';?>">
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
+        <?php if($action->action == 'adjusttasktowait') continue;?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
         <li <?php if($action->major) echo "class='active'";?>>
           <div>
@@ -87,7 +88,7 @@
               <span class='label-action'><?php echo $action->actionLabel;?></span>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php if($action->objectName) echo html::a($action->objectLink, $action->objectName);?>
+              <?php if($action->objectName) echo !empty($action->objectLink) ? html::a($action->objectLink, $action->objectName) : $action->objectName;?>
             </span>
           </div>
         </li>

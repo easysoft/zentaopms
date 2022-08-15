@@ -50,6 +50,7 @@ class testsuite extends control
      * Browse test suites.
      *
      * @param  int    $productID
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -57,7 +58,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
@@ -74,11 +75,11 @@ class testsuite extends control
         $sort = common::appendOrder($orderBy);
 
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites      = $this->testsuite->getSuites($productID, $sort, $pager);
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         if(empty($suites) and $pageID > 1)
         {
             $pager  = pager::init(0, $recPerPage, 1);
-            $suites = $this->testsuite->getSuites($productID, $sort, $pager, 'all');
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
@@ -89,6 +90,7 @@ class testsuite extends control
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
         $this->view->suites      = $suites;
+        $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);

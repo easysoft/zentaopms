@@ -48,6 +48,7 @@ $lang->upgrade->fromVersion   = 'De';
 $lang->upgrade->toVersion     = 'à';
 $lang->upgrade->confirm       = 'Confirmez SQL';
 $lang->upgrade->sureExecute   = 'Executez';
+$lang->upgrade->upgradingTips = 'La mise à jour est en cours, veuillez être patient. Ne pas actualiser la page ou éteindre votre ordinateur!';
 $lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la version. Elle a été désactivée :';
 $lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->noticeSQL     = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
@@ -155,3 +156,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 EOT;
 
 include dirname(__FILE__) . '/version.php';
+
+$lang->upgrade->recoveryActions = new stdclass();
+$lang->upgrade->recoveryActions->cancel = 'Cancel';
+$lang->upgrade->recoveryActions->review = 'Review';

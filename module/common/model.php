@@ -28,6 +28,7 @@ class commonModel extends model
             $this->sendHeader();
             $this->setCompany();
             $this->setUser();
+            $this->setApproval();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
@@ -285,6 +286,18 @@ class commonModel extends model
     }
 
     /**
+     * Set approval config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setApproval()
+    {
+        $this->config->openedApproval = false;
+        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
+    }
+
+    /**
      * Load configs from database and save it to config->system and config->personal.
      *
      * @access public
@@ -512,6 +525,7 @@ class commonModel extends model
 
         if(isset($app->user))
         {
+            if(!isset($app->user->visions)) $app->user->visions = trim($config->visions, ',');
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
             $configVisions = array_filter(explode(',', trim($config->visions, ',')));
@@ -620,7 +634,7 @@ class commonModel extends model
                         }
                         else if(!defined('TUTORIAL'))
                         {
-                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $params       = "programID=0&from=global";
                             $createMethod = 'createGuide';
                             $attr         = 'data-toggle="modal"';
                         }
@@ -1090,6 +1104,10 @@ class commonModel extends model
             {
                 $executionID = $menuItem->link['vars'];
                 commonModel::buildMoreButton($executionID);
+            }
+            elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
+            {
+                commonModel::buildAppButton();
             }
             else
             {
@@ -1584,7 +1602,7 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
-     * @Param  bool   $extraEnabled
+     * @param  bool   $extraEnabled
      * @static
      * @access public
      * @return void
@@ -1734,6 +1752,45 @@ EOD;
     }
 
     /**
+     * Build devops app button.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildAppButton()
+    {
+        if(defined('TUTORIAL')) return;
+        global $app, $config, $lang;
+
+        $pipelinePairs = array();
+        $condition     = '';
+        if(!$app->user->admin)
+        {
+            $types = '';
+            foreach($config->pipelineTypeList as $pipelineType)
+            {
+                if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
+            }
+            if(empty($types)) return;
+            $condition .= ' AND `type` in (' . trim($types, ',') . ')';
+        }
+        $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        if(empty($pipelineList)) return;
+
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->app->common}<span class='caret'></span></a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        foreach($pipelineList as $pipeline)
+        {
+            $html .= "<li style='max-width: 300px;'>" . html::a($pipeline->url, "[{$pipeline->type}] {$pipeline->name}", '', "title='{$pipeline->name}' class='text-ellipsis' style='padding: 2px 10px' target='_blank'") . '</li>';
+        }
+        $html .= "</ul></li>\n";
+
+        echo $html;
+    }
+
+    /**
      * Print link icon.
      *
      * @param  string $module
@@ -1746,13 +1803,14 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
+     * @param  string $extraEnabled
      * @static
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
     {
-        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID);
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID, $extraEnabled);
     }
 
     /**
@@ -1796,18 +1854,20 @@ EOD;
      * Print back link
      *
      * @param  string $backLink
+     * @param  string $class
+     * @param  string $misc
      * @static
      * @access public
      * @return void
      */
-    static public function printBack($backLink, $class = '')
+    static public function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
 
         if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} data-app='{$app->tab}'");
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} $misc");
     }
 
     /**
@@ -2134,6 +2194,7 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
+        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
@@ -2318,8 +2379,7 @@ EOD;
                 }
 
                 $referer = helper::safe64Encode($uri);
-                print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
-                helper::end();
+                die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
             }
         }
         catch(EndResponseException $endResponseException)
@@ -2357,7 +2417,11 @@ EOD;
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'sso' and $method == 'login') or
-          ($module == 'traincourse' and $method == 'ajaxuploadlargefile'))
+          ($module == 'report' && $method == 'annualdata') or
+          ($module == 'misc' && $method == 'captcha') or
+          ($module == 'execution' and $method == 'printkanban') or
+          ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
+          ($module == 'traincourse' and $method == 'playvideo'))
         {
             return;
         }
@@ -2402,16 +2466,16 @@ EOD;
         /* If is the program/project/product/execution admin, have all program privs. */
         if($app->config->vision != 'lite')
         {
-            $inProject = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project';
+            $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
             if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
-            $inProduct = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product';
+            $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
             if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
 
-            $inProgram = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program';
+            $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
             if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
 
-            $inExecution = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution';
+            $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
             if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
         }
 
@@ -2438,6 +2502,7 @@ EOD;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
+            if($module == 'report' and $method == 'export') return true;
             if(!isset($acls['views'][$menu])) return false;
 
             return true;
@@ -3018,11 +3083,13 @@ EOD;
      * @param  string|array $data
      * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
      * @param  array        $headers   Set request headers.
+     * @param  string       $dataType
+     * @param  string       $method    POST|PATCH|PUT
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST')
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3059,7 +3126,8 @@ EOD;
         if(!empty($data))
         {
             if(is_object($data)) $data = (array) $data;
-            curl_setopt($curl, CURLOPT_POST, true);
+            if($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
+            if(in_array($method, array('PATCH', 'PUT'))) curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 
@@ -3304,6 +3372,45 @@ EOD;
         $Parsedown->voidElementSuffix = '>'; // HTML5
 
         return $Parsedown->text($markdown);
+    }
+
+    /**
+     * Sort featureBar.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function sortFeatureMenu($module = '', $method = '')
+    {
+        global $lang, $app;
+
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
+
+        /* It will be sorted according to the workflow in the future */
+        if(!empty($lang->featureBarSort[$module][$method]))
+        {
+            $featureBar = array();
+            if(empty($lang->$module->featureBar[$method])) return false;
+            foreach($lang->$module->featureBar[$method] as $key => $label)
+            {
+                foreach($lang->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                {
+                    if($key == $currentKey) continue;
+                    $featureBar[$method][$key] = $label;
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
+                }
+            }
+            $lang->$module->featureBar = $featureBar;
+        }
+
+        return true;
     }
 }
 

@@ -30,6 +30,7 @@ $lang->search->noQuery       = 'Aucune query de sauvegardée !';
 $lang->search->onMenuBar     = 'Montrer dans le Menu';
 $lang->search->custom        = 'Personnalisation';
 $lang->search->setCommon     = 'Set as public query criteria';
+$lang->search->saveCondition = 'Save search options';
 
 $lang->search->account  = 'Compte';
 $lang->search->module   = 'Module';

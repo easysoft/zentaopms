@@ -195,7 +195,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'task');
-                    $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -210,7 +210,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'bug');
-                    $control->bug($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->bug($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -266,7 +266,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'story');
-                    $control->story($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->story($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -290,7 +290,7 @@ class userEntry extends Entry
                     if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'issue');
-                        $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->issue('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -307,7 +307,7 @@ class userEntry extends Entry
                     if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'risk');
-                        $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->risk('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -324,7 +324,7 @@ class userEntry extends Entry
                     if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('all', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('all', '', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')

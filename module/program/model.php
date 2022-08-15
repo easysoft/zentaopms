@@ -166,8 +166,8 @@ class programModel extends model
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF(!$this->cookie->showClosed and $status == 'all')->andWhere('status')->ne('closed')->fi()
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
@@ -547,6 +547,24 @@ class programModel extends model
             $path    = $program->path;
         }
 
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('projectQuery', $query->sql);
+                $this->session->set('projectForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('projectQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($browseType == 'bySearch' and $this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
+        }
+
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
         $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
@@ -556,8 +574,12 @@ class programModel extends model
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF($browseType != 'all' and $browseType != 'undone' and $browseType != 'bysearch')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($browseType == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
@@ -703,38 +725,13 @@ class programModel extends model
             ->remove('delta,future,contactListMenu')
             ->get();
 
-        if($program->parent)
-        {
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
-            if($parentProgram)
-            {
-                /* Child program begin cannot less than parent. */
-                if(!empty($program->name) and $program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
-
-                /* When parent set end then child program end cannot greater than parent. */
-                if(!empty($program->name) and$parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
-
-                /* When parent set end then child program cannot set longTime. */
-                if(!empty($program->name) and empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
-
-                /* The budget of a child program cannot beyond the remaining budget of the parent program. */
-                $program->budgetUnit = $parentProgram->budgetUnit;
-                if(isset($program->budget))
-                {
-                    $availableBudget = $this->getBudgetLeft($parentProgram);
-                    if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-                }
-
-                if(dao::isError()) return false;
-            }
-        }
-
         /* Redefines the language entries for the fields in the project table. */
         foreach(explode(',', $this->config->program->create->requiredFields) as $field)
         {
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -742,7 +739,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent and `deleted` = '0'")
             ->checkFlow()
             ->exec();
 
@@ -772,6 +769,7 @@ class programModel extends model
      */
     public function update($programID)
     {
+        $this->app->loadLang('project');
         $programID  = (int)$programID;
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
 
@@ -797,15 +795,6 @@ class programModel extends model
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
         $children = $this->getChildren($programID);
 
-        if($children > 0)
-        {
-            $minChildBegin = $this->dao->select('name, min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch();
-            $maxChildEnd   = $this->dao->select('name, max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch();
-
-            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $program->name, $minChildBegin->name, $minChildBegin->minBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $program->name, $maxChildEnd->name, $maxChildEnd->maxEnd);
-            if(dao::isError()) return false;
-        }
 
         if($program->parent)
         {
@@ -814,22 +803,6 @@ class programModel extends model
                 ->where('root')->eq($programID)
                 ->andwhere('type')->eq('line')
                 ->exec();
-
-            $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
-            if($parentProgram)
-            {
-                if(!empty($program->name) and $program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
-                if(!empty($program->name) and $parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
-                if(!empty($program->name) and empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
-            }
-
-            /* The budget of a child program cannot beyond the remaining budget of the parent program. */
-            $program->budgetUnit = $parentProgram->budgetUnit;
-            if($program->budget != 0)
-            {
-                $availableBudget = $this->getBudgetLeft($parentProgram);
-                if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
         }
         if(dao::isError()) return false;
 
@@ -839,13 +812,14 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($programID)
             ->limit(1)
@@ -1413,13 +1387,14 @@ class programModel extends model
         }
 
         /* Compute totalReal and progress. */
-        foreach($hours as $hour)
+        $progressList = $this->loadModel('project')->getWaterfallProgress(array_keys($hours));
+        foreach($hours as $projectID => $hour)
         {
             $hour->totalEstimate = round($hour->totalEstimate, 1) ;
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
+            $hour->progress      = $projects[$projectID]->model == 'waterfall' ? $progressList[$projectID] : ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0);
         }
 
         /* Get the number of left tasks. */
@@ -1584,17 +1559,21 @@ class programModel extends model
                 $menu .= "</ul>";
                 $menu .= "</div>";
             }
-            $attr  = $program->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
+
             $menu .= $this->buildMenu('project', 'edit',  $params, $program, $type, 'edit',  '', 'iframe', true);
-            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', '',   '', 'data-app="project"' . $attr);
-            $menu .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', '',   '', 'data-app="project"' . $attr);
+            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', '',   '', 'data-app="project"');
+
+            $disabledGroup = $program->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
+            $menu         .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', '',   '', 'data-app="project"' . $disabledGroup);
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=browse",                $program, $type, 'link',         '', '', '', "data-app={$this->app->tab}" . $attr);
-                $menu .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', '', '', "data-app='project'" . $attr);
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program",                $program, $type, 'link',         '', '', '', "data-app={$this->app->tab}");
+
+                $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
+                $menu             .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', '', '', "data-app='project'" . $disabledWhitelist);
                 if(common::hasPriv('project','delete'))
                 {
                     $menu .= $this->buildMenu("project", "delete", $params, $program, $type, 'trash', 'hiddenwin', '', '', "data-group='program'", $this->lang->delete);

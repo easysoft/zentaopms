@@ -136,22 +136,23 @@ $lang->doc->menuTitle        = '目录';
 
 $lang->doc->collectAction = '收藏文档';
 
-$lang->doc->libName        = '文档库名称';
-$lang->doc->libType        = '文档库类型';
-$lang->doc->custom         = '自定义文档库';
-$lang->doc->customAB       = '自定义库';
-$lang->doc->createLib      = '创建文档库';
-$lang->doc->allLibs        = '文档库列表';
-$lang->doc->objectLibs     = "文档库文档详情";
-$lang->doc->showFiles      = '附件库';
-$lang->doc->editLib        = '编辑文档库';
-$lang->doc->deleteLib      = '删除文档库';
-$lang->doc->fixedMenu      = '固定到菜单栏';
-$lang->doc->removeMenu     = '从菜单栏移除';
-$lang->doc->search         = '搜索';
-$lang->doc->allCollections = '查看全部收藏文档';
-$lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
-$lang->doc->sortLibs       = '文档库排序';
+$lang->doc->libName          = '文档库名称';
+$lang->doc->libType          = '文档库类型';
+$lang->doc->custom           = '自定义文档库';
+$lang->doc->customAB         = '自定义库';
+$lang->doc->createLib        = '创建文档库';
+$lang->doc->allLibs          = '文档库列表';
+$lang->doc->objectLibs       = "文档库文档详情";
+$lang->doc->showFiles        = '附件库';
+$lang->doc->editLib          = '编辑文档库';
+$lang->doc->deleteLib        = '删除文档库';
+$lang->doc->fixedMenu        = '固定到菜单栏';
+$lang->doc->removeMenu       = '从菜单栏移除';
+$lang->doc->search           = '搜索';
+$lang->doc->allCollections   = '查看全部收藏文档';
+$lang->doc->keywordsTips     = '多个关键字请用逗号分隔。';
+$lang->doc->sortLibs         = '文档库排序';
+$lang->doc->titlePlaceholder = '请输入标题';
 
 global $config;
 /* 查询条件列表 */
@@ -251,8 +252,8 @@ $lang->doc->noticeAcl['lib']['project']['default']   = "有所选项目访问权
 $lang->doc->noticeAcl['lib']['project']['open']      = "有所选项目访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['project']['private']   = "有所选项目访问权限或白名单里的用户可以访问。";
 $lang->doc->noticeAcl['lib']['project']['custom']    = "白名单的用户可以访问。";
-$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->execution->common}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->execution->common}访问权限或白名单里的用户可以访问。";
 $lang->doc->noticeAcl['lib']['api']['open']          = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['api']['custom']        = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['lib']['api']['private']       = '只有创建者自己可以访问。';

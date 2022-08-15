@@ -32,7 +32,7 @@ $config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTo
 $config->story->list = new stdclass();
 $config->story->list->exportFields      = '
     id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
-    pri, estimate, status, stage, taskCountAB, bugCountAB, caseCountAB,
+    pri, estimate, status, stage, category, taskCountAB, bugCountAB, caseCountAB,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
     reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
@@ -129,7 +129,7 @@ $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
 $config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '70';
+$config->story->datatable->fieldList['stage']['width']    = '80';
 $config->story->datatable->fieldList['stage']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';

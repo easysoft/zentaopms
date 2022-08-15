@@ -151,6 +151,10 @@
                   <span class='attend-<?php echo $status;?>'>
                     <?php extCommonModel::printLink('leave', 'create', "date=" . $date, $leave, "data-toggle='modal' data-width='700px'");?>
                   </span>
+                  <?php elseif($status == 'overtime'):?>
+                  <span class='attend-<?php echo $status;?>'>
+                    <?php extCommonModel::printLink('overtime', 'create', "date=" . $date, $overtime, "data-toggle='modal' data-width='700px'");?>
+                  </span>
                   <?php elseif($status == 'lieu'):?>
                   <span class='attend-<?php echo $status;?>'>
                   <?php extCommonModel::printLink('lieu', 'create', "date=" . $date, $lieu, "data-toggle='modal' data-width='700px'");?>

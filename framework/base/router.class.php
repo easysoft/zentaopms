@@ -658,6 +658,20 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+
+        /* Filter common get and cookie vars. */
+        if($this->config->framework->filterParam == 2)
+        {
+            global $filter;
+            foreach($filter->default->get as $key => $rules)
+            {
+                if(isset($_GET[$key]) and !validater::checkByRule($_GET[$key], $rules)) unset($_GET[$key]);
+            }
+            foreach($filter->default->cookie as $key => $rules)
+            {
+                if(isset($_COOKIE[$key]) and !validater::checkByRule($_COOKIE[$key], $rules)) unset($_COOKIE[$key]);
+            }
+        }
     }
 
     /**
@@ -714,7 +728,7 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
         $vision = '';
-        if($this->config->installed)
+        if($this->config->installed and validater::checkAccount($account))
         {
             $sql     = new sql();
             $account = $sql->quote($account);
@@ -982,14 +996,7 @@ class baseRouter
             if($writable)
             {
                 $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-                session_set_save_handler(
-                    array($ztSessionHandler, "open"),
-                    array($ztSessionHandler, "close"),
-                    array($ztSessionHandler, "read"),
-                    array($ztSessionHandler, "write"),
-                    array($ztSessionHandler, "destroy"),
-                    array($ztSessionHandler, "gc")
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -3093,7 +3100,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $tagID;
@@ -3233,7 +3240,8 @@ class ztSessionHandler
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
-        @unlink($sessFile);
+        unlink($sessFile);
+        unlink($this->rawFile);
         touch($sessFile);
         return true;
     }

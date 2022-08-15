@@ -40,13 +40,17 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-left'>
     <?php
-    if(common::hasPriv('caselib', 'browse'))
+    common::sortFeatureMenu();
+    if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['browse']['wait']);
+    foreach($lang->caselib->featureBar['browse'] as $featureType => $label)
     {
-        echo html::a($this->inlink('browse', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('browse', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span>", '', "id='waitTab' class='btn btn-link'");
+        $activeClass = $browseType == $featureType ? 'btn-active-text' : '';
+        echo html::a(inlink('browse', "libID=$libID&browseType=$featureType"), "<span class='text'>$label</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
+  </div>
+  <div class='btn-toolbar pull-right'>
     <?php
     if(common::hasPriv('caselib', 'view'))
     {
@@ -54,8 +58,6 @@ js::set('flow',          $config->global->flow);
         echo html::a($link, "<i class='icon icon-list-alt muted'> </i> " . $this->lang->caselib->view, '', "class='btn btn-link'");
     }
     ?>
-  </div>
-  <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
      <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='40%'");?>
      <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i> " . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
@@ -153,7 +155,7 @@ js::set('flow',          $config->global->flow);
                 <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-              <td><?php echo zget($users, $case->openedBy);?></td>
+              <td title="<?php echo zget($users, $case->openedBy);?>"><?php echo zget($users, $case->openedBy);?></td>
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>

@@ -18,7 +18,7 @@ $lang->file->deleted       = 'Deleted';
 $lang->file->uploadImages  = 'Batch Upload Images';
 $lang->file->download      = 'Download Files';
 $lang->file->uploadDate    = 'Uploaded';
-$lang->file->edit          = 'Rename File';
+$lang->file->edit          = 'Rename';
 $lang->file->inputFileName = 'Enter File Name';
 $lang->file->delete        = 'Delete File';
 $lang->file->label         = 'Label:';
@@ -36,6 +36,7 @@ $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
 $lang->file->batchExport   = 'Export in batches';
+$lang->file->downloadFile  = 'Download';
 
 $lang->file->pathname  = 'Path Name';
 $lang->file->title     = 'Title';

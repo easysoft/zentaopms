@@ -47,6 +47,7 @@ $lang->program->realDuration   = 'RealDuration';
 $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
+$lang->program->childProgram   = 'sous-programme';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -99,10 +100,10 @@ $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed programs.';
 $lang->program->tips               = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
-$lang->program->beginLetterParent  = 'La date de début du programme "%s" doit être ≥ à la date de début du programme parent "%s" : %s.';
-$lang->program->endGreaterParent   = 'La date de fin du programme "%s" doit être ≤ à la date de fin du programme parent "%s" : %s.';
-$lang->program->beginGreateChild   = 'La date de début du programme parent "%s" doit être ≤ à la date de début minimum du sous-programme "%s" : %s.';
-$lang->program->endLetterChild     = 'Le temps de fin du programme parent "%s" doit être ≥ au temps de fin maximum du sous-programme "%s" : %s.';
+$lang->program->beginLetterParent  = 'La date de début du programme doit être ≥ à la date de début du programme parent: %s.';
+$lang->program->endGreaterParent   = 'La date de fin du programme doit être ≤ à la date de fin du programme parent: %s.';
+$lang->program->beginGreateChild   = 'La date de début du programme parent doit être ≤ à la date de début minimum du %s: %s.';
+$lang->program->endLetterChild     = 'Le temps de fin du programme parent doit être ≥ au temps de fin maximum du %s: %s.';
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'It has child programs or projects. You cannot delete it.';
 $lang->program->hasProduct         = 'It has products. You cannot delete it.';
@@ -112,6 +113,7 @@ $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->checkedProjects    = "Pour s électionner l'élément% s";
+$lang->program->budgetOverrun      = "Le budget du programme a dépassé le budget restant du programme parent:";
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
@@ -138,12 +140,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all']       = 'All';
-$lang->program->featureBar['undone']    = 'Non Terminées';
-$lang->program->featureBar['wait']      = 'En Attente';
-$lang->program->featureBar['doing']     = 'En Cours';
-$lang->program->featureBar['suspended'] = 'Suspendues';
-$lang->program->featureBar['closed']    = 'Fermées';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'En Attente';
+$lang->program->featureBar['browse']['doing']     = 'En Cours';
+$lang->program->featureBar['browse']['suspended'] = 'Suspendues';
+$lang->program->featureBar['browse']['closed']    = 'Fermées';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

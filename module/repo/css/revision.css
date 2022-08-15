@@ -1,3 +1,5 @@
 .change ul {margin: 8px; margin-left: 1.5em;}
 .change li {list-style: none;}
 .panel-heading {border-bottom: 1px solid #ddd;}
+.back-btn {margin-right: 5px !important;}
+.compare-all {top: 0 !important;}

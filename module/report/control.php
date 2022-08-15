@@ -315,25 +315,37 @@ class report extends control
         $users[''] = $this->lang->report->annualData->allUser;
 
         $depts = $this->loadModel('dept')->getOptionMenu();
-        $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
-        if(empty($userID)) unset($depts[0]);
+        if($this->app->tab == 'report')
+        {
+            $noDepartment = $depts[0];
+            unset($depts[0]);
+            $depts += array('0' => $noDepartment);
+        }
 
         $accounts = array();
-        if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         if($userID)
         {
-            $user = $this->loadModel('user')->getById($userID, 'id');
-            $dept = $user->dept;
+            $user     = $this->loadModel('user')->getById($userID, 'id');
+            $dept     = $user->dept;
+            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
-        if(empty($accounts)) $accounts = $this->user->getPairs('noletter|noclosed');
-        if($accounts) $accounts = array_keys($accounts);
-
-        if($dept)
+        else
         {
-            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
-            $users = array('' => $this->lang->report->annualData->allUser) + $users;
+            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
+            $users    = array('' => $this->lang->report->annualData->allUser) + $users;
+            $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         }
+        if(!$this->app->user->admin)
+        {
+            foreach($depts as $id => $name) if($id != $this->app->user->dept) unset($depts[$id]);
+        }
+        else
+        {
+            $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
+        }
+
+        if($accounts) $accounts = array_keys($accounts);
 
         /* Get annual data. */
         $data = array();

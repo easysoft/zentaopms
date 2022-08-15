@@ -37,9 +37,6 @@ $().ready(function()
 
 $(function()
 {
-    var heightType = $("[name='heightType']:checked").val();
-    setCardCount(heightType);
-
     /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
     $("#productsBox select[name^='products']").each(function()
     {
@@ -71,8 +68,22 @@ $(function()
         }
     });
 
-    nonClickableSelectedProduct();
-    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
+    /* Init. */
+    $("select[id^=branch]").each(disableSelectedBranch);
+    disableSelectedProduct();
+
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
+    {
+        if($(this).val() == 0)
+        {
+            $("select[id^='branch']").each(disableSelectedBranch);
+
+            disableSelectedProduct();
+        }
+    });
+
+    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 })
 var lastProjectID = $("#project").val();
 

@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = 'Teammitglieder';
 $lang->execution->watermark           = 'Exported by ZenTao';
 $lang->execution->burnXUnit           = '(Date)';
 $lang->execution->burnYUnit           = '(Hours)';
+$lang->execution->count               = '(Count)';
 $lang->execution->waitTasks           = 'Waiting Tasks';
 $lang->execution->viewByUser          = 'By User';
 $lang->execution->oneProduct          = "Only one stage can be linked {$lang->productCommon}";
@@ -136,6 +137,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
@@ -165,7 +167,10 @@ $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
 $lang->execution->lifeTimeList['ops']   = "DevOps";
 
-$lang->team = new stdclass();
+$lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "View by task";
+$lang->execution->cfdTypeList['bug']   = "View By bug";
+
 $lang->team->account    = 'Konto';
 $lang->team->role       = 'Rolle';
 $lang->team->join       = 'Beigetreten';
@@ -221,6 +226,8 @@ $lang->execution->build               = 'Builds';
 $lang->execution->testtask            = 'Testaufgaben';
 $lang->execution->burn                = 'Burndown';
 $lang->execution->computeBurn         = 'Aktualisieren';
+$lang->execution->CFD                 = 'Cumulative Flow diagrams';
+$lang->execution->computeCFD          = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData            = 'Burndown Daten';
 $lang->execution->fixFirst            = 'Bearbeite Mannstunden des ersten Tags';
 $lang->execution->team                = 'Teammitglieder';
@@ -380,8 +387,8 @@ $lang->execution->errorBegin                  = "The start time of {$lang->execu
 $lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->errorLetterProject          = "The start time of stage cannot be less than the start time of the project %s.";
 $lang->execution->errorGreaterProject         = "The end time of stage cannot be greater than the end time %s of the project.";
-$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' "%s" should be ≥ the start date of project %s: %s.';
-$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' "%s" should be ≤ the deadline of project %s: %s.';
+$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' should be ≥ the start date of project : %s.';
+$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
 $lang->execution->accessDenied                = "Zugriff zu {$lang->executionCommon} verweigert!";
 $lang->execution->tips                        = 'Hinweis';
 $lang->execution->afterInfo                   = "{$lang->executionCommon} wurde erstellt. Als nächstes können Sie ";
@@ -405,6 +412,8 @@ $lang->execution->ge                          = "『%s』should be >= actual beg
 $lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
+$lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = 'Seleted %s items';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -422,6 +431,22 @@ $lang->execution->charts->burn->graph->reference    = 'Referenz';
 $lang->execution->charts->burn->graph->actuality    = 'Aktualität';
 $lang->execution->charts->burn->graph->delay        = 'Delay';
 
+$lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cfdTip        = "<p>
+1. The CFD（Cumulative Flow Diagram）reflects the trend of accumulated workload at each stage over time.<br>
+2. The horizontal axis represents the date, and the vertical axis represents the number of work items.<br>
+3. To learn about the team's delivery, you can calculate the WIP quantity, delivery rate and average lead time through the CFD. <p>";
+$lang->execution->charts->cfd->cycleTime     = 'Average cycle time';
+$lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card from development start to completion';
+$lang->execution->charts->cfd->throughput    = 'Throughput Rate';
+$lang->execution->charts->cfd->throughputTip = 'Throughput Rate = WIP / Average cycle time';
+
+$lang->execution->charts->cfd->begin          = 'Begin';
+$lang->execution->charts->cfd->end            = 'End';
+$lang->execution->charts->cfd->errorBegin     = 'The start time cannot be greater than the end time.';
+$lang->execution->charts->cfd->errorDateRange = 'The Cumulative Flow Diagram（CFD） only provides data display within 3 months.';
+$lang->execution->charts->cfd->dateRangeTip   = 'CFD only shows the data within 3 months';
+
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = 'Abkurzung des Projektnamens';
 $lang->execution->placeholder->totalLeft = 'Schätzungen zu Beginn des Projekts.';
@@ -438,6 +463,7 @@ $lang->execution->orderList['stage_desc'] = "Phase Ab.";
 
 $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Kanban Einstellung";
+$lang->execution->setKanban     = "Kanban Einstellung";
 $lang->execution->resetKanban   = "Einstellungen zurücksetzen";
 $lang->execution->printKanban   = "Kanban drucken";
 $lang->execution->fullScreen    = "Full Screen";
@@ -487,6 +513,8 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
 
 $lang->execution->myExecutions = 'Ich bin beteiligt.';
 $lang->execution->doingProject = 'Laufende Projekte';

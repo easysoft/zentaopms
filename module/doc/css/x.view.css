@@ -1,4 +1,4 @@
-.side-col.col-4 {display: none;}
+.side-col.col-4 {display: none; position: unset !important;}
 #main {margin-bottom: 40px;}
 #mainMenu {margin-top: 0px;}
 #mainMenu .btn {display: none;}

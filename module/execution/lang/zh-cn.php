@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = '相关成员';
 $lang->execution->watermark           = '由禅道导出';
 $lang->execution->burnXUnit           = '(日期)';
 $lang->execution->burnYUnit           = '(工时)';
+$lang->execution->count               = '(数量)';
 $lang->execution->waitTasks           = '待处理';
 $lang->execution->viewByUser          = '按用户查看';
 $lang->execution->oneProduct          = "阶段只能关联一个{$lang->productCommon}";
@@ -136,6 +137,7 @@ $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
+$lang->execution->allProject          = '全部项目';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
@@ -165,7 +167,10 @@ $lang->execution->lifeTimeList['short'] = "短期";
 $lang->execution->lifeTimeList['long']  = "长期";
 $lang->execution->lifeTimeList['ops']   = "运维";
 
-$lang->team = new stdclass();
+$lang->execution->cfdTypeList['story'] = "按{$lang->SRCommon}查看";
+$lang->execution->cfdTypeList['task']  = "按任务查看";
+$lang->execution->cfdTypeList['bug']   = "按Bug查看";
+
 $lang->team->account    = '用户';
 $lang->team->role       = '角色';
 $lang->team->join       = '加盟日';
@@ -221,6 +226,8 @@ $lang->execution->build               = '所有版本';
 $lang->execution->testtask            = '测试单';
 $lang->execution->burn                = '燃尽图';
 $lang->execution->computeBurn         = '更新燃尽图';
+$lang->execution->CFD                 = '累积流图';
+$lang->execution->computeCFD          = '更新累积流图';
 $lang->execution->burnData            = '燃尽图数据';
 $lang->execution->fixFirst            = '修改首天工时';
 $lang->execution->team                = '团队成员';
@@ -362,8 +369,8 @@ $lang->execution->noMembers            = '暂时没有团队成员。';
 $lang->execution->workloadTotal        = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip      = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队来复制";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队来复制";
+if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队";
+if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您确定删除{$lang->executionCommon}[%s]吗？";
@@ -380,8 +387,8 @@ $lang->execution->errorBegin                  = "{$lang->executionCommon}的开�
 $lang->execution->errorEnd                    = "{$lang->executionCommon}的截止时间不能大于所属项目的结束时间%s。";
 $lang->execution->errorLetterProject          = "阶段的计划开始时间不能小于所属项目的计划开始时间%s。";
 $lang->execution->errorGreaterProject         = "阶段的计划完成时间不能大于所属项目的计划完成时间%s。";
-$lang->execution->errorCommonBegin            = $lang->executionCommon . '“%s”开始日期应大于等于项目“%s”的开始日期：%s。';
-$lang->execution->errorCommonEnd              = $lang->executionCommon . '“%s”截止日期应小于等于项目“%s”的截止日期：%s。';
+$lang->execution->errorCommonBegin            = $lang->executionCommon . '开始日期应大于等于项目的开始日期：%s。';
+$lang->execution->errorCommonEnd              = $lang->executionCommon . '截止日期应小于等于项目的截止日期：%s。';
 $lang->execution->accessDenied                = "您无权访问该{$lang->executionCommon}！";
 $lang->execution->tips                        = '提示';
 $lang->execution->afterInfo                   = "{$lang->executionCommon}添加成功，您现在可以进行以下操作：";
@@ -405,6 +412,8 @@ $lang->execution->ge                          = "『%s』应当不小于实际�
 $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草稿或已变更状态，请评审通过后再拖动";
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
+$lang->execution->week                        = '周';
+$lang->execution->checkedExecutions           = '已选择%s项';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -422,6 +431,22 @@ $lang->execution->charts->burn->graph->reference    = '参考';
 $lang->execution->charts->burn->graph->actuality    = '实际';
 $lang->execution->charts->burn->graph->delay        = '延期';
 
+$lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cfdTip        = "<p>
+1.累积流图反应各个阶段累积处理的工作项数量随时间的变化趋势。</br>
+2.横轴代表日期，纵轴代表工作项数量。</br>
+3.通过此图可计算出在制品数量，交付速率以及平均前置时间，从而了解团队的交付情况。</p>";
+$lang->execution->charts->cfd->cycleTime     = '平均周期时间';
+$lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启动到完成的周期时间';
+$lang->execution->charts->cfd->throughput    = '吞吐率';
+$lang->execution->charts->cfd->throughputTip = '吞吐率 = 在制品 / 平均周期时间';
+
+$lang->execution->charts->cfd->begin          = '开始日期';
+$lang->execution->charts->cfd->end            = '结束日期';
+$lang->execution->charts->cfd->errorBegin     = '开始日期应小于结束日期';
+$lang->execution->charts->cfd->errorDateRange = '累积流图只提供3个月内的数据展示';
+$lang->execution->charts->cfd->dateRangeTip   = '累积流图只展示3个月内的数据';
+
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = '团队内部的简称';
 $lang->execution->placeholder->totalLeft = "{$lang->executionCommon}开始时的总预计工时";
@@ -438,6 +463,7 @@ $lang->execution->orderList['stage_desc'] = "{$lang->SRCommon}阶段倒序";
 
 $lang->execution->kanban        = "看板";
 $lang->execution->kanbanSetting = "看板设置";
+$lang->execution->setKanban     = "设置看板";
 $lang->execution->resetKanban   = "恢复默认";
 $lang->execution->printKanban   = "打印看板";
 $lang->execution->fullScreen    = "看板全屏展示";
@@ -487,6 +513,8 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['build']['all'] = '所有版本';
 
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';

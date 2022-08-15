@@ -36,11 +36,15 @@ $config->kanban->splitcolumn->requiredFields   = 'name,limit';
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->closespace    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->activatespace = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->createspace   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->editspace     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->create        = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->edit          = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->createcard    = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->activate      = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->close         = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->editcard      = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->viewcard      = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->viewcard      = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->kanban->editor->activatecard  = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->fromType         = array('execution', 'productplan', 'release', 'build');

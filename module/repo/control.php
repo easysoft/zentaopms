@@ -78,9 +78,6 @@ class repo extends control
      */
     public function maintain($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->switcherMenu = '';
-        if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
-
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
@@ -145,14 +142,14 @@ class repo extends control
         $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
         $productID = count($products) > 0 ? key($products) : '';
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]  = $this->lang->repo->create;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $products;
-        $this->view->productID   = $productID;
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
-        $this->view->objectID    = $objectID;
+        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[]   = $this->lang->repo->create;
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products     = $products;
+        $this->view->productID    = $productID;
+        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID     = $objectID;
 
         $this->display();
     }
@@ -185,25 +182,29 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        if(strtolower($repo->SCM) == 'gitlab')
+        $scm = strtolower($repo->SCM);
+        if(in_array($scm, $this->config->repo->gitServiceList))
         {
-            $gitlabID = isset($repo->gitlab) ? $repo->gitlab : 0;
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
-            $options  = array();
-            foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
+            $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
+            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+            $options   = array();
+            foreach($projects as $project)
+            {
+                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
+                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
+            }
 
             $this->view->projects = $options;
         }
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $repo->repoType          = $repo->id . '-' . $repo->SCM;
-        $this->view->repo        = $repo;
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->gitlabHosts = array('' => '') + $this->loadModel('gitlab')->getPairs();
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo          = $repo;
+        $this->view->repoID        = $repoID;
+        $this->view->objectID      = $objectID;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -236,11 +237,7 @@ class repo extends control
 
         if($error) return print(js::alert($error));
 
-        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
-
+        $this->repo->delete(TABLE_REPO, $repoID);
         if(dao::isError()) return print(js::error(dao::getError()));
         echo js::reload('parent');
     }
@@ -500,6 +497,7 @@ class repo extends control
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
+        $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
         $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
         $this->view->branchOrTag     = $branchOrTag;
 
@@ -1139,18 +1137,81 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($repoID, $type = 'repo', $objectID = 0)
+    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse')
     {
-        $repos = $this->repo->getRepoPairs($type, $objectID);
-        $reposHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
-        foreach($repos as $id => $repoName)
+        if($module == 'repo' and !in_array($method, array('review', 'diff'))) $method = 'browse';
+        if($module == 'mr')  $method = 'browse';
+        if($module == 'job') $method = 'browse';
+        if($module == 'compile' and $method == 'logs') $method = 'browse';
+        if($module == 'bug' and $method == 'view')
         {
-            $selected = $id == $repoID ? 'selected' : '';
-            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "class='$selected' data-app='{$this->app->tab}'");
+            $module = 'repo';
+            $method = 'review';
         }
-        $reposHtml .= '</div></div></div>';
 
-        return print($reposHtml);
+        /* Get repo group by type. */
+        $repoGroup = $this->repo->getRepoGroup($this->app->tab);
+        if($module == 'mr')
+        {
+            foreach($repoGroup as $type => $group)
+            {
+                if(!in_array(strtolower($type), $this->config->repo->gitServiceList)) unset($repoGroup[$type]);
+            }
+        }
+
+        $this->view->repoID    = $repoID;
+        $this->view->repoGroup = $repoGroup;
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s");
+
+        $this->display();
+    }
+
+    /**
+     * Ajax get hosts.
+     *
+     * @param  int    $scm
+     * @access public
+     * @return void
+     */
+    public function ajaxGetHosts($scm)
+    {
+        $scm   = strtolower($scm);
+        $hosts = $this->loadModel($scm)->getPairs();
+        return print(html::select('pipelineHost', $hosts, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Ajax get projects by server.
+     *
+     * @param  int    $serverID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects($serverID)
+    {
+        $server         = $this->loadModel('pipeline')->getByID($serverID);
+        $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
+
+        $this->$getProjectFunc($serverID);
+    }
+
+    /**
+     * Ajax get gitea projects.
+     *
+     * @param  string    $gitlabID
+     * @param  string    $projectIdList
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGiteaProjects($giteaID)
+    {
+        $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
+        if(!$projects) $this->send(array('message' => array()));
+
+        $options = "<option value=''></option>";
+        foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
+
+        return print($options);
     }
 
     /**
@@ -1185,7 +1246,6 @@ class repo extends control
                 }
             }
         }
-
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
@@ -1282,5 +1342,73 @@ class repo extends control
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
         echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+    }
+
+    /**
+     * Download zip code.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function downloadCode($repoID = 0, $branch = '')
+    {
+        $repo     = $this->repo->getRepoByID($repoID);
+        $savePath = $this->app->getDataRoot() . 'repo';
+        $fileName = $savePath . DS . $repo->name . '.zip';
+        if(!is_dir($savePath))
+        {
+            if(!is_writable($this->app->getDataRoot())) return print(js::alert(sprintf($this->lang->repo->error->noWritable, dirname($savePath))) . js::close());
+            mkdir($savePath, 0777, true);
+        }
+
+        $repo = $this->repo->getRepoByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $url = $this->scm->getDownloadUrl($branch);
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
+            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
+        }
+        elseif($repo->SCM == 'Git')
+        {
+            $gitDir = scandir($repo->path);
+            $files  = '';
+            foreach($gitDir as $path)
+            {
+                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
+            }
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($fileName);
+            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+        }
+        else
+        {
+            /* Checkout repo. */
+            chdir($savePath);
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $this->scm->exec('export ' . $repo->path);
+
+            /* Get repo name. */
+            $pathList = explode('/', trim($repo->path, '/'));
+            $repoDir  = end($pathList);
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($fileName);
+            if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+        }
+
+        $this->locate($url);
     }
 }

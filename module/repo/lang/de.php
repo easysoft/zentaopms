@@ -8,9 +8,9 @@ $lang->repo->create          = 'Create';
 $lang->repo->maintain        = 'Repo List';
 $lang->repo->edit            = 'Edit';
 $lang->repo->delete          = 'Delete Repo';
-$lang->repo->showSyncCommit  = 'Display Synchronization';
+$lang->repo->showSyncCommit  = 'Display Sync';
 $lang->repo->ajaxSyncCommit  = 'Interface: Ajax Sync Note';
-$lang->repo->setRules        = 'Set rules';
+$lang->repo->setRules        = 'Set Rules';
 $lang->repo->download        = 'Download File';
 $lang->repo->downloadDiff    = 'Download Diff';
 $lang->repo->addBug          = 'Add Review';
@@ -30,16 +30,23 @@ $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';
 $lang->repo->editAction      = 'Edit Repo';
-$lang->repo->diffAction      = 'Revision Diff';
+$lang->repo->diffAction      = 'Diff Revision';
 $lang->repo->downloadAction  = 'Download File';
 $lang->repo->revisionAction  = 'Revision Detail';
-$lang->repo->blameAction     = 'Repo Blame';
+$lang->repo->blameAction     = 'Blame';
 $lang->repo->reviewAction    = 'Review List';
+$lang->repo->downloadCode    = 'Download Code';
+$lang->repo->downloadZip     = 'Download Zip file';
+$lang->repo->sshClone        = 'Clone with SSH';
+$lang->repo->httpClone       = 'Clone with HTTP';
+$lang->repo->cloneUrl        = 'Clone URL';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
 $lang->repo->addComment = 'Add Comment';
 
+$lang->repo->copy     = 'Click to copy';
+$lang->repo->copied   = 'Copy successful';
 $lang->repo->module   = 'Module';
 $lang->repo->type     = 'Type';
 $lang->repo->assign   = 'AssignTo';
@@ -106,7 +113,7 @@ $lang->repo->openedDate = 'CreatedDate';
 $lang->repo->latestRevision = 'Latest Revision';
 $lang->repo->actionInfo     = "Add by %s in %s";
 $lang->repo->changes        = "Change Log";
-$lang->repo->reviewLocation = "File: %s@%s, line:%s - %s";
+$lang->repo->reviewLocation = "File: %s@%s, Line: %s - %s";
 $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "Other Changes";
@@ -119,7 +126,7 @@ $lang->repo->objectIdRule = 'Object ID Rule';
 $lang->repo->actionRule   = 'Action Rule';
 $lang->repo->manHourRule  = 'Man-hour Rule';
 $lang->repo->ruleUnit     = "Unit";
-$lang->repo->ruleSplit    = "Multiple keywords are divided by ';'. For example: task multiple keywords: Task;task";
+$lang->repo->ruleSplit    = "Multiple keywords are divided by ';', e.g. task multiple keywords: Task;task";
 
 $lang->repo->viewDiffList['inline'] = 'Inline';
 $lang->repo->viewDiffList['appose'] = 'Parallel';
@@ -135,12 +142,16 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
-$lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Subversion'] = 'SVN';
 
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'Project';
+
+$lang->repo->serviceHost    = 'Host';
+$lang->repo->serviceProject = 'Project';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
@@ -149,12 +160,12 @@ $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';
 $lang->repo->notice->syncComplete   = 'Synchronized. Now redirecting ...';
 $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
-$lang->repo->notice->delete         = 'Are you sure delete this repo?';
+$lang->repo->notice->delete         = 'Do you want to delete this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
 $lang->repo->notice->commentContent = 'Comment';
 $lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
-$lang->repo->notice->deleteBug      = 'Are you sure to delete this bug?';
-$lang->repo->notice->deleteComment  = 'Are you sure to delete this comment?';
+$lang->repo->notice->deleteBug      = 'Do you want to delete this bug?';
+$lang->repo->notice->deleteComment  = 'Do you want to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
 
 $lang->repo->rules = new stdclass();
@@ -182,14 +193,16 @@ $lang->repo->error->noFile        = '%s does not exist.';
 $lang->repo->error->noPriv        = 'The program does not have the privilege  to switch to %s';
 $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n";
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
-$lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
+$lang->repo->error->encoding      = "The encoding might be wrong. Please change the encoding and try again.";
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
 $lang->repo->error->linkedJob     = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
+$lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
+$lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
-$lang->repo->encodingsTips     = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
+$lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";
 $lang->repo->pathTipsForGitlab = "GitLab Project URL";
 
 $lang->repo->example              = new stdclass();

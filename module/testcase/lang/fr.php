@@ -94,7 +94,7 @@ $lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
-$lang->testcase->lib              = 'Lib';
+$lang->testcase->executionStatus  = 'executionStatus';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -235,6 +235,7 @@ $lang->testcase->noLibrary        = "Aucune library n'existe. Créez-en une pour
 $lang->testcase->mustChooseResult = 'La Validation du résultat est nécessaire.';
 $lang->testcase->noModule         = "<div>Vous n'avez aucun modules.</div><div>Gérer les modules maintenant.</div>";
 $lang->testcase->noCase           = "Aucun CasTest pour l'instant. ";
+$lang->testcase->importedCases    = 'Le cas d\'utilisation avec l\'ID %s est déjà importé dans le même module, il est donc ignoré.';
 
 $lang->testcase->searchStories = 'Rechercher des stories';
 $lang->testcase->selectLib     = 'Sélectionner Library';

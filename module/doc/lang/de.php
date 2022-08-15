@@ -48,7 +48,7 @@ $lang->doc->common       = 'Dok';
 $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
 $lang->doc->project      = 'Project';
-$lang->doc->execution    = $lang->executionCommon;
+$lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothek';
 $lang->doc->module       = 'Modul';
 $lang->doc->object       = 'Object';
@@ -136,22 +136,23 @@ $lang->doc->menuTitle        = 'Menu';
 
 $lang->doc->collectAction = 'Add Favorite';
 
-$lang->doc->libName        = 'Name';
-$lang->doc->libType        = 'Kategorie';
-$lang->doc->custom         = 'Eigene Dok Bibliothek';
-$lang->doc->customAB       = 'Eigene Bibliothek';
-$lang->doc->createLib      = 'Document Library';
-$lang->doc->allLibs        = 'Bibliothek';
-$lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
-$lang->doc->showFiles      = 'Dok Bibliothek';
-$lang->doc->editLib        = 'Edit Document Library';
-$lang->doc->deleteLib      = 'Bibliothek löschen';
-$lang->doc->fixedMenu      = 'Im Menü fixieren';
-$lang->doc->removeMenu     = 'Vom Menü entfernen';
-$lang->doc->search         = 'Suche';
-$lang->doc->allCollections = 'All Collections';
-$lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
-$lang->doc->sortLibs       = 'Sort Libs';
+$lang->doc->libName          = 'Name';
+$lang->doc->libType          = 'Kategorie';
+$lang->doc->custom           = 'Eigene Dok Bibliothek';
+$lang->doc->customAB         = 'Eigene Bibliothek';
+$lang->doc->createLib        = 'Document Library';
+$lang->doc->allLibs          = 'Bibliothek';
+$lang->doc->objectLibs       = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
+$lang->doc->showFiles        = 'Dok Bibliothek';
+$lang->doc->editLib          = 'Edit Document Library';
+$lang->doc->deleteLib        = 'Bibliothek löschen';
+$lang->doc->fixedMenu        = 'Im Menü fixieren';
+$lang->doc->removeMenu       = 'Vom Menü entfernen';
+$lang->doc->search           = 'Suche';
+$lang->doc->allCollections   = 'All Collections';
+$lang->doc->keywordsTips     = 'Please use commas to separate multiple keywords.';
+$lang->doc->sortLibs         = 'Sort Libs';
+$lang->doc->titlePlaceholder = 'Please enter the title';
 
 global $config;
 /* Query condition list. */
@@ -161,7 +162,7 @@ $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Bibliothek';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project Library';
-$lang->doc->libTypeList['execution'] = $lang->executionCommon . ' Bibliothek';
+$lang->doc->libTypeList['execution'] = $lang->execution->common . ' Bibliothek';
 $lang->doc->libTypeList['api']       = 'API Library';
 $lang->doc->libTypeList['custom']    = 'Eigene Bibliothek';
 
@@ -251,8 +252,8 @@ $lang->doc->noticeAcl['lib']['project']['default']   = 'Users who can access the
 $lang->doc->noticeAcl['lib']['project']['open']      = 'Users who can access the selected project can access it.';
 $lang->doc->noticeAcl['lib']['project']['private']   = 'Users who can access the selected project or users in the whiltelist can access it.';
 $lang->doc->noticeAcl['lib']['project']['custom']    = 'Users who can access the selected project or users in the whiltelist can access it.';
-$lang->doc->noticeAcl['lib']['execution']['default'] = "Users who can access the selected {$lang->executionCommon} can access it.";
-$lang->doc->noticeAcl['lib']['execution']['custom']  = "Users who can access the selected {$lang->executionCommon} or users in the whiltelist can access it.";
+$lang->doc->noticeAcl['lib']['execution']['default'] = "Users who can access the selected {$lang->execution->common} can access it.";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "Users who can access the selected {$lang->execution->common} or users in the whiltelist can access it.";
 $lang->doc->noticeAcl['lib']['api']['open']          = 'All users can access it.';
 $lang->doc->noticeAcl['lib']['api']['custom']        = 'Users in the whitelist can access it.';
 $lang->doc->noticeAcl['lib']['api']['private']       = 'Only the one who created it can access it.';

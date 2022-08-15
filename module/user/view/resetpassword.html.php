@@ -27,7 +27,10 @@ include '../../common/view/header.lite.html.php';
             <tbody>
               <div class='form-group'>
                 <label for='password1'><?php echo $lang->user->password;?></label>
-                <?php echo html::password('password1', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}'");?>
+                <span class='input-group'>
+                  <?php echo html::password('password1', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+                  <span class='input-group-addon' id='passwordStrength'></span>
+                </span>
               </div>
               <div class='form-group'>
                 <label for='password2'><?php echo $lang->user->password2AB;?></label>
@@ -37,6 +40,7 @@ include '../../common/view/header.lite.html.php';
                 <td colspan='2' class="form-actions text-center">
                   <?php
                   echo html::hidden('account', $user->account);
+                  echo html::hidden('passwordStrength', '');
                   echo html::submitButton($lang->user->submit);
                   echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
                   ?>
@@ -50,4 +54,5 @@ include '../../common/view/header.lite.html.php';
   </div>
 </div>
 <?php endif;?>
+<?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -62,6 +62,8 @@ $(function()
             }
             else
             {
+                if(!unlinkTaskIdList) return false;
+
                 $('#storyIdList').val(unlinkTaskIdList);
             }
         }

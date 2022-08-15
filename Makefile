@@ -7,8 +7,8 @@ XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 #RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
 XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
-BUILD_PATH    := /home/z/ci/build/
-RELEASE_PATH  := /home/z/ci/release/
+BUILD_PATH    := /home/z/ci/pip_build/
+RELEASE_PATH  := /home/z/ci/pip_release/
 
 all:
 	make clean
@@ -143,9 +143,10 @@ zentaoxx:
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
+	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
-	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
+	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
 	rm -rf zentaoxx/tools
 	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	#rm -rf xuan.zip xuan zentaoxx

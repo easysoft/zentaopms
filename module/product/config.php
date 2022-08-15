@@ -93,7 +93,7 @@ $app->loadLang('product');
 $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
-$config->product->all->search['fields']['code']        = $lang->product->code;
+if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
 $config->product->all->search['fields']['id']          = $lang->product->id;
 if($config->systemMode == 'new') $config->product->all->search['fields']['program'] = $lang->product->program;
 $config->product->all->search['fields']['line']        = $lang->product->line;

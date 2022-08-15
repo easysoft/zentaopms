@@ -68,6 +68,8 @@ $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
+$lang->moduleOrder[230] = 'app';
+$lang->moduleOrder[235] = 'gitea';
 
 $lang->resource = new stdclass();
 
@@ -511,6 +513,9 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'trackAB';
 $lang->resource->story->processStoryChange = 'processStoryChange';
+$lang->resource->story->linkStories        = 'linkStoriesAB';
+
+if($config->URAndSR) $lang->resource->story->linkRequirements = 'linkRequirementsAB';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -540,6 +545,9 @@ $lang->story->methodOrder[125] = 'batchChangeModule';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'track';
 $lang->story->methodOrder[140] = 'processStoryChange';
+$lang->story->methodOrder[145] = 'linkStories';
+
+if($config->URAndSR) $lang->story->methodOrder[150] = 'linkRequirements';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -622,6 +630,7 @@ $lang->resource->kanban->activateSpace      = 'activateSpace';
 $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
+$lang->resource->kanban->setting            = 'setting';
 $lang->resource->kanban->view               = 'view';
 $lang->resource->kanban->activate           = 'activate';
 $lang->resource->kanban->close              = 'close';
@@ -734,6 +743,8 @@ $lang->resource->execution->bug               = 'bug';
 $lang->resource->execution->testreport        = 'testreport';
 $lang->resource->execution->burn              = 'burn';
 $lang->resource->execution->computeBurn       = 'computeBurnAction';
+$lang->resource->execution->cfd               = 'CFD';
+$lang->resource->execution->computeCFD        = 'computeCFD';
 $lang->resource->execution->fixFirst          = 'fixFirst';
 $lang->resource->execution->burnData          = 'burnData';
 $lang->resource->execution->team              = 'teamAction';
@@ -763,6 +774,7 @@ $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->storyView         = 'storyView';
 if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
+$lang->resource->execution->setKanban         = 'setKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -792,6 +804,8 @@ $lang->execution->methodOrder[115] = 'testtask';
 $lang->execution->methodOrder[120] = 'testreport';
 $lang->execution->methodOrder[125] = 'burn';
 $lang->execution->methodOrder[130] = 'computeBurn';
+$lang->execution->methodOrder[132] = 'cfd';
+$lang->execution->methodOrder[133] = 'computeCFD';
 $lang->execution->methodOrder[135] = 'fixFirst';
 $lang->execution->methodOrder[140] = 'burnData';
 $lang->execution->methodOrder[145] = 'team';
@@ -819,6 +833,7 @@ $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[265] = 'executionkanban';
 $lang->execution->methodOrder[270] = 'kanban';
+$lang->execution->methodOrder[275] = 'setKanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -1141,6 +1156,7 @@ $lang->resource->repo->download        = 'downloadAction';
 $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
 $lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
+$lang->resource->repo->downloadCode    = 'downloadCode';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1156,6 +1172,7 @@ $lang->repo->methodOrder[55] = 'blame';
 $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 $lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
+$lang->repo->methodOrder[75] = 'downloadCode';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1276,6 +1293,7 @@ $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 $lang->resource->custom->kanban             = 'kanban';
+$lang->resource->custom->code               = 'code';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1292,6 +1310,8 @@ $lang->custom->methodOrder[60] = 'editStoryConcept';
 $lang->custom->methodOrder[65] = 'browseStoryConcept';
 $lang->custom->methodOrder[70] = 'setDefaultConcept';
 $lang->custom->methodOrder[75] = 'deleteStoryConcept';
+$lang->custom->methodOrder[80] = 'kanban';
+$lang->custom->methodOrder[85] = 'code';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
@@ -1336,17 +1356,11 @@ $lang->resource->gitlab->browseBranch         = 'browseBranch';
 $lang->resource->gitlab->webhook              = 'webhook';
 $lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
-$lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
-$lang->resource->gitlab->createBranchPriv     = 'createBranchPriv';
-$lang->resource->gitlab->editBranchPriv       = 'editBranchPriv';
-$lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
+$lang->resource->gitlab->manageBranchPriv     = 'browseBranchPriv';
+$lang->resource->gitlab->manageTagPriv        = 'browseTagPriv';
 $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
-$lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
-$lang->resource->gitlab->createTagPriv        = 'createTagPriv';
-$lang->resource->gitlab->editTagPriv          = 'editTagPriv';
-$lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1373,9 +1387,27 @@ $lang->gitlab->methodOrder[115] = 'browseBranch';
 $lang->gitlab->methodOrder[120] = 'webhook';
 $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
-$lang->gitlab->methodOrder[135] = 'browseTag';
-$lang->gitlab->methodOrder[140] = 'browseTagPriv';
-$lang->gitlab->methodOrder[145] = 'deleteTagPriv';
+$lang->gitlab->methodOrder[135] = 'manageBranchPriv';
+$lang->gitlab->methodOrder[140] = 'manageTagPriv';
+$lang->gitlab->methodOrder[145] = 'browseTag';
+$lang->gitlab->methodOrder[150] = 'createTag';
+$lang->gitlab->methodOrder[155] = 'deleteTag';
+
+/* Gitea. */
+$lang->resource->gitea = new stdclass();
+$lang->resource->gitea->browse   = 'browse';
+$lang->resource->gitea->create   = 'create';
+$lang->resource->gitea->edit     = 'edit';
+$lang->resource->gitea->view     = 'view';
+$lang->resource->gitea->delete   = 'delete';
+$lang->resource->gitea->bindUser = 'bindUser';
+
+$lang->gitea->methodOrder[5]  = 'browse';
+$lang->gitea->methodOrder[10] = 'create';
+$lang->gitea->methodOrder[15] = 'edit';
+$lang->gitea->methodOrder[20] = 'view';
+$lang->gitea->methodOrder[25] = 'delete';
+$lang->gitea->methodOrder[30] = 'bindUser';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();
@@ -1436,6 +1468,12 @@ $lang->mr->methodOrder[80] = 'approval';
 $lang->mr->methodOrder[85] = 'close';
 $lang->mr->methodOrder[90] = 'reopen';
 $lang->mr->methodOrder[95] = 'addReview';
+
+/* App. */
+$lang->resource->app = new stdclass();
+$lang->resource->app->serverlink = 'serverLink';
+
+$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();

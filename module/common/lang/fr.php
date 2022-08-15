@@ -52,6 +52,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset          = 'Réinitialiser';
 $lang->cancel         = 'Annuler';
 $lang->refresh        = 'Rafraichir';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = 'Create';
 $lang->edit           = 'Editer';
 $lang->delete         = 'Supprimer';
@@ -149,6 +150,7 @@ $lang->openedByAB   = 'Créé par';
 $lang->assignedToAB = 'Affecté à';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
@@ -196,6 +198,8 @@ $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -282,6 +286,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';
@@ -368,6 +373,7 @@ $lang->error->companyNotFound = "Le domaine %s ne peut être trouvé !";
 $lang->error->length          = array("『 %s 』erreur de longueur. Il devrait être『%s』", "La longueur de 『%s』devrait être <=『%s』et >『%s』.");
 $lang->error->reg             = "『 %s 』erreur de format. Il devrait être『%s』.";
 $lang->error->unique          = "『 %s 』『 %s 』existes. Allez à Admin->System->Data->Recycle Bin pour le restaurer, si vous êtes sûr qu'il est supprimé.";
+$lang->error->repeat          = "『 %s 』『 %s 』existes.";
 $lang->error->gt              = "『 %s 』devrait être > 『 %s 』.";
 $lang->error->ge              = "『 %s 』devrait être >= 『 %s 』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
@@ -459,6 +465,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

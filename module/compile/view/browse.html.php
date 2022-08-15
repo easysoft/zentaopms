@@ -14,8 +14,8 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a($this->createLink('job', 'browse'), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link'");
-    echo html::a($this->createLink('compile', 'browse'), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
+    echo html::a($this->createLink('job', 'browse', "repoID=$repoID"), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link'");
+    echo html::a($this->createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID"), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
     ?>
   </div>
 </div>
@@ -28,22 +28,22 @@
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='buildList' class='table has-sort-head table-fixed'>
       <thead>
-        <tr class='text-center'>
-          <?php $vars = "jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <tr>
+          <?php $vars = "repoID=$repoID&jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
-          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
-          <th class='c-build-type text-left'><?php echo $lang->compile->buildType;?></th>
-          <th class='c-repo text-left'><?php echo $lang->job->repo;?></th>
-          <th class='text-left'><?php echo $lang->job->triggerType;?></th>
-          <th class='c-status text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
-          <th class='c-date text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
-          <th class='c-actions'><?php echo $lang->actions;?></th>
+          <th class='text'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
+          <th class='c-build-type'><?php echo $lang->compile->buildType;?></th>
+          <th class='c-repo'><?php echo $lang->job->repo;?></th>
+          <th class='text'><?php echo $lang->job->triggerType;?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
+          <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody class='text-left'>
         <?php foreach($buildList as $id => $build):?>
         <tr>
-          <td class='text-center'><?php echo $id;?></td>
+          <td class='text'><?php echo $id;?></td>
           <td class='c-name' title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
           <td title='<?php echo $build->engine;?>'><?php echo $build->engine;?></td>
           <td title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
@@ -51,7 +51,7 @@
           <?php $triggerConfig = $this->loadModel('job')->getTriggerConfig($build);?>
           <td title='<?php echo $triggerConfig;?>'><?php echo $triggerConfig;?></td>
           <?php $buildStatus = zget($lang->compile->statusList, $build->status);?>
-          <td class='text-center' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
+          <td class='text' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
           <td title='<?php echo $build->createdDate;?>'><?php echo $build->createdDate;?></td>
           <td class='c-actions text-left'>
             <?php

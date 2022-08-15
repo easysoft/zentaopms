@@ -31,22 +31,22 @@
       <span class="label label-id"><?php echo $MR->id ?></span>
       <span class="text" title='<?php echo $MR->title; ?>'><?php echo  $MR->title; ?></span>
       <?php if($MR->synced):?>
-      <span class="text" title='<?php echo $MR->title; ?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGitlab, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
+      <span class="text" title='<?php echo $MR->title; ?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGit, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
       <?php endif;?>
     </div>
   </div>
 </div>
 
-<div id="mainContent" class="main-content">
+<div class="main-content">
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
       <li class='active'><?php echo html::a('###', $lang->mr->view);?></li>
-      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
+      <li><?php echo html::a(inlink('diff', "MRID={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
-    <div class='tab-content main-row'>
+    <div class='tab-content main-row' id="mainContent">
       <div class="main-col col-8">
         <div class="cell">
           <div class="detail">
@@ -85,7 +85,7 @@
                    </tr>
                    <tr>
                      <th><?php echo $lang->mr->MRHasConflicts; ?></th>
-                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict; ?>
+                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;?>
                      <td><?php echo ($hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
                   </tr>
                    <tr>
@@ -105,6 +105,10 @@
         <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch); ?></div>
         <?php endif; ?>
 
+        <?php if($this->app->getViewType() != 'xhtml'):?>
+        <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+        <?php endif;?>
+
         <div class='main-actions'>
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>
@@ -112,16 +116,16 @@
             <?php if($MR->synced and $rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
             <?php if($MR->synced and $rawMR->state == 'opened'): ?>
               <?php if($rawMR->has_conflicts or (!empty($compile->id) and $compile->status != 'success') or $MR->approvalStatus == 'approved'):?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
               <?php else:?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
               <?php endif;?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=reject", $MR, 'button', 'bug', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, ($MR->approvalStatus == 'rejected' ? 'disabled' : ''), $lang->mr->reject);?>
-              <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
-              <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=reject", $MR, 'button', 'bug', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, ($MR->approvalStatus == 'rejected' ? 'disabled' : ''), $lang->mr->reject);?>
+              <?php common::printIcon('mr', 'close', "MRID=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
+              <?php common::printIcon('mr', 'edit', "MRID=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
             <?php if($MR->synced and $rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
-            <?php if($projectOwner) common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
+            <?php if($projectOwner) common::printIcon('mr', 'delete', "MRID=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>
       </div>

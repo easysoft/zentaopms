@@ -251,9 +251,10 @@ class api extends control
 
 
             $id = $this->api->createStruct($data);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $this->action->create('apistruct', $id, 'Created');
 
-            if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
         }
 
@@ -352,7 +353,7 @@ class api extends control
 
         $this->view->type   = $type;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -387,7 +388,7 @@ class api extends control
 
         $this->view->doc    = $doc;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -455,7 +456,7 @@ class api extends control
         $this->getTypeOptions($api->lib);
 
         $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
@@ -635,7 +636,7 @@ class api extends control
             if(intval($libID) > 0 and common::hasPriv('api', 'create'))
             {
                 $menu .= "<li>";
-                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
+                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->createApi, '', "data-app='{$this->app->tab}'");
                 $menu .= "</li>";
             }
 

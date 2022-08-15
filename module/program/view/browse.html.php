@@ -17,17 +17,19 @@
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('hasProject', $hasProject);?>
 <?php js::set('checkedProjects', $lang->program->checkedProjects);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if($programType == 'bygrid'):?>
 <style>#mainMenu{padding-left: 10px; padding-right: 10px;}</style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->program->featureBar as $key => $label):?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->program->featureBar['browse'] as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
+    <?php if($status == 'all' or $status == 'bySearch') echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
     <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true) echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
@@ -42,7 +44,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
-      <?php common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
+      <?php if($status == 'all') common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
     </p>
   </div>
   <?php else:?>

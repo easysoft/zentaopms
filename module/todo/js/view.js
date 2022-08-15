@@ -1,5 +1,7 @@
 $(function()
 {
+    if(config.onlybody == 'yes') $('.main-actions').css('width', '100%');
+
     $('#toStoryLink').click(function()
     {
         $('#productModal .modal-body .input-group .input-group-btn').addClass('hidden');

@@ -271,6 +271,7 @@ $filter->project->task->cookie['projectTaskOrder']       = 'reg::orderBy';
 $filter->project->task->cookie['windowWidth']            = 'int';
 $filter->project->export->cookie['checkedItem']          = 'reg::checked';
 $filter->project->execution->cookie['pagerExecutionAll'] = 'int';
+$filter->project->execution->cookie['showTask']          = 'code';
 
 $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';

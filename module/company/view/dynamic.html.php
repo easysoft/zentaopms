@@ -64,6 +64,7 @@
       </div>
       <ul class="timeline timeline-tag-left <?php if($browseType == 'all') echo 'margin-l-50px';?>">
         <?php foreach($actions as $i => $action):?>
+        <?php if($action->action == 'adjusttasktowait') continue;?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
         <li <?php if($action->major) echo "class='active'";?>>
           <div>
@@ -74,7 +75,7 @@
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <span class="label label-id"><?php echo ($action->objectType == 'module' and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
               <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>

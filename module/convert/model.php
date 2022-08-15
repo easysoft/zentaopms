@@ -989,12 +989,14 @@ class convertModel extends model
             if(empty($data->RELEASEDATE)) continue;
 
             $release = new stdclass();
-            $release->product = $build->product;
-            $release->build   = $buildID;
-            $release->name    = $build->name;
-            $release->date    = $build->date;
-            $release->desc    = $data->DESCRIPTION;
-            $release->status  = 'normal';
+            $release->product     = $build->product;
+            $release->build       = $buildID;
+            $release->name        = $build->name;
+            $release->date        = $build->date;
+            $release->desc        = $data->DESCRIPTION;
+            $release->status      = 'normal';
+            $release->createdBy   = $this->app->user->account;
+            $release->createdDate = helper::now();
 
             $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
             $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();

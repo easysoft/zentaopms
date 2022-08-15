@@ -30,7 +30,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
-      <?php if(common::hasPriv('execution', 'create')):?>
+      <?php if(common::hasPriv('execution', 'create') and $allExecutionsNum):?>
       <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->project->createKanban, '', "class='btn btn-info' data-app='project'");?>
       <?php endif;?>
     </p>

@@ -1,2 +1,3 @@
 #legendLifeTime .thWidth {width: 100px !important;}
 #legendRelated .thWidth {width: 110px !important;}
+#legendRelated .table-data tbody>tr>th {width: 105px;}

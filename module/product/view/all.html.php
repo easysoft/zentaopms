@@ -13,6 +13,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
@@ -256,6 +257,7 @@
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
 <?php js::set('checkedProducts', $lang->product->checkedProducts);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>
 #productListForm {overflow: hidden;}

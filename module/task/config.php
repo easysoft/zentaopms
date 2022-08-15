@@ -28,7 +28,7 @@ $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleToo
 
 $config->task->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID,product';
 $config->task->exportFields = '
-    id, execution, module, story,
+    id, execution, module, story, fromBug,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
     mailto, progress, mode,
@@ -94,7 +94,7 @@ $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
 $config->task->datatable->fieldList['progress']['fixed']    = 'no';
-$config->task->datatable->fieldList['progress']['width']    = '50';
+$config->task->datatable->fieldList['progress']['width']    = '80';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['sort']     = 'no';
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;

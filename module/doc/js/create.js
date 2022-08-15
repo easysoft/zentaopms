@@ -26,12 +26,12 @@ $(function()
         if($(this).hasClass('ke-selected'))
         {
             $('#submit').removeClass('fullscreen-save')
-            $('#submit').addClass('btn-wide')
+            $('.form-actions #submit').addClass('btn-wide')
         }
         else
         {
             $('#submit').addClass('fullscreen-save')
-            $('#submit').removeClass('btn-wide')
+            $('.form-actions #submit').removeClass('btn-wide')
         }
     });
 
@@ -87,7 +87,7 @@ function initPage(type)
         {
             $('#contentBox .contentmarkdown').removeClass('hidden');
             $('#contentBox .contenthtml').addClass('hidden');
-            $('#contentBox #contentType').val(type);
+            $('#contentType').val(type);
         }
     }
     else if(type == 'url')
@@ -149,4 +149,18 @@ function loadWhitelist(libID)
             $('#users').picker();
         }
     });
+}
+
+/**
+ * Redirect to edit page when create the doc of text type.
+ *
+ * @param  int     docID
+ * @param  string  objectType
+ * @param  int     objectID
+ * @param  int     libID
+ * @return void
+ */
+function redirect2Edit(docID, objectType, objectID, libID)
+{
+    parent.location.href = createLink('doc', 'edit', 'docID=' + docID + '&comment=false&objectType=' + objectType + '&objectID=' + objectID + '&libID=' + libID + '&from=create');
 }

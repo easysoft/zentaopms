@@ -35,14 +35,12 @@
       }
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
-
-  $name = $from == 'execution' ? 'execName' : 'name';
-  $code = $from == 'execution' ? 'execCode' : 'code';
-  $PM   = $from == 'execution' ? 'execPM'   : 'PM';
-  $type = $from == 'execution' ? 'execType' : 'type';
-  $desc = $from == 'execution' ? 'execDesc' : 'desc';
-  $status = $from == 'execution' ? 'execStatus' : 'status';
-
+  $name     = $from == 'execution' ? 'execName' : 'name';
+  $code     = $from == 'execution' ? 'execCode' : 'code';
+  $PM       = $from == 'execution' ? 'execPM'   : 'PM';
+  $type     = $from == 'execution' ? 'execType' : 'type';
+  $desc     = $from == 'execution' ? 'execDesc' : 'desc';
+  $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
   <form class='main-form' method='post' target='hiddenwin' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
@@ -51,10 +49,12 @@
           <tr>
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
-            <th class='c-project required' style="width:100%"><?php echo $lang->execution->projectName;?></th>
+            <th class='c-project required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
             <th class='c-code required'><?php echo $lang->execution->$code;?></th>
+            <?php endif;?>
             <th class='c-user<?php echo zget($visibleFields, 'PM',       ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->$PM;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'PO',       ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'QD',       ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
@@ -86,7 +86,9 @@
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "id='names{$executionID}' class='form-control'");?></td>
-            <td><?php echo html::input("codes[$executionID]",     $executions[$executionID]->code, "class='form-control'");?></td>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "class='form-control'");?></td>
+            <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'PM',  ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$executionID]", $pmUsers, $executions[$executionID]->PM, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$executionID]", $poUsers, $executions[$executionID]->PO, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$executionID]", $qdUsers, $executions[$executionID]->QD, "class='form-control picker-select'");?></td>

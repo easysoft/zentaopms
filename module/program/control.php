@@ -28,7 +28,6 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
     {
-        $this->lang->program->featureBar = array('all' => $this->lang->program->featureBar['all']);
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
@@ -54,8 +53,9 @@ class program extends control
             else
             {
                 /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status, $orderBy, $pager, 'top');
-                $programs   = $this->program->getList($status, $orderBy, NULL, 'child', array_keys($topObjects));
+                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+                if(!$topObjects) $topObjects = array(0);
+                $programs   = $this->program->getList($status == 'closed' ? 'closed' : 'all', $orderBy, NULL, 'child', array_keys($topObjects));
 
                 /* Get summary. */
                 $topCount = $indCount = 0;
@@ -193,7 +193,7 @@ class program extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('program', $programID, 'opened');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => $this->session->programList));
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -234,7 +234,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->programList ? $this->session->programList : inLink('browse')));
         }
 
         $program       = $this->program->getByID($programID);
@@ -472,6 +472,9 @@ class program extends control
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
+
+        $allProjectsNum = $this->program->getProjectStats($programID, 'all');
+        $this->view->allProjectsNum = $allProjectsNum;
 
         $this->view->title      = $this->lang->program->project;
         $this->view->position[] = $this->lang->program->project;
@@ -713,6 +716,35 @@ class program extends control
         $program    = $this->program->getByID($programID);
         $budgetLeft = $this->program->getBudgetLeft($program);
         echo number_format($budgetLeft, 2);
+    }
+
+    /**
+     * Ajax get available budget.
+     *
+     * @param  int    $programID
+     * @param  int    $selectedProgramID
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAvailableBudget($programID, $selectedProgramID, $budget)
+    {
+        if(!empty($programID))
+        {
+            $program         = $this->program->getByID($programID);
+            $selectedProgram = $this->program->getByID($selectedProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
+            $availableBudget = $program->parent == $selectedProgramID ? $budgetLeft + $program->budget : $budgetLeft;
+        }
+        else
+        {
+            $selectedProgram = $this->program->getByID($selectedProgramID);
+            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+        }
+
+        $tips = '';
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tips = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->program->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
+        echo json_encode($tips);
     }
 
     /**

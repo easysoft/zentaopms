@@ -115,7 +115,7 @@
                     if($canDelete)
                     {
                         echo '<li>';
-                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin');
+                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}&confirm=no&browseType=$browseType", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin');
                         echo '</li>';
                     }
                     ?>

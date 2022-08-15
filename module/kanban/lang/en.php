@@ -48,6 +48,7 @@ $lang->kanban->removeCard          = 'Remove Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->settingSpace        = 'Setting Space';
+$lang->kanban->settingKanban       = 'Setting Kanban';
 $lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->closeSpace          = 'Close Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
@@ -87,6 +88,7 @@ $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'cla
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
+$lang->kanban->allUsers            = 'Load All Users';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -199,10 +201,13 @@ $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 $lang->kanban->limitExceeded      = 'Limit Exceeded';
 $lang->kanban->fullScreen         = 'Full Screen';
-$lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 $lang->kanban->showWIP            = 'Show WIP';
+$lang->kanban->copyTitle          = 'Please select a Kanban to copy';
+$lang->kanban->copyNoKanban       = 'No Kanban available to copy';
+$lang->kanban->cancelCopy         = 'Cancel Copying';
+$lang->kanban->copyContent        = 'Copy Content';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
@@ -210,6 +215,14 @@ $lang->kanban->error->parentLimitNote   = 'The WIPs in the parent column cannot 
 $lang->kanban->error->childLimitNote    = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
+
+$lang->kanban->orderList['id_asc']          = 'Story ID Ascending';
+$lang->kanban->orderList['id_desc']         = 'Story ID Descending';
+$lang->kanban->orderList['pri_asc']         = 'Story Priority Ascending';
+$lang->kanban->orderList['pri_desc']        = 'Story Priority Descending';
+$lang->kanban->orderList['stage_asc']       = 'Story Stage Ascending';
+$lang->kanban->orderList['stage_desc']      = 'Story Stage Descending';
+$lang->kanban->orderList['assignedTo_desc'] = 'Assigned To';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
@@ -268,6 +281,10 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanban->copyContentList = array();
+$lang->kanban->copyContentList['basicInfo'] = 'Basic Information';
+$lang->kanban->copyContentList['region']    = 'Columns and swimlanes';
 
 $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->common         = 'Kanban Space';
@@ -334,11 +351,11 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
-$lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Keep all columns the same width)</span>";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapts to lane width)</span>";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';
+$lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 3 to 32767.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

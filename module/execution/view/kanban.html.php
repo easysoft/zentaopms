@@ -53,7 +53,6 @@ js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
-js::set('reviewStoryParis', $reviewStoryParis);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');
@@ -119,6 +118,11 @@ js::set('priv',
     )
 );
 ?>
+<?php if($groupBy == 'story' and $browseType == 'task'):?>
+<style>
+.kanban-cols {left: 0px !important;}
+</style>
+<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -144,7 +148,7 @@ js::set('priv',
   <div class='btn-toolbar pull-right'>
     <div class="input-group" id="rdKanbanSearch">
       <div class="input-control search-box" id="rdSearchBox">
-        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>">
+        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>" autocomplete="off">
       </div>
     </div>
     <?php
@@ -152,16 +156,18 @@ js::set('priv',
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     $actions           = '';
     $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
-    $printSettingBtn   = ($printCreateRegion or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
+    $printSettingBtn   = ($printCreateRegion or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'setKanban') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
     if($printSettingBtn)
     {
-        $actions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i>" . $lang->kanban->setting, '', "data-toggle='dropdown' class='btn btn-link'");
-        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
-        $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
+        $actions .= "<div class='btn-group menu-actions'>";
+        $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+        $actions .= "<ul class='dropdown-menu pull-right'>";
+        $width    = common::checkNotCN() ? '600px' : '470px';
         if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
+        if(common::hasPriv('execution', 'setKanban')) $actions .= '<li>' . html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i>' . $lang->execution->setKanban, '', "class='iframe btn btn-link text-left' data-width='$width'") . '</li>';
         $kanbanActions = '';
-        if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='80%'") . '</li>';
         if(common::hasPriv('execution', 'start')) $kanbanActions .= '<li class="startButton hidden">' . html::a(helper::createLink('execution', 'start', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
         if(common::hasPriv('execution', 'putoff')) $kanbanActions .= '<li class="putoffButton hidden">' . html::a(helper::createLink('execution', 'putoff', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
         if(common::hasPriv('execution', 'suspend')) $kanbanActions .= '<li class="suspendButton hidden">' . html::a(helper::createLink('execution', 'suspend', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
@@ -170,9 +176,9 @@ js::set('priv',
         if(common::hasPriv('execution', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$execution->id"), '<i class="icon icon-trash"></i>' . $lang->delete, 'hiddenwin', "class='btn btn-link text-left'") . '</li>';
         if($kanbanActions)
         {
-            $actions .= (common::hasPriv('kanban', 'createRegion') and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+            $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('execution', 'setKanban')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
         }
-        $actions .= "</ul>";
+        $actions .= '</ul></div>';
     }
 
     echo $actions;
@@ -210,7 +216,7 @@ js::set('priv',
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
         <?php if($canImportTask) echo '<li>' . html::a(helper::createLink('execution', 'importTask', "toExecution=$execution->id", '', true), $lang->execution->importTask, '', "class='iframe' data-width=90%") . '</li>';?>
-        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
+        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
     </div>
     <?php endif;?>

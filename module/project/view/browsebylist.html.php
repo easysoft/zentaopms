@@ -33,7 +33,8 @@
   </div>
   <?php endif;?>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->project->featureBar as $key => $label):?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->project->featureBar['browse'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
@@ -73,10 +74,12 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php if(!defined('TUTORIAL')):?>
-        <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
-        <?php else:?>
-        <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
+        <?php if(empty($allProjectsNum)):?>
+          <?php if(!defined('TUTORIAL')):?>
+            <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
+          <?php else:?>
+            <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
+          <?php endif;?>
         <?php endif;?>
       </p>
     </div>

@@ -69,8 +69,7 @@
             <td><?php echo html::select('subgroup_creation_level', $lang->gitlab->group->subgroupCreationLevelList, 'maintainer', "class='form-control'");?></td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php if(!isonlybody()) echo html::a(inlink('browseGroup', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>

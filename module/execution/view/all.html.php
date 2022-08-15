@@ -48,6 +48,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       </ul>
     </div>
     <?php endif;?>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
@@ -58,6 +59,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
     <?php endif;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
@@ -69,16 +71,19 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='execution'></div>
   <?php if(empty($executionStats)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
-      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
-      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
-      <?php else: ?>
-      <?php if(common::hasPriv('execution', 'create')):?>
-      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
-      <?php endif;?>
+      <?php if(empty($allExecutionsNum)):?>
+        <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
+        <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
+        <?php else: ?>
+          <?php if(common::hasPriv('execution', 'create')):?>
+          <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
+          <?php endif;?>
+        <?php endif;?>
       <?php endif;?>
     </p>
   </div>
@@ -89,7 +94,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
     <?php
-    $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+    $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
     if($useDatatable) include '../../common/view/datatable.html.php';
     else              include '../../common/view/tablesorter.html.php';
 
@@ -102,39 +107,11 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <thead>
         <tr>
           <?php
-          if($isStage)
-          {
-              $hasActions = false;
-              foreach($setting as $key => $value)
-              {
-                  if($value->id == 'actions')
-                  {
-                      $hasActions  = true;
-                      $value->show = true;
-                  }
-              }
-
-              if(!$hasActions)
-              {
-                  $data = new stdclass();
-                  $data->id    = 'actions';
-                  $data->order = $value->order + 1;
-                  $data->show  = true;
-                  $data->width = '180px';
-                  $data->fixed = 'right';
-                  $data->title = $lang->actions;
-                  $data->sort  = 'no';
-
-                  $setting[] = $data;
-              }
-          }
-
           foreach($setting as $key => $value)
           {
               if($value->show)
               {
-                  if(!$isStage and in_array($value->id, array('percent', 'attribute', 'actions'))) continue;
-                  if(($config->systemMode == 'classic' or ($config->systemMode == 'new' and $this->app->tab != 'execution')) and $value->id == 'project') continue;
+                  if($config->systemMode == 'classic' and $value->id == 'project') continue;
 
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
                   $columns ++;

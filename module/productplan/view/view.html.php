@@ -45,11 +45,6 @@
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
     <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
-    <div class="linkButton" onclick="handleLinkButtonClick()">
-      <span title="<?php echo $lang->viewDetails;?>">
-        <i class="icon icon-import icon-rotate-270"></i>
-      </span>
-    </div>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -88,7 +83,7 @@
               $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
               echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
               ?>
-              <ul class='dropdown-menu'>
+              <ul class='dropdown-menu pull-right'>
                 <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
                 <li <?php echo $disabled?>>
                   <?php
@@ -194,7 +189,7 @@
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title);
+                  echo html::a($viewLink , $story->title, '', "style='color: $story->color'");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -607,12 +602,6 @@
 <?php js::set('type', $type)?>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <script>
-function handleLinkButtonClick()
-{
-    var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-    window.open(xxcUrl, '_blank');
-}
-
 $(function()
 {
     function handleClientReady()

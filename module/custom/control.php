@@ -125,7 +125,7 @@ class custom extends control
                 foreach($postArray->data->keys as $key)
                 {
                     if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
-                    if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
                     $keys[] = $key;
                 }
             }
@@ -243,9 +243,12 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
-                $data = fixer::input('post')->get();
+                $data     = fixer::input('post')->get();
+                $emptyKey = false;
                 foreach($data->keys as $index => $key)
                 {
+                    if(!$key && $emptyKey) continue;
+
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
 
                     $value  = $data->values[$index];
@@ -253,6 +256,8 @@ class custom extends control
                     if($key and trim($value) === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
 
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+
+                    if(!$key) $emptyKey = true;
                 }
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -604,7 +609,7 @@ class custom extends control
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
-            $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
+            $locate = $this->config->systemMode == 'new' ? 'parent' : 'top';
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
@@ -676,14 +681,17 @@ class custom extends control
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {
-            $fields  = $this->post->fields;
+            $fields = $this->post->fields;
             if(is_array($fields)) $fields = join(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
+            if(in_array($module, array('task', 'testcase', 'story')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
+            if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
         }
         else
         {
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
+
         return print(js::reload('parent'));
     }
 
@@ -839,5 +847,24 @@ class custom extends control
 
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
         return print(js::reload('parent.parent'));
+    }
+
+    /**
+     * Set code.
+     *
+     * @access public
+     * @return void
+     */
+    public function code()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->custom->code;
+
+        $this->display();
     }
 }

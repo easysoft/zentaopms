@@ -39,10 +39,12 @@
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th id="dateRange"><?php echo $lang->execution->dateRange;?></th>
           <td>
@@ -193,20 +195,6 @@
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
-        <tr>
-          <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
-        </tr>
-        <?php if($laneCount > 1):?>
-        <tr>
-          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
-          <td class='laneHeightBox' colspan='2'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
-        </tr>
-        <tr class="hidden" id='cardBox'>
-          <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->execution->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
