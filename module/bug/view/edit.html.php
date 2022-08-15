@@ -173,11 +173,11 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo html::select('os[]', $osList, $bug->os, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('os[]', $lang->bug->osList, $bug->os, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo html::select('browser[]', $browserList, $bug->browser, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('browser[]', $lang->bug->browserList, $bug->browser, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>

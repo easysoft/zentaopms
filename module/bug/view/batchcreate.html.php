@@ -135,8 +135,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?> typeBox' style='overflow:visible'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox' style='overflow:visible'>     <?php echo html::select("pris[$i]", $lang->bug->priList, $pri, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?> severityBox' style='overflow:visible'><?php echo html::select("severities[$i]", $lang->bug->severityList, '3', "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $osList, '', "class='form-control chosen' multiple");?></td>
-            <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $browserList, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $lang->bug->osList, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $lang->bug->browserList, '', "class='form-control chosen' multiple");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
@@ -193,8 +193,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?> typeBox' style='overflow:visible'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox' style='overflow:visible'>     <?php echo html::select("pris[$i]", $lang->bug->priList, $pri, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?> severityBox' style='overflow:visible'><?php echo html::select("severities[$i]", $lang->bug->severityList, '3', "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $osList, '', "class='form-control chosen' multiple");?></td>
-            <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $browserList, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $lang->bug->osList, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $lang->bug->browserList, '', "class='form-control chosen' multiple");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
@@ -252,8 +252,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
       <td class='<?php echo zget($visibleFields, 'type', 'hidden')?> typeBox' style='overflow:visible'>    <?php echo html::select("types[%s]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox' style='overflow:visible'>     <?php echo html::select("pris[%s]", $lang->bug->priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?> severityBox' style='overflow:visible'><?php echo html::select("severities[%s]", $lang->bug->severityList, '3', "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[%s][]", $osList, '', "class='form-control chosen' multiple");?></td>
-      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[%s][]", $browserList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[%s][]", $lang->bug->osList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[%s][]", $lang->bug->browserList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <?php
       $this->loadModel('flow');
@@ -301,8 +301,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
       <td class='<?php echo zget($visibleFields, 'type', 'hidden')?> typeBox' style='overflow:visible'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox' style='overflow:visible'>     <?php echo html::select("pris[$i]", $lang->bug->priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?> severityBox' style='overflow:visible'><?php echo html::select("severities[$i]", $lang->bug->severityList, '3', "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $osList, '', "class='form-control chosen' multiple");?></td>
-      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $browserList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?> osBox' style='overflow:visible'>      <?php echo html::select("oses[$i][]", $lang->bug->osList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?> browserBox' style='overflow:visible'> <?php echo html::select("browsers[$i][]", $lang->bug->browserList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
       <?php
       $this->loadModel('flow');

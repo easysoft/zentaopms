@@ -1610,8 +1610,6 @@ class bugModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-        $this->config->bug->search['params']['os']['values']            = $this->getObjectList('os');
-        $this->config->bug->search['params']['browser']['values']       = $this->getObjectList('browser');
         if($this->session->currentProductType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -3608,29 +3606,5 @@ class bugModel extends model
 
         if(in_array($object, array('build','resolvedBuild'))) $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
         return array('' => '', 0 => '') + $relatedObjects;
-    }
-
-    /**
-     * Get object list.
-     *
-     * @param  string $objectType
-     * @access public
-     * @return array
-     */
-    public function getObjectList($objectType = '')
-    {
-        $objectListName = $objectType . 'List';
-        if(empty($objectType) or !isset($this->lang->bug->{$objectListName})) return array();
-        $objectList       = $this->lang->bug->{$objectListName};
-        $deleteConfigName = $objectType == 'os' ? 'deleteOS' : 'delete' . ucfirst($objectType);
-        $existConfigName  = $objectType == 'os' ? 'bugOS' : 'bug' . ucfirst($objectType);
-        $deleteItems      = isset($this->config->bug->{$deleteConfigName}) ? $this->config->bug->{$deleteConfigName} : array();
-        $existItems       = isset($this->config->{$existConfigName}) ? $this->config->{$existConfigName} : '';
-        foreach($objectList as $id => $value)
-        {
-            if(in_array($id, $deleteItems) and strpos(",$existItems,", ",$id,") === false) unset($objectList[$id]);
-        }
-
-        return $objectList;
     }
 }

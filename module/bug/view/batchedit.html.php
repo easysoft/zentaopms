@@ -134,8 +134,8 @@
             ?>
             <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $assignedToList, $bug->assignedTo, "class='form-control picker-select' data-drop-width='135px'");?></td>
             <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", helper::isZeroDate($bug->deadline) ? '' : $bug->deadline, "class='form-control form-date'");?></td>
-            <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID][]", $osList, $bug->os, 'class="form-control chosen" multiple');?></td>
-            <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID][]", $browserList, $bug->browser, 'class="form-control chosen" multiple');?></td>
+            <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID][]", $lang->bug->osList, $bug->os, 'class="form-control chosen" multiple');?></td>
+            <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID][]", $lang->bug->browserList, $bug->browser, 'class="form-control chosen" multiple');?></td>
             <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bug->keywords, 'class=form-control');?></td>
             <td class='<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>

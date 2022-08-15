@@ -688,8 +688,6 @@ class bug extends control
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
         $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
-        $this->view->osList           = $this->bug->getObjectList('os');
-        $this->view->browserList      = $this->bug->getObjectList('browser');
 
         $this->display();
     }
@@ -861,8 +859,6 @@ class bug extends control
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
-        $this->view->osList           = $this->bug->getObjectList('os');
-        $this->view->browserList      = $this->bug->getObjectList('browser');
 
         $this->display();
     }
@@ -1173,8 +1169,6 @@ class bug extends control
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
-        $this->view->osList           = $this->bug->getObjectList('os');
-        $this->view->browserList      = $this->bug->getObjectList('browser');
 
         $this->display();
     }
@@ -1386,8 +1380,6 @@ class bug extends control
         $this->view->priList          = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
         $this->view->resolutionList   = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
         $this->view->statusList       = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
-        $this->view->osList           = $this->bug->getObjectList('os');
-        $this->view->browserList      = $this->bug->getObjectList('browser');
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;
