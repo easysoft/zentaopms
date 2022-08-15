@@ -194,7 +194,6 @@
 
               common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
               if(common::hasPriv('file', 'edit')) echo html::a('###', $lang->file->edit, '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
               echo '</span>';
           }
           echo '</li>';?>
