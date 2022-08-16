@@ -6899,29 +6899,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Record OS and browser of bug.
-     *
-     * @access public
-     * @return bool
-     */
-    public function recordOSAndBrowserOfBug()
-    {
-        $osList      = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchAll('os');
-        $browserList = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchAll('browser');
-        $osList      = array_filter($osList);
-        $browserList = array_filter($browserList);
-        $osList      = implode(',', array_keys($osList));
-        $browserList = implode(',', array_keys($browserList));
-
-        $items = new stdclass();
-        $items->bugOS      = $osList;
-        $items->bugBrowser = $browserList;
-
-        $this->loadModel('setting')->setItems('system.common@rnd', $items);
-        return true;
-    }
-
-    /**
      * Update story search index.
      *
      * @access public
@@ -7114,5 +7091,131 @@ class upgradeModel extends model
         $result = $this->dbh->query("show columns from `$table` like '$field'");
 
         return $result->rowCount() > 0;
+    }
+
+    /**
+     * Record OS and browser of bug.
+     *
+     * @access public
+     * @return bool
+     */
+    public function recordOSAndBrowserOfBug()
+    {
+        $this->app->loadLang('bug');
+
+        $existOSList        = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $existBrowserList   = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $existOSList        = array_filter($existOSList);
+        $existBrowserList   = array_filter($existBrowserList);
+        $deletedOSList      = array('vista', 'win2012', 'win2008', 'win2003', 'win2000', 'wp8', 'wp7', 'symbian', 'freebsd');
+        $deletedBrowserList = array('ie7', 'ie6', 'firefox4', 'firefox3', 'firefox2', 'oprea11', 'oprea10', 'oprea9', 'maxthon', 'uc');
+        $existList          = array_merge($existOSList, $existBrowserList);
+        $deletedList        = array_merge($deletedOSList, $deletedBrowserList);
+
+        $langList = array();
+        $langList['zh-cn']['osList']['all']      = '全部';
+        $langList['zh-cn']['osList']['windows']  = 'Windows';
+        $langList['zh-cn']['osList']['win11']    = 'Windows 11';
+        $langList['zh-cn']['osList']['win10']    = 'Windows 10';
+        $langList['zh-cn']['osList']['win8']     = 'Windows 8';
+        $langList['zh-cn']['osList']['win7']     = 'Windows 7';
+        $langList['zh-cn']['osList']['winxp']    = 'Windows XP';
+        $langList['zh-cn']['osList']['osx']      = 'Mac OS';
+        $langList['zh-cn']['osList']['android']  = 'Android';
+        $langList['zh-cn']['osList']['ios']      = 'IOS';
+        $langList['zh-cn']['osList']['linux']    = 'Linux';
+        $langList['zh-cn']['osList']['ubuntu']   = 'Ubuntu';
+        $langList['zh-cn']['osList']['chromeos'] = 'Chrome OS';
+        $langList['zh-cn']['osList']['fedora']   = 'Fedora';
+        $langList['zh-cn']['osList']['vista']    = 'Windows Vista';
+        $langList['zh-cn']['osList']['win2012']  = 'Windows 2012';
+        $langList['zh-cn']['osList']['win2008']  = 'Windows 2008';
+        $langList['zh-cn']['osList']['win2003']  = 'Windows 2003';
+        $langList['zh-cn']['osList']['win2000']  = 'Windows 2000';
+        $langList['zh-cn']['osList']['wp8']      = 'WP8';
+        $langList['zh-cn']['osList']['wp7']      = 'WP7';
+        $langList['zh-cn']['osList']['symbian']  = 'Symbian';
+        $langList['zh-cn']['osList']['freebsd']  = 'FreeBSD';
+        $langList['zh-cn']['osList']['unix']     = 'Unix';
+        $langList['zh-cn']['osList']['others']   = '其他';
+
+        $langList['zh-tw']['osList'] = $langList['zh-cn']['osList'];
+        $langList['en']['osList']    = $langList['zh-cn']['osList'];
+
+        $langList['en']['osList']['all']    = 'All';
+        $langList['en']['osList']['others'] = 'Others';
+
+        $langList['de']['osList'] = $langList['en']['osList'];
+        $langList['fr']['osList'] = $langList['en']['osList'];
+
+        $langList['zh-cn']['browserList']['all']      = '全部';
+        $langList['zh-cn']['browserList']['chrome']   = 'Chrome';
+        $langList['zh-cn']['browserList']['edge']     = 'Edge';
+        $langList['zh-cn']['browserList']['ie']       = 'IE系列';
+        $langList['zh-cn']['browserList']['ie11']     = 'IE11';
+        $langList['zh-cn']['browserList']['ie10']     = 'IE10';
+        $langList['zh-cn']['browserList']['ie9']      = 'IE9';
+        $langList['zh-cn']['browserList']['ie8']      = 'IE8';
+        $langList['zh-cn']['browserList']['ie7']      = 'IE7';
+        $langList['zh-cn']['browserList']['ie6']      = 'IE6';
+        $langList['zh-cn']['browserList']['firefox']  = 'firefox系列';
+        $langList['zh-cn']['browserList']['firefox4'] = 'firefox4';
+        $langList['zh-cn']['browserList']['firefox3'] = 'firefox3';
+        $langList['zh-cn']['browserList']['firefox2'] = 'firefox2';
+        $langList['zh-cn']['browserList']['opera']    = 'opera系列';
+        $langList['zh-cn']['browserList']['opera11']  = 'opera11';
+        $langList['zh-cn']['browserList']['opera10']  = 'opera10';
+        $langList['zh-cn']['browserList']['opera9']   = 'opera9';
+        $langList['zh-cn']['browserList']['safari']   = 'safari';
+        $langList['zh-cn']['browserList']['360']      = '360浏览器';
+        $langList['zh-cn']['browserList']['qq']       = 'QQ浏览器';
+        $langList['zh-cn']['browserList']['maxthon']  = '遨游';
+        $langList['zh-cn']['browserList']['uc']       = 'UC';
+        $langList['zh-cn']['browserList']['other']    = '其他';
+
+        $langList['zh-tw']['browserList'] = $langList['zh-cn']['browserList'];
+        $langList['en']['browserList']    = $langList['zh-cn']['browserList'];
+
+        $langList['en']['browserList']['all']      = 'All';
+        $langList['en']['browserList']['ie']       = 'IE series';
+        $langList['en']['browserList']['firefox']  = 'Firefox series';
+        $langList['en']['browserList']['firefox4'] = 'Firefox4';
+        $langList['en']['browserList']['firefox3'] = 'Firefox3';
+        $langList['en']['browserList']['firefox2'] = 'Firefox2';
+        $langList['en']['browserList']['opera']    = 'Opera series';
+        $langList['en']['browserList']['opera11']  = 'Opera11';
+        $langList['en']['browserList']['opera10']  = 'Opera10';
+        $langList['en']['browserList']['opera9']   = 'Opera9';
+        $langList['en']['browserList']['360']      = '360';
+        $langList['en']['browserList']['qq']       = 'QQ';
+        $langList['en']['browserList']['maxthon']  = 'Maxthon';
+        $langList['en']['browserList']['uc']       = 'UC';
+        $langList['en']['browserList']['other']    = 'Others';
+
+        $langList['de']['browserList'] = $langList['en']['browserList'];
+        $langList['fr']['browserList'] = $langList['en']['browserList'];
+
+        foreach($langList as $langType => $sectionList)
+        {
+            $item = new stdclass();
+            foreach($sectionList as $section => $valueList)
+            {
+                foreach($valueList as $key => $value)
+                {
+                    if(!in_array($key, $deletedList) or in_array($key, $existList))
+                    {
+                        $item->module  = 'bug';
+                        $item->section = $section;
+                        $item->key     = $key;
+                        $item->system  = 1;
+                        $item->lang    = $langType;
+                        $item->value   = $value;
+                        $this->dao->replace(TABLE_LANG)->data($item)->exec();
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }
