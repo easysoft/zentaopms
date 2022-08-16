@@ -113,12 +113,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo $program['draftRequirements'];?></td>
             <td><?php echo $program['activeRequirements'];?></td>
-            <td><?php echo $program['changedRequirements'];?></td>
+            <td><?php echo $program['changingRequirements'];?></td>
             <td><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $program['draftStories'];?></td>
             <td><?php echo $program['activeStories'];?></td>
-            <td><?php echo $program['changedStories'];?></td>
+            <td><?php echo $program['changingStories'];?></td>
             <td><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
             <td><?php echo $program['unResolvedBugs'];?></td>
             <td><?php echo $program['closedBugs'];?></td>
@@ -158,12 +158,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo isset($line['draftRequirements']) ? $line['draftRequirements'] : 0;?></td>
             <td><?php echo isset($line['activeRequirements']) ? $line['activeRequirements'] : 0;?></td>
-            <td><?php echo isset($line['changedRequirements']) ? $line['changedRequirements'] : 0;?></td>
+            <td><?php echo isset($line['changingRequirements']) ? $line['changingRequirements'] : 0;?></td>
             <td><?php echo (isset($line['totalRequirements']) and $line['totalRequirements'] != 0) ? round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100 : 0;?>%</td>
             <?php endif;?>
             <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
-            <td><?php echo isset($line['changedStories']) ? $line['changedStories'] : 0;?></td>
+            <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
             <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
             <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
