@@ -1646,7 +1646,9 @@ EOD;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
+        parse_str($vars, $app->params);
         if(!commonModel::hasPriv($module, $method, $object)) return false;
+
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
@@ -2450,6 +2452,9 @@ EOD;
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+
+        if($module == 'story' and isset($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'product' and $method == 'browse' and isset($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))

@@ -40,11 +40,11 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $storyType = 'story')
     {
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -59,7 +59,7 @@ class story extends control
             if(!empty($project)) $productID = key($product);
         }
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
@@ -238,7 +238,7 @@ class story extends control
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
-                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
+                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
                 if($this->session->storyList)
                 {
                     /* When copying story in the product plan, return to different pages for story#32949. */
@@ -420,9 +420,9 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $type == 'story' ? $this->story->getRequirements($productID) : '';
+        $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
-        $this->view->type             = $type;
+        $this->view->type             = $storyType;
 
         $this->display();
     }
@@ -741,10 +741,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function edit($storyID, $kanbanGroup = 'default')
+    public function edit($storyID, $kanbanGroup = 'default', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1215,10 +1216,11 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $version
      * @param  int    $param
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $param = 0)
+    public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
         $uri        = $this->app->getURI(true);
         $tab        = $this->app->tab;

@@ -19,6 +19,7 @@ $lang->moduleOrder[15]  = 'program';
 $lang->moduleOrder[20]  = 'personnel';
 $lang->moduleOrder[25]  = 'product';
 $lang->moduleOrder[30]  = 'story';
+$lang->moduleOrder[31]  = 'requirement';
 $lang->moduleOrder[35]  = 'productplan';
 $lang->moduleOrder[40]  = 'release';
 
@@ -418,6 +419,7 @@ if($config->systemMode == 'new')
 $lang->resource->product = new stdclass();
 $lang->resource->product->index          = 'indexAction';
 $lang->resource->product->browse         = 'browse';
+if($config->URAndSR) $lang->resource->product->requirement = 'requirement';
 $lang->resource->product->create         = 'create';
 $lang->resource->product->view           = 'view';
 $lang->resource->product->edit           = 'edit';
@@ -440,6 +442,7 @@ $lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
+if($config->URAndSR) $lang->product->methodOrder[6] = 'requirement';
 $lang->product->methodOrder[10]  = 'create';
 $lang->product->methodOrder[15]  = 'view';
 $lang->product->methodOrder[20]  = 'edit';
@@ -513,8 +516,6 @@ $lang->resource->story->track              = 'trackAB';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
 
-if($config->URAndSR) $lang->resource->story->linkRequirements = 'linkRequirementsAB';
-
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
 $lang->story->methodOrder[15]  = 'edit';
@@ -545,7 +546,51 @@ $lang->story->methodOrder[135] = 'track';
 $lang->story->methodOrder[140] = 'processStoryChange';
 $lang->story->methodOrder[145] = 'linkStories';
 
-if($config->URAndSR) $lang->story->methodOrder[150] = 'linkRequirements';
+if($config->URAndSR)
+{
+    /* Requirement. */
+    $lang->resource->requirement = new stdclass();
+    $lang->resource->requirement->create            = 'create';
+    $lang->resource->requirement->batchCreate       = 'batchCreate';
+    $lang->resource->requirement->edit              = 'editAction';
+    $lang->resource->requirement->batchEdit         = 'batchEdit';
+    $lang->resource->requirement->export            = 'exportAction';
+    $lang->resource->requirement->delete            = 'deleteAction';
+    $lang->resource->requirement->view              = 'view';
+    $lang->resource->requirement->change            = 'changeAction';
+    $lang->resource->requirement->review            = 'reviewAction';
+    $lang->resource->requirement->batchReview       = 'batchReview';
+    $lang->resource->requirement->recall            = 'recall';
+    $lang->resource->requirement->assignTo          = 'assignAction';
+    $lang->resource->requirement->close             = 'closeAction';
+    $lang->resource->requirement->batchClose        = 'batchClose';
+    $lang->resource->requirement->activate          = 'activateAction';
+    $lang->resource->requirement->report            = 'reportAction';
+    $lang->resource->requirement->batchChangeBranch = 'batchChangeBranch';
+    $lang->resource->requirement->batchAssignTo     = 'batchAssignTo';
+    $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
+    $lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
+
+    $lang->requirement->methodOrder[5]  = 'create';
+    $lang->requirement->methodOrder[10] = 'batchCreate';
+    $lang->requirement->methodOrder[15] = 'edit';
+    $lang->requirement->methodOrder[20] = 'export';
+    $lang->requirement->methodOrder[25] = 'delete';
+    $lang->requirement->methodOrder[30] = 'view';
+    $lang->requirement->methodOrder[35] = 'change';
+    $lang->requirement->methodOrder[40] = 'review';
+    $lang->requirement->methodOrder[45] = 'batchReview';
+    $lang->requirement->methodOrder[50] = 'recall';
+    $lang->requirement->methodOrder[55] = 'close';
+    $lang->requirement->methodOrder[60] = 'batchClose';
+    $lang->requirement->methodOrder[65] = 'assignTo';
+    $lang->requirement->methodOrder[70] = 'batchAssignTo';
+    $lang->requirement->methodOrder[75] = 'activate';
+    $lang->requirement->methodOrder[80] = 'report';
+    $lang->requirement->methodOrder[85] = 'batchChangeBranch';
+    $lang->requirement->methodOrder[90] = 'batchChangeModule';
+    $lang->requirement->methodOrder[95] = 'linkRequirements';
+}
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

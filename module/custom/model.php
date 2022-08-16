@@ -244,6 +244,8 @@ class customModel extends model
             {
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
+                if(!empty($link[3])) parse_str($link[3], $app->params);
+
                 $hasPriv = commonModel::hasPriv($module, $method);
 
                 /* Fix bug #20464 */
