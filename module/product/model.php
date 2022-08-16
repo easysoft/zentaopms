@@ -1159,13 +1159,14 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0)
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status)
     {
         $product = $this->getById($productID);
 
         $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
+            ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()

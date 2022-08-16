@@ -351,15 +351,6 @@ class productplan extends control
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
-        $projects = $this->product->getProjectPairsByProduct($productID, $branch);
-        foreach($projects as $key=>$value)
-        {
-            $closed = $this->dao->select('status')->from(TABLE_PROJECT)->where('id')->eq($key)->fetch();
-            if($closed->status =='closed')
-            {
-                unset($projects[$key]);
-            }
-        }
 
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[]       = $this->lang->productplan->browse;
@@ -372,7 +363,7 @@ class productplan extends control
         $this->view->orderBy          = $orderBy;
         $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
-        $this->view->projects         = $projects;
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch,'',$status='closed');
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->view->queryID          = $queryID;
         $this->display();
@@ -625,7 +616,7 @@ class productplan extends control
      */
     public function ajaxGetProjects($productID, $branch = 0)
     {
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch);
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch,'',$status='closed');
         echo html::select('project', $projects, key($projects), "class='form-control chosen'");
     }
 
