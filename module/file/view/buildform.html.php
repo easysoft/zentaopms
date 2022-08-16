@@ -28,7 +28,7 @@
       </div>
       <div class="input-group-btn">
         <button type="button" class="fileAction btn btn-link file-input-rename" title="<?php echo $lang->file->edit;?>"><i class='icon icon-pencil-alt'></i></button>
-        <button type="button" class="fileAction btn btn-link file-input-delete hidden" title="<?php echo $lang->delete;?>"><i class='icon icon-trash'></i></button>
+        <button type="button" class="fileAction btn btn-link file-input-delete" title="<?php echo $lang->delete;?>"><i class='icon icon-trash'></i></button>
       </div>
     </div>
     <input type="file" name="<?php echo $filesName;?>[]" onchange="checkDangerExtension(this)" />
@@ -37,19 +37,6 @@
 <script>
 var totalSize = 0;
 maxUploadSize = unitConversion(maxUploadSize);
-
-$(function(){
-  $('div.file-input.normal').mouseover(function(){
-    //$(this).children('.file-input-normal.input-group .input-group-btn .fileAction').removeClass("hidden");
-    //$(this).addClass('backgroundColor');
-      console.log(123);
-  });
-  $('div.file-input.normal').mouseout(function(){
-   // $(this).children('.file-input-normal.input-group .input-group-btn .fileAction').addClass("hidden");
-   // $(this).removeClass('backgroundColor');
-    console.log(456);
-  });
-});
 
 /**
  * Conversion unit to byte.
