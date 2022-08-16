@@ -175,6 +175,9 @@ $(function()
         {
             checked = false;
             $('#checkAllProjects').prop('checked', false);
+            $('form #newProgram0').removeAttr('disabled');
+            $('#programs').removeAttr('disabled');
+            $('#programID').val('');
             $('#programName').val('');
         }
 
@@ -902,7 +905,7 @@ function setProgramByProduct(product)
 
         getProjectByProgram($('#programs'));
     }
-    else
+    else if(programID && $(':checkbox:checked[data-programid=' + programID + ']').length == 0)
     {
         $('form #newProgram0').removeAttr('disabled');
         $('#programs').removeAttr('disabled');
