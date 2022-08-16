@@ -1,5 +1,5 @@
 <script>
-
+$('#showData > tbody').addClass('load-indicator loading');
 $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pagerID=<?php echo $pagerID;?>'), function(data)
 {
     $('#showData > tbody').append(data);
@@ -7,6 +7,7 @@ $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pag
     $('#showData tbody').find('.picker-select').picker({chosenMode: true});
     $('.form-date').datetimepicker('update');
     $('.form-datetime').datetimepicker('update');
+    $('#showData > tbody').removeClass('load-indicator loading');
 })
 
 window.addEventListener('scroll', this.handleScroll);
