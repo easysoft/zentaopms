@@ -529,6 +529,11 @@ $(document).ready(function()
         });
     });
 
+    $('#modalTeam').on('change', 'select#team', function()
+    {
+        $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
+    })
+
     adjustButtons();
 
     $('#showAllModule').change(function()
@@ -568,38 +573,37 @@ $('#modalTeam .btn').click(function()
     var error = false;
 
     /* Unique team. */
+    values = [];
     $('select[name^=team]').each(function(i)
     {
         value = $(this).val();
         if(value == '') return;
-        $('select[name^=team]').each(function(j)
+
+        if($.inArray(value, values) >= 0)
         {
-            if(i <= j) return;
-            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
-        })
+            $(this).closest('tr').addClass('hidden');
+            return;
+        }
+
+        values.push(value);
     })
     $('select[name^=team]').closest('tr.hidden').remove();
 
     $('select[name^=team]').each(function()
     {
+        if($(this).val() == '') return;
+
+        var tr      = $(this).closest('tr');
         var account = $(this).find('option:selected').text();
-        if(account != '')
-        {
-            team += ' ' + account;
-        }
+        team += ' ' + account;
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
-        if(!isNaN(estimate))
+        if(!isNaN(estimate) && estimate > 0) time += estimate;
+        if(account != '' && (isNaN(estimate) || estimate == 0))
         {
-            time += estimate;
-        }
-
-        var requiredFieldList = ',' + requiredFields + ',';
-        if(account && requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
-        {
-            alert(estimateNotEmpty);
-            error = true;
-            return false;
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
         }
     });
 
@@ -607,7 +611,7 @@ $('#modalTeam .btn').click(function()
     var teamList = team.split(" ");
     if(teamList.length <= 2)
     {
-        alert(teamMemberError);
+        bootbox.alert(teamMemberError);
         return false;
     }
     else

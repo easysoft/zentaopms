@@ -1,6 +1,12 @@
 $(function()
 {
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
+
+    $('#modalTeam').on('change', 'select#team', function()
+    {
+        $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
+    })
+    $('#modalTeam select:enabled').change()
 })
 
 /**
@@ -154,15 +160,17 @@ $(document).ready(function()
 $('#confirmButton').click(function()
 {
     /* Unique team. */
+    var values = [];
     $('select[name^=team]').each(function(i)
     {
         value = $(this).val();
         if(value == '') return;
-        $('select[name^=team]').each(function(j)
+        if($.inArray(value, values) >= 0)
         {
-            if(i <= j) return;
-            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
-        })
+            $(this).closest('tr').addClass('hidden');
+            return;
+        }
+        values.push(value);
     });
 
     $('select[name^=team]').closest('tr.hidden').remove();
@@ -174,24 +182,39 @@ $('#confirmButton').click(function()
     var error         = false;
     $('select[name^=team]').each(function()
     {
-        if($(this).find('option:selected').text() == '') return;
+        if($(this).val() == '') return;
 
         memberCount++;
 
-        estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
-        if(!isNaN(estimate)) totalEstimate += estimate;
+        var $tr     = $(this).closest('tr');
+        var account = $(this).find('option:selected').text();
 
-        consumed = parseFloat($(this).parents('td').next('td').find('[name^=teamConsumed]').val());
+        estimate = parseFloat($tr.find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate)) totalEstimate += estimate;
+        if(isNaN(estimate) || estimate == 0)
+        {
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
+        }
+
+        consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
         if(!isNaN(consumed)) totalConsumed += consumed;
 
-        left = parseFloat($(this).parents('td').next('td').find('[name^=teamLeft]').val());
+        left = parseFloat($tr.find('[name^=teamLeft]').val());
         if(!isNaN(left)) totalLeft += left;
+        if(!$tr.hasClass('member-done') && (isNaN(left) || left == 0))
+        {
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
+        }
 
         var requiredFieldList = ',' + requiredFields + ',';
         if(requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
         {
             $(this).val('').trigger("chosen:updated");
-            alert(estimateNotEmpty);
+            bootbox.alert(estimateNotEmpty);
             error = true;
             return false;
         }
@@ -201,13 +224,13 @@ $('#confirmButton').click(function()
 
     if(memberCount < 2)
     {
-        alert(teamMemberError);
+        bootbox.alert(teamMemberError);
         return false;
     }
 
     if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        alert(totalLeftError);
+        bootbox.alert(totalLeftError);
         return false;
     }
 

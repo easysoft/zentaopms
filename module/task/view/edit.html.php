@@ -27,6 +27,7 @@
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
 <?php js::set('requiredFields', $config->task->edit->requiredFields);?>
 <?php
 $requiredFields = array();
@@ -279,22 +280,33 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           <table class='table table-form'>
             <tbody class="sortable">
               <?php foreach($task->team as $member):?>
-              <tr>
-                <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
+              <?php
+              $memberStatus = 'wait';
+              if($member->consumed > 0) $memberStatus = 'doing';
+              if(strpos($task->finishedList, ",{$member->account},") !== false) $memberStatus = 'done';
+
+              $memberDisabled = false;
+              if($memberStatus == 'done') $memberDisabled = true;
+              ?>
+              <tr class='member-<?php echo $memberStatus;?>'>
+                <td class='w-250px'>
+                  <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
+                  <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
+                </td>
                 <td>
                   <div class='input-group'>
                     <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                     <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
+                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -327,4 +339,5 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
   </form>
 </div>
 <?php js::set('executionID', $execution->id);?>
+<?php if($memberDisabled) js::set('sortSelector', 'tr.member-wait');?>
 <?php include '../../common/view/footer.html.php';?>
