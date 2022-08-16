@@ -207,6 +207,17 @@ class tree extends control
             $title      = $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
+        elseif($viewType == 'dashboard')
+        {
+            $root       = new stdclass();
+            $root->name = $this->lang->dashboard->common;
+
+            $this->view->root       = $root;
+            $this->lang->tree->menu = $this->lang->report->menu;
+
+            $title      = $this->lang->tree->manageDashboard;
+            $position[] = $this->lang->tree->manageDashboard;
+        }
         elseif($viewType == 'trainskill')
         {
             $this->lang->tree->menu = $this->lang->trainskill->menu;

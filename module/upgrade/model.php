@@ -681,13 +681,13 @@ class upgradeModel extends model
             case 'biz6_4':
                 $this->importLiteModules();
                 break;
-            case 'biz7.0.beta1':
+            case 'biz7_0_beta1':
                 $this->processViewFields();
                 break;
-            case 'biz7.0':
+            case 'biz7_0':
                 $this->processFlowPosition();
                 break;
-            case 'biz7.4':
+            case 'biz7_4':
                 $this->processCreatedInfo();
                 $this->processCreatedBy();
                 $this->updateApproval();
