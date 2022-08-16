@@ -150,7 +150,7 @@ class project extends control
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
-        $projects = $this->project->getPairsByModel('undifined', 0, '', array_keys($projectPairs));
+        $projects = $this->project->getPairsByModel('', 0, '', array_keys($projectPairs));
         $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
         foreach($projects as $id => $name)
         {
