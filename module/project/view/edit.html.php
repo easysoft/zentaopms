@@ -37,6 +37,7 @@
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
 <?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
+<?php js::set('ignore', $lang->project->ignore);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

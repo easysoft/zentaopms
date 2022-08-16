@@ -14,6 +14,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
 <?php js::set('changeProgram', $lang->project->changeProgram);?>
+<?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id="mainContent" class="main-content">
   <div class="main-header">

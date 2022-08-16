@@ -63,6 +63,7 @@ $lang->project->teamMembersCount   = ', there are %s team members.';
 $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
+$lang->project->ignore             = 'Ignore';
 
 /* Fields. */
 $lang->project->common             = 'Project';
