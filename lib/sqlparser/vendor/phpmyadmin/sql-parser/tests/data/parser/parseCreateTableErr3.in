@@ -1,0 +1,1 @@
+CREATE TABLE `table_copy` LIKE ;

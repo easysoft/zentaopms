@@ -1,0 +1,652 @@
+{
+    "query": "ALTER TABLE `d` CHARSET=hp8;\n",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "PARSER_METHODS": [
+            "parseDelimiter",
+            "parseWhitespace",
+            "parseNumber",
+            "parseComment",
+            "parseOperator",
+            "parseBool",
+            "parseString",
+            "parseSymbol",
+            "parseKeyword",
+            "parseLabel",
+            "parseUnknown"
+        ],
+        "str": "ALTER TABLE `d` CHARSET=hp8;\n",
+        "len": 29,
+        "last": 29,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "ALTER",
+                    "value": "ALTER",
+                    "keyword": "ALTER",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "TABLE",
+                    "value": "TABLE",
+                    "keyword": "TABLE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`d`",
+                    "value": "d",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 15
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CHARSET",
+                    "value": "CHARSET",
+                    "keyword": "CHARSET",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 16
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 23
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "hp8",
+                    "value": "hp8",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 24
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 27
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "\n",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 28
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 12,
+            "idx": 12
+        },
+        "DEFAULT_DELIMITER": ";",
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "STATEMENT_PARSERS": {
+            "DESCRIBE": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "DESC": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "EXPLAIN": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "FLUSH": "",
+            "GRANT": "",
+            "HELP": "",
+            "SET PASSWORD": "",
+            "STATUS": "",
+            "USE": "",
+            "ANALYZE": "PhpMyAdmin\\SqlParser\\Statements\\AnalyzeStatement",
+            "BACKUP": "PhpMyAdmin\\SqlParser\\Statements\\BackupStatement",
+            "CHECK": "PhpMyAdmin\\SqlParser\\Statements\\CheckStatement",
+            "CHECKSUM": "PhpMyAdmin\\SqlParser\\Statements\\ChecksumStatement",
+            "OPTIMIZE": "PhpMyAdmin\\SqlParser\\Statements\\OptimizeStatement",
+            "REPAIR": "PhpMyAdmin\\SqlParser\\Statements\\RepairStatement",
+            "RESTORE": "PhpMyAdmin\\SqlParser\\Statements\\RestoreStatement",
+            "SET": "PhpMyAdmin\\SqlParser\\Statements\\SetStatement",
+            "SHOW": "PhpMyAdmin\\SqlParser\\Statements\\ShowStatement",
+            "ALTER": "PhpMyAdmin\\SqlParser\\Statements\\AlterStatement",
+            "CREATE": "PhpMyAdmin\\SqlParser\\Statements\\CreateStatement",
+            "DROP": "PhpMyAdmin\\SqlParser\\Statements\\DropStatement",
+            "RENAME": "PhpMyAdmin\\SqlParser\\Statements\\RenameStatement",
+            "TRUNCATE": "PhpMyAdmin\\SqlParser\\Statements\\TruncateStatement",
+            "CALL": "PhpMyAdmin\\SqlParser\\Statements\\CallStatement",
+            "DELETE": "PhpMyAdmin\\SqlParser\\Statements\\DeleteStatement",
+            "DO": "",
+            "HANDLER": "",
+            "INSERT": "PhpMyAdmin\\SqlParser\\Statements\\InsertStatement",
+            "LOAD DATA": "PhpMyAdmin\\SqlParser\\Statements\\LoadStatement",
+            "REPLACE": "PhpMyAdmin\\SqlParser\\Statements\\ReplaceStatement",
+            "SELECT": "PhpMyAdmin\\SqlParser\\Statements\\SelectStatement",
+            "UPDATE": "PhpMyAdmin\\SqlParser\\Statements\\UpdateStatement",
+            "WITH": "PhpMyAdmin\\SqlParser\\Statements\\WithStatement",
+            "DEALLOCATE": "",
+            "EXECUTE": "",
+            "PREPARE": "",
+            "BEGIN": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "COMMIT": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "ROLLBACK": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "START TRANSACTION": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "PURGE": "PhpMyAdmin\\SqlParser\\Statements\\PurgeStatement",
+            "LOCK": "PhpMyAdmin\\SqlParser\\Statements\\LockStatement",
+            "UNLOCK": "PhpMyAdmin\\SqlParser\\Statements\\LockStatement"
+        },
+        "KEYWORD_PARSERS": {
+            "PARTITION BY": [],
+            "SUBPARTITION BY": [],
+            "_OPTIONS": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                "field": "options"
+            },
+            "_END_OPTIONS": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                "field": "end_options"
+            },
+            "INTERSECT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "EXCEPT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION ALL": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION DISTINCT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "ALTER": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "ANALYZE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "BACKUP": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CALL": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\FunctionCall",
+                "field": "call"
+            },
+            "CHECK": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CHECKSUM": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CROSS JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "DROP": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "fields",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "FORCE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "FROM": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "from",
+                "options": {
+                    "field": "table"
+                }
+            },
+            "GROUP BY": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\GroupKeyword",
+                "field": "group"
+            },
+            "HAVING": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Condition",
+                "field": "having"
+            },
+            "IGNORE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "INTO": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IntoKeyword",
+                "field": "into"
+            },
+            "JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LEFT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LEFT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "ON": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "RIGHT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "RIGHT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "INNER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "FULL JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "FULL OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL LEFT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL RIGHT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL LEFT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL RIGHT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "STRAIGHT_JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LIMIT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Limit",
+                "field": "limit"
+            },
+            "OPTIMIZE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "ORDER BY": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OrderKeyword",
+                "field": "order"
+            },
+            "PARTITION": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ArrayObj",
+                "field": "partition"
+            },
+            "PROCEDURE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\FunctionCall",
+                "field": "procedure"
+            },
+            "RENAME": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\RenameOperation",
+                "field": "renames"
+            },
+            "REPAIR": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "RESTORE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "SET": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\SetOperation",
+                "field": "set"
+            },
+            "SELECT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "expr"
+            },
+            "TRUNCATE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "UPDATE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "USE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "VALUE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Array2d",
+                "field": "values"
+            },
+            "VALUES": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Array2d",
+                "field": "values"
+            },
+            "WHERE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Condition",
+                "field": "where"
+            }
+        },
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\AlterStatement",
+                "table": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                    "ALLOWED_KEYWORDS": {
+                        "AS": 1,
+                        "DUAL": 1,
+                        "NULL": 1,
+                        "REGEXP": 1,
+                        "CASE": 1,
+                        "DIV": 1,
+                        "AND": 1,
+                        "OR": 1,
+                        "XOR": 1,
+                        "NOT": 1,
+                        "MOD": 1
+                    },
+                    "database": null,
+                    "table": "d",
+                    "column": null,
+                    "expr": "`d`",
+                    "alias": null,
+                    "function": null,
+                    "subquery": null
+                },
+                "altered": [
+                    {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\AlterOperation",
+                        "DB_OPTIONS": {
+                            "CHARACTER SET": [
+                                1,
+                                "var"
+                            ],
+                            "CHARSET": [
+                                1,
+                                "var"
+                            ],
+                            "DEFAULT CHARACTER SET": [
+                                1,
+                                "var"
+                            ],
+                            "DEFAULT CHARSET": [
+                                1,
+                                "var"
+                            ],
+                            "UPGRADE": [
+                                1,
+                                "var"
+                            ],
+                            "COLLATE": [
+                                2,
+                                "var"
+                            ],
+                            "DEFAULT COLLATE": [
+                                2,
+                                "var"
+                            ]
+                        },
+                        "TABLE_OPTIONS": {
+                            "ENGINE": [
+                                1,
+                                "var="
+                            ],
+                            "AUTO_INCREMENT": [
+                                1,
+                                "var="
+                            ],
+                            "AVG_ROW_LENGTH": [
+                                1,
+                                "var"
+                            ],
+                            "MAX_ROWS": [
+                                1,
+                                "var"
+                            ],
+                            "ROW_FORMAT": [
+                                1,
+                                "var"
+                            ],
+                            "COMMENT": [
+                                1,
+                                "var"
+                            ],
+                            "ADD": 1,
+                            "ALTER": 1,
+                            "ANALYZE": 1,
+                            "CHANGE": 1,
+                            "CHARSET": 1,
+                            "CHECK": 1,
+                            "COALESCE": 1,
+                            "CONVERT": 1,
+                            "DEFAULT CHARSET": 1,
+                            "DISABLE": 1,
+                            "DISCARD": 1,
+                            "DROP": 1,
+                            "ENABLE": 1,
+                            "IMPORT": 1,
+                            "MODIFY": 1,
+                            "OPTIMIZE": 1,
+                            "ORDER": 1,
+                            "PARTITION": 1,
+                            "REBUILD": 1,
+                            "REMOVE": 1,
+                            "RENAME": 1,
+                            "REORGANIZE": 1,
+                            "REPAIR": 1,
+                            "UPGRADE": 1,
+                            "COLUMN": 2,
+                            "CONSTRAINT": 2,
+                            "DEFAULT": 2,
+                            "TO": 2,
+                            "BY": 2,
+                            "FOREIGN": 2,
+                            "FULLTEXT": 2,
+                            "KEY": 2,
+                            "KEYS": 2,
+                            "PARTITIONING": 2,
+                            "PRIMARY KEY": 2,
+                            "SPATIAL": 2,
+                            "TABLESPACE": 2,
+                            "INDEX": 2,
+                            "CHARACTER SET": 3
+                        },
+                        "USER_OPTIONS": {
+                            "ATTRIBUTE": [
+                                1,
+                                "var"
+                            ],
+                            "COMMENT": [
+                                1,
+                                "var"
+                            ],
+                            "REQUIRE": [
+                                1,
+                                "var"
+                            ],
+                            "BY": [
+                                2,
+                                "expr"
+                            ],
+                            "PASSWORD": [
+                                2,
+                                "var"
+                            ],
+                            "WITH": [
+                                2,
+                                "var"
+                            ],
+                            "ACCOUNT": 1,
+                            "DEFAULT": 1,
+                            "LOCK": 2,
+                            "UNLOCK": 2,
+                            "IDENTIFIED": 3
+                        },
+                        "VIEW_OPTIONS": {
+                            "AS": 1
+                        },
+                        "options": {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                            "options": {
+                                "1": "CHARSET"
+                            }
+                        },
+                        "field": null,
+                        "unknown": [
+                            {
+                                "@type": "@9"
+                            },
+                            {
+                                "@type": "@10"
+                            }
+                        ]
+                    }
+                ],
+                "OPTIONS": {
+                    "ONLINE": 1,
+                    "OFFLINE": 1,
+                    "IGNORE": 2,
+                    "DATABASE": 3,
+                    "EVENT": 3,
+                    "FUNCTION": 3,
+                    "PROCEDURE": 3,
+                    "SERVER": 3,
+                    "TABLE": 3,
+                    "TABLESPACE": 3,
+                    "USER": 3,
+                    "VIEW": 3
+                },
+                "CLAUSES": [],
+                "END_OPTIONS": [],
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "3": "TABLE"
+                    }
+                },
+                "first": 0,
+                "last": 9
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

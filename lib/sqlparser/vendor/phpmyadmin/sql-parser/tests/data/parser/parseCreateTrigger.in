@@ -1,0 +1,2 @@
+CREATE TRIGGER ins_sum BEFORE INSERT ON account
+FOR EACH ROW BEGIN SET @sum = @sum + NEW.amount END

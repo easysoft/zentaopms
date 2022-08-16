@@ -1,0 +1,1 @@
+SELECT (SELECT 'foo') bar, (SELECT 'baz') AS qux, a as b FROM tabl;

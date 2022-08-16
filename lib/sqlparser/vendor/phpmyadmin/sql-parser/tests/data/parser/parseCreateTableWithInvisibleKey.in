@@ -1,0 +1,12 @@
+CREATE TABLE `animes_comments` (
+  `anime_comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `anime_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `comment_text` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `comment_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`anime_comment_id`),
+  KEY `animes_comments_animes_fk` (`anime_id`) invisible,
+  KEY `animes_comments_users_fk` (`user_id`),
+  KEY `comment_at_idx` (`comment_at`) ,
+  CONSTRAINT `animes_comments_animes_fk` FOREIGN KEY (`anime_id`) REFERENCES `animes` (`anime_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  CONSTRAINT `animes_comments_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE RESTRICT)

@@ -1,0 +1,1 @@
+ALTER TABLE place CHANGE COLUMN plc_location_type gplc_location_type ENUM('LOCATION') CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL;

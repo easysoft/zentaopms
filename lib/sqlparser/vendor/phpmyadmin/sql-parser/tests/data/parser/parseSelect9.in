@@ -1,0 +1,4 @@
+SELECT casein_pipe, email_cp, name_first_cp, name_last_cp, purpose_pipe
+FROM (tbl_comp_person INNER JOIN `tbl_pipelist` ON tbl_comp_person.IDp = tbl_pipelist.IDp)
+WHERE casein_pipe > '2016-03-01' AND  `campaign_id_pipe` = 24569 AND `weeksonlist_pipe` = 1
+ORDER BY `tbl_pipelist`.`casein_pipe` ASC

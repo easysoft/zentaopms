@@ -1,0 +1,1 @@
+ALTER TABLE `actor` ADD `last_update2` SET ('value1','value2','value3')

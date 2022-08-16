@@ -1,0 +1,1 @@
+CREATE TABLE `xss`.`gis` ( `x` POINT NOT NULL ) ENGINE = InnoDB;

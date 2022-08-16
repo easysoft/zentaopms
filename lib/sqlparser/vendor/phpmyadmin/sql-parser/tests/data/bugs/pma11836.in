@@ -1,0 +1,1 @@
+SELECT * FROM alumnos WHERE id = IF(id = 1, id, nombre) AND id not in (SELECT id FROM alumnos)

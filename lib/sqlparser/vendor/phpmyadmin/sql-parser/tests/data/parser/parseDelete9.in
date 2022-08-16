@@ -1,0 +1,1 @@
+DELETE QUICK table1, table2.* FROM table1 as t1, table2 as t2

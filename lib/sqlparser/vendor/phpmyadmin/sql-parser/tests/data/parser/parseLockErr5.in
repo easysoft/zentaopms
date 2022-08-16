@@ -1,0 +1,2 @@
+-- extraneous comma
+LOCK TABLES table1 READ LOCAL,

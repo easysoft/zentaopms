@@ -1,0 +1,3 @@
+LOAD DATA INFILE '/tmp/test.txt' IGNORE
+INTO TABLE test
+@a = 1;

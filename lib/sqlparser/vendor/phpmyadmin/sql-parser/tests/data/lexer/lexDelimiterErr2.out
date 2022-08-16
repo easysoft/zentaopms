@@ -1,0 +1,73 @@
+{
+    "query": "DELIMITER \r",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "PARSER_METHODS": [
+            "parseDelimiter",
+            "parseWhitespace",
+            "parseNumber",
+            "parseComment",
+            "parseOperator",
+            "parseBool",
+            "parseString",
+            "parseSymbol",
+            "parseKeyword",
+            "parseLabel",
+            "parseUnknown"
+        ],
+        "str": "DELIMITER \r",
+        "len": 11,
+        "last": 11,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "DELIMITER",
+                    "value": "DELIMITER",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " \r",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 9
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 3,
+            "idx": 0
+        },
+        "DEFAULT_DELIMITER": ";",
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": null,
+    "errors": {
+        "lexer": [
+            [
+                "Expected delimiter.",
+                "",
+                11,
+                0
+            ]
+        ],
+        "parser": []
+    }
+}

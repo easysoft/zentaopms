@@ -1,0 +1,3 @@
+SELECT * FROM orders
+NATURAL JOIN Items_Orders LEFT JOIN items on orders.item_id = items.id
+WHERE customer= 'username'

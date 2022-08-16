@@ -1,0 +1,1 @@
+SELECT pid, name2 FROM tablename WHERE pid = 20 /* FOR UPDATE end_option */ FOR UPDATE

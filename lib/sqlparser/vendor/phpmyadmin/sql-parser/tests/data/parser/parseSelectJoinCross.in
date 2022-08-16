@@ -1,0 +1,4 @@
+SELECT table112.id,table112.bval1,table112.bval2,
+table111.id,table111.aval1
+FROM table112
+CROSS JOIN table111

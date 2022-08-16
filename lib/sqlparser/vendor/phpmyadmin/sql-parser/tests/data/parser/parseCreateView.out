@@ -1,0 +1,3592 @@
+{
+    "query": "CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY INVOKER VIEW `sakila`.`actor_info` AS select `a`.`actor_id` AS `actor_id`,`a`.`first_name` AS `first_name`,`a`.`last_name` AS `last_name`,group_concat(distinct concat(`c`.`name`,': ',(select group_concat(`f`.`title` order by `f`.`title` ASC separator ', ') from ((`sakila`.`film` `f` join `sakila`.`film_category` `fc` on((`f`.`film_id` = `fc`.`film_id`))) join `sakila`.`film_actor` `fa` on((`f`.`film_id` = `fa`.`film_id`))) where ((`fc`.`category_id` = `c`.`category_id`) and (`fa`.`actor_id` = `a`.`actor_id`)))) order by `c`.`name` ASC separator '; ') AS `film_info` from (((`sakila`.`actor` `a` left join `sakila`.`film_actor` `fa` on((`a`.`actor_id` = `fa`.`actor_id`))) left join `sakila`.`film_category` `fc` on((`fa`.`film_id` = `fc`.`film_id`))) left join `sakila`.`category` `c` on((`fc`.`category_id` = `c`.`category_id`))) group by `a`.`actor_id`,`a`.`first_name`,`a`.`last_name`",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "PARSER_METHODS": [
+            "parseDelimiter",
+            "parseWhitespace",
+            "parseNumber",
+            "parseComment",
+            "parseOperator",
+            "parseBool",
+            "parseString",
+            "parseSymbol",
+            "parseKeyword",
+            "parseLabel",
+            "parseUnknown"
+        ],
+        "str": "CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY INVOKER VIEW `sakila`.`actor_info` AS select `a`.`actor_id` AS `actor_id`,`a`.`first_name` AS `first_name`,`a`.`last_name` AS `last_name`,group_concat(distinct concat(`c`.`name`,': ',(select group_concat(`f`.`title` order by `f`.`title` ASC separator ', ') from ((`sakila`.`film` `f` join `sakila`.`film_category` `fc` on((`f`.`film_id` = `fc`.`film_id`))) join `sakila`.`film_actor` `fa` on((`f`.`film_id` = `fa`.`film_id`))) where ((`fc`.`category_id` = `c`.`category_id`) and (`fa`.`actor_id` = `a`.`actor_id`)))) order by `c`.`name` ASC separator '; ') AS `film_info` from (((`sakila`.`actor` `a` left join `sakila`.`film_actor` `fa` on((`a`.`actor_id` = `fa`.`actor_id`))) left join `sakila`.`film_category` `fc` on((`fa`.`film_id` = `fc`.`film_id`))) left join `sakila`.`category` `c` on((`fc`.`category_id` = `c`.`category_id`))) group by `a`.`actor_id`,`a`.`first_name`,`a`.`last_name`",
+        "len": 960,
+        "last": 960,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CREATE",
+                    "value": "CREATE",
+                    "keyword": "CREATE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "ALGORITHM",
+                    "value": "ALGORITHM",
+                    "keyword": "ALGORITHM",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 7
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 16
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "UNDEFINED",
+                    "value": "UNDEFINED",
+                    "keyword": "UNDEFINED",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 17
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 26
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "DEFINER",
+                    "value": "DEFINER",
+                    "keyword": "DEFINER",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 27
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 34
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`root`@`localhost`",
+                    "value": "root@localhost",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 4,
+                    "position": 35
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 53
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "SQL SECURITY",
+                    "value": "SQL SECURITY",
+                    "keyword": "SQL SECURITY",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 54
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 66
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "INVOKER",
+                    "value": "INVOKER",
+                    "keyword": "INVOKER",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 67
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 74
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "VIEW",
+                    "value": "VIEW",
+                    "keyword": "VIEW",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 75
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 79
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 80
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 88
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_info`",
+                    "value": "actor_info",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 89
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 101
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 102
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 104
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "select",
+                    "value": "SELECT",
+                    "keyword": "SELECT",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 105
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 111
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 112
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 115
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 116
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 126
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 127
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 129
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 130
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 140
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 141
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 144
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`first_name`",
+                    "value": "first_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 145
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 157
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 158
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 160
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`first_name`",
+                    "value": "first_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 161
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 173
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 174
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 177
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`last_name`",
+                    "value": "last_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 178
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 189
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 190
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 192
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`last_name`",
+                    "value": "last_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 193
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 204
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "group_concat",
+                    "value": "group_concat",
+                    "keyword": "GROUP_CONCAT",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 205
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 217
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "distinct",
+                    "value": "DISTINCT",
+                    "keyword": "DISTINCT",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 218
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 226
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "concat",
+                    "value": "concat",
+                    "keyword": "CONCAT",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 227
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 233
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`c`",
+                    "value": "c",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 234
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 237
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`name`",
+                    "value": "name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 238
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 244
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "': '",
+                    "value": ": ",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 245
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 249
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 250
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "select",
+                    "value": "SELECT",
+                    "keyword": "SELECT",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 251
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 257
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "group_concat",
+                    "value": "group_concat",
+                    "keyword": "GROUP_CONCAT",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 258
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 270
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`f`",
+                    "value": "f",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 271
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 274
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`title`",
+                    "value": "title",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 275
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 282
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "order by",
+                    "value": "ORDER BY",
+                    "keyword": "ORDER BY",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 283
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 291
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`f`",
+                    "value": "f",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 292
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 295
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`title`",
+                    "value": "title",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 296
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 303
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "ASC",
+                    "value": "ASC",
+                    "keyword": "ASC",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 304
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 307
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "separator",
+                    "value": "SEPARATOR",
+                    "keyword": "SEPARATOR",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 308
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 317
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "', '",
+                    "value": ", ",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 318
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 322
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 323
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "from",
+                    "value": "FROM",
+                    "keyword": "FROM",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 324
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 328
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 329
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 330
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 331
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 339
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film`",
+                    "value": "film",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 340
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 346
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`f`",
+                    "value": "f",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 347
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 350
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "join",
+                    "value": "JOIN",
+                    "keyword": "JOIN",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 351
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 355
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 356
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 364
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_category`",
+                    "value": "film_category",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 365
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 380
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 381
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 385
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "on",
+                    "value": "ON",
+                    "keyword": "ON",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 386
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 388
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 389
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`f`",
+                    "value": "f",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 390
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 393
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 394
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 403
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 404
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 405
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 406
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 410
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 411
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 420
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 421
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 422
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 423
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "join",
+                    "value": "JOIN",
+                    "keyword": "JOIN",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 424
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 428
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 429
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 437
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_actor`",
+                    "value": "film_actor",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 438
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 450
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 451
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 455
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "on",
+                    "value": "ON",
+                    "keyword": "ON",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 456
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 458
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 459
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`f`",
+                    "value": "f",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 460
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 463
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 464
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 473
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 474
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 475
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 476
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 480
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 481
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 490
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 491
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 492
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 493
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "where",
+                    "value": "WHERE",
+                    "keyword": "WHERE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 494
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 499
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 500
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 501
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 502
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 506
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`category_id`",
+                    "value": "category_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 507
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 520
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 521
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 522
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`c`",
+                    "value": "c",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 523
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 526
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`category_id`",
+                    "value": "category_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 527
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 540
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 541
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "and",
+                    "value": "AND",
+                    "keyword": "AND",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 542
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 545
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 546
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 547
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 551
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 552
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 562
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 563
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 564
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 565
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 568
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 569
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 579
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 580
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 581
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 582
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 583
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "order by",
+                    "value": "ORDER BY",
+                    "keyword": "ORDER BY",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 584
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 592
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`c`",
+                    "value": "c",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 593
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 596
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`name`",
+                    "value": "name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 597
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 603
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "ASC",
+                    "value": "ASC",
+                    "keyword": "ASC",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 604
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 607
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "separator",
+                    "value": "SEPARATOR",
+                    "keyword": "SEPARATOR",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 608
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 617
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'; '",
+                    "value": "; ",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 618
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 622
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 623
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 624
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 626
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_info`",
+                    "value": "film_info",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 627
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 638
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "from",
+                    "value": "FROM",
+                    "keyword": "FROM",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 639
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 643
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 644
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 645
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 646
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 647
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 655
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor`",
+                    "value": "actor",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 656
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 663
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 664
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 667
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "left join",
+                    "value": "LEFT JOIN",
+                    "keyword": "LEFT JOIN",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 668
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 677
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 678
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 686
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_actor`",
+                    "value": "film_actor",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 687
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 699
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 700
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 704
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "on",
+                    "value": "ON",
+                    "keyword": "ON",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 705
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 707
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 708
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 709
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 712
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 713
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 723
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 724
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 725
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 726
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 730
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 731
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 741
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 742
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 743
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 744
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "left join",
+                    "value": "LEFT JOIN",
+                    "keyword": "LEFT JOIN",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 745
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 754
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 755
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 763
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_category`",
+                    "value": "film_category",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 764
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 779
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 780
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 784
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "on",
+                    "value": "ON",
+                    "keyword": "ON",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 785
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 787
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 788
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fa`",
+                    "value": "fa",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 789
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 793
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 794
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 803
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 804
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 805
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 806
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 810
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`film_id`",
+                    "value": "film_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 811
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 820
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 821
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 822
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 823
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "left join",
+                    "value": "LEFT JOIN",
+                    "keyword": "LEFT JOIN",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 824
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 833
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`sakila`",
+                    "value": "sakila",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 834
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 842
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`category`",
+                    "value": "category",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 843
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 853
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`c`",
+                    "value": "c",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 854
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 857
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "on",
+                    "value": "ON",
+                    "keyword": "ON",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 858
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 860
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 861
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`fc`",
+                    "value": "fc",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 862
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 866
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`category_id`",
+                    "value": "category_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 867
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 880
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "=",
+                    "value": "=",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 2,
+                    "position": 881
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 882
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`c`",
+                    "value": "c",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 883
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 886
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`category_id`",
+                    "value": "category_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 887
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 900
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 901
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 902
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 903
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "group by",
+                    "value": "GROUP BY",
+                    "keyword": "GROUP BY",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 904
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 912
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 913
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 916
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`actor_id`",
+                    "value": "actor_id",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 917
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 927
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 928
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 931
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`first_name`",
+                    "value": "first_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 932
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 944
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`a`",
+                    "value": "a",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 945
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ".",
+                    "value": ".",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 948
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`last_name`",
+                    "value": "last_name",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 949
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 286,
+            "idx": 286
+        },
+        "DEFAULT_DELIMITER": ";",
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "STATEMENT_PARSERS": {
+            "DESCRIBE": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "DESC": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "EXPLAIN": "PhpMyAdmin\\SqlParser\\Statements\\ExplainStatement",
+            "FLUSH": "",
+            "GRANT": "",
+            "HELP": "",
+            "SET PASSWORD": "",
+            "STATUS": "",
+            "USE": "",
+            "ANALYZE": "PhpMyAdmin\\SqlParser\\Statements\\AnalyzeStatement",
+            "BACKUP": "PhpMyAdmin\\SqlParser\\Statements\\BackupStatement",
+            "CHECK": "PhpMyAdmin\\SqlParser\\Statements\\CheckStatement",
+            "CHECKSUM": "PhpMyAdmin\\SqlParser\\Statements\\ChecksumStatement",
+            "OPTIMIZE": "PhpMyAdmin\\SqlParser\\Statements\\OptimizeStatement",
+            "REPAIR": "PhpMyAdmin\\SqlParser\\Statements\\RepairStatement",
+            "RESTORE": "PhpMyAdmin\\SqlParser\\Statements\\RestoreStatement",
+            "SET": "PhpMyAdmin\\SqlParser\\Statements\\SetStatement",
+            "SHOW": "PhpMyAdmin\\SqlParser\\Statements\\ShowStatement",
+            "ALTER": "PhpMyAdmin\\SqlParser\\Statements\\AlterStatement",
+            "CREATE": "PhpMyAdmin\\SqlParser\\Statements\\CreateStatement",
+            "DROP": "PhpMyAdmin\\SqlParser\\Statements\\DropStatement",
+            "RENAME": "PhpMyAdmin\\SqlParser\\Statements\\RenameStatement",
+            "TRUNCATE": "PhpMyAdmin\\SqlParser\\Statements\\TruncateStatement",
+            "CALL": "PhpMyAdmin\\SqlParser\\Statements\\CallStatement",
+            "DELETE": "PhpMyAdmin\\SqlParser\\Statements\\DeleteStatement",
+            "DO": "",
+            "HANDLER": "",
+            "INSERT": "PhpMyAdmin\\SqlParser\\Statements\\InsertStatement",
+            "LOAD DATA": "PhpMyAdmin\\SqlParser\\Statements\\LoadStatement",
+            "REPLACE": "PhpMyAdmin\\SqlParser\\Statements\\ReplaceStatement",
+            "SELECT": "PhpMyAdmin\\SqlParser\\Statements\\SelectStatement",
+            "UPDATE": "PhpMyAdmin\\SqlParser\\Statements\\UpdateStatement",
+            "WITH": "PhpMyAdmin\\SqlParser\\Statements\\WithStatement",
+            "DEALLOCATE": "",
+            "EXECUTE": "",
+            "PREPARE": "",
+            "BEGIN": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "COMMIT": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "ROLLBACK": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "START TRANSACTION": "PhpMyAdmin\\SqlParser\\Statements\\TransactionStatement",
+            "PURGE": "PhpMyAdmin\\SqlParser\\Statements\\PurgeStatement",
+            "LOCK": "PhpMyAdmin\\SqlParser\\Statements\\LockStatement",
+            "UNLOCK": "PhpMyAdmin\\SqlParser\\Statements\\LockStatement"
+        },
+        "KEYWORD_PARSERS": {
+            "PARTITION BY": [],
+            "SUBPARTITION BY": [],
+            "_OPTIONS": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                "field": "options"
+            },
+            "_END_OPTIONS": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                "field": "end_options"
+            },
+            "INTERSECT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "EXCEPT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION ALL": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "UNION DISTINCT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\UnionKeyword",
+                "field": "union"
+            },
+            "ALTER": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "ANALYZE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "BACKUP": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CALL": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\FunctionCall",
+                "field": "call"
+            },
+            "CHECK": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CHECKSUM": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "CROSS JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "DROP": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "fields",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "FORCE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "FROM": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "from",
+                "options": {
+                    "field": "table"
+                }
+            },
+            "GROUP BY": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\GroupKeyword",
+                "field": "group"
+            },
+            "HAVING": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Condition",
+                "field": "having"
+            },
+            "IGNORE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "INTO": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IntoKeyword",
+                "field": "into"
+            },
+            "JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LEFT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LEFT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "ON": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "RIGHT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "RIGHT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "INNER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "FULL JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "FULL OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL LEFT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL RIGHT JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL LEFT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "NATURAL RIGHT OUTER JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "STRAIGHT_JOIN": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\JoinKeyword",
+                "field": "join"
+            },
+            "LIMIT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Limit",
+                "field": "limit"
+            },
+            "OPTIMIZE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "ORDER BY": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\OrderKeyword",
+                "field": "order"
+            },
+            "PARTITION": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ArrayObj",
+                "field": "partition"
+            },
+            "PROCEDURE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\FunctionCall",
+                "field": "procedure"
+            },
+            "RENAME": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\RenameOperation",
+                "field": "renames"
+            },
+            "REPAIR": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "RESTORE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "SET": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\SetOperation",
+                "field": "set"
+            },
+            "SELECT": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "expr"
+            },
+            "TRUNCATE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                "field": "table",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "UPDATE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\ExpressionArray",
+                "field": "tables",
+                "options": {
+                    "parseField": "table"
+                }
+            },
+            "USE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\IndexHint",
+                "field": "index_hints"
+            },
+            "VALUE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Array2d",
+                "field": "values"
+            },
+            "VALUES": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Array2d",
+                "field": "values"
+            },
+            "WHERE": {
+                "class": "PhpMyAdmin\\SqlParser\\Components\\Condition",
+                "field": "where"
+            }
+        },
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\CreateStatement",
+                "OPTIONS": {
+                    "TEMPORARY": 1,
+                    "OR REPLACE": 2,
+                    "ALGORITHM": [
+                        3,
+                        "var="
+                    ],
+                    "DEFINER": [
+                        4,
+                        "expr="
+                    ],
+                    "SQL SECURITY": [
+                        5,
+                        "var"
+                    ],
+                    "DATABASE": 6,
+                    "EVENT": 6,
+                    "FUNCTION": 6,
+                    "INDEX": 6,
+                    "UNIQUE INDEX": 6,
+                    "FULLTEXT INDEX": 6,
+                    "SPATIAL INDEX": 6,
+                    "PROCEDURE": 6,
+                    "SERVER": 6,
+                    "TABLE": 6,
+                    "TABLESPACE": 6,
+                    "TRIGGER": 6,
+                    "USER": 6,
+                    "VIEW": 6,
+                    "SCHEMA": 6,
+                    "IF NOT EXISTS": 7
+                },
+                "DB_OPTIONS": {
+                    "CHARACTER SET": [
+                        1,
+                        "var="
+                    ],
+                    "CHARSET": [
+                        1,
+                        "var="
+                    ],
+                    "DEFAULT CHARACTER SET": [
+                        1,
+                        "var="
+                    ],
+                    "DEFAULT CHARSET": [
+                        1,
+                        "var="
+                    ],
+                    "DEFAULT COLLATE": [
+                        2,
+                        "var="
+                    ],
+                    "COLLATE": [
+                        2,
+                        "var="
+                    ]
+                },
+                "TABLE_OPTIONS": {
+                    "ENGINE": [
+                        1,
+                        "var="
+                    ],
+                    "AUTO_INCREMENT": [
+                        2,
+                        "var="
+                    ],
+                    "AVG_ROW_LENGTH": [
+                        3,
+                        "var"
+                    ],
+                    "CHARACTER SET": [
+                        4,
+                        "var="
+                    ],
+                    "CHARSET": [
+                        4,
+                        "var="
+                    ],
+                    "DEFAULT CHARACTER SET": [
+                        4,
+                        "var="
+                    ],
+                    "DEFAULT CHARSET": [
+                        4,
+                        "var="
+                    ],
+                    "CHECKSUM": [
+                        5,
+                        "var"
+                    ],
+                    "DEFAULT COLLATE": [
+                        6,
+                        "var="
+                    ],
+                    "COLLATE": [
+                        6,
+                        "var="
+                    ],
+                    "COMMENT": [
+                        7,
+                        "var="
+                    ],
+                    "CONNECTION": [
+                        8,
+                        "var"
+                    ],
+                    "DATA DIRECTORY": [
+                        9,
+                        "var"
+                    ],
+                    "DELAY_KEY_WRITE": [
+                        10,
+                        "var"
+                    ],
+                    "INDEX DIRECTORY": [
+                        11,
+                        "var"
+                    ],
+                    "INSERT_METHOD": [
+                        12,
+                        "var"
+                    ],
+                    "KEY_BLOCK_SIZE": [
+                        13,
+                        "var"
+                    ],
+                    "MAX_ROWS": [
+                        14,
+                        "var"
+                    ],
+                    "MIN_ROWS": [
+                        15,
+                        "var"
+                    ],
+                    "PACK_KEYS": [
+                        16,
+                        "var"
+                    ],
+                    "PASSWORD": [
+                        17,
+                        "var"
+                    ],
+                    "ROW_FORMAT": [
+                        18,
+                        "var"
+                    ],
+                    "TABLESPACE": [
+                        19,
+                        "var"
+                    ],
+                    "STORAGE": [
+                        20,
+                        "var"
+                    ],
+                    "UNION": [
+                        21,
+                        "var"
+                    ]
+                },
+                "FUNC_OPTIONS": {
+                    "NOT": [
+                        2,
+                        "var"
+                    ],
+                    "FUNCTION": [
+                        3,
+                        "var="
+                    ],
+                    "PROCEDURE": [
+                        3,
+                        "var="
+                    ],
+                    "CONTAINS": [
+                        4,
+                        "expr"
+                    ],
+                    "NO": [
+                        4,
+                        "var"
+                    ],
+                    "READS": [
+                        4,
+                        "var"
+                    ],
+                    "MODIFIES": [
+                        4,
+                        "expr"
+                    ],
+                    "SQL SECURITY": [
+                        6,
+                        "var"
+                    ],
+                    "LANGUAGE": [
+                        7,
+                        "var"
+                    ],
+                    "COMMENT": [
+                        8,
+                        "var"
+                    ],
+                    "CREATE": 1,
+                    "DETERMINISTIC": 2,
+                    "DATA": 5
+                },
+                "TRIGGER_OPTIONS": {
+                    "BEFORE": 1,
+                    "AFTER": 1,
+                    "INSERT": 2,
+                    "UPDATE": 2,
+                    "DELETE": 2
+                },
+                "name": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                    "ALLOWED_KEYWORDS": {
+                        "AS": 1,
+                        "DUAL": 1,
+                        "NULL": 1,
+                        "REGEXP": 1,
+                        "CASE": 1,
+                        "DIV": 1,
+                        "AND": 1,
+                        "OR": 1,
+                        "XOR": 1,
+                        "NOT": 1,
+                        "MOD": 1
+                    },
+                    "database": "sakila",
+                    "table": "actor_info",
+                    "column": null,
+                    "expr": "`sakila`.`actor_info`",
+                    "alias": null,
+                    "function": null,
+                    "subquery": null
+                },
+                "entityOptions": null,
+                "fields": null,
+                "select": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Statements\\SelectStatement",
+                    "OPTIONS": {
+                        "ALL": 1,
+                        "DISTINCT": 1,
+                        "DISTINCTROW": 1,
+                        "HIGH_PRIORITY": 2,
+                        "MAX_STATEMENT_TIME": [
+                            3,
+                            "var="
+                        ],
+                        "STRAIGHT_JOIN": 4,
+                        "SQL_SMALL_RESULT": 5,
+                        "SQL_BIG_RESULT": 6,
+                        "SQL_BUFFER_RESULT": 7,
+                        "SQL_CACHE": 8,
+                        "SQL_NO_CACHE": 8,
+                        "SQL_CALC_FOUND_ROWS": 9
+                    },
+                    "END_OPTIONS": {
+                        "FOR UPDATE": 1,
+                        "LOCK IN SHARE MODE": 1
+                    },
+                    "CLAUSES": {
+                        "SELECT": [
+                            "SELECT",
+                            2
+                        ],
+                        "_OPTIONS": [
+                            "_OPTIONS",
+                            1
+                        ],
+                        "_SELECT": [
+                            "SELECT",
+                            1
+                        ],
+                        "INTO": [
+                            "INTO",
+                            3
+                        ],
+                        "FROM": [
+                            "FROM",
+                            3
+                        ],
+                        "FORCE": [
+                            "FORCE",
+                            1
+                        ],
+                        "USE": [
+                            "USE",
+                            1
+                        ],
+                        "IGNORE": [
+                            "IGNORE",
+                            3
+                        ],
+                        "PARTITION": [
+                            "PARTITION",
+                            3
+                        ],
+                        "JOIN": [
+                            "JOIN",
+                            1
+                        ],
+                        "FULL JOIN": [
+                            "FULL JOIN",
+                            1
+                        ],
+                        "INNER JOIN": [
+                            "INNER JOIN",
+                            1
+                        ],
+                        "LEFT JOIN": [
+                            "LEFT JOIN",
+                            1
+                        ],
+                        "LEFT OUTER JOIN": [
+                            "LEFT OUTER JOIN",
+                            1
+                        ],
+                        "RIGHT JOIN": [
+                            "RIGHT JOIN",
+                            1
+                        ],
+                        "RIGHT OUTER JOIN": [
+                            "RIGHT OUTER JOIN",
+                            1
+                        ],
+                        "NATURAL JOIN": [
+                            "NATURAL JOIN",
+                            1
+                        ],
+                        "NATURAL LEFT JOIN": [
+                            "NATURAL LEFT JOIN",
+                            1
+                        ],
+                        "NATURAL RIGHT JOIN": [
+                            "NATURAL RIGHT JOIN",
+                            1
+                        ],
+                        "NATURAL LEFT OUTER JOIN": [
+                            "NATURAL LEFT OUTER JOIN",
+                            1
+                        ],
+                        "NATURAL RIGHT OUTER JOIN": [
+                            "NATURAL RIGHT JOIN",
+                            1
+                        ],
+                        "WHERE": [
+                            "WHERE",
+                            3
+                        ],
+                        "GROUP BY": [
+                            "GROUP BY",
+                            3
+                        ],
+                        "HAVING": [
+                            "HAVING",
+                            3
+                        ],
+                        "ORDER BY": [
+                            "ORDER BY",
+                            3
+                        ],
+                        "LIMIT": [
+                            "LIMIT",
+                            3
+                        ],
+                        "PROCEDURE": [
+                            "PROCEDURE",
+                            3
+                        ],
+                        "UNION": [
+                            "UNION",
+                            1
+                        ],
+                        "EXCEPT": [
+                            "EXCEPT",
+                            1
+                        ],
+                        "INTERSECT": [
+                            "INTERSECT",
+                            1
+                        ],
+                        "_END_OPTIONS": [
+                            "_END_OPTIONS",
+                            1
+                        ]
+                    },
+                    "expr": [
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "ALLOWED_KEYWORDS": {
+                                "AS": 1,
+                                "DUAL": 1,
+                                "NULL": 1,
+                                "REGEXP": 1,
+                                "CASE": 1,
+                                "DIV": 1,
+                                "AND": 1,
+                                "OR": 1,
+                                "XOR": 1,
+                                "NOT": 1,
+                                "MOD": 1
+                            },
+                            "database": null,
+                            "table": "a",
+                            "column": "actor_id",
+                            "expr": "`a`.`actor_id`",
+                            "alias": "actor_id",
+                            "function": null,
+                            "subquery": null
+                        },
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "ALLOWED_KEYWORDS": {
+                                "AS": 1,
+                                "DUAL": 1,
+                                "NULL": 1,
+                                "REGEXP": 1,
+                                "CASE": 1,
+                                "DIV": 1,
+                                "AND": 1,
+                                "OR": 1,
+                                "XOR": 1,
+                                "NOT": 1,
+                                "MOD": 1
+                            },
+                            "database": null,
+                            "table": "a",
+                            "column": "first_name",
+                            "expr": "`a`.`first_name`",
+                            "alias": "first_name",
+                            "function": null,
+                            "subquery": null
+                        },
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "ALLOWED_KEYWORDS": {
+                                "AS": 1,
+                                "DUAL": 1,
+                                "NULL": 1,
+                                "REGEXP": 1,
+                                "CASE": 1,
+                                "DIV": 1,
+                                "AND": 1,
+                                "OR": 1,
+                                "XOR": 1,
+                                "NOT": 1,
+                                "MOD": 1
+                            },
+                            "database": null,
+                            "table": "a",
+                            "column": "last_name",
+                            "expr": "`a`.`last_name`",
+                            "alias": "last_name",
+                            "function": null,
+                            "subquery": null
+                        },
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "ALLOWED_KEYWORDS": {
+                                "AS": 1,
+                                "DUAL": 1,
+                                "NULL": 1,
+                                "REGEXP": 1,
+                                "CASE": 1,
+                                "DIV": 1,
+                                "AND": 1,
+                                "OR": 1,
+                                "XOR": 1,
+                                "NOT": 1,
+                                "MOD": 1
+                            },
+                            "database": null,
+                            "table": null,
+                            "column": null,
+                            "expr": "group_concat(distinct concat(`c`.`name`,': ',(select group_concat(`f`.`title` order by `f`.`title` ASC separator ', ') from ((`sakila`.`film` `f` join `sakila`.`film_category` `fc` on((`f`.`film_id` = `fc`.`film_id`))) join `sakila`.`film_actor` `fa` on((`f`.`film_id` = `fa`.`film_id`))) where ((`fc`.`category_id` = `c`.`category_id`) and (`fa`.`actor_id` = `a`.`actor_id`)))) order by `c`.`name` ASC separator '; ')",
+                            "alias": "film_info",
+                            "function": "group_concat",
+                            "subquery": "SELECT"
+                        }
+                    ],
+                    "from": [
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "ALLOWED_KEYWORDS": {
+                                "AS": 1,
+                                "DUAL": 1,
+                                "NULL": 1,
+                                "REGEXP": 1,
+                                "CASE": 1,
+                                "DIV": 1,
+                                "AND": 1,
+                                "OR": 1,
+                                "XOR": 1,
+                                "NOT": 1,
+                                "MOD": 1
+                            },
+                            "database": null,
+                            "table": null,
+                            "column": null,
+                            "expr": "(((`sakila`.`actor` `a` left join `sakila`.`film_actor` `fa` on((`a`.`actor_id` = `fa`.`actor_id`))) left join `sakila`.`film_category` `fc` on((`fa`.`film_id` = `fc`.`film_id`))) left join `sakila`.`category` `c` on((`fc`.`category_id` = `c`.`category_id`)))",
+                            "alias": null,
+                            "function": null,
+                            "subquery": null
+                        }
+                    ],
+                    "index_hints": null,
+                    "partition": null,
+                    "where": null,
+                    "group": [
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\GroupKeyword",
+                            "type": null,
+                            "expr": {
+                                "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                                "ALLOWED_KEYWORDS": {
+                                    "AS": 1,
+                                    "DUAL": 1,
+                                    "NULL": 1,
+                                    "REGEXP": 1,
+                                    "CASE": 1,
+                                    "DIV": 1,
+                                    "AND": 1,
+                                    "OR": 1,
+                                    "XOR": 1,
+                                    "NOT": 1,
+                                    "MOD": 1
+                                },
+                                "database": null,
+                                "table": "a",
+                                "column": "actor_id",
+                                "expr": "`a`.`actor_id`",
+                                "alias": null,
+                                "function": null,
+                                "subquery": null
+                            }
+                        },
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\GroupKeyword",
+                            "type": null,
+                            "expr": {
+                                "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                                "ALLOWED_KEYWORDS": {
+                                    "AS": 1,
+                                    "DUAL": 1,
+                                    "NULL": 1,
+                                    "REGEXP": 1,
+                                    "CASE": 1,
+                                    "DIV": 1,
+                                    "AND": 1,
+                                    "OR": 1,
+                                    "XOR": 1,
+                                    "NOT": 1,
+                                    "MOD": 1
+                                },
+                                "database": null,
+                                "table": "a",
+                                "column": "first_name",
+                                "expr": "`a`.`first_name`",
+                                "alias": null,
+                                "function": null,
+                                "subquery": null
+                            }
+                        },
+                        {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\GroupKeyword",
+                            "type": null,
+                            "expr": {
+                                "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                                "ALLOWED_KEYWORDS": {
+                                    "AS": 1,
+                                    "DUAL": 1,
+                                    "NULL": 1,
+                                    "REGEXP": 1,
+                                    "CASE": 1,
+                                    "DIV": 1,
+                                    "AND": 1,
+                                    "OR": 1,
+                                    "XOR": 1,
+                                    "NOT": 1,
+                                    "MOD": 1
+                                },
+                                "database": null,
+                                "table": "a",
+                                "column": "last_name",
+                                "expr": "`a`.`last_name`",
+                                "alias": null,
+                                "function": null,
+                                "subquery": null
+                            }
+                        }
+                    ],
+                    "having": null,
+                    "order": null,
+                    "limit": null,
+                    "procedure": null,
+                    "into": null,
+                    "join": null,
+                    "union": [],
+                    "end_options": null,
+                    "options": {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                        "options": []
+                    },
+                    "first": 22,
+                    "last": 284
+                },
+                "like": null,
+                "partitionBy": null,
+                "partitionsNum": null,
+                "subpartitionBy": null,
+                "subpartitionsNum": null,
+                "partitions": null,
+                "table": null,
+                "return": null,
+                "parameters": null,
+                "body": [
+                    {
+                        "@type": "@286"
+                    }
+                ],
+                "CLAUSES": [],
+                "END_OPTIONS": [],
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "3": {
+                            "name": "ALGORITHM",
+                            "equals": true,
+                            "expr": "UNDEFINED",
+                            "value": "UNDEFINED"
+                        },
+                        "4": {
+                            "name": "DEFINER",
+                            "equals": true,
+                            "expr": {
+                                "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                                "ALLOWED_KEYWORDS": {
+                                    "AS": 1,
+                                    "DUAL": 1,
+                                    "NULL": 1,
+                                    "REGEXP": 1,
+                                    "CASE": 1,
+                                    "DIV": 1,
+                                    "AND": 1,
+                                    "OR": 1,
+                                    "XOR": 1,
+                                    "NOT": 1,
+                                    "MOD": 1
+                                },
+                                "database": null,
+                                "table": null,
+                                "column": "root@localhost",
+                                "expr": "`root`@`localhost`",
+                                "alias": null,
+                                "function": null,
+                                "subquery": null
+                            },
+                            "value": "`root`@`localhost`"
+                        },
+                        "5": {
+                            "name": "SQL SECURITY",
+                            "equals": false,
+                            "expr": "INVOKER",
+                            "value": "INVOKER"
+                        },
+                        "6": "VIEW"
+                    }
+                },
+                "first": 0,
+                "last": 285
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

@@ -1,0 +1,2 @@
+select (SELECT name FROM mysql.help_category WHERE help_category_id = 1) as name,
+case /* */ when 1=1 then "Some" when 2=1 then "Other" end FROM a;

@@ -1,0 +1,4 @@
+INSERT INTO
+  tbproject(`id`, `name`, `description`, `create_dt`, `dbtype`, `useclause`, `sync_comments`)
+VALUES
+  (NULL, 'testdb', 'Descrizione test', NOW(), 'mySQL', '', 1);

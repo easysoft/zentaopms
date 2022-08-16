@@ -1,0 +1,34 @@
+SELECT * FROM
+SELECT *FROM
+SELECT a.* FROM
+SELECT a.*,b.* FROM
+SELECT a.*, b.* FROM
+SELECT a.*, /* with a comment */ b.* FROM
+SELECT a.*,/* with a comment */b.* FROM
+SELECT a.* /* comment */ FROM
+-- SELECT a.*/* comment */ FROM (This one is not working yet because of https://github.com/phpmyadmin/sql-parser/issues/285. Please uncomment when this issue is fixed.)
+SELECT DISTINCT * FROM
+SELECT DISTINCT *FROM
+SELECT DISTINCT a.* FROM
+SELECT DISTINCT a.*,b.* FROM
+SELECT DISTINCT a.*, b.* FROM
+SELECT DISTINCT a.*, /* with a comment */ b.* FROM
+SELECT DISTINCT a.*,/* with a comment */b.* FROM
+SELECT DISTINCT a.* /* comment */ FROM
+-- SELECT DISTINCT a.*/* comment */ FROM (This one is not working yet because of https://github.com/phpmyadmin/sql-parser/issues/285. Please uncomment when this issue is fixed.)
+SELECT `*` FROM table_name
+SELECT `*`.* FROM table_name AS `*`
+SELECT COUNT(*) FROM table_name
+SELECT COUNT( * ) FROM table_name
+SELECT COUNT( * /* comment with *,USING,FROM */) FROM table_name
+SELECT COUNT(`*`) FROM table_name
+SELECT 1 FROM table_name WHERE LABEL LIKE '%*%'
+DELETE a.* USING
+DELETE a.*, b.* USING
+DELETE a.* ,b.* USING
+DELETE a.* , b.* USING
+DELETE a.* /* comment */ USING
+DELETE a.* /* comment */, b.* /*comment*/ USING
+DELETE a.* /* comment */ ,b.* /*comment*/ USING
+DELETE a.* /* comment */ , b.* /*comment*/ USING
+

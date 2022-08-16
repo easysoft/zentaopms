@@ -1,0 +1,3 @@
+SELECT *
+   FROM test
+   WHERE RIGHT(name, 2) = 'AB';

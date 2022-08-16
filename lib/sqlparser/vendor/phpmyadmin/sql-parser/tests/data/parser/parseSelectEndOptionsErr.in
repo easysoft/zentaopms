@@ -1,0 +1,3 @@
+SELECT pid, name2 FROM tablename WHERE pid = 20
+/* USE both end_option, gives error */
+FOR UPDATE LOCK IN SHARE MODE

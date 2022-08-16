@@ -1,0 +1,11 @@
+CREATE TABLE `jos_core_acl_aro` (
+  `id` int(11) NOT NULL,
+  `section_value` varchar(240) NOT NULL DEFAULT '0',
+  `value` varchar(240) NOT NULL DEFAULT '',
+  `order_value` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `hidden` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `jos_section_value_value_aro` (`section_value`(100),`value`(15)) USING BTREE,
+  KEY `jos_gacl_hidden_aro` (`hidden`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
