@@ -2534,7 +2534,7 @@ class executionModel extends model
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
 
-            $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
+            $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
