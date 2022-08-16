@@ -14,8 +14,8 @@
           <th class='c-step'>
             <table class='w-p100 table-borderless'>
               <tr>
-                <th class="no-padding"><?php echo $fields['stepDesc']['title']?></th>
-                <th class="no-padding"><?php echo $fields['stepExpect']['title']?></th>
+                <th><?php echo $fields['stepDesc']['title']?></th>
+                <th><?php echo $fields['stepExpect']['title']?></th>
               </tr>
             </table>
           </th>

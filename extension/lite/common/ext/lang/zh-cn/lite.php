@@ -51,6 +51,7 @@ else
 }
 
 $lang->task->common = '任务';
+$lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* My menu. */
 $lang->my->menu           = new stdclass();

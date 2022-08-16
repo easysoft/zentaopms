@@ -6687,7 +6687,7 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `action` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `relationoftasks` (`execution`,`task`)
-) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'execution','gantt'),
 (1,'execution','relation'),

@@ -479,7 +479,7 @@ class portModel extends model
     {
         $getParams = $this->session->{$model . 'PortParams'};
 
-        if($params)
+        if($params and $getParams)
         {
             $params = explode('&', $params);
             foreach($params as $param => $value)
@@ -642,6 +642,7 @@ class portModel extends model
             foreach($listFields as $field)
             {
                 $listName = $field . 'List';
+                if(!empty($_POST[$listName])) continue;
                 if(!empty($fieldList[$field]))
                 {
                     $lists[$listName] = $fieldList[$field]['values'];
@@ -900,6 +901,8 @@ class portModel extends model
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
+
+        $this->session->set('insert', true);
 
         foreach($datas as $data)
         {
@@ -1302,7 +1305,7 @@ class portModel extends model
                 elseif($field == 'estimate')
                 {
                     $html .= '<td>';
-                    if(is_array($object->estimate))
+                    if(!empty($object->estimate) and is_array($object->estimate))
                     {
                         $html .= "<table class='table-borderless'>";
                         foreach($object->estimate as $account => $estimate)
