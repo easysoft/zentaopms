@@ -1733,10 +1733,10 @@ class mrModel extends model
         }
         else
         {
-            $projectID = $MR->projectID;
+            $projectID = $MR->targetProject;
             $MRID      = $MR->mriid;
-            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($this->hostID), "/projects/$projectID/merge_requests/$MRID/commits");
-            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($this->hostID), "/repos/$projectID/pulls/$MRID/commits");
+            if($host->type == 'gitlab') $url = sprintf($this->loadModel('gitlab')->getApiRoot($MR->hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+            if($host->type == 'gitea')  $url = sprintf($this->loadModel('gitea')->getApiRoot($MR->hostID), "/repos/$projectID/pulls/$MRID/commits");
             return json_decode(commonModel::http($url));
         }
     }
