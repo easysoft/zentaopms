@@ -905,7 +905,7 @@ function setProgramByProduct(product)
 
         getProjectByProgram($('#programs'));
     }
-    else if($(':checkbox:checked[data-programid=' + programID + ']').length == 0)
+    else if(programID && $(':checkbox:checked[data-programid=' + programID + ']').length == 0)
     {
         $('form #newProgram0').removeAttr('disabled');
         $('#programs').removeAttr('disabled');
