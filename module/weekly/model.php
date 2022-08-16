@@ -114,7 +114,11 @@ class weeklyModel extends model
      */
     public function save($project, $date)
     {
-        $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($project)->exec();
+        $weekStart = $this->getThisMonday($date);
+        $this->dao->delete()->from(TABLE_WEEKLYREPORT)
+            ->where('project')->eq($project)
+            ->andWhere('weekStart')->eq($weekStart)
+            ->exec();
 
         $report = new stdclass;
         $report->pv        = $this->getPV($project, $date);
@@ -123,7 +127,7 @@ class weeklyModel extends model
         $report->sv        = $this->getSV($report->ev, $report->pv);
         $report->cv        = $this->getCV($report->ev, $report->ac);
         $report->project   = $project;
-        $report->weekStart = $this->getThisMonday($date);
+        $report->weekStart = $weekStart;
         $report->staff     = $this->getStaff($project);
         $report->workload  = json_encode($this->getWorkloadByType($project, $date));
         $this->dao->replace(TABLE_WEEKLYREPORT)->data($report)->exec();
@@ -378,9 +382,10 @@ class weeklyModel extends model
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
-            ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
             ->andWhere("parent")->ge(0)
             ->andWhere("deleted")->eq(0)
+            ->andWhere("estStarted")->ge($monday)
+            ->andWhere("estStarted")->lt($nextMonday)
             ->fetchAll('id');
 
         $PV = 0;
@@ -400,7 +405,7 @@ class weeklyModel extends model
             $PV += count($passedDays) * $task->estimate / count($fullDays);
         }
 
-        return round($PV, 2);
+        return sprintf("%.2f",$PV);
     }
 
     /**
@@ -429,7 +434,8 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('consumed')->gt(0)
-            ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
+            ->andWhere("estStarted")->ge($monday)
+            ->andWhere("estStarted")->lt($nextMonday)
             ->andWhere("parent")->ge(0)
             ->andWhere("deleted")->eq(0)
             ->andWhere('status')->ne('cancel')
@@ -448,7 +454,8 @@ class weeklyModel extends model
                 $EV += $task->estimate * $task->progress / 100;
             }
         }
-        return round($EV, 2);
+
+        return sprintf("%.2f", $EV);
     }
 
     /**
@@ -483,6 +490,7 @@ class weeklyModel extends model
                 ->where('objectType')->eq('task')
                 ->andWhere('objectID')->in($taskIdList)
                 ->andWhere('execution')->in($executionIdList)
+                ->andWhere('date')->ge($monday)
                 ->andWhere('date')->lt($nextMonday)
                 ->fetch('consumed');
         }
@@ -491,11 +499,12 @@ class weeklyModel extends model
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_TASKESTIMATE)
                 ->where('task')->in($taskIdList)
+                ->andWhere('date')->ge($monday)
                 ->andWhere('date')->lt($nextMonday)
                 ->fetch('consumed');
         }
 
-        return round($AC, 2);
+        return sprintf("%.2f", $AC);
     }
 
     /**
