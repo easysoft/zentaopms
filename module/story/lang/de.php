@@ -148,6 +148,7 @@ $lang->story->linkRequirements = "Linked {$lang->URCommon}";
 $lang->story->childStories     = 'Story aufteilen';
 $lang->story->duplicateStory   = 'Story ID kopieren';
 $lang->story->reviewResult     = 'Ergbnis prüfen';
+$lang->story->reviewResultAB   = 'Bewertungsergebnisse';
 $lang->story->preVersion       = 'Frühere Version';
 $lang->story->keywords         = 'Tags';
 $lang->story->newStory         = 'Weitere Story';

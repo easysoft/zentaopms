@@ -141,6 +141,7 @@ $lang->story->linkStories    = 'Câu chuyện liên kết';
 $lang->story->childStories   = 'Câu chuyện được phân rã';
 $lang->story->duplicateStory = 'ID câu chuyện được nhân bản';
 $lang->story->reviewResult   = 'Duyệt kết quả';
+$lang->story->reviewResultAB = 'Kết quả đánh giá';
 $lang->story->preVersion     = 'Phiên bản mới nhất';
 $lang->story->keywords       = 'Tags';
 $lang->story->newStory       = 'Tiếp tục thêm';

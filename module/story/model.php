@@ -2991,10 +2991,34 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
+        /* From action Get reviews. */
+        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('product')->like("%,$productID,%")
+            ->andWhere('action')->eq('reviewed')
+            ->andWhere('objectType')->eq('story')
+            ->andWhere('extra')->eq('Revert')
+            ->groupBy('objectID')
+            ->orderBy('id_desc')
+            ->fetchAll();
 
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        if(strpos($sql,'result')!== false)
+        {
+            if(strpos($sql,'revert')!== false)
+            {
+                $sql = str_replace("AND `result` = 'revert'",'',$sql);
+                $review = implode('\',\'',array_column($review,'objectID'));
+                $sql.=" AND t1.`id` in ('{$review}')";
+            }
+            else
+            {
+                $sql = str_replace(array('`result`'), array('t3.`result`'), $sql);
+            }
+        }
+
         $tmpStories = $this->dao->select('DISTINCT t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->beginIF(strpos($sql,'result')!== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)

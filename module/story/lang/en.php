@@ -148,6 +148,7 @@ $lang->story->linkRequirements = "Linked {$lang->URCommon}";
 $lang->story->childStories     = 'Decomposed Story';
 $lang->story->duplicateStory   = 'Duplicated Story ID';
 $lang->story->reviewResult     = 'Review Result';
+$lang->story->reviewResultAB   = 'Assessment results';
 $lang->story->preVersion       = 'Last Version';
 $lang->story->keywords         = 'Tags';
 $lang->story->newStory         = 'Continue adding';

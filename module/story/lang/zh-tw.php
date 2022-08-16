@@ -139,6 +139,7 @@ $lang->story->linkStories    = "相關{$lang->SRCommon}";
 $lang->story->childStories   = "細分需求";
 $lang->story->duplicateStory = "重複需求ID";
 $lang->story->reviewResult   = '評審意見';
+$lang->story->reviewResultAB = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = "繼續添加{$lang->SRCommon}";

@@ -148,6 +148,7 @@ $lang->story->linkRequirements = "相关{$lang->URCommon}";
 $lang->story->childStories     = "细分需求";
 $lang->story->duplicateStory   = "重复需求ID";
 $lang->story->reviewResult     = '评审意见';
+$lang->story->reviewResultAB   = '评审结果';
 $lang->story->preVersion       = '之前版本';
 $lang->story->keywords         = '关键词';
 $lang->story->newStory         = "继续添加{$lang->SRCommon}";

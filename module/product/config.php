@@ -38,6 +38,7 @@ $config->product->search['fields']['category']   = $lang->story->category;
 
 $config->product->search['fields']['openedBy']     = $lang->story->openedBy;
 $config->product->search['fields']['reviewedBy']   = $lang->story->reviewedBy;
+$config->product->search['fields']['result']       = $lang->story->reviewResultAB;
 $config->product->search['fields']['assignedTo']   = $lang->story->assignedTo;
 $config->product->search['fields']['closedBy']     = $lang->story->closedBy;
 $config->product->search['fields']['lastEditedBy'] = $lang->story->lastEditedBy;
@@ -73,6 +74,7 @@ $config->product->search['params']['category']       = array('operator' => '=', 
 
 $config->product->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['reviewedBy']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+$config->product->search['params']['result']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reviewResultList);
 $config->product->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
