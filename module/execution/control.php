@@ -2552,7 +2552,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
-        $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
+        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -3731,7 +3731,7 @@ class execution extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->project->getStats(0, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
+        $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
 
         $parentIdList = array();
         foreach($executionStats as $execution)
@@ -3742,7 +3742,7 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->project->getStats(0, 'all');
+        $allExecutionsNum = $this->execution->getStatData(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
@@ -3853,7 +3853,7 @@ class execution extends control
             }
 
             $project        = $this->project->getByID($projectID);
-            $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, '', 'id_asc');
             if(isset($project->model) and $project->model == 'waterfall')
             {
                 $stageList = array();
