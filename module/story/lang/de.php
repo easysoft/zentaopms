@@ -26,6 +26,7 @@ $lang->story->review             = 'Prüfen';
 $lang->story->submitReview       = "Submit Review";
 $lang->story->recall             = 'Revoke';
 $lang->story->recallChange       = 'Undo Changes';
+$lang->story->recallAction       = 'Undo';
 $lang->story->needReview         = 'Need Review';
 $lang->story->batchReview        = 'Mehere prüfen';
 $lang->story->edit               = "Bearbeiten";
@@ -462,3 +463,7 @@ $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+
+$lang->story->recallList = array();
+$lang->story->recallList['recallReview'] = $lang->story->recall;
+$lang->story->recallList['recallChange'] = $lang->story->recallChange;

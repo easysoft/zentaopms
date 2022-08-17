@@ -26,6 +26,7 @@ $lang->story->review             = 'Valider';
 $lang->story->submitReview       = "Submit Review";
 $lang->story->recall             = 'Revoke';
 $lang->story->recallChange       = 'Undo Changes';
+$lang->story->recallAction       = 'Undo';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
 $lang->story->edit               = "Editer Story";
@@ -189,8 +190,8 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Oui';
 $lang->story->useList[1] = 'Non';
 
-$lang->story->statusList['']        　= '';
-$lang->story->statusList['draft']   　= 'Brouillon';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = 'Brouillon';
 $lang->story->statusList['reviewing'] = 'Examen en cours';
 $lang->story->statusList['active']    = 'Active';
 $lang->story->statusList['closed']    = 'Fermée';
@@ -462,3 +463,7 @@ $lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne pe
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+
+$lang->story->recallList = array();
+$lang->story->recallList['recallReview'] = $lang->story->recall;
+$lang->story->recallList['recallChange'] = $lang->story->recallChange;

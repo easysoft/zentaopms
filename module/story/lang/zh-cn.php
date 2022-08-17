@@ -465,5 +465,5 @@ $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
 
 $lang->story->recallList = array();
-$lang->story->recallList['recallReview'] = '撤销评审';
-$lang->story->recallList['recallChange'] = '撤销变更';
+$lang->story->recallList['recallReview'] = $lang->story->recall;
+$lang->story->recallList['recallChange'] = $lang->story->recallChange;

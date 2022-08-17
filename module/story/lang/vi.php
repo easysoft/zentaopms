@@ -25,7 +25,8 @@ $lang->story->assignTo          = 'Giao cho';
 $lang->story->review            = 'Xét duyệt';
 $lang->story->submitReview      = "Submit Review";
 $lang->story->recall            = 'Revoke';
-$lang->story->recallChange       = 'Undo Changes';
+$lang->story->recallChange      = 'Undo Changes';
+$lang->story->recallAction      = 'Undo';
 $lang->story->needReview        = 'Duyệt nhu cầu';
 $lang->story->batchReview       = 'Duyệt hàng loạt';
 $lang->story->edit              = "Sửa câu chuyện";
@@ -454,3 +455,7 @@ $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+
+$lang->story->recallList = array();
+$lang->story->recallList['recallReview'] = $lang->story->recall;
+$lang->story->recallList['recallChange'] = $lang->story->recallChange;
