@@ -1527,49 +1527,37 @@ class taskModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft')
+            ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft,source')
             ->get();
 
         $teams = array();
-        if(count(array_unique(array_filter($this->post->team))) > 1)
+        if($this->post->multiple and count(array_filter($this->post->team)) > 1)
         {
+            $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
             foreach($this->post->team as $row => $account)
             {
-                if(empty($account) or isset($team[$account])) continue;
+                if(empty($account)) continue;
 
+                $source = $this->post->source[$row];
                 $member = new stdClass();
-                $member->account  = $account;
                 $member->task     = $taskID;
+                $member->order    = $row;
+                $member->type     = (!empty($source) and $source != $account) ? 'replace' : 'new';
+                $member->account  = $account;
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
                 $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
-                $member->order    = $row;
-                $teams[$account]  = $member;
-                if($oldTask->status == 'done') $member->left = 0;
+                if($task->status == 'done') $member->left = 0;
+
+                $memberMethod = ($oldTask->mode == 'multi' and isset($teams[$account])) ? 'update' : 'insert';
+                $this->manageTaskTeam($member, $memberMethod);
+
+                $teams[$account] = $account;
             }
-        }
 
-        /* Save team. */
-        $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
-        if(!empty($teams))
-        {
-            foreach($teams as $member) $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
-
-            /* Assign the left hours to zero who will be skipped. */
-            $skipMembers = $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, isset($task->assignedTo) ? $task->assignedTo : $oldTask->assignedTo);
-            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->where('task')->eq($taskID)->andWhere('account')->eq($account)->exec();
-
-            $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
-            if($task->status == 'wait')
-            {
-                reset($teams);
-                $task->assignedTo = key($teams);
-            }
+            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
         }
-        else
-        {
-            $task->mode = '';
-        }
+        if(empty($teams)) $task->mode = '';
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
@@ -2235,8 +2223,15 @@ class taskModel extends model
         /* Check parent Task. */
         if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
-        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
-        foreach($children as $child) $child->team = array();
+        $task->members = array();
+        $task->team    = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+        foreach($task->team as $member) $task->members[$member->account] = $member->account;
+
+        foreach($children as $child)
+        {
+            $child->team    = array();
+            $child->members = array();
+        }
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);

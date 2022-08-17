@@ -21,7 +21,7 @@
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block' id='taskTeamEditor'>
-    <?php if(empty($task->team) and !isset($task->team[$app->user->account])):?>
+    <?php if(empty($task->members) and !isset($task->members[$app->user->account])):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
@@ -56,27 +56,47 @@
             </td>
           </tr>
           <?php foreach($task->team as $member):?>
+          <?php
+          $memberStatus = 'wait';
+          if($member->consumed > 0)
+          {
+              $memberStatus = 'doing';
+              if($member->left == 0) $memberStatus = 'done';
+          }
+
+          $memberDisabled = false;
+          $linearDisabled = false;
+          if($memberStatus == 'done') $memberDisabled = true;
+          if($memberDisabled and $task->mode == 'linear') $linearDisabled = true;
+          ?>
           <tr>
-            <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
+            <td class='w-250px'>
+              <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
+              <?php echo html::hidden("source[]", $member->account);?>
+              <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
+            </td>
             <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''));?>
                 <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                 <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                 <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
               </div>
             </td>
             <td class='w-130px sort-handler'>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-              <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-              <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
+              <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+              <button type='button' <?php echo $linearDisabled ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+              <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
             </td>
           </tr>
           <?php endforeach;?>
           <tr class='template'>
-            <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
+            <td class='w-250px'>
+              <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
+              <?php echo html::hidden("source[]", '');?>
+            </td>
             <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->task->estimate?></span>

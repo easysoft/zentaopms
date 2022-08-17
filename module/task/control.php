@@ -832,7 +832,7 @@ class task extends control
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
-            $task->nextUser = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $task->nextUser = $this->task->getAssignedTo4Multi($task->members, $task);
             $members = $this->task->getMemberPairs($task);
         }
 
