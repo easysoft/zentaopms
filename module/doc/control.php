@@ -1126,7 +1126,7 @@ class doc extends control
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
 
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
-        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
+        $this->doc->buildSearchForm(0, array(), 0, $actionURL, $type);
 
         $moduleTree = $type == 'book' ? $this->doc->getBookStructure($libID) : $this->doc->getTreeMenu($type, $objectID, $libID, 0, $docID);
 
