@@ -12,6 +12,5 @@ $(function()
  */
 function changeWeakChange(changeWeak)
 {
-    if(changeWeak == 1) $('#mainContent .table td.notice').html(adminLang.safe.noticeWeakMode);
-    if(changeWeak == 0) $('#mainContent .table td.notice').html(adminLang.safe.noticeMode);
+    $('#mainContent .table td.notice').html(changeWeak == 1 ? adminLang.safe.noticeWeakMode : adminLang.safe.noticeMode);
 }
