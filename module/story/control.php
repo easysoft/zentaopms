@@ -189,7 +189,7 @@ class story extends control
 
             $message = $this->executeHooks($storyID);
             if($message) $this->lang->saveSuccess = $message;
-            $response['message'] = $this->lang->saveSuccess;
+            $response['message'] = $this->post->status == 'draft' ? $this->lang->story->saveDraftSuccess : $this->lang->saveSuccess;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 

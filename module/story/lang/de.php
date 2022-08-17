@@ -86,12 +86,13 @@ $lang->story->deleteAction    = "Delete Story";
 $lang->story->exportAction    = "Export Story";
 $lang->story->reportAction    = "Story Report";
 
-$lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "The closed {$lang->SRCommon} will not be converted into tasks.";
-$lang->story->successToTask   = "Converted to task.";
-$lang->story->storyRound      = '%s time estimation';
-$lang->story->float           = "『%s』should be positive number, decimals included.";
+$lang->story->skipStory        = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory      = 'Story %s is closed and will not be closed.';
+$lang->story->batchToTaskTips  = "The closed {$lang->SRCommon} will not be converted into tasks.";
+$lang->story->successToTask    = "Converted to task.";
+$lang->story->storyRound       = '%s time estimation';
+$lang->story->float            = "『%s』should be positive number, decimals included.";
+$lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
