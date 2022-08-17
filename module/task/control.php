@@ -832,7 +832,7 @@ class task extends control
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
-            $task->nextUser = $this->task->getAssignedTo4Multi($task->members, $task);
+            $task->nextUser = $this->task->getAssignedTo4Multi($task->members, $task, 'next');
             $members = $this->task->getMemberPairs($task);
         }
 
@@ -1336,21 +1336,15 @@ class task extends control
         $this->view->users = $members;
         if(!empty($task->team))
         {
-            $teams = array_keys($task->team);
-
-            $task->nextBy     = $this->task->getNextUser($teams, $this->app->user->account);
-            $task->myConsumed = isset($task->team[$this->app->user->account]) ? $task->team[$this->app->user->account]->consumed : 0;
-
-            $lastAccount   = end($teams);
-            $finishedUsers = $this->task->getFinishedUsers($taskID, $teams);
-            if(($lastAccount != $task->assignedTo and $task->mode == 'linear') or ($task->mode == 'multi' and count($teams) != count($finishedUsers)))
+            $task->nextBy     = $this->task->getAssignedTo4Multi($task->members, $task, 'next');
+            $task->myConsumed = 0;
+            foreach($task->team as $teamID => $team)
             {
-                $members = $this->task->getMemberPairs($task);
+                if($team->consumed > 0 and $team->left == 0) continue;
+                if($team->account == $this->app->user->account) $task->myConsumed = $team->consumed;
             }
-            else
-            {
-                $task->nextBy = $task->openedBy;
-            }
+
+            $members = $this->task->getMemberPairs($task);
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;

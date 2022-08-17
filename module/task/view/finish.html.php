@@ -69,7 +69,18 @@
         </tr>
         <tr>
           <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
-          <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
+          <td>
+            <?php
+            if(!empty($task->team) and $task->mode == 'linear')
+            {
+                echo zget($members, $task->nextBy) . html::hidden('assignedTo', $task->nextBy);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->realStarted;?></th>

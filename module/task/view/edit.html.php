@@ -290,7 +290,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               $memberDisabled = false;
               $linearDisabled = false;
               if($memberStatus == 'done') $memberDisabled = true;
-              if($memberDisabled and $task->mode == 'linear') $linearDisabled = true;
+              if($memberStatus != 'wait' and $task->mode == 'linear') $linearDisabled = true;
               ?>
               <tr class='member-<?php echo $memberStatus;?>'>
                 <td class='w-250px'>
@@ -347,5 +347,5 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
   </form>
 </div>
 <?php js::set('executionID', $execution->id);?>
-<?php if($linearDisabled) js::set('sortSelector', 'tr.member-wait');?>
+<?php if($task->mode == 'linear') js::set('sortSelector', 'tr.member-wait');?>
 <?php include '../../common/view/footer.html.php';?>

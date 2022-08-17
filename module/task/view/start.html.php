@@ -46,7 +46,16 @@
         <tr>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'>
-            <?php echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");?>
+            <?php
+            if($task->mode == 'linear')
+            {
+                echo zget($members, $assignedTo) . html::hidden('assignedTo', $assignedTo);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");
+            }
+            ?>
           </td>
           <td></td>
         </tr>
@@ -63,7 +72,7 @@
               <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td>
@@ -77,7 +86,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'doing');?></td>
         </tr>
-        <?php $this->printExtendFields($task, 'table', 'columns=2');?> 
+        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>

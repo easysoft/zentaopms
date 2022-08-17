@@ -3349,6 +3349,8 @@ class taskModel extends model
         if($action == 'recordestimate' and $task->parent == -1)     return false;
         if($action == 'delete'         and $task->parent < 0)       return false;
 
+        if($action == 'assignto' and !empty($task->team) and $task->mode == 'linear') return false;
+
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
         if($action == 'pause')    return $task->status == 'doing';
@@ -3662,11 +3664,12 @@ class taskModel extends model
      *
      * @param  string $users
      * @param  object $task
+     * @param  string $type   current|next
      *
      * @access public
      * @return string
      */
-    public function getAssignedTo4Multi($users, $task)
+    public function getAssignedTo4Multi($users, $task, $type = 'current')
     {
         if(empty($task->team)) return $task->assignedTo;
         if($task->mode != 'linear') return $task->assignedTo;
@@ -3680,8 +3683,10 @@ class taskModel extends model
         foreach($users as $i => $account)
         {
             if(isset($teamHours[$i]) and $teamHours[$i]->consumed > 0 and $teamHours[$i]->left == 0) continue;
-            return $account;
+            if($type == 'current') return $account;
+            break;
         }
+        if($type == 'next' and isset($users[$i + 1])) return $users[$i + 1];
 
         return $task->openedBy;
     }
