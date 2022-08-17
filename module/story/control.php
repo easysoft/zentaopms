@@ -1201,6 +1201,7 @@ class story extends control
         }
 
         $this->commonAction($storyID);
+        $this->story->setActivateStatus($storyID);
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -1645,6 +1646,8 @@ class story extends control
      */
     public function close($storyID, $from = '')
     {
+        $story = $this->story->getById($storyID);
+
         if(!empty($_POST))
         {
             $changes = $this->story->close($storyID);
@@ -1653,7 +1656,10 @@ class story extends control
 
             if($changes)
             {
-                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
+                $preStatus = $story->status;
+                if($preStatus == 'reviewing') $preStatus = $story->changedBy ? 'changing' : 'draft';
+
+                $actionID  = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1699,7 +1705,6 @@ class story extends control
         }
 
         /* Get story and product. */
-        $story   = $this->story->getById($storyID);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
 
         $this->story->replaceURLang($story->type);
@@ -1736,30 +1741,12 @@ class story extends control
      */
     public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
-        if($this->post->comments)
-        {
-            $data       = fixer::input('post')->get();
-            $allChanges = $this->story->batchClose();
-
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->storyList, 'parent'));
-        }
-
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
+        $stories = $this->story->getByList($storyIdList);
         foreach($stories as $story)
         {
             if($story->parent == -1)
@@ -1772,6 +1759,27 @@ class story extends control
                 $closedStory[] = $story->id;
                 unset($stories[$story->id]);
             }
+        }
+
+        if($this->post->comments)
+        {
+            $data       = fixer::input('post')->get();
+            $allChanges = $this->story->batchClose();
+
+            if($allChanges)
+            {
+                foreach($allChanges as $storyID => $changes)
+                {
+                    $preStatus = $stories[$storyID]->status;
+                    if($preStatus == 'reviewing') $preStatus = $stories[$storyID]->changedBy ? 'changing' : 'draft';
+
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+            return print(js::locate($this->session->storyList, 'parent'));
         }
 
         $errorTips = '';

@@ -5551,7 +5551,7 @@ class storyModel extends model
 
         if($result != 'revert')
         {
-            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected');
+            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected', '', empty($story->changedBy) ? 'draft' : 'changing');
             if($story->status == 'active') $this->action->create('story', $story->id, 'ReviewPassed');
             if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' or $story->status == 'changing')) $this->action->create('story', $story->id, 'ReviewClarified');
         }
@@ -5852,5 +5852,40 @@ class storyModel extends model
         }
 
         return $stories;
+    }
+
+    /**
+     * Set the selectable status when activated.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function setActivateStatus($storyID)
+    {
+        $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
+            ->where('objectType')->eq('story')
+            ->andWhere('objectID')->eq($storyID)
+            ->orderBy('id_desc')
+            ->fetch();
+
+        $lastAction = $lastRecord->action;
+        $preStatus  = $lastRecord->extra;
+        if(strpos($preStatus, '|') !== false) $preStatus = substr($preStatus, strpos($preStatus, '|') + 1);
+
+        if(strpos('closed,reviewrejected', $lastAction) !== false)
+        {
+            foreach($this->lang->story->statusList as $status => $lang)
+            {
+                if($preStatus == $status or $status == 'active') continue;
+                unset($this->lang->story->statusList[$status]);
+            }
+
+            if($this->checkForceReview() and $preStatus != 'active') unset($this->lang->story->statusList['active']);
+        }
+        else
+        {
+            foreach(array('', 'closed', 'changing', 'reviewing') as $status) unset($this->lang->story->statusList[$status]);
+        }
     }
 }
