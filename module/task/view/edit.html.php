@@ -281,8 +281,11 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php foreach($task->team as $member):?>
               <?php
               $memberStatus = 'wait';
-              if($member->consumed > 0) $memberStatus = 'doing';
-              if(strpos($task->finishedList, ",{$member->account},") !== false) $memberStatus = 'done';
+              if($member->consumed > 0)
+              {
+                  $memberStatus = 'doing';
+                  if($member->left == 0) $memberStatus = 'done';
+              }
 
               $memberDisabled = false;
               $linearDisabled = false;

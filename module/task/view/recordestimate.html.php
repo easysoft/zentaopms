@@ -21,8 +21,8 @@
 <?php endif;?>
 #recordForm table .form-actions{padding:25px;}
 </style>
-<?php $team = array_keys($task->team);?>
-<?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
+<?php $members = $task->members;?>
+<?php js::set('confirmRecord',    (!empty($members) && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
@@ -45,7 +45,7 @@
             <th class="thWidth"><?php echo $lang->task->consumed;?></th>
             <th class="thWidth"><?php echo $lang->task->left;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions-2'><?php if(empty($task->team) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account]))) echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php if(empty($members) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($members[$app->user->account]))) echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -57,7 +57,7 @@
             <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
             <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account]))):?>
+            <?php if(empty($members) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($members[$app->user->account]))):?>
             <td align='center' class='c-actions'>
               <?php
               if($this->app->user->account == $estimate->account)
@@ -71,7 +71,7 @@
           <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
-      <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+        <?php if(!empty($members) and (!isset($members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
         </tbody>
       </table>
     </form>

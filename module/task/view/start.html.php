@@ -18,7 +18,7 @@
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
-  if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
+  if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
   ?>
   <div class="alert with-icon">
     <i class="icon-exclamation-sign"></i>
