@@ -192,7 +192,7 @@
               /* For the open source version of the file judgment. */
               if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {
-                  echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                  echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
               }
 
               /* For the max version of the file judgment. */
@@ -201,7 +201,7 @@
                   $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
                   if(stripos($officeTypes, $file->extension) !== false)
                   {
-                      echo html::a($downloadLink, $lang->file->preview, '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                      echo html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
                   }
               }
 
