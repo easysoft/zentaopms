@@ -19,6 +19,7 @@
 <?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
 <?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('longTime', $lang->project->longTime);?>
+<?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id="mainContent" class="main-content">
   <div class="main-header">

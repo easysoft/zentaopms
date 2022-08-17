@@ -1,3 +1,8 @@
+window.ignoreTips = {
+    'beyondBudgetTip' : false,
+    'dateTip'         : false
+};
+
 /**
  * Access rights are equal to private, and the white list settings are displayed.
  *
@@ -328,6 +333,8 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
  */
 function budgetOverrunTips()
 {
+    if(window.ignoreTips['beyondBudgetTip']) return;
+
     var selectedProgramID = $('#parent').val();
     var budget            = $('#budget').val();
 
@@ -344,7 +351,7 @@ function budgetOverrunTips()
         if(typeof(data.availableBudget) == 'undefined') return;
 
         var tip = "";
-        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</span>"
+        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         $('#budgetBox').after(tip);
 
@@ -364,6 +371,7 @@ function budgetOverrunTips()
  */
 function outOfDateTip(currentID = 0)
 {
+    if(window.ignoreTips['dateTip']) return;
     var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
     var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
     if($('#dateTip.text-remind').length > 0) $('#dateTip').remove();
@@ -412,8 +420,24 @@ function outOfDateTip(currentID = 0)
             }
             else
             {
-                $('#dateBox').after("<span id='dateTip' class='text-remind'>" + dateTip + "</span>");
+                $('#dateBox').after("<span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>");
             }
         });
     }
+}
+
+/**
+ * Make this prompt no longer appear.
+ *
+ * @param  string  $obj
+ * @access public
+ * @return void
+ */
+function ignoreTip(obj)
+{
+    var parentID = obj.parentNode.id;
+    $('#' + parentID).addClass('hidden');
+
+    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }

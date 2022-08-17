@@ -33,6 +33,7 @@
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
 <?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
+<?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
@@ -46,7 +47,7 @@
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       <?php else: ?>
         <button type='button' class='btn btn-link open-btn' data-toggle='modal' data-target='#maxCopyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
-      <?php endif; ?> 
+      <?php endif; ?>
       </div>
       <?php endif; ?>
     </div>
