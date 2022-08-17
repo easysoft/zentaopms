@@ -47,7 +47,7 @@
       <tbody>
         <?php foreach($projects as $projectID => $project):?>
         <?php $aclList = $project->parent ? $lang->program->subAcls : $lang->project->acls;?>
-          <tr id="projects[<?php echo $projectID;?>]">
+        <tr id="projects[<?php echo $projectID;?>]">
           <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIdList[$projectID]", $projectID);?></td>
           <?php if(isset($unauthorizedPrograms[$project->parent])):?>
           <td>
