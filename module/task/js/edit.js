@@ -159,22 +159,6 @@ $(document).ready(function()
 
 $('#confirmButton').click(function()
 {
-    /* Unique team. */
-    var values = [];
-    $('select[name^=team]').each(function(i)
-    {
-        value = $(this).val();
-        if(value == '') return;
-        if($.inArray(value, values) >= 0)
-        {
-            $(this).closest('tr').addClass('hidden');
-            return;
-        }
-        values.push(value);
-    });
-
-    $('select[name^=team]').closest('tr.hidden').remove();
-
     var memberCount   = '';
     var totalEstimate = 0;
     var totalConsumed = oldConsumed;
@@ -288,6 +272,6 @@ function updateAssignedTo()
     }
 
     $('#assignedTo').html(html);
-    if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($$('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
+    if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
     $('#assignedTo').trigger('chosen:updated');
 }

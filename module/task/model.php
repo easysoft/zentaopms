@@ -229,26 +229,26 @@ class taskModel extends model
             {
                 foreach($this->post->team as $row => $account)
                 {
-                    if(empty($account) or isset($team[$account])) continue;
+                    if(empty($account)) continue;
+
                     $member = new stdClass();
                     $member->account  = $account;
                     $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
                     $member->left     = $member->estimate;
                     $member->order    = $row;
-                    $teams[$account]  = $member;
-                }
-            }
+                    $member->task     = $taskID;
 
-            if(!empty($teams))
-            {
-                foreach($teams as $team)
+                    $memberMethod = ($task->mode == 'multi' and isset($teams[$account])) ? 'update' : 'insert';
+                    $this->manageTaskTeam($member, $memberMethod);
+
+                    $teams[$account] = $account;
+                }
+
+                if($teams)
                 {
-                    $team->task = $taskID;
-                    $this->dao->insert(TABLE_TASKTEAM)->data($team)->autoCheck()->exec();
+                    $task->id = $taskID;
+                    $this->computeHours4Multiple($task);
                 }
-
-                $task->id = $taskID;
-                $this->computeHours4Multiple($task);
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -784,14 +784,15 @@ class taskModel extends model
     {
         if(!$oldTask) return false;
 
-        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll('account');
+        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll();
         if(!empty($team))
         {
             $now         = helper::now();
-            $teams       = array_keys($team);
+            $oldTeam     = zget($oldTask, 'team', array());
+            $members     = array_map(function($member){ return $member->account; }, $team);
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
-            if(empty($oldTask->team)) $oldTask->team = $team;
+            $oldTask->team = $team;
 
             $currentTask->assignedTo = $oldTask->assignedTo;
             if(!empty($_POST['assignedTo']) and is_string($_POST['assignedTo']))
@@ -800,7 +801,7 @@ class taskModel extends model
             }
             else
             {
-                $currentTask->assignedTo = $this->getAssignedTo4Multi($teams, $oldTask);
+                $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
                 if($oldTask->assignedTo != $currentTask->assignedTo) $currentTask->assignedDate = $now;
             }
 
@@ -814,6 +815,7 @@ class taskModel extends model
                 $currentTask->left     += (float)$member->left;
             }
 
+            $oldTask->team = $oldTeam;
             if($this->app->rawMethod == 'edit' and empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
@@ -865,6 +867,30 @@ class taskModel extends model
                 return $currentTask;
             }
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
+        }
+    }
+
+    /**
+     * Manage multi task team members.
+     *
+     * @param  object  $member
+     * @param  string  $method   insert|update
+     * @access public
+     * @return void
+     */
+    public function manageTaskTeam($member, $method)
+    {
+        if($method == 'update')
+        {
+            $this->dao->update(TABLE_TASKTEAM)->set("estimate= estimate + {$member->estimate}")
+                ->set("`left` = `left` + {$member->left}")
+                ->where('task')->eq($member->task)
+                ->andWhere('account')->eq($member->account)
+                ->exec();
+        }
+        elseif($method == 'insert')
+        {
+            $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
         }
     }
 
@@ -948,7 +974,7 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->cleanINT('execution,story,module')
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
+            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,source,contactListMenu')
             ->get();
 
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
@@ -964,49 +990,33 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple and count(array_unique(array_filter($this->post->team))) > 1)
+        if($this->post->multiple and count(array_filter($this->post->team)) > 1)
         {
-            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && $this->post->assignedTo && !in_array($this->post->assignedTo, $this->post->team))
-            {
-                dao::$errors[] = $this->lang->task->error->assignedTo;
-                return false;
-            }
-
+            $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
             foreach($this->post->team as $row => $account)
             {
-                if(empty($account) or isset($team[$account])) continue;
+                if(empty($account)) continue;
 
+                $source = $this->post->source[$row];
                 $member = new stdClass();
-                $member->account  = $account;
                 $member->task     = $taskID;
+                $member->order    = $row;
+                $member->type     = (!empty($source) and $source != $account) ? 'replace' : 'new';
+                $member->account  = $account;
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
                 $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
-                $member->order    = $row;
-                $teams[$account]  = $member;
                 if($task->status == 'done') $member->left = 0;
-            }
-        }
 
-        /* Save team. */
-        $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec(); if(!empty($teams))
-        {
-            foreach($teams as $member) $this->dao->insert(TABLE_TASKTEAM)->data($member)->autoCheck()->exec();
+                $memberMethod = ($oldTask->mode == 'multi' and isset($teams[$account])) ? 'update' : 'insert';
+                $this->manageTaskTeam($member, $memberMethod);
 
-            /* Assign the left hours to zero who will be skipped. */
-            $skipMembers = $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, isset($task->assignedTo) ? $task->assignedTo : $oldTask->assignedTo);
-            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->where('task')->eq($taskID)->andWhere('account')->eq($account)->exec();
-            $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
-            if($task->status == 'wait')
-            {
-                reset($teams);
-                $task->assignedTo = key($teams);
+                $teams[$account] = $account;
             }
+
+            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
         }
-        else
-        {
-            $task->mode = '';
-        }
+        if(empty($teams)) $task->mode = '';
 
         $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
@@ -2227,7 +2237,7 @@ class taskModel extends model
         /* Check parent Task. */
         if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
-        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('account');
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         foreach($children as $child) $child->team = array();
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
@@ -2363,7 +2373,7 @@ class taskModel extends model
         if(empty($tasks)) return array();
 
         $taskList = array_keys($tasks);
-        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskList)->fetchGroup('root');
+        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskList)->fetchGroup('task');
         if(!empty($taskTeam))
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
@@ -3666,19 +3676,18 @@ class taskModel extends model
     public function getAssignedTo4Multi($users, $task)
     {
         if(empty($task->team)) return $task->assignedTo;
-        if(empty($task->mode != 'linear')) return $task->assignedTo;
+        if($task->mode != 'linear') return $task->assignedTo;
 
-        $teamHours = $task->team;
+        $teamHours = array_values($task->team);
 
         /* Process user */
         if(!is_array($users)) $users = explode(',', trim($users, ','));
-        $users    = array_values($users);
-        $isInList = (!$current || !in_array($current, $users) || array_search($current, $users) == (count($users) - 1))
-        foreach($users as $account)
-        {
-            if(isset($teamHours[$account]) and $$teamHours[$account]->consumed > 0 and $teamHours[$account]->left == 0) continue;
-            return $account;
+        $users = array_values($users);
 
+        foreach($users as $i => $account)
+        {
+            if(isset($teamHours[$i]) and $teamHours[$i]->consumed > 0 and $teamHours[$i]->left == 0) continue;
+            return $account;
         }
 
         return $task->openedBy;

@@ -5,7 +5,8 @@ CREATE TABLE `zt_taskteam` (
   `estimate` decimal(12,2) NOT NULL,
   `consumed` decimal(12,2) NOT NULL,
   `left` decimal(12,2) NOT NULL,
+  `type` char(10) NOT NULL DEFAULT 'new',
   `order` tinyint(3) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `task` (`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE `zt_taskteam` ADD INDEX `task` (`task`);

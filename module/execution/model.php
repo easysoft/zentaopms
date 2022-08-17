@@ -2746,8 +2746,9 @@ class executionModel extends model
     public function getTeamSkip($teams, $begin, $end)
     {
         $members = array();
-        foreach($teams as $account => $team)
+        foreach($teams as $team)
         {
+            $account = $team->account;
             if($account == $end) break;
             if(!empty($begin) and $account != $begin and empty($members)) continue;
 

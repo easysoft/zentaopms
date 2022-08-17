@@ -139,7 +139,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and ($task->mode == 'linear' or $task->assignedTo != $this->app->user->account)) ? "disabled='disabled'" : '';?>
+                <?php $disableAssignedTo = (!empty($task->team) and $task->mode == 'linear') ? "disabled='disabled'" : '';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
@@ -160,8 +160,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
                 <th><?php echo $lang->task->mode;?></th>
-                <?php $disabledMode = isset($task->team[$app->user->account]) ? '' : "disabled='disabled'"?>
-                <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen' $disabledMode onchange='updateAssignedTo()'");?></td>
+                <td><?php echo zget($lang->task->modeList, $task->mode) . html::hidden('mode', $task->mode);?></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
@@ -293,6 +292,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <tr class='member-<?php echo $memberStatus;?>'>
                 <td class='w-250px'>
                   <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
+                  <?php echo html::hidden("source[]", $member->account);?>
                   <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
                 </td>
                 <td>
@@ -313,7 +313,10 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <?php endforeach;?>
               <tr class='template'>
-                <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
+                <td class='w-250px'>
+                  <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
+                  <?php echo html::hidden("source[]", '');?>
+                </td>
                 <td>
                   <div class='input-group'>
                     <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>

@@ -571,23 +571,7 @@ $('#modalTeam .btn').click(function()
     var team  = '';
     var time  = 0;
     var error = false;
-
-    /* Unique team. */
-    values = [];
-    $('select[name^=team]').each(function(i)
-    {
-        value = $(this).val();
-        if(value == '') return;
-
-        if($.inArray(value, values) >= 0)
-        {
-            $(this).closest('tr').addClass('hidden');
-            return;
-        }
-
-        values.push(value);
-    })
-    $('select[name^=team]').closest('tr.hidden').remove();
+    var mode  = $('#mode').val();
 
     $('select[name^=team]').each(function()
     {
