@@ -474,7 +474,6 @@ class task extends control
         if($taskID) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
         if($taskID) $this->view->parentPri   = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('pri');
 
-
         $this->view->title        = $title;
         $this->view->position     = $position;
         $this->view->execution    = $execution;
