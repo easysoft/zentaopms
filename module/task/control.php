@@ -778,7 +778,7 @@ class task extends control
 
         if(!empty($task->team) and $task->mode == 'multi')
         {
-            return $this->editTeam($executionID, $task, $kanbanGroup);
+            return $this->editTeam($executionID, $task, $kanbanGroup, $from);
         }
 
         if(!empty($_POST))
@@ -2320,10 +2320,11 @@ class task extends control
      * @param  int    $requestID
      * @param  object $task
      * @param  string $kanbanGroup
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function editTeam($executionID, $task, $kanbanGroup = 'default')
+    public function editTeam($executionID, $task, $kanbanGroup = 'default', $from = '')
     {
         $taskID = $task->id;
         $this->commonAction($taskID);
@@ -2349,7 +2350,17 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
-                if(($this->app->tab == 'execution' or $this->config->vision == 'lite') and $this->app->tab == 'execution')
+
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')
+                {
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+
+                if($from == 'taskkanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
@@ -2357,10 +2368,8 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this'));
-                }
+
+                return print(js::closeModal('parent.parent', 'this'));
             }
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }

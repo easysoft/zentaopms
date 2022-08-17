@@ -82,7 +82,7 @@
                 <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
                 <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                 <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                 <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
                 <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
               </div>
