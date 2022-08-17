@@ -108,7 +108,7 @@
               }
               else
               {
-                  $task->executionType == 'kanban' ? ($class = 'iframe').($onlybody = 'onlybody=yes') : ($class = '').($onlybody = '');
+                  $task->executionType == 'kanban' ? ($class = 'iframe').($onlybody = true) : ($class = '').($onlybody = '');
                   echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', "{$onlybody}", $task->project), $task->name, null,"class={$class} style='color: $task->color'");
               }
               ?>
