@@ -436,12 +436,12 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $executionID
      * @param  int    $plan
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $storyType = 'story', $extra = '')
     {
         /* Set menu. */
         if($executionID)
@@ -488,7 +488,7 @@ class story extends control
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
 
         /* Check can subdivide or not. */
         if($storyID)
@@ -499,7 +499,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->story->batchCreate($productID, $branch, $type);
+            $mails = $this->story->batchCreate($productID, $branch, $storyType);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $stories = array();
@@ -576,7 +576,7 @@ class story extends control
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
+                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
                 return print(js::locate($locateLink, 'parent'));
             }
         }
@@ -653,7 +653,7 @@ class story extends control
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
-        if($type == 'requirement')
+        if($storyType == 'requirement')
         {
             unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
@@ -683,7 +683,7 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = isset($story->title) ? $story->title : '';
         $this->view->spec             = $spec;
-        $this->view->type             = $type;
+        $this->view->type             = $storyType;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */

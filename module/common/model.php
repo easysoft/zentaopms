@@ -1646,7 +1646,6 @@ EOD;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
-        parse_str($vars, $app->params);
         if(!commonModel::hasPriv($module, $method, $object)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
@@ -2443,17 +2442,21 @@ EOD;
      *
      * @param  string $module
      * @param  string $method
+     * @param  object $object
+     * @param  string $vars
      * @static
      * @access public
      * @return bool
      */
-    public static function hasPriv($module, $method, $object = null)
+    public static function hasPriv($module, $method, $object = null, $vars = '')
     {
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+        parse_str($vars, $params);
 
-        if($module == 'story' and isset($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
         if($module == 'product' and $method == 'browse' and isset($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
