@@ -1306,6 +1306,7 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
+     * @param  string $extra
      * @access public
      * @return string
      */
@@ -1319,6 +1320,7 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
+     * @param  string $extra
      * @access public
      * @return string
      */
@@ -1332,12 +1334,27 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
+     * @param  string $extra
      * @access public
      * @return string
      */
     public function createTrainPostLink($type, $module, $extra = '')
     {
         return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
+     * Create dashboard link.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
+    public function createDashboardLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('dashboard', 'browse', "type=bymodule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**

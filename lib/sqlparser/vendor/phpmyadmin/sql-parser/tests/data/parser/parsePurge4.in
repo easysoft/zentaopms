@@ -1,0 +1,1 @@
+PURGE MASTER LOGS TO 'mysql-bin.010';

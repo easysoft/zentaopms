@@ -424,6 +424,20 @@ CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `date` date NOT NULL,
   UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_chart`;
+CREATE TABLE `zt_chart` (
+  `id` mediumint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(30) NOT NULL,
+  `dataset` varchar(30) NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `settings` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -485,6 +499,31 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `lastTime` (`lastTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_dashboard`;
+CREATE TABLE `zt_dashboard` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `module` mediumint NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `layout` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_dataset`;
+CREATE TABLE `zt_dataset` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(155) NOT NULL,
+  `sql` text NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `objects` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
@@ -6170,6 +6209,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `dismissDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pinnedMessages` text NOT NULL DEFAULT '',
   `mergedChats` text NOT NULL DEFAULT '',
+  `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
   KEY `name` (`name`),
@@ -6647,7 +6687,7 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `action` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
   PRIMARY KEY (`id`),
   KEY `relationoftasks` (`execution`,`task`)
-) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'execution','gantt'),
 (1,'execution','relation'),

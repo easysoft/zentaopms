@@ -354,7 +354,6 @@ $config->delete['17_2'][] = 'extension/lite/workflow/ext/view/flowchart.flow.htm
 $config->delete['17_2'][] = 'extension/lite/workflow/ext/view/release.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/workflow/ext/view/setcss.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/workflow/ext/view/setjs.flow.html.hook.php';
-$config->delete['17_2'][] = 'extension/lite/workflow/ext/view/ui.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/workflowaction/ext/view/browse.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/workflowaction/ext/view/edit.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/workflowaction/ext/view/setnotice.flow.html.hook.php';

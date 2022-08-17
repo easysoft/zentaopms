@@ -35,6 +35,7 @@ $lang->admin->changingTable  = '正在更换数据表%s引擎...';
 $lang->admin->changeSuccess  = '已经更换数据表%s引擎为InnoDB。';
 $lang->admin->changeFail     = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
 $lang->admin->errorInnodb    = '您当前的数据库不支持使用InnoDB数据表引擎。';
+$lang->admin->changeFinished = "更换数据库引擎完毕。";
 $lang->admin->engineInfo     = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";

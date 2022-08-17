@@ -33,6 +33,7 @@ $('#subNavbar').find('ul li').each(function()
 {
     var that = $(this);
     if(that.attr('data-id') != browseType) that.removeClass('active');
+    if(that.attr('data-id') == 'gantt' && 'assignedTo' == browseType) that.addClass('active');
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -23,3 +23,40 @@ UPDATE `zt_grouppriv` SET `method`='exportTemplate' WHERE `method` = 'exportTemp
 
 INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'reply' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
 INSERT INTO `zt_grouppriv` (SELECT `group`,`module`,'ask' FROM `zt_grouppriv` WHERE `module` = 'feedback' AND `method` = 'comment');
+
+CREATE TABLE `zt_chart` (
+  `id` mediumint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(30) NOT NULL,
+  `dataset` varchar(30) NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `settings` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_dashboard` (
+  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `module` mediumint NOT NULL,
+  `desc` mediumtext NOT NULL,
+  `layout` mediumtext NOT NULL,
+  `filters` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_dataset` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(155) NOT NULL,
+  `sql` text NOT NULL,
+  `fields` mediumtext NOT NULL,
+  `objects` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

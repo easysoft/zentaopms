@@ -36,7 +36,9 @@
   </div>
 </div>
 <?php js::set('changingTable', $lang->admin->changingTable);?>
+<?php js::set('hasMyISAM', $lang->admin->engineSummary['hasMyISAM']);?>
 <script>
+var changeFails = 0;
 /**
  * Change all table engines.
  *
@@ -45,34 +47,23 @@
  */
 function changeAllEngines()
 {
-    var tables = [];
     var $engineBox = $('#engineBox');
-    $engineBox.find('li').each(function()
-    {
-        tables.push($(this).attr('data-table'));
-    });
-
     $('.btn.changeEngine').hide();
     $engineBox.empty();
-    $.each(tables, function(_, table)
-    {
-        changeEngine(table);
-    });
+
+    changeTableEngine();
 }
 
 /**
- * Change one engine.
+ * Ajax change table engine.
  *
- * @param  string $table
  * @access public
  * @return void
  */
-function changeEngine(table)
+function changeTableEngine()
 {
     var $engineBox = $('#engineBox');
-    var link = createLink('admin', 'ajaxChangeTableEngine', 'table=' + table);
-
-    if($engineBox.find('[data-table=' + table + ']').length == 0) $engineBox.append("<div data-table='" + table + "'>" + changingTable.replace('%s', table) + "</div>");
+    var link       = createLink('admin', 'ajaxChangeTableEngine');
     $.ajax(
     {
         type: "GET",
@@ -80,11 +71,33 @@ function changeEngine(table)
         success: function(response)
         {
             response = JSON.parse(response);
-            $engineBox.find('[data-table=' + table + ']').html(response.message).addClass('text-success');
+            if(response == null || response.result == 'finished')
+            {
+                $engineBox.append("<div class='text-success'><?php echo $lang->admin->changeFinished?></div>");
+                $engineBox.append("<div class='btn btn-sm'><a href='javascript:location.reload()'><?php echo $lang->refresh;?></a></div>");
+                if(changeFails == 0) $('#mainContent .main-header h2').html("<?php echo $lang->admin->engineSummary['allInnoDB']?>");
+                if(changeFails != 0) $('#mainContent .main-header h2').html(hasMyISAM.replace('%s', changeFails));
+            }
+            else
+            {
+                table = response.thisTable;
+                if($engineBox.find('[data-table=' + table + ']').length == 0) $engineBox.append("<li data-table='" + table + "'>" + changingTable.replace('%s', table) + "</li>");
+                $engineBox.find('[data-table=' + table + ']').html(response.message);
+                if(response.result == 'success') $engineBox.find('[data-table=' + table + ']').addClass('text-success');
+                if(response.result == 'fail') $engineBox.find('[data-table=' + table + ']').addClass('text-warning');
+
+                nextTable = response.nextTable;
+                if(nextTable && $engineBox.find('[data-table=' + nextTable + ']').length == 0) $engineBox.append("<li data-table='" + nextTable + "'>" + changingTable.replace('%s', nextTable) + "</li>");
+
+                if(response.result == 'fail') changeFails += 1;
+                $(document).scrollTop($(document).height());
+
+                changeTableEngine();
+            }
         },
         error: function()
         {
-            changeEngine(table);
+            changeTableEngine();
         }
     })
 }
