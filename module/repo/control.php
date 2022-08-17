@@ -46,8 +46,7 @@ class repo extends control
     public function commonAction($repoID = 0, $objectID = 0)
     {
         $tab = $this->app->tab;
-        $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
-        $this->repoGroup = $this->repo->getRepoGroup($tab, $objectID);
+        $this->repos = $this->repo->getRepoPairs($tab, $objectID);
 
         if($tab == 'project')
         {
@@ -492,7 +491,7 @@ class repo extends control
         $this->view->repo            = $repo;
         $this->view->repos           = $this->repos;
         $this->view->revisions       = $revisions;
-        $this->view->repoGroup       = $this->repoGroup;
+        $this->view->repoGroup       = $this->repo->getRepoGroup($this->app->tab, $objectID);
         $this->view->revision        = $revision;
         $this->view->infos           = $infos;
         $this->view->repoID          = $repoID;
@@ -742,6 +741,12 @@ class repo extends control
         $file  = $entry;
         $repo  = $this->repo->getRepoByID($repoID);
         $entry = $this->repo->decodePath($entry);
+
+        if($repo->SCM == 'Git' and !is_dir($repo->path))
+        {
+            $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
+            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
+        }
 
         $pathInfo = pathinfo($entry);
         $suffix   = '';
