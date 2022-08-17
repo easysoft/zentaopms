@@ -708,12 +708,12 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
+        $teams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIDList)->fetchGroup('task', 'id');
 
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($executionIDList)->fetchGroup('task', 'id');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -892,7 +892,7 @@ class task extends control
             if(!is_array($taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID=$execution"), 'parent'));
             $taskIDList = array_unique($taskIDList);
 
-            $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
+            $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIDList)->fetchGroup('task', 'account');
             $tasks          = $this->task->getByList($taskIDList);
             $this->loadModel('action');
             foreach($tasks as $taskID => $task)
@@ -2096,10 +2096,7 @@ class task extends control
             }
 
             /* Get team for multiple task. */
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)
-                ->where('root')->in(array_keys($tasks))
-                ->andWhere('type')->eq('task')
-                ->fetchGroup('root');
+            $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
 
             /* Process multiple task info. */
             if(!empty($taskTeam))

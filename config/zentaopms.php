@@ -265,6 +265,7 @@ define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
+define('TABLE_TASKTEAM',      '`' . $config->db->prefix . 'taskteam`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
 define('TABLE_PROJECTADMIN',  '`' . $config->db->prefix . 'projectadmin`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');

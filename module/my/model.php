@@ -609,7 +609,7 @@ class myModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
-        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
         if(!empty($taskTeam))
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;

@@ -224,7 +224,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
         $tasks     = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
-        $taskTeams = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in(array_keys($tasks))->fetchGroup('root', 'account');
+        $taskTeams = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
         $users     = $this->loadModel('user')->getPairs('noletter');
 
         if($baselineID)
@@ -381,30 +381,39 @@ class programplanModel extends model
         $tasksGroup = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchGroup('assignedTo','id');
         $users      = $this->loadModel('user')->getPairs('noletter');
 
-        $tasksMap = array();
+        $tasksMap   = array();
+        $multiTasks = array();
         foreach($tasksGroup as $group => $tasks)
         {
             foreach($tasks as $id => $task)
             {
-                if($task->mode == 'multi')
-                {
-                    $team = $this->dao->select('t1.*,t2.realname')->from(TABLE_TEAM)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-                        ->where('t1.root')->eq($id)->andWhere('t1.type')->eq('task')->orderBy('t1.order')->fetchAll('account');
-                    foreach($team as $account => $member)
-                    {
-                        if($account == $group) continue;
-                        if(!isset($taskGroups[$account])) $taskGroups[$account] = array();
-
-                        $taskGroups[$account][$id] = clone $task;
-                        $taskGroups[$account][$id]->id         = $id . '_' . $account;
-                        $taskGroups[$account][$id]->realID     = $id;
-                        $taskGroups[$account][$id]->assignedTo = $account;
-                        $taskGroups[$account][$id]->realname   = $member->realname;
-                    }
-                }
-
+                if($task->mode == 'multi') $multiTasks[$id] = $group;
                 $tasksMap[$task->id] = $task;
+            }
+        }
+
+        if($multiTasks)
+        {
+            $taskTeams = $this->dao->select('t1.*,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+                ->where('t1.task')->in(array_keys($multiTasks))
+                ->orderBy('t1.order')
+                ->fetchGroup('task', 'id');
+            foreach($taskTeams as $taskID => $team)
+            {
+                $group = $multiTasks[$taskID];
+                foreach($team as $member)
+                {
+                    $account = $member->account;
+                    if($account == $group) continue;
+                    if(!isset($taskGroups[$account])) $taskGroups[$account] = array();
+
+                    $taskGroups[$account][$taskID] = clone $tasksMap[$taskID];
+                    $taskGroups[$account][$taskID]->id         = $taskID . '_' . $account;
+                    $taskGroups[$account][$taskID]->realID     = $taskID;
+                    $taskGroups[$account][$taskID]->assignedTo = $account;
+                    $taskGroups[$account][$taskID]->realname   = $member->realname;
+                }
             }
         }
 

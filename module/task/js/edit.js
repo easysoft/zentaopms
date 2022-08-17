@@ -269,13 +269,13 @@ function updateAssignedTo()
             html += "<option value='" + account + "' title='" + realName + "'" + selected + ">" + realName + "</option>";
         });
 
-        if(mode == 'multi' && isTeamMember)
+        if(mode == 'multi' && isTeamMember && mode != 'linear')
         {
             $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
         }
         else
         {
-            if(currentUser != oldAssignedTo || !isTeamMember) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
+            $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     }
     else
@@ -288,5 +288,6 @@ function updateAssignedTo()
     }
 
     $('#assignedTo').html(html);
+    if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($$('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
     $('#assignedTo').trigger('chosen:updated');
 }

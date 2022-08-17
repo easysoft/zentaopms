@@ -139,7 +139,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and (($task->assignedTo != $this->app->user->account and $task->mode == 'linear') or !isset($task->team[$app->user->account]))) ? "disabled='disabled'" :'';?>
+                <?php $disableAssignedTo = (!empty($task->team) and ($task->mode == 'linear' or $task->assignedTo != $this->app->user->account)) ? "disabled='disabled'" : '';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
@@ -286,7 +286,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               if(strpos($task->finishedList, ",{$member->account},") !== false) $memberStatus = 'done';
 
               $memberDisabled = false;
+              $linearDisabled = false;
               if($memberStatus == 'done') $memberDisabled = true;
+              if($memberDisabled and $task->mode == 'linear') $linearDisabled = true;
               ?>
               <tr class='member-<?php echo $memberStatus;?>'>
                 <td class='w-250px'>
@@ -304,9 +306,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>
-                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
+                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -317,7 +319,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                     <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
                     <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
@@ -339,5 +341,5 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
   </form>
 </div>
 <?php js::set('executionID', $execution->id);?>
-<?php if($memberDisabled) js::set('sortSelector', 'tr.member-wait');?>
+<?php if($linearDisabled) js::set('sortSelector', 'tr.member-wait');?>
 <?php include '../../common/view/footer.html.php';?>
