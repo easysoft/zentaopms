@@ -859,6 +859,7 @@ class bug extends control
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+
         $this->display();
     }
 
@@ -1379,8 +1380,6 @@ class bug extends control
         $this->view->priList          = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
         $this->view->resolutionList   = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
         $this->view->statusList       = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
-        $this->view->osList           = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->osList;
-        $this->view->browserList      = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->browserList;
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;

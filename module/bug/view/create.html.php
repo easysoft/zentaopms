@@ -91,12 +91,20 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               <div class='input-group' id='bugTypeInputGroup'>
                 <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");?>
                 <?php if($showOS):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+                <div class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+                    <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
+                  </div>
+                </div>
                 <?php endif;?>
                 <?php if($showBrowser):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+                <div class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+                    <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
+                  </div>
+                </div>
                 <?php endif;?>
               </div>
             </td>
@@ -186,7 +194,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col' id='osBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                    <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
+                    <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
                   </div>
                 </div>
                 <?php endif;?>
@@ -194,7 +202,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                    <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
+                    <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
                   </div>
                 </div>
                 <?php endif;?>

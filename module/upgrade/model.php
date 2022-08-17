@@ -543,6 +543,9 @@ class upgradeModel extends model
                     }
                 }
                 break;
+            case '17_5':
+                $this->recordOSAndBrowserOfBug();
+                break;
         }
 
         $this->deletePatch();
@@ -7088,5 +7091,29 @@ class upgradeModel extends model
         $result = $this->dbh->query("show columns from `$table` like '$field'");
 
         return $result->rowCount() > 0;
+    }
+
+    /**
+     * Record OS and browser of bug.
+     *
+     * @access public
+     * @return bool
+     */
+    public function recordOSAndBrowserOfBug()
+    {
+        $existOSList        = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $existBrowserList   = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $deletedOSList      = array('vista', 'win2012', 'win2008', 'win2003', 'win2000', 'wp8', 'wp7', 'symbian', 'freebsd');
+        $deletedBrowserList = array('ie7', 'ie6', 'firefox4', 'firefox3', 'firefox2', 'oprea11', 'oprea10', 'oprea9', 'maxthon', 'uc');
+        $existList          = array_merge($existOSList, $existBrowserList);
+        $deletedList        = array_merge($deletedOSList, $deletedBrowserList);
+
+        foreach($deletedList as $deletedLang)
+        {
+            if(in_array($deletedLang, $existList)) continue;
+            $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('bug')->andWhere('`key`')->eq($deletedLang)->andWhere('system')->eq(1)->andWhere('vision')->eq('rnd')->exec();
+        }
+
+        return true;
     }
 }
