@@ -168,11 +168,11 @@
                 <td><?php echo $this->processStatus('story', $child);?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('story', 'change',     "storyID=$child->id", $child, 'list', 'alter');
-                  common::printIcon('story', 'review',     "storyID=$child->id", $child, 'list', 'search', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'assignTo',   "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'close',      "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'activate',   "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'change',     "storyID=$child->id&from=&storyType=$child->type", $child, 'list', 'alter');
+                  common::printIcon('story', 'review',     "storyID=$child->id&from=product&storyType=$child->type", $child, 'list', 'search', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'assignTo',   "storyID=$child->id&kanbanGroup=default&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'close',      "storyID=$child->id&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'activate',   "storyID=$child->id&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'edit',       "storyID=$child->id&kanbanGroup=default&storyType=$child->type", $child, 'list');
                   common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap');
                   ?>

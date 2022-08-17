@@ -45,10 +45,10 @@
     <table id='storyList' class="table has-sort-head table-fixed">
       <?php $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
-      $canBatchEdit     = common::hasPriv('story', 'batchEdit');
-      $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
-      $canBatchReview   = common::hasPriv('story', 'batchReview');
-      $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');
+      $canBatchEdit     = common::hasPriv('requirement', 'batchEdit');
+      $canBatchClose    = (common::hasPriv('requirement', 'batchClose') and strtolower($type) != 'closedby');
+      $canBatchReview   = common::hasPriv('requirement', 'batchReview');
+      $canBatchAssignTo = common::hasPriv('requirement', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
       ?>
       <thead>

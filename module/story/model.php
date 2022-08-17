@@ -4132,8 +4132,8 @@ class storyModel extends model
 
             if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
-            $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
             if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
@@ -4419,13 +4419,13 @@ class storyModel extends model
         $canOrder     = common::hasPriv('execution', 'storySort');
 
         $canBatchEdit         = common::hasPriv('story',        'batchEdit');
-        $canBatchClose        = common::hasPriv('story',        'batchClose');
+        $canBatchClose        = common::hasPriv($story->type,   'batchClose');
         $canBatchReview       = common::hasPriv('story',        'batchReview');
         $canBatchChangeStage  = common::hasPriv('story',        'batchChangeStage');
-        $canBatchChangeBranch = common::hasPriv('story',        'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv('story',        'batchChangeModule');
+        $canBatchChangeBranch = common::hasPriv($story->type,   'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv($story->type,   'batchChangeModule');
         $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
-        $canBatchAssignTo     = common::hasPriv('story',        'batchAssignTo');
+        $canBatchAssignTo     = common::hasPriv($story->type,   'batchAssignTo');
         $canBatchUnlinkStory  = common::hasPriv('projectstory', 'batchUnlinkStory');
         $canBatchUnlink       = common::hasPriv('execution',    'batchUnlinkStory');
 
@@ -4724,10 +4724,10 @@ class storyModel extends model
 
         $btnClass     = $story->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
-        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id", '', true);
+        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv('story', 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**

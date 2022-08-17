@@ -137,9 +137,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
         $tab   = $isProjectStory ? 'project' : 'product';
-        $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
-        $misc  = common::hasPriv('story', 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$tab'" : "class=disabled";
-        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=0&browseType=$browseType&type=$storyType") : '#';
+        $class = common::hasPriv($storyType, 'export') ? '' : "class=disabled";
+        $misc  = common::hasPriv($storyType, 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$tab'" : "class=disabled";
+        $link  = common::hasPriv($storyType, 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=0&browseType=$browseType&type=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
@@ -287,13 +287,13 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
       $canBeChanged         = common::canModify('product', $product);
       $canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
-      $canBatchClose        = (common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
+      $canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
       $canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
       $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage'));
-      $canBatchChangeBranch = ($canBeChanged and common::hasPriv('story', 'batchChangeBranch'));
-      $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
+      $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch'));
+      $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan'));
-      $canBatchAssignTo     = ($canBeChanged and common::hasPriv('story', 'batchAssignTo'));
+      $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
       $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
       $canBatchImportToLib  = ($canBeChanged and $this->app->tab == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
@@ -504,7 +504,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 foreach($modules as $moduleId => $module)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
-                    $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
+                    $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId&storyType=$storyType");
                     echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey title='{$module}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>

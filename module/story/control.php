@@ -1730,10 +1730,11 @@ class story extends control
      * Batch change the module of story.
      *
      * @param  int    $moduleID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule($moduleID, $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1825,10 +1826,11 @@ class story extends control
      * @param  int    $branchID
      * @param  string $confirm  yes|no
      * @param  string $storyIdList
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '')
+    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1863,8 +1865,8 @@ class story extends control
                 $normalStotyIdList = array_diff($storyIdList, $conflictStoryArray);
                 $normalStotyIdList = implode(',', $normalStotyIdList);
                 $storyIdList       = implode(',', $storyIdList);
-                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
-                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
+                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList&storyType=$storyType");
+                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList&storyType=$storyType");
                 return print(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
             }
         }
@@ -1914,10 +1916,11 @@ class story extends control
      * @param  int    $storyID
      * @param  string $kanbanGroup
      * @param  string $from taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = 'default', $from = '')
+    public function assignTo($storyID, $kanbanGroup = 'default', $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1970,6 +1973,7 @@ class story extends control
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
+        $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->users      = ($this->config->vision == 'lite') ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
         $this->display();
@@ -1978,10 +1982,11 @@ class story extends control
     /**
      * Batch assign to.
      *
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchAssignTo()
+    public function batchAssignTo($storyType = 'story')
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
@@ -2533,11 +2538,11 @@ class story extends control
      * @param  string $orderBy
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $type = 'story')
+    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $storyType = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -2548,7 +2553,7 @@ class story extends control
             $this->fetch('port', 'export', 'model=story');
         }
 
-        $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         if($executionID)
         {
             $executionName = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch('name');
