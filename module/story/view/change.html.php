@@ -88,7 +88,7 @@
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
-            echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
+            echo html::commonButton($lang->story->doNotSubmit, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
             if(!isonlybody()) echo html::backButton();
             ?>
           </td>

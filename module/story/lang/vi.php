@@ -72,6 +72,7 @@ $lang->story->convertRelations  = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
+$lang->story->doNotSubmit        = 'Do Not Submit';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";

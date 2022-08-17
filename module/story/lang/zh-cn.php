@@ -75,6 +75,7 @@ $lang->story->convertRelations   = '换算关系';
 $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
 $lang->story->saveDraft          = '存为草稿';
+$lang->story->doNotSubmit        = '保存暂不提交';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
