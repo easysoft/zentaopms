@@ -793,6 +793,12 @@ class storyModel extends model
             return false;
         }
 
+        if($this->checkForceReview() and empty($_POST['reviewer']))
+        {
+            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            return false;
+        }
+
         $oldSpec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->fetch();
         $oldStory->title  = isset($oldSpec->title)  ? $oldSpec->title  : '';
         $oldStory->spec   = isset($oldSpec->spec)   ? $oldSpec->spec   : '';

@@ -66,7 +66,7 @@
                 </div>
                 <?php else:?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
+                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple required')?>
                 </div>
                 <?php endif;?>
               </div>

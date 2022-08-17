@@ -7,7 +7,7 @@ $(function()
         $('#reviewer').next().find('.picker-selection').each(function()
         {
             if(reviewedReviewer.indexOf($(this).find('span').text()) != -1) $(this).css('pointer-events', 'none');
-        })
+        });
 
         $('#reviewer').change(function()
         {
