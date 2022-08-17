@@ -1530,8 +1530,6 @@ class taskModel extends model
             ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft')
             ->get();
 
-        if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
-
         $teams = array();
         if(count(array_unique(array_filter($this->post->team))) > 1)
         {
