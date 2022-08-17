@@ -252,10 +252,12 @@ class project extends control
         $data = array();
         if(isset($selectedProgram))
         {
-            $data['selectedProgramBegin'] = $selectedProgram->begin;
-            $data['selectedProgramEnd']   = $selectedProgram->end;
-            $data['budgetUnit']           = $selectedProgram->budgetUnit;
+            $data['selectedProgramBegin']  = $selectedProgram->begin;
+            $data['selectedProgramEnd']    = $selectedProgram->end;
+            $data['budgetUnit']            = $selectedProgram->budgetUnit;
+            $data['selectedProgramParent'] = $selectedProgram->parent;
         }
+        if(!empty($objectID))       $data['parent']          = $object->parent;
         if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
         if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
         if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;

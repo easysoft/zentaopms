@@ -115,7 +115,30 @@ $(function()
  */
 function setParentProgram(parentProgram)
 {
-    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
+    //ParentProgram is the ID of the currently selected program.
+
+    var lastSelectedID     = $('#parent').attr('data-lastSelected');
+    var lastSelectedParent = 0;
+    var selectedParent     = 0;
+
+    if(parentProgram == 0) $('#budgetBox').find('input').removeAttr("placeholder");
+
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
+    {
+        var data = JSON.parse(data);
+        selectedParent = parentProgram != 0 ? data.selectedProgramParent : 0;
+        lastSelectedParent = lastSelectedID != 0 ? data.parent : 0;
+
+        if(selectedParent != lastSelectedParent)
+        {
+            location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
+            return;
+        }
+        budgetOverrunTips();
+        outOfDateTip();
+    });
+
+    $('#parent').attr('data-lastSelected', parentProgram);
 }
 
 /**
