@@ -1204,6 +1204,8 @@ class block extends control
             ->andWhere('parent')->lt(1)
             ->fetch();
 
+        $this->weekly->save($this->session->project, $date);
+
         $this->view->pv = $this->weekly->getPV($this->session->project, $today);
         $this->view->ev = $this->weekly->getEV($this->session->project, $today);
         $this->view->ac = $this->weekly->getAC($this->session->project, $today);
@@ -1299,23 +1301,17 @@ class block extends control
         $projectID = $this->session->project;
         $project   = $this->loadModel('project')->getByID($projectID);
 
-        $begin = $project->begin;
-        $today = helper::today();
-        $end   = date('Y-m-d', strtotime($today));
+        $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
 
         $charts['PV'] = '[';
         $charts['EV'] = '[';
         $charts['AC'] = '[';
-        $i = 1;
-        while($begin < $end)
+        foreach($projectWeekly as $weekStart => $data)
         {
-            $charts['labels'][] = $this->lang->block->time . $i . $this->lang->block->month;
-            $charts['PV']      .= $this->weekly->getPV($projectID, $begin) . ',';
-            $charts['EV']      .= $this->weekly->getEV($projectID, $begin) . ',';
-            $charts['AC']      .= $this->weekly->getAC($projectID, $begin) . ',';
-            $stageEnd           = $this->weekly->getThisSunday($begin);
-            $begin              = date('Y-m-d', strtotime("$stageEnd + 30 day"));
-            $i ++;
+            $charts['labels'][] = $weekStart;
+            $charts['PV']      .= $data->pv . ',';
+            $charts['EV']      .= $data->ev . ',';
+            $charts['AC']      .= $data->ac . ',';
         }
 
         $charts['PV'] .= ']';
