@@ -147,18 +147,18 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <?php if(common::canModify('product', $product)):?>
     <div class='btn-group dropdown'>
       <?php
-      $createStoryLink = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
-      $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&type=$storyType");
+      $createStoryLink = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
+      $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType");
 
       $buttonLink  = '';
       $buttonTitle = '';
       $buttonType  = $from == 'project' ? 'btn-secondary' : 'btn-primary';
-      if(common::hasPriv('story', 'batchCreate'))
+      if(common::hasPriv($storyType, 'batchCreate'))
       {
           $buttonLink  = empty($productID) ? '' : $batchCreateLink;
           $buttonTitle = $lang->story->batchCreate;
       }
-      if(common::hasPriv('story', 'create'))
+      if(common::hasPriv($storyType, 'create'))
       {
           $buttonLink  = $createStoryLink;
           $buttonTitle = $lang->story->create;
@@ -167,7 +167,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $hidden = empty($buttonLink) ? 'hidden' : '';
       echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn $buttonType $hidden create-story-btn' data-app='$tab'");
       ?>
-      <?php if(!empty($productID) and common::hasPriv('story', 'batchCreate') and common::hasPriv('story', 'create')): ?>
+      <?php if(!empty($productID) and common::hasPriv($storyType, 'batchCreate') and common::hasPriv($storyType, 'create')): ?>
       <button type='button' class="btn <?php echo $buttonType?> dropdown-toggle" data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <li>
@@ -286,9 +286,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $columns = 0;
 
       $canBeChanged         = common::canModify('product', $product);
-      $canBatchEdit         = ($canBeChanged and common::hasPriv('story', 'batchEdit'));
+      $canBatchEdit         = ($canBeChanged and common::hasPriv($storyType, 'batchEdit'));
       $canBatchClose        = (common::hasPriv('story', 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
-      $canBatchReview       = ($canBeChanged and common::hasPriv('story', 'batchReview'));
+      $canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
       $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage'));
       $canBatchChangeBranch = ($canBeChanged and common::hasPriv('story', 'batchChangeBranch'));
       $canBatchChangeModule = ($canBeChanged and common::hasPriv('story', 'batchChangeModule'));
@@ -408,7 +408,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   unset($lang->story->reviewResultList['revert']);
                   foreach($lang->story->reviewResultList as $key => $result)
                   {
-                      $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                      $actionLink = $this->createLink('story', 'batchReview', "result=$key&from=product&storyType=$storyType");
                       if($key == 'reject')
                       {
                           echo "<li class='dropdown-submenu'>";
@@ -420,7 +420,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
                           foreach($lang->story->reasonList as $key => $reason)
                           {
-                              $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                              $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key&storyType=$storyType");
                               echo "<li>";
                               echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                               echo "</li>";

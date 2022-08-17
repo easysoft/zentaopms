@@ -1065,10 +1065,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $from
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function change($storyID, $from = '')
+    public function change($storyID, $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1162,10 +1163,11 @@ class story extends control
      * Activate a story.
      *
      * @param  int    $storyID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function activate($storyID)
+    public function activate($storyID, $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1317,12 +1319,13 @@ class story extends control
      * Delete a story.
      *
      * @param  int    $storyID
-     * @param  string $confirm  yes|no
-     * @param  string $from taskkanban
+     * @param  string $confirm   yes|no
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no', $from = '')
+    public function delete($storyID, $confirm = 'no', $from = '', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
         if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
@@ -1369,11 +1372,12 @@ class story extends control
      * Review a story.
      *
      * @param  int    $storyID
-     * @param  string $from product|project
+     * @param  string $from      product|project
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function review($storyID, $from = 'product')
+    public function review($storyID, $from = 'product', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1482,10 +1486,11 @@ class story extends control
      *
      * @param  string $result
      * @param  string $reason
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchReview($result, $reason = '')
+    public function batchReview($result, $reason = '', $storyType = 'story')
     {
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1502,10 +1507,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $from
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function recall($storyID, $from = 'list')
+    public function recall($storyID, $from = 'list', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
         $this->story->recall($storyID);
@@ -1521,11 +1527,12 @@ class story extends control
      * Close a story.
      *
      * @param  int    $storyID
-     * @param  string $from taskkanban
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function close($storyID, $from = '')
+    public function close($storyID, $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {

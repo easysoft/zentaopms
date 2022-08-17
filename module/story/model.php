@@ -4056,7 +4056,7 @@ class storyModel extends model
 
                 $isClick = $this->isClickable($story, 'change');
                 $title   = (!$isClick and $story->status != 'closed') ? $this->lang->story->changeTip : '';
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
+                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 $isClick = $this->isClickable($story, 'review');
                 $title   = $this->lang->story->review;
@@ -4079,7 +4079,7 @@ class storyModel extends model
                         $title = $this->lang->story->reviewTip['recalled'];
                     }
                 }
-                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
+                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 $title   = $this->lang->story->recall;
                 $isClick = $this->isClickable($story, 'recall');
                 if(!$isClick and $story->status != 'closed')
@@ -4089,9 +4089,9 @@ class storyModel extends model
                     if(empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
                     if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
                 }
-                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', 'showinonlybody', '', '', $title);
+                $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', '', '', $title);
 
-                $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
+                $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
@@ -4120,21 +4120,21 @@ class storyModel extends model
             }
             else
             {
-                return $this->buildMenu('story', 'close', $params, $story, 'list', '', '', 'iframe', true);
+                return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
             }
         }
 
         if($type == 'view')
         {
-            $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
-            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', '', 'showinonlybody');
-            $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&storyType=$story->type", $story, $type, 'undo', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'review', $params . "&from=product&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
             if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
             $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'activate', $params, $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
             if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
 
@@ -4170,9 +4170,9 @@ class storyModel extends model
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
+            $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type);
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
-            $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'delete', $params . "&confirm=no&from=&storyType=$story->type", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
 
         if($type == 'execution')
