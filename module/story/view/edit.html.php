@@ -19,9 +19,10 @@
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('reviewedReviewer', $reviewedReviewer);?>
 <?php js::set('storyModule', $lang->story->module);?>
-<?php js::set('reviewers', explode(',', $reviewers));?>
+<?php js::set('reviewers', $reviewers);?>
 <?php js::set('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
+<?php js::set('storyStatus', $story->status);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -46,6 +47,32 @@
               <?php echo html::input('title', $story->title, 'class="form-control disabled story-title"' . (strpos('draft,changing', $story->status) !== false ? '' : ' disabled="disabled"'));?>
             </div>
           </div>
+          <?php if(strpos('draft,changing', $story->status) !== false):?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->story->reviewers;?></div>
+            <div class='detail-content'>
+              <div class="table-row">
+                <?php if(!$this->story->checkForceReview()):?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
+                </div>
+                <div class="table-col needNotReviewBox">
+                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
+                    <div class='checkbox-primary'>
+                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo empty($reviewers) ? 'checked' : '';?>/>
+                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+                    </div>
+                  </span>
+                </div>
+                <?php else:?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
+                </div>
+                <?php endif;?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
             <div class='detail-content article-content'>
@@ -232,7 +259,7 @@
                 <?php $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;?>
                 <td><?php echo html::select('assignedTo', $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($isShowReviewer):?>
+              <?php if($story->status == 'reviewing'):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
                 <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>

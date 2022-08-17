@@ -823,12 +823,11 @@ class storyModel extends model
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
-            ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
             ->get();
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
@@ -870,9 +869,9 @@ class storyModel extends model
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
 
-        if(isset($_POST['reviewer']))
+        if(isset($_POST['reviewer']) or isset($_POST['needNotReview']))
         {
-            $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            $_POST['reviewer'] = isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']);
             $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
             if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
             {
@@ -889,14 +888,16 @@ class storyModel extends model
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                 }
 
-                $story->reviewedBy = $oldStory->reviewedBy;
-                $story = $this->updateStoryByReview($storyID, $oldStory, $story);
+                if($story->status == 'reviewing')
+                {
+                    $story->reviewedBy = $oldStory->reviewedBy;
+                    $story = $this->updateStoryByReview($storyID, $oldStory, $story);
+                }
             }
 
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
             $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
         }
-
 
         $this->dao->update(TABLE_STORY)
             ->data($story, 'reviewers,spec,verify')

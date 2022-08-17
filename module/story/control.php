@@ -746,6 +746,8 @@ class story extends control
      */
     public function edit($storyID, $kanbanGroup = 'default')
     {
+        $story = $this->story->getById($storyID, 0, true);
+
         if(!empty($_POST))
         {
             $changes = $this->story->update($storyID);
@@ -756,8 +758,8 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
 
-                $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                if(isset($_POST['reviewer'])) $this->story->recordReviewAction($story);
+                $editedStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+                if(isset($_POST['reviewer']) and $story->status == 'reviewing') $this->story->recordReviewAction($editedStory);
             }
 
             $this->executeHooks($storyID);
@@ -812,22 +814,12 @@ class story extends control
         $products = $myProducts + $othersProducts;
 
         /* Assign. */
-        $story   = $this->story->getById($storyID, 0, true);
         $product = $this->product->getById($story->product);
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent);
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
-
-        $isShowReviewer = false;
-        $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
-        $reviewerList   = array_keys($reviewerList);
-        $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(strpos('draft,changing', $story->status) !== false or array_diff($reviewerList, $reviewedBy)) $isShowReviewer = true;
-
-        $reviewedReviewer = array();
-        foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
@@ -846,6 +838,12 @@ class story extends control
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
+        /* Get story reviewers. */
+        $reviewedReviewer = array();
+        $reviewerList     = $this->story->getReviewerPairs($story->id, $story->version);
+        $reviewedBy       = explode(',', trim($story->reviewedBy, ','));
+        foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
+
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
         if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
@@ -863,10 +861,10 @@ class story extends control
         $this->view->products         = $products;
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
-        $this->view->reviewers        = implode(',', $reviewerList);
+        $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
-        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
-        $this->view->isShowReviewer   = $isShowReviewer;
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
+
         $this->display();
     }
 
