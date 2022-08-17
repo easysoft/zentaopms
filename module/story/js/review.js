@@ -7,11 +7,6 @@ function switchShow(result)
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
         $('#assignedToBox').hide();
-        if(isMultiple)
-        {
-            $('#assignedToBox').show();
-            loadAssignedTo();
-        }
     }
     else if(result == 'revert')
     {
@@ -19,8 +14,6 @@ function switchShow(result)
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
-        $('#assignedToBox').show();
-        loadAssignedTo();
     }
     else if(result == 'clarify')
     {
@@ -29,8 +22,6 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
-        $('#assignedToBox').show();
-        loadAssignedTo();
     }
     else
     {
@@ -39,13 +30,10 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
-        $('#assignedToBox').hide();
         if(result == 'pass')
         {
             $('#priBox').show();
             $('#estimateBox').show();
-            $('#assignedToBox').show();
-            loadAssignedTo();
         }
     }
 

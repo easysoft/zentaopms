@@ -202,7 +202,7 @@ class storyModel extends model
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
             return false;
         }
 
@@ -283,7 +283,6 @@ class storyModel extends model
             /* Save the story reviewer to storyreview table. */
             if(isset($_POST['reviewer']))
             {
-                $assignedTo = '';
                 foreach($this->post->reviewer as $reviewer)
                 {
                     if(empty($reviewer)) continue;
@@ -293,10 +292,7 @@ class storyModel extends model
                     $reviewData->version  = 1;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
-                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
 
             /* Project or execution linked story. */
@@ -754,7 +750,6 @@ class storyModel extends model
                 }
 
                 /* Update the reviewer. */
-                $assignedTo = '';
                 foreach($_POST['reviewer'] as $reviewer)
                 {
                     $reviewData = new stdclass();
@@ -762,10 +757,7 @@ class storyModel extends model
                     $reviewData->version  = $story->version;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                    if(empty($assignedTo)) $assignedTo = $reviewer;
                 }
-                if($assignedTo and $assignedTo != $oldStory->assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
@@ -1440,7 +1432,6 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
             ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($this->post->result == 'revert', 'version', $oldStory->version - 1)
-            ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->setIF($this->post->result == 'clarify', 'status', 'draft')
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
@@ -2936,7 +2927,7 @@ class storyModel extends model
             ->beginIF($fieldName == 'reviewBy')
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
-            ->andWhere('t1.status')->in('draft,changing')
+            ->andWhere('t1.status')->eq('reviewing')
             ->fi()
             ->beginIF($fieldName == 'assignedBy')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy($orderBy)

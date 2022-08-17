@@ -34,6 +34,14 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
   <div class="center-block">
     <div class="main-header">
       <h2><?php echo $lang->story->create;?></h2>
+      <?php if(!$this->story->checkForceReview()):?>
+      <div class="needNotReviewBox">
+        <div class='checkbox-primary'>
+          <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+          <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+        </div>
+      </div>
+      <?php endif;?>
       <div class="pull-right btn-toolbar">
         <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
         <?php include '../../common/view/customfield.html.php';?>
@@ -88,64 +96,24 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 ?>
               </div>
             </td>
-            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
-              <div class="input-group">
-                <div class="input-group" style='display: flex;'>
-                  <div class='source'>
-                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                    <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  </div>
-                  <div class='sourceNote'>
-                    <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
-                    <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : ""?>
-                    <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
-              <div class="table-row">
-                <?php if(!$this->story->checkForceReview()):?>
-                <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple");?>
-                </div>
-                <div class="table-col needNotReviewBox">
-                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
-                    <div class='checkbox-primary'>
-                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
-                    </div>
-                  </span>
-                </div>
-                <?php else:?>
-                <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
-                </div>
-                <?php endif;?>
-              </div>
-            </td>
-            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox' class='hidden'>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
-            <?php if($type == 'requirement'):?>
-            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
+          </tr>
+          <tr class='sourceBox <?php echo $hiddenSource;?>'>
+            <th><?php echo $lang->story->source;?></th>
+            <td colspan='2'>
+              <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+            </td>
+            <td colspan="2" class="sourceTd">
               <div class="input-group">
-                <div class="input-group">
-                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
-                </div>
+                <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
+                <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
               </div>
             </td>
-            <?php else:?>
             <td colspan="2" id='feedbackBox' class='hidden'>
               <div class="input-group">
                 <div class="input-group">
@@ -156,7 +124,41 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 </div>
               </div>
             </td>
-            <?php endif;?>
+          </tr>
+          <?php else:?>
+          <tr>
+            <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
+            <td colspan='2' id='assignedToBox'>
+              <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
+            </td>
+            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
+              <div class="input-group">
+                <div class="input-group">
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
+                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                  <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <th><?php echo $lang->story->reviewedBy;?></th>
+            <td colspan='2' id='reviewerBox'>
+              <div class="table-row">
+                <?php if(!$this->story->checkForceReview()):?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple");?>
+                </div>
+                <?php echo html::hidden('needNotReview', 1);?>
+                <?php else:?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
+                </div>
+                <?php endif;?>
+              </div>
+            </td>
           </tr>
           <?php if($type == 'story'):?>
           <?php if($this->config->URAndSR):?>

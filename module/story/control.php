@@ -1147,7 +1147,7 @@ class story extends control
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
-        $this->view->needReview       = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
         $this->view->files            = $this->loadModel('file')->getByObject($story->type, $storyID);
@@ -1463,6 +1463,7 @@ class story extends control
         $this->view->actions   = $this->action->getList('story', $storyID);
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter', "$story->lastEditedBy,$story->openedBy");
         $this->view->reviewers = $reviewers;
+        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) == 1 ? true : false;
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
@@ -2759,7 +2760,7 @@ class story extends control
      */
     public function ajaxGetAssignedTo($type = '', $storyID = 0, $assignees = '')
     {
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $users = $this->loadModel('user')->getPairs('noclosed');
 
         if($type == 'create')
         {
