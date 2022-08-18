@@ -721,6 +721,7 @@ class bugModel extends model
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
+            ->setIF($this->post->case === '', 'case', 0)
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
@@ -844,7 +845,7 @@ class bugModel extends model
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
                 $bug->module         = $data->modules[$bugID];
-                $bug->assignedTo     = $data->assignedTos[$bugID];
+                $bug->assignedTo     = $bug->status == 'closed' ? $oldBug->assignedTo : $data->assignedTos[$bugID];
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];
@@ -1008,6 +1009,8 @@ class bugModel extends model
     {
         $now = helper::now();
         $oldBug = $this->getById($bugID);
+        if($oldBug->status == 'closed') return false;
+
         $bug = fixer::input('post')
             ->add('id', $bugID)
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -3556,7 +3559,7 @@ class bugModel extends model
         $toStoryParams = "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id";
 
         $menu .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
-        if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
+        if($type == 'view' and $bug->status != 'closed') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
         $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe showinonlybody", true);
         $menu .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);

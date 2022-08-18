@@ -95,6 +95,7 @@
         <?php echo html::backButton('','','btn');?>
         <?php endif;?>
       </div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   </form>
