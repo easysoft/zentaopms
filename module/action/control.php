@@ -52,6 +52,8 @@ class action extends control
     public function trash($browseType = 'all', $type = 'all', $byQuery = false, $queryID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('backup');
+        $this->app->loadLang('execution');
+        $this->app->loadLang('project');
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -115,6 +117,15 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
+        /* Get the project name of executions. */
+        if($browseType == 'execution')
+        {
+            $executionIdList = array();
+            foreach($trashes as $trash) $executionIdList[] = $trash->objectID;
+            $projectPairs = $this->loadModel('project')->getProjectName($executionIdList);
+            $this->view->projectPairs = $projectPairs;
+        }
+
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
@@ -130,7 +141,6 @@ class action extends control
         $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->view->byQuery             = $byQuery;
         $this->view->queryID             = $queryID;
-
         $this->display();
     }
 

@@ -82,6 +82,7 @@
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
           <th class='c-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
+          <th class='w-250px'><?php if($currentObjectType == 'execution') echo $this->lang->execution->project;?></th>
           <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
           <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
           <th class='c-actions'><?php echo $lang->actions;?></th>
@@ -134,6 +135,14 @@
                 echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab");
             }
             ?>
+          </td>
+          <td>
+            <?php if($currentObjectType == 'execution'):?>
+            <span title='<?php echo $projectPairs[$action->project]->name;?>'><?php echo $projectPairs[$action->project]->name;?></span>
+            <?php if($projectPairs[$action->project]->deleted):?>
+            <span class='label label-danger'><?php echo $this->lang->project->deleted;?></span>
+            <?php endif; ?>
+            <?php endif; ?>
           </td>
           <td><?php echo zget($users, $action->actor);?></td>
           <td><?php echo $action->date;?></td>

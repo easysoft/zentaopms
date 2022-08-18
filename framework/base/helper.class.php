@@ -885,8 +885,8 @@ function getWebRoot($full = false)
  *
  * @param  array|object    $var
  * @param  string|int      $key
- * @param  mixed           $valueWhenNone     value when the key not exits.
- * @param  mixed           $valueWhenExists   value when the key exits.
+ * @param  mixed           $valueWhenNone     value when the key not exists.
+ * @param  mixed           $valueWhenExists   value when the key exists.
  * @access public
  * @return mixed
  */
