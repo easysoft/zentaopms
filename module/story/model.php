@@ -4052,7 +4052,7 @@ class storyModel extends model
             if(common::canBeChanged('story', $story))
             {
                 $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
+                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
                 $title   = (!$isClick and $story->status != 'closed') ? $this->lang->story->changeTip : '';
@@ -4521,7 +4521,7 @@ class storyModel extends model
             }
             elseif($id == 'actions')
             {
-                $class .= ' text-center';
+                $class .= ' text-left';
             }
             elseif($id == 'order')
             {
