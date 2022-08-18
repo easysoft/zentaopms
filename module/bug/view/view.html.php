@@ -232,11 +232,29 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                  <td>
+                  <?php $osList = explode(',', $bug->os);?>
+                  <?php if($osList):?>
+                  <p class='osContent'>
+                    <?php foreach($osList as $os):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->osList, $os) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                  <td>
+                  <?php $browserList = explode(',', $bug->browser);?>
+                  <?php if($browserList):?>
+                  <p class='browserContent'>
+                    <?php foreach($browserList as $browser):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>

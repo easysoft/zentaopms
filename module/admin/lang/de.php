@@ -75,6 +75,7 @@ $lang->admin->safe->checkWeak                = 'Schwache Passwörter prüfen';
 $lang->admin->safe->changeWeak               = 'Ihr Passwort ist schwach. Bitte ändern.';
 $lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
+$lang->admin->safe->passwordStrengthWeak     = 'The password strength is weaker than the system settings.';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';

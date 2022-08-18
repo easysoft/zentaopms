@@ -565,7 +565,7 @@ class fileModel extends model
         }
         elseif($objectType == 'feedback')
         {
-            $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch();
+            $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch('product');
             $grantProducts = $this->loadModel('feedback')->getGrantProducts();
             return in_array($productID, array_keys($grantProducts));
         }

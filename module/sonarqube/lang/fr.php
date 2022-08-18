@@ -16,6 +16,7 @@ $lang->sonarqube->desc              = 'Description';
 $lang->sonarqube->reportView        = "SonarQube Report";
 $lang->sonarqube->browseIssue       = "SonarQube Issue List";
 $lang->sonarqube->createBug         = "Create Bug";
+$lang->sonarqube->delError          = "There are bound jobs under this server, please delete the association and then operate";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "Server Name";

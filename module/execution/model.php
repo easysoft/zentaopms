@@ -1005,17 +1005,24 @@ class executionModel extends model
             }
         }
 
+        $changes = common::createChanges($oldExecution, $execution);
+        if($this->post->comment != '' or !empty($changes))
+        {
+            $this->loadModel('action');
+            $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+
         /* Update the status of the parent stage. */
         if($oldExecution->type == 'stage')
         {
             $parent = $this->getByID($oldExecution->parent);
-            if($parent->type == 'stage' and $parent->status == 'closed')
+            if($parent->type == 'stage' and in_array($parent->status, array('closed', 'wait')))
             {
                 $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
+                $this->loadModel('action')->create('execution', $parent->id, 'startbychildactivate');
             }
         }
-
-        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
     /**
@@ -1058,6 +1065,15 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+
+            $changes = common::createChanges($oldExecution, $execution);
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+
             /* Update the status of the parent stage. */
             if($oldExecution->type == 'stage')
             {
@@ -1071,12 +1087,15 @@ class executionModel extends model
                         if($childExecution->status != 'closed') $isClosed = false;
                     }
 
-                    if($isClosed) $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
+                    if($isClosed)
+                    {
+                        $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
+                        $this->loadModel('action')->create('execution', $parent->id, 'closebychildclose');
+                    }
                 }
             }
 
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
-            return common::createChanges($oldExecution, $execution);
         }
     }
 
@@ -1411,7 +1430,7 @@ class executionModel extends model
 
     /**
      * Get execution stat data.
-     
+
      * @param  int        $projectID
      * @param  string     $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
      * @param  int        $productID
@@ -2689,7 +2708,7 @@ class executionModel extends model
             $this->story->setStage($storyID);
             $this->linkCases($executionID, (int)$products[$storyID], $storyID);
 
-            $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
+            $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }

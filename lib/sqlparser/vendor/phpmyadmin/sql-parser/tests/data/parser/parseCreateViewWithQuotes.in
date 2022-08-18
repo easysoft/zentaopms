@@ -1,0 +1,4 @@
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost`
+SQL SECURITY DEFINER VIEW `test_view`  AS
+select `email_content`.`content_id` AS `content_id`,
+`email_content`.`brand_id` AS `brand_id` from `email_content`;
