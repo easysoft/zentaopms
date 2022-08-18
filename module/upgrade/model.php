@@ -544,7 +544,7 @@ class upgradeModel extends model
                 }
                 break;
             case '17_5':
-                $this->recordOSAndBrowserOfBug();
+                $this->updateOSAndBrowserOfBug();
                 break;
         }
 
@@ -7094,12 +7094,12 @@ class upgradeModel extends model
     }
 
     /**
-     * Record OS and browser of bug.
+     * Update OS and browser of bug.
      *
      * @access public
      * @return bool
      */
-    public function recordOSAndBrowserOfBug()
+    public function updateOSAndBrowserOfBug()
     {
         $existOSList        = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
         $existBrowserList   = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
