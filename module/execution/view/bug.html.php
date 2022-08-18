@@ -162,7 +162,7 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn" id="mulAssigned"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
             <?php
             $withSearch = count($memberPairs) > 10;
             $actionLink = $this->createLink('bug', 'batchAssignTo', "executionID={$execution->id}&type=execution");
