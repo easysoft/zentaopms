@@ -130,6 +130,7 @@ class file extends control
         if(!$this->file->checkPriv($file))
         {
             echo(js::alert($this->lang->file->accessDenied));
+            if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::locate(helper::createLink('my', 'index')));
         }
 
