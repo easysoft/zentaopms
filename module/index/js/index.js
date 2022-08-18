@@ -122,7 +122,7 @@
             }
         }
         if(moduleName === 'story' && vision === 'lite') return 'project'
-        if(moduleName === 'story' && methodLowerCase === 'zerocase')
+        if(moduleName === 'testcase' && methodLowerCase === 'zerocase')
         {
             return link.params.from == 'project' ? 'project' : 'qa';
         }

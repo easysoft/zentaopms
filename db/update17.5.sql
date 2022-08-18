@@ -247,3 +247,6 @@ INSERT IGNORE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `syst
 ('de',    'bug', 'osList',      'freebsd',  'FreeBSD',        '1', 'rnd'),
 ('de',    'bug', 'osList',      'unix',     'Unix',           '1', 'rnd'),
 ('de',    'bug', 'osList',      'others',   'Andere',         '1', 'rnd');
+
+UPDATE `zt_grouppriv` SET `module` = 'testcase' WHERE `module` = 'story' and `method` = 'zeroCase';
+UPDATE `zt_grouppriv` SET `module` = 'product' WHERE `module` = 'story' and `method` = 'track';

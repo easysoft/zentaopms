@@ -1554,4 +1554,59 @@ class product extends control
         $this->session->set('product', (int)$productID, $this->app->tab);
         $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
+
+    /**
+     * Story track.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $projectID
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
+     * @access public
+     * @return void
+     */
+    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        /* Set menu. The projectstory module does not execute. */
+        if(!$projectID)
+        {
+            $products  = $this->product->getPairs();
+            $productID = $this->product->saveState($productID, $products);
+            $this->product->products = $this->product->saveState($productID, $products);
+            $this->product->setMenu($productID, $branch);
+        }
+
+        /* Save session. */
+        $this->session->set('storyList',    $this->app->getURI(true), 'product');
+        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
+        $this->session->set('designList',   $this->app->getURI(true), 'project');
+        $this->session->set('bugList',      $this->app->getURI(true), 'qa');
+        $this->session->set('caseList',     $this->app->getURI(true), 'qa');
+        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
+
+        /* Load pager and get tracks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
+
+        if($projectID)
+        {
+            $this->loadModel('project')->setMenu($projectID);
+            $projectProducts = $this->product->getProducts($projectID);
+        }
+
+        $this->view->title      = $this->lang->story->track;
+        $this->view->position[] = $this->lang->story->track;
+
+        $this->view->tracks          = $tracks;
+        $this->view->pager           = $pager;
+        $this->view->productID       = $productID;
+        $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
+        $this->display();
+    }
 }

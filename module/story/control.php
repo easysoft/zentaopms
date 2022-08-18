@@ -1989,61 +1989,6 @@ class story extends control
     }
 
     /**
-     * Story track.
-     *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $projectID
-     * @param  int         $recTotal
-     * @param  int         $recPerPage
-     * @param  int         $pageID
-     * @access public
-     * @return void
-     */
-    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        /* Set menu. The projectstory module does not execute. */
-        if(!$projectID)
-        {
-            $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
-            $this->product->products = $this->product->saveState($productID, $products);
-            $this->product->setMenu($productID, $branch);
-        }
-
-        /* Save session. */
-        $this->session->set('storyList',    $this->app->getURI(true), 'product');
-        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
-        $this->session->set('designList',   $this->app->getURI(true), 'project');
-        $this->session->set('bugList',      $this->app->getURI(true), 'qa');
-        $this->session->set('caseList',     $this->app->getURI(true), 'qa');
-        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
-
-        /* Load pager and get tracks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
-
-        if($projectID)
-        {
-            $this->loadModel('project')->setMenu($projectID);
-            $projectProducts = $this->product->getProducts($projectID);
-        }
-
-        $this->view->title      = $this->lang->story->track;
-        $this->view->position[] = $this->lang->story->track;
-
-        $this->view->tracks          = $tracks;
-        $this->view->pager           = $pager;
-        $this->view->productID       = $productID;
-        $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
-        $this->display();
-    }
-
-    /**
      * Tasks of a story.
      *
      * @param  int    $storyID
@@ -2090,60 +2035,6 @@ class story extends control
         $this->view->cases      = $this->testcase->getStoryCases($storyID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
-        $this->display();
-    }
-
-    /**
-     * Show zero case story.
-     *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
-    {
-        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
-        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
-
-        $this->loadModel('testcase');
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($this->session->project);
-            $this->app->rawModule = 'qa';
-            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
-            $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', "projectID=$projectID", $branchID);
-        }
-        else
-        {
-            $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
-            $this->loadModel('qa');
-            $this->app->rawModule = 'testcase';
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->qa->setMenu($products, $productID, $branchID);
-        }
-
-        /* Append id for secend sort. */
-        $sort = common::appendOrder($orderBy);
-
-        $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
-        $this->view->position[] = $this->lang->story->zeroCase;
-
-        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projectID  = $projectID;
-        $this->view->productID  = $productID;
-        $this->view->branchID   = $branchID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->browseType = '';
-        $this->view->product    = $this->product->getByID($productID);
         $this->display();
     }
 
