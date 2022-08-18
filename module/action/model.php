@@ -1258,6 +1258,10 @@ class actionModel extends model
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
             }
+            elseif($action->objectType == 'mr' and $action->action == 'deleted')
+            {
+                $action->objectName = $action->extra;
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
@@ -1273,14 +1277,14 @@ class actionModel extends model
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
-            /* Get gitlab or gitea objectname. */
-            if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea')) $action->objectName = $action->extra;
+            /* Get gitlab, gitea or gogs objectname. */
+            if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea' or substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             $this->setObjectLink($action, $deptUsers);
 
             /* Set merge request link. */
-            if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
+            if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
@@ -1721,6 +1725,16 @@ class actionModel extends model
 
             $projectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
+        }
+
+        if($action->objectType == 'repo')
+        {
+            $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($action->objectID)->fetch();
+            if($repo and in_array($repo->SCM, array('Gitlab', 'Gitea', 'Gogs')))
+            {
+                $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($repo->serviceHost)->andWhere('deleted')->eq('0')->fetch();
+                if(empty($server)) return print(js::error($this->lang->action->repoNoServer));
+            }
         }
 
         if($action->objectType == 'product')

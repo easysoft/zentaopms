@@ -5,4 +5,4 @@
 #server_chosen .chosen-single {border-right: 0px;}
 #pipelineBox {width: 385px;}
 #svnDirBox .input-group {width: unset !important;}
-#paramDiv .input-group {padding: 3px;}
+#jenkinsServerTR .input-group-addon {border-left-width: 0 !important;}

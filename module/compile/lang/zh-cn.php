@@ -1,7 +1,8 @@
 <?php
-$lang->compile->common = '构建';
-$lang->compile->browse = '构建历史';
-$lang->compile->logs   = '构建日志';
+$lang->compile->common      = '构建';
+$lang->compile->browse      = '构建历史';
+$lang->compile->logs        = '构建日志';
+$lang->compile->syncCompile = '接口：同步构建记录';
 
 $lang->compile->id          = 'ID';
 $lang->compile->name        = '构建名称';

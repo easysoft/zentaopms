@@ -60,15 +60,19 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions'>
             <?php
-            echo common::buildIconButton('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'treemap', '', '', false, '', $this->lang->gitlab->browseBranch, 0, $gitlabProject->default_branch);
-            echo common::buildIconButton('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag', '', '', false, '', $this->lang->gitlab->browseTag, 0, $gitlabProject->default_branch);
-            echo common::buildIconButton('gitlab', 'manageBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', $this->lang->gitlab->browseBranchPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
-            echo common::buildIconButton('gitlab', 'manageTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', $this->lang->gitlab->browseTagPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
-            echo common::buildIconButton('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
-            echo common::buildIconButton('gitlab', 'createWebhook', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'change', 'hiddenwin', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
-            echo common::buildIconButton('gitlab', 'importIssue', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'link', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
-            echo common::buildIconButton('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'edit', '', '', false, '', '', 0, $gitlabProject->adminer);
-            echo common::buildIconButton('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $gitlabProject->adminer);
+            $hasRepoClass       = isset($repoPairs[$gitlabProject->id]) ? '' : 'disabled';
+            $adminerClass       = $gitlabProject->adminer               ? '' : 'disabled';
+            $maintainerClass    = $gitlabProject->isMaintainer          ? '' : 'disabled';
+            $defaultBranchClass = $gitlabProject->adminer               ? '' : 'disabled';
+            echo common::printIcon('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'treemap', '', $defaultBranchClass, false, '', $this->lang->gitlab->browseBranch);
+            echo common::printIcon('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag', '', $defaultBranchClass, false, '', $this->lang->gitlab->browseTag);
+            echo common::printIcon('gitlab', 'manageBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', $defaultBranchClass . ' ' . $maintainerClass, false, '', $this->lang->gitlab->browseBranchPriv);
+            echo common::printIcon('gitlab', 'manageTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', $defaultBranchClass . ' ' . $maintainerClass, false, '', $this->lang->gitlab->browseTagPriv);
+            echo common::printIcon('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', $hasRepoClass);
+            echo common::printIcon('gitlab', 'createWebhook', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'change', 'hiddenwin', $hasRepoClass);
+            echo common::printIcon('gitlab', 'importIssue', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'link');
+            echo common::printIcon('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'edit', '', $adminerClass);
+            echo common::printIcon('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'trash', 'hiddenwin', $adminerClass);
             ?>
           </td>
         </tr>
