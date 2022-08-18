@@ -5,3 +5,4 @@
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
 .btn-edit-comment {z-index: 100;}
 .select-project-modal .modal-body {right: 15px;}
+.osContent, .browserContent {margin: 0 0 5px;}

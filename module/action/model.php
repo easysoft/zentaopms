@@ -1765,6 +1765,12 @@ class actionModel extends model
         {
             $products = $this->product->getProducts($project->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
+
+            if($action->objectType == 'execution')
+            {
+                $execution = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+                $this->loadModel('common')->syncExecutionByChild($execution);
+            }
         }
 
         /* Revert doclib when undelete product or project. */
