@@ -2991,6 +2991,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
+
         /* From action Get reviews. */
         $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('product')->like("%,$productID,%")
@@ -3097,13 +3098,23 @@ class storyModel extends model
                 $storyQuery = str_replace($allProduct, '1', $this->session->executionStoryQuery);
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+            /* From action Get reviews. */
+            $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+                ->where('product')->like("%,$productID,%")
+                ->andWhere('action')->eq('reviewed')
+                ->andWhere('objectType')->eq('story')
+                ->andWhere('extra')->eq('Revert')
+                ->groupBy('objectID')
+                ->orderBy('id_desc')
+                ->fetchAll();
+
             if(strpos($storyQuery,'result')!== false)
             {
                 if(strpos($storyQuery,'revert')!== false)
                 {
-                    $storyQuery = str_replace("AND `result` = 'revert'",'',$storyQuery);
+                    $storyQuery = str_replace("AND t2.`result` = 'revert'",'',$storyQuery);
                     $review = implode('\',\'',array_column($review,'objectID'));
-                    $storyQuery.=" AND t1.`id` in ('{$review}')";
+                    $storyQuery.=" AND t2.`id` in ('{$review}')";
                 }
                 else
                 {
