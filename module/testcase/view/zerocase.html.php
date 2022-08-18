@@ -64,16 +64,7 @@
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
         <td class='text-left' title="<?php echo $story->title?>"><nobr>
-        <?php
-        if($canView)
-        {
-            echo html::a($viewLink, $story->title, '', "data-app='product'") . "</nobr>";
-        }
-        else
-        {
-            echo $story->title;
-        }
-        ?>
+          <?php echo $canView ? html::a($viewLink, $story->title, '', "data-app='product'") . "</nobr>" : $story->title;?>
         </td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>
