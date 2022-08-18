@@ -405,10 +405,7 @@ class designModel extends model
     {
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
-        $this->lang->waterfall->menu->design['subMenu']->other = array('link' => "更多|design|other|", 'class' => 'dropdown dropdown-hover');
-        $this->lang->waterfall->menu->design['subMenu']->other['dropMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
-        $count = 1;
         foreach(array_filter($this->lang->design->typeList) as $key => $value)
         {
             $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
