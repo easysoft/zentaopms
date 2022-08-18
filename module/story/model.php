@@ -3097,10 +3097,24 @@ class storyModel extends model
                 $storyQuery = str_replace($allProduct, '1', $this->session->executionStoryQuery);
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+            if(strpos($storyQuery,'result')!== false)
+            {
+                if(strpos($storyQuery,'revert')!== false)
+                {
+                    $storyQuery = str_replace("AND `result` = 'revert'",'',$storyQuery);
+                    $review = implode('\',\'',array_column($review,'objectID'));
+                    $storyQuery.=" AND t1.`id` in ('{$review}')";
+                }
+                else
+                {
+                    $storyQuery = str_replace(array('t2.`result`'), array('t4.`result`'), $storyQuery);
+                }
+            }
 
             $stories = $this->dao->select('distinct t1.*, t2.*, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+                ->beginIF(strpos($storyQuery,'result')!== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
