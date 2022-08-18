@@ -8,6 +8,7 @@
   <a href="https://github.com/easysoft/zentaopms/blob/master/COPYING"><img src="https://img.shields.io/badge/License-AGPL%20+%20ZPL-blue" alt="ZenTao License"></a>
   <a href="https://www.zentao.net"><img src="https://img.shields.io/badge/Website-www.zentao.net-blue" alt="ZenTao Website"></a>
 </p>
+
 # 介绍
 
 禅道是第一款国产的开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、 组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整地覆盖了项目管理的核心流程。
