@@ -84,4 +84,5 @@
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('isMultiple', count($reviewers) == 1 ? false : true);?>
+<?php js::set('isLastOne', $isLastOne);?>
 <?php include '../../common/view/footer.html.php';?>

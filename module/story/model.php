@@ -5607,9 +5607,11 @@ class storyModel extends model
      */
     public function superReview($storyID, $oldStory, $story, $result = '', $reason = '')
     {
+        $result = isset($_POST['result']) ? $this->post->result : $result;
+        if(empty($result)) return $story;
+
         $now    = helper::now();
         $status = $oldStory->status;
-        $result = isset($_POST['result']) ? $this->post->result : $result;
         if(strpos('revert,pass', $result) !== false) $status = 'active';
         if($result == 'reject')  $status = 'closed';
         if($result == 'clarify') $status = 'draft';
