@@ -1,7 +1,7 @@
 ALTER TABLE `zt_bug` MODIFY COLUMN `os` varchar(255) NOT NULL default '';
 ALTER TABLE `zt_bug` MODIFY COLUMN `browser` varchar(255) NOT NULL default '';
 
-INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
+INSERT IGNORE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'bug', 'browserList', 'all',      '全部',           '1', 'rnd'),
 ('zh-cn', 'bug', 'browserList', 'chrome',   'Chrome',         '1', 'rnd'),
 ('zh-cn', 'bug', 'browserList', 'edge',     'Edge',           '1', 'rnd'),
