@@ -14,6 +14,7 @@ function switchShow(result)
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
+        $('#assignedToBox').show();
     }
     else if(result == 'clarify')
     {
@@ -22,6 +23,7 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
+        $('#assignedToBox').show();
     }
     else
     {
@@ -30,6 +32,7 @@ function switchShow(result)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
+        $('#assignedToBox').show();
         if(result == 'pass')
         {
             $('#priBox').show();
