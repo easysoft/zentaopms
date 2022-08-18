@@ -24,8 +24,8 @@
       <thead>
       <tr>
         <?php
-        $this->app->rawModule = 'story';
-        $vars = "productID=$productID&branchID=$branchID&orderBy=%s";
+        $this->app->rawModule = 'testcase';
+        $vars = "productID=$productID&branchID=$branchID&orderBy=%s&project=$projectID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         ?>
         <th class='c-id'>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -63,7 +63,11 @@
           <?php printf('%03d', $story->id);?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
-        <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title, '', "data-app='product'");?></nobr></td>
+        <td class='text-left' title="<?php echo $story->title?>">
+          <nobr>
+            <?php echo $canView ? html::a($viewLink, $story->title, '', "data-app='product'") : $story->title;?>
+          </nobr>
+        </td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
@@ -148,6 +152,7 @@
         }
         ?>
       </div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>

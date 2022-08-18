@@ -11,6 +11,7 @@
  */
 $lang->product->index            = $lang->productCommon . ' Home';
 $lang->product->browse           = 'Story List';
+$lang->product->requirement      = 'Requirement List';
 $lang->product->dynamic          = 'Dynamics';
 $lang->product->view             = "{$lang->productCommon} Detail";
 $lang->product->edit             = "Edit {$lang->productCommon}";
@@ -34,6 +35,7 @@ $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the s
 $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Unbind Whitelist';
+$lang->product->track            = 'View Stories Matrix';
 $lang->product->checkedProducts  = '%s products selected';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";

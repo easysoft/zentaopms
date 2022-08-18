@@ -125,6 +125,7 @@ $lang->testcase->batchConfirmStoryChange = "Confirmer par Lot";
 $lang->testcase->batchCaseTypeChange     = "Changer Types par Lot";
 $lang->testcase->browse                  = "Liste CasTests";
 $lang->testcase->groupCase               = "Vue par Groupe";
+$lang->testcase->zeroCase                = "Stories sans CasTests";
 $lang->testcase->import                  = "Importer";
 $lang->testcase->importAction            = "Importer CasTest";
 $lang->testcase->fileImport              = "Importer CSV";
