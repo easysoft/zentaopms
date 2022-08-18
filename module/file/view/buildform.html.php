@@ -3,6 +3,7 @@
 .file-input .file-editbox{max-width:40%;}
 .file-input-list .input-group-btn{float:left}
 .fileAction {color: #0c64eb !important;}
+.backgroundColor {background: #eff5ff; }
 </style>
 <?php js::set('dangerExtensions', ',' . $this->config->file->dangers . ',');?>
 <?php js::set('maxUploadSize', $maxUploadSize);?>
@@ -26,8 +27,8 @@
         <small class="file-size muted"></small>
       </div>
       <div class="input-group-btn">
-        <button type="button" class="fileAction btn btn-link file-input-rename"><?php echo $lang->file->edit;?></button>
-        <button type="button" class="fileAction btn btn-link file-input-delete"><?php echo $lang->delete;?></button>
+        <button type="button" class="fileAction btn btn-link file-input-rename" title="<?php echo $lang->file->edit;?>"><i class='icon icon-pencil-alt'></i></button>
+        <button type="button" class="fileAction btn btn-link file-input-delete" title="<?php echo $lang->delete;?>"><i class='icon icon-trash'></i></button>
       </div>
     </div>
     <input type="file" name="<?php echo $filesName;?>[]" onchange="checkDangerExtension(this)" />
