@@ -3349,7 +3349,13 @@ class taskModel extends model
         if($action == 'recordestimate' and $task->parent == -1)     return false;
         if($action == 'delete'         and $task->parent < 0)       return false;
 
-        if($action == 'assignto' and !empty($task->team) and $task->mode == 'linear') return false;
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            global $app;
+            if($action == 'assignto') return false;
+            if($action == 'start' and $task->assignedTo != $app->user->account) return false;
+            if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
+        }
 
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
