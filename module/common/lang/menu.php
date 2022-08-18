@@ -513,7 +513,7 @@ if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = arr
 
 if($config->systemMode == 'new')
 {
-    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting');
+    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 }
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
