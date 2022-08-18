@@ -2735,30 +2735,6 @@ class executionModel extends model
     }
 
     /**
-     * Get the skip members of the team.
-     *
-     * @param  array  $teams
-     * @param  string $begin
-     * @param  string $end
-     * @access public
-     * @return array
-     */
-    public function getTeamSkip($teams, $begin, $end)
-    {
-        $members = array();
-        foreach($teams as $team)
-        {
-            $account = $team->account;
-            if($account == $end) break;
-            if(!empty($begin) and $account != $begin and empty($members)) continue;
-
-            $members[$account] = $team;
-        }
-
-        return $members;
-    }
-
-    /**
      * Get teams which can be imported.
      *
      * @param  string $account

@@ -70,7 +70,6 @@ $config->execution->search['fields']['canceledBy']     = $lang->task->canceledBy
 $config->execution->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
 
 $config->execution->search['fields']['mailto']         = $lang->task->mailto;
-$config->execution->search['fields']['finishedList']   = $lang->task->finishedList;
 
 $config->execution->search['fields']['openedDate']     = $lang->task->openedDate;
 $config->execution->search['fields']['deadline']       = $lang->task->deadline;
@@ -106,7 +105,6 @@ $config->execution->search['params']['cancelBy']       = array('operator' => '='
 $config->execution->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-$config->execution->search['params']['finishedList']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
