@@ -804,9 +804,12 @@ class caselib extends control
      */
     public function libSort()
     {
-        $idList   = explode(',', trim($this->post->caselib, ','));
+        $idList = explode(',', trim($this->post->caselib, ','));
+        $order  = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->in($idList)->andWhere('type')->eq('library')->orderBy('order_asc')->fetch('order');
+        $idList = array_reverse($idList);
 
-        $order = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->in($idList)->andWhere('type')->eq('library')->orderBy('order_asc')->fetch('order');
+        /* Init Order. */
+        if(empty($order)) $order = 1;
 
         foreach($idList as $caselibID)
         {
