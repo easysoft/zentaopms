@@ -34,6 +34,7 @@ Scrum 是一种注重实效的敏捷项目管理方式。它规定了核心的�
 - [官网](https://www.zentao.net)  
 - [文档](https://www.zentao.net/book/zentaopmshelp.html)  
 - [常见问题](https://www.zentao.net/faq.html)
+- [插件库](https://www.zentao.net/extension-browse.html)
 
 ## Demo
 
