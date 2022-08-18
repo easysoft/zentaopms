@@ -47,6 +47,7 @@
       </thead>
       <tbody>
       <?php $storyCount = 0;?>
+      <?php $canViewUR = common::hasPriv('requirement', 'view');;?>
       <?php foreach($stories2Link as $story2Link):?>
       <?php $storyLink = $this->createLink('story', 'view', "storyID=$story2Link->id");?>
       <tr>
@@ -55,10 +56,10 @@
             <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/>
             <label></label>
           </div>
-          <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
+          <?php echo $canViewUR ? html::a($storyLink, sprintf('%03d', $story2Link->id)) : sprintf('%03d', $story2Link->id);?>
         </td>
         <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story2Link->pri?>' title='<?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
-        <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
+        <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo $canViewUR ? html::a($storyLink, $story2Link->title, '_blank') : $story2Link->title;?></td>
         <td><?php echo $this->processStatus('story', $story2Link);?></td>
         <?php if($story->type == 'requirement'):?>
         <td><?php echo zget($lang->story->stageList, $story2Link->stage);?></td>

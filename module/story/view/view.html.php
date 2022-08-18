@@ -403,10 +403,11 @@
             <ul class="list-unstyled">
               <?php
               $relation = array();
+              $canViewLinkStory = $story->type == 'story' ? common::hasPriv('requirement', 'view') : common::hasPriv('story', 'view');
               foreach($relations as $item) $relation[$item->id] = $item->title;
               foreach($relation as $id => $title)
               {
-                  echo "<li title='$title'>" . html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$story->type", '', true), "#$id $title", '', "class='iframe' data-width='80%'");
+                  echo "<li title='$title'>" . ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$story->type", '', true), "#$id $title", '', "class='iframe' data-width='80%'") : "#$id $title");
                   echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
               }
               ?>

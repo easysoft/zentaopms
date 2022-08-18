@@ -56,15 +56,17 @@
         </thead>
         <tbody>
           <?php foreach($tracks as $key => $requirement):?>
-          <?php $track = ($key == 'noRequirement') ? $requirement : $requirement->track;?>
+          <?php $track   = ($key == 'noRequirement') ? $requirement : $requirement->track;?>
           <?php $rowspan = count($track);?>
+          <?php $title   = $lang->story->noRequirement;?>
           <tr>
             <?php if($config->URAndSR):?>
             <td <?php if($rowspan != 0) echo "rowspan=" . $rowspan;?> class='requirement' title='<?php echo $key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement;?>'>
               <?php if($key != 'noRequirement'):?>
               <span class="label label-primary label-outline"><?php echo zget($lang->story->statusList, $requirement->status);?></span>
+              <?php $title = common::hasPriv($requirement->type, 'view') ? html::a($this->createLink('story', 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-app='$tab'") : $requirement->title;?>
               <?php endif;?>
-              <?php echo $key == 'noRequirement' ? $lang->story->noRequirement : html::a($this->createLink($module, 'view', "storyID=$requirement->id"), $requirement->title, '', "title=$requirement->title data-app='$tab'");?>
+              <?php echo $title;?>
             </td>
             <?php endif;?>
             <?php if(count($track) != 0):?>

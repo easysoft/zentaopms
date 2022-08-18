@@ -89,8 +89,8 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
-            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
+            <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : "<span title='$story->title'>$story->title</span>";?>
+            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
@@ -102,11 +102,11 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
-                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
-                echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                if(common::hasPriv('requirement', 'change')) echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
+                if(common::hasPriv('requirement', 'review')) echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+                if(common::hasPriv('requirement', 'recall')) echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                if(common::hasPriv('requirement', 'close'))  echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
+                if(common::hasPriv('requirement', 'edit'))   echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
