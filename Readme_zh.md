@@ -29,15 +29,16 @@ Scrum 是一种注重实效的敏捷项目管理方式。它规定了核心的�
 
 禅道还首次创造性的将产品、项目、测试这三者的概念明确分开，互相配合，又互相制约，通过需求、任务、BUG来进行交相互动，终通过项目拿到合格的产品。
 
-# 安全漏洞
-
-如果您发现禅道项目管理软件中存在安全漏洞，请发送电子邮件至禅道官方团队，电子邮件地址为 chunsheng@easycorp.ltd ，所有安全漏洞都会被及时的解决。
-
-# 官网及文档
+# 官网网站
 
 官网 [https://www.zentao.net](https://www.zentao.net)  
 文档 [https://www.zentao.net/book/zentaopmshelp.html](https://www.zentao.net/book/zentaopmshelp.html)  
-常见问题 [https://www.zentao.net/faq.html](https://www.zentao.net/faq.html)
+常见问题 [https://www.zentao.net/faq.html](https://www.zentao.net/faq.html)  
+演示站点 [https://demo16.zentao.net](https://demo16.zentao.net)
+
+# 安全漏洞
+
+如果您发现禅道项目管理软件中存在安全漏洞，请发送电子邮件至禅道官方团队，电子邮件地址为 chunsheng@easycorp.ltd ，所有安全漏洞都会被及时的解决。
 
 # 开源协议
 
@@ -48,15 +49,13 @@ Scrum 是一种注重实效的敏捷项目管理方式。它规定了核心的�
 也许您已经"众里寻她千百度"，那么让禅道带给您"蓦然回首，那人却在灯火阑珊处"的惊喜吧！
 
 <details>
-<summary>其他版本</summary>
+<summary><h1>增强版本<h1/></summary>
 
-<br/>
- 
 如果开源版的功能不能满足您的需要，可以考虑禅道[企业版](https://www.zentao.net/page/enterprise.html)或[旗舰版](https://www.zentao.net/page/max.html)。
 
 ## 企业版
 
-> 前往查看[企业版和开源版的对比](https://www.zentao.net/page/enterprise.html#diff)。
+> 前往查看[企业版和开源版的对比](https://www.zentao.net/page/enterprise.html#diff) 或 [演示站点](https://biz.demo16.zentao.net)
 
 禅道企业版是在禅道开源版的基础上增加增强功能的版本，该版本也基于项目管理的流程做了横向拓展，覆盖了更多的角色。
 
@@ -66,10 +65,15 @@ Scrum 是一种注重实效的敏捷项目管理方式。它规定了核心的�
 
 ## 旗舰版
 
-> 前往查看[旗舰版功能对比](https://www.zentao.net/page/max.html#diff)。
+> 前往查看[旗舰版功能对比](https://www.zentao.net/page/max.html#diff) 或 [演示站点](http://zentaomax.demo.zentao.net)
 
 旗舰版作为禅道最高的版本系列，可以完整覆盖项目管理的各个过程，帮助企业建立研发管理体系，提高企业管理流程的稳健性和项目管理成熟度，大大增加项目成功的概率。
 
 旗舰版增强了流程控制、过程定义、项目度量、问题管理、风险管控、质量保证、项目报告等方面的功能，同时可以支持CMMI标准的落地实施，帮助企业通过CMMI评估，提升研发管理能力。
 
+## 云禅道
+
+前往了解和体验 SaaS 版本的[禅道](https://www.chandao.net)
+
 </details>
+
