@@ -7115,6 +7115,7 @@ class upgradeModel extends model
         }
 
         $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
+        $this->dao->update(TABLE_LANG)->set('value')->eq('Opera 系列')->where('module')->eq('bug')->andWhere('`key`')->eq('operea')->andWhere('value')->eq('opera 系列')->exec();
 
         return true;
     }
