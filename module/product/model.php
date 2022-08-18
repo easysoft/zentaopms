@@ -2229,7 +2229,7 @@ class productModel extends model
             {
                 $link = helper::createLink('testsuite', 'browse', "productID=%s");
             }
-            elseif($module == 'testcase' and ($method == 'groupCase' or $method == 'zeroCase') and $this->app->tab == 'project')
+            elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
             {
                 parse_str($extra, $output);
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
