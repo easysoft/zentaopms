@@ -4202,7 +4202,7 @@ class storyModel extends model
                 $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', $iframe, true, 'data-width="40%"', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
-                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type, '', '', 'showinonlybody', false, '', ($story->status == 'draft' or $story->status == 'changing') ? $this->lang->story->editDraft : '');
+                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type, '', '', 'showinonlybody', false);
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
@@ -4280,7 +4280,7 @@ class storyModel extends model
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('story', 'edit', $params, $story, $type, $story->status == 'draft' ? 'draft-edit' : '', '', 'showinonlybody', '', '', $story->status == 'draft' ? $this->lang->story->editDraft : '');
+            $menu .= $this->buildMenu('story', 'edit', $params, $story, $type, '', '', 'showinonlybody');
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
