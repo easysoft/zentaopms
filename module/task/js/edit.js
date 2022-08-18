@@ -5,7 +5,14 @@ $(function()
     $('#modalTeam').on('change', 'select#team', function()
     {
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
-    })
+
+        var $source = $(this).siblings('[name^=source]');
+        if($source.val() == '') return;
+
+        var consumed = 0;
+        if($(this).val() == $source.val()) consumed = $(this).closest('tr').attr('data-consumed');
+        $(this).closest('tr').find('[name^=teamConsumed]').val(consumed);
+    });
     $('#modalTeam select:enabled').change()
 })
 
@@ -76,38 +83,6 @@ function setPreview(){}
 
 $(document).ready(function()
 {
-    /* show team menu. */
-    $('[name=multiple]').change(function()
-    {
-        var checked = $(this).prop('checked');
-        if(checked)
-        {
-            $('#teamTr').removeClass('hidden');
-            $('.modeBox').removeClass('hidden');
-            $('#mode').removeAttr('disabled').trigger('chosen:updated');
-            $('#parent').val('');
-            $('#parent').trigger('chosen:updated');
-            $('#parent').closest('tr').addClass('hidden');
-            $('#estimate').attr('disabled', 'disabled');
-            $('#left').attr('disabled', 'disabled');
-
-            var mode = $('#mode').val();
-            if((mode == 'linear' && currentUser != oldAssignedTo) || !team[currentUser]) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
-        }
-        else
-        {
-            $('#teamTr').addClass('hidden');
-            $('.modeBox').addClass('hidden');
-            $('#mode').attr('disabled', 'disabled').trigger('chosen:updated');
-            $('#parent').closest('tr').removeClass('hidden');
-            $('#estimate').removeAttr('disabled');
-            $('#left').removeAttr('disabled');
-            $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
-        }
-
-        updateAssignedTo();
-    });
-
     /* Init task team manage dialog */
     var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
     {

@@ -816,7 +816,16 @@ class taskModel extends model
             }
 
             $oldTask->team = $oldTeam;
-            if($this->app->rawMethod == 'edit' and empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
+            if($this->app->rawMethod == 'edit')
+            {
+                if(empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
+
+                $efforts = $this->getTaskEstimate($oldTask->id);
+                foreach($efforts as $effort)
+                {
+                    if(!isset($members[$effort->account])) $currentTask->consumed += (float)$effort->consumed;
+                }
+            }
 
             if(!empty($task))
             {
@@ -990,9 +999,11 @@ class taskModel extends model
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
 
         $teams = array();
-        if($this->post->multiple and count(array_filter($this->post->team)) > 1)
+        $changeUsers = array();
+        if(count(array_filter($this->post->team)) > 1)
         {
             $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
+            $oldTeams = array_values($oldTask->team);
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account)) continue;
@@ -1001,7 +1012,7 @@ class taskModel extends model
                 $member = new stdClass();
                 $member->task     = $taskID;
                 $member->order    = $row;
-                $member->type     = (!empty($source) and $source != $account) ? 'replace' : 'new';
+                $member->type     = (!empty($source) and $source != $account and !isset($oldTask->members[$account])) ? 'replace' : 'new';
                 $member->account  = $account;
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
@@ -1011,8 +1022,19 @@ class taskModel extends model
                 $memberMethod = ($oldTask->mode == 'multi' and isset($teams[$account])) ? 'update' : 'insert';
                 $this->manageTaskTeam($member, $memberMethod);
 
+                /* Set effort left = 0 when linear task members be changed. */
+                if($task->mode == 'linear' and isset($oldTeams[$row]) and $oldTeams[$row]->account != $account) $changeUsers[] = $oldTeams[$row]->account;
+
                 $teams[$account] = $account;
             }
+
+            /* Set effort left = 0 when multi task members be removed. */
+            if($task->mode == 'multi')
+            {
+                $removedMembers = array_diff($oldTask->members, $teams);
+                $changeUsers    = array_merge($changeUsers, $removedMembers);
+            }
+            if($changeUsers) $this->resetEffortLeft($taskID, $changeUsers);
 
             if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
         }
@@ -1808,6 +1830,23 @@ class taskModel extends model
         if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
 
         return $changes;
+    }
+
+    /**
+     * Set effort left to 0.
+     *
+     * @param  int    $taskID
+     * @param  array  $members
+     * @access public
+     * @return void
+     */
+    public function resetEffortLeft($taskID, $members)
+    {
+        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
+        $this->dao->update($table)->set('`left`')->eq(0)->where('account')->in($members)
+            ->beginIF($this->config->edition == 'open')->andWhere('task')->eq($taskID)->fi()
+            ->beginIF($this->config->edition != 'open')->andWhere('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fi()
+            ->exec();
     }
 
     /**

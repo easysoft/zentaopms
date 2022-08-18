@@ -20,7 +20,7 @@
 <?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('taskStatus', $task->status);?>
 <?php js::set('currentUser', $app->user->account);?>
-<?php js::set('team', $task->team);?>
+<?php js::set('team', $task->members);?>
 <?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
@@ -66,7 +66,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary'>
-                      <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
+                      <input type='checkBox' name='multiple' id='multiple' value='1' disabled <?php echo empty($task->team) ? '' : 'checked';?> />
                       <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
                     </div>
                   </span>
@@ -144,7 +144,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 $taskMembers = array();
                 if(!empty($task->team))
                 {
-                    $teamAccounts = array_keys($task->team);
+                    $teamAccounts = $task->members;
                     foreach($teamAccounts as $teamAccount)
                     {
                         if(!isset($members[$teamAccount])) continue;
@@ -205,8 +205,8 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
                 <td>
-                  <?php $disabled = (!empty($task->team) or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
+                  <?php $readonly = (!empty($task->team) or $task->parent < 0) ? "readonly" : '';?>
+                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$readonly}");?>
                 </td>
               </tr>
               <tr>
@@ -215,10 +215,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
-                <td>
-                  <?php $disabled = (!empty($task->team)  or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
-                </td>
+                <td><?php echo html::input('left', $task->left, "class='form-control' {$readonly}");?></td>
               </tr>
             </table>
           </div>
@@ -292,7 +289,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               if($memberStatus == 'done') $memberDisabled = true;
               if($memberStatus != 'wait' and $task->mode == 'linear') $linearDisabled = true;
               ?>
-              <tr class='member-<?php echo $memberStatus;?>'>
+              <tr class='member-<?php echo $memberStatus;?>' data-consumed='<?php echo (float)$member->consumed?>'>
                 <td class='w-250px'>
                   <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
                   <?php echo html::hidden("source[]", $member->account);?>
