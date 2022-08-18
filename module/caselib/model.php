@@ -145,7 +145,7 @@ class caselibModel extends model
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
-            ->orderBy('id_desc')
+            ->orderBy('order_desc, id_desc')
             ->fetchPairs('id', 'name');
     }
 
