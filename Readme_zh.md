@@ -29,7 +29,7 @@ Scrum 是一种注重实效的敏捷项目管理方式。它规定了核心的�
 
 禅道还首次创造性的将产品、项目、测试这三者的概念明确分开，互相配合，又互相制约，通过需求、任务、BUG来进行交相互动，终通过项目拿到合格的产品。
 
-# 官网网站
+# 官方网站
 
 官网 [https://www.zentao.net](https://www.zentao.net)  
 文档 [https://www.zentao.net/book/zentaopmshelp.html](https://www.zentao.net/book/zentaopmshelp.html)  
