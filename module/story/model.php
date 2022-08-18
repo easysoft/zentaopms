@@ -1432,7 +1432,6 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
             ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($this->post->result == 'revert', 'version', $oldStory->version - 1)
-            ->setIF($this->post->result == 'clarify', 'status', 'draft')
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
@@ -4237,7 +4236,13 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
-            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', '', 'showinonlybody');
+
+            $title  = $this->lang->story->recallAction;
+            $iframe = ($story->status == 'reviewing' and !empty($story->changedBy)) ? 'iframe' : 'showinonlybody';
+            if($story->status == 'changing') $title = $this->lang->story->recallChange;
+            if($story->status == 'reviewing' and empty($story->changedBy)) $title = $this->lang->story->recall;
+            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', 'hiddenwin', $iframe, true, 'data-width="40%"', $title);
+
             $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
 
             if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
