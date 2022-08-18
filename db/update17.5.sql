@@ -5,7 +5,8 @@ CREATE TABLE `zt_taskteam` (
   `estimate` decimal(12,2) NOT NULL,
   `consumed` decimal(12,2) NOT NULL,
   `left` decimal(12,2) NOT NULL,
-  `type` char(10) NOT NULL DEFAULT 'new',
+  `transfer` char(30) NOT NULL,
+  `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
   `order` tinyint(3) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
