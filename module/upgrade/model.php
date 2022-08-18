@@ -7111,7 +7111,7 @@ class upgradeModel extends model
         foreach($deletedList as $deletedLang)
         {
             if(in_array($deletedLang, $existList)) continue;
-            $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('bug')->andWhere('`key`')->eq($deletedLang)->andWhere('system')->eq(1)->andWhere('vision')->eq('rnd')->exec();
+            $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('bug')->andWhere('`key`')->eq($deletedLang)->andWhere('`system`')->eq(1)->andWhere('vision')->eq('rnd')->exec();
         }
 
         $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
