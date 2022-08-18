@@ -301,10 +301,14 @@ class testcase extends control
      * @param  int    $productID
      * @param  int    $branchID
      * @param  string $orderBy
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
@@ -331,13 +335,20 @@ class testcase extends control
         }
 
         /* Append id for secend sort. */
-        $sort = common::appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
+        $stories = $this->story->getZeroCase($productID, $branchID, $sort);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($stories);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $stories  = array_chunk($stories, $pager->recPerPage);
 
         $this->view->title      = $this->lang->story->zeroCase;
         $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
         $this->view->position[] = $this->lang->story->zeroCase;
 
-        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
+        $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
@@ -346,6 +357,7 @@ class testcase extends control
         $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->browseType = '';
         $this->view->product    = $this->product->getByID($productID);
+        $this->view->pager      = $pager;
         $this->display();
     }
 
