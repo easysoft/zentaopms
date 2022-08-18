@@ -66,7 +66,7 @@ class commonModel extends model
             if($rawModule == 'execution')
             {
                 $executionID = $objectID;
-                $execution   = $this->dao->select('id, project, grade, parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
                 $this->syncExecutionByChild($execution);
                 $project     = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
@@ -153,7 +153,7 @@ class commonModel extends model
         $today = helper::today();
         $parentExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentExecutionID)->fetch();
 
-        if($parentExecution->status == 'wait')
+        if($execution->deleted == '0' and $execution->status == 'doing' and in_array($parentExecution->status, array('wait', 'closed')))
         {
             $this->dao->update(TABLE_EXECUTION)
                  ->set('status')->eq('doing')
@@ -161,6 +161,32 @@ class commonModel extends model
                  ->where('id')->eq($parentExecutionID)
                  ->exec();
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
+        }
+
+        if($parentExecution->type == 'stage')
+        {
+            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            if($execution->deleted == '1' and count($childExecutions) > 0)
+            {
+                $childWait   = true;
+                $childClosed = true;
+                foreach($childExecutions as $childExecution)
+                {
+                    if($childExecution->status != 'wait')   $childWait = false;
+                    if($childExecution->status != 'closed') $childClosed = false;
+                }
+
+                if($childWait and $parentExecution->status != 'wait')
+                {
+                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
+                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
+                }
+                if($childClosed and $parentExecution->status != 'closed')
+                {
+                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
+                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
+                }
+            }
         }
 
         return $parentExecution;
@@ -185,6 +211,11 @@ class commonModel extends model
         {
             $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
+            if($execution->parent)
+            {
+                $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($execution->id)->fetch(); // Get updated execution.
+                $this->syncExecutionByChild($execution);
+            }
         }
         return $execution;
     }

@@ -379,6 +379,7 @@ $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
 $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
 $config->objectTables['gitea']        = TABLE_PIPELINE;
+$config->objectTables['gogs']         = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
 $config->objectTables['stage']        = TABLE_STAGE;
@@ -387,7 +388,7 @@ $config->objectTables['repo']         = TABLE_REPO;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 
-$config->pipelineTypeList = array('gitlab', 'sonarqube', 'jenkins', 'gitea');
+$config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

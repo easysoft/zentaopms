@@ -54,8 +54,9 @@
     <?php if(!empty($this->app->user->modifyPasswordReason)):?>
     <?php $this->app->loadLang('admin');?>
     <div class='alert alert-info'>
+      <?php $reason = $this->app->user->modifyPasswordReason;?>
       <?php echo $lang->admin->safe->common . ' : ';?>
-      <?php echo $this->app->user->modifyPasswordReason == 'weak' ? $lang->admin->safe->changeWeak : $lang->admin->safe->modifyPasswordFirstLogin;?>
+      <?php echo $reason == 'weak' ? $lang->admin->safe->changeWeak : $lang->admin->safe->$reason;?>
     </div>
     <?php endif;?>
   </form>

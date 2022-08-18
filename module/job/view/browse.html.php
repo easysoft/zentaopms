@@ -74,7 +74,7 @@
             <?php
             common::printIcon('compile', 'browse', "repoID={$job->repo}&jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
-            common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play');
+            common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', '', $job->canExec ? '' : 'disabled');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");
             ?>
           </td>

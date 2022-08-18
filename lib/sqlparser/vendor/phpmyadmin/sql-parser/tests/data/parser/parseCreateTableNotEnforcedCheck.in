@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS employees_check (FirstName varchar(30) CHECK (FirstName REGEXP '^T' AND FirstName REGEXP 'r$') NOT ENFORCED);

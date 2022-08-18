@@ -75,6 +75,7 @@ $lang->admin->safe->checkWeak                = 'Balayage des mots de passe faibl
 $lang->admin->safe->changeWeak               = 'Forcer le changement des mots de passe faibles';
 $lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Forcer le changement du mot de passe après la première connexion';
+$lang->admin->safe->passwordStrengthWeak     = 'Le mot de passe est moins fort que les paramètres du système.';
 
 $lang->admin->safe->modeList[0] = "Contrôle Modéré";
 $lang->admin->safe->modeList[1] = 'Contrôle Moyen';

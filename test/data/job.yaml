@@ -46,7 +46,7 @@ fields:
     range: 3,1
   - field: pipeline
     note: "流水线"
-    range: dave,[{"project":"1569"}]
+    range: dave,[{"project":"1569","reference":"master"}]
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule

@@ -1,0 +1,2 @@
+-- TABLES misspelled
+LOCK TABLE table1 AS t1 READ

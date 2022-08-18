@@ -469,10 +469,13 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $fromExecution
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importTask($toExecution, $fromExecution = 0)
+    public function importTask($toExecution, $fromExecution = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -509,13 +512,20 @@ class execution extends control
             $tasks2Imported = zget($tasks, $fromExecution, array());
         }
 
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($tasks2Imported);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
+
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
 
         $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->pager            = $pager;
         $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
         $this->view->position[]       = $this->lang->execution->importTask;
-        $this->view->tasks2Imported   = $tasks2Imported;
+        $this->view->tasks2Imported   = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
@@ -632,7 +642,7 @@ class execution extends control
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
         $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
-        $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
+        $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
 
@@ -2179,15 +2189,9 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->execution->activate($executionID);
+            $this->execution->activate($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
             {
@@ -2230,16 +2234,10 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $this->execution->computeBurn($executionID);
-            $changes = $this->execution->close($executionID);
+            $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
             {
@@ -2890,6 +2888,7 @@ class execution extends control
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
+            $this->loadModel('common')->syncPPEStatus($executionID);
 
             $this->session->set('execution', '');
             $message = $this->executeHooks($executionID);
