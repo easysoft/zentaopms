@@ -97,7 +97,8 @@
           <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
           <td><?php echo $action->objectID;?></td>
           <td class='text-left'>
-            <?php $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+            <?php
+            $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
             $methodName = 'view';
             if($module == 'caselib')
             {
