@@ -806,7 +806,7 @@ class taskModel extends model
                 $efforts = $this->getTaskEstimate($oldTask->id);
                 foreach($efforts as $effort)
                 {
-                    if(!isset($members[$effort->account])) $currentTask->consumed += (float)$effort->consumed;
+                    if(!in_array($effort->account, $members)) $currentTask->consumed += (float)$effort->consumed;
                 }
             }
 
@@ -864,6 +864,7 @@ class taskModel extends model
     {
         $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->fetchAll();
         $oldMembers = array_map(function($team){return $team->account;}, $oldTeams);
+
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->exec();
 
         if($taskStatus == 'doing')
@@ -876,7 +877,9 @@ class taskModel extends model
             $doingUsers = array_unique(array_filter($doingUsers));
         }
 
-        $teams = array();
+        $teams       = array();
+        $minStatus   = 'done';
+        $changeUsers = array();
         foreach($this->post->team as $row => $account)
         {
             if(empty($account)) continue;
@@ -890,14 +893,20 @@ class taskModel extends model
             $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
             $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
             $member->status   = 'wait';
+            if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
             if($taskStatus == 'done') $member->left = 0;
 
             if($member->left == 0 and $member->consumed > 0) $member->status = 'done';
             if($taskStatus == 'doing')
             {
                 if(!empty($source) and $source != $account and in_array($source, $doingUsers)) $member->transfer = $source;
-                if(in_array($account, $doingUsers)) $member->status = 'doing';
+                if($minStatus != 'wait' and in_array($account, $doingUsers)) $member->status = 'doing';
             }
+
+            /* Doing status is only one in linear task. */
+            if($mode == 'linear' and $member->status == 'doing') $minStatus = 'wait';
+            if($member->status == 'wait') $minStatus = 'wait';
+            if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
 
             if($mode == 'multi' and isset($teams[$account]))
             {
@@ -939,8 +948,9 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function getTeamByAccount($teams, $account, $filter = 'done')
+    public function getTeamByAccount($teams, $account = '', $filter = 'done')
     {
+        if(empty($account)) $account = $this->app->user->account;
         foreach($teams as $team)
         {
             if($filter and $team->status == $filter) continue;
@@ -1592,8 +1602,8 @@ class taskModel extends model
         if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         if(!empty($oldTask->team))
         {
-            $thisTeam = $this->getTeamByAccount($oldTask->team, $this->app->user->account);
-            if($thisTeam and $this->post->consumed < $thisTeam->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
+            $currentTeam = $this->getTeamByAccount($oldTask->team);
+            if($currentTeam and $this->post->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
         }
         else
         {
@@ -1639,7 +1649,7 @@ class taskModel extends model
         if($this->post->comment) $estimate->work = $this->post->comment;
         $this->addTaskEstimate($estimate);
 
-        if(!empty($oldTask->team) and $thisTeam)
+        if(!empty($oldTask->team) and $currentTeam)
         {
             $data = new stdclass();
             $data->consumed = $this->post->consumed;
@@ -1647,7 +1657,7 @@ class taskModel extends model
             $data->status   = 'doing';
 
             $this->dao->update(TABLE_TASKTEAM)->data($data)->where('task')->eq($taskID)
-                ->andWhere('account')->eq($thisTeam->account)
+                ->andWhere('account')->eq($currentTeam->account)
                 ->andWhere('status')->ne('done')
                 ->orderBy('`order`')
                 ->limit(1)
@@ -1887,9 +1897,9 @@ class taskModel extends model
         }
         else
         {
-            $thisTeam = $this->getTeamByAccount($oldTask->team, $this->app->user->account);
-            $consumed = $thisTeam ? $task->consumed - $thisTeam->consumed : $task->consumed;
-            if($consumed) return dao::$errors[] = $this->lang->task->error->consumedSmall;
+            $currentTeam = $this->getTeamByAccount($oldTask->team);
+            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
+            if($consumed < 0) return dao::$errors[] = $this->lang->task->error->consumedSmall;
         }
 
         $estimate = new stdclass();
@@ -1900,18 +1910,11 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        if(!empty($oldTask->team))
-        {
-            foreach($oldTask->team as $team)
-            {
-                if($team->account == $this->app->user->account) continue;
-                $estimate->left += $team->left;
-            }
-        }
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))
         {
+
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')
                 ->where('task')->eq((int)$taskID)
                 ->andWhere('account')->eq($this->app->user->account)
@@ -3679,10 +3682,11 @@ class taskModel extends model
         /* Process user */
         if(!is_array($users)) $users = explode(',', trim($users, ','));
         $users = array_values($users);
+        if(is_object($users[0])) $users = array_map(function($member){ return $member->account; }, $users);
 
         foreach($users as $i => $account)
         {
-            if(isset($teamHours[$i]) and $teamHours[$i]->consumed > 0 and $teamHours[$i]->left == 0) continue;
+            if(isset($teamHours[$i]) and $teamHours[$i]->status  == 'done') continue;
             if($type == 'current') return $account;
             break;
         }
@@ -3720,7 +3724,7 @@ class taskModel extends model
      */
     public function getFinishedUsers($taskID = 0, $team = array())
     {
-        return $this->dao->select('account')->from(TABLE_TASKTEAM)
+        return $this->dao->select('id,account')->from(TABLE_TASKTEAM)
             ->where('task')->eq($taskID)
             ->andWhere('status')->eq('done')
             ->beginIF($team)->andWhere('account')->in($team)->fi()

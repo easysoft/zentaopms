@@ -832,7 +832,7 @@ class task extends control
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
-            $task->nextUser = $this->task->getAssignedTo4Multi($task->members, $task, 'next');
+            $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
         }
 
@@ -1336,13 +1336,10 @@ class task extends control
         $this->view->users = $members;
         if(!empty($task->team))
         {
-            $task->nextBy     = $this->task->getAssignedTo4Multi($task->members, $task, 'next');
+            $task->nextBy     = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $task->myConsumed = 0;
-            foreach($task->team as $teamID => $team)
-            {
-                if($team->consumed > 0 and $team->left == 0) continue;
-                if($team->account == $this->app->user->account) $task->myConsumed = $team->consumed;
-            }
+            $currentTeam      = $this->task->getTeamByAccount($task->team);
+            if($currentTeam) $task->myConsumed = $currentTeam->consumed;
 
             $members = $this->task->getMemberPairs($task);
         }
