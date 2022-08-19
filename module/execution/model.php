@@ -1434,7 +1434,7 @@ class executionModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
-            ->beginIF(empty($this->config->CRExecution))->andWhere('status')->ne('closed')->fi()
+            ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($devel === true)->andWhere('attribute')->in('dev,qa,release')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
