@@ -20,4 +20,4 @@ $limit    = 1;
 
 $task = $my->getTasksBySearchTest($account[0], $limit);
 
-r($task)           && p('913:name,status') && e('批量任务三,wait');//获取task状态的项目
+r($task) && p('913:name,status') && e('批量任务三,wait');//获取task状态的项目

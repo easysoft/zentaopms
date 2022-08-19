@@ -163,33 +163,28 @@ class myTest
     }
 
     /**
-     * Get risks by search.
-     *
-     * @param  int    $queryID
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $pager
-     * @access public
-     * @return array
-     */
-    public function getRisksBySearchTest($queryID, $type, $orderBy, $pager)
-    {
-
-    }
-
-    /**
      * Get stories by search.
      *
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
      * @access public
      * @return array
      */
-    public function getStoriesBySearchTest($queryID, $type, $orderBy, $pager)
+    public function getStoriesBySearchTest($queryID, $type, $orderBy)
     {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 1;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $objects = $this->objectModel->getStoriesBySearch($queryID, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -198,13 +193,23 @@ class myTest
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
      * @access public
      * @return array
      */
-    public function getRequirementsBySearchTest($queryID, $type, $orderBy, $pager)
+    public function getRequirementsBySearchTest($queryID, $type, $orderBy)
     {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 1;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $objects = $this->objectModel->getRequirementsBySearch($queryID, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
 }
