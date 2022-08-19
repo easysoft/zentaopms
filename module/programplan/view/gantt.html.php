@@ -509,7 +509,7 @@ $(function()
     var resizeGanttView = function()
     {
         if(gantt.getState().fullscreen) return false;
-        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 80)));
+        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
     var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
@@ -634,7 +634,7 @@ $(function()
         if(isGanttExpand)
         {
             $('body').addClass('gantt-fullscreen');
-            $('#ganttView').css('height', $(window).height() - 40);
+            $('#ganttView').css('height', $(window).height() - 60);
             isGanttExpand = false;
         }
         else
