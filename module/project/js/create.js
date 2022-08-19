@@ -128,10 +128,10 @@ function setParentProgram(parentProgram)
         var data = JSON.parse(data);
         selectedParent = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
-        $('#budget').val('');
 
         if(selectedParent != lastSelectedParent)
         {
+            $('#budget').val('');
             /* Hide product and plan dropdown controls. */
             $('#productsBox .row .col-sm-4:not(:last)').remove();
             $('#productsBox .row .col-sm-4:last select').remove();
