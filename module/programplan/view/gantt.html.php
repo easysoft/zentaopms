@@ -64,7 +64,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
 .gantt_task_line.gantt_task_inline_color{border:0px;}
 .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
-#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;}
+#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;height:unset!important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -509,7 +509,7 @@ $(function()
     var resizeGanttView = function()
     {
         if(gantt.getState().fullscreen) return false;
-        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 80)));
+        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
     var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
@@ -634,7 +634,7 @@ $(function()
         if(isGanttExpand)
         {
             $('body').addClass('gantt-fullscreen');
-            $('#ganttView').css('height', $(window).height() - 40);
+            $('#ganttView').css('height', $(window).height() - 60);
             isGanttExpand = false;
         }
         else
