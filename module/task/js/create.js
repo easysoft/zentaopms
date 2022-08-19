@@ -369,7 +369,7 @@ function addItem(obj)
     var $tr = $(obj).closest('tr');
     $tr.after($tr.clone());
     var $nextTr = $tr.next();
-    $nextTr.find('#testAssignedTo').val($('#assignedTo').val());
+    $nextTr.find('#testAssignedTo').val('ditto');
     $nextTr.find('#testStory').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testStory').closest('td').find('select').val('').chosen();
     $nextTr.find('#testPri').closest('td').find('.chosen-container').remove();

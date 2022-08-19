@@ -267,7 +267,7 @@ class task extends control
             if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
 
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -293,11 +293,21 @@ class task extends control
 
         $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
 
+        $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        /* Stories that can be used to create test tasks. */
+        $testStories     = array();
+        foreach($stories as $storyID => $storyTitle)
+        {
+            if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;
+            $testStories[$storyID] = $storyTitle;
+        }
+
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
 
         $this->view->title            = $title;
+        $this->view->testStories      = $testStories;
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
@@ -307,7 +317,7 @@ class task extends control
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
         $this->view->stories          = $stories;
-        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        $this->view->testStoryIdList  = $testStoryIdList;
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
