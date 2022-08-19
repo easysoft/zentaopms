@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://www.php.net"><img src="https://img.shields.io/badge/php-%3E=5.6-brightgreen.svg?maxAge=2592000" alt="Php Version"></a>
 	<a href="mailto:chunsheng@easycorp.ltd"><img src="https://img.shields.io/badge/Email-chunsheng@easycorp.ltd-ea644a" alt="Email" /></a>
-  <a href="https://github.com/easysoft/zentaopms/blob/master/COPYING"><img src="https://img.shields.io/badge/License-AGPL%20+%20ZPL-blue" alt="ZenTao License"></a>
+  <a href="https://github.com/easysoft/zentaopms/blob/master/COPYING"><img src="https://img.shields.io/badge/License-AGPL%20or%20ZPL-blue" alt="ZenTao License"></a>
   <a href="https://www.zentao.net"><img src="https://img.shields.io/badge/Website-www.zentao.net-blue" alt="ZenTao Website"></a>
 </p>
 
