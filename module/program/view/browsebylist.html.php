@@ -58,7 +58,7 @@
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo strpos(",{$app->user->view->programs},", ",$program->id,") !== false ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
+          <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
           <?php
