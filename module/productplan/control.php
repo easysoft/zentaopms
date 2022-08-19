@@ -351,7 +351,6 @@ class productplan extends control
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
-
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[]       = $this->lang->productplan->browse;
         $this->view->productID        = $productID;
