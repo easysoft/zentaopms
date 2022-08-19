@@ -257,14 +257,14 @@ class project extends control
             $data['selectedProgramEnd']    = $selectedProgram->end;
             $data['budgetUnit']            = $selectedProgram->budgetUnit;
             $allProducts = array(0 => '') + $allProducts;
-            //Finish task #64882.Get the path of the currently selected program.
+            /* Finish task #64882.Get the path of the currently selected program. */
             $data['selectedProgramPath']   = explode(',', $selectedProgram->path);
-            //Get the products that can be linked with the currently selected program.
+            /* Get the products that can be linked with the currently selected program. */
             $data['allProducts']           = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
             $data['plans']                 = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
         }
 
-        //Finish task #64882.Get the path of the last selected program.
+        /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
         if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
         if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
