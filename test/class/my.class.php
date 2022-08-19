@@ -117,12 +117,13 @@ class myTest
     /**
      * Get testcases by search.
      *
+     * @param  int    $query
      * @param  string $type
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getTestcasesBySearchTest($type, $orderBy)
+    public function getTestcasesBySearchTest($queryID, $type, $orderBy)
     {
         global $tester;
         $recTotal = 0;
@@ -131,7 +132,7 @@ class myTest
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $objects = $this->objectModel->getTestcasesBySearch(0, $type, $orderBy, $pager);
+        $objects = $this->objectModel->getTestcasesBySearch($query, $type, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 

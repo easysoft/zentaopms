@@ -21,8 +21,8 @@ $my    = new myTest();
 $type  = array('contribute', 'openedbyme');
 $order = 'id_desc';
 
-$cases1 = $my->getTestcasesBySearchTest($type[0], $order);
-$cases2 = $my->getTestcasesBySearchTest($type[1], $order);
+$cases1 = $my->getTestcasesBySearchTest(0, $type[0], $order);
+$cases2 = $my->getTestcasesBySearchTest(0, $type[1], $order);
 
 r($cases1)        && p('560:title,status') && e('com.ngtesting.autotest.test.TestLogin账号过期,normal');//获取testcase状态的项目
 r(count($cases1)) && p()                   && e('20');                                                 //获取testcase的统计
