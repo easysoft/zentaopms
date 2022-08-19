@@ -48,6 +48,7 @@ $lang->program->openedVersion  = '创建版本';
 $lang->program->lastEditedBy   = '最后编辑人';
 $lang->program->lastEditedDate = '最后编辑日期';
 $lang->program->childProgram   = '子项目集';
+$lang->program->ignore         = '忽略';
 
 /* Actions. */
 $lang->program->common                  = '项目集';

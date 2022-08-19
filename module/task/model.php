@@ -89,7 +89,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane,estStartedDitto,deadlineDitto')
             ->add('version', 1)
             ->get();
 
@@ -177,6 +177,10 @@ class taskModel extends model
                 $this->loadModel('action');
                 if($this->post->testStory)
                 {
+                    $assignedTo     = '';
+                    $testEstStarted = '0000-00-00';
+                    $testDeadline   = '0000-00-00';
+
                     foreach($this->post->testStory as $storyID)
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
@@ -186,14 +190,18 @@ class taskModel extends model
                     {
                         if(!isset($testStories[$storyID])) continue;
 
+                        $assignedTo     = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+                        $testEstStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $testEstStarted : $this->post->testEstStarted[$i];
+                        $testDeadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on')) ? $testDeadline : $this->post->testDeadline[$i];
+
                         $task->parent       = $taskID;
                         $task->story        = $storyID;
                         $task->storyVersion = $testStories[$storyID]->version;
                         $task->name         = $this->lang->task->lblTestStory . " #{$storyID} " . $testStories[$storyID]->title;
                         $task->pri          = $this->post->testPri[$i];
-                        $task->estStarted   = $this->post->testEstStarted[$i];
-                        $task->deadline     = $this->post->testDeadline[$i];
-                        $task->assignedTo   = $this->post->testAssignedTo[$i];
+                        $task->estStarted   = $testEstStarted;
+                        $task->deadline     = $testDeadline;
+                        $task->assignedTo   = $assignedTo;
                         $task->estimate     = $this->post->testEstimate[$i];
                         $task->left         = $this->post->testEstimate[$i];
                         $task->module       = $testStories[$storyID]->module;
@@ -3947,9 +3955,9 @@ class taskModel extends model
         {
             $this->updateExecutionEsDateByGantt($objectID, $objectType, $post);
         }
-        
+
         if(dao::isError()) return false;
-        
+
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
         $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');

@@ -75,6 +75,7 @@ $lang->admin->safe->checkWeak                = 'Weak Password Scan';
 $lang->admin->safe->changeWeak               = 'Force to change weak password';
 $lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Force to change password after first login';
+$lang->admin->safe->passwordStrengthWeak     = 'The password strength is weaker than the system settings.';
 
 $lang->admin->safe->modeList[0] = 'I don\'t care.';
 $lang->admin->safe->modeList[1] = 'Medium';

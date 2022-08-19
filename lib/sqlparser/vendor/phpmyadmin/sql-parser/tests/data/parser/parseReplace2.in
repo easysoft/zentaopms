@@ -1,0 +1,4 @@
+REPLACE LOW_PRIORITY
+INTO users
+SET id = 1,
+    username = 'Bar';

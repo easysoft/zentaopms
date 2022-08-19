@@ -64,6 +64,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
 .gantt_task_line.gantt_task_inline_color{border:0px;}
 .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
+#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -117,9 +118,43 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   $typeHtml .= '</ul></div>';
   ?>
 </div>
+<div id="myCover">
+  <div class="gantt_control">
+    <div class='btn btn-link' id='ganttPris'>
+      <strong><?php echo $lang->task->pri . " : "?></strong>
+      <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
+      <?php if($pri <= 4):?>
+      <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+      <?php endif;?>
+      <?php endforeach;?>
+    </div>
+  </div>
+  <div id="gantt_here"></div>
+</div>
 <script>
 var scriptLoadedMap   = {};
 var loadingPrefixText = '<?php echo $lang->programplan->exporting;?>';
+
+//After that you have to redefine the getFullscreenElement() method to return a custom root node that will be expanded to full screen:
+gantt.ext.fullscreen.getFullscreenElement = function() {
+    return document.getElementById("myCover");
+}
+gantt.init("gantt_here");
+
+// before gantt is expanded to full screen
+gantt.attachEvent("onBeforeExpand",function(){
+    $('#myCover').css('display', 'unset');
+    $('#mainContent .pull-right').css('opacity', '0');
+    $('.example').css('display', 'none');
+    return true;
+});
+
+// when gantt exited the full screen mode
+gantt.attachEvent("onCollapse", function (){
+    $('#myCover').css('display', 'none');
+    $('#mainContent .pull-right').css('opacity', '1');
+    $('.example').css('display', 'block');
+});
 
 /**
  * Get remote script for export.

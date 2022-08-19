@@ -166,10 +166,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function startTest($executionID,$param = array())
+    public function startTest($executionID,$param = array(), $testParent = false)
     {
         $data = date('Y-m-d');
 
@@ -196,6 +197,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -268,10 +275,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function activateTest($executionID, $param = array())
+    public function activateTest($executionID, $param = array(), $testParent = false)
     {
         self::suspendTest($executionID);
 
@@ -294,6 +302,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -303,10 +317,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function closeTest($executionID, $param = array())
+    public function closeTest($executionID, $param = array(), $testParent = false)
     {
         $todate = date('Y-m-d');
 
@@ -326,6 +341,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }

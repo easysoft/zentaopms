@@ -1,8 +1,4 @@
 <script>
 $("#createCaseActionMenu").parent('.btn-group').remove();
-$("#actionbox .histories-list li").each(function()
-{
-    var text = $(this).find('a').text();
-    $(this).find('a').parent().text(text);
-});
+$(".histories-list li a").not("[href*='feedback']").attr('href','javascript:void(0)').attr('disabled',"true").css('color', '#3c4353');
 </script>

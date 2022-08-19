@@ -145,7 +145,7 @@ class caselibModel extends model
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
-            ->orderBy('id_desc')
+            ->orderBy('order_desc, id_desc')
             ->fetchPairs('id', 'name');
     }
 
@@ -647,7 +647,7 @@ class caselibModel extends model
         $menu   = '';
         $params = "caseID=$case->id";
 
-        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+        if($case->status == 'wait' and ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)))
         {
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }

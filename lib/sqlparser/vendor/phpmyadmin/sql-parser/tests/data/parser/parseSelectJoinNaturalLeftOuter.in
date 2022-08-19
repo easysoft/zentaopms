@@ -1,0 +1,1 @@
+SELECT * FROM actor NATURAL LEFT OUTER JOIN film_actor;
