@@ -3475,7 +3475,7 @@ class taskModel extends model
             if($id == 'name')
             {
                 $title = " title='{$task->name}'";
-                if(!empty($task->children)) $class .= 'has-child';
+                if(!empty($task->children)) $class .= ' has-child';
             }
             if($id == 'story') $title = " title='{$task->storyTitle}'";
             if($id == 'estimate' || $id == 'consumed' || $id == 'left')

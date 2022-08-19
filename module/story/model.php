@@ -2974,6 +2974,26 @@ class storyModel extends model
     }
 
     /**
+     * Get Story changed Revert ObjectID.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getRevertStoryIDList($productID)
+    {
+        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('product')->like("%,$productID,%")
+            ->andWhere('action')->eq('reviewed')
+            ->andWhere('objectType')->eq('story')
+            ->andWhere('extra')->eq('Revert')
+            ->groupBy('objectID')
+            ->orderBy('id_desc')
+            ->fetchPairs();
+        return $review;
+    }
+
+    /**
      * Get stories by a sql.
      *
      * @param  int    $productID
@@ -2992,24 +3012,14 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        /* From action Get reviews. */
-        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
-            ->where('product')->like("%,$productID,%")
-            ->andWhere('action')->eq('reviewed')
-            ->andWhere('objectType')->eq('story')
-            ->andWhere('extra')->eq('Revert')
-            ->groupBy('objectID')
-            ->orderBy('id_desc')
-            ->fetchAll();
-
+        $review = $this->getRevertStoryIDList($productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
         if(strpos($sql,'result')!== false)
         {
             if(strpos($sql,'revert')!== false)
             {
-                $sql = str_replace("AND `result` = 'revert'",'',$sql);
-                $review = implode('\',\'',array_column($review,'objectID'));
-                $sql.=" AND t1.`id` in ('{$review}')";
+                $sql  = str_replace("AND `result` = 'revert'", '', $sql);
+                $sql .= " AND t1.`id` " . helper::dbIN($review);
             }
             else
             {
@@ -3039,6 +3049,7 @@ class storyModel extends model
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
             $stories[$story->id] = $story;
         }
+
         return $stories;
     }
 
@@ -3099,26 +3110,16 @@ class storyModel extends model
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
 
-            /* Get productID*/
             $products  = $this->loadModel('product')->getProducts($executionID);
             if($products) $productID = key($products);
-            /* From action Get reviews. */
-            $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
-                ->where('product')->like("%,$productID,%")
-                ->andWhere('action')->eq('reviewed')
-                ->andWhere('objectType')->eq('story')
-                ->andWhere('extra')->eq('Revert')
-                ->groupBy('objectID')
-                ->orderBy('id_desc')
-                ->fetchAll();
+            $review = $this->getRevertStoryIDList($productID);
 
             if(strpos($storyQuery,'result')!== false)
             {
                 if(strpos($storyQuery,'revert')!== false)
                 {
-                    $storyQuery = str_replace("AND t2.`result` = 'revert'",'',$storyQuery);
-                    $review = implode('\',\'',array_column($review,'objectID'));
-                    $storyQuery.=" AND t2.`id` in ('{$review}')";
+                    $storyQuery  = str_replace("AND t2.`result` = 'revert'", '', $storyQuery);
+                    $storyQuery .= " AND t2.`id` " . helper::dbIN($review);
                 }
                 else
                 {

@@ -1156,10 +1156,11 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $appendProject
+     * @param  string $status all|closed|unclosed
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status)
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '')
     {
         $product = $this->getById($productID);
 
