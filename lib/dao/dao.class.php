@@ -195,10 +195,10 @@ class dao extends baseDAO
         $module = $app->getModuleName();
         $method = $app->getMethodName();
 
-        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = {$config->vision}")->fetch(PDO::FETCH_OBJ);
+        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$config->vision}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;
 
-        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = {$config->vision}")->fetchAll();
+        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = '{$config->vision}'")->fetchAll();
         if(!$flowFields) return $this;
 
         $rules    = array();
