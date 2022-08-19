@@ -304,7 +304,8 @@ $lang->story->estimateMustBePlus    = '估算值不能是负数';
 $lang->story->confirmChangeBranch   = $lang->SRCommon . '%s已关联在之前所属分支的计划中，调整分支后，' . $lang->SRCommon . '将从之前所属分支的计划中移除，请确认是否继续修改上述' . $lang->SRCommon . '的分支。';
 $lang->story->confirmChangePlan     = $lang->SRCommon . '%s已关联在之前计划的所属分支中，调整分支后，' . $lang->SRCommon . '将会从计划中移除，请确认是否继续修改计划的所属分支。';
 $lang->story->errorDuplicateStory   = $lang->SRCommon . '%s不存在';
-$lang->story->recallChangeTips      = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
+$lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
+$lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";

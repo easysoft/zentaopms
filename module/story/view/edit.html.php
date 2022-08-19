@@ -98,7 +98,7 @@
             if(strpos('draft,changing', $story->status) !== false)
             {
                 echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
-                echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
+                echo html::commonButton($story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
             }
             else
             {

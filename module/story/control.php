@@ -1508,60 +1508,20 @@ class story extends control
     {
         $story = $this->story->getById($storyID);
 
-        if($story->status == 'changing')
-        {
-            echo $this->fetch('story', 'recallChange', "storyID=$storyID&confrim=$confirm");
-        }
-        elseif($story->status == 'reviewing' and empty($story->changedBy))
-        {
-            /* When the story are in the status of reviewing but not changed, only recall review.*/
-            echo $this->fetch('story', 'recallReview', "storyID=$storyID&from=$from");
-        }
-        elseif($story->status == 'reviewing' and !empty($story->changedBy))
-        {
-            if($_POST)
-            {
-                $recallResult = $this->post->recallList;
-                if($recallResult == 'recallReview')
-                {
-                    $this->story->recallReview($storyID);
-                    $this->loadModel('action')->create('story', $storyID, 'Recalled');
-                }
-                if($recallResult == 'recallChange')
-                {
-                    $this->story->recallChange($storyID);
-                    $this->loadModel('action')->create('story', $storyID, 'recalledChange');
-                }
-
-                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-                echo js::locate($locateLink, 'parent.parent');
-            }
-
-            $this->view->story   = $story;
-            $this->view->users   = $this->user->getPairs('noclosed|noletter');
-            $this->view->actions = $this->action->getList('story', $storyID);
-            $this->display();
-        }
-    }
-
-    /**
-     * Recall the story change.
-     *
-     * @param  int    $storyID
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function recallChange($storyID, $confirm = 'no')
-    {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->recallChangeTips, $this->createLink('story', 'recall', "story=$storyID&from=lite&confirm=yes")));
+            $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
+            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=lite&confirm=yes")));
         }
         else
         {
-            $this->story->recallChange($storyID);
-            $this->loadModel('action')->create('story', $storyID, 'recalledChange');
+            if($story->status == 'changing')  $this->story->recallChange($storyID);
+            if($story->status == 'reviewing') $this->story->recallReview($storyID);
+
+            $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
+            $this->loadModel('action')->create('story', $storyID, $action);
+
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             echo js::locate($locateLink, 'parent');
@@ -1576,15 +1536,22 @@ class story extends control
      * @access public
      * @return void
      */
-    public function recallReview($storyID, $from = 'list')
+    public function recallReview($storyID, $from = 'list', $confirm = 'no')
     {
-        $this->story->recallReview($storyID);
-        $this->loadModel('action')->create('story', $storyID, 'Recalled');
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->story->confirmRecallReview, $this->createLink('story', 'recall', "story=$storyID&from=lite&confirm=yes")));
+        }
+        else
+        {
+            $this->story->recallReview($storyID);
+            $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
-        if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
 
-        $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-        echo js::locate($locateLink, 'parent');
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            echo js::locate($locateLink, 'parent');
+        }
     }
 
     /**

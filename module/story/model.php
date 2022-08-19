@@ -696,7 +696,6 @@ class storyModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
-            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged, 'reviewedBy', '')
             ->setIF($specChanged, 'changedBy', $this->app->user->account)
@@ -1567,8 +1566,9 @@ class storyModel extends model
      */
     public function recallReview($storyID)
     {
-        $story = $this->getById($storyID);
-        $status = $story->changedBy ? 'changing' : 'draft';
+        $story     = $this->getById($storyID);
+        $isChanged = $story->changedBy ? true : false;
+        $status    = $isChanged ? 'changing' : 'draft';
         $this->dao->update(TABLE_STORY)->set('status')->eq($status)->where('id')->eq($storyID)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
     }
@@ -4158,7 +4158,7 @@ class storyModel extends model
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id", $story, $type, 'sub-review', '', 'iframe', true);
+                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id", $story, $type, 'sub-review', '', 'iframe', true, "data-width='50%'");
                 }
                 else
                 {
@@ -4186,11 +4186,8 @@ class storyModel extends model
                     $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 }
 
-                $title  = $this->lang->story->recallAction;
-                $iframe = ($story->status == 'reviewing' and !empty($story->changedBy)) ? 'iframe' : 'showinonlybody';
-                if($story->status == 'changing') $title = $this->lang->story->recallChange;
-                if($story->status == 'reviewing' and empty($story->changedBy)) $title = $this->lang->story->recall;
                 $isClick = $this->isClickable($story, 'recall');
+                $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
                 if(!$isClick and $story->status != 'closed')
                 {
                     if($story->status == 'draft' and empty($storyReviewer)) $title = $this->lang->story->recallTip['recalled'];
@@ -4198,7 +4195,7 @@ class storyModel extends model
                     if(empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
                     if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
                 }
-                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', $iframe, true, 'data-width="40%"', $title);
+                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type, '', '', 'showinonlybody', false);
@@ -4237,11 +4234,8 @@ class storyModel extends model
         {
             $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
 
-            $title  = $this->lang->story->recallAction;
-            $iframe = ($story->status == 'reviewing' and !empty($story->changedBy)) ? 'iframe' : 'showinonlybody';
-            if($story->status == 'changing') $title = $this->lang->story->recallChange;
-            if($story->status == 'reviewing' and empty($story->changedBy)) $title = $this->lang->story->recall;
-            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', 'hiddenwin', $iframe, true, 'data-width="40%"', $title);
+            $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
             $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
 

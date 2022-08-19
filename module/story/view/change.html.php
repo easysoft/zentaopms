@@ -34,12 +34,6 @@
               <?php endif;?>
             </div>
           </td>
-          <td id='assignedToBox'>
-            <div class='input-group'>
-              <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
-              <?php echo html::select('assignedTo', $users, $story->assignedTo, "class='form-control picker-select'");?>
-            </div>
-          </td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
@@ -48,7 +42,7 @@
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->title;?></th>
-          <td colspan='2'>
+          <td>
             <div class="colorpicker">
               <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
               <ul class="dropdown-menu clearfix">
@@ -61,30 +55,30 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->spec;?></th>
-          <td colspan='2'><?php echo html::textarea('spec', htmlSpecialString($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
+          <td><?php echo html::textarea('spec', htmlSpecialString($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->verify;?></th>
-          <td colspan='2'><?php echo html::textarea('verify', htmlSpecialString($story->verify), 'rows=6 class="form-control"');?></td>
+          <td><?php echo html::textarea('verify', htmlSpecialString($story->verify), 'rows=6 class="form-control"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
+          <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->attatch;?></th>
-          <td colspan='2'>
+          <td>
           <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'true', 'object' => $story, 'method' => 'change'));?>
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
-          <td colspan='2'><?php include './affected.html.php';?></td>
+          <td><?php include './affected.html.php';?></td>
         </tr>
         <tr>
           <td></td>
-          <td colspan='2' class='text-center form-actions'>
+          <td class='text-center form-actions'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');

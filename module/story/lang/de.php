@@ -304,7 +304,8 @@ $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
-$lang->story->recallChangeTips     = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
+$lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
+$lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Story Bereich';
