@@ -115,8 +115,6 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
-<<<<<<< Updated upstream
-=======
         /* Get the project name of executions. */
         if($browseType == 'execution')
         {
@@ -127,7 +125,6 @@ class action extends control
             $this->view->projectList = $projectList;
         }
 
->>>>>>> Stashed changes
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
@@ -143,7 +140,6 @@ class action extends control
         $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->view->byQuery             = $byQuery;
         $this->view->queryID             = $queryID;
-
         $this->display();
     }
 
