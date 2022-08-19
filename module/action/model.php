@@ -1053,7 +1053,7 @@ class actionModel extends model
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
+            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
