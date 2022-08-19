@@ -30,7 +30,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
           <th class='c-product text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
-          <th class='c-actions-3'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-4'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
