@@ -109,14 +109,11 @@ $(function()
 /**
  * Set parent program.
  *
- * @param  int    $parentProgram
- * @access public
+ * @param  int    $parentProgram ParentProgram is the ID of the currently selected program.
  * @return void
  */
 function setParentProgram(parentProgram)
 {
-    //ParentProgram is the ID of the currently selected program.
-
     var lastSelectedID     = $('#parent').attr('data-lastSelected');
     var lastSelectedParent = 0;
     var selectedParent     = 0;
