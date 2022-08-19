@@ -295,7 +295,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
-            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         }
         else
         {
@@ -340,7 +340,7 @@ function budgetOverrunTips()
 
     if(selectedProgramID == 0)
     {
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         return false;
     }
 
@@ -351,9 +351,10 @@ function budgetOverrunTips()
         if(typeof(data.availableBudget) == 'undefined') return;
 
         var tip = "";
-        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>"
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(tip);
+        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<tr><td></td><td colspan='2'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>"
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        $('#budgetBox').parent().parent().after(tip);
+        $('#beyondBudgetTip').parent().css('line-height', '0');
 
         var placeholder = '';
         if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2);
@@ -374,7 +375,7 @@ function outOfDateTip(currentID = 0)
     if(window.ignoreTips['dateTip']) return;
     var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
     var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
-    if($('#dateTip.text-remind').length > 0) $('#dateTip').remove();
+    if($('#dateTip.text-remind').length > 0) $('#dateTip').parent().parent().remove();
     if(currentID) $('#dateTip\\[' + currentID + '\\]').remove();
 
     if(end == longTime) end = LONG_TIME;
@@ -396,7 +397,6 @@ function outOfDateTip(currentID = 0)
 
             var beginLetterParentTip = beginLetterParent + data.selectedProgramBegin;
             var endGreaterParentTip  = endGreaterParent + data.selectedProgramEnd;
-            var dateExceedParentTip  = dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd;
 
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
@@ -416,7 +416,8 @@ function outOfDateTip(currentID = 0)
             }
             else
             {
-                $('#dateBox').after("<span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>");
+                $('#dateRange').parent().after("<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td><tr>");
+                $('#dateTip').parent().css('line-height', '0')
             }
         });
     }
