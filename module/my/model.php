@@ -726,6 +726,7 @@ class myModel extends model
         if($type == 'contribute')
         {
             $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'risk');
+            
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
