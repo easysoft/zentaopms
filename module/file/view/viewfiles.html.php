@@ -16,6 +16,7 @@
 .renameFile .input-group-addon {width: 60px;}
 .backgroundColor {background: #eff5ff; }
 .icon.icon-file-text {margin-left: 4px;}
+.right-icon .btn {padding: 0 6px;}
 </style>
 <script>
 $(document).ready(function()
