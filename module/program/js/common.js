@@ -360,17 +360,13 @@ function compareChildDate()
             if(programBegin <= childBegin && programEnd >= childEnd) return;
 
             var dateTip = '';
-            if(programBegin > childBegin && programEnd >= childEnd)
+            if(programBegin > childBegin)
             {
                 dateTip = "<span id='dateTip' class='text-remind'><p>" + beginGreateChild + childInfo.minChildBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
-            else if(programEnd < childEnd && programBegin <= childBegin)
+            else if(programEnd < childEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'><p>" + endLetterChild + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
-            }
-            else
-            {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + dateExceedChild + childInfo.minChildBegin + "~" + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
 
             $('#dateBox').after(dateTip);
@@ -419,17 +415,13 @@ function outOfDateTip()
                 return;
             }
 
-            if(programBegin < parentBegin && programEnd <= parentEnd && programEnd >= parentBegin)
+            if(programBegin < parentBegin)
             {
                 dateTip = "<span id='dateTip' class='text-remind'><p>" + beginLetterParent + data.selectedProgramBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
-            else if(programEnd > parentEnd && programBegin >= parentBegin && programBegin <= parentEnd)
+            else if(programEnd > parentEnd)
             {
                 dateTip = "<span id='dateTip' class='text-remind'><p>" + endGreaterParent + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
-            }
-            else
-            {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
 
             $('#dateBox').after(dateTip);
