@@ -85,20 +85,9 @@
           <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
           <th class='w-250px'><?php echo $this->lang->execution->project;?></th>
           <?php endif;?>
-          <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
-          <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
-          <th class='c-actions'><?php echo $lang->actions;?></th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach($trashes as $action):?>
-        <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-        <tr>
-          <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
-          <td><?php echo $action->objectID;?></td>
-          <td class='text-left'>
-            <?php
-            $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+          <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
+          <th class='w-250px'><?php echo $this->lang->execution->project;?></th>
+          <?php endif;?> <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th> <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th> <th class='c-actions'><?php echo $lang->actions;?></th> </tr> </thead> <tbody> <?php foreach($trashes as $action):?> <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?> <tr> <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td> <td><?php echo $action->objectID;?></td> <td class='text-left'> <?php $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
             $methodName = 'view';
             if($module == 'caselib')
             {

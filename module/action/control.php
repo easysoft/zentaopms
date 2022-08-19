@@ -115,6 +115,11 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> 730c63859893f773f598f4b484b2c349bebd23cd
         /* Get the project name of executions. */
         if($browseType == 'execution')
         {
@@ -125,6 +130,10 @@ class action extends control
             $this->view->projectList = $projectList;
         }
 
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> 730c63859893f773f598f4b484b2c349bebd23cd
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
