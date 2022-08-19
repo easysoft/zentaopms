@@ -1,0 +1,1 @@
+INSERT INTO aa SET  = INET6_ATON('::ffff:8.8.8.8')

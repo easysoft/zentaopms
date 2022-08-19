@@ -1,0 +1,1 @@
+PURGE BINARY LOGS TO 'mysql.bin' INTO;

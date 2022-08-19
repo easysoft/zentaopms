@@ -647,7 +647,7 @@ class caselibModel extends model
         $menu   = '';
         $params = "caseID=$case->id";
 
-        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+        if($case->status == 'wait' and ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)))
         {
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }

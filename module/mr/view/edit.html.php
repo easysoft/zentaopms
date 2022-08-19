@@ -50,7 +50,7 @@
              <th style="white-space: nowrap;"><?php echo $lang->mr->targetProject;?></th>
              <td>
                <div class='input-group'>
-                 <?php if($MR->status == 'merged' or $MR->status == 'closed'):?>
+                 <?php if($MR->status == 'merged' or $MR->status == 'closed' or $host->type == 'gogs'):?>
                  <span class='fix-border text-left'>
                  <?php echo $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;?>:
                  <?php echo $MR->targetBranch;?>
@@ -79,9 +79,13 @@
           <tr>
             <th><?php echo $lang->mr->removeSourceBranch;?></th>
             <td colspan='1'>
+              <?php
+              $attr = '';
+              if($MR->canDeleteBranch and $MR->removeSourceBranch == '1') $attr .= 'checked ';
+              if(!$MR->canDeleteBranch) $attr .= 'disabled';
+              ?>
               <div class="checkbox-primary" title="<?php echo $lang->mr->notDelbranch;?>">
-                <?php $checked = $MR->canDeleteBranch and $MR->removeSourceBranch== '1' ? 'checked' : '' ?>
-                <input type="checkbox" <?php echo $checked;?> <?php if(!$MR->canDeleteBranch) echo 'disabled';?> name="removeSourceBranch" value="1" id="removeSourceBranch">
+                <input type="checkbox" <?php echo $attr;?> name="removeSourceBranch" value="1" id="removeSourceBranch">
                 <label for="removeSourceBranch"></label>
               </div>
             </td>

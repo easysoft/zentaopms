@@ -1,0 +1,2 @@
+INSERT INTO `champs` (`id`,`val`) VALUES (412,'Thresh')
+ON DUPLICATE KEY UPDATE `id`=412,`val`='Thresh'

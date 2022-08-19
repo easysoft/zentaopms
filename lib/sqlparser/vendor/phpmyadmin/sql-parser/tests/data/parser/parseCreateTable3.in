@@ -1,0 +1,6 @@
+CREATE TABLE table1 (
+    a INT NOT NULL,
+    b VARCHAR(32),
+    c INT AS (a mod 10) VIRTUAL,
+    d VARCHAR(5) AS (left(b,5)) PERSISTENT
+);

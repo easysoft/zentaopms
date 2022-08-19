@@ -57,7 +57,7 @@ class projectStory extends control
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($productID)) $productID = key($products);
 
-        echo $this->fetch('story', 'track', "productID=$productID&branch=$branch&projectID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('product', 'track', "productID=$productID&branch=$branch&projectID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

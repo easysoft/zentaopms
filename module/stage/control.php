@@ -133,19 +133,19 @@ class stage extends control
     }
 
     /**
-     * Set type.
+     * Custom settings stage type.
      *
+     * @param  string lang2Set
      * @access public
      * @return void
      */
-    public function setType()
+    public function setType($lang2Set = '')
     {
         $this->loadModel('custom');
         $lang = $this->app->getClientLang();
         if($_POST)
         {
             $data = fixer::input('post')->get();
-            if($data->lang != 'all') $this->custom->deleteItems("lang=all&module=stage&section=typeList");
             $this->custom->deleteItems("lang={$data->lang}&module=stage&section=typeList");
 
             foreach($data->keys as $index => $key)
@@ -154,16 +154,12 @@ class stage extends control
                 if(!$value or !$key) continue;
                 $this->custom->setItem("all.stage.typeList.{$key}", $value);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('stage', 'settype', "lang2Set=$data->lang")));
         }
-
-        /* Check whether the current language has been customized. */
-        $customLang = $this->custom->getItems("lang=all&module=stage&section=typeList&vision={$this->config->vision}");
-        if($customLang) $lang2Set = 'all';
 
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->setType;
         $this->view->currentLang = $lang;
-        $this->view->lang2Set    = isset($lang2Set) ? $lang2Set : $lang;
+        $this->view->lang2Set    = !empty($lang2Set) ? $lang2Set : $lang;
         $this->display();
     }
 

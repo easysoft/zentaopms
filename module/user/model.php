@@ -920,6 +920,12 @@ class userModel extends model
                 $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
                 if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
             }
+            /* Check weak password when login. */
+            if(!$user->modifyPassword and $this->app->moduleName == 'user' and $this->app->methodName == 'login' and isset($_POST['passwordStrength']))
+            {
+                $user->modifyPassword = (isset($this->config->safe->mode) and $this->post->passwordStrength < $this->config->safe->mode);
+                if($user->modifyPassword) $user->modifyPasswordReason = 'passwordStrengthWeak';
+            }
 
             /* code for bug #2729. */
             if(defined('IN_USE')) $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();

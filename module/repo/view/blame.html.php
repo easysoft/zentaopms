@@ -54,7 +54,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
   <div class='panel-heading'>
     <div class='panel-title'><?php echo $entry;?></div>
     <?php $encodePath = $this->repo->encodePath($entry);?>
-    <div class='panel-actions'>
+    <div class='panel-actions <?php echo isonlybody() ? "action-onlybody" : ""?>'>
       <div class='btn-group'>
         <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn dropdown-toggle')?>
         <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>

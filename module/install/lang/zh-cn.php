@@ -162,7 +162,7 @@ $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
 
 $lang->install->placeholder = new stdclass();
-$lang->install->placeholder->password = '六位及以上，包含数字、字母和特殊字符';
+$lang->install->placeholder->password = '6位及以上，包含大小写字母，数字。';
 
 $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";

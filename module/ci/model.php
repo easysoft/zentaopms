@@ -29,9 +29,11 @@ class ciModel extends model
         if($this->session->repoID)
         {
             $repo = $this->loadModel('repo')->getRepoByID($this->session->repoID);
-            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!empty($repo) and !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
 
-            $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
+            $tab   = $this->app->tab;
+            $repos = $this->repo->getRepoPairs($tab);
+            if(count($repos) > 1) $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
         }
     }
 
@@ -180,11 +182,12 @@ class ciModel extends model
         $data = new stdclass;
         $data->status     = $pipeline->status;
         $data->updateDate = $now;
+        $data->logs       = '';
 
         foreach($jobs as $job)
         {
             if(empty($job->duration) or $job->duration == '') $job->duration = '-';
-            $data->logs  = "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
+            $data->logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $job->name, Stage: $job->stage, Status: $job->status, Duration: $job->duration Sec\r\n </font>";
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
             $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->project, $job->id));
         }
