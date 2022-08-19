@@ -121,8 +121,7 @@ class action extends control
             $this->app->loadLang('execution');
             $projectIdList = array();
             foreach($trashes as $trash) $projectIdList[] = $trash->project;
-            $projectList = $this->loadModel('project')->getByIdList($projectIdList, 'all');
-            $this->view->projectList = $projectList;
+            $this->view->projectList = $this->loadModel('project')->getByIdList($projectIdList, 'all');
         }
 
         /* Title and position. */
@@ -140,6 +139,7 @@ class action extends control
         $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->view->byQuery             = $byQuery;
         $this->view->queryID             = $queryID;
+
         $this->display();
     }
 
