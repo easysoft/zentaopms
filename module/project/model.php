@@ -797,16 +797,17 @@ class projectModel extends model
     /**
      * Get project by id list.
      *
-     * @param  array    $projectIdList
+     * @param  array  $projectIdList
+     * @param  string $mode all
      * @access public
      * @return object
      */
-    public function getByIdList($projectIdList = array())
+    public function getByIdList($projectIdList = array(), $mode = '')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');
     }
 

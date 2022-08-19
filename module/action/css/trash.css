@@ -6,3 +6,6 @@
 
 .dropdown-menu .btn-active-text:hover .text:after {border-bottom: 0px;}
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: 0px;}
+.flex span.label-danger {margin-left: 5px; min-width: 50px;}
+.c-name > .text-ellipsis {text-overflow: clip;}

@@ -82,6 +82,12 @@
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
           <th class='c-id'><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php echo $lang->action->objectName;?></th>
+<<<<<<< Updated upstream
+=======
+          <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
+          <th class='w-250px'><?php echo $this->lang->execution->project;?></th>
+          <?php endif;?>
+>>>>>>> Stashed changes
           <th class='c-user'><?php common::printOrderLink('actor', $orderBy, $vars, $lang->action->actor);?></th>
           <th class='c-full-date'><?php common::printOrderLink('date', $orderBy, $vars, $lang->action->date);?></th>
           <th class='c-actions'><?php echo $lang->actions;?></th>
@@ -135,6 +141,17 @@
             }
             ?>
           </td>
+<<<<<<< Updated upstream
+=======
+          <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
+          <td class="flex" title="<?php echo $projectList[$action->project]->name;?>">
+            <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>
+            <?php if($projectList[$action->project]->deleted):?>
+            <span class='label label-danger'><?php echo $this->lang->project->deleted;?></span>
+            <?php endif;?>
+          </td>
+          <?php endif;?>
+>>>>>>> Stashed changes
           <td><?php echo zget($users, $action->actor);?></td>
           <td><?php echo $action->date;?></td>
           <td>
