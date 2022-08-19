@@ -3098,6 +3098,10 @@ class storyModel extends model
                 $storyQuery = str_replace($allProduct, '1', $this->session->executionStoryQuery);
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+
+            /* Get productID*/
+            $products  = $this->loadModel('product')->getProducts($executionID);
+            if($products) $productID = key($products);
             /* From action Get reviews. */
             $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('product')->like("%,$productID,%")
