@@ -95,8 +95,8 @@
             }
             else
             {
-                $task->executionType == 'kanban' ? ($class = 'iframe').($onlybody = true) : ($class = '').($onlybody = '');
-                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', "{$onlybody}", $task->project), $task->name, null,"class={$class} data-width='80%' style='color: $task->color'");
+                $class = ($task->executionType == 'kanban') ? 'iframe' : '';
+                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true, $task->project), $task->name, null,"class={$class} data-width='80%' style='color: $task->color'");
             }
             ?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
