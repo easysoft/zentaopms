@@ -986,7 +986,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleProject($gitlabID, $projectID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        $url = sprintf($this->getApiRoot($gitlabID, false), "/projects/$projectID");
         return json_decode(commonModel::http($url));
     }
 
@@ -2878,5 +2878,21 @@ class gitlabModel extends model
 
         $html .= '</div>';
         return $html;
+    }
+
+    /**
+     * Get pipeline with api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object|array
+     */
+    public function apiGetPipeline($gitlabID, $projectID, $branch)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
+        return json_decode(commonModel::http($url));
     }
 }

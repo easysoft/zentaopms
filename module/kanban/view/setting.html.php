@@ -21,7 +21,7 @@
   <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th class='w-120px'><?php echo $lang->kanban->WIPCount;?></th>
+        <th><?php echo $lang->kanban->WIPCount;?></th>
         <td><?php echo html::radio('showWIP', $lang->kanban->showWIPList, $kanban->showWIP);?></td>
         <td></td>
       </tr>
@@ -36,7 +36,7 @@
       </tr>
       <tr class="hidden" id='cardBox'>
         <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-        <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+        <td colspan='2'><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanbanlane->error->mustBeInt}'  autocomplete='off'");?></td>
       </tr>
       <?php endif;?>
       <tr>

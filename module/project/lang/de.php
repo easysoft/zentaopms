@@ -63,6 +63,7 @@ $lang->project->teamMembersCount   = ', there are %s team members.';
 $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
+$lang->project->ignore             = 'Ignore';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -196,7 +197,7 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
-$lang->project->budgetOverrun          = "The project's budget has exceeded the remaining budget of the parent program:";
+$lang->project->budgetOverrun          = "The project's budget exceeds the remaining budget of the parent program:";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
 
 $lang->project->tenThousand    = '';
@@ -321,8 +322,8 @@ $lang->project->cannotChangeToCat    = "It is not empty, so you cannot change it
 $lang->project->cannotCancelCat      = "It has child projects, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd       = "Parent begin&end date: %s ~ %s";
 $lang->project->parentBudget         = "The budget of the parent program: ";
-$lang->project->beginLetterParent    = "The start date of the project was < the minimum start date of the parent program:";
-$lang->project->endGreaterParent     = "The finish date of the project was > the maximum finish date of the parent program:";
+$lang->project->beginLetterParent    = "The start date of the project is < the start date of the parent program:";
+$lang->project->endGreaterParent     = "The finish date of the project is > the finish date of the parent program:";
 $lang->project->dateExceedParent     = "The start and finish date of the project was > the start and finish date of the parent program:";
 $lang->project->beginGreateChild     = 'The start date of the project should be ≥ the start date of program: %s.';
 $lang->project->endLetterChild       = 'The finish date of the project should be ≤ the finish date of program: %s.';

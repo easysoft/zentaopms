@@ -114,7 +114,7 @@ $colspan = count($visibleFields) + 3;
               $currentStory = $type = $member = $moduleID = 'ditto';
           }
           ?>
-          <?php $pri = 3;?>
+          <?php $pri = $parent ? $parentPri : 3;?>
           <tr>
             <td class='text-left c-id'><?php echo $i;?></td>
             <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>

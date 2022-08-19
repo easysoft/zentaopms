@@ -296,6 +296,72 @@ class testcase extends control
     }
 
     /**
+     * Show zero case story.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  string $orderBy
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
+        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
+
+        $this->loadModel('story');
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+            $this->app->rawModule = 'qa';
+            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
+            $productID = $this->product->saveState($productID, $products);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);
+        }
+        else
+        {
+            $products  = $this->product->getPairs();
+            $productID = $this->product->saveState($productID, $products);
+            $this->loadModel('qa');
+            $this->app->rawModule = 'testcase';
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->qa->setMenu($products, $productID, $branchID);
+        }
+
+        /* Append id for secend sort. */
+        $sort    = common::appendOrder($orderBy);
+        $stories = $this->story->getZeroCase($productID, $branchID, $sort);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($stories);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $stories  = array_chunk($stories, $pager->recPerPage);
+
+        $this->view->title      = $this->lang->story->zeroCase;
+        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
+        $this->view->position[] = $this->lang->story->zeroCase;
+
+        $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->projectID  = $projectID;
+        $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->browseType = '';
+        $this->view->product    = $this->product->getByID($productID);
+        $this->view->pager      = $pager;
+        $this->display();
+    }
+
+    /**
      * Create a test case.
      * @param        $productID
      * @param string $branch

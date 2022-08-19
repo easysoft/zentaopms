@@ -403,7 +403,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php endif;?>
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn" id="mulAssigned"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
             <?php $withSearch = count($memberPairs) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">

@@ -143,14 +143,14 @@ class project extends control
     public function ajaxGetCopyProjects()
     {
         $data = fixer::input('post')->get();
-        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $projectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
-
+        $projects = $this->project->getPairsByModel('', 0, '', array_keys($projectPairs));
         $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
         foreach($projects as $id => $name)
         {
@@ -234,6 +234,7 @@ class project extends control
         {
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
             if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+            if(isset($selectedProgram)) $allProducts = $this->program->getProductPairs($selectedProgram->id, 'assign', 'noclosed');
         }
 
         if(!empty($objectID))
@@ -252,10 +253,19 @@ class project extends control
         $data = array();
         if(isset($selectedProgram))
         {
-            $data['selectedProgramBegin'] = $selectedProgram->begin;
-            $data['selectedProgramEnd']   = $selectedProgram->end;
-            $data['budgetUnit']           = $selectedProgram->budgetUnit;
+            $data['selectedProgramBegin']  = $selectedProgram->begin;
+            $data['selectedProgramEnd']    = $selectedProgram->end;
+            $data['budgetUnit']            = $selectedProgram->budgetUnit;
+            $allProducts = array(0 => '') + $allProducts;
+            /* Finish task #64882.Get the path of the currently selected program. */
+            $data['selectedProgramPath']   = explode(',', $selectedProgram->path);
+            /* Get the products that can be linked with the currently selected program. */
+            $data['allProducts']           = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+            $data['plans']                 = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
         }
+
+        /* Finish task #64882.Get the path of the last selected program. */
+        if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
         if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
         if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
         if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;
@@ -1024,13 +1034,13 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $allExecution = $this->project->getStats($projectID, 'all');
+        $allExecution = $this->execution->getStatData($projectID, 'all');
         $this->view->allExecutionNum = empty($allExecution);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, $this->cookie->showTask);
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;

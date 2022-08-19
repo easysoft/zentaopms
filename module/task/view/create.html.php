@@ -135,18 +135,25 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
               <tbody>
                 <?php $i = 0;?>
                 <?php foreach($stories as $storyID => $storyTitle):?>
+                <?php if($i > 0) $members['ditto'] = $lang->task->ditto;?>
                 <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
                   <td><?php echo html::select("testStory[]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+                      <?php
+                        echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");
+                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                      ?>
                       <span class='input-group-addon fix-border'>~</span>
-                      <?php echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+                      <?php
+                        echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");
+                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                      ?>
                     </div>
                   </td>
-                  <td><?php echo html::select("testAssignedTo[]", $members, $task->assignedTo, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testAssignedTo[]", $members, $i == 0 ? $task->assignedTo : 'ditto', "class='form-control chosen'");?></td>
                   <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
                   <td class='text-center'>
                     <div class="btn-group">

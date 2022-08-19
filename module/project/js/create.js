@@ -109,13 +109,45 @@ $(function()
 /**
  * Set parent program.
  *
- * @param  $parentProgram
- * @access public
+ * @param  int    $parentProgram ParentProgram is the ID of the currently selected program.
  * @return void
  */
 function setParentProgram(parentProgram)
 {
-    location.href = createLink('project', 'create', 'model=' + model + '&programID=' + parentProgram);
+    var lastSelectedID     = $('#parent').attr('data-lastSelected');
+    var lastSelectedParent = 0;
+    var selectedParent     = 0;
+
+    if(parentProgram == 0) $('#budgetBox').find('input').removeAttr("placeholder");
+
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
+    {
+        var data = JSON.parse(data);
+        selectedParent = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
+        lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
+
+        if(selectedParent != lastSelectedParent)
+        {
+            $('#budget').val('');
+            /* Hide product and plan dropdown controls. */
+            $('#productsBox .row .col-sm-4:not(:last)').remove();
+            $('#productsBox .row .col-sm-4:last select').remove();
+            $('#productsBox .row .col-sm-4:last .chosen-container').remove();
+            var select = data.allProducts;
+            $('#productsBox .row .col-sm-4 .input-group').prepend(select)
+            $('#productsBox .row .col-sm-4 .input-group select').chosen();
+
+            $('#plansBox .col-sm-4:not(:last)').remove();
+            $('#plansBox .col-sm-4').children().remove();
+            var planSelect = data.plans;
+            $('#plansBox .col-sm-4').prepend(planSelect);
+            $('#plansBox .col-sm-4 select').chosen();
+        }
+        budgetOverrunTips();
+        outOfDateTip();
+    });
+
+    $('#parent').attr('data-lastSelected', parentProgram);
 }
 
 /**

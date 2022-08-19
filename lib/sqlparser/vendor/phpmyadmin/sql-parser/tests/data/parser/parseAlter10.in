@@ -1,0 +1,1 @@
+ALTER TABLE `database`.`table` MODIFY `field` INT(11) AUTO_INCREMENT PRIMARY KEY;

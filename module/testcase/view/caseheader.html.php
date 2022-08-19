@@ -40,7 +40,7 @@
     <?php
     $hasBrowsePriv = $isProjectApp ? common::hasPriv('project', 'testcase') : common::hasPriv('testcase', 'browse');
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
-    $hasZeroPriv   = common::hasPriv('story', 'zerocase');
+    $hasZeroPriv   = common::hasPriv('testcase', 'zerocase');
     $hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
@@ -100,7 +100,7 @@
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
     elseif($hasUnitPriv and $menuType == 'browseunits')
     {

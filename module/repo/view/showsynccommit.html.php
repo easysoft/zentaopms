@@ -28,7 +28,7 @@ $(function(){
     <?php if(empty($branch)):?>
     var link = createLink('repo', 'ajaxSyncCommit', "repoID=<?php echo $repoID?>");
     <?php else:?>
-    var link = createLink('repo', 'ajaxSyncBranchCommit', "repoID=<?php echo $repoID?>&branch=<?php echo base64_encode($branch);?>");
+    var link = createLink('repo', 'ajaxSyncBranchCommit', "repoID=<?php echo $repoID?>&branch=<?php echo helper::safe64Encode(base64_encode($branch));?>");
     <?php endif;?>
     function syncComments()
     {

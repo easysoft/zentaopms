@@ -441,10 +441,14 @@ class extensionModel extends model
             else
             {
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(!is_writable($parentDir) or !@mkdir($path, 0777, true))
+                if(!is_dir($path) and !mkdir($path, 0777, true))
                 {
                     $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $return->mkdirCommands .= "sudo mkdir -p $path<br />";
+                }
+                if(!is_writable($parentDir))
+                {
+                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
                 $return->dirs2Created[] = $path;
