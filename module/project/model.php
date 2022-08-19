@@ -2613,14 +2613,5 @@ class projectModel extends model
         }
 
         return $menu;
-
     }
-    public function getProjectName($executionIdList)
-    {
-        return $this->dao->select('t1.id, t2.id as projectID, t2.name, t2.deleted')->from(TABLE_EXECUTION)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.id')->in($executionIdList)
-            ->fetchAll('projectID');
-    }
-
 }
