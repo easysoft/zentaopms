@@ -117,7 +117,7 @@ class myTest
     /**
      * Get testcases by search.
      *
-     * @param  int    $query
+     * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
      * @access public
