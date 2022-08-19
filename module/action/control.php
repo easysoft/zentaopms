@@ -115,6 +115,19 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
+<<<<<<< Updated upstream
+=======
+        /* Get the project name of executions. */
+        if($browseType == 'execution')
+        {
+            $this->app->loadLang('execution');
+            $projectIdList = array();
+            foreach($trashes as $trash) $projectIdList[] = $trash->project;
+            $projectList = $this->loadModel('project')->getByIdList($projectIdList, 'all');
+            $this->view->projectList = $projectList;
+        }
+
+>>>>>>> Stashed changes
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
