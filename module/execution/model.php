@@ -1023,6 +1023,8 @@ class executionModel extends model
                 $this->loadModel('action')->create('execution', $parent->id, 'startbychildactivate');
             }
         }
+
+        return $changes;
     }
 
     /**
@@ -1096,6 +1098,7 @@ class executionModel extends model
             }
 
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
+            return $changes;
         }
     }
 

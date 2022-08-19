@@ -1216,6 +1216,7 @@ class actionModel extends model
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
         $this->app->loadLang('branch');
+        $this->app->loadLang('execution');
 
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
