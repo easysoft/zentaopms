@@ -24,7 +24,7 @@ class projectBugsEntry extends entry
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
         $control = $this->loadController('project', 'bug');
-        $control->bug($projectID, $this->param('product', 0), $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->bug($projectID, $this->param('product', 0), $this->param('branch', 0), $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
