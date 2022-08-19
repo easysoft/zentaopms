@@ -29,7 +29,7 @@ class dao extends baseDAO
     /**
      * 设置需要更新或插入的数据。
      * Set the data to update or insert.
-     *
+     * 
      * @param  object $data  the data object or array
      * @access public
      * @return object the dao object self.
@@ -182,7 +182,7 @@ class dao extends baseDAO
 
     /**
      * Check workFlow field rule.
-     *
+     * 
      * @access public
      * @return object the dao object self.
      */
@@ -232,10 +232,10 @@ class dao extends baseDAO
     }
 
     /**
-     * 检查工作流扩展字段
-     * check workflow extend field
-     *
-     * @param  array $fields
+     * 检查工作流扩展字段 
+     * check workflow extend field 
+     * 
+     * @param  array $fields 
      * @access public
      * @return object the dao object self
      */
