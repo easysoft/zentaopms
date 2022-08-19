@@ -945,7 +945,7 @@ class userTest
     }
 
     /**
-     * Put the current user first.
+     * Put the current user first
      *
      * @param  array    $users
      * @access public
