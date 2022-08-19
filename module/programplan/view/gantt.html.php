@@ -64,7 +64,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
 .gantt_task_line.gantt_task_inline_color{border:0px;}
 .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
-#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;}
+#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;height:unset!important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
