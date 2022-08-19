@@ -401,17 +401,13 @@ function outOfDateTip(currentID = 0)
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
             var dateTip = "";
-            if(projectBegin < parentBegin && projectEnd <= parentEnd && projectEnd >= parentBegin)
+            if(projectBegin < parentBegin)
             {
                 dateTip = currentID ? beginLetterParentTip + "'>" + beginLetterParentTip : beginLetterParentTip;
             }
-            else if(projectEnd > parentEnd && projectBegin >= parentBegin && projectBegin <= parentEnd)
+            else if(projectEnd > parentEnd)
             {
                 dateTip = currentID ? endGreaterParentTip + "'>" + endGreaterParentTip : endGreaterParentTip;
-            }
-            else
-            {
-                dateTip = currentID ? dateExceedParentTip + "'>" + dateExceedParentTip : dateExceedParentTip;
             }
 
             if(currentID)
