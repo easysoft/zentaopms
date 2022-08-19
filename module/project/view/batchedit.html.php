@@ -16,7 +16,6 @@
 <?php js::set('changeProgram', $lang->project->changeProgram);?>
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
-<?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
 <?php js::set('LONG_TIME', LONG_TIME);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('ignore', $lang->project->ignore);?>
