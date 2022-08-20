@@ -1199,7 +1199,6 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-        $this->story->setActivateStatus($storyID);
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -1623,7 +1622,8 @@ class story extends control
             if($changes)
             {
                 $preStatus = $story->status;
-                if($preStatus == 'reviewing') $preStatus = $story->changedBy ? 'changing' : 'draft';
+                $isChanged = $story->changedBy ? true : false;
+                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
                 $actionID  = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
                 $this->action->logHistory($actionID, $changes);
@@ -1737,7 +1737,8 @@ class story extends control
                 foreach($allChanges as $storyID => $changes)
                 {
                     $preStatus = $stories[$storyID]->status;
-                    if($preStatus == 'reviewing') $preStatus = $stories[$storyID]->changedBy ? 'changing' : 'draft';
+                    $isChanged = $stories[$storyID]->changedBy ? true : false;
+                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
                     $this->action->logHistory($actionID, $changes);

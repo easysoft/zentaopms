@@ -2360,10 +2360,14 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
+
+        /* Get status after activation. */
+        $story->status = $this->getActivateStatus($storyID);
+
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
-        if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+        if($story->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
 
         $this->setStage($storyID);
 
@@ -5548,7 +5552,8 @@ class storyModel extends model
 
         if($result != 'revert')
         {
-            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected', '', empty($story->changedBy) ? 'draft' : 'changing');
+            $isChanged = $story->changedBy ? true : false;
+            if($story->status == 'closed') $this->action->create('story', $story->id, 'ReviewRejected', '', $isChanged ? 'changing' : 'draft');
             if($story->status == 'active') $this->action->create('story', $story->id, 'ReviewPassed');
             if(!array_diff(array_keys($reviewers), $reviewedBy) and ($story->status == 'draft' or $story->status == 'changing')) $this->action->create('story', $story->id, 'ReviewClarified');
         }
@@ -5576,7 +5581,10 @@ class storyModel extends model
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
             $status = $this->post->result == 'revert' ? 'active' : $this->setStatusByReviewRules($reviewerList);
-            $status = ($status == 'draft' and $oldStory->changedBy) ? 'changing' : $status;
+
+            /* When the review result of the changed story is clarify, the status should be changing. */
+            $isChanged = $oldStory->changedBy ? true : false;
+            $status    = ($isChanged and $status == 'draft') ? 'changing' : $status;
 
             $story->status = $status ? $status : $oldStory->status;
             if($story->status == 'closed')
@@ -5854,14 +5862,15 @@ class storyModel extends model
     }
 
     /**
-     * Set the selectable status when activated.
+     * Get the story status after activation.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function setActivateStatus($storyID)
+    public function getActivateStatus($storyID)
     {
+        $status     = 'active';
         $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
@@ -5871,20 +5880,8 @@ class storyModel extends model
         $lastAction = $lastRecord->action;
         $preStatus  = $lastRecord->extra;
         if(strpos($preStatus, '|') !== false) $preStatus = substr($preStatus, strpos($preStatus, '|') + 1);
+        if(strpos('closed,reviewrejected', $lastAction) !== false) $status = $preStatus;
 
-        if(strpos('closed,reviewrejected', $lastAction) !== false)
-        {
-            foreach($this->lang->story->statusList as $status => $lang)
-            {
-                if($preStatus == $status or $status == 'active') continue;
-                unset($this->lang->story->statusList[$status]);
-            }
-
-            if($this->checkForceReview() and $preStatus != 'active') unset($this->lang->story->statusList['active']);
-        }
-        else
-        {
-            foreach(array('', 'closed', 'changing', 'reviewing') as $status) unset($this->lang->story->statusList[$status]);
-        }
+        return $status;
     }
 }

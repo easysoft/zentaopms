@@ -28,14 +28,6 @@
           <th class='w-80px'><?php echo $lang->story->assignedTo;?></th>
           <td class='w-p45'><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control chosen"');?></td><td></td>
         </tr>
-        <tr>
-          <th><?php echo $lang->story->status;?></th>
-          <td>
-            <?php
-            echo html::select('status', $lang->story->statusList, 'active', 'class="form-control chosen"');
-            ?>
-          </td>
-        </tr>
         <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
