@@ -1378,25 +1378,33 @@ class taskTest
     }
 
     /**
-     * Test get next user.
+     * Test for get team by account.
+     *
+     * @param  array  $users
+     * @param  string $account
+     * @param  string $filter
+     * @access public
+     * @return string
+     */
+    public function getTeamByAccount($users, $account, $filter = 'done')
+    {
+        $object = $this->objectModel->getTeamByAccount($users, $account, $filter);
+        if(empty($object)) return '_';
+        return $object->account . '_' . $object->status;
+    }
+
+    /**
+     * Test get assignedTo  for multi task.
      *
      * @param  array  $users
      * @param  string $current
      * @access public
      * @return string
      */
-    public function getNextUserTest($users, $current)
+    public function getAssignedTo4Multi($users, $task, $type = 'current')
     {
-        $object = $this->objectModel->getNextUser($users, $current);
-
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+        $assignedTo = $this->objectModel->getAssignedTo4Multi($users, $task, $type);
+        return empty($assignedTo) ? 'null' : $assignedTo;
     }
 
     /**

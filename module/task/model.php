@@ -759,6 +759,7 @@ class taskModel extends model
      *
      * @param  object  $oldTask
      * @param  object  $task
+     * @param  array   $team
      * @param  bool    $autoStatus
      * @access public
      * @return object|bool
@@ -3675,7 +3676,7 @@ class taskModel extends model
     public function getAssignedTo4Multi($users, $task, $type = 'current')
     {
         if(empty($task->team)) return $task->assignedTo;
-        if($task->mode != 'linear') return $task->assignedTo;
+        if($task->mode != 'linear') return '';
 
         $teamHours = array_values($task->team);
 
