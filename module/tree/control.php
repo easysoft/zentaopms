@@ -376,7 +376,16 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
-        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
+        if($type == 'doc')
+        {
+            $libs  = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
+
+            /* Filter out wiki libraries. */
+            $books = $this->doc->getAllLibsByType('book');
+            foreach($books as $book) unset($libs[$book->id]);
+
+            $this->view->libs = $libs;
+        }
 
         $this->view->module = $module;
         $this->view->type   = $type;
