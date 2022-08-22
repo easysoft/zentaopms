@@ -23,12 +23,16 @@
 <?php js::set('team', $task->members);?>
 <?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
+
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
 <?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
 <?php js::set('requiredFields', $config->task->edit->requiredFields);?>
+
+<?php $newRowCount = count($task->team) < 6 ? 6 - count($task->team) : 1;?>
+<?php if($task->status != 'wait' and $task->status != 'doing') $newRowCount = 0;?>
+<?php js::set('newRowCount', $newRowCount);?>
 <?php
 $requiredFields = array();
 foreach(explode(',', $config->task->edit->requiredFields) as $field)
