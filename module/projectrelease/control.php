@@ -237,12 +237,10 @@ class projectrelease extends control
             ->beginIF($type == 'story')->orderBy($orderBy)->fi()
             ->page($storyPager)
             ->fetchAll('id');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
-
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)
