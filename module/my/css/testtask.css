@@ -1,2 +1,5 @@
 .c-execution {width: 200px}
 .c-build {width: 120px;}
+.c-id {width: 60px;}
+.c-status {width: 80px;}
+.table-fixed td  {text-overflow: ellipsis;}
