@@ -7117,6 +7117,7 @@ class upgradeModel extends model
 
         $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
         $this->dao->update(TABLE_LANG)->set('value')->eq('Opera 系列')->where('module')->eq('bug')->andWhere('`key`')->eq('operea')->andWhere('value')->eq('opera 系列')->exec();
+        return true;
     }
 
     /**
@@ -7127,7 +7128,7 @@ class upgradeModel extends model
      */
     public function addURPriv()
     {
-        if(empty($this->config->URAndSR)) return false;
+        if(empty($this->config->URAndSR)) return true;
 
         $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
