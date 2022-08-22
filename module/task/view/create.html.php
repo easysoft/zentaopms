@@ -157,7 +157,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                   <td class='text-center'>
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
-                      <?php if($i > 0):?><button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button><?php endif;?>
+                      <button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button>
                     </div>
                   </td>
                 </tr>
@@ -342,7 +342,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
   </tr>
 </table>
 <?php js::set('stories', $testStories);?>
-<?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
+<?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($testStories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('executionType', $execution->type);?>
