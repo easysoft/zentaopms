@@ -403,16 +403,16 @@ function outOfDateTip(currentID = 0)
             var dateTip = "";
             if(projectBegin < parentBegin)
             {
-                dateTip = currentID ? beginLetterParentTip + "'>" + beginLetterParentTip : beginLetterParentTip;
+                dateTip = currentID ? beginLetterParentTip + "'><p>" + beginLetterParentTip : beginLetterParentTip;
             }
             else if(projectEnd > parentEnd)
             {
-                dateTip = currentID ? endGreaterParentTip + "'>" + endGreaterParentTip : endGreaterParentTip;
+                dateTip = currentID ? endGreaterParentTip + "'><p>" + endGreaterParentTip : endGreaterParentTip;
             }
 
             if(currentID)
             {
-                $("#projects\\[" + currentID + "\\]").after("<tr id='dateTip[" + currentID + "]'><td colspan='5'></td><td id='dateTip' class='c-name' colspan='3'><span class='text-remind' title='" + dateTip + "</span></td></tr>");
+                $("#projects\\[" + currentID + "\\]").after("<tr><td colspan='5'></td><td class='c-name' colspan='3'><span id='dateTip" + currentID + "' class='text-remind' title='" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this," + currentID + ")'>" + ignore + "</p></span></td></tr>");
             }
             else
             {
@@ -430,11 +430,11 @@ function outOfDateTip(currentID = 0)
  * @access public
  * @return void
  */
-function ignoreTip(obj)
+function ignoreTip(obj,currentID = 0)
 {
     var parentID = obj.parentNode.id;
-    $('#' + parentID).addClass('hidden');
+    currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).parent().parent().remove();
 
-    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'dateTip' || parentID == 'dateTip' + currentID) window.ignoreTips['dateTip'] = true;
     if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }
