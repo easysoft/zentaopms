@@ -396,7 +396,6 @@ function outOfDateTip(currentID = 0)
 
             var beginLetterParentTip = beginLetterParent + data.selectedProgramBegin;
             var endGreaterParentTip  = endGreaterParent + data.selectedProgramEnd;
-            var dateExceedParentTip  = dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd;
 
             if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
 
