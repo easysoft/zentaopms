@@ -309,7 +309,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 </td>
               </tr>
               <?php endforeach;?>
-              <tr class='template'>
+              <tr class='template member-wait'>
                 <td class='w-250px'>
                   <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
                   <?php echo html::hidden("source[]", '');?>

@@ -171,7 +171,7 @@ $('#confirmButton').click(function()
         if(!isNaN(left)) totalLeft += left;
         if(!$tr.hasClass('member-done') && (isNaN(left) || left == 0))
         {
-              bootbox.alert(account + ' ' + estimateNotEmpty);
+              bootbox.alert(account + ' ' + leftNotEmpty);
               error = true;
               return false;
         }
