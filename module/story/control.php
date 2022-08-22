@@ -1202,7 +1202,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->closedBy);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
@@ -1510,7 +1510,7 @@ class story extends control
         if($confirm == 'no')
         {
             $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
-            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=lite&confirm=yes")));
+            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes")));
         }
         else
         {
@@ -1520,10 +1520,10 @@ class story extends control
             $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
             $this->loadModel('action')->create('story', $storyID, $action);
 
-            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            echo js::locate($locateLink, 'parent');
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 

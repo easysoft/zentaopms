@@ -462,8 +462,10 @@ $lang->story->subDivideTip['planned']   = 'The Story has been planned and cannot
 $lang->story->subDivideTip['projected'] = 'The Story has been initiated and cannot be subdivided.';
 $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be subdivided.';
 
-$lang->story->featureBar['browse']['all']      = $lang->all;
-$lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+$lang->story->featureBar['browse']['all']       = $lang->all;
+$lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
+$lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
+$lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
 $lang->story->recallList = array();
 $lang->story->recallList['recallReview'] = $lang->story->recall;

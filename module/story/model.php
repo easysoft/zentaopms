@@ -709,6 +709,7 @@ class storyModel extends model
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
 
+
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -757,12 +758,15 @@ class storyModel extends model
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
                 }
+
+                if($reviewerHasChanged)
+                {
+                    $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
+                    $story->reviewers    = implode(',', $_POST['reviewer']);
+                }
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-
-            $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
-            $story->reviewers    = implode(',', $_POST['reviewer']);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1438,6 +1442,8 @@ class storyModel extends model
             ->add('id', $storyID)
             ->remove('result,comment')
             ->get();
+
+        $story->reviewedBy = implode(',', array_unique(explode(',', $story->reviewedBy)));
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->review['id'], $this->post->uid);
 
         /* Fix bug #671. */
@@ -3051,15 +3057,6 @@ class storyModel extends model
             if(empty($normalProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
             $storyQuery .= ') ';
 
-            if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
-            {
-                $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing')"; // Fix bug #990.
-            }
-            else
-            {
-                $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'closed')";
-            }
-
             if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
@@ -3071,6 +3068,15 @@ class storyModel extends model
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
+
+        if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
+        {
+            $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing')"; // Fix bug #990.
+        }
+        else
+        {
+            $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'closed')";
+        }
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
@@ -3225,7 +3231,7 @@ class storyModel extends model
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
                 ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
-                ->beginIF(strpos('changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
+                ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
                 ->beginIF($type == 'unlinkedexecution')->andWhere('t2.id')->notIn($storyIdList)->fi()
@@ -4129,7 +4135,7 @@ class storyModel extends model
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
-        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
+        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
 
@@ -4237,6 +4243,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
+            if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params, $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
