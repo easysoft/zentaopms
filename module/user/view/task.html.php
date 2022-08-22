@@ -61,7 +61,8 @@
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
+            <?php $class = ($task->executionType == 'kanban') ? 'iframe' : '';?>
+            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");?>
           </td>
           <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
           <td class='hours' title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . $lang->execution->workHourUnit;?></td>

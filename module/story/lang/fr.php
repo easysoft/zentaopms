@@ -148,6 +148,7 @@ $lang->story->linkRequirements = "{$lang->URCommon} Lié es";
 $lang->story->childStories     = 'Stories Décomposées';
 $lang->story->duplicateStory   = 'Story ID Dupliquées';
 $lang->story->reviewResult     = 'Résultat Validation';
+$lang->story->reviewResultAB   = 'Résultats de lévaluation';
 $lang->story->preVersion       = 'Dernière Version';
 $lang->story->keywords         = 'Tags';
 $lang->story->newStory         = "Continuer d'ajouter";
