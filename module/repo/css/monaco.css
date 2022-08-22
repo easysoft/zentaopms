@@ -5,7 +5,7 @@
 #fileTabs .tab-pane {display: none;}
 #fileTabs .tab-pane.active {display: block;}
 #fileTabs .tab-nav-item {max-width: none !important;}
-#fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px;position: relative;height:40px;}
+#fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
 #fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
 .repoCode .content {padding: 5px;}
 .repoCode .nav > li > a {display: flex; white-space: pre;}
@@ -16,3 +16,5 @@
 #sourceSwapper .tree li > a {max-width: 100%;}
 .version-name {max-width: 90%}
 #filesTree #modules {margin-top: 5px;}
+.repoCode .content, .repoCode .btn {background-color: #F4F5F7; border: none;}
+.repoCode .nav-tabs > li.active > a:before {background: none; height: 0;}

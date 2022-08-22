@@ -53,19 +53,19 @@ $encodePath = $this->repo->encodePath($entry);
   <div class="main-col repoCode main">
     <div class="content panel">
       <div class='btn-toolbar'>
-        <div class="btn btn-left pull-left"><i class="icon icon-angle-left"></i></div>
+        <div class="btn btn-left pull-left"><i class="icon icon-chevron-left"></i></div>
         <?php if(common::hasPriv('repo', 'blame') or common::hasPriv('repo', 'download')):?>
         <div class="dropdown pull-right">
-          <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v"></i></button>
+          <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
           <ul class="dropdown-menu">
             <?php
-            if(common::hasPriv('repo', 'blame')) echo '<li>' . html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "data-app='{$app->tab}'") . '</li>';
-            if(common::hasPriv('repo', 'download')) echo '<li>' . html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin') . '</li>';
+            if(common::hasPriv('repo', 'blame')) echo '<li>' . html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), '<i class="icon icon-change"></i> ' . $lang->repo->blame, '', "data-app='{$app->tab}'") . '</li>';
+            if(common::hasPriv('repo', 'download')) echo '<li>' . html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), '<i class="icon icon-download"></i> ' . $lang->repo->download, 'hiddenwin') . '</li>';
             ?>
           </ul>
         </div>
         <?php endif;?>
-        <div class="btn btn-right  pull-right"><i class="icon icon-angle-right"></i></div>
+        <div class="btn btn-right  pull-right"><i class="icon icon-chevron-right"></i></div>
         <div class='panel-title'>
           <div class="tabs w-10" id="fileTabs"></div>
         </div>
