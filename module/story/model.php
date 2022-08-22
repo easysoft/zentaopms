@@ -91,11 +91,10 @@ class storyModel extends model
      */
     public function getByList($storyIdList = 0, $type = 'story')
     {
-        return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
+        return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-            ->where('t1.deleted')->eq(0)
             ->andWhere('t1.version=t2.version')
             ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
             ->beginIF(!$storyIdList)->andWhere('t1.type')->eq($type)->fi()

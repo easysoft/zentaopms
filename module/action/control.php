@@ -115,7 +115,7 @@ class action extends control
             $preferredType   = $preferredType + $toPreferredType;
         }
 
-        /* Get the project name of executions. */
+        /* Get the projects name of executions. */
         if($browseType == 'execution')
         {
             $this->app->loadLang('execution');
@@ -124,6 +124,24 @@ class action extends control
             $this->view->projectList = $this->loadModel('project')->getByIdList($projectIdList, 'all');
         }
 
+        /* Get the products name of story. */
+        if($browseType == 'story')
+        {
+            $this->app->loadLang('project');
+            $storyIdList = array();
+            foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
+            $this->view->productList = $this->loadModel('story')->getByList($storyIdList, 'story');
+        }
+
+        /* Get the executions name of task. */
+        if($browseType == 'task')
+        {
+            $this->app->loadLang('task');
+            $this->app->loadLang('project');
+            $executionIdList = array();
+            foreach($trashes as $trash) $executionIdList[] = $trash->execution;
+            $this->view->executionList = $this->loadModel('execution')->getByIdList($executionIdList);
+        }
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
