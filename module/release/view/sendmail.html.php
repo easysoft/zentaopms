@@ -64,15 +64,15 @@ if($onlybody) $_GET['onlybody'] = 'no';
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
                     <tr style='background-color: #F4F5F7;'>
-                      <th style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
-                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->storyTitle; ?></th>
+                      <th style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $this->lang->release->storyTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($stories as $story):?>
                     <tr>
-                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $story->id;?></td>
-                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $story->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $story->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $story->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
@@ -90,15 +90,15 @@ if($onlybody) $_GET['onlybody'] = 'no';
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
                     <tr style='background-color: #F4F5F7;'>
-                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
-                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->bugTitle; ?></th>
+                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $this->lang->release->bugTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($bugs as $bug):?>
                     <tr>
-                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->id;?></td>
-                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $bug->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $bug->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
@@ -116,15 +116,15 @@ if($onlybody) $_GET['onlybody'] = 'no';
                 <table align='center' cellpadding='0' cellspacing='0' width='1000' class='content' style='background-color: #fff;margin-bottom: 20px; font-size:13px;'>
                   <thead>
                     <tr style='background-color: #F4F5F7;'>
-                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->idAB; ?></th>
-                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $this->lang->release->bugTitle; ?></th>
+                      <th class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $this->lang->idAB; ?></th>
+                      <th class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $this->lang->release->bugTitle; ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach($leftBugs as $bug):?>
                     <tr>
-                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->id;?></td>
-                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353;'><?php echo $bug->title;?></td>
+                    <td class='id' style='text-align: center; width: 100px;border-top: 1px solid #D7DBDE; color: #3C4353; border-left: 1px solid #D7DBDE;'><?php echo $bug->id;?></td>
+                    <td class='title' style='border-left: 1px solid #D7DBDE; text-align: left; padding-left: 30px;border-top: 1px solid #D7DBDE; color: #3C4353; border-right: 1px solid #D7DBDE;'><?php echo $bug->title;?></td>
                     </tr>
                     <?php endforeach;?>
                   </tbody>
