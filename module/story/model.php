@@ -709,7 +709,6 @@ class storyModel extends model
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
 
-
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
