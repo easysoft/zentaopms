@@ -114,4 +114,103 @@ class myTest
         return count($objects);
     }
 
+    /**
+     * Get testcases by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getTestcasesBySearchTest($queryID, $type, $orderBy)
+    {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 20;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $objects = $this->objectModel->getTestcasesBySearch($query, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Get tasks by search.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getTasksBySearchTest($account, $limit = 0)
+    {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 20;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $objects = $this->objectModel->getTasksBySearch($account, $limit, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Get stories by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStoriesBySearchTest($queryID, $type, $orderBy)
+    {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 1;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $objects = $this->objectModel->getStoriesBySearch($queryID, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Get requirements by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getRequirementsBySearchTest($queryID, $type, $orderBy)
+    {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 1;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $objects = $this->objectModel->getRequirementsBySearch($queryID, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
 }
