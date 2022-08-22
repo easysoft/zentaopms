@@ -1868,7 +1868,7 @@ class bugModel extends model
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         return $bugs;
     }
@@ -1936,7 +1936,7 @@ class bugModel extends model
                 ->fetchAll('id');
         }
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         return $bugs;
     }
