@@ -90,7 +90,7 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>' title='<?php echo $story->title;?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
+            <?php echo common::hasPriv('story', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : $story->title;?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
           <td class='c-product' title='<?php echo $story->productTitle;?>'><?php echo $story->productTitle;?></td>
