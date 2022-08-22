@@ -371,7 +371,7 @@ function budgetOverrunTips()
  * @access public
  * @return void
  */
-function outOfDateTip(currentID = '')
+function outOfDateTip(currentID)
 {
     if(window.ignoreTips['dateTip']) return;
     if(batchEditDateTips.includes(Number(currentID))) return;
