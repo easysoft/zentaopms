@@ -1,0 +1,6 @@
+CREATE FUNCTION F_TEST(uid INT) RETURNS VARCHAR
+BEGIN
+    DECLARE username VARCHAR DEFAULT "";
+    SELECT username INTO username FROM users WHERE ID = uid;
+    RETURN username;
+END

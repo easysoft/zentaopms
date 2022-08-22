@@ -57,6 +57,7 @@ $lang->action->historyEdit        = 'The history EditBy cannot be empty.';
 $lang->action->noDynamic          = 'No dynamics. ';
 $lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 $lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
+$lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
 
 $lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
 $lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';
@@ -128,6 +129,7 @@ $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLab Server';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
+$lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
@@ -138,6 +140,7 @@ $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
 $lang->action->objectTypes['giteauser']        = 'Gitea User';
+$lang->action->objectTypes['gogsuser']         = 'Gogs User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
@@ -245,10 +248,6 @@ $lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories 
 $lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
-
-/* Used to describe the historical operation records of gantt. */
-$lang->action->desc->ganttdrag = '$date, <strong>$actor</strong> tasks dragged <strong>$extra</strong>.' . "\n";
-$lang->action->desc->ganttmove = '$date, <strong>$actor</strong> tasks sorted <strong>$extra</strong>.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
@@ -388,7 +387,6 @@ $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
 $lang->action->label->tolib                 = 'imported';
 $lang->action->label->updatetolib           = 'updated';
-$lang->action->label->ganttdrag             = 'dragged';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
 
@@ -548,6 +546,7 @@ $lang->action->dynamicAction->task['undeleted']           = 'Restore Task';
 $lang->action->dynamicAction->task['hidden']              = 'Hide Task';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN Commit';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT Commit';
+$lang->action->dynamicAction->task['ganttmove']           = 'Order';
 
 $lang->action->dynamicAction->build['opened']  = 'Create Build';
 $lang->action->dynamicAction->build['edited']  = 'Edit Build';
@@ -644,19 +643,32 @@ $lang->action->dynamicAction->job['executed']  = 'Execute Job';
 $lang->action->dynamicAction->job['deleted']   = 'Delete Job';
 $lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
 
-$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
-$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
-$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['created']   = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']    = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted']   = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['undeleted'] = 'Undelete SonarQube Server';
 
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
 
-$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
-$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
-$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['created']   = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']    = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted']   = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['undeleted'] = 'Undelete GitLab Server';
 
-$lang->action->dynamicAction->gitea['created'] = 'Create Gitea Server';
-$lang->action->dynamicAction->gitea['edited']  = 'Edit Gitea Server';
-$lang->action->dynamicAction->gitea['deleted'] = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['created']   = 'Create Gitea Server';
+$lang->action->dynamicAction->gitea['edited']    = 'Edit Gitea Server';
+$lang->action->dynamicAction->gitea['deleted']   = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['undeleted'] = 'Undelete Gitea Server';
+
+$lang->action->dynamicAction->gogs['created']   = 'Create Gogs Server';
+$lang->action->dynamicAction->gogs['edited']    = 'Edit Gogs Server';
+$lang->action->dynamicAction->gogs['deleted']   = 'Delete Gogs Server';
+$lang->action->dynamicAction->gogs['undeleted'] = 'Undelete Gogs Server';
+
+$lang->action->dynamicAction->repo['created']   = 'Create Repo';
+$lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
+$lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
+$lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
 
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

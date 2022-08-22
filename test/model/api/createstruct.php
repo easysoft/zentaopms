@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/api.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -11,7 +12,7 @@ cid=1
 pid=1
 
 创建数据结构 >> struct
-创建没有结构名的数据结构 >> 『Name』should not be blank.
+创建没有结构名的数据结构 >> 『结构名』不能为空。
 
 */
 
@@ -35,4 +36,5 @@ $normalStruct->addedBy   = $tester->app->user->account;
 $normalStruct->addedDate = helper::now();
 
 r($api->createStructTest($normalStruct)) && p('name') && e('struct');                            //创建数据结构
-r($api->createStructTest($emptyNameStruct)) && p('name:0') && e('『Name』should not be blank.'); //创建没有结构名的数据结构
+r($api->createStructTest($emptyNameStruct)) && p('name:0') && e('『结构名』不能为空。'); //创建没有结构名的数据结构
+$db->restoreDB();

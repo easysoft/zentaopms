@@ -125,6 +125,7 @@ $lang->testcase->batchConfirmStoryChange = "Mehrere bestätigen";
 $lang->testcase->batchCaseTypeChange     = "Mehrere Typen änderen";
 $lang->testcase->browse                  = "Fälle";
 $lang->testcase->groupCase               = "Nach Gruppe";
+$lang->testcase->zeroCase                = "Storys ohne Fälle";
 $lang->testcase->import                  = "Importieren";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->fileImport              = "Importiere CSV";

@@ -64,18 +64,24 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
 .gantt_task_line.gantt_task_inline_color{border:0px;}
 .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
+#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;height:unset!important;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
 <?php js::set('ganttType', $ganttType);?>
-<?php js::set('showFields', $showFields);?>
+<?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <div class="pull-right btn-toolbar">
-    <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields')?>
-    <?php include '../../common/view/customfield.html.php';?>
+  <?php
+  if($this->app->getModuleName() == 'programplan')
+  {
+      $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields');
+      include '../../common/view/customfield.html.php';
+  }
+  ?>
   </div>
   <form class="main-form form-ajax not-watch">
     <div class="example">
@@ -89,7 +95,9 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       <div class='btn btn-link' id='ganttPris'>
         <strong><?php echo $lang->task->pri . " : "?></strong>
         <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
+        <?php if($pri <= 4):?>
         <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+        <?php endif;?>
         <?php endforeach;?>
       </div>
     </div>
@@ -110,9 +118,43 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   $typeHtml .= '</ul></div>';
   ?>
 </div>
+<div id="myCover">
+  <div class="gantt_control">
+    <div class='btn btn-link' id='ganttPris'>
+      <strong><?php echo $lang->task->pri . " : "?></strong>
+      <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
+      <?php if($pri <= 4):?>
+      <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+      <?php endif;?>
+      <?php endforeach;?>
+    </div>
+  </div>
+  <div id="gantt_here"></div>
+</div>
 <script>
 var scriptLoadedMap   = {};
 var loadingPrefixText = '<?php echo $lang->programplan->exporting;?>';
+
+//After that you have to redefine the getFullscreenElement() method to return a custom root node that will be expanded to full screen:
+gantt.ext.fullscreen.getFullscreenElement = function() {
+    return document.getElementById("myCover");
+}
+gantt.init("gantt_here");
+
+// before gantt is expanded to full screen
+gantt.attachEvent("onBeforeExpand",function(){
+    $('#myCover').css('display', 'unset');
+    $('#mainContent .pull-right').css('opacity', '0');
+    $('.example').css('display', 'none');
+    return true;
+});
+
+// when gantt exited the full screen mode
+gantt.attachEvent("onCollapse", function (){
+    $('#myCover').css('display', 'none');
+    $('#mainContent .pull-right').css('opacity', '1');
+    $('.example').css('display', 'block');
+});
 
 /**
  * Get remote script for export.
@@ -467,7 +509,7 @@ $(function()
     var resizeGanttView = function()
     {
         if(gantt.getState().fullscreen) return false;
-        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 80)));
+        $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
     var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
@@ -475,12 +517,15 @@ $(function()
 
     <?php
     $userList = array();
-    foreach($users as $account => $realname)
+    if(!empty($users))
     {
-        $user = array();
-        $user['key']   = $account;
-        $user['label'] = $realname;
-        $userList[]    = $user;
+        foreach($users as $account => $realname)
+        {
+            $user = array();
+            $user['key']   = $account;
+            $user['label'] = $realname;
+            $userList[]    = $user;
+        }
     }
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
@@ -589,7 +634,7 @@ $(function()
         if(isGanttExpand)
         {
             $('body').addClass('gantt-fullscreen');
-            $('#ganttView').css('height', $(window).height() - 40);
+            $('#ganttView').css('height', $(window).height() - 60);
             isGanttExpand = false;
         }
         else

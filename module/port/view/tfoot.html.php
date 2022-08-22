@@ -3,7 +3,7 @@
     <?php
     $submitText  = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
     $isStartPage = $pagerID == 1 ? true : false;
-    if(!$insert and $dataInsert === '')
+    if(!$this->session->insert)
     {
         echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
     }

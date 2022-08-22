@@ -11,6 +11,7 @@
  */
 $lang->product->index            = $lang->productCommon . '主页';
 $lang->product->browse           = "{$lang->SRCommon}列表";
+$lang->product->requirement      = "{$lang->URCommon}列表";
 $lang->product->dynamic          = $lang->productCommon . '动态';
 $lang->product->view             = "{$lang->productCommon}概况";
 $lang->product->edit             = "编辑{$lang->productCommon}";
@@ -34,6 +35,7 @@ $lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集�
 $lang->product->changeProgramTip = "%s > 修改项目集";
 $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
+$lang->product->track            = "查看需求矩阵";
 $lang->product->checkedProducts  = '已选择%s项产品';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";

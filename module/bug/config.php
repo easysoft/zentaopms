@@ -133,35 +133,28 @@ $config->bug->search['params']['branch']        = array('operator' => '=',      
 $config->bug->search['params']['plan']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['module']        = array('operator' => 'belong',  'control' => 'select', 'values' => 'modules');
 $config->bug->search['params']['execution']     = array('operator' => '=',       'control' => 'select', 'values' => 'executions');
-
 $config->bug->search['params']['severity']      = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->severityList);
 $config->bug->search['params']['pri']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->priList);
 $config->bug->search['params']['type']          = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->typeList);
-$config->bug->search['params']['os']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->osList);
-$config->bug->search['params']['browser']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->browserList);
+$config->bug->search['params']['os']            = array('operator' => 'include', 'control' => 'select', 'values' => $lang->bug->osList);
+$config->bug->search['params']['browser']       = array('operator' => 'include', 'control' => 'select', 'values' => $lang->bug->browserList);
 $config->bug->search['params']['resolution']    = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->resolutionList);
-
 $config->bug->search['params']['activatedCount']= array('operator' => '>=',      'control' => 'input',  'values' => '');
-
 $config->bug->search['params']['toTask']        = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->bug->search['params']['toStory']       = array('operator' => '=',       'control' => 'input',  'values' => '');
-
 $config->bug->search['params']['openedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-
-$config->bug->search['params']['mailto']        = array('operator' => 'include',       'control' => 'select', 'values' => 'users');
-
+$config->bug->search['params']['mailto']        = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['openedBuild']   = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild'] = array('operator' => '=',       'control' => 'select', 'values' => 'builds');
-
-$config->bug->search['params']['openedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['assignedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['resolvedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['closedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['lastEditedDate']= array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['activatedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['openedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['assignedDate']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['resolvedDate']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['closedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['lastEditedDate']= array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['deadline']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['activatedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
 $config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'confirmed', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
@@ -303,12 +296,13 @@ $config->bug->datatable->fieldList['openedBuild']['fixed']      = 'no';
 $config->bug->datatable->fieldList['openedBuild']['width']      = '120';
 $config->bug->datatable->fieldList['openedBuild']['required']   = 'no';
 $config->bug->datatable->fieldList['openedBuild']['control']    = 'multiple';
-$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'openedBuild&id,name');
+$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
 
 $config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->bug->datatable->fieldList['assignedTo']['width']    = '120';
 $config->bug->datatable->fieldList['assignedTo']['required'] = 'no';
+$config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'bug', 'method' =>'getProductMemberPairs', 'params' => '$productID&$branch');
 
 $config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';

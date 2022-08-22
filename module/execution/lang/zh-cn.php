@@ -536,10 +536,19 @@ $lang->execution->treeLevel['task']  = '全部显示';
 $lang->execution->treeLevel['story'] = "只看{$lang->SRCommon}";
 
 $lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
-$lang->execution->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-$lang->execution->action->edited  = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
-$lang->execution->action->extra   = '相关产品为 %s。';
+$lang->execution->action->opened               = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
+$lang->execution->action->managed              = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+$lang->execution->action->edited               = '$date, 由 <strong>$actor</strong> 编辑。$extra' . "\n";
+$lang->execution->action->extra                = '相关产品为 %s。';
+$lang->execution->action->startbychildactivate = '$date, 系统判断由于子阶段激活，将' . $lang->executionCommon . '状态置为进行中。' . "\n";
+$lang->execution->action->waitbychilddelete    = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为未开始。' . "\n";
+$lang->execution->action->closebychilddelete   = '$date, 系统判断由于子阶段删除，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
+$lang->execution->action->closebychildclose    = '$date, 系统判断由于子阶段关闭，将' . $lang->executionCommon . '状态置为已关闭。' . "\n";
+
+$lang->execution->startbychildactivate = '激活了';
+$lang->execution->waitbychilddelete    = '停止了';
+$lang->execution->closebychilddelete   = '关闭了';
+$lang->execution->closebychildclose    = '关闭了';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';

@@ -319,6 +319,24 @@ class branchTest
     }
 
     /**
+     * Test check branch data.
+     *
+     * @param  int    $branchID
+     * @access public
+     * @return int
+     */
+    public function setDefaultTest($productID, $branchID)
+    {
+        $this->objectModel->setDefault($productID, $branchID);
+
+        if(dao::isError()) return dao::getError();
+
+        $object = $this->objectModel->getById($branchID, $productID, '');
+
+        return $object;
+    }
+
+    /**
      * Test get branches of product which linked project.
      *
      * @param  int     $projectID

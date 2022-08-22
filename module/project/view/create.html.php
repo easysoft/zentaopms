@@ -32,7 +32,7 @@
 <?php js::set('parentBudget', $lang->project->parentBudget);?>
 <?php js::set('beginLetterParent', $lang->project->beginLetterParent);?>
 <?php js::set('endGreaterParent', $lang->project->endGreaterParent);?>
-<?php js::set('dateExceedParent', $lang->project->dateExceedParent);?>
+<?php js::set('ignore', $lang->project->ignore);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
@@ -46,7 +46,7 @@
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       <?php else: ?>
         <button type='button' class='btn btn-link open-btn' data-toggle='modal' data-target='#maxCopyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
-      <?php endif; ?> 
+      <?php endif; ?>
       </div>
       <?php endif; ?>
     </div>
@@ -55,7 +55,7 @@
         <tr>
           <th class='w-130px'><?php echo $lang->project->parent;?></th>
           <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)' $disabled");?></td>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' data-lastSelected=$programID onchange='setParentProgram(this.value)' $disabled");?></td>
           <?php if($disabled) echo html::hidden('parent', $programID);?>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->program->tips;?>"></icon>

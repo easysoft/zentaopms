@@ -373,4 +373,94 @@ class admin extends control
         $this->view->title = $this->lang->admin->resetPWDSetting;
         $this->display();
     }
+
+    /**
+     * Show table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function tableEngine()
+    {
+        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->tableEngines = $this->loadModel('misc')->getTableEngines();
+        $this->display();
+    }
+
+    /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine()
+    {
+        $response = array();
+        $response['result']    = 'success';
+        $response['message']   = '';
+        $response['thisTable'] = '';
+        $response['nextTable'] = '';
+
+        $tableEngines = $this->loadModel('misc')->getTableEngines();
+
+        $thisTable = '';
+        $nextTable = '';
+        foreach($tableEngines as $table => $engine)
+        {
+            if($engine == 'InnoDB') continue;
+            if(strpos(",{$this->session->errorTables},", ",{$table},") !== false) continue;
+
+            if(stripos($table, 'searchindex') !== false)
+            {
+                $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+                if($mysqlVersion < 5.6) continue;
+            }
+
+            if($thisTable and empty($nextTable)) $nextTable = $table;
+            if(empty($thisTable)) $thisTable = $table;
+            if($thisTable and $nextTable) break;
+        }
+
+        if(empty($thisTable))
+        {
+            unset($_SESSION['errorTables']);
+            $response['result'] = 'finished';
+            return print(json_encode($response));
+        }
+
+        try
+        {
+            /* Check process this table or not. */
+            $dbProcesses = $this->dbh->query("SHOW PROCESSLIST")->fetchAll();
+            foreach($dbProcesses as $dbProcess)
+            {
+                if($dbProcess->db != $this->config->db->name) continue;
+                if(strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                {
+                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
+                    return print(json_encode($response));
+                }
+            }
+        }
+        catch(PDOException $e){}
+
+        $response['thisTable'] = $thisTable;
+        $response['nextTable'] = $nextTable;
+
+        try
+        {
+            $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
+            $this->dbh->exec($sql);
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
+        }
+        catch(PDOException $e)
+        {
+            $this->session->set('errorTables', $this->session->errorTables . ',' . $thisTable);
+
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
+        }
+
+        return print(json_encode($response));
+    }
 }

@@ -22,12 +22,23 @@ $lang->admin->captcha         = 'Bestätigungscode';
 $lang->admin->getCaptcha      = 'Bestätigungscode anfordern';
 $lang->admin->register        = 'Register';
 $lang->admin->resetPWDSetting = 'Reset password Setting';
+$lang->admin->tableEngine     = 'Table Engine';
 
 $lang->admin->api            = 'API';
 $lang->admin->log            = 'Log';
 $lang->admin->setting        = 'Einstellungen';
 $lang->admin->days           = 'Gültige Tage';
 $lang->admin->resetPWDByMail = 'Reset the password via the email';
+
+$lang->admin->changeEngine   = "Change to InnoDB";
+$lang->admin->changingTable  = 'Replacing data table %s engine...';
+$lang->admin->changeSuccess  = 'The data table %s engine has been changed to InnoDB.';
+$lang->admin->changeFail     = "Failed to replace table %s engine. Reason: <span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb    = 'Your MySQL does not support InnoDB data table engine.';
+$lang->admin->changeFinished = "Database engine replacement completed.";
+$lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>%s</strong>.";
+$lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
+$lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Aktuelle Version ist %s. ';
@@ -64,6 +75,7 @@ $lang->admin->safe->checkWeak                = 'Schwache Passwörter prüfen';
 $lang->admin->safe->changeWeak               = 'Ihr Passwort ist schwach. Bitte ändern.';
 $lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
+$lang->admin->safe->passwordStrengthWeak     = 'The password strength is weaker than the system settings.';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';

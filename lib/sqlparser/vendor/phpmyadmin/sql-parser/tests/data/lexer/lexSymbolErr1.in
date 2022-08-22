@@ -1,0 +1,2 @@
+SET @idx := 1;
+SELECT @idx, @`idx`, @'idx

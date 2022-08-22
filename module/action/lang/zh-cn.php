@@ -57,6 +57,7 @@ $lang->action->historyEdit        = '历史记录编辑不能为空。';
 $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
+$lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
 
 $lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
 $lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
@@ -128,6 +129,7 @@ $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
 $lang->action->objectTypes['gitea']            = 'Gitea服务器';
+$lang->action->objectTypes['gogs']             = 'Gogs服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = '合并请求';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab项目';
@@ -138,6 +140,7 @@ $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
 $lang->action->objectTypes['giteauser']        = 'Gitea用户';
+$lang->action->objectTypes['gogsuser']         = 'Gogs用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板区域';
@@ -245,10 +248,6 @@ $lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需
 $lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
-
-/* 用来描述gantt chat相关操作记录。 */
-$lang->action->desc->ganttdrag = '$date, 由 <strong>$actor</strong> 拖动了任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->ganttmove = '$date, 由 <strong>$actor</strong> 排序了任务 <strong>$extra</strong>。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
@@ -388,7 +387,6 @@ $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
 $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
-$lang->action->label->ganttdrag             = '拖动了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
 
@@ -548,6 +546,7 @@ $lang->action->dynamicAction->task['undeleted']           = '还原任务';
 $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
+$lang->action->dynamicAction->task['ganttmove']           = '排序';
 
 $lang->action->dynamicAction->build['opened']  = '创建版本';
 $lang->action->dynamicAction->build['edited']  = '编辑版本';
@@ -644,19 +643,32 @@ $lang->action->dynamicAction->job['executed']  = '执行构建任务';
 $lang->action->dynamicAction->job['deleted']   = '删除构建任务';
 $lang->action->dynamicAction->job['undeleted'] = '还原构建任务';
 
-$lang->action->dynamicAction->sonarqube['created'] = '创建SonarQube服务器';
-$lang->action->dynamicAction->sonarqube['edited']  = '设置SonarQube服务器';
-$lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['created']   = '创建SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['edited']    = '设置SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['deleted']   = '删除SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['undeleted'] = '还原SonarQube服务器';
 
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
 
-$lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
-$lang->action->dynamicAction->gitlab['edited']  = '编辑GitLab服务器';
-$lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
+$lang->action->dynamicAction->gitlab['created']   = '创建GitLab服务器';
+$lang->action->dynamicAction->gitlab['edited']    = '编辑GitLab服务器';
+$lang->action->dynamicAction->gitlab['deleted']   = '删除GitLab服务器';
+$lang->action->dynamicAction->gitlab['undeleted'] = '还原GitLab服务器';
 
-$lang->action->dynamicAction->gitea['created'] = '创建Gitea服务器';
-$lang->action->dynamicAction->gitea['edited']  = '编辑Gitea服务器';
-$lang->action->dynamicAction->gitea['deleted'] = '删除Gitea服务器';
+$lang->action->dynamicAction->gitea['created']   = '创建Gitea服务器';
+$lang->action->dynamicAction->gitea['edited']    = '编辑Gitea服务器';
+$lang->action->dynamicAction->gitea['deleted']   = '删除Gitea服务器';
+$lang->action->dynamicAction->gitea['undeleted'] = '还原Gitea服务器';
+
+$lang->action->dynamicAction->gogs['created']   = '创建Gogs服务器';
+$lang->action->dynamicAction->gogs['edited']    = '编辑Gogs服务器';
+$lang->action->dynamicAction->gogs['deleted']   = '删除Gogs服务器';
+$lang->action->dynamicAction->gogs['undeleted'] = '还原Gogs服务器';
+
+$lang->action->dynamicAction->repo['created']   = '创建代码库';
+$lang->action->dynamicAction->repo['edited']    = '编辑代码库';
+$lang->action->dynamicAction->repo['deleted']   = '删除代码库';
+$lang->action->dynamicAction->repo['undeleted'] = '还原代码库';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

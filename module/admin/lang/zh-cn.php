@@ -22,12 +22,23 @@ $lang->admin->captcha         = '验证码';
 $lang->admin->getCaptcha      = '获取验证码';
 $lang->admin->register        = '登记';
 $lang->admin->resetPWDSetting = '重置密码设置';
+$lang->admin->tableEngine     = '表引擎';
 
 $lang->admin->api            = '接口';
 $lang->admin->log            = '日志';
 $lang->admin->setting        = '设置';
 $lang->admin->days           = '日志保存天数';
 $lang->admin->resetPWDByMail = '通过邮箱重置密码';
+
+$lang->admin->changeEngine   = "更换到InnoDB";
+$lang->admin->changingTable  = '正在更换数据表%s引擎...';
+$lang->admin->changeSuccess  = '已经更换数据表%s引擎为InnoDB。';
+$lang->admin->changeFail     = "更换数据表%s引擎失败，原因：<span class='text-red'>%s</span>。";
+$lang->admin->errorInnodb    = '您当前的数据库不支持使用InnoDB数据表引擎。';
+$lang->admin->changeFinished = "更换数据库引擎完毕。";
+$lang->admin->engineInfo     = "表<strong>%s</strong>的引擎是<strong>%s</strong>。";
+$lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
+$lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
@@ -64,6 +75,7 @@ $lang->admin->safe->checkWeak                = '弱口令扫描';
 $lang->admin->safe->changeWeak               = '修改弱口令密码';
 $lang->admin->safe->loginCaptcha             = '登录使用验证码';
 $lang->admin->safe->modifyPasswordFirstLogin = '首次登录修改密码';
+$lang->admin->safe->passwordStrengthWeak     = '密码强度小于系统设置';
 
 $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';

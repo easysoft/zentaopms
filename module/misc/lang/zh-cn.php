@@ -187,7 +187,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['17.5'][]       = array('title' => '优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.5'][]       = array('title' => '提供高效的可视化统计工具。优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.4'][]       = array('title' => '详情页面的视觉优化和部分页面跳转逻辑优化。看板功能完善。文档创建和编辑页面优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.3'][]       = array('title' => '统计、后台等模块的UI优化，用例库同步用例信息功能优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.2'][]       = array('title' => '调整敏捷项目区块的展示，项目集、项目和测试相关UI优化，细节体验优化。修复Bug。', 'desc' => '');

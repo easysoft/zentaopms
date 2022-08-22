@@ -45,7 +45,7 @@ class task extends control
         parse_str($extra, $output);
 
         if(!empty($executionID)) $execution = $this->execution->getById($executionID);
-        $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
+        $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
         $this->execution->setMenu($executionID);
@@ -267,7 +267,7 @@ class task extends control
             if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
 
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -291,13 +291,23 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
+        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'noclosed', 0, true);
+
+        $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        /* Stories that can be used to create test tasks. */
+        $testStories     = array();
+        foreach($stories as $storyID => $storyTitle)
+        {
+            if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;
+            $testStories[$storyID] = $storyTitle;
+        }
 
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
         $this->view->showAllModule = $showAllModule;
 
         $this->view->title            = $title;
+        $this->view->testStories      = $testStories;
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
@@ -307,7 +317,7 @@ class task extends control
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
         $this->view->stories          = $stories;
-        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
+        $this->view->testStoryIdList  = $testStoryIdList;
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -472,6 +482,7 @@ class task extends control
         $position[] = $this->lang->task->batchCreate;
 
         if($taskID) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
+        if($taskID) $this->view->parentPri   = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('pri');
 
         $this->view->title        = $title;
         $this->view->position     = $position;

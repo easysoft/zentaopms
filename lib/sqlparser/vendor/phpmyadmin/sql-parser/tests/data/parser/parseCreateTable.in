@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS users (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(64) NULL,
+    `password` VARCHAR(256) DEFAULT '123456',
+    CONSTRAINT pk_id PRIMARY KEY (`id`),
+    UNIQUE (username)
+) ENGINE=InnoDB;

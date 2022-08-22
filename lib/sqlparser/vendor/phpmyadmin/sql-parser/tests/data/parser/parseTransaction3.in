@@ -1,0 +1,3 @@
+begin;
+SELECT * FROM `tablename`
+commit;

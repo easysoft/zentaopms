@@ -13,13 +13,13 @@ pid=1
 
 测试修改block 名称 >> 欢迎test,my,8,welcome
 测试修改block 模块 >> 我的贡献,my,8,dynamic
-测试修改block 区块 >> 项目统计,my,8,projectteam
-测试修改block 变量 >> 未关闭的产品,product,8,statistic
+测试修改block 区块 >> 项目统计,projectteam,8,projectteam
+测试修改block 变量 >> 未关闭的产品,statistic,8,statistic
 
 */
 
 $blockID = array('95', '99', '113');
-$module  = 'product';
+$source  = 'product';
 
 $changeTitle = new stdclass();
 $changeTitle->modules    = 'welcome';
@@ -51,8 +51,8 @@ $changeParams->actionLink  = '/block-set-95-welcome-.html';
 
 $block = new blockTest();
 
-r($block->saveTest($changeTitle,   $blockID[0], $changeTitle->modules))                                       && p('title,module,grid,block') && e('欢迎test,my,8,welcome');            // 测试修改block 名称
-r($block->saveTest($changeModules, $blockID[0], $changModules->modules))                                      && p('title,module,grid,block') && e('我的贡献,my,8,dynamic');            // 测试修改block 模块
-r($block->saveTest($changeBlock,   $blockID[1], $changeBlock->modules,  $changeBlock->moduleBlock))           && p('title,module,grid,block') && e('项目统计,my,8,projectteam');        // 测试修改block 区块
-r($block->saveTest($changeParams,  $blockID[2], $changeParams->modules, $changeParams->moduleBlock, $module)) && p('title,module,grid,block') && e('未关闭的产品,product,8,statistic'); // 测试修改block 变量
+r($block->saveTest($changeTitle,   $blockID[0], $source, $changeTitle->modules))                              && p('title,module,grid,block') && e('欢迎test,my,8,welcome');            // 测试修改block 名称
+r($block->saveTest($changeModules, $blockID[0], $source, $changeModules->modules))                            && p('title,module,grid,block') && e('我的贡献,my,8,dynamic');            // 测试修改block 模块
+r($block->saveTest($changeBlock,   $blockID[1], $source, $changeBlock->modules,  $changeBlock->moduleBlock))  && p('title,module,grid,block') && e('项目统计,projectteam,8,projectteam');        // 测试修改block 区块
+r($block->saveTest($changeParams,  $blockID[2], $source, $changeParams->modules, $changeParams->moduleBlock)) && p('title,module,grid,block') && e('未关闭的产品,statistic,8,statistic'); // 测试修改block 变量
 $db->restoreDB();

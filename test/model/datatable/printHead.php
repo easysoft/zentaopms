@@ -10,7 +10,10 @@ title=测试 datatableModel::printHead();
 cid=1
 pid=1
 
-
+获取产品模块browse方法头部html           >> 1
+获取产品模块browse方法头部html带排序     >> 1
+获取产品模块browse方法头部html带参数     >> 1
+获取产品模块browse方法头部html带checkbox >> 1
 
 */
 

@@ -34,4 +34,5 @@ INSERT INTO `zt_config` (`id`, `vision`, `owner`, `module`, `section`, `key`, `v
 (33,	'rnd',	'system',	'common',	'global',	'skipIntroduction',	',admin'),
 (34,	'rnd',	'system',	'common',	'global',	'skipTutorial',	',admin'),
 (35,	'rnd',	'system',	'common',	'global',	'skipYoungBlueTheme',	',admin'),
-(36,	'rnd',	'system',	'common',	'global',	' scoreStatus',	'1');
+(36,	'rnd',	'system',	'common',	'global',	'scoreStatus',	'1'),
+(37,	'rnd',	'system',	'sso',	        ''      ,	'key',	'858640a724c2c981983935eb2bbc4ad8');

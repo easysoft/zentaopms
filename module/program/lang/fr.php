@@ -48,6 +48,7 @@ $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
 $lang->program->childProgram   = 'sous-programme';
+$lang->program->ignore         = 'Ignorer';
 
 /* Actions. */
 $lang->program->common                  = 'Program';

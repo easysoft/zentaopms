@@ -3,6 +3,7 @@ class Gitea
 {
     public $client;
     public $root;
+    public $repo;
 
     /**
      * Construct
@@ -28,8 +29,11 @@ class Gitea
             $project = $app->control->loadModel('gitea')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
             if(isset($project->tokenCloneUrl))
             {
-                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"';
+                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"  > "' . $app->getTmpRoot() . "log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log\" 2>&1 &";
+                if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
                 exec($cmd);
+
+                return $app->control->locate($app->control->createLink('repo', 'showSyncCommit', "repoID={$repo->id}"));
             }
         }
 
@@ -40,6 +44,7 @@ class Gitea
             if(isset($branches[$branch])) $branch = "origin/$branch";
         }
         $this->branch = $branch;
+        $this->repo   = $repo;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -159,7 +164,7 @@ class Gitea
         {
             $localBranch = trim($localBranch);
             if(substr($localBranch, 0, 19) == 'remotes/origin/HEAD') continue;
-            if(substr($localBranch, 0, 1) == '*') $localBranch = substr($localBranch, 1);
+            if(substr($localBranch, 0, 1) == '*') continue;
             if(substr($localBranch, 0, 15) == 'remotes/origin/') $localBranch = substr($localBranch, 15);
 
             $localBranch = trim($localBranch);
@@ -551,9 +556,15 @@ class Gitea
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch)
+        {
+            $revision = $branch;
+        }
+        elseif(is_numeric($revision))
+        {
+            $revision = "--skip=$revision $branch";
+        }
+        $count = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
         if($branch)
@@ -598,11 +609,11 @@ class Gitea
                 list($action, $path) = $file;
 
                 $parsedFile = new stdclass();
-                $parsedFile->revision = $hash;
-                $parsedFile->path     = '/' . trim($path);
-                $parsedFile->type     = 'file';
-                $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
+                $parsedFile->revision   = $hash;
+                $parsedFile->path       = '/' . trim($path);
+                $parsedFile->type       = 'file';
+                $parsedFile->action     = $action;
+                $logs['files'][$hash][] = $parsedFile;
             }
         }
         return $logs;
@@ -689,5 +700,21 @@ class Gitea
         }
 
         return $parsedLogs;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
+    {
+        global $app;
+        $api = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
+        return sprintf($api, "/repos/{$this->repo->serviceProject}/archive/{$branch}.zip");
     }
 }

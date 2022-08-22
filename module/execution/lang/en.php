@@ -536,10 +536,19 @@ $lang->execution->treeLevel['task']  = 'Stories&Tasks';
 $lang->execution->treeLevel['story'] = 'Only Stories';
 
 $lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, created by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->extra   = 'Linked products is %s.';
+$lang->execution->action->opened               = '$date, created by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->managed              = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->edited               = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->extra                = 'Linked products is %s.';
+$lang->execution->action->startbychildactivate = '$date, activating the sub stage sets the execution status as Ongoing.' . "\n";
+$lang->execution->action->waitbychilddelete    = '$date, deleting the sub stage sets the execution status as waitting.' . "\n";
+$lang->execution->action->closebychilddelete   = '$date, deleting the sub stage sets the execution status as closing.' . "\n";
+$lang->execution->action->closebychildclose    = '$date, closing the sub stage sets the execution status as closing.' . "\n";
+
+$lang->execution->startbychildactivate = 'activated';
+$lang->execution->waitbychilddelete    = 'stop';
+$lang->execution->closebychilddelete   = 'closed';
+$lang->execution->closebychildclose    = 'closed';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';

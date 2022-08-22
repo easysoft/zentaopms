@@ -254,6 +254,8 @@ class blockModel extends model
      */
     public function initBlock($module, $type = '')
     {
+        if(empty($module)) return;
+
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
         $vision  = $this->config->vision;
@@ -507,7 +509,7 @@ class blockModel extends model
         $this->app->loadLang('project');
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->project->featureBar;
+        $params->type['options'] = $this->lang->project->featureBar['browse'];
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -969,11 +971,10 @@ class blockModel extends model
     /**
      * Get project dynamic params.
      *
-     * @param  string $module
      * @access public
      * @return string
      */
-    public function getProjectDynamicParams($module = '')
+    public function getProjectDynamicParams()
     {
         $params = $this->appendCountParams();
 

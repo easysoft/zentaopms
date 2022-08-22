@@ -31,7 +31,7 @@
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanbanlane->error->mustBeInt}' autocomplete='off'");?></td>
         </tr>
         <?php endif;?>
         <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton();?></td></tr>

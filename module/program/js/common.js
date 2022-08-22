@@ -1,3 +1,8 @@
+window.ignoreTips = {
+    'beyondBudgetTip' : false,
+    'dateTip'         : false
+};
+
 /**
  * Access rights are equal to private, and the white list settings are displayed.
  *
@@ -331,6 +336,7 @@ function setBudgetTipsAndAclList(parentID)
  */
 function compareChildDate()
 {
+    if(window.ignoreTips['dateTip']) return;
     if(page == 'create') return;
 
     var end               = $('#end').val();
@@ -354,17 +360,13 @@ function compareChildDate()
             if(programBegin <= childBegin && programEnd >= childEnd) return;
 
             var dateTip = '';
-            if(programBegin > childBegin && programEnd >= childEnd)
+            if(programBegin > childBegin)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + beginGreateChild + childInfo.minChildBegin + "</span>";
+                dateTip = "<span id='dateTip' class='text-remind'><p>" + beginGreateChild + childInfo.minChildBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
-            else if(programEnd < childEnd && programBegin <= childBegin)
+            else if(programEnd < childEnd)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + endLetterChild + childInfo.maxChildEnd + "</span>";
-            }
-            else
-            {
-                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedChild + childInfo.minChildBegin + "~" + childInfo.maxChildEnd + "</span>";
+                dateTip = "<span id='dateTip' class='text-remind'><p>" + endLetterChild + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
 
             $('#dateBox').after(dateTip);
@@ -380,6 +382,8 @@ function compareChildDate()
  */
 function outOfDateTip()
 {
+    if(window.ignoreTips['dateTip']) return;
+
     var end   = $('#end').val();
     var begin = $('#begin').val();
     if($('#dateTip').length > 0) $('#dateTip').remove();
@@ -411,17 +415,13 @@ function outOfDateTip()
                 return;
             }
 
-            if(programBegin < parentBegin && programEnd <= parentEnd && programEnd >= parentBegin)
+            if(programBegin < parentBegin)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+                dateTip = "<span id='dateTip' class='text-remind'><p>" + beginLetterParent + data.selectedProgramBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
-            else if(programEnd > parentEnd && programBegin >= parentBegin && programBegin <= parentEnd)
+            else if(programEnd > parentEnd)
             {
-                dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
-            }
-            else
-            {
-                dateTip = "<span id='dateTip' class='text-remind'>" + dateExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+                dateTip = "<span id='dateTip' class='text-remind'><p>" + endGreaterParent + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
             }
 
             $('#dateBox').after(dateTip);
@@ -437,6 +437,8 @@ function outOfDateTip()
  */
 function budgetOverrunTips()
 {
+    if(window.ignoreTips['beyondBudgetTip']) return;
+
     var selectedProgramID = $('#parent').val();
     var budget            = $('#budget').val();
     if(selectedProgramID == 0)
@@ -451,8 +453,24 @@ function budgetOverrunTips()
         var data = JSON.parse(data);
 
         var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         $('#budgetBox').after(tip);
     });
+}
+
+/**
+ * Make this prompt no longer appear.
+ *
+ * @param  string  $obj
+ * @access public
+ * @return void
+ */
+function ignoreTip(obj)
+{
+    var parentID = obj.parentNode.id;
+    $('#' + parentID).addClass('hidden');
+
+    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }

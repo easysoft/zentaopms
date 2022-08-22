@@ -33,6 +33,5 @@ r($action->createTest($objectTypeList[1], $objectIDList[1], $actionTypeList[1]))
 r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[2]))                 && p('objectType,objectId,action,comment') && e('user,,login,');             // 测试创建user 1 login动态
 r($action->createTest($objectTypeList[3], $objectIDList[0], $actionTypeList[3]))                 && p('objectType,objectId,action,comment') && e('bug,,closed,');             // 测试创建bug 1 closed动态
 r($action->createTest($objectTypeList[4], $objectIDList[0], $actionTypeList[4], $comment))       && p('objectType,objectId,action,comment') && e('story,,comments,测试备注'); // 测试创建story 1 comment动态
-r($action->createTest($objectTypeList[4], $objectIDList[0], $actionTypeList[4]))                 && p()                                     && e('');                        // 测试创建story 1 comment动态 不填写备注
 r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[5], '', '', $actor)) && p()                                     && e('0');                        // 测试创建游客 logout动态
 $db->restoreDB();

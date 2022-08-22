@@ -3082,6 +3082,26 @@ class storyModel extends model
     }
 
     /**
+     * Get Story changed Revert ObjectID.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getRevertStoryIDList($productID)
+    {
+        $review =  $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('product')->like("%,$productID,%")
+            ->andWhere('action')->eq('reviewed')
+            ->andWhere('objectType')->eq('story')
+            ->andWhere('extra')->eq('Revert')
+            ->groupBy('objectID')
+            ->orderBy('id_desc')
+            ->fetchPairs();
+        return $review;
+    }
+
+    /**
      * Get stories by a sql.
      *
      * @param  int    $productID
@@ -3100,9 +3120,24 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
+        $review = $this->getRevertStoryIDList($productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        if(strpos($sql, 'result') !== false)
+        {
+            if(strpos($sql, 'revert') !== false)
+            {
+                $sql  = str_replace("AND `result` = 'revert'", '', $sql);
+                $sql .= " AND t1.`id` " . helper::dbIN($review);
+            }
+            else
+            {
+                $sql = str_replace(array('`result`'), array('t3.`result`'), $sql);
+            }
+        }
+
         $tmpStories = $this->dao->select('DISTINCT t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -3122,6 +3157,7 @@ class storyModel extends model
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
             $stories[$story->id] = $story;
         }
+
         return $stories;
     }
 
@@ -3182,9 +3218,27 @@ class storyModel extends model
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
 
+            $products  = $this->loadModel('product')->getProducts($executionID);
+            if($products) $productID = key($products);
+            $review = $this->getRevertStoryIDList($productID);
+
+            if(strpos($storyQuery, 'result') !== false)
+            {
+                if(strpos($storyQuery, 'revert') !== false)
+                {
+                    $storyQuery  = str_replace("AND t2.`result` = 'revert'", '', $storyQuery);
+                    $storyQuery .= " AND t2.`id` " . helper::dbIN($review);
+                }
+                else
+                {
+                    $storyQuery = str_replace(array('t2.`result`'), array('t4.`result`'), $storyQuery);
+                }
+            }
+
             $stories = $this->dao->select('distinct t1.*, t2.*, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+                ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
@@ -4160,11 +4214,11 @@ class storyModel extends model
             if(common::canBeChanged('story', $story))
             {
                 $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
+                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
                 $title   = (!$isClick and $story->status != 'closed' and $story->status != 'draft') ? $this->lang->story->changeTip : '';
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
+                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
@@ -4193,7 +4247,7 @@ class storyModel extends model
                             $title = $this->lang->story->reviewTip['recalled'];
                         }
                     }
-                    $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
+                    $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 }
 
                 $isClick = $this->isClickable($story, 'recall');
@@ -4205,10 +4259,12 @@ class storyModel extends model
                     if(empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
                     if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
                 }
-                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
-                $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
-                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type, '', '', 'showinonlybody', false);
+                $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+
+                $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
+                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
@@ -4229,32 +4285,32 @@ class storyModel extends model
                             if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
                         }
                     }
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
 
             }
             else
             {
-                return $this->buildMenu('story', 'close', $params, $story, 'list', '', '', 'iframe', true);
+                return $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, 'list', '', '', 'iframe', true);
             }
         }
 
         if($type == 'view')
         {
-            $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
             if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params, $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-            $menu .= $this->buildMenu('story', 'recall', $params . '&from=view', $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+            $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
-            $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'review', $params . "&from=product&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody');
 
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
-            $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
-            $menu .= $this->buildMenu('story', 'activate', $params, $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'close',    $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'activate', $params . "&storyType=$story->type", $story, $type, '', '', 'iframe showinonlybody', true);
 
             if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
 
@@ -4290,9 +4346,9 @@ class storyModel extends model
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('story', 'edit', $params, $story, $type, '', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type);
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
-            $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'delete', $params . "&confirm=no&from=&storyType=$story->type", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
 
         if($type == 'execution')
@@ -4520,7 +4576,7 @@ class storyModel extends model
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
-        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id");
+        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
         $canView     = common::hasPriv('story', 'view');
 
         if($tab == 'project')
@@ -4539,13 +4595,13 @@ class storyModel extends model
         $canOrder     = common::hasPriv('execution', 'storySort');
 
         $canBatchEdit         = common::hasPriv('story',        'batchEdit');
-        $canBatchClose        = common::hasPriv('story',        'batchClose');
+        $canBatchClose        = common::hasPriv($story->type,   'batchClose');
         $canBatchReview       = common::hasPriv('story',        'batchReview');
         $canBatchChangeStage  = common::hasPriv('story',        'batchChangeStage');
-        $canBatchChangeBranch = common::hasPriv('story',        'batchChangeBranch');
-        $canBatchChangeModule = common::hasPriv('story',        'batchChangeModule');
+        $canBatchChangeBranch = common::hasPriv($story->type,   'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv($story->type,   'batchChangeModule');
         $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
-        $canBatchAssignTo     = common::hasPriv('story',        'batchAssignTo');
+        $canBatchAssignTo     = common::hasPriv($story->type,   'batchAssignTo');
         $canBatchUnlinkStory  = common::hasPriv('projectstory', 'batchUnlinkStory');
         $canBatchUnlink       = common::hasPriv('execution',    'batchUnlinkStory');
 
@@ -4641,7 +4697,7 @@ class storyModel extends model
             }
             elseif($id == 'actions')
             {
-                $class .= ' text-center';
+                $class .= ' text-left';
             }
             elseif($id == 'order')
             {
@@ -4653,14 +4709,8 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                if($canBatchAction)
-                {
-                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'");
-                }
-                else
-                {
-                    printf('%03d', $story->id);
-                }
+                if($canBatchAction) echo html::checkbox('storyIdList', array($story->id => ''));
+                echo $canView ? html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'") : sprintf('%03d', $story->id);
                 break;
             case 'order':
                 echo "<i class='icon-move'>";
@@ -4844,10 +4894,10 @@ class storyModel extends model
 
         $btnClass     = $story->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
-        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id", '', true);
+        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv('story', 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**
@@ -5772,8 +5822,8 @@ class storyModel extends model
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
         /* Get related objects title or names. */
-        $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-
+        $relatedSpecs = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         foreach($stories as $story)
         {
             $story->spec   = '';
@@ -5890,5 +5940,19 @@ class storyModel extends model
         if(strpos('closed,reviewrejected', $lastAction) !== false) $status = $preStatus;
 
         return $status;
+    }
+
+    /**
+     * Get reviewer pairs for story .
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getStoriesReviewer($productID = 0)
+    {
+        $product   = $this->loadModel('product')->getByID($productID);
+        $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
 }

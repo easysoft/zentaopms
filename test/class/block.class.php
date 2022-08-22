@@ -158,7 +158,7 @@ class blockTest
         $object->blockversion = $tester->loadModel('setting')->getItem("owner=$account&module=$module&section=block&key=initVersion");
 
         $blockData = $this->objectModel->getBlockList($module, $type);
-        $object->blockData = current($blockData);
+        $object->blockData = empty($module) ? 0 : current($blockData);
 
         return $object;
     }
@@ -311,6 +311,12 @@ class blockTest
         return $objects->count;
     }
 
+    /**
+     * Get project params.
+     *
+     * @access public
+     * @return string
+     */
     public function getProjectParamsTest()
     {
         $objects = $this->objectModel->getProjectParams();
@@ -320,6 +326,12 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get project team params.
+     *
+     * @access public
+     * @return string
+     */
     public function getProjectTeamParamsTest()
     {
         $objects = $this->objectModel->getProjectTeamParams();
@@ -364,13 +376,37 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get product params.
+     *
+     * @access public
+     * @return string
+     */
     public function getProductParamsTest()
     {
         $objects = $this->objectModel->getProductParams();
-
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $return  = '';
+        $objects = json_decode($objects);
+        foreach($objects as $type => $params)
+        {
+            $return .= "$type:{";
+            foreach($params as $param => $paramValue)
+            {
+                if(is_object($paramValue))
+                {
+                    foreach($paramValue as $key => $value) $return .= "$key=>$value,";
+                }
+                else
+                {
+                    $return .= "$param:$paramValue,";
+                }
+            }
+            $return  = trim($return, ',');
+            $return .= '};';
+        }
+        return $return;
     }
 
     /**
@@ -389,13 +425,37 @@ class blockTest
         return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Get product statistic params.
+     *
+     * @access public
+     * @return string
+     */
     public function getProductStatisticParamsTest()
     {
         $objects = $this->objectModel->getProductStatisticParams();
-
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $return  = '';
+        $objects = json_decode($objects);
+        foreach($objects as $type => $params)
+        {
+            $return .= "$type:{";
+            foreach($params as $param => $paramValue)
+            {
+                if(is_object($paramValue))
+                {
+                    foreach($paramValue as $key => $value) $return .= "$key=>$value,";
+                }
+                else
+                {
+                    $return .= "$param:$paramValue,";
+                }
+            }
+            $return  = trim($return, ',');
+            $return .= '};';
+        }
+        return $return;
     }
 
     /**
@@ -428,6 +488,12 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get qa statistic params.
+     *
+     * @access public
+     * @return object
+     */
     public function getQaStatisticParamsTest()
     {
         $object = $this->objectModel->getQaStatisticParams();
@@ -435,15 +501,6 @@ class blockTest
         if(dao::isError()) return dao::getError();
 
         return json_decode($object);
-    }
-
-    public function getRecentProjectParamsTest()
-    {
-        $objects = $this->objectModel->getRecentProjectParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -578,6 +635,13 @@ class blockTest
         return $bool ? 1 : 2;
     }
 
+    /**
+     * Check API for ranzhi.
+     *
+     * @param  string $hash
+     * @access public
+     * @return bool
+     */
     public function checkAPITest($hash)
     {
         $objects = $this->objectModel->checkAPI($hash);
@@ -602,6 +666,13 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get scrum project list params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getScrumListParamsTest($module = '')
     {
         $objects = $this->objectModel->getScrumListParams($module = '');
@@ -611,15 +682,6 @@ class blockTest
         $objects = json_decode($objects);
 
         return $objects->type;
-    }
-
-    public function getScrumOverviewParamsTest($module = '')
-    {
-        $objects = $this->objectModel->getScrumOverviewParams($module = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -652,22 +714,31 @@ class blockTest
         return $objects;
     }
 
-    public function getProjectDynamicParamsTest($module = '')
+    public function getProjectDynamicParamsTest()
     {
-        $objects = $this->objectModel->getProjectDynamicParams($module = '');
-
+        $objects = $this->objectModel->getProjectDynamicParams();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function getSprintParamsTest($module = '')
-    {
-        $objects = $this->objectModel->getSprintParams($module = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $return  = '';
+        $objects = json_decode($objects);
+        foreach($objects as $type => $params)
+        {
+            $return .= "$type:{";
+            foreach($params as $param => $paramValue)
+            {
+                if(is_object($paramValue))
+                {
+                    foreach($paramValue as $key => $value) $return .= "$key=>$value,";
+                }
+                else
+                {
+                    $return .= "$param:$paramValue,";
+                }
+            }
+            $return  = trim($return, ',');
+            $return .= '};';
+        }
+        return $return;
     }
 
     /**

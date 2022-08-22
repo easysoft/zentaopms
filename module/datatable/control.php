@@ -97,6 +97,7 @@ class datatable extends control
             unset($cols['taskCount']);
             unset($cols['bugCount']);
             unset($cols['caseCount']);
+            $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         }
 
         $this->view->cols    = $cols;

@@ -1664,6 +1664,7 @@ class kanbanModel extends model
                     if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
                     if($groupBy == 'assignedTo')
                     {
+                        $laneID = (string)$laneID;
                         if(empty($object->team) and $object->$groupBy !== $laneID) continue;
                         if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
 

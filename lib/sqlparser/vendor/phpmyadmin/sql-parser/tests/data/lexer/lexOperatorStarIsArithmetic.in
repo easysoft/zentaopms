@@ -1,0 +1,50 @@
+SELECT 2*3
+SELECT 2 * 3
+SELECT field * 8
+SELECT 8 * field
+SELECT foo * bar
+SELECT `escaped_field` * 16
+SELECT 16 * `escaped_field`
+SELECT `foo` * `bar`
+SELECT `foo`*`bar`
+SELECT 1 * (SELECT COUNT(1) FROM nb_rows)
+SELECT (SELECT COUNT(1) FROM nb_rows) * 1
+SELECT (SELECT COUNT(1) FROM nb_rows) * (SELECT COUNT(1) FROM nb_rows)
+SELECT (1 * 1) * (2 * 2)
+SELECT 1 * (2 * (3 * (4 * 5)))
+SELECT 2.71 * 3.14
+SELECT 2.71 * -3.14
+SELECT -2.71 * 3.14
+SELECT -2.71 * -3.14
+SELECT 0xABC * 0xCBA
+SELECT 0xABC * -0xCBA
+SELECT -0xABC * 0xCBA
+SELECT -0xABC * -0xCBA
+
+-- Now same but with comments inside (C style comments could conflicts with operator if lexer is failing)
+SELECT 2 * /* comment */3
+SELECT 2/* comment */ * 3
+SELECT 2/* comment with * inside */ * 3
+SELECT /* comment */ field /* comment */ * /* comment */ 8 /* comment */
+SELECT /* comment */ 8 /* comment */ * /* comment */ field /* comment */
+SELECT /* comment */ foo /* comment */ * /* comment */ bar /* comment */
+SELECT /* comment */ `escaped_field` /* comment */ * /* comment */ 16 /* comment */
+SELECT /* comment */ 16 /* comment */ * /* comment */ `escaped_field` /* comment */
+SELECT /* comment */ `foo` /* comment */ * /* comment */ `bar` /* comment */
+SELECT /* `comment` */ `foo` /* `comment` */ * /* `comment` */ `bar` /* `comment` */
+SELECT /* comment */ 1 /* comment */ * /* comment */ (SELECT COUNT(/* comment */1/* comment */) /* comment */ FROM nb_rows)
+SELECT /* comment */ (SELECT COUNT(1) /* comment */FROM/* comment */ nb_rows) /* comment */ * /* comment */ 1
+SELECT (SELECT /* comment */ COUNT(1) /* comment */ FROM /* comment */ nb_rows) /* comment */ * /* comment */ (SELECT COUNT(1) FROM nb_rows)
+SELECT (1 * 1) /* comment */ * /* comment */ (2 * 2)
+SELECT /* comment */ 1 /* comment */ * /* comment */ (2 /* comment */ * /* comment */ (3 /* comment */ * /* comment */ (4 /* comment */ * /* comment */ 5))) /* comment */
+SELECT 2.71 /* comment */ * /* comment */ 3.14
+SELECT 2.71 /* comment */ * /* comment */ -3.14
+SELECT -2.71 /* comment */ * /* comment */ 3.14
+SELECT -2.71 /* comment */ * /* comment */ -3.14
+SELECT 0xABC /* comment */ * /* comment */ 0xCBA
+SELECT 0xABC /* comment */ * /* comment */ -0xCBA
+SELECT -0xABC /* comment */ * /* comment */ 0xCBA
+SELECT -0xABC /* comment */ * /* comment */ -0xCBA
+SELECT 1 /* comment with FROM keyword */ * /* comment with USING keyword */1
+SELECT 1 /* comment with ) */ * /* comment with , keyword */1
+

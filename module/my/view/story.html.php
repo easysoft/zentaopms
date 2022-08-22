@@ -90,7 +90,7 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>' title='<?php echo $story->title;?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
+            <?php echo common::hasPriv('story', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : $story->title;?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
           <td class='c-product' title='<?php echo $story->productTitle;?>'><?php echo $story->productTitle;?></td>
@@ -132,9 +132,9 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product' title='$child->title'");?>
           </td>
-          <td class='c-product'><?php echo $child->productTitle;?></td>
+          <td class='c-product' title='<?php echo $child->productTitle;?>'><?php echo $child->productTitle;?></td>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>

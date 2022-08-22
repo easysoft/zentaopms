@@ -63,6 +63,7 @@ $lang->project->teamMembersCount   = ', there are %s team members.';
 $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
+$lang->project->ignore             = 'Ignorer';
 
 /* Fields. */
 $lang->project->common             = 'Projets';
@@ -321,8 +322,8 @@ $lang->project->cannotChangeToCat    = "It is not empty, so you cannot change it
 $lang->project->cannotCancelCat      = "It has child projects, so you cannot unmark the parent.";
 $lang->project->parentBeginEnd       = "Parent begin&end date: %s ~ %s";
 $lang->project->parentBudget         = "The budget of the parent project: ";
-$lang->project->beginLetterParent    = "La date de début du projet était < à la date minimale de début du programme parent:";
-$lang->project->endGreaterParent     = "La date de fin du projet était > à la date de fin maximale du programme parent:";
+$lang->project->beginLetterParent    = "La date de début du projet était < à la date de début du programme parent:";
+$lang->project->endGreaterParent     = "La date de fin du projet était > à la date de fin du programme parent:";
 $lang->project->dateExceedParent     = "La date de début et de fin du project était > à la date de début et de fin du programme parent:";
 $lang->project->beginGreateChild     = 'La date de début du projets "%s" doit être ≥ à la date de début du programme "%s" : %s.';
 $lang->project->endLetterChild       = 'La date de fin du projets doit être ≤ à la date de fin du programme: %s.';
