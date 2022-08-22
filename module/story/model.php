@@ -4533,14 +4533,8 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                if($canBatchAction)
-                {
-                    echo html::checkbox('storyIdList', array($story->id => '')) . html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'");
-                }
-                else
-                {
-                    printf('%03d', $story->id);
-                }
+                if($canBatchAction) echo html::checkbox('storyIdList', array($story->id => ''));
+                echo $canView ? html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'") : sprintf('%03d', $story->id);
                 break;
             case 'order':
                 echo "<i class='icon-move'>";
