@@ -173,7 +173,7 @@
               </tr>
               <?php else:?>
               <tr>
-                <th class='w-85px'><?php echo $lang->testcase->product;?></th>
+                <th><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
@@ -294,7 +294,7 @@
             <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->testcase->openedBy;?></th>
+                <th><?php echo $lang->testcase->openedBy;?></th>
                 <td><?php echo zget($users, $case->openedBy) . $lang->at . $case->openedDate;?></td>
               </tr>
               <tr>
