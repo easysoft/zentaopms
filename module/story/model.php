@@ -3014,9 +3014,9 @@ class storyModel extends model
 
         $review = $this->getRevertStoryIDList($productID);
         $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
-        if(strpos($sql,'result')!== false)
+        if(strpos($sql, 'result') !== false)
         {
-            if(strpos($sql,'revert')!== false)
+            if(strpos($sql, 'revert') !== false)
             {
                 $sql  = str_replace("AND `result` = 'revert'", '', $sql);
                 $sql .= " AND t1.`id` " . helper::dbIN($review);
@@ -3029,7 +3029,7 @@ class storyModel extends model
 
         $tmpStories = $this->dao->select('DISTINCT t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
-            ->beginIF(strpos($sql,'result')!== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
+            ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -3114,9 +3114,9 @@ class storyModel extends model
             if($products) $productID = key($products);
             $review = $this->getRevertStoryIDList($productID);
 
-            if(strpos($storyQuery,'result')!== false)
+            if(strpos($storyQuery, 'result') !== false)
             {
-                if(strpos($storyQuery,'revert')!== false)
+                if(strpos($storyQuery, 'revert') !== false)
                 {
                     $storyQuery  = str_replace("AND t2.`result` = 'revert'", '', $storyQuery);
                     $storyQuery .= " AND t2.`id` " . helper::dbIN($review);
@@ -3130,7 +3130,7 @@ class storyModel extends model
             $stories = $this->dao->select('distinct t1.*, t2.*, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-                ->beginIF(strpos($storyQuery,'result')!== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
+                ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
