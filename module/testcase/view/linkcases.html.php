@@ -52,8 +52,8 @@
             <?php printf('%03d', $case2Link->id);?>
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case2Link->pri, $case2Link->pri)?>'><?php echo zget($lang->testcase->priList, $case2Link->pri, $case2Link->pri)?></span></td>
-          <td><?php echo html::a($this->createLink('product', 'browse', "productID={$case2Link->product}&branch={$case2Link->branch}"), $products[$case2Link->product], '_blank');?></td>
-          <td class='text-left' title='<?php echo $case2Link->title;?>'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case2Link->id"), $case2Link->title, '_blank');?></td>
+          <td class='c-name'><?php echo html::a($this->createLink('product', 'browse', "productID={$case2Link->product}&branch={$case2Link->branch}"), $products[$case2Link->product], '_blank');?></td>
+          <td class='text-left c-name' title='<?php echo $case2Link->title;?>'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case2Link->id"), $case2Link->title, '_blank');?></td>
           <td><?php echo $lang->testcase->typeList[$case2Link->type];?></td>
           <td><?php echo zget($users, $case2Link->openedBy);?></td>
           <td class='case-<?php echo $case2Link->status?>'><?php echo $this->processStatus('testcase', $case2Link);?></td>
@@ -66,6 +66,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php if($caseCount) echo html::submitButton('', '', 'btn btn-default');?></div>
       <?php echo html::hidden('case', $case->id);?>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
