@@ -3170,6 +3170,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         $this->sessSavePath = $savePath;
@@ -3182,6 +3183,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return true;
@@ -3194,6 +3196,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3213,6 +3216,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3243,6 +3247,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3259,6 +3264,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifeTime)
     {
         $time = time();
