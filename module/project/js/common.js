@@ -1,6 +1,6 @@
 window.ignoreTips = {
     'beyondBudgetTip' : false,
-    'dateTip'         : false,
+    'dateTip'         : false
 };
 var batchEditDateTips = new Array();
 
