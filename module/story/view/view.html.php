@@ -25,7 +25,7 @@
       <span class="label label-id"><?php echo $story->id?></span>
       <span class="text" title='<?php echo $story->title;?>' style='color: <?php echo $story->color;?>'>
         <?php if($story->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->story->childrenAB . '</span>';?>
-        <?php if($story->parent > 0) echo isset($story->parentName) ? html::a(inlink('view', "storyID={$story->parent}"), $story->parentName) . ' / ' : '';?><?php echo $story->title;?>
+        <?php if($story->parent > 0) echo isset($story->parentName) ? html::a(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type"), $story->parentName) . ' / ' : '';?><?php echo $story->title;?>
       </span>
       <?php if($story->version > 1):?>
       <small class='dropdown'>
@@ -35,7 +35,7 @@
         for($i = $story->version; $i >= 1; $i --)
         {
             $class = $i == $version ? " class='active'" : '';
-            echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i) . '</li>';
+            echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i&param=0&storyType=$story->type"), '#' . $i) . '</li>';
         }
         ?>
         </ul>
@@ -97,7 +97,7 @@
                 <tbody>
                   <?php foreach($track as $storyID => $storyInfo):?>
                   <tr>
-                     <td style='padding-left: 10px;'><?php echo html::a($this->createLink('story', 'view', "storyID=$storyID"), $storyInfo->title, '', "title='$storyInfo->title'");?>
+                     <td style='padding-left: 10px;'><?php echo html::a($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type"), $storyInfo->title, '', "title='$storyInfo->title'");?>
                      </td>
                      <td>
                       <?php foreach($storyInfo->design as $designID => $design):?>
@@ -162,18 +162,18 @@
                   echo "</span>";
                   ?>
                 </td>
-                <td class='text-left' title='<?php echo $child->title;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('story', 'view', "storyID=$child->id", '', true); ?>"><?php echo $child->title;?></a></td>
+                <td class='text-left' title='<?php echo $child->title;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('story', 'view', "storyID=$child->id&version=0&param=0&storyType=$child->type", '', true); ?>"><?php echo $child->title;?></a></td>
                 <td><?php echo zget($users, $child->assignedTo);?></td>
                 <td title="<?php echo $child->estimate . ' ' . $lang->hourCommon;?>"><?php echo $child->estimate . $config->hourUnit;?></td>
                 <td><?php echo $this->processStatus('story', $child);?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
-                  common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', 'search', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'assignTo', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'close',  "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'activate', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('story', 'edit',   "storyID=$child->id", $child, 'list');
+                  common::printIcon('story', 'change',     "storyID=$child->id&from=&storyType=$child->type", $child, 'list', 'alter');
+                  common::printIcon('story', 'review',     "storyID=$child->id&from=product&storyType=$child->type", $child, 'list', 'search', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'assignTo',   "storyID=$child->id&kanbanGroup=default&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'close',      "storyID=$child->id&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'activate',   "storyID=$child->id&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'edit',       "storyID=$child->id&kanbanGroup=default&storyType=$child->type", $child, 'list');
                   common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap');
                   ?>
                 </td>
@@ -402,11 +402,13 @@
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
-              $relation = array();
+              $relation         = array();
+              $relationType     = $story->type == 'story' ? 'requirement' : 'story';
+              $canViewLinkStory = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
               foreach($relations as $item) $relation[$item->id] = $item->title;
               foreach($relation as $id => $title)
               {
-                  echo "<li title='$title'>" . html::a($this->createLink('story', 'view', "id=$id", '', true), "#$id $title", '', "class='iframe' data-width='80%'");
+                  echo "<li title='$title'>" . ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$relationType", '', true), "#$id $title", '', "class='iframe' data-width='80%'") : "#$id $title");
                   echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
               }
               ?>
@@ -527,7 +529,7 @@
                           {
                               if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
                               {
-                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID&version=0&param=0&storyType=$story->type", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
                               }
                               else
                               {

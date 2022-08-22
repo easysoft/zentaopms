@@ -40,11 +40,11 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $storyType = 'story')
     {
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -59,7 +59,7 @@ class story extends control
             if(!empty($project)) $productID = key($product);
         }
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
@@ -238,7 +238,7 @@ class story extends control
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
-                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
+                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
                 if($this->session->storyList)
                 {
                     /* When copying story in the product plan, return to different pages for story#32949. */
@@ -420,9 +420,9 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $type == 'story' ? $this->story->getRequirements($productID) : '';
+        $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
-        $this->view->type             = $type;
+        $this->view->type             = $storyType;
 
         $this->display();
     }
@@ -436,12 +436,12 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $executionID
      * @param  int    $plan
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $storyType = 'story', $extra = '')
     {
         /* Set menu. */
         if($executionID)
@@ -488,7 +488,7 @@ class story extends control
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
 
         /* Check can subdivide or not. */
         if($storyID)
@@ -499,7 +499,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->story->batchCreate($productID, $branch, $type);
+            $mails = $this->story->batchCreate($productID, $branch, $storyType);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $stories = array();
@@ -576,7 +576,7 @@ class story extends control
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
+                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
                 return print(js::locate($locateLink, 'parent'));
             }
         }
@@ -653,7 +653,7 @@ class story extends control
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
-        if($type == 'requirement')
+        if($storyType == 'requirement')
         {
             unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
@@ -683,7 +683,7 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = isset($story->title) ? $story->title : '';
         $this->view->spec             = $spec;
-        $this->view->type             = $type;
+        $this->view->type             = $storyType;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
@@ -741,10 +741,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function edit($storyID, $kanbanGroup = 'default')
+    public function edit($storyID, $kanbanGroup = 'default', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1064,10 +1065,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $from
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function change($storyID, $from = '')
+    public function change($storyID, $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1161,10 +1163,11 @@ class story extends control
      * Activate a story.
      *
      * @param  int    $storyID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function activate($storyID)
+    public function activate($storyID, $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1215,10 +1218,11 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $version
      * @param  int    $param
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $param = 0)
+    public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
         $uri        = $this->app->getURI(true);
         $tab        = $this->app->tab;
@@ -1315,12 +1319,13 @@ class story extends control
      * Delete a story.
      *
      * @param  int    $storyID
-     * @param  string $confirm  yes|no
-     * @param  string $from taskkanban
+     * @param  string $confirm   yes|no
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no', $from = '')
+    public function delete($storyID, $confirm = 'no', $from = '', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
         if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
@@ -1367,11 +1372,12 @@ class story extends control
      * Review a story.
      *
      * @param  int    $storyID
-     * @param  string $from product|project
+     * @param  string $from      product|project
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function review($storyID, $from = 'product')
+    public function review($storyID, $from = 'product', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1480,10 +1486,11 @@ class story extends control
      *
      * @param  string $result
      * @param  string $reason
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchReview($result, $reason = '')
+    public function batchReview($result, $reason = '', $storyType = 'story')
     {
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1500,10 +1507,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $from
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function recall($storyID, $from = 'list')
+    public function recall($storyID, $from = 'list', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
         $this->story->recall($storyID);
@@ -1519,11 +1527,12 @@ class story extends control
      * Close a story.
      *
      * @param  int    $storyID
-     * @param  string $from taskkanban
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function close($storyID, $from = '')
+    public function close($storyID, $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1721,10 +1730,11 @@ class story extends control
      * Batch change the module of story.
      *
      * @param  int    $moduleID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule($moduleID, $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1816,10 +1826,11 @@ class story extends control
      * @param  int    $branchID
      * @param  string $confirm  yes|no
      * @param  string $storyIdList
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '')
+    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1854,8 +1865,8 @@ class story extends control
                 $normalStotyIdList = array_diff($storyIdList, $conflictStoryArray);
                 $normalStotyIdList = implode(',', $normalStotyIdList);
                 $storyIdList       = implode(',', $storyIdList);
-                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
-                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
+                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList&storyType=$storyType");
+                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList&storyType=$storyType");
                 return print(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
             }
         }
@@ -1905,10 +1916,11 @@ class story extends control
      * @param  int    $storyID
      * @param  string $kanbanGroup
      * @param  string $from taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = 'default', $from = '')
+    public function assignTo($storyID, $kanbanGroup = 'default', $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1961,6 +1973,7 @@ class story extends control
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
+        $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->users      = ($this->config->vision == 'lite') ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
         $this->display();
@@ -1969,10 +1982,11 @@ class story extends control
     /**
      * Batch assign to.
      *
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchAssignTo()
+    public function batchAssignTo($storyType = 'story')
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
@@ -2415,11 +2429,11 @@ class story extends control
      * @param  string $orderBy
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $type = 'story')
+    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $storyType = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -2430,7 +2444,7 @@ class story extends control
             $this->fetch('port', 'export', 'model=story');
         }
 
-        $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         if($executionID)
         {
             $executionName = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch('name');

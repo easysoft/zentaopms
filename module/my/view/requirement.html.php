@@ -45,10 +45,10 @@
     <table id='storyList' class="table has-sort-head table-fixed">
       <?php $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
-      $canBatchEdit     = common::hasPriv('story', 'batchEdit');
-      $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
-      $canBatchReview   = common::hasPriv('story', 'batchReview');
-      $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');
+      $canBatchEdit     = common::hasPriv('requirement', 'batchEdit');
+      $canBatchClose    = (common::hasPriv('requirement', 'batchClose') and strtolower($type) != 'closedby');
+      $canBatchReview   = common::hasPriv('requirement', 'batchReview');
+      $canBatchAssignTo = common::hasPriv('requirement', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
       ?>
       <thead>
@@ -89,8 +89,8 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
-            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
+            <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : "<span title='$story->title'>$story->title</span>";?>
+            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
@@ -102,11 +102,11 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
-                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
-                echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                echo common::buildIconButton('story', 'change', "$vars&from=&storyType=requirement", $story, 'list', 'alter', '', 'iframe', true);
+                echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
+                echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
+                echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
@@ -129,23 +129,30 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . (common::hasPriv('story', 'view') ? html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'") : $child->title);?>
           </td>
           <td class='c-product'><?php echo $child->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
-          <td class='c-status'><span class='status-story status-<?php echo $child->status;?>'> <?php echo $this->processStatus('story', $child);?></span></td>
+          <td class='c-status'><?php echo $child->URChanged ? "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>" : "<span class='status-story status-$child->status'>" . $this->processStatus('story', $child) . '</span>'?></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)
             {
                 $vars = "story={$child->id}";
-                common::printIcon('story', 'change',     $vars, $child, 'list', 'alter');
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
-                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $child, 'list');
-                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+                if($child->URChanged)
+                {
+                    common::printIcon('story', 'processStoryChange', $vars, $child, 'list', 'ok');
+                }
+                else
+                {
+                    common::printIcon('story', 'change',     $vars, $child, 'list', 'alter');
+                    common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
+                    common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('story', 'edit',       $vars, $child, 'list');
+                    common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+                }
             }
             ?>
           </td>

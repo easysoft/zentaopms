@@ -129,9 +129,11 @@
             }
             else
             {
-                $tab = '';
+                $tab     = '';
+                $canView = common::hasPriv($module, $methodName);
                 if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab");
+                if($module == 'requirement') $module = 'story';
+                echo $canView ? html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab") : "<span title='$action->objectName'>$action->objectName</span>";
             }
             ?>
           </td>

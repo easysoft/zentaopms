@@ -473,7 +473,7 @@ class actionModel extends model
                 $action->extra = '';
                 if($names)
                 {
-                    foreach($names as $id => $name) $action->extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+                    foreach($names as $id => $name) $action->extra .= common::hasPriv('requriement', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
@@ -1534,6 +1534,12 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
+
+                if($action->objectType == 'story')
+                {
+                    $story = $this->loadModel('story')->getByID($action->objectID);
+                    if(!empty($story)) $moduleName = $story->type;
                 }
 
                 if($action->objectType == 'doclib')

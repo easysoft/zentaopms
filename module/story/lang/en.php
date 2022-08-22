@@ -452,3 +452,26 @@ $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+
+$lang->requirement->common             = $lang->URCommon;
+$lang->requirement->create             = 'Create Requirement';
+$lang->requirement->batchCreate        = "Batch Create";
+$lang->requirement->editAction         = "Edit {$lang->URCommon}";
+$lang->requirement->changeAction       = "Change {$lang->URCommon}";
+$lang->requirement->assignAction       = "Assign {$lang->URCommon}";
+$lang->requirement->reviewAction       = "Review {$lang->URCommon}";
+$lang->requirement->subdivideAction    = "Subdivide {$lang->URCommon}";
+$lang->requirement->closeAction        = "Close {$lang->URCommon}";
+$lang->requirement->activateAction     = "Activate {$lang->URCommon}";
+$lang->requirement->deleteAction       = "Delete {$lang->URCommon}";
+$lang->requirement->exportAction       = "Export {$lang->URCommon}";
+$lang->requirement->reportAction       = "Report";
+$lang->requirement->recall             = 'Revoke';
+$lang->requirement->batchReview        = 'Batch Review';
+$lang->requirement->batchEdit          = "Batch Edit";
+$lang->requirement->batchClose         = 'Batch Close';
+$lang->requirement->view               = 'Requirement Detail';
+$lang->requirement->linkRequirementsAB = "Link {$lang->URCommon}";
+$lang->requirement->batchChangeBranch  = "Batch Change Branches";
+$lang->requirement->batchAssignTo      = "Batch Assign";
+$lang->requirement->batchChangeModule  = "Batch Change Modules";

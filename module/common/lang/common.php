@@ -14,6 +14,7 @@ $lang->waterfall   = new stdclass();
 $lang->execution   = new stdclass();
 $lang->kanban      = new stdclass();
 $lang->story       = new stdclass();
+$lang->requirement = new stdclass();
 $lang->release     = new stdclass();
 $lang->branch      = new stdclass();
 $lang->productplan = new stdclass();
