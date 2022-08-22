@@ -221,6 +221,7 @@ $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->adjusttasktowait     = '$date, 系统判断由于消耗工时调整为0，将任务状态置为未开始。' . "\n";
 $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 重新打开。' . "\n";
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
+$lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
