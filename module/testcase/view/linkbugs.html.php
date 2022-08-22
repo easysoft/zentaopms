@@ -53,7 +53,7 @@
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?></span></td>
           <td class='c-name'><?php echo html::a($this->createLink('product', 'browse', "productID={$bug2Link->product}&branch={$bug2Link->branch}"), $products[$bug2Link->product], '_blank');?></td>
-          <td class='text-left c-name' title='<?php echo $bug2Link->title;?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug2Link->id"), $bug2Link->title, '_blank');?></td>
+          <td class='c-name' title='<?php echo $bug2Link->title;?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug2Link->id"), $bug2Link->title, '_blank');?></td>
           <td><?php echo zget($lang->bug->typeList, $bug2Link->type);?></td>
           <td><?php echo zget($users, $bug2Link->openedBy);?></td>
           <td class='status-<?php echo $bug2Link->status?>'><?php echo $this->bug->processStatus('bug', $bug2Link);?></td>
