@@ -1,0 +1,18 @@
+.repoCode .nav > li > a {padding: 8px 10px;}
+.repoCode .nav-tabs > li > a > span {margin-right: 5px;}
+
+#fileTabs .tab-pane {height: 600px;}
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .tab-nav-item {max-width: none !important;}
+#fileTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px;position: relative;height:40px;}
+#fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
+.repoCode .content {padding: 5px;}
+.repoCode .nav > li > a {display: flex; white-space: pre;}
+#sourceSwapper {border: 1px solid #D8DBDE; border-radius: 2px; width: 100%;}
+#sourceSwapper .repo-select {width: 100%;}
+#sourceSwapper .repo-select .caret {margin-top: 6px;}
+#sourceSwapper .hide-in-search {padding-left: 5px;}
+#sourceSwapper .tree li > a {max-width: 100%;}
+.version-name {max-width: 90%}
+#filesTree #modules {margin-top: 5px;}

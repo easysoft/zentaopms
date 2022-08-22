@@ -752,4 +752,47 @@ class Gogs
 
         return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . "{$this->repo->name}_$branch.zip";
     }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path, $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
+        $sub  = '';
+        chdir($this->root);
+        if(!empty($path)) $sub = ":$path";
+        if(!empty($this->branch))$revision = $this->branch;
+        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
+        $list = execCmd($cmd . ' 2>&1', 'array', $result);
+        if($result) return array();
+
+        $infos   = array();
+        foreach($list as $entry)
+        {
+            list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
+
+            /* Get commit info. */
+            $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
+            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
+            if($kind == 'tree')
+            {
+                $this->getAllFiles($pathName, $revision, $lists);
+            }
+            else
+            {
+                $lists[] = rtrim($pathName, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $lists;
+    }
 }
