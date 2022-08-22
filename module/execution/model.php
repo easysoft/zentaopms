@@ -785,6 +785,9 @@ class executionModel extends model
                 return false;
             }
 
+            /* Replace the project language item for message. */
+            $this->lang->project->name = $this->lang->execution->name;
+            $this->lang->project->code = $this->lang->execution->code;
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
