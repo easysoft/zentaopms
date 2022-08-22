@@ -1,7 +1,8 @@
 window.ignoreTips = {
-    'beyondBudgetTip' : false,
-    'dateTip'         : false
+    'beyondBudgetTip'  : false,
+    'dateTip'          : false,
 };
+var batchEditDateTips = new Array();
 
 /**
  * Access rights are equal to private, and the white list settings are displayed.
@@ -366,13 +367,15 @@ function budgetOverrunTips()
 /**
  *The date is out of the range of the parent project set, and a prompt is given.
  *
- * @param  int    $currentID
+ * @param  string $currentID
  * @access public
  * @return void
  */
-function outOfDateTip(currentID = 0)
+function outOfDateTip(currentID = '')
 {
     if(window.ignoreTips['dateTip']) return;
+    if(batchEditDateTips.includes(Number(currentID))) return;
+
     var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
     var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
     if($('#dateTip.text-remind').length > 0) $('#dateTip').parent().parent().remove();
@@ -413,6 +416,7 @@ function outOfDateTip(currentID = 0)
             if(currentID)
             {
                 $("#projects\\[" + currentID + "\\]").after("<tr><td colspan='5'></td><td class='c-name' colspan='3'><span id='dateTip" + currentID + "' class='text-remind' title='" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this," + currentID + ")'>" + ignore + "</p></span></td></tr>");
+                $('#dateTip'+ currentID).parent().css('line-height', '0')
             }
             else
             {
@@ -427,14 +431,16 @@ function outOfDateTip(currentID = 0)
  * Make this prompt no longer appear.
  *
  * @param  string  $obj
+ * @param  string  $currentID
  * @access public
  * @return void
  */
-function ignoreTip(obj,currentID = 0)
+function ignoreTip(obj, currentID)
 {
     var parentID = obj.parentNode.id;
     currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).parent().parent().remove();
 
-    if(parentID == 'dateTip' || parentID == 'dateTip' + currentID) window.ignoreTips['dateTip'] = true;
+    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'dateTip' + currentID) batchEditDateTips.push(currentID);
     if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }
