@@ -2402,7 +2402,11 @@ EOD;
                 if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
 
                 $this->app->user = $this->session->user;
-                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
+                if(!commonModel::hasPriv($module, $method))
+                {
+                    if($module == 'story' and !empty($this->app->params['storyType']) and strpos(",story,requirement,", ",{$this->app->params['storyType']},") !== false) $module = $this->app->params['storyType'];
+                    $this->deny($module, $method);
+                }
             }
             else
             {
