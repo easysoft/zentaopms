@@ -248,9 +248,9 @@
                     {
                         foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li title='$linkCaseTitle'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkCase[]' value=$linkCaseID />";
-                            echo "<label>#{$linkCaseID} {$linkCaseTitle}</label>";
+                            echo "<label class='linkCaseTitle'>#{$linkCaseID} {$linkCaseTitle}</label>";
                             echo '</div></li>';
                         }
                     }
@@ -275,9 +275,9 @@
                     {
                         foreach($case->toBugs as $bugID => $bugTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li title='$bugTitle'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$bugID />";
-                            echo "<label>#{$bugID} {$bugTitle}</label>";
+                            echo "<label class='linkBugTitle'>#{$bugID} {$bugTitle}</label>";
                             echo '</div></li>';
                         }
                     }

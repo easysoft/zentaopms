@@ -284,13 +284,13 @@
             <?php if(!$isLibCase):?>
             <tr>
               <th><?php echo $lang->testcase->linkCase;?></th>
-              <td>
+              <td class='text-ellipsis'>
                 <?php
                 if(isset($case->linkCaseTitles))
                 {
                     foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                     {
-                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%' title='$linkCaseTitle'") . '<br />';
                     }
                 }
                 ?>
@@ -314,11 +314,11 @@
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <td>
+              <td class='text-ellipsis'>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
               {
-                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
+                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%' title='$bugTitle'") . '<br />';
               }
               ?>
               </td>
