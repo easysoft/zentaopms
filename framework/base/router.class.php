@@ -2147,7 +2147,6 @@ class baseRouter
     {
         try {
             /* 调用该方法   Call the method. */
-            if(empty($this->control)) $this->setParams();
             $module = $this->control;
 
             call_user_func_array(array($module, $this->methodName), $this->params);
