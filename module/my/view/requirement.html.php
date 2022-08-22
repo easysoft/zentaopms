@@ -102,11 +102,11 @@
             if($canBeChanged)
             {
                 $vars = "story={$story->id}";
-                if(common::hasPriv('requirement', 'change')) echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
-                if(common::hasPriv('requirement', 'review')) echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
-                if(common::hasPriv('requirement', 'recall')) echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                if(common::hasPriv('requirement', 'close'))  echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
-                if(common::hasPriv('requirement', 'edit'))   echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+                echo common::buildIconButton('story', 'change', "$vars&from=&storyType=requirement", $story, 'list', 'alter', '', 'iframe', true);
+                echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
+                echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
+                echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
             }
             ?>
           </td>
