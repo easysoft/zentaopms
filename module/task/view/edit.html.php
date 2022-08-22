@@ -278,9 +278,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php foreach($task->team as $member):?>
               <?php
               $memberDisabled = false;
-              $linearDisabled = false;
+              $sortDisabled   = false;
               if($member->status == 'done') $memberDisabled = true;
-              if($member->status != 'wait' and $task->mode == 'linear') $linearDisabled = true;
+              if($member->status != 'wait' and $task->mode == 'linear') $sortDisabled = true;
               ?>
               <tr class='member-<?php echo $member->status;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
                 <td class='w-250px'>
@@ -299,9 +299,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>
-                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" <?php echo $linearDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
+                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
                 </td>
               </tr>
               <?php endforeach;?>

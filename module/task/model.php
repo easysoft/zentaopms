@@ -805,10 +805,8 @@ class taskModel extends model
                 if(empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
 
                 $efforts = $this->getTaskEstimate($oldTask->id);
-                foreach($efforts as $effort)
-                {
-                    if(!in_array($effort->account, $members)) $currentTask->consumed += (float)$effort->consumed;
-                }
+                $currentTask->consumed = 0;
+                foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
             }
 
             if(!empty($task))
@@ -871,11 +869,12 @@ class taskModel extends model
         if($taskStatus == 'doing')
         {
             $efforts    = $this->getTaskEstimate($taskID);
-            $doingUsers = array_map(function($effort)
+            $doingUsers = array();
+            foreach($efforts as $i => $effort)
             {
-                if($effort->left != 0) return $effort->account;
-            }, $efforts);
-            $doingUsers = array_unique(array_filter($doingUsers));
+                if($effort->left != 0) $doingUsers[$effort->account] = $effort->account;
+                if($effort->left == 0) unset($doingUsers[$effort->account]);
+            }
         }
 
         $teams       = array();
@@ -897,11 +896,14 @@ class taskModel extends model
             if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
             if($taskStatus == 'done') $member->left = 0;
 
-            if($member->left == 0 and $member->consumed > 0) $member->status = 'done';
-            if($taskStatus == 'doing')
+            if($member->left == 0 and $member->consumed > 0)
             {
-                if(!empty($source) and $source != $account and in_array($source, $doingUsers)) $member->transfer = $source;
-                if($minStatus != 'wait' and in_array($account, $doingUsers)) $member->status = 'doing';
+                $member->status = 'done';
+            }
+            elseif($taskStatus == 'doing')
+            {
+                if(!empty($source) and $source != $account and isset($doingUsers[$source])) $member->transfer = $source;
+                if(isset($doingUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
             }
 
             /* Doing status is only one in linear task. */
@@ -1600,15 +1602,16 @@ class taskModel extends model
         parse_str($extra, $output);
 
         $oldTask = $this->getById($taskID);
-        if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         if(!empty($oldTask->team))
         {
             $currentTeam = $this->getTeamByAccount($oldTask->team);
             if($currentTeam and $this->post->consumed < $currentTeam->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
+            if($currentTeam and $currentTeam->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
         else
         {
             if($this->post->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
+            if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
         if(dao::isError()) return false;
 
@@ -1842,6 +1845,8 @@ class taskModel extends model
         $this->dao->update($table)->set('`left`')->eq(0)->where('account')->in($members)
             ->beginIF($this->config->edition == 'open')->andWhere('task')->eq($taskID)->fi()
             ->beginIF($this->config->edition != 'open')->andWhere('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fi()
+            ->orderBy('date_desc,id_desc')
+            ->limit('1')
             ->exec();
     }
 
@@ -3351,7 +3356,13 @@ class taskModel extends model
         {
             global $app;
             if($action == 'assignto') return false;
-            if($action == 'start' and $task->assignedTo != $app->user->account) return false;
+            if($action == 'start')
+            {
+                if($task->assignedTo != $app->user->account) return false;
+
+                $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                if($currentTeam and $currentTeam->status == 'wait') return true;
+            }
             if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
         }
 
