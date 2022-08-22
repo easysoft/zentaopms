@@ -7129,7 +7129,7 @@ class upgradeModel extends model
     {
         if(empty($this->config->URAndSR)) return false;
 
-        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit')";
+        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
     }
