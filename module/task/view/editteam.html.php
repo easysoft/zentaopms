@@ -57,19 +57,12 @@
           </tr>
           <?php foreach($task->team as $member):?>
           <?php
-          $memberStatus = 'wait';
-          if($member->consumed > 0)
-          {
-              $memberStatus = 'doing';
-              if($member->left == 0) $memberStatus = 'done';
-          }
-
           $memberDisabled = false;
           $linearDisabled = false;
-          if($memberStatus == 'done') $memberDisabled = true;
-          if($memberDisabled and $task->mode == 'linear') $linearDisabled = true;
+          if($member->status == 'done') $memberDisabled = true;
+          if($member->status != 'wait' and $task->mode == 'linear') $linearDisabled = true;
           ?>
-          <tr>
+          <tr class='member-<?php echo $member->status;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
             <td class='w-250px'>
               <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
               <?php echo html::hidden("source[]", $member->account);?>

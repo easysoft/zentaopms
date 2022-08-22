@@ -9,9 +9,16 @@ $(function()
         var $source = $(this).siblings('[name^=source]');
         if($source.val() == '') return;
 
+        var $tr      = $(this).closest('tr');
         var consumed = 0;
-        if($(this).val() == $source.val()) consumed = $(this).closest('tr').attr('data-consumed');
-        $(this).closest('tr').find('[name^=teamConsumed]').val(consumed);
+        var estimate = $tr.attr('data-left');;
+        if($(this).val() == $source.val())
+        {
+            consumed = $tr.attr('data-consumed');
+            estimate = $tr.attr('data-estimate');
+        }
+        $tr.find('[name^=teamConsumed]').val(consumed);
+        $tr.find('[name^=teamEstimate]').val(estimate);
     });
     $('#modalTeam select:enabled').change()
 })
