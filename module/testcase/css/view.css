@@ -3,4 +3,3 @@
 
 .case-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden;}
 .case-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}
-.caseBox > a, .bugBox > a {overflow: hidden;}
