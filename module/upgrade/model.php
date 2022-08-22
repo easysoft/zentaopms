@@ -533,6 +533,9 @@ class upgradeModel extends model
             case '17_4':
                 $this->updateSearchIndex();
                 break;
+            case '17_5':
+                $this->updateStoryStatus();
+                break;
         }
 
         $this->deletePatch();
@@ -7033,6 +7036,23 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_WORKFLOWACTION)->set('linkages')->eq(helper::jsonEncode($newLinkages))->where('id')->eq($id)->exec();
             }
         }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update story status.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryStatus()
+    {
+        /* After cancel the review of changed story, the story status should be 'changing'. */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
+
+        /* Other stories in draft status should be 'reviewing'. */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('status')->eq('draft')->exec();
 
         return !dao::isError();
     }
