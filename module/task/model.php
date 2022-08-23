@@ -2740,11 +2740,8 @@ class taskModel extends model
             ->fetch();
 
         /* If the estimate is the last of its task, status of task will be checked. */
-        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)
-            ->where('task')->eq($estimate->task)
-            ->andWhere('id')->gt($estimate->id)
-            ->fetch('id');
-        $estimate->isLast = $lastID ? false : true;
+        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date,id')->limit(1)->fetch('id');
+        $estimate->isLast = $lastID == $estimate->id;
         return $estimate;
     }
 
@@ -2756,14 +2753,25 @@ class taskModel extends model
      * @access public
      * @return bool
      */
-    public function canOperateEffort($task, $effort)
+    public function canOperateEffort($task, $effort = null)
     {
         if(empty($task->team)) return true;
 
+        /* Check for add effort. */
+        if(empty($effort))
+        {
+            if($task->mode == 'linear' and strpos('|done|done|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
+            $members = array_column($task->team, 'account');
+            if(!in_array($this->app->user->account, $members)) return false;
+            if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
+            return true;
+        }
+
+        /* Check for edit and delete effort. */
         if($task->mode == 'linear')
         {
             if(strpos('|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
-            if($task->status == 'doing') return $task->assignedTo == $effort->account;
+            if($task->status == 'doing') return ($task->assignedTo == $effort->account and $task->assignedTo == $this->app->user->account);
         }
         if($this->app->user->account == $effort->account) return true;
         return false;
@@ -2811,7 +2819,7 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('filter' => '', 'effortID' => $estimateID));
+            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('effortID' => $estimateID));
             if($currentTeam)
             {
                 $newTeamInfo = new stdClass();
@@ -2855,7 +2863,6 @@ class taskModel extends model
     {
         $estimate = $this->getEstimateById($estimateID);
         $task     = $this->getById($estimate->task);
-        $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
 
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(1)->fetch();
         $consumed     = $task->consumed - $estimate->consumed;
@@ -2893,6 +2900,7 @@ class taskModel extends model
             }
         }
 
+        $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);

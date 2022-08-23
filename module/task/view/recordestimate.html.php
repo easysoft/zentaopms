@@ -67,14 +67,16 @@
           </tr>
           <?php endforeach;?>
           <?php endif;?>
-          <?php if(!empty($members) and (!isset($members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+          <?php if(!$this->task->canOperateEffort($task)):?>
         </tbody>
       </table>
     </form>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
-        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
+        <?php if(strpos('|done|closed|cancel|pause|', $task->status) !== false):?>
+        <p><?php echo sprintf($lang->task->deniedStatusNotice, '<strong>' . zget($this->lang->task->statusList, $task->status) . '</strong>');?></p>
+        <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
         <?php else:?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>

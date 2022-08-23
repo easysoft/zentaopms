@@ -1191,11 +1191,10 @@ class task extends control
             return print(js::locate($url, 'parent'));
         }
 
-        $estimate = $this->task->getEstimateById($estimateID);
-
         $this->view->title      = $this->lang->task->editEstimate;
         $this->view->position[] = $this->lang->task->editEstimate;
         $this->view->estimate   = $estimate;
+        $this->view->task       = $this->task->getById($estimate->task);
         $this->display();
     }
 
