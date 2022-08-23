@@ -1004,7 +1004,9 @@ class user extends control
         $this->view->method            = $method;
         $this->view->denyPage          = $this->referer;        // The denied page.
         $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        $this->app->loadLang($module);
+        if($module == 'requirement') $this->app->loadLang('story');
+        if($module != 'requirement') $this->app->loadLang($module);
+
         $this->app->loadLang('my');
 
         /* Check deny type. */

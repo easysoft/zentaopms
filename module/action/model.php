@@ -473,7 +473,7 @@ class actionModel extends model
                 $action->extra = '';
                 if($names)
                 {
-                    foreach($names as $id => $name) $action->extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+                    foreach($names as $id => $name) $action->extra .= common::hasPriv('requriement', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
@@ -510,7 +510,8 @@ class actionModel extends model
             elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
             {
                 $action->appendLink = '';
-                if(strpos($action->extra, ':')!== false)
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
                 {
                     list($extra, $id) = explode(':', $action->extra);
                     $action->extra    = $extra;
@@ -996,10 +997,10 @@ class actionModel extends model
             {
                 $productCondition = '';
                 foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                $productCondition .= '))';
+                if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : '';
+                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
@@ -1010,7 +1011,7 @@ class actionModel extends model
 
                 $productCondition = '';
                 foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                $productCondition .= '))';
+                if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project = '$projectID')";
                 $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
@@ -1534,6 +1535,12 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
+
+                if($action->objectType == 'story')
+                {
+                    $story = $this->loadModel('story')->getByID($action->objectID);
+                    if(!empty($story)) $moduleName = $story->type;
                 }
 
                 if($action->objectType == 'doclib')

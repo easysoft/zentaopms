@@ -1,3 +1,6 @@
+UPDATE `zt_story` SET `status` = 'reviewing' WHERE `status` = 'changed';
+ALTER TABLE `zt_story` MODIFY `status` enum('','changed','active','draft','closed','reviewing') NOT NULL DEFAULT '' AFTER `estimate`;
+
 ALTER TABLE `zt_feedback` ADD `repeatFeedback` mediumint(8) NOT NULL DEFAULT 0 AFTER `feedbackBy`;
 
 ALTER TABLE `zt_assetlib` ADD `order` SMALLINT  UNSIGNED  NOT NULL  DEFAULT '0'  AFTER `desc`;

@@ -33,4 +33,5 @@ $app->setDebug();
 if(isset($config->installed) and $config->installed) $app->connectDB();
 
 $app->parseRequest();
+$app->setParams();
 $app->loadModule();

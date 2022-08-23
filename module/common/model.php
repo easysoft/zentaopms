@@ -1677,7 +1677,8 @@ EOD;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
+
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
@@ -1927,8 +1928,9 @@ EOD;
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
 
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
-            $link .= '#app=' . $app->tab;
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->pre->type}" : '';
+            $link   = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}" . $params);
+            $link  .= '#app=' . $app->tab;
             if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
             {
                 echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
@@ -1943,7 +1945,8 @@ EOD;
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->next->type}" : '';
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}" . $params);
             $link .= '#app=' . $app->tab;
             if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
             {
@@ -2229,7 +2232,6 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
-        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
@@ -2399,7 +2401,11 @@ EOD;
                 if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
 
                 $this->app->user = $this->session->user;
-                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
+                if(!commonModel::hasPriv($module, $method))
+                {
+                    if($module == 'story' and !empty($this->app->params['storyType']) and strpos(",story,requirement,", ",{$this->app->params['storyType']},") !== false) $module = $this->app->params['storyType'];
+                    $this->deny($module, $method);
+                }
             }
             else
             {
@@ -2472,15 +2478,23 @@ EOD;
      *
      * @param  string $module
      * @param  string $method
+     * @param  object $object
+     * @param  string $vars
      * @static
      * @access public
      * @return bool
      */
-    public static function hasPriv($module, $method, $object = null)
+    public static function hasPriv($module, $method, $object = null, $vars = '')
     {
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+        parse_str($vars, $params);
+
+        if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
+        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
+        if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))

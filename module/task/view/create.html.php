@@ -123,20 +123,19 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td colspan='3'>
             <table class='table table-form mg-0 table-bordered'>
               <thead>
-                <tr>
+                <tr class='text-center'>
                   <th class='w-150px'><?php echo $lang->task->storyAB;?></th>
-                  <th class='w-80px'><?php echo $lang->task->pri;?></th>
-                  <th class='w-300px'><?php echo $lang->task->datePlan;?></th>
-                  <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
-                  <th class='w-80px'><?php echo $lang->task->estimate;?></th>
-                  <th class='w-80px'><?php echo $lang->actions;?></th>
+                  <th class='w-60px'><?php echo $lang->task->pri;?></th>
+                  <th class='w-200px'><?php echo $lang->task->datePlan;?></th>
+                  <th class='w-60px'><?php echo $lang->task->assignedTo;?></th>
+                  <th class='w-60px'><?php echo $lang->task->estimate;?></th>
+                  <th class='w-60px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <tbody>
                 <?php $i = 0;?>
-                <?php foreach($stories as $storyID => $storyTitle):?>
+                <?php foreach($testStories as $storyID => $storyTitle):?>
                 <?php if($i > 0) $members['ditto'] = $lang->task->ditto;?>
-                <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
                   <td><?php echo html::select("testStory[]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
@@ -342,8 +341,8 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
     </td>
   </tr>
 </table>
-<?php js::set('stories', $stories);?>
-<?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
+<?php js::set('stories', $testStories);?>
+<?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($testStories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('executionType', $execution->type);?>

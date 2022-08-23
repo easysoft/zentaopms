@@ -545,6 +545,10 @@ class upgradeModel extends model
                 break;
             case '17_5':
                 $this->updateOSAndBrowserOfBug();
+                $this->addURPriv();
+                break;
+            case '17_5':
+                $this->updateStoryStatus();
                 break;
         }
 
@@ -7051,6 +7055,23 @@ class upgradeModel extends model
     }
 
     /**
+     * Update story status.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryStatus()
+    {
+        /* After cancel the review of changed story, the story status should be 'changing'. */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
+
+        /* Other stories in draft status should be 'reviewing'. */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('status')->eq('draft')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Change FULLTEXT index for searchindex table.
      *
      * @access public
@@ -7116,7 +7137,21 @@ class upgradeModel extends model
 
         $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
         $this->dao->update(TABLE_LANG)->set('value')->eq('Opera 系列')->where('module')->eq('bug')->andWhere('`key`')->eq('opera')->andWhere('value')->eq('opera 系列')->exec();
+        return true;
+    }
 
+    /**
+     * Add user requirement privilege when URAndSR is open.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addURPriv()
+    {
+        if(empty($this->config->URAndSR)) return true;
+
+        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $this->dbh->exec($sql);
         return true;
     }
 }

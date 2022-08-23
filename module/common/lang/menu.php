@@ -607,6 +607,7 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
+$lang->navGroup->requirement = 'product';
 
 $lang->navGroup->project     = 'project';
 $lang->navGroup->deploy      = 'project';
