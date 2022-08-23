@@ -283,10 +283,17 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php
               $memberDisabled = false;
               $sortDisabled   = false;
-              if($member->status == 'done') $memberDisabled = true;
-              if($member->status != 'wait' and $task->mode == 'linear') $sortDisabled = true;
+              $memberStatus   = $member->status;
+              if($memberStatus == 'done') $memberDisabled = true;
+              if($memberStatus != 'wait' and $task->mode == 'linear') $sortDisabled = true;
+              if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !== false)
+              {
+                  $memberStatus   = $task->status;
+                  $memberDisabled = true;
+                  $sortDisabled   = true;
+              }
               ?>
-              <tr class='member-<?php echo $member->status;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
+              <tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
                 <td class='w-250px'>
                   <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
                   <?php echo html::hidden("source[]", $member->account);?>
