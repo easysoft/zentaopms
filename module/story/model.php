@@ -3027,7 +3027,7 @@ class storyModel extends model
             }
         }
 
-        $tmpStories = $this->dao->select('DISTINCT t1.*,IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')->from(TABLE_STORY)->alias('t1')
+        $tmpStories = $this->dao->select('DISTINCT t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
@@ -3127,7 +3127,7 @@ class storyModel extends model
                 }
             }
 
-            $stories = $this->dao->select('distinct t1.*, t2.*,IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.*, t2.*, IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
