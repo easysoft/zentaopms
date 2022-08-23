@@ -332,7 +332,7 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
@@ -397,7 +397,7 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
@@ -571,8 +571,8 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        if(strpos($sort, 'severity_') !== false and strpos($sort, 'severityOrder_') === false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         if($type == 'assignedBy')
         {
             $bugs = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'bug');
