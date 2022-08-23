@@ -2111,9 +2111,12 @@ EOD;
         $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
+        $select  = '';
         if($this->session->$typeOnlyCondition)
         {
-            $sql = $this->dao->select('*')->from($table)
+            if(strpos($orderBy, 'priOrder_') !== false) $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
+            if(strpos($orderBy, 'severityOrder_') !== false) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
+            $sql = $this->dao->select("*$select")->from($table)
                 ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->get();
