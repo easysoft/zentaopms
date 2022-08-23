@@ -223,7 +223,7 @@ class product extends control
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

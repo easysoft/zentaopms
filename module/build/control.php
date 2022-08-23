@@ -234,7 +234,7 @@ class build extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         /* Get product and bugs. */
         $product = $this->loadModel('product')->getById($build->product);

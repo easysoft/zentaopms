@@ -3283,7 +3283,6 @@ class storyModel extends model
         }
         else
         {
-            if(strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
             $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder')
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')

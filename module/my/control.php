@@ -332,7 +332,7 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
@@ -397,16 +397,16 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {

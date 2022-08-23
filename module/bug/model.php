@@ -384,8 +384,8 @@ class bugModel extends model
         $browseType = ($browseType == 'bymodule' and $this->session->bugBrowseType and $this->session->bugBrowseType != 'bysearch') ? $this->session->bugBrowseType : $browseType;
         $browseType = $browseType == 'bybranch' ? 'bymodule' : $browseType;
 
-        if(strpos($sort, 'pri') !== false and strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
-        if(strpos($sort, 'severity') !== false and strpos($sort, 'severityOrder') === false) $sort = str_replace('severity', 'severityOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'severity_') !== false and strpos($sort, 'severityOrder_') === false) $sort = str_replace('severity_', 'severityOrder_', $sort);
 
         /* Get bugs by browse type. */
         $bugs = array();
@@ -509,7 +509,7 @@ class bugModel extends model
      */
     public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        if(strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false and strpos($orderBy, 'priOrder_') === false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         $bugs = $this->dao->select('*, IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_BUG)
             ->where('plan')->eq((int)$planID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -1718,8 +1718,8 @@ class bugModel extends model
         $queryName  = $moduleName . 'Query';
         $formName   = $moduleName . 'Form';
 
-        if(strpos($orderBy, 'pri') !== false and strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
-        if(strpos($orderBy, 'severity') !== false and strpos($orderBy, 'severityOrder') === false) $orderBy = str_replace('severity', 'severityOrder', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false and strpos($orderBy, 'priOrder_') === false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'severity_') !== false and strpos($orderBy, 'severityOrder_') === false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         $bugIDList = array();
         if($moduleName == 'contributeBug')
@@ -1830,8 +1830,8 @@ class bugModel extends model
     public function getProjectBugs($projectID, $productID = 0, $branchID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
-        if(strpos($orderBy, 'pri') !== false and strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
-        if(strpos($orderBy, 'severity') !== false and strpos($orderBy, 'severityOrder') === false) $orderBy = str_replace('severity', 'severityOrder', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false and strpos($orderBy, 'priOrder_') === false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'severity_') !== false and strpos($orderBy, 'severityOrder_') === false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         if($type == 'bysearch')
         {
@@ -1901,8 +1901,8 @@ class bugModel extends model
     public function getExecutionBugs($executionID, $productID = 0, $branchID = 'all', $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
-        if(strpos($orderBy, 'pri') !== false and strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
-        if(strpos($orderBy, 'severity') !== false and strpos($orderBy, 'severityOrder') === false) $orderBy = str_replace('severity', 'severityOrder', $orderBy);
+        if(strpos($orderBy, 'pri_') !== false and strpos($orderBy, 'priOrder_') === false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        if(strpos($orderBy, 'severity_') !== false and strpos($orderBy, 'severityOrder_') === false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
         if($type == 'bysearch')
         {

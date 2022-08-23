@@ -191,7 +191,7 @@ class release extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
-        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*, IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
@@ -211,7 +211,7 @@ class release extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-        if($type == 'leftBug' and strpos($orderBy, 'severity') !== false) $sort = str_replace('severity', 'severityOrder', $orderBy);
+        if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false and strpos($orderBy, 'severityOrder_') === false) $sort = str_replace('severity_', 'severityOrder_', $sort);
 
         $leftBugs = $this->dao->select('*, IF(`severity` = 0, 999, `severity`) as severityOrder')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
             ->beginIF($type == 'leftBug')->orderBy($sort)->fi()

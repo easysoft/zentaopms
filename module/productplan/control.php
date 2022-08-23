@@ -421,6 +421,7 @@ class productplan extends control
         /* Append id for secend sort. */
         $orderBy = ($type == 'bug' and $orderBy == 'order_desc') ? 'id_desc' : $orderBy;
         $sort    = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getProductPairsByProject($this->session->project);
