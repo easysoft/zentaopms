@@ -378,13 +378,7 @@ class tree extends control
         }
         if($type == 'doc')
         {
-            $libs  = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
-
-            /* Filter out wiki libraries. */
-            $books = $this->doc->getAllLibsByType('book');
-            foreach($books as $book) unset($libs[$book->id]);
-
-            $this->view->libs = $libs;
+            $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
         }
 
         $this->view->module = $module;
