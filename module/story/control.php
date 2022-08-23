@@ -1539,10 +1539,11 @@ class story extends control
      * Submit review.
      *
      * @param  int    $storyID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function submitReview($storyID)
+    public function submitReview($storyID, $storyType = 'story')
     {
         if($_POST)
         {
