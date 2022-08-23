@@ -337,7 +337,7 @@ EOF;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
         }
         elseif($type == 'bysearch')
         {
@@ -402,7 +402,7 @@ EOF;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
         }
         elseif($type == 'bysearch')
         {
@@ -571,9 +571,11 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false and strpos($sort, 'priOrder_') === false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'severity_') !== false and strpos($sort, 'severityOrder_') === false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         if($type == 'assignedBy')
         {
-            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'bug');
+            $bugs = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'bug');
         }
         else
         {

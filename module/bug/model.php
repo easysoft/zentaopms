@@ -1717,11 +1717,7 @@ class bugModel extends model
         $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
         $queryName  = $moduleName . 'Query';
         $formName   = $moduleName . 'Form';
-
-        if(strpos($orderBy, 'pri_') !== false and strpos($orderBy, 'priOrder_') === false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        if(strpos($orderBy, 'severity_') !== false and strpos($orderBy, 'severityOrder_') === false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
-
-        $bugIDList = array();
+        $bugIDList  = array();
         if($moduleName == 'contributeBug')
         {
             $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
@@ -1933,7 +1929,7 @@ class bugModel extends model
         }
         else
         {
-            $bugs = $this->dao->select('t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder, IF(t1.`pri` = 0, 999, t1.`severity`) as severityOrder')->from(TABLE_BUG)->alias('t1')
+            $bugs = $this->dao->select('t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder, IF(t1.`severity` = 0, 999, t1.`severity`) as severityOrder')->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
