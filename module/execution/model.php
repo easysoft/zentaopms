@@ -1561,10 +1561,11 @@ class executionModel extends model
      * @param  string  $status
      * @param  int     $limit
      * @param  string  $pairs
+     * @param  string  $projectsToAppended
      * @access public
      * @return array
      */
-    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false)
+    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false, $projectsToAppended = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1584,6 +1585,13 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
+
+        if($projectsToAppended)
+        {
+            $task = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($projectsToAppended)->fetch('execution');
+            $path = sprintf("%s,%s", $projectID, $task);
+            $executions += $this->dao->select('*')->from(TABLE_EXECUTION)->where('path')->like("%,$path,%")->fetchAll('id');
+        }
 
         if(isset($project->model) and $project->model == 'waterfall')
         {
