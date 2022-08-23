@@ -86,7 +86,7 @@
           <th class='w-250px'><?php echo $this->lang->execution->project;?></th>
           <?php endif;?>
           <?php if($currentObjectType == 'story'):?>
-          <th class='w-250px'><?php echo $this->lang->project->product;?></th>
+          <th class='w-250px'><?php echo $this->lang->story->product;?></th>
           <?php endif;?>
           <?php if($currentObjectType == 'task'):?>
           <th class='w-250px'><?php echo $this->lang->task->execution;?></th>

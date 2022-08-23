@@ -128,7 +128,6 @@ class action extends control
         /* Get the products name of story. */
         if($browseType == 'story')
         {
-            $this->app->loadLang('project');
             $this->loadModel('story');
             $storyIdList = array();
             foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
