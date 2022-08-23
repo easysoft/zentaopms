@@ -45,7 +45,7 @@
             <th class="thWidth"><?php echo $lang->task->consumed;?></th>
             <th class="thWidth"><?php echo $lang->task->left;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions-2'><?php if(empty($members) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($members[$app->user->account]))) echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -57,21 +57,17 @@
             <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
             <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <?php if(empty($members) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($members[$app->user->account]))):?>
             <td align='center' class='c-actions'>
               <?php
-              if($this->app->user->account == $estimate->account)
-              {
-                  common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
-                  common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody');
-              }
+              $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
+              common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $estimate->left > 0) ? '' : 'disabled');
               ?>
             </td>
           </tr>
-          <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
-        <?php if(!empty($members) and (!isset($members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+          <?php if(!empty($members) and (!isset($members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
         </tbody>
       </table>
     </form>

@@ -947,17 +947,63 @@ class taskModel extends model
      *
      * @param  array  $teams
      * @param  string $account
-     * @param  string $filter
+     * @param  array  $extra
      * @access public
-     * @return void
+     * @return object
      */
-    public function getTeamByAccount($teams, $account = '', $filter = 'done')
+    public function getTeamByAccount($teams, $account = '', $extra = array('filter' => 'done'))
     {
         if(empty($account)) $account = $this->app->user->account;
+
+        $filter   = zget($extra, 'filter', '');
+        $effortID = zget($extra, 'effortID', '');
+
+        $duplicates = array();
+        $members    = array();
+        $taskID     = 0;
         foreach($teams as $team)
         {
-            if($filter and $team->status == $filter) continue;
-            if($team->account == $account) return $team;
+            if(empty($taskID)) $taskID = $team->task;
+            if(isset($members[$team->account]))  $duplicates[$team->account] = $team->account;
+            if(!isset($members[$team->account])) $members[$team->account]    = 0;
+            $members[$team->account] += 1;
+        }
+
+        /*
+         * 1. No duplicate account;
+         * 2. Account is not duplicate account;
+         * 3. Not by effort;
+         * Then direct get team by account.
+         */
+        if(empty($duplicates) or (!isset($duplicates[$account])) or empty($effortID))
+        {
+            foreach($teams as $team)
+            {
+                if($filter and $team->status == $filter) continue;
+                if($team->account == $account) return $team;
+            }
+        }
+        elseif($effortID)
+        {
+            $efforts = $this->getTaskEstimate($taskID);
+
+            $prevTeam = null;
+            $thisTeam = null;
+            foreach($efforts as $effort)
+            {
+                $thisTeam = reset($teams);
+                if($effort->id == $effortID)
+                {
+                    if($effort->account == $thisTeam->account) return $thisTeam;
+                    if($effort->account == $prevTeam->account) return $prevTeam;
+                    return false;
+                }
+
+                if(empty($currentEffort) and $effort->left == 0)
+                {
+                    if($thisTeam->account == $effort->account) $prevTeam = array_shift($teams);
+                }
+            }
         }
     }
 
@@ -1660,12 +1706,7 @@ class taskModel extends model
             $data->left     = $this->post->left;
             $data->status   = 'doing';
 
-            $this->dao->update(TABLE_TASKTEAM)->data($data)->where('task')->eq($taskID)
-                ->andWhere('account')->eq($currentTeam->account)
-                ->andWhere('status')->ne('done')
-                ->orderBy('`order`')
-                ->limit(1)
-                ->exec();
+            $this->dao->update(TABLE_TASKTEAM)->data($data)->where('id')->eq($currentTeam->id)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
 
@@ -1805,17 +1846,17 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $myConsumed = $task->team[$this->app->user->account]->consumed;
+            $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account);
+            if($currentTeam)
+            {
+                $newTeamInfo = new stdClass();
+                $newTeamInfo->consumed = $currentTeam->consumed + $consumed;
+                $newTeamInfo->left     = $left;
+                $newTeamInfo->status   = ($newTeamInfo->consumed > 0 and $left == 0) ? 'done' : 'doing';
+                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
-            $newTeamInfo = new stdClass();
-            $newTeamInfo->consumed = $myConsumed + $consumed;
-            $newTeamInfo->left     = $left;
-            $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)
-                ->where('task')->eq($taskID)
-                ->andWhere('account')->eq($this->app->user->account)
-                ->exec();
-
-            $data = $this->computeHours4Multiple($task, $data);
+                $data = $this->computeHours4Multiple($task, $data);
+            }
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
@@ -1918,16 +1959,9 @@ class taskModel extends model
         if($this->post->comment) $estimate->work = $this->post->comment;
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
-        if(!empty($oldTask->team))
+        if(!empty($oldTask->team) and $currentTeam)
         {
-
-            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')
-                ->where('task')->eq((int)$taskID)
-                ->andWhere('account')->eq($this->app->user->account)
-                ->andWhere('status')->ne('done')
-                ->orderBy('`order`')
-                ->limit(1)
-                ->exec();
+            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
 
@@ -2715,6 +2749,27 @@ class taskModel extends model
     }
 
     /**
+     * Check operate effort.
+     *
+     * @param  object    $task
+     * @param  object    $effort
+     * @access public
+     * @return bool
+     */
+    public function canOperateEffort($task, $effort)
+    {
+        if(empty($task->team)) return true;
+
+        if($task->mode == 'linear')
+        {
+            if(strpos('|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
+            if($task->status == 'doing') return $task->assignedTo == $effort->account;
+        }
+        if($this->app->user->account == $effort->account) return true;
+        return false;
+    }
+
+    /**
      * Update estimate.
      *
      * @param  int    $estimateID
@@ -2756,17 +2811,17 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $oldConsumed = $task->team[$oldEstimate->account]->consumed;
+            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('filter' => '', 'effortID' => $estimateID));
+            if($currentTeam)
+            {
+                $newTeamInfo = new stdClass();
+                $newTeamInfo->consumed = $currentTeam->consumed + $estimate->consumed - $oldEstimate->consumed;
+                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
+                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
-            $newTeamInfo = new stdClass();
-            $newTeamInfo->consumed = $oldConsumed + $estimate->consumed - $oldEstimate->consumed;
-            $newTeamInfo->left     = $left;
-            $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)
-                ->where('task')->eq($oldEstimate->task)
-                ->andWhere('account')->eq($oldEstimate->account)
-                ->exec();
-
-            $data = $this->computeHours4Multiple($task, $data);
+                $data = $this->computeHours4Multiple($task, $data);
+            }
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
@@ -2825,17 +2880,17 @@ class taskModel extends model
         }
         if(!empty($task->team))
         {
-            $oldConsumed = $task->team[$estimate->account]->consumed;
+            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('filter' => '', 'effortID' => $estimateID));
+            if($currentTeam)
+            {
+                $newTeamInfo = new stdClass();
+                $newTeamInfo->consumed = $currentTeam->consumed - $estimate->consumed;
+                if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+                if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
+                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
 
-            $newTeamInfo = new stdClass();
-            $newTeamInfo->consumed = $oldConsumed - $estimate->consumed;
-            $newTeamInfo->left     = $left;
-            $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)
-                ->where('task')->eq($estimate->task)
-                ->andWhere('account')->eq($estimate->account)
-                ->exec();
-
-            $data = $this->computeHours4Multiple($task, $data);
+                $data = $this->computeHours4Multiple($task, $data);
+            }
         }
 
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
