@@ -118,7 +118,6 @@ class action extends control
         /* Get the projects name of executions. */
         if($browseType == 'execution')
         {
-            $this->app->loadLang('execution');
             $this->loadModel('project');
             $projectIdList = array();
             foreach($trashes as $trash) $projectIdList[] = $trash->project;
