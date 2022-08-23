@@ -948,7 +948,7 @@ class myModel extends model
                 $requirementIDList[$requirementID] = $requirementID;
             }
 
-            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+            $requirements = $this->dao->select('distinct t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)
@@ -965,7 +965,7 @@ class myModel extends model
         }
         else
         {
-            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+            $requirements = $this->dao->select('distinct t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)
