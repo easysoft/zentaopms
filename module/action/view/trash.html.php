@@ -154,18 +154,18 @@
           <?php endif;?>
           <?php if($currentObjectType == 'story'):?>
           <td class="flex" title="<?php echo $productList[$action->objectID]->productTitle;?>">
-          <span class="text-ellipsis"><?php echo $productList[$action->objectID]->productTitle;?></span>
-          <?php if($productList[$action->objectID]->deleted):?>
-          <span class='label label-danger'><?php echo $this->lang->project->deleted;?></span>
-          <?php endif;?>
+            <span class="text-ellipsis"><?php echo $productList[$action->objectID]->productTitle;?></span>
+            <?php if($productList[$action->objectID]->productDeleted):?>
+            <span class='label label-danger'><?php echo $this->lang->story->deleted;?></span>
+            <?php endif;?>
           </td>
           <?php endif;?>
           <?php if($currentObjectType == 'task'):?>
           <td class="flex" title="<?php echo $executionList[$action->execution]->name;?>">
-          <span class="text-ellipsis"><?php echo $executionList[$action->execution]->name;?></span>
-          <?php if($executionList[$action->execution]->deleted):?>
-          <span class='label label-danger'><?php echo $this->lang->project->deleted;?></span>
-          <?php endif;?>
+            <span class="text-ellipsis"><?php echo $executionList[$action->execution]->name;?></span>
+            <?php if($executionList[$action->execution]->deleted):?>
+            <span class='label label-danger'><?php echo $this->lang->execution->deleted;?></span>
+            <?php endif;?>
           </td>
           <?php endif;?>
           <td><?php echo zget($users, $action->actor);?></td>

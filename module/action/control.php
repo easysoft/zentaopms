@@ -119,28 +119,30 @@ class action extends control
         if($browseType == 'execution')
         {
             $this->app->loadLang('execution');
+            $this->loadModel('project');
             $projectIdList = array();
             foreach($trashes as $trash) $projectIdList[] = $trash->project;
-            $this->view->projectList = $this->loadModel('project')->getByIdList($projectIdList, 'all');
+            $this->view->projectList = $this->project->getByIdList($projectIdList, 'all');
         }
 
         /* Get the products name of story. */
         if($browseType == 'story')
         {
             $this->app->loadLang('project');
+            $this->loadModel('story');
             $storyIdList = array();
             foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
-            $this->view->productList = $this->loadModel('story')->getByList($storyIdList, 'story');
+            $this->view->productList = $this->story->getByList($storyIdList, 'story', 'all');
         }
 
         /* Get the executions name of task. */
         if($browseType == 'task')
         {
             $this->app->loadLang('task');
-            $this->app->loadLang('project');
+            $this->loadModel('execution');
             $executionIdList = array();
             foreach($trashes as $trash) $executionIdList[] = $trash->execution;
-            $this->view->executionList = $this->loadModel('execution')->getByIdList($executionIdList);
+            $this->view->executionList = $this->execution->getByIdList($executionIdList, 'all');
         }
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
