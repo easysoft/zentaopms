@@ -248,7 +248,7 @@ class build extends control
 
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select('*, IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_STORY)
+        $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('id')->in($build->stories)
             ->andWhere('deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy($sort)->fi()

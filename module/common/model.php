@@ -2114,8 +2114,8 @@ EOD;
         $select  = '';
         if($this->session->$typeOnlyCondition)
         {
-            if(strpos($orderBy, 'priOrder') !== false) $select .= ', IF(`pri` = 0, 999, `pri`) as priOrder';
-            if(strpos($orderBy, 'severityOrder') !== false) $select .= ', IF(`severity` = 0, 999, `severity`) as severityOrder';
+            if(strpos($orderBy, 'priOrder') !== false) $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
+            if(strpos($orderBy, 'severityOrder') !== false) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
             $sql = $this->dao->select("*$select")->from($table)
                 ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
