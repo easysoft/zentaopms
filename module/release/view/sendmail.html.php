@@ -13,6 +13,7 @@
 <?php $mailTitle = 'RELEASE #' . $release->id . ' ' . $release->name;?>
 <?php $module    = $this->app->tab == 'product' ? 'release' : 'projectrelease';?>
 <?php
+$webRoot  = $this->app->getWebRoot();
 $onlybody = isonlybody() ? true : false;
 if($onlybody) $_GET['onlybody'] = 'no';
 ?>
@@ -55,7 +56,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/story.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <img src='<?php echo common::getSysURL() . $webRoot . 'theme/default/images/release/story.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
                 <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->stories . '（' . count($stories) . '）';?></span>
               </td>
             </tr>
@@ -81,7 +82,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/bug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <img src='<?php echo common::getSysURL() . $webRoot . 'theme/default/images/release/bug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
                 <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->bugs . '（' . count($bugs) . '）';?></span>
               </td>
             </tr>
@@ -107,7 +108,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
             </tr>
             <tr>
               <td class='content-head' style='padding: 15px 10px 15px 40px; border: none;'>
-                <img src='<?php echo common::getSysURL() . '/theme/default/images/release/leftbug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
+                <img src='<?php echo common::getSysURL() . $webRoot . 'theme/default/images/release/leftbug.png';?>' class='content-icon' style='width: 16px; height: 16px; vertical-align: middle;'/>
                 <span style='vertical-align: middle; font-weight: bold; color: #1B1F28;'><?php echo $this->lang->release->leftBugs . '（' . count($leftBugs) . '）';?></span>
               </td>
             </tr>
