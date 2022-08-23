@@ -2214,7 +2214,7 @@ class repoModel extends model
      * @param  object $repo
      * @param  string $branch
      * @access public
-     * @return void
+     * @return string
      */
     public function getFileTree($repo, $branch = '')
     {
@@ -2243,7 +2243,7 @@ class repoModel extends model
      *
      * @param  array  $allFiles
      * @access public
-     * @return void
+     * @return string
      */
     public function buildFileTree($allFiles = array())
     {

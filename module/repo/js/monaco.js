@@ -11,15 +11,16 @@ $(function()
      */
     function arrow(num){
         var tabItemWidth = $('#fileTabs > .tabs-navbar > .nav-tabs')[0].clientWidth;
-        var tabsWidth = $('#fileTabs')[0].clientWidth; // 拿到展示宽度（及父级宽度）
+        var tabsWidth    = $('#fileTabs')[0].clientWidth;
         if(tabItemWidth < tabsWidth) return;
 
         distance += tabsWidth * num * 0.2;
         if(distance > 0) distance = 0;
         if((tabItemWidth + distance) < tabsWidth * 0.7) return;
+
         $('#fileTabs > .tabs-navbar > .tabs-nav')[0].style.transform = 'translateX('+ distance +'px)';
     }
-    $('.btn-left').click(function() {arrow(1);});
+    $('.btn-left').click(function()  {arrow(1);});
     $('.btn-right').click(function() {arrow(-1);});
 
     /**
@@ -101,7 +102,6 @@ $(function()
     $(document).on('click', '.branch-or-tag', function()
     {
         var branchOrTag = $(this).text();
-        console.log(branchOrTag)
         if(branchOrTag != branchID)
         {
             $('#filesTree').addClass('loading');

@@ -1536,6 +1536,14 @@ class repo extends control
         return print(json_encode($branchesAndTags));
     }
 
+    /**
+     * Get file tree by ajax.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
     public function ajaxGetFileTree($repoID, $branch = '')
     {
         $repo  = $this->repo->getRepoByID($repoID);
