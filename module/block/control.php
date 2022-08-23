@@ -778,8 +778,9 @@ class block extends control
      */
     public function printReleaseBlock()
     {
-        $this->session->set('releaseList', $this->app->getURI(true), 'product');
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $uri = $this->createLink('my', 'index');
+        $this->session->set('releaseList', $uri, 'product');
+        $this->session->set('buildList', $uri, 'execution');
 
         $this->app->loadLang('release');
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
@@ -801,7 +802,7 @@ class block extends control
      */
     public function printBuildBlock()
     {
-        $this->session->set('buildList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->createLink('my', 'index'), 'execution');
         $this->app->loadLang('build');
 
         $builds = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUILD)->alias('t1')
