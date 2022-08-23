@@ -241,8 +241,7 @@ class build extends control
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $bugs = $this->dao->select('*')
-            ->from(TABLE_BUG)
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('id')->in($build->bugs)
             ->andWhere('deleted')->eq(0)
             ->beginIF($type == 'bug')->orderBy($sort)->fi()
@@ -251,8 +250,7 @@ class build extends control
 
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")
-            ->from(TABLE_STORY)
+        $stories    = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('id')->in($build->stories)
             ->andWhere('deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy($sort)->fi()
