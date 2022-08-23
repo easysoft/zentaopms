@@ -280,7 +280,6 @@
 
           <?php $this->printExtendFields($story, 'div', 'position=right');?>
 
-          <?php if($story->status == 'closed'):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
@@ -318,7 +317,6 @@
               </tr>
            </table>
           </div>
-          <?php endif;?>
         </div>
       </div>
     </div>
