@@ -1450,27 +1450,27 @@ class product extends control
             $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
-                $product->line                = zget($lines, $product->line, '');
+                $product->line = zget($lines, $product->line, '');
                 if($this->config->URAndSR)
                 {
                     $product->activeRequirements  = (int) $product->requirements['active'];
-                    $product->changedRequirements = (int) $product->requirements['changed'];
+                    $product->changedRequirements = (int) $product->requirements['changing'];
                     $product->draftRequirements   = (int) $product->requirements['draft'];
                     $product->closedRequirements  = (int) $product->requirements['closed'];
                     $product->totalRequirements   = $product->activeRequirements + $product->changedRequirements + $product->draftRequirements + $product->closedRequirements;
                     $product->requireCompleteRate = ($product->totalRequirements == 0 ? 0 : round($product->closedRequirements / $product->totalRequirements, 3) * 100) . '%';
                 }
-                $product->activeStories       = (int)$product->stories['active'];
-                $product->changedStories      = (int)$product->stories['changed'];
-                $product->draftStories        = (int)$product->stories['draft'];
-                $product->closedStories       = (int)$product->stories['closed'];
-                $product->totalStories        = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
-                $product->storyCompleteRate   = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-                $product->unResolvedBugs      = (int)$product->unResolved;
-                $product->assignToNullBugs    = (int)$product->assignToNull;
-                $product->closedBugs          = (int)$product->closedBugs;
-                $product->bugFixedRate        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
-                $product->program             = $product->programName;
+                $product->activeStories     = (int)$product->stories['active'];
+                $product->changedStories    = (int)$product->stories['changing'];
+                $product->draftStories      = (int)$product->stories['draft'];
+                $product->closedStories     = (int)$product->stories['closed'];
+                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
+                $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
+                $product->unResolvedBugs    = (int)$product->unResolved;
+                $product->assignToNullBugs  = (int)$product->assignToNull;
+                $product->closedBugs        = (int)$product->closedBugs;
+                $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+                $product->program           = $product->programName;
 
                 /* get rowspan data */
                 if($lastProgram == '' or $product->program != $lastProgram)

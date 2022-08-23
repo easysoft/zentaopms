@@ -22,7 +22,7 @@ $config->story->review->requiredFields = '';
 $config->story->editor = new stdclass();
 $config->story->editor->create   = array('id' => 'spec,verify', 'tools' => 'simpleTools');
 $config->story->editor->change   = array('id' => 'spec,verify,comment', 'tools' => 'simpleTools');
-$config->story->editor->edit     = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->story->editor->edit     = array('id' => 'spec,verify,comment', 'tools' => 'simpleTools');
 $config->story->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->story->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->story->editor->review   = array('id' => 'comment', 'tools' => 'simpleTools');

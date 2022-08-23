@@ -113,12 +113,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo $program['draftRequirements'];?></td>
             <td><?php echo $program['activeRequirements'];?></td>
-            <td><?php echo $program['changedRequirements'];?></td>
+            <td><?php echo $program['changingRequirements'];?></td>
             <td><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $program['draftStories'];?></td>
             <td><?php echo $program['activeStories'];?></td>
-            <td><?php echo $program['changedStories'];?></td>
+            <td><?php echo $program['changingStories'];?></td>
             <td><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
             <td><?php echo $program['unResolvedBugs'];?></td>
             <td><?php echo $program['closedBugs'];?></td>
@@ -158,12 +158,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo isset($line['draftRequirements']) ? $line['draftRequirements'] : 0;?></td>
             <td><?php echo isset($line['activeRequirements']) ? $line['activeRequirements'] : 0;?></td>
-            <td><?php echo isset($line['changedRequirements']) ? $line['changedRequirements'] : 0;?></td>
+            <td><?php echo isset($line['changingRequirements']) ? $line['changingRequirements'] : 0;?></td>
             <td><?php echo (isset($line['totalRequirements']) and $line['totalRequirements'] != 0) ? round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100 : 0;?>%</td>
             <?php endif;?>
             <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
-            <td><?php echo isset($line['changedStories']) ? $line['changedStories'] : 0;?></td>
+            <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
             <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
             <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
@@ -179,8 +179,8 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changed'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changed'];
+          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'];
+          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'];
 
           $trClass = '';
           if($product->line)
@@ -217,12 +217,12 @@
             <?php if($this->config->URAndSR):?>
             <td><?php echo $product->requirements['draft'];?></td>
             <td><?php echo $product->requirements['active'];?></td>
-            <td><?php echo $product->requirements['changed'];?></td>
+            <td><?php echo $product->requirements['changing'];?></td>
             <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
             <?php endif;?>
             <td><?php echo $product->stories['draft'];?></td>
             <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changed'];?></td>
+            <td><?php echo $product->stories['changing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
             <td><?php echo $product->closedBugs;?></td>

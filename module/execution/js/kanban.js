@@ -1130,7 +1130,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                     if(data)
                     {
                         data = $.parseJSON(data);
-                        if(data.status == 'draft' || data.status == 'changed')
+                        if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
                         {
                             bootbox.alert(executionLang.storyDragError);
                         }

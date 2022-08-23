@@ -23,10 +23,14 @@ $lang->story->change             = "Change";
 $lang->story->changed            = 'Change';
 $lang->story->assignTo           = 'Assign';
 $lang->story->review             = 'Review';
+$lang->story->submitReview       = "Submit Review";
 $lang->story->recall             = 'Revoke';
+$lang->story->recallChange       = 'Undo Changes';
+$lang->story->recallAction       = 'Undo';
 $lang->story->needReview         = 'Need Review';
 $lang->story->batchReview        = 'Batch Review';
 $lang->story->edit               = "Edit Story";
+$lang->story->editDraft          = "Edit Draft";
 $lang->story->batchEdit          = "Batch Edit";
 $lang->story->subdivide          = 'Decompose';
 $lang->story->link               = 'Link';
@@ -70,6 +74,8 @@ $lang->story->batchToTask        = 'Batch Convert to Task';
 $lang->story->convertRelations   = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
+$lang->story->saveDraft          = 'Save as draft';
+$lang->story->doNotSubmit        = 'Do Not Submit';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
@@ -82,12 +88,13 @@ $lang->story->deleteAction    = "Delete {$lang->SRCommon}";
 $lang->story->exportAction    = "Export {$lang->SRCommon}";
 $lang->story->reportAction    = "Report";
 
-$lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "The closed {$lang->SRCommon} will not be converted into tasks.";
-$lang->story->successToTask   = "Converted to task.";
-$lang->story->storyRound      = '%s time estimation';
-$lang->story->float           = "『%s』should have positive number, or decimals.";
+$lang->story->skipStory        = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory      = 'Story %s is closed and will not be closed.';
+$lang->story->batchToTaskTips  = "The closed {$lang->SRCommon} will not be converted into tasks.";
+$lang->story->successToTask    = "Converted to task.";
+$lang->story->storyRound       = '%s time estimation';
+$lang->story->float            = "『%s』should have positive number, or decimals.";
+$lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
@@ -130,6 +137,8 @@ $lang->story->closedBy         = 'ClosedBy';
 $lang->story->closedDate       = 'ClosedDate';
 $lang->story->closedReason     = 'Reason';
 $lang->story->rejectedReason   = 'Reject Reason';
+$lang->story->changedBy        = 'ChangedBy';
+$lang->story->changedDate      = 'ChangedDate';
 $lang->story->reviewedBy       = 'ReviewedBy';
 $lang->story->reviewer         = $lang->story->reviewedBy;
 $lang->story->reviewers        = 'Reviewers';
@@ -182,11 +191,12 @@ $lang->story->needNotReviewList[1] = 'No Review';
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = 'Draft';
-$lang->story->statusList['active']  = 'Active';
-$lang->story->statusList['closed']  = 'Closed';
-$lang->story->statusList['changed'] = 'Changed';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = 'Draft';
+$lang->story->statusList['reviewing'] = 'Reviewing';
+$lang->story->statusList['active']    = 'Active';
+$lang->story->statusList['closed']    = 'Closed';
+$lang->story->statusList['changing']  = 'Changing';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Waiting';
@@ -295,6 +305,8 @@ $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
+$lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
+$lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
@@ -325,6 +337,7 @@ $lang->story->action->linkrelatedstory      = array('main' => '$date, linked by 
 $lang->story->action->subdividestory        = array('main' => '$date, decomposed by <strong>$actor</strong> to Story <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, unlinked by <strong>$actor</strong> from Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, unlinked by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
+$lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -452,6 +465,8 @@ $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be
 
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+$lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
+$lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';
