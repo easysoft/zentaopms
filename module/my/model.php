@@ -336,7 +336,7 @@ class myModel extends model
 
         if($objectType == 'task')
         {
-            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')
+            $objectList = $this->dao->select('t1.*, t2.name as executionName, t2.type as executionType')->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
