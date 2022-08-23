@@ -783,6 +783,7 @@ class execution extends control
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
 
         $queryID     = ($type == 'bysearch') ? $param : 0;
         $execution   = $this->commonAction($executionID);

@@ -194,8 +194,8 @@ class release extends control
         if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
-                ->beginIF($type == 'story')->orderBy($orderBy)->fi()
+        $stories = $this->dao->select('*, IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
+                ->beginIF($type == 'story')->orderBy($sort)->fi()
                 ->page($storyPager)
                 ->fetchAll('id');
 

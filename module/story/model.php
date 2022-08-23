@@ -2601,7 +2601,7 @@ class storyModel extends model
         if(empty($normalProducts) and empty($branchProducts)) $productQuery .= '1 = 1';
         $productQuery .= ') ';
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
+        $stories = $this->dao->select('*, IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
@@ -2815,7 +2815,7 @@ class storyModel extends model
         $actionIDList = array();
         if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
-        $sql = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1');
+        $sql = $this->dao->select('t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
 
         $stories = $sql->where('t1.product')->in($productID)
@@ -2851,7 +2851,7 @@ class storyModel extends model
      */
     public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy = '', $pager = null)
     {
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
+        $stories = $this->dao->select('*,IF(`pri` = 0, 999, `pri`) as priOrder')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
@@ -3027,7 +3027,7 @@ class storyModel extends model
             }
         }
 
-        $tmpStories = $this->dao->select('DISTINCT t1.*')->from(TABLE_STORY)->alias('t1')
+        $tmpStories = $this->dao->select('DISTINCT t1.*,IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
@@ -3127,7 +3127,7 @@ class storyModel extends model
                 }
             }
 
-            $stories = $this->dao->select('distinct t1.*, t2.*, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.*, t2.*,IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
@@ -3168,7 +3168,7 @@ class storyModel extends model
 
             $type = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
 
-            $stories = $this->dao->select('distinct t1.*, t2.*,t3.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.*, t2.*, IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where('t1.project')->eq((int)$executionID)
@@ -3283,7 +3283,8 @@ class storyModel extends model
         }
         else
         {
-            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+            if(strpos($orderBy, 'priOrder') === false) $orderBy = str_replace('pri', 'priOrder', $orderBy);
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, 999, t2.`pri`) as priOrder')
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where('t1.plan')->eq($planID)
@@ -3390,7 +3391,7 @@ class storyModel extends model
      */
     public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true)
     {
-        $sql = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+        $sql = $this->dao->select('t1.*, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 

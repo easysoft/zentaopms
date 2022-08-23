@@ -2421,6 +2421,8 @@ class productModel extends model
             $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         }
+
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 
     /**

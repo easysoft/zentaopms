@@ -332,15 +332,16 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'story');
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
@@ -396,6 +397,7 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
