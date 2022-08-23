@@ -65,3 +65,9 @@ $lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract     = 'Extracting files failed. Files might be damaged or there might be invalid files in the zip package.';
 $lang->file->fileNotFound     = 'Tập tin was not found. The physical file might have been deleted!';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
+
+$lang->file->uploadError[1] = 'The uploaded filesize exceeds the limit. Please change the upload_max_filesize and post_max_size options in php.ini';
+$lang->file->uploadError[2] = 'The size of the uploaded file exceeds the value specified by the MAX_FILE_SIZE option in the HTML form';
+$lang->file->uploadError[3] = 'Only part of the file has been uploaded, please re-upload';
+$lang->file->uploadError[4] = 'No files have been uploaded';
+$lang->file->uploadError[5] = 'The size of the file is 0. Please upload the file again';

@@ -102,6 +102,9 @@ class port extends control
         if($_FILES)
         {
             $file      = $this->loadModel('file')->getUpload('file');
+
+            if(!empty($file['error'])) return print(js::confirm($this->lang->file->uploadError[$file['error']]));
+
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
 
