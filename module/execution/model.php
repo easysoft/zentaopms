@@ -785,6 +785,18 @@ class executionModel extends model
                 return false;
             }
 
+            /* Replace required language. */
+            if($this->app->tab == 'project')
+            {
+                $this->lang->project->name = $this->lang->execution->name;
+                $this->lang->project->code = $this->lang->execution->code;
+            }
+            else
+            {
+                $this->lang->project->name = $this->lang->execution->execName;
+                $this->lang->project->code = $this->lang->execution->execCode;
+            }
+
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
