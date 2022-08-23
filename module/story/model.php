@@ -3056,6 +3056,15 @@ class storyModel extends model
             if(empty($normalProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
             $storyQuery .= ') ';
 
+            if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
+            }
+            else
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
+            }
+
             if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
@@ -3068,14 +3077,6 @@ class storyModel extends model
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
-        if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
-        {
-            $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing')"; // Fix bug #990.
-        }
-        else
-        {
-            $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'closed')";
-        }
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
