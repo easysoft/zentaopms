@@ -853,4 +853,44 @@ class gitlab
 
         return "{$this->root}archive.{$ext}" . '?' . http_build_query($params);
     }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+        $api = "tree";
+
+        $param = new stdclass();
+        $param->path      = ltrim($path, '/');
+        $param->ref       = $revision;
+        $param->recursive = 0;
+        if(!empty($this->branch)) $param->ref = $this->branch;
+
+        $list = $this->fetch($api, $param, true);
+        if(empty($list)) return array();
+
+        $infos = array();
+        foreach($list as $file)
+        {
+            if(!isset($file->type)) continue;
+
+            if($file->type == 'blob')
+            {
+                $lists[] = $file->path;
+            }
+            else
+            {
+                $this->getAllFiles($file->path, $revision, $lists);
+            }
+        }
+        return $lists;
+    }
 }

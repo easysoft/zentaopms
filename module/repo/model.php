@@ -1166,7 +1166,7 @@ class repoModel extends model
      */
     public function setRepoBranch($branch)
     {
-        setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure);
         $_COOKIE['repoBranch'] = $branch;
     }
 
@@ -2206,5 +2206,209 @@ class repoModel extends model
         }
 
         return $url;
+    }
+
+    /**
+     * Get html for file tree.
+     *
+     * @param  object $repo
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
+    public function getFileTree($repo, $branch = '')
+    {
+        if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+        $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
+            ->where('1=1')
+            ->andWhere('t1.repo')->eq($repo->id)
+            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+            ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+            ->orderBy('t1.`type` asc, t2.`time` asc')
+            ->fetchPairs();
+
+        $allFiles = array();
+        foreach($files as $file => $action)
+        {
+            if($action != 'D') $allFiles[] = $file;
+        }
+
+        return $this->buildFileTree($allFiles);
+    }
+
+    /**
+     * Build file tree.
+     *
+     * @param  array  $allFiles
+     * @access public
+     * @return string
+     */
+    public function buildFileTree($allFiles = array())
+    {
+        $files = array();
+        $id    = 0;
+        foreach($allFiles as $key => $file)
+        {
+            $fileName = explode('/', $file);
+            $parent   = '';
+            foreach($fileName as $path)
+            {
+                if($path === '') continue;
+
+                $parentID = $parent == '' ? 0 : $files[$parent]['id'];
+                $parent  .= $parent == '' ? $path : '/' . $path;
+                if(!isset($files[$parent])){
+                    $id++;
+
+                    $files[$parent] = array(
+                        'id'     => $id,
+                        'parent' => $parentID,
+                        'name'   => $path,
+                        'path'   => $parent,
+                        'key'    => $key,
+                    );
+                }
+            }
+        }
+        sort($files);
+        $fileTree = $this->buildTree($files);
+
+        $html  = '<ul data-name="filesTree" data-ride="tree" data-initial-state="preserve" id="modules" class="tree">';
+        foreach($fileTree as $file)
+        {
+            $html .= "<li class='open' data-id='{$file['id']}'>";
+            if(isset($file['children']))
+            {
+                $html .= "<i class='icon icon-folder'></i> {$file['name']}";
+                $html .= $this->getFrontFiles($file['children']);
+            }
+            else
+            {
+                $html .= "<span class='item doc-title text-ellipsis'><i class='icon icon-file-text-alt'></i> " . html::a('#filePath' . $file['key'], $file['name'], '', "class='repoFileName' data-path='{$file['path']}'") . '</span>';
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * Build tree.
+     *
+     * @param  array  $files
+     * @param  int    $parent
+     * @access public
+     * @return array
+     */
+    public function buildTree($files = array(), $parent = 0)
+    {
+        $treeList = [];
+        $key      = 0;
+        $pathName = array();
+        $fileName = array();
+        foreach($files as $key => $file)
+        {
+            if ($file['parent'] == $parent)
+            {
+                $treeList[$key] = $file;
+                $fileName[$key] = $file['name'];
+                /* Default value is '~', because his ascii code is large in string. */
+                $pathName[$key] = '~';
+
+                $children = $this->buildTree($files, $file['id']);
+                if($children)
+                {
+                    $treeList[$key]['children'] = $children;
+                    $fileName[$key] = '';
+                    $pathName[$key] = $file['path'];
+                }
+
+                $key++;
+            }
+        }
+        array_multisort($pathName, SORT_ASC, $fileName, SORT_ASC, $treeList);
+
+        return $treeList;
+    }
+
+    /**
+     * Get front files.
+     *
+     * @param  array $nodes
+     * @access public
+     * @return string
+     */
+    public function getFrontFiles($nodes)
+    {
+        $html = '<ul>';
+        foreach($nodes as $childNode)
+        {
+            $html .= "<li class='open'>";
+            if(isset($childNode['children']))
+            {
+                $html .= "<div class='tree-group'>";
+                $html .= "<i class='module-name icon icon-folder'></i> {$childNode['name']}";
+                $html .= '</div>';
+                $html .= $this->getFrontFiles($childNode['children']);
+            }
+            else
+            {
+                $html .= "<span class='item doc-title text-ellipsis'><i class='file icon icon-file-text-alt'></i> " . html::a('#filePath' . $childNode['key'], $childNode['name'], '', "class='repoFileName' data-path='{$childNode['path']}'") . '</span>';
+            }
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * Get git branch and tag.
+     *
+     * @param  int    $repoID
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @access public
+     * @return object
+     */
+    public function getBranchesAndTags($repoID, $oldRevision = '0', $newRevision = 'HEAD')
+    {
+        $output = new stdClass();
+
+        $scm  = $this->app->loadClass('scm');
+        $repo = $this->getRepoByID($repoID);
+        if(!$repo) return $output;
+
+        $scm->setEngine($repo);
+        $branches     = $scm->branch();
+        $tags         = $scm->tags('');
+        $branchAndtag = array('branch' => $branches, 'tag' =>$tags);
+
+        $html = '<ul class="tree tree-angles" data-ride="tree" data-idx="0" id="branchesAndTags">';
+        foreach($branchAndtag as $type => $data)
+        {
+            if(empty($data)) continue;
+
+            $html .= "<li data-idx='$type' data-id='$type' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>";
+            $html .= "<div class='hide-in-search'><a class='text-muted' title='{$this->lang->repo->{$type}}'>{$this->lang->repo->{$type}}</a></div><ul data-idx='$type'>";
+
+            foreach($data as $name)
+            {
+                $selectedSource = $name == $oldRevision ? 'selected-source' : '';
+                $selectedTarget = $name == $newRevision ? 'selected-target' : '';
+                $html .= "<li data-idx='$name' data-id='$type-$name'><a href='javascript:;' id='$type-$name' class='$selectedSource $selectedTarget branch-or-tag text-ellipsis' title='$name' data-key='$name'>$name</a></li>";
+            }
+
+            $html .= '</ul></li>';
+        }
+        $html .= '</ul>';
+
+        $sourceHtml = str_replace('branch-or-tag', 'branch-or-tag source', $html);
+        $targetHtml = str_replace('branch-or-tag', 'branch-or-tag target', $html);
+
+        $output->sourceHtml = str_replace('selected-source', 'selected', $sourceHtml);
+        $output->targetHtml = str_replace('selected-target', 'selected', $targetHtml);
+        return $output;
     }
 }

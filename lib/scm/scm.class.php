@@ -271,6 +271,19 @@ class scm
     {
         return $this->engine->getDownloadUrl($branch, $savePath, $ext);
     }
+
+    /**
+     * Get all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @access public
+     * @return string
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD')
+    {
+        return $this->engine->getAllFiles($path, $revision);
+    }
 }
 
 /**

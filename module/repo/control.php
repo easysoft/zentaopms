@@ -248,6 +248,101 @@ class repo extends control
     }
 
     /**
+     * Get editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    {
+        $file     = $entry;
+        $repo     = $this->repo->getRepoByID($repoID);
+        $entry    = $this->repo->decodePath($entry);
+        $revision = str_replace('*', '-', $revision);
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $revision);
+        $path = $entry ? $info->path : '';
+        if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
+        $content  = $this->scm->cat($entry, $revision);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $suffix   = '';
+        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
+        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
+
+        if(strpos($this->config->repo->images, "|$suffix|") !== false)
+        {
+            $content = base64_encode($content);
+        }
+        elseif($encoding != 'utf-8')
+        {
+            $content = helper::convertEncoding($content, $encoding);
+        }
+
+        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type         = 'view';
+        $this->view->showBug      = $showBug;
+        $this->view->encoding     = str_replace('-', '_', $encoding);
+        $this->view->repoID       = $repoID;
+        $this->view->branchID     = $this->cookie->repoBranch;
+        $this->view->objectID     = $objectID;
+        $this->view->repo         = $repo;
+        $this->view->revision     = $revision;
+        $this->view->file         = $file;
+        $this->view->entry        = $entry;
+        $this->view->path         = $entry;
+        $this->view->suffix       = $suffix;
+        $this->view->content      = $content;
+        $this->view->pathInfo     = $pathInfo;
+        $this->display();
+    }
+
+    /**
+     * View repo file with monaco editor.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    {
+        $file     = $entry;
+        $repo     = $this->repo->getRepoByID($repoID);
+        $entry    = $this->repo->decodePath($entry);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+
+        $this->view->title    = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type     = 'view';
+        $this->view->branchID = $this->cookie->repoBranch;
+        $this->view->showBug  = $showBug;
+        $this->view->encoding = $encoding;
+        $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
+        $this->view->repo     = $repo;
+        $this->view->revision = $revision;
+        $this->view->file     = $file;
+        $this->view->entry    = $entry;
+        $this->view->pathInfo = $pathInfo;
+        $this->display();
+    }
+
+    /**
      * View repo file.
      *
      * @param  int    $repoID
@@ -261,9 +356,13 @@ class repo extends control
      */
     public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
     {
+        $browser = helper::getBrowser();
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repo->setBackSession('view', $withOtherModule = true);
         if($repoID == 0) $repoID = $this->session->repoID;
+
+        $this->commonAction($repoID, $objectID);
+        if($browser['name'] != 'ie') return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
 
         if($_POST)
         {
@@ -272,8 +371,6 @@ class repo extends control
 
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=$entry&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
-
-        $this->commonAction($repoID, $objectID);
 
         $file     = $entry;
         $repo     = $this->repo->getRepoByID($repoID);
@@ -1422,5 +1519,35 @@ class repo extends control
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
         $this->locate($url);
+    }
+
+    /**
+     * Ajax get branches and tags.
+     *
+     * @param  int    $repoID
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchesAndTags($repoID, $oldRevision = '0', $newRevision = 'HEAD')
+    {
+        $branchesAndTags = $this->repo->getBranchesAndTags($repoID, $oldRevision, $newRevision);
+        return print(json_encode($branchesAndTags));
+    }
+
+    /**
+     * Get file tree by ajax.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
+    public function ajaxGetFileTree($repoID, $branch = '')
+    {
+        $repo  = $this->repo->getRepoByID($repoID);
+        $files = $this->repo->getFileTree($repo, $branch);
+        return print($files);
     }
 }
