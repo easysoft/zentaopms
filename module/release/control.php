@@ -190,6 +190,9 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'priOrder') === false) $sort = str_replace('pri', 'priOrder', $sort);
+
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
                 ->beginIF($type == 'story')->orderBy($orderBy)->fi()
@@ -202,16 +205,19 @@ class release extends control
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+            ->beginIF($type == 'bug')->orderBy($sort)->fi()
             ->page($bugPager)
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'leftBug')->orderBy($orderBy)->fi()
+        if($type == 'leftBug' and strpos($orderBy, 'severity') !== false) $sort = str_replace('severity', 'severityOrder', $orderBy);
+
+        $leftBugs = $this->dao->select('*, IF(`severity` = 0, 999, `severity`) as severityOrder')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
             ->page($leftBugPager)
             ->fetchAll();
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
         $this->commonAction($release->product);
