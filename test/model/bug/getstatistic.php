@@ -10,6 +10,16 @@ title=bugModel->getStatistic();
 cid=1
 pid=1
 
+查询product id为0创建日期在今天的统计信息 >> 0
+查询product id为1创建日期在今天的统计信息 >> 0
+查询product id为1创建日期在今天的统计信息 >> 0
+查询product id为1创建日期在今天的统计信息 >> 0
+查询product id为11解决日期在今天的统计信息 >> 1
+查询product id为31解决日期在今天的统计信息 >> 0
+查询product id为61解决日期在今天的统计信息 >> 0
+查询product id为91关闭日期在今天的统计信息 >> 0
+查询product id为10001关闭日期在今天的统计信息 >> 0
+
 */
 
 $productIDList = array('1', '11', '31', '61', '91', '10001');
