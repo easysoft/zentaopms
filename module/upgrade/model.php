@@ -546,8 +546,6 @@ class upgradeModel extends model
             case '17_5':
                 $this->updateOSAndBrowserOfBug();
                 $this->addURPriv();
-                break;
-            case '17_5':
                 $this->updateStoryStatus();
                 break;
         }
