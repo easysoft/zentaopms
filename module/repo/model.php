@@ -2598,11 +2598,11 @@ class repoModel extends model
      */
     public function getRelationByCommit($repoID, $commit)
     {
-        $relationList = $this->dao->select('BID as id, BType as type')->from(TABLE_RELATION)
-            ->where('relation')->eq('repo')
-            ->andWhere('AType')->eq('codeCommited')
-            ->andWhere('AID')->eq($repoID)
-            ->andWhere('AVersion')->eq($commit)
+        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')
+            ->on('t1.AID = t2.id')
+            ->where('t2.revision')->eq($commit)
+            ->andWhere('t2.repo')->eq($repoID)
             ->fetchAll();
 
         $storyIDs = array();
