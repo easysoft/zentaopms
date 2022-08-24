@@ -2080,4 +2080,93 @@ class bugTest
             return $title;
         }
     }
+
+    /**
+     * Test get statistic.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getStatisticTest($productID = 0)
+    {
+        $dates = $this->objectModel->getStatistic($productID);
+        $returns = array();
+        $today   = date('m/d', time());
+        foreach($dates as $dateType => $dateList)
+        {
+            $returns[$dateType] = $dateList[$today];
+        }
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $returns;
+        }
+    }
+
+    /**
+     * Test get bugs to review.
+     *
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @access public
+     * @return string
+     */
+    public function getReviewBugsTest($productIDList, $branch, $modules, $executions, $orderBy)
+    {
+        $bugs = $this->objectModel->getReviewBugs($productIDList, $branch, $modules, $executions, $orderBy);
+        $ids  = '';
+        foreach($bugs as $bug)
+        {
+            $ids .= ",$bug->id";
+        }
+        $ids = trim($ids, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $ids;
+        }
+    }
+
+    /**
+     * Test get related objects id lists.
+     *
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @access public
+     * @return string
+     */
+    public function getRelatedObjectsTest($object, $pairs)
+    {
+        $objects = $this->objectModel->getRelatedObjects($object, $pairs);
+        $ids     = '';
+        foreach($objects as $objectID => $object)
+        {
+            $ids .= ",$objectID:$object";
+        }
+        $ids = trim($ids, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $ids;
+        }
+    }
 }
