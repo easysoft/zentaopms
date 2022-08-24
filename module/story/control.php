@@ -137,7 +137,7 @@ class story extends control
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
                 if($objectID == 0)
                 {
-                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
+                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType=$storyType");
                 }
                 else
                 {
@@ -563,7 +563,7 @@ class story extends control
 
             if($storyID)
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
             elseif($executionID)
             {
@@ -796,7 +796,8 @@ class story extends control
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
+            $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1127,7 +1128,8 @@ class story extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1198,7 +1200,7 @@ class story extends control
                     return print(js::closeModal('parent.parent', 'this'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1330,7 +1332,7 @@ class story extends control
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from"), ''));
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
         }
         else
         {
@@ -1425,7 +1427,8 @@ class story extends control
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         /* Get story and product. */
@@ -1528,7 +1531,7 @@ class story extends control
             $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
             $this->loadModel('action')->create('story', $storyID, $action);
 
-            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
@@ -1557,7 +1560,7 @@ class story extends control
             }
 
             if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         /* Get story and product. */
@@ -1650,7 +1653,7 @@ class story extends control
             }
             else
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
         }
 
@@ -2030,7 +2033,7 @@ class story extends control
                     return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         /* Get story and product. */
