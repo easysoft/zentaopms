@@ -411,19 +411,13 @@ class designModel extends model
         {
             $key = strtolower($key);
 
-            if($count > 4)
+            if($count <= 4) $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+            if($count == 5)
             {
-                if($count == 5)
-                {
-                    $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "更多|design|browse|projectID=%s&productID=0&browseType={$key}", 'class' => 'dropdown dropdown-hover');
-                    $this->lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
-                }
-                $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+                $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "{$this->lang->design->more}|design|browse|projectID=%s&productID=0&browseType={$key}", 'class' => 'dropdown dropdown-hover');
+                $this->lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
             }
-            else
-            {
-                $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
-            }
+            if($count >= 5) $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
 
             $count ++;
         }
