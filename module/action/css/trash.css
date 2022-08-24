@@ -12,4 +12,3 @@ td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; alig
 [lang^=de] .flex span.label-danger {min-width: 58px;}
 [lang^=fr] .flex span.label-danger {min-width: 63px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
-
