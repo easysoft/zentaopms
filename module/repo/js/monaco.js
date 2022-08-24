@@ -1,6 +1,6 @@
 $(function()
 {
-    var distance  = 0;
+    var distance = 0;
 
     /**
      * Arrow tab line.
