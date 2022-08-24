@@ -350,6 +350,7 @@
                 <th class='text-center'><?php echo $lang->task->estimate?></th>
                 <th class='text-center'><?php echo $lang->task->consumed?></th>
                 <th class='text-center'><?php echo $lang->task->left?></th>
+                <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>
                 <?php foreach($task->team as $member):?>
@@ -358,6 +359,7 @@
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>
+                  <td class="status-<?php echo $member->status;?>"><?php echo zget($lang->task->statusList, $member->status);?></td>
                 </tr>
                 <?php endforeach;?>
             </table>

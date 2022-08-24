@@ -1647,6 +1647,7 @@ class taskModel extends model
             $data = new stdclass();
             $data->consumed = $this->post->consumed;
             $data->left     = $this->post->left;
+            $data->status   = 'doing';
 
             $this->dao->update(TABLE_TASKTEAM)->data($data)
                 ->where('task')->eq($taskID)
@@ -1919,7 +1920,10 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)
+            $this->dao->update(TABLE_TASKTEAM)
+                ->set('left')->eq(0)
+                ->set('consumed')->eq($task->consumed)
+                ->set('status')->eq('done')
                 ->where('task')->eq((int)$taskID)
                 ->andWhere('account')->eq($this->app->user->account)->exec();
 

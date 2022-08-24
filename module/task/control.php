@@ -1338,7 +1338,7 @@ class task extends control
         {
             $teams = array_keys($task->team);
 
-            $task->nextBy     = $this->task->getNextUser($teams, $this->app->user->account);
+            $task->nextBy     = $this->task->getAssignedTo4Multi($members, $task);
             $task->myConsumed = isset($task->team[$this->app->user->account]) ? $task->team[$this->app->user->account]->consumed : 0;
 
             $lastAccount   = end($teams);
