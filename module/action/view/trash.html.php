@@ -85,7 +85,7 @@
           <?php if($config->systemMode == 'new' and $currentObjectType == 'execution'):?>
           <th class='w-250px'><?php echo $this->lang->project->project;?></th>
           <?php endif;?>
-          <?php if($currentObjectType == 'story'):?>
+          <?php if($currentObjectType == 'story' or 'requirement'):?>
           <th class='w-250px'><?php echo $this->lang->story->product;?></th>
           <?php endif;?>
           <?php if($currentObjectType == 'task'):?>
@@ -152,7 +152,7 @@
             <?php endif;?>
           </td>
           <?php endif;?>
-          <?php if($currentObjectType == 'story'):?>
+          <?php if($currentObjectType == 'story' or 'requirement'):?>
           <td class="c-name flex" title="<?php echo $productList[$action->objectID]->productTitle;?>">
             <span class="text-ellipsis"><?php echo $productList[$action->objectID]->productTitle;?></span>
             <?php if($productList[$action->objectID]->productDeleted):?>
