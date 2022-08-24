@@ -1588,8 +1588,7 @@ class executionModel extends model
 
         if($projectsToAppended)
         {
-            $task = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($projectsToAppended)->fetch('execution');
-            $path = sprintf("%s,%s", $projectID, $task);
+            $path = sprintf("%s,%s", $projectID, $projectsToAppended);
             $executions += $this->dao->select('*')->from(TABLE_EXECUTION)->where('path')->like("%,$path,%")->fetchAll('id');
         }
 
