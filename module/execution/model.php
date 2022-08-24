@@ -1315,12 +1315,16 @@ class executionModel extends model
      * Get execution by idList.
      *
      * @param  array  $executionIdList
+     * @param  string $mode all
      * @access public
      * @return array
      */
-    public function getByIdList($executionIdList = array())
+    public function getByIdList($executionIdList = array(), $mode = '')
     {
-        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in($executionIdList)
+            ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
     }
 
     /**

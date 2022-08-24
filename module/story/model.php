@@ -86,17 +86,18 @@ class storyModel extends model
      *
      * @param  int|array|string    $storyIdList
      * @param  string $type requirement|story
+     * @param  string $mode all
      * @access public
      * @return array
      */
-    public function getByList($storyIdList = 0, $type = 'story')
+    public function getByList($storyIdList = 0, $type = 'story', $mode = '')
     {
-        return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
+        return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.version=t2.version')
+            ->where('t1.version=t2.version')
+            ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
             ->beginIF(!$storyIdList)->andWhere('t1.type')->eq($type)->fi()
             ->fetchAll('id');
