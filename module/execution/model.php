@@ -4380,7 +4380,7 @@ class executionModel extends model
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
         $class = !empty($execution->children) ? 'disabled' : '';
-        common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+        common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
         if($execution->type == 'stage')
         {
