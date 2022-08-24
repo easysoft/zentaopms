@@ -5562,7 +5562,8 @@ class storyModel extends model
 
         if($reviewRule == 'halfpass')
         {
-            if($rejectCount == floor(count($revireList) / 2)) return 'closed';
+            /* When the number of reviewers is even, half of them reject to close. */
+            if(count($reviewerList) > 1 and count($reviewerList) % 2 == 0 and $rejectCount == floor(count($reviewerList) / 2)) return 'closed';
 
             if($passCount   >= floor(count($reviewerList) / 2) + 1) $status = 'active';
             if($rejectCount >= floor(count($reviewerList) / 2) + 1) $status = 'closed';
