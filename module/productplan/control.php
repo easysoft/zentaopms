@@ -725,29 +725,14 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('productplan', 'unlinkstory', "storyID=$storyID&planID=$planID&confirm=yes")));
+            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, inlink('unlinkstory', "storyID=$storyID&planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->unlinkStory($storyID, $planID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
-            return print(js::reload('parent'));
+            echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent');
         }
     }
 
@@ -867,28 +852,13 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->productplan->confirmUnlinkBug, $this->createLink('productplan', 'unlinkbug', "bugID=$bugID&confirm=yes")));
+            return print(js::confirm($this->lang->productplan->confirmUnlinkBug, inlink('unlinkbug', "bugID=$bugID&planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->unlinkBug($bugID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
-            /* if ajax request, send result. */
-            if($this->server->ajax)
-            {
-                if(dao::isError())
-                {
-                    $response['result']  = 'fail';
-                    $response['message'] = dao::getError();
-                }
-                else
-                {
-                    $response['result']  = 'success';
-                    $response['message'] = '';
-                }
-                return $this->send($response);
-            }
             return print(js::reload('parent'));
         }
     }

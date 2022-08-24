@@ -591,21 +591,6 @@ class build extends control
     {
         $this->build->unlinkStory($buildID, $storyID);
 
-        /* if ajax request, send result. */
-        if($this->server->ajax)
-        {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
-        }
         return print(js::reload('parent'));
     }
 
