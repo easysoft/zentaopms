@@ -44,9 +44,9 @@ $(function()
     }
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
 
-    var paneWidth = $(window).height() - 120;
-    $('#fileTabs .tab-pane').css('height', paneWidth + 'px')
-    $('#filesTree').css('height', paneWidth + 45)
+    var paneHeight = $(window).height() - 120;
+    $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
+    $('#filesTree').css('height', paneHeight + 45)
 
     $(document).on('click', '.repoFileName', function()
     {
