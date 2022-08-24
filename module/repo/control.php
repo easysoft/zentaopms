@@ -270,12 +270,12 @@ class repo extends control
         $info = $this->scm->info($entry, $revision);
         $path = $entry ? $info->path : '';
         if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
-        $content   = $this->scm->cat($entry, $revision);
-        $entry     = urldecode($entry);
-        $pathInfo  = pathinfo($entry);
-        $encoding  = empty($encoding) ? $repo->encoding : $encoding;
-        $encoding  = strtolower(str_replace('_', '-', $encoding));
-        $blames    = $this->scm->blame($entry, $revision);
+        $content  = $this->scm->cat($entry, $revision);
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+        $blames   = $this->scm->blame($entry, $revision);
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
