@@ -105,7 +105,16 @@
             {
                 $vars = "story={$story->id}";
                 echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+
+                if(strpos('draft,changing', $story->status) !== false)
+                {
+                    echo common::buildIconButton('story', 'submitReview', $vars, $story, 'list', 'sub-review', '', 'iframe', true);
+                }
+                else
+                {
+                    echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+                }
+
                 echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
@@ -145,8 +154,17 @@
             if($canBeChanged)
             {
                 $vars = "story={$child->id}";
-                common::printIcon('story', 'change',     $vars, $child, 'list', 'alter', '', 'iframe', true);
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'search', '', 'iframe', true);
+                common::printIcon('story', 'change', $vars, $child, 'list', 'alter', '', 'iframe', true);
+
+                if(strpos('draft,changing', $child->status) !== false)
+                {
+                    common::printIcon('story', 'submitReview', $vars, $child, 'list', 'sub-review', '', 'iframe', true);
+                }
+                else
+                {
+                    common::printIcon('story', 'review', $vars, $child, 'list', 'search', '', 'iframe', true);
+                }
+                common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
                 common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");

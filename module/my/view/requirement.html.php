@@ -103,7 +103,15 @@
             {
                 $vars = "story={$story->id}";
                 echo common::buildIconButton('story', 'change', "$vars&from=&storyType=requirement", $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
+
+                if(strpos('draft,changing', $story->status) !== false)
+                {
+                    echo common::buildIconButton('story', 'submitReview', "$vars&storyType=requirement", $story, 'list', 'sub-review', '', 'iframe', true);
+                }
+                else
+                {
+                    echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
+                }
                 echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
@@ -147,11 +155,20 @@
                 }
                 else
                 {
-                    common::printIcon('story', 'change',     $vars, $child, 'list', 'alter');
-                    common::printIcon('story', 'review',     $vars, $child, 'list', 'search');
-                    common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
-                    common::printIcon('story', 'edit',       $vars, $child, 'list');
-                    common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap');
+                    common::printIcon('story', 'change', "$vars&from=&storyType=requirement", $child, 'list', 'alter');
+
+                    if(strpos('draft,changing', $child->status) !== false)
+                    {
+                        common::printIcon('story', 'submitReview', "$vars&storyType=requirement", $child, 'list', 'sub-review', '', 'iframe', true);
+                    }
+                    else
+                    {
+                        common::printIcon('story', 'review', "$vars&from=product&storyType=requirement", $child, 'list', 'search', '', 'iframe', true);
+                    }
+
+                    common::printIcon('story', 'recall', "$vars&from=list&storyType=requirement", $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                    common::printIcon('story', 'close',  "$vars&from=&storyType=requirement", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('story', 'edit',   "$vars&from=default&storyType=requirement", $child, 'list');
                 }
             }
             ?>
