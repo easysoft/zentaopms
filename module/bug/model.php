@@ -1994,7 +1994,8 @@ class bugModel extends model
     /**
      * get Product Bug Pairs
      *
-     * @param  int    $productID
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
