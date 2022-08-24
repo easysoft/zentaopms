@@ -2207,9 +2207,10 @@ class story extends control
         $products = $this->product->getPairs();
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
+        $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         $this->view->story        = $story;
