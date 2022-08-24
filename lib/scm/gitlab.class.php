@@ -342,7 +342,7 @@ class gitlab
         if(!scm::checkRevision($revision)) return false;
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $file = $this->files($entry, $revision);
-        return base64_decode($file->content);
+        return isset($file->content) ? base64_decode($file->content) : '';
     }
 
     /**
@@ -688,7 +688,7 @@ class gitlab
     /**
      * Get files by commit.
      *
-     * @param  string    $commit
+     * @param  string  $commit
      * @access public
      * @return void
      */
@@ -717,8 +717,9 @@ class gitlab
             $file->revision = $revision;
             $file->path     = '/' . $row->new_path;
             $file->type     = 'file';
+            $file->oldPath  = '/' . $row->old_path;
 
-            $file->action   = 'M';
+            $file->action = 'M';
             if($row->new_file) $file->action = 'A';
             if($row->renamed_file) $file->action = 'R';
             if($row->deleted_file) $file->action = 'D';
@@ -827,8 +828,9 @@ class gitlab
             foreach($commit->diffs as $diff)
             {
                 $parsedLog->change[$diff->path] = array();
-                $parsedLog->change[$diff->path]['action'] = $diff->action;
-                $parsedLog->change[$diff->path]['kind']   = $diff->type;
+                $parsedLog->change[$diff->path]['action']  = $diff->action;
+                $parsedLog->change[$diff->path]['kind']    = $diff->type;
+                $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
             }
             $parsedLogs[] = $parsedLog;
         }
