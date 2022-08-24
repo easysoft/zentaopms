@@ -1258,7 +1258,7 @@ class taskModel extends model
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
             }
 
-            if(isset($data->consumeds[$taskID]))
+            if(isset($data->consumeds[$taskID]) and !empty($data->consumeds[$taskID]))
             {
                 if($data->consumeds[$taskID] < 0)
                 {
@@ -3947,9 +3947,9 @@ class taskModel extends model
         {
             $this->updateExecutionEsDateByGantt($objectID, $objectType, $post);
         }
-        
+
         if(dao::isError()) return false;
-        
+
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($objectID)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
         $actionID  = $this->loadModel('action')->create($actionType, $objectID, 'edited');
