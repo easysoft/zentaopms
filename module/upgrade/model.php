@@ -7062,11 +7062,16 @@ class upgradeModel extends model
      */
     public function updateStoryStatus()
     {
-        /* After cancel the review of changed story, the story status should be 'changing'. */
+        /* After cancel the review of changed story, the story status should be "changing". */
         $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
 
-        /* Other stories in draft status should be 'reviewing'. */
-        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('status')->eq('draft')->exec();
+        /* The draft story with reviewers should be "reviewing". */
+        $reviewingStories = $this->dao->select('story')->from(TABLE_STORYREVIEW)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id and t1.version = t2.version')
+            ->where('t2.status')->eq('draft')
+            ->andWhere('t2.version')->eq(1)
+            ->fetchPairs();
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('id')->in($reviewingStories)->exec();
 
         return !dao::isError();
     }
