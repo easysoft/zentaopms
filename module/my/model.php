@@ -504,7 +504,6 @@ class myModel extends model
     {
         $rawMethod = $this->app->rawMethod;
         $this->loadModel('execution');
-        $this->app->loadConfig('execution');
 
         $this->config->execution->search['module']    = $rawMethod . 'Task';
         $this->config->execution->search['actionURL'] = $actionURL;
