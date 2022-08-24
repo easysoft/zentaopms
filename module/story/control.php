@@ -1023,7 +1023,8 @@ class story extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Append module when change product type. */
-        $moduleList = array(0 => '/');
+        $moduleList       = array(0 => '/');
+        $productStoryList = array();
         foreach($stories as $story)
         {
             if(isset($modules[$story->product][$story->branch]))
@@ -1033,6 +1034,13 @@ class story extends control
             else
             {
                 $moduleList[$story->id] = $modules[$story->product][0] + $this->tree->getModulesName($story->module);
+            }
+
+            if($story->status == 'closed')
+            {
+                $storyProduct = $products[$story->product];
+                $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
             }
         }
 
@@ -1055,6 +1063,7 @@ class story extends control
         $this->view->executionID       = $executionID;
         $this->view->branchTagOption   = $branchTagOption;
         $this->view->moduleList        = $moduleList;
+        $this->view->productStoryList  = $productStoryList;
         $this->display();
     }
 
@@ -1655,7 +1664,7 @@ class story extends control
         }
 
         /* Get story and product. */
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
 
         $this->story->replaceURLang($story->type);
 
@@ -1666,16 +1675,20 @@ class story extends control
         if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
         unset($this->lang->story->reasonList['subdivided']);
 
+        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->close;
 
-        $this->view->product    = $product;
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getPairs();
-        $this->view->reasonList = $this->lang->story->reasonList;
+        $this->view->product        = $product;
+        $this->view->story          = $story;
+        $this->view->productStories = $productStories;
+        $this->view->actions        = $this->action->getList('story', $storyID);
+        $this->view->users          = $this->loadModel('user')->getPairs();
+        $this->view->reasonList     = $this->lang->story->reasonList;
         $this->display();
     }
 
@@ -1697,6 +1710,8 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
+        $productStoryList = array();
+        $productList      = array();
         foreach($stories as $story)
         {
             if($story->parent == -1)
@@ -1709,6 +1724,10 @@ class story extends control
                 $closedStory[] = $story->id;
                 unset($stories[$story->id]);
             }
+
+            $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
+            $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
         }
 
         if($this->post->comments)
@@ -1792,6 +1811,7 @@ class story extends control
         $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
+        $this->view->productStoryList = $productStoryList;
 
         $this->display();
     }

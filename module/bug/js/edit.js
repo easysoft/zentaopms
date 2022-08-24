@@ -19,6 +19,12 @@ $(function()
             }
         });
     }
+
+    $('#duplicateBug').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto'
+    });
 });
 
 /**

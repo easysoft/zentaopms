@@ -3652,7 +3652,8 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $tasks   = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
              ->from(TABLE_TASK)->alias('t1')
              ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
              ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')

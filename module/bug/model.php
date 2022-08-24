@@ -1998,12 +1998,13 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function getProductBugPairs($productID)
+    public function getProductBugPairs($productID, $branch = '')
     {
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();
