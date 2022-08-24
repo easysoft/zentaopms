@@ -191,11 +191,7 @@ class api extends router
     public function loadModule()
     {
         /* If the version of api don't exists, call parent method. */
-        if(!$this->version)
-        {
-            parent::setParams();
-            return parent::loadModule();
-        }
+        if(!$this->version) return parent::loadModule();
 
         $entry = strtolower($this->entry);
         include($this->appRoot . "api/$this->version/entries/$entry.php");

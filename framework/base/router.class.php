@@ -1540,11 +1540,12 @@ class baseRouter
                     $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
-
+            return true;
         }
         catch(EndResponseException $endResponseException)
         {
             echo $endResponseException->getContent();
+            return false;
         }
     }
 
@@ -2146,6 +2147,8 @@ class baseRouter
     public function loadModule()
     {
         try {
+            if(is_null($this->params) and !$this->setParams()) return false;
+
             /* 调用该方法   Call the method. */
             $module = $this->control;
 

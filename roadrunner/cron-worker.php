@@ -32,5 +32,4 @@ $common = $app->loadCommon();
 $app->moduleName = 'cron';
 $app->methodName = 'ajaxExec';
 $app->setControlFile();
-$app->setParams();
 $app->loadModule();
