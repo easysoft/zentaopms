@@ -1538,6 +1538,7 @@ class repo extends control
     /**
      * Get relation by commit.
      *
+     * @param  string $commit
      * @access public
      * @return object
      */
