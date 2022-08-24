@@ -1540,7 +1540,11 @@ class actionModel extends model
                 if($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story)) $moduleName = $story->type;
+                    if(!empty($story))
+                    {
+                        $moduleName = $story->type;
+                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                    }
                 }
 
                 if($action->objectType == 'doclib')
