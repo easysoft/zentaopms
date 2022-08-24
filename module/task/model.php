@@ -1258,7 +1258,7 @@ class taskModel extends model
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
             }
 
-            if(isset($data->consumeds[$taskID]) and !empty($data->consumeds[$taskID]))
+            if(!empty($data->consumeds[$taskID]))
             {
                 if($data->consumeds[$taskID] < 0)
                 {
