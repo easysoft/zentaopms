@@ -444,7 +444,6 @@ class product extends control
 
         /* Init vars. */
         $product = $this->product->getById($productID);
-        if($product->bind) $this->config->product->edit->requiredFields = 'name';
 
         $unmodifiableProjects = array();
         $canChangeProgram     = true;

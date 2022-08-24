@@ -284,7 +284,7 @@
             <?php if(!$isLibCase):?>
             <tr>
               <th><?php echo $lang->testcase->linkCase;?></th>
-              <td class='text-ellipsis'>
+              <td class='linkCaseTitles'>
                 <?php
                 if(isset($case->linkCaseTitles))
                 {
@@ -314,7 +314,7 @@
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <td class='text-ellipsis'>
+              <td class='linkBugTitles'>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
               {
