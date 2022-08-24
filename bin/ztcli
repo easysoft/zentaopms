@@ -74,5 +74,4 @@ else
 }
 
 $app->parseRequest();
-$app->setParams();
 $app->loadModule();
