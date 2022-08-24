@@ -1335,28 +1335,31 @@ class commonModel extends model
 
                 $label    = $menuItem->text;
                 $dropMenu = '';
+
                 /* Print sub menus. */
                 if(isset($menuItem->dropMenu))
                 {
-                    foreach($menuItem->dropMenu as $dropMenuItem)
+                    foreach($menuItem->dropMenu as $dropMenuKey => $dropMenuItem)
                     {
-                        if($dropMenuItem->hidden) continue;
+                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                         $subActive = '';
                         $subModule = '';
                         $subMethod = '';
                         $subParams = '';
-                        $subLabel  = $dropMenuItem->text;
-                        if(isset($dropMenuItem->link['module'])) $subModule = $dropMenuItem->link['module'];
-                        if(isset($dropMenuItem->link['method'])) $subMethod = $dropMenuItem->link['method'];
-                        if(isset($dropMenuItem->link['vars']))   $subParams = $dropMenuItem->link['vars'];
+                        $subLabel  = '';
+                        list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuItem['link']);
+                        if(isset($dropMenuModule)) $subModule = $dropMenuModule;
+                        if(isset($dropMenuMethod)) $subMethod = $dropMenuMethod;
+                        if(isset($dropMenuParams)) $subParams = $dropMenuParams;
+                        if(isset($dropMenuName))   $subLabel  = $dropMenuName;
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
                         $misc = (isset($lang->navGroup->$subModule) and $tab != $lang->navGroup->$subModule) ? "data-app='$tab'" : '';
-                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuKey'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
                     }
 
                     if(empty($dropMenu)) continue;
