@@ -284,6 +284,18 @@ class scm
     {
         return $this->engine->getAllFiles($path, $revision);
     }
+
+    /**
+     * Get files by commit.
+     *
+     * @param  string  $commit
+     * @access public
+     * @return array
+     */
+    public function getFilesByCommit($revision)
+    {
+        return $this->engine->getFilesByCommit($revision);
+    }
 }
 
 /**

@@ -511,10 +511,8 @@ class repo extends control
             $this->repo->setRepoBranch('');
         }
 
-        /* Decrypt path and get cacheFile. */
-        $path      = $this->repo->decodePath($path);
-        $cacheFile = $this->repo->getCacheFile($repoID, $path, $revision);
-        $this->scm->setEngine($repo);
+        /* Decrypt path. */
+        $path = $this->repo->decodePath($path);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -528,58 +526,29 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
-        /* Cache infos. */
-        if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
+        /* Refresh repo. */
+        if($refresh)
         {
-            /* Get cache infos. */
-            $infos = $this->scm->ls($path, $revision);
+            /* Update code commit history. */
+            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
 
-            if($infos)
+            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
-                /* Update code commit history. */
-                $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-
-                if($refresh and in_array($repo->SCM, $this->config->repo->gitTypeList))
-                {
-                    $branch = $this->cookie->repoBranch;
-                    $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-                    $_COOKIE['repoBranch'] = $branch;
-                }
-                if($refresh and $repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
-
-                $revisionList = array();
-                foreach($infos as $info) $revisionList[$info->revision] = $info->revision;
-                $comments = $this->repo->getHistory($repoID, $revisionList);
-                foreach($infos as $info)
-                {
-                    if(isset($comments[$info->revision]))
-                    {
-                        $comment = $comments[$info->revision];
-                        $info->comment = $comment->comment;
-                    }
-                }
+                $branch = $this->cookie->repoBranch;
+                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+                $_COOKIE['repoBranch'] = $branch;
             }
-
-            if($cacheFile)
-            {
-                if(!file_exists($cacheFile . '.lock'))
-                {
-                    touch($cacheFile . '.lock');
-                    file_put_contents($cacheFile, serialize($infos));
-                    unlink($cacheFile . '.lock');
-                }
-            }
-        }
-        else
-        {
-            $infos = unserialize(file_get_contents($cacheFile));
+            if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
         }
 
+        /* Get files info. */
+        $infos = $this->repo->getFileCommits($repo, $branchID, $path);
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Set logType and revisions. */
-        $logType   = 'dir';
-        $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
+        $logType      = 'dir';
+        $revisions    = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
+        $lastRevision = current($revisions);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -601,8 +570,9 @@ class repo extends control
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
         $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
-        $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
+        $this->view->cacheTime       = date('m-d H:i', strtotime($lastRevision->time));
         $this->view->branchOrTag     = $branchOrTag;
+        $this->view->syncedRF        = strpos(",{$this->config->repo->synced},", ",$repoID,") !== false; //Check has synced rename files.
 
         $this->display();
     }
@@ -1549,5 +1519,17 @@ class repo extends control
         $repo  = $this->repo->getRepoByID($repoID);
         $files = $this->repo->getFileTree($repo, $branch);
         return print($files);
+    }
+
+    /**
+     * Ajax sync rename record.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxSyncRenameRecord($repoID)
+    {
+        $this->repo->insertDeleteRecord($repoID);
     }
 }

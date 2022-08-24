@@ -199,6 +199,8 @@ class GitRepo
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
 
+        execCmd(escapeCmd("$this->client pull"));
+
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
@@ -594,9 +596,10 @@ class GitRepo
                 $parsedFile = new stdclass();
                 $parsedFile->revision = $hash;
                 $parsedFile->path     = '/' . trim($path);
+                $parsedFile->oldPath  = isset($file[2]) ? '/' . trim($file[2]) : '';
                 $parsedFile->type     = 'file';
                 $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
+                $logs['files'][$hash][] = $parsedFile;
             }
         }
         return $logs;
@@ -667,12 +670,14 @@ class GitRepo
             }
             elseif(strpos($line, "\t") !== false)
             {
-                list($action, $entry) = explode("\t", $line);
+                $lineList = explode("\t", $line);
+                list($action, $entry) = $lineList;
                 $entry = '/' . trim($entry);
                 $pathInfo = array();
-                $pathInfo['action'] = $action;
-                $pathInfo['kind']   = 'file';
-                $changes[$entry]    = $pathInfo;
+                $pathInfo['action']  = $action;
+                $pathInfo['kind']    = 'file';
+                $pathInfo['oldPath'] = isset($lineList[2]) ? '/' . trim($lineList[2]) : '';
+                $changes[$entry]     = $pathInfo;
             }
         }
 

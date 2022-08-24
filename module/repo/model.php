@@ -877,6 +877,15 @@ class repoModel extends model
                         $file->revision = $commitID;
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+
+                        if($file->oldPath)
+                        {
+                            $file->path    = $file->oldPath;
+                            $file->parent  = dirname($file->path);
+                            $file->oldPath = '';
+                            $file->action  = 'D';
+                            $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                        }
                     }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
@@ -933,7 +942,20 @@ class repoModel extends model
                 $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
                 $repoFile->type     = $info['kind'];
                 $repoFile->action   = $info['action'];
+                $repoFile->oldPath  = $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
+
+                if($repoFile->oldPath)
+                {
+                    $parentPath = dirname($repoFile->oldPath);
+
+                    $repoFile->path    = $repoFile->oldPath;
+                    $repoFile->parent  = $parentPath == '\\' ? '/' : $parentPath;
+                    $repoFile->type    = $info['kind'];
+                    $repoFile->action  = 'D';
+                    $repoFile->oldPath = '';
+                    $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
+                }
             }
             $version++;
         }
@@ -2209,10 +2231,81 @@ class repoModel extends model
     }
 
     /**
+     * Get file commits.
+     *
+     * @param  object $repo
+     * @param  string $branch
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function getFileCommits($repo, $branch, $parent = '')
+    {
+        $parent = '/' . ltrim($parent, '/');
+
+        /* Get file commits by repo. */
+        if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+        $fileCommits = $this->dao->select('t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
+            ->where('t1.repo')->eq($repo->id)
+            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+            ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+            ->andWhere('t1.parent')->like("$parent%")->fi()
+            ->orderBy('t2.`time` asc')
+            ->fetchAll('path');
+
+        $files   = array();
+        $folders = array();
+        $dirList = array();
+        foreach($fileCommits as $fileCommit)
+        {
+            /* Filter by parent. */
+            if($fileCommit->action == 'D') continue;
+            if(strpos($fileCommit->path, $parent) !== 0) continue;
+
+            $pathList = explode('/', ltrim($fileCommit->path, '/'));
+            if($fileCommit->parent == $parent and $fileCommit->type == 'file')
+            {
+                $file = new stdclass();
+                $file->name     = end($pathList);
+                $file->kind     = 'file';
+                $file->revision = $fileCommit->revision;
+                $file->comment  = $fileCommit->comment;
+                $file->account  = $fileCommit->committer;
+                $file->date     = $fileCommit->time;
+
+                $files[] = $file;
+            }
+            else
+            {
+                $childPath = ltrim(substr($fileCommit->path, strlen($parent)), '/');
+                $childPath = explode('/', $childPath);
+                $fileName  = $fileCommit->type == 'dir' ? end($pathList) : $childPath[0];
+                if(in_array($fileName, $dirList)) continue;
+
+                $folder = new stdclass();
+                $folder->name     = $fileName;
+                $folder->kind     = 'dir';
+                $folder->revision = $fileCommit->revision;
+                $folder->comment  = $fileCommit->comment;
+                $folder->account  = $fileCommit->committer;
+                $folder->date     = $fileCommit->time;
+
+                $dirList[] = $fileName;
+                $folders[] = $folder;
+            }
+        }
+
+        return array_merge($folders, $files);
+    }
+
+    /**
      * Get html for file tree.
      *
      * @param  object $repo
      * @param  string $branch
+     * @param  string $parent
      * @access public
      * @return string
      */
@@ -2222,11 +2315,10 @@ class repoModel extends model
         $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
-            ->where('1=1')
-            ->andWhere('t1.repo')->eq($repo->id)
+            ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->orderBy('t1.`type` asc, t2.`time` asc')
+            ->orderBy('t2.`time` asc')
             ->fetchPairs();
 
         $allFiles = array();
@@ -2410,5 +2502,88 @@ class repoModel extends model
         $output->sourceHtml = str_replace('selected-source', 'selected', $sourceHtml);
         $output->targetHtml = str_replace('selected-target', 'selected', $targetHtml);
         return $output;
+    }
+
+    /**
+     * Insert delete record.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function insertDeleteRecord($repoID)
+    {
+        set_time_limit(0);
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        if(empty($repo)) return false;
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $values = '';
+        if($repo->SCM == 'Gitlab')
+        {
+            $renameRevisions = $this->dao->select('t1.revision as revisionID,t2.revision')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->where('t1.action')->eq('R')
+                ->andWhere('t1.repo')->eq($repoID)
+                ->andWhere('t1.oldPath')->eq('')
+                ->orderBy('t2.time desc')
+                ->fetchAll('revisionID');
+
+            foreach($renameRevisions as $revision)
+            {
+                $files = $scm->getFilesByCommit($revision->revision);
+                foreach($files as $file)
+                {
+                    if($file->action != 'R') continue;
+                    $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
+                    $values    .= "($repoID,{$revision->revisionID},'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
+
+                    $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revision->revisionID)->andWhere('path')->eq($file->path)->exec();
+                }
+            }
+        }
+        else
+        {
+            $branchGroups = $this->dao->select('t1.id as fileID,t1.revision as revisionID,t2.revision,t3.branch')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t3.revision=t2.id')
+                ->where('t1.action')->eq('R')
+                ->andWhere('t1.repo')->eq($repoID)
+                ->andWhere('t1.oldPath')->eq('')
+                ->orderBy('t2.time desc')
+                ->fetchGroup('branch');
+
+            $revisionPairs = $this->dao->select('revision,id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchPairs();
+
+            foreach($branchGroups as $branch => $group)
+            {
+                $firstCommit = end($group);
+                $commits     = $scm->getCommits($firstCommit->revision, 0, $branch);
+                foreach($commits['files'] as $revision => $commit)
+                {
+                    if(!isset($revisionPairs[$revision])) continue;
+                    $revisionID = $revisionPairs[$revision];
+
+                    foreach($commit as $file)
+                    {
+                        if(!$file->oldPath) continue;
+                        $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
+                        $values    .= "($repoID,$revisionID,'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
+
+                        $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revisionID)->andWhere('path')->eq($file->path)->exec();
+                    }
+                }
+            }
+        }
+
+        if($values)
+        {
+            $sql    = 'INSERT INTO ' . TABLE_REPOFILES . ' (`repo`,`revision`,`path`,`oldPath`,`parent`,`type`,`action`) VALUES ' . trim($values, ',');
+            $result = $this->dao->exec($sql);
+        }
+
+        $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
     }
 }
