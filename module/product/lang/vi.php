@@ -166,21 +166,21 @@ $lang->product->noModule       = '<div>Chưa có Module. </div><div>Quản lý n
 $lang->product->noProduct      = "Không có {$lang->productCommon} nào.";
 $lang->product->noMatched      = '"%s" không thể tìm thấy ' . $lang->productCommon;
 
-$lang->product->featureBar['browse']['allstory']       = $lang->product->allStory;
-$lang->product->featureBar['browse']['unclosed']       = $lang->product->unclosed;
-$lang->product->featureBar['browse']['assignedtome']   = $lang->product->assignedToMe;
-$lang->product->featureBar['browse']['openedbyme']     = $lang->product->openedByMe;
-$lang->product->featureBar['browse']['reviewedbyme']   = $lang->product->reviewedByMe;
-$lang->product->featureBar['browse']['draftstory']     = $lang->product->draftStory;
-$lang->product->featureBar['browse']['reviewingstory'] = $lang->product->reviewingStory;
-$lang->product->featureBar['browse']['more']           = $lang->more;
+$lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
+$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+$lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
+$lang->product->featureBar['browse']['more']         = $lang->more;
 
 $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['closedbyme']    = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']   = $lang->product->activeStory;
-$lang->product->moreSelects['changingstory'] = $lang->product->changingStory;
-$lang->product->moreSelects['willclose']     = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']   = $lang->product->closedStory;
+$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;
