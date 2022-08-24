@@ -1604,12 +1604,11 @@ class executionTest
     }
 
     /**
-     * function getBurnDataFlot test by execution
+     * Function getBurnDataFlot test by execution.
      *
-     * @param  int $executionID
-     * @param  string $count
+     * @param  int   $executionID
      * @access public
-     * @return array
+     * @return int
      */
     public function getBurnDataFlotTest($executionID = 0)
     {
