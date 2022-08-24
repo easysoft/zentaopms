@@ -493,49 +493,6 @@ $(document).ready(function()
         $('#dataPlanGroup').fixInputGroup();
     });
 
-    /* Init task team manage dialog */
-    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
-    {
-        idStart: 0,
-        idEnd: 5,
-        chosen: true,
-        datetimepicker: false,
-        colorPicker: false,
-    });
-    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
-
-    var adjustButtons = function()
-    {
-        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
-    };
-
-    $taskTeamEditor.on('click', '.btn-add', function()
-    {
-        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
-        $newRow.addClass('highlight');
-        setTimeout(function()
-        {
-            $newRow.removeClass('highlight');
-        }, 1600);
-        adjustButtons();
-    }).on('click', '.btn-delete', function()
-    {
-        var $row = $(this).closest('tr');
-        $row.addClass('highlight').fadeOut(700, function()
-        {
-            $row.remove();
-            adjustButtons();
-        });
-    });
-
-    $('#modalTeam').on('change', 'select#team', function()
-    {
-        $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
-    })
-
-    adjustButtons();
-
     $('#showAllModule').change(function()
     {
         var executionID = $('#execution').val();

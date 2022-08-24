@@ -44,6 +44,6 @@ r($task->getTeamByAccount($users, 'admin')) && p() && e('admin_doing'); //获取
 
 $users[0]->status = 'done';
 r($task->getTeamByAccount($users, 'admin')) && p() && e('admin_wait'); //过滤已完成的成员获取的指定账号的团队信息
-r($task->getTeamByAccount($users, 'admin', '')) && p() && e('admin_done'); //不过滤已完成的成员获取的指定账号的团队信息
+r($task->getTeamByAccount($users, 'admin', array('filter' => ''))) && p() && e('admin_done'); //不过滤已完成的成员获取的指定账号的团队信息
 
 r($task->getTeamByAccount($users, 'dev')) && p() && e('_'); //获取的不存在账号

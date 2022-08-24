@@ -28,47 +28,7 @@ $(document).ready(function()
             $('#left').removeAttr('disabled');
             $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
         }
-
-        updateAssignedTo();
     });
-
-    /* Init task team manage dialog */
-    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
-    {
-        idStart: 0,
-        idEnd: newRowCount - 1,
-        chosen: true,
-        datetimepicker: false,
-        colorPicker: false,
-    });
-    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
-
-    var adjustButtons = function()
-    {
-        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
-    };
-
-    $taskTeamEditor.on('click', '.btn-add', function()
-    {
-        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
-        $newRow.addClass('highlight');
-        setTimeout(function()
-        {
-            $newRow.removeClass('highlight');
-        }, 1600);
-        adjustButtons();
-    }).on('click', '.btn-delete', function()
-    {
-        var $row = $(this).closest('tr');
-        $row.addClass('highlight').fadeOut(700, function()
-        {
-            $row.remove();
-            adjustButtons();
-        });
-    });
-
-    adjustButtons();
 });
 
 $('#confirmButton').click(function()

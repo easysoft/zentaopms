@@ -29,10 +29,6 @@
 <?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
 <?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
 <?php js::set('requiredFields', $config->task->edit->requiredFields);?>
-
-<?php $newRowCount = count($task->team) < 6 ? 6 - count($task->team) : 1;?>
-<?php if($task->status != 'wait' and $task->status != 'doing') $newRowCount = 0;?>
-<?php js::set('newRowCount', $newRowCount);?>
 <?php
 $requiredFields = array();
 foreach(explode(',', $config->task->edit->requiredFields) as $field)
@@ -279,64 +275,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
         <div class="modal-content with-padding" id='taskTeamEditor'>
           <table class='table table-form'>
             <tbody class="sortable">
-              <?php foreach($task->team as $member):?>
-              <?php
-              $memberDisabled = false;
-              $sortDisabled   = false;
-              $memberStatus   = $member->status;
-              if($memberStatus == 'done') $memberDisabled = true;
-              if($memberStatus != 'wait' and $task->mode == 'linear') $sortDisabled = true;
-              if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !== false)
-              {
-                  $memberStatus   = $task->status;
-                  $memberDisabled = true;
-                  $sortDisabled   = true;
-              }
-              ?>
-              <tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
-                <td class='w-250px'>
-                  <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
-                  <?php echo html::hidden("source[]", $member->account);?>
-                  <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
-                </td>
-                <td>
-                  <div class='input-group'>
-                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tr class='template member-wait'>
-                <td class='w-250px'>
-                  <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
-                  <?php echo html::hidden("source[]", '');?>
-                </td>
-                <td>
-                  <div class='input-group'>
-                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
+              <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
             </tbody>
             <tfoot>
               <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
@@ -348,5 +287,4 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
   </form>
 </div>
 <?php js::set('executionID', $execution->id);?>
-<?php if($task->mode == 'linear') js::set('sortSelector', 'tr.member-wait');?>
 <?php include '../../common/view/footer.html.php';?>

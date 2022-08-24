@@ -89,7 +89,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamSource,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane')
             ->add('version', 1)
             ->get();
 
@@ -884,7 +884,7 @@ class taskModel extends model
         {
             if(empty($account)) continue;
 
-            $source = $this->post->source[$row];
+            $teamSource = $this->post->teamSource[$row];
             $member = new stdClass();
             $member->task     = $taskID;
             $member->order    = $row;
@@ -902,7 +902,7 @@ class taskModel extends model
             }
             elseif($taskStatus == 'doing')
             {
-                if(!empty($source) and $source != $account and isset($doingUsers[$source])) $member->transfer = $source;
+                if(!empty($teamSource) and $teamSource != $account and isset($doingUsers[$teamSource])) $member->transfer = $teamSource;
                 if(isset($doingUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
             }
 
@@ -1087,7 +1087,7 @@ class taskModel extends model
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->cleanINT('execution,story,module')
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,source,contactListMenu')
+            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource,contactListMenu')
             ->get();
 
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
@@ -1608,7 +1608,7 @@ class taskModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
             ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft,source')
+            ->remove('comment,showModule,team,teamEstimate,teamConsumed,teamLeft,teamSource')
             ->get();
 
         if(count(array_filter($this->post->team)) > 1)
@@ -2179,7 +2179,7 @@ class taskModel extends model
             ->setDefault('assignedDate', helper::now())
             ->setDefault('activatedDate', helper::now())
             ->stripTags($this->config->task->editor->activate['id'], $this->config->allowedTags)
-            ->remove('comment')
+            ->remove('comment,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource')
             ->get();
 
         if(!is_numeric($task->left))
@@ -2190,11 +2190,7 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($this->post->left)
-                ->where('task')->eq($taskID)
-                ->andWhere('account')->eq($this->post->assignedTo)
-                ->exec();
-
+            $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
 

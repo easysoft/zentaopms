@@ -1386,7 +1386,7 @@ class taskTest
      * @access public
      * @return string
      */
-    public function getTeamByAccount($users, $account, $filter = 'done')
+    public function getTeamByAccount($users, $account, array('filter' => 'done'))
     {
         $object = $this->objectModel->getTeamByAccount($users, $account, $filter);
         if(empty($object)) return '_';
