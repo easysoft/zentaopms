@@ -44,6 +44,10 @@ $(function()
     }
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
 
+    var paneHeight = $(window).height() - 120;
+    $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
+    $('#filesTree').css('height', paneHeight + 45)
+
     $(document).on('click', '.repoFileName', function()
     {
         var path  = $(this).data('path');
@@ -102,7 +106,7 @@ $(function()
     $(document).on('click', '.branch-or-tag', function()
     {
         var branchOrTag = $(this).text();
-        if(branchOrTag != branchID)
+        if(branchOrTag != $.cookie('repoBranch'))
         {
             $('#filesTree').addClass('loading');
             $.cookie('repoBranch', branchOrTag);

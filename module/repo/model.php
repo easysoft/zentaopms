@@ -2316,6 +2316,7 @@ class repoModel extends model
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
             ->where('t1.repo')->eq($repo->id)
+            ->andWhere('t1.type')->eq('file')
             ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
             ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
             ->orderBy('t2.`time` asc')
@@ -2585,5 +2586,72 @@ class repoModel extends model
         }
 
         $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
+    }
+
+    /**
+     * Get relation by commit.
+     *
+     * @param  int    $repoID
+     * @param  string $commit
+     * @access public
+     * @return array
+     */
+    public function getRelationByCommit($repoID, $commit)
+    {
+        $relationList = $this->dao->select('BID as id, BType as type')->from(TABLE_RELATION)
+            ->where('relation')->eq('repo')
+            ->andWhere('AType')->eq('codeCommited')
+            ->andWhere('AID')->eq($repoID)
+            ->andWhere('AVersion')->eq($commit)
+            ->fetchAll();
+
+        $storyIDs = array();
+        $bugIDs   = array();
+        $taskIDs  = array();
+        foreach($relationList as $relation)
+        {
+            if($relation->type == 'story')
+            {
+                $storyIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bugIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'task')
+            {
+                $taskIDs[] = $relation->id;
+            }
+        }
+        $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
+        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
+        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
+
+        $titleList = array();
+        foreach($relationList as $key => $relation)
+        {
+            $titleList[$key] = array(
+                'id'    => $relation->id,
+                'type'  => $relation->type,
+                'title' => "#$relation->id "
+            );
+            if($relation->type == 'story')
+            {
+                $story = zget($stories, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($story, 'title', '');
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bug = zget($bugs, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($bug, 'title', '');
+            }
+            elseif($relation->type == 'task')
+            {
+                $task = zget($tasks, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($task, 'name', '');
+            }
+        }
+
+        return $titleList;
     }
 }

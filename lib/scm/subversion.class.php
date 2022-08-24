@@ -306,10 +306,14 @@ class Subversion
                     $blame = array();
                     $blame['revision']  = (int)$line->commit['revision'];
                     $blame['committer'] = (string)$line->commit->author;
-                    $blame['time']      = substr($line->commit->date, 0, 10);
+                    $blame['time']      = date('Y-m-d H:i:s', strtotime($line->commit->date));
                     $blame['line']      = (int)$line['line-number'];
                     $blame['lines']     = 1;
                     $blame['content']   = $content[$blame['line'] - 1];
+
+                    $log = $this->log('', $blame['revision'], 'HEAD', 1);
+                    $blame['message'] = $log[0]->comment;
+
                     $revision         = $blame['revision'];
                     $revLine          = $blame['line'];
                     $blames[$revLine] = $blame;

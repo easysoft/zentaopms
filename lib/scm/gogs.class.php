@@ -280,6 +280,9 @@ class Gogs
                 $blame['lines']     = 1;
                 $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
 
+                $log = $this->log('', $matches[1], '', 1);
+                $blame['message'] = $log[0]->comment;
+
                 $revision         = $matches[1];
                 $revLine          = $matches[5];
                 $blames[$revLine] = $blame;

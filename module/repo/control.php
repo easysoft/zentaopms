@@ -275,6 +275,7 @@ class repo extends control
         $pathInfo = pathinfo($entry);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
+        $blames   = $this->scm->blame($entry, $revision);
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
@@ -304,6 +305,7 @@ class repo extends control
         $this->view->suffix       = $suffix;
         $this->view->content      = $content;
         $this->view->pathInfo     = $pathInfo;
+        $this->view->blames       = $blames;
         $this->display();
     }
 
@@ -1531,5 +1533,38 @@ class repo extends control
     public function ajaxSyncRenameRecord($repoID)
     {
         $this->repo->insertDeleteRecord($repoID);
+    }
+
+    /**
+     * Get relation by commit.
+     *
+     * @param  string $commit
+     * @access public
+     * @return object
+     */
+    public function ajaxGetCommitRelation($commit)
+    {
+        $repoID    = $this->repo->saveState();
+        $titleList = $this->repo->getRelationByCommit($repoID, $commit);
+        return $this->send(array('titleList' => $titleList));
+    }
+
+    /**
+     * Get relation story, task, bug info.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRelationInfo($objectID, $objectType = 'story')
+    {
+        $this->app->loadLang('release');
+        $this->view->object     = $this->loadModel($objectType)->getById($objectID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList($objectType, $objectID);
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->display();
     }
 }

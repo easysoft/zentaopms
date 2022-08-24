@@ -268,7 +268,8 @@ class gitlab
             $line = array();
             $line['revision']  = $blame->commit->id;
             $line['committer'] = $blame->commit->committer_name;
-            $line['time']      = $blame->commit->committer_name;
+            $line['message']   = $blame->commit->message;
+            $line['time']      = date('Y-m-d H:i:s', strtotime($blame->commit->committed_date));
             $line['line']      = $lineNumber;
             $line['lines']     = count($blame->lines);
             $line['content']   = array_shift($blame->lines);
