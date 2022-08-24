@@ -2355,8 +2355,6 @@ class storyModel extends model
             ->add('closedDate', '0000-00-00')
             ->add('reviewedBy', '')
             ->add('reviewedDate', '0000-00-00')
-            ->add('changedBy', '')
-            ->add('changedDate', '0000-00-00')
             ->add('duplicateStory', 0)
             ->add('childStories', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
