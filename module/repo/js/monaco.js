@@ -1,6 +1,6 @@
 $(function()
 {
-    var distance = 0;
+    var distance  = 0;
 
     /**
      * Arrow tab line.
@@ -43,6 +43,10 @@ $(function()
         };
     }
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
+
+    var paneWidth = $(window).height() - 120;
+    $('#fileTabs .tab-pane').css('height', paneWidth + 'px')
+    $('#filesTree').css('height', paneWidth + 45)
 
     $(document).on('click', '.repoFileName', function()
     {
@@ -102,7 +106,7 @@ $(function()
     $(document).on('click', '.branch-or-tag', function()
     {
         var branchOrTag = $(this).text();
-        if(branchOrTag != branchID)
+        if(branchOrTag != $.cookie('repoBranch'))
         {
             $('#filesTree').addClass('loading');
             $.cookie('repoBranch', branchOrTag);

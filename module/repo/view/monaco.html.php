@@ -23,7 +23,6 @@ $encodePath = $this->repo->encodePath($entry);
 ?>
 <?php if(!isonlybody()):?>
 <div id="mainContent" class="main-row fade">
-<?php endif;?>
   <?php $sideWidth = common::checkNotCN() ? '270' : '240';?>
   <div class="side-col" style="width: <?php echo $sideWidth;?>px; padding-top: <?php echo isonlybody() ? 22 : 0;?>px;">
     <div class="side-col file-tree" style="width: <?php echo $sideWidth;?>px;" data-min-width="<?php echo $sideWidth;?>">
@@ -50,9 +49,11 @@ $encodePath = $this->repo->encodePath($entry);
       </div>
     </div>
   </div>
+<?php endif;?>
   <div class="main-col repoCode main">
     <div class="content panel">
       <div class='btn-toolbar'>
+        <?php if(!isonlybody()):?>
         <div class="btn btn-left pull-left"><i class="icon icon-chevron-left"></i></div>
         <?php if(common::hasPriv('repo', 'blame') or common::hasPriv('repo', 'download')):?>
         <div class="dropdown pull-right">
@@ -66,6 +67,7 @@ $encodePath = $this->repo->encodePath($entry);
         </div>
         <?php endif;?>
         <div class="btn btn-right  pull-right"><i class="icon icon-chevron-right"></i></div>
+        <?php endif;?>
         <div class='panel-title'>
           <div class="tabs w-10" id="fileTabs"></div>
         </div>
