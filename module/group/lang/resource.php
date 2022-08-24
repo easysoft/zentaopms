@@ -560,6 +560,7 @@ if($config->URAndSR)
     $lang->resource->requirement->view              = 'view';
     $lang->resource->requirement->change            = 'changeAction';
     $lang->resource->requirement->review            = 'reviewAction';
+    $lang->resource->requirement->submitReview      = 'submitReview';
     $lang->resource->requirement->batchReview       = 'batchReview';
     $lang->resource->requirement->recall            = 'recall';
     $lang->resource->requirement->assignTo          = 'assignAction';
@@ -580,6 +581,7 @@ if($config->URAndSR)
     $lang->requirement->methodOrder[30] = 'view';
     $lang->requirement->methodOrder[35] = 'change';
     $lang->requirement->methodOrder[40] = 'review';
+    $lang->requirement->methodOrder[44] = 'submitReview';
     $lang->requirement->methodOrder[45] = 'batchReview';
     $lang->requirement->methodOrder[50] = 'recall';
     $lang->requirement->methodOrder[55] = 'close';

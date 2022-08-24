@@ -4223,7 +4223,7 @@ class storyModel extends model
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id", $story, $type, 'sub-review', '', 'iframe', true, "data-width='50%'");
+                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'sub-review', '', 'iframe', true, "data-width='50%'");
                 }
                 else
                 {
@@ -4264,7 +4264,7 @@ class storyModel extends model
                 $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+                $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
@@ -4300,7 +4300,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params, $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
+            if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
