@@ -155,7 +155,7 @@
                 }
                 else
                 {
-                    common::printIcon('story', 'change', "$vars&from=&storyType=requirement", $child, 'list', 'alter');
+                    common::printIcon('story', 'change', "$vars&from=&storyType=requirement", $child, 'list', 'alter', '', 'iframe', true);
 
                     if(strpos('draft,changing', $child->status) !== false)
                     {
