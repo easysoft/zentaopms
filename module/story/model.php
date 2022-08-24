@@ -608,7 +608,6 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
             /* Save the story reviewer to storyreview table. */
-            $assignedTo = '';
             foreach($_POST['reviewer'][$i] as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -618,10 +617,7 @@ class storyModel extends model
                 $reviewData->version  = 1;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
 
             $this->executeHooks($storyID);
 
@@ -1633,7 +1629,6 @@ class storyModel extends model
 
         if(isset($_POST['reviewer']))
         {
-            $assignedTo = '';
             foreach($this->post->reviewer as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -1643,10 +1638,7 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             $story->status = 'reviewing';
         }
 
