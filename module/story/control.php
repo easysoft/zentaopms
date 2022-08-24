@@ -1663,8 +1663,9 @@ class story extends control
         $this->product->setMenu($product->id, $story->branch);
 
         /* Set the closed reason options and remove subdivided options. */
-        if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-        unset($this->lang->story->reasonList['subdivided']);
+        $reasonList = $this->lang->story->reasonList;
+        if($story->status == 'draft') unset($reasonList['cancel']);
+        unset($reasonList['subdivided']);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
@@ -1675,7 +1676,7 @@ class story extends control
         $this->view->story      = $story;
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->users      = $this->loadModel('user')->getPairs();
-        $this->view->reasonList = $this->lang->story->reasonList;
+        $this->view->reasonList = $reasonList;
         $this->display();
     }
 
