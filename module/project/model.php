@@ -758,7 +758,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
