@@ -10,6 +10,6 @@ td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; alig
 .flex span.label-danger {margin-left: 5px; min-width: 50px;}
 [lang^=en] .flex span.label-danger {min-width: 52px;}
 [lang^=de] .flex span.label-danger {min-width: 58px;}
-[lang^=fr] .flex span.label-danger {min-width: 69px;}
+[lang^=fr] .flex span.label-danger {min-width: 63px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
 
