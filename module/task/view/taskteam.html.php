@@ -99,6 +99,11 @@ $(document).ready(function()
             for(i = 0; i < $teams.length; i++)
             {
                 var value = $teams.eq(i).val();
+                if($.inArray(value, members) >= 0)
+                {
+                    $teams.eq(i).closest('tr').addClass('hidden');
+                    continue;
+                }
                 if(value != '') members.push(value);
             }
 
@@ -114,6 +119,7 @@ $(document).ready(function()
                 })
                 $this.trigger("chosen:updated");
             });
+            $taskTeamEditor.find('tr.hidden').remove();
         }
     }
 
@@ -165,5 +171,21 @@ $(document).ready(function()
     {
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
     });
+
+    $('#mode').change(function()
+    {
+        if($(this).val() == 'multi')
+        {
+            disableMembers();
+        }
+        else
+        {
+            $taskTeamEditor.find('select#team').each(function()
+            {
+                $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
+            })
+        }
+        $taskTeamEditor.find('tfoot .btn').click();
+    })
 });
 </script>

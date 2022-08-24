@@ -523,7 +523,7 @@ $(document).on('click', '#testStory_chosen', function()
     $obj.trigger("chosen:updated");
 })
 
-$('#modalTeam .btn').click(function()
+$('#modalTeam tfoot .btn').click(function()
 {
     var team  = '';
     var time  = 0;
