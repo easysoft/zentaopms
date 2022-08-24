@@ -1507,10 +1507,11 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
-            $oldStory = $oldStories[$storyID];
-            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
 
-            if($oldStory->status != 'draft' and $oldStory->status != 'changing') continue;
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+            $oldStory        = $oldStories[$storyID];
+
+            if($oldStory->status != 'reviewing') continue;
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
