@@ -76,6 +76,7 @@
         <?php
         $storyLink    = $this->createLink('story', 'view', "id=$story->id");
         $canBeChanged = common::canBeChanged('story', $story);
+        $spanClass    = $canBatchAction ? 'c-span' : '';
         ?>
         <tr>
           <td class="c-id">
@@ -119,12 +120,7 @@
         <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
         <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
           <td class="c-id">
-            <?php if($canBatchAction):?>
-            <div class="checkbox-primary">
-              <input type='checkbox' name='storyIdList[<?php echo $child->id;?>]' value='<?php echo $child->id;?>' />
-              <label></label>
-            </div>
-            <?php endif;?>
+            <span class="<?php echo $spanClass?>"></span>
             <?php printf('%03d', $child->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
@@ -185,7 +181,7 @@
             unset($lang->story->reviewResultList['revert']);
             foreach($lang->story->reviewResultList as $key => $result)
             {
-                $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                $actionLink = $this->createLink('story', 'batchReview', "result=$key&reason=&storyType=requirement");
                 if($key == 'reject')
                 {
                     echo "<li class='dropdown-submenu'>";
@@ -197,7 +193,7 @@
 
                     foreach($lang->story->reasonList as $key => $reason)
                     {
-                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key&storyType=requirement");
                         echo "<li>";
                         echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                         echo "</li>";
@@ -218,7 +214,7 @@
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo?> <span class="caret"></span></button>
           <?php
           $withSearch = count($users) > 10;
-          $actionLink = $this->createLink('story', 'batchAssignTo');
+          $actionLink = $this->createLink('story', 'batchAssignTo', 'storyType=requirement');
           echo html::select('assignedTo', $users, '', 'class="hidden"');
           if($withSearch)
           {
