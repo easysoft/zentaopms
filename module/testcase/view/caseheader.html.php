@@ -130,7 +130,7 @@
       $class = common::hasPriv('testcase', 'exportTemplate') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='50%'") . "</li>";
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='60%'") . "</li>";
       ?>
       </ul>
     </div>
