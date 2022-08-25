@@ -2367,7 +2367,8 @@ class taskModel extends model
     public function getExecutionTasks($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $pager = null)
     {
         if(is_string($type)) $type = strtolower($type);
-        $fields = 'DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName';
+        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $fields  = "DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
         $this->config->edition == 'max' && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
 
         $actionIDList = array();
@@ -2510,7 +2511,8 @@ class taskModel extends model
     public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0)
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
-        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
+        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $tasks   = $this->dao->select("t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')

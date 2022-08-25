@@ -608,7 +608,6 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
             /* Save the story reviewer to storyreview table. */
-            $assignedTo = '';
             foreach($_POST['reviewer'][$i] as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -618,10 +617,7 @@ class storyModel extends model
                 $reviewData->version  = 1;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
 
             $this->executeHooks($storyID);
 
@@ -1511,10 +1507,11 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
-            $oldStory = $oldStories[$storyID];
-            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
 
-            if($oldStory->status != 'draft' and $oldStory->status != 'changing') continue;
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+            $oldStory        = $oldStories[$storyID];
+
+            if($oldStory->status != 'reviewing') continue;
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
@@ -1633,7 +1630,6 @@ class storyModel extends model
 
         if(isset($_POST['reviewer']))
         {
-            $assignedTo = '';
             foreach($this->post->reviewer as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -1643,10 +1639,7 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             $story->status = 'reviewing';
         }
 
@@ -2355,8 +2348,6 @@ class storyModel extends model
             ->add('closedDate', '0000-00-00')
             ->add('reviewedBy', '')
             ->add('reviewedDate', '0000-00-00')
-            ->add('changedBy', '')
-            ->add('changedDate', '0000-00-00')
             ->add('duplicateStory', 0)
             ->add('childStories', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -4182,7 +4173,7 @@ class storyModel extends model
 
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')     return ($isSuperReviewer !== false or $story->status == 'active');
+        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
         if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')      return $story->status != 'closed';
@@ -4300,7 +4291,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
+            if(strpos('draft,changing', $story->status) !== false) $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
@@ -4578,7 +4569,7 @@ class storyModel extends model
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
-        $canView     = common::hasPriv('story', 'view');
+        $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
         if($tab == 'project')
         {
@@ -5572,7 +5563,8 @@ class storyModel extends model
 
         if($reviewRule == 'halfpass')
         {
-            if($rejectCount == floor(count($revireList) / 2)) return 'closed';
+            /* When the number of reviewers is even, half of them reject to close. */
+            if(count($reviewerList) > 1 and count($reviewerList) % 2 == 0 and $rejectCount == floor(count($reviewerList) / 2)) return 'closed';
 
             if($passCount   >= floor(count($reviewerList) / 2) + 1) $status = 'active';
             if($rejectCount >= floor(count($reviewerList) / 2) + 1) $status = 'closed';

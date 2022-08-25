@@ -147,16 +147,11 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td colspan='2' id='reviewerBox'>
               <div class="table-row">
-                <?php if(!$this->story->checkForceReview()):?>
+                <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
+                <?php echo $this->story->checkForceReview() ? '' : html::hidden('needNotReview', 1);?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
                 </div>
-                <?php echo html::hidden('needNotReview', 1);?>
-                <?php else:?>
-                <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
-                </div>
-                <?php endif;?>
               </div>
             </td>
           </tr>

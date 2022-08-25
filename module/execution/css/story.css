@@ -19,4 +19,4 @@ th.c-pri{width:50px;}
 .panel-actions {position: relative; padding: 0;}
 .switchBtn {background-color: #fff !important;}
 .switchBtn > i {padding-left: 7px;}
-#main>.container {padding: 23px 20px;}
+#main>.container {padding: 0 20px 20px 23px;}

@@ -406,10 +406,20 @@ class designModel extends model
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
         $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID=0&browseType=all");
+        $count = 1;
         foreach(array_filter($this->lang->design->typeList) as $key => $value)
         {
             $key = strtolower($key);
-            $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+
+            if($count <= 4) $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+            if($count == 5)
+            {
+                $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "{$this->lang->design->more}|design|browse|projectID=%s&productID=0&browseType={$key}", 'class' => 'dropdown dropdown-hover');
+                $this->lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
+            }
+            if($count >= 5) $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID=0&browseType={$key}");
+
+            $count ++;
         }
 
         if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
