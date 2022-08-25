@@ -1964,16 +1964,7 @@ class taskModel extends model
 
         if(!empty($oldTask->team) and $currentTeam)
         {
-            $this->dao->update(TABLE_TASKTEAM)
-                ->set('left')->eq(0)
-                ->set('consumed')->eq($task->consumed)
-                ->set('status')->eq('done')
-                ->where('task')->eq((int)$taskID)
-                ->andWhere('account')->eq($this->app->user->account)->exec();
-
-            $skipMembers = $oldTask->mode == 'linear' ? $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo) : $this->getFinishedUsers($oldTask->id, array_keys($oldTask->team));
-            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->where('task')->eq($taskID)->andWhere('account')->eq($account)->exec();
-
+            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
             $task = $this->computeHours4Multiple($oldTask, $task);
 
             $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
