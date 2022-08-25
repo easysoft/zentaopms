@@ -2738,7 +2738,7 @@ class taskModel extends model
             ->fetch();
 
         /* If the estimate is the last of its task, status of task will be checked. */
-        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date,id')->limit(1)->fetch('id');
+        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date_desc,id_desc')->limit(1)->fetch('id');
         $estimate->isLast = $lastID == $estimate->id;
         return $estimate;
     }
@@ -2798,7 +2798,7 @@ class taskModel extends model
             ->exec();
 
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
-        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
+        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('date_desc,id_desc')->limit(1)->fetch();
         $left         = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
 
         $now  = helper::now();
@@ -2808,7 +2808,7 @@ class taskModel extends model
         $data->status         = $left == 0 ? 'done' : $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
-        if(!$left)
+        if(empty($left))
         {
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;

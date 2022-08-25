@@ -163,6 +163,7 @@ $(document).ready(function()
             bootbox.alert(totalLeftError);
             return false;
         }
+        return true;
     }
 
     $taskTeamEditor.on('click', '.btn-add', function()
