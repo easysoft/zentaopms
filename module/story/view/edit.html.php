@@ -240,7 +240,7 @@
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control picker-select' multiple");?>
+                    <?php echo html::select('mailto[]', $users, $story->mailto, "class='form-control picker-select' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
