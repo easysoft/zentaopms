@@ -179,9 +179,12 @@ if(!isset($config->setCode) or $config->setCode == 1)
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
-else
+elseif($config->systemMode == 'new')
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
@@ -202,10 +205,13 @@ if(!isset($config->setCode) or $config->setCode == 1)
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
 
-$config->execution->datatable->fieldList['project']['title']    = 'project';
-$config->execution->datatable->fieldList['project']['fixed']    = 'no';
-$config->execution->datatable->fieldList['project']['width']    = '100';
-$config->execution->datatable->fieldList['project']['required'] = 'no';
+if($config->systemMode == 'new')
+{
+    $config->execution->datatable->fieldList['project']['title']    = 'project';
+    $config->execution->datatable->fieldList['project']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['project']['width']    = '100';
+    $config->execution->datatable->fieldList['project']['required'] = 'no';
+}
 
 $config->execution->datatable->fieldList['PM']['title']    = 'owner';
 $config->execution->datatable->fieldList['PM']['fixed']    = 'no';
