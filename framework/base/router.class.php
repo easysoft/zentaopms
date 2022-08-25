@@ -1461,6 +1461,17 @@ class baseRouter
             chdir(dirname($file2Included));
             helper::import($file2Included);
 
+            /* Check file is encode by ioncube. */
+            $isEncrypted = false;
+            if($isExt)
+            {
+                $fp = fopen($file2Included, 'r');
+                $line1 = fgets($fp);
+                $line2 = fgets($fp);
+                fclose($fp);
+                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+            }
+
             /*
              * 设置control的类名。
              * Set the class name of the control.
@@ -1500,7 +1511,7 @@ class baseRouter
                 {
                     $default = $paramDefaultValue[$className][$methodName][$name];
                 }
-                elseif($param->isDefaultValueAvailable())
+                elseif(!$isEncrypted and $param->isDefaultValueAvailable())
                 {
                     $default = $param->getDefaultValue();
                 }
