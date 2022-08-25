@@ -69,6 +69,11 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
 <?php if(isset($task->status) and $task->status != 'wait' and $task->status != 'doing') $newRowCount = 0;?>
 <?php js::set('newRowCount', $newRowCount);?>
 <?php if(isset($task->mode) and $task->mode == 'linear') js::set('sortSelector', 'tr.member-wait');?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php if(isset($task->status)):?>
+<?php js::set('taskStatus', $task->status);?>
+<?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
+<?php endif;?>
 <script>
 $(document).ready(function()
 {
@@ -123,6 +128,43 @@ $(document).ready(function()
         }
     }
 
+    var checkRemove = function(removeIndex)
+    {
+        var $teams      = $taskTeamEditor.find('select#team');
+        var totalLeft   = 0;
+        var memberCount = 0;
+        for(i = 0; i < $teams.length; i++)
+        {
+            var $this = $teams.eq(i);
+            var value = $this.val();
+            if(value == '') continue;
+
+            var $tr = $this.closest('tr');
+            if($tr.index() == removeIndex) continue;
+
+            memberCount++;
+
+            var $teamLeft = $tr.find('[name^=teamLeft]');
+            if($teamLeft.length > 0)
+            {
+                left = parseFloat($teamLeft.val());
+                if(!isNaN(left)) totalLeft += left;
+            }
+        }
+
+        if(memberCount < 2)
+        {
+            bootbox.alert(teamMemberError);
+            return false;
+        }
+
+        if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
+        {
+            bootbox.alert(totalLeftError);
+            return false;
+        }
+    }
+
     $taskTeamEditor.on('click', '.btn-add', function()
     {
         var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
@@ -136,6 +178,9 @@ $(document).ready(function()
     }).on('click', '.btn-delete', function()
     {
         var $row = $(this).closest('tr');
+        <?php if(!empty($task->team)):?>
+        if(!checkRemove($row.index())) return;
+        <?php endif;?>
         $row.addClass('highlight').fadeOut(700, function()
         {
             $row.remove();
