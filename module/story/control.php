@@ -2131,11 +2131,12 @@ class story extends control
      * @param  int    $storyID
      * @param  string $type
      * @param  string $browseType
-     * @param  int    $param
+     * @param  int    $queryID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0)
+    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0, $storyType = 'story')
     {
         $this->commonAction($storyID);
 
@@ -2169,7 +2170,7 @@ class story extends control
         }
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         /* Get stories to link. */
