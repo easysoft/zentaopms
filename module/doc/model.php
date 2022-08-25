@@ -930,6 +930,8 @@ class docModel extends model
     {
         $this->loadModel('product');
 
+        if($this->app->getMethodName() == 'objectlibs') $type = 'objectlibs';
+
         if($this->app->rawMethod == 'contribute')
         {
             $this->config->doc->search['module'] = 'contributeDoc';
