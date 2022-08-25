@@ -791,6 +791,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `lastExec` datetime DEFAULT NULL,
   `lastStatus` varchar(255) DEFAULT NULL,
   `lastTag` varchar(255) DEFAULT NULL,
+  `lastSyncDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
