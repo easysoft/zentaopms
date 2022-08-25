@@ -283,7 +283,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
-            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         }
         else
         {
@@ -362,14 +362,15 @@ function compareChildDate()
             var dateTip = '';
             if(programBegin > childBegin)
             {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + beginGreateChild + childInfo.minChildBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + beginGreateChild + childInfo.minChildBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
             }
             else if(programEnd < childEnd)
             {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + endLetterChild + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + endLetterChild + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
             }
 
-            $('#dateBox').after(dateTip);
+            $('#dateBox').parent().parent().after(dateTip);
+            $('#dateTip').parent().css('line-height', '0');
         });
     }
 }
@@ -386,7 +387,7 @@ function outOfDateTip()
 
     var end   = $('#end').val();
     var begin = $('#begin').val();
-    if($('#dateTip').length > 0) $('#dateTip').remove();
+    if($('#dateTip').length > 0) $('#dateTip').parent().parent().remove();
 
     if(end == longTime) end = LONG_TIME;
     if(end.length > 0 && begin.length > 0)
@@ -417,14 +418,15 @@ function outOfDateTip()
 
             if(programBegin < parentBegin)
             {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + beginLetterParent + data.selectedProgramBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + beginLetterParent + data.selectedProgramBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
             }
             else if(programEnd > parentEnd)
             {
-                dateTip = "<span id='dateTip' class='text-remind'><p>" + endGreaterParent + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>";
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + endGreaterParent + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
             }
 
-            $('#dateBox').after(dateTip);
+            $('#dateBox').parent().parent().after(dateTip);
+            $('#dateTip').parent().css('line-height', '0');
         });
     }
 }
@@ -443,7 +445,7 @@ function budgetOverrunTips()
     var budget            = $('#budget').val();
     if(selectedProgramID == 0)
     {
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         return false;
     }
 
@@ -453,9 +455,10 @@ function budgetOverrunTips()
         var data = JSON.parse(data);
 
         var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>"
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(tip);
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<tr><td></td><td colspan='2'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>"
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        $('#budgetBox').parent().parent().after(tip);
+        $('#beyondBudgetTip').parent().css('line-height', '0');
     });
 }
 

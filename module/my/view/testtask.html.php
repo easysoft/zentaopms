@@ -47,12 +47,12 @@
       <?php foreach($tasks as $task):?>
       <tr>
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
-        <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
-        <td class='nobr'><?php echo $task->executionName?></td>
-        <td class='nobr' title='<?php echo $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+        <td class='text-left nobr' title='<?php echo $task->name;?>'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
+        <td class='nobr' title='<?php echo $task->executionName;?>'><?php echo $task->executionName;?></td>
+        <td class='nobr' title='<?php echo $task->build == 'trunk' ? $lang->trunk : $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
-        <td title='<?php echo $task->status?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
+        <td title='<?php echo $this->processStatus('testtask', $task);?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', "data-app='qa'");

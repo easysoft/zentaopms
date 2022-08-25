@@ -23,10 +23,14 @@ $lang->story->change             = "变更";
 $lang->story->changed            = "{$lang->SRCommon}变更";
 $lang->story->assignTo           = '指派';
 $lang->story->review             = '评审';
+$lang->story->submitReview       = "提交评审";
 $lang->story->recall             = '撤销评审';
+$lang->story->recallChange       = '撤销变更';
+$lang->story->recallAction       = '撤销';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
 $lang->story->edit               = "编辑";
+$lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
 $lang->story->subdivide          = '细分';
 $lang->story->link               = '关联';
@@ -70,6 +74,8 @@ $lang->story->batchToTask        = '批量转任务';
 $lang->story->convertRelations   = '换算关系';
 $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
+$lang->story->saveDraft          = '存为草稿';
+$lang->story->doNotSubmit        = '保存暂不提交';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
@@ -82,12 +88,13 @@ $lang->story->deleteAction    = "删除{$lang->SRCommon}";
 $lang->story->exportAction    = "导出{$lang->SRCommon}";
 $lang->story->reportAction    = "统计报表";
 
-$lang->story->skipStory       = '需求：%s 为父需求，将不会被关闭。';
-$lang->story->closedStory     = '需求：%s 已关闭，将不会被关闭。';
-$lang->story->batchToTaskTips = "已关闭的需求不会转为任务。";
-$lang->story->successToTask   = '批量转任务成功';
-$lang->story->storyRound      = '第 %s 轮估算';
-$lang->story->float           = "『%s』应当是正数，可以是小数。";
+$lang->story->skipStory        = '需求：%s 为父需求，将不会被关闭。';
+$lang->story->closedStory      = '需求：%s 已关闭，将不会被关闭。';
+$lang->story->batchToTaskTips  = "已关闭的需求不会转为任务。";
+$lang->story->successToTask    = '批量转任务成功';
+$lang->story->storyRound       = '第 %s 轮估算';
+$lang->story->float            = "『%s』应当是正数，可以是小数。";
+$lang->story->saveDraftSuccess = '存为草稿成功';
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
@@ -130,6 +137,8 @@ $lang->story->closedBy         = '由谁关闭';
 $lang->story->closedDate       = '关闭日期';
 $lang->story->closedReason     = '关闭原因';
 $lang->story->rejectedReason   = '拒绝原因';
+$lang->story->changedBy        = '由谁变更';
+$lang->story->changedDate      = '变更时间';
 $lang->story->reviewedBy       = '由谁评审';
 $lang->story->reviewer         = $lang->story->reviewedBy;
 $lang->story->reviewers        = '评审人员';
@@ -182,11 +191,12 @@ $lang->story->needNotReviewList[1] = '不需要评审';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已关闭';
-$lang->story->statusList['changed'] = '已变更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已关闭';
+$lang->story->statusList['changing']  = '变更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
@@ -295,6 +305,8 @@ $lang->story->estimateMustBePlus    = '估算值不能是负数';
 $lang->story->confirmChangeBranch   = $lang->SRCommon . '%s已关联在之前所属分支的计划中，调整分支后，' . $lang->SRCommon . '将从之前所属分支的计划中移除，请确认是否继续修改上述' . $lang->SRCommon . '的分支。';
 $lang->story->confirmChangePlan     = $lang->SRCommon . '%s已关联在之前计划的所属分支中，调整分支后，' . $lang->SRCommon . '将会从计划中移除，请确认是否继续修改计划的所属分支。';
 $lang->story->errorDuplicateStory   = $lang->SRCommon . '%s不存在';
+$lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
+$lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
@@ -325,6 +337,7 @@ $lang->story->action->linkrelatedstory      = array('main' => "\$date, 由 <stro
 $lang->story->action->subdividestory        = array('main' => "\$date, 由 <strong>\$actor</strong> 细分为{$lang->SRCommon}   <strong>\$extra</strong>。");
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
+$lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -450,8 +463,10 @@ $lang->story->subDivideTip['planned']   = '该需求已计划，无法进行细�
 $lang->story->subDivideTip['projected'] = '该需求已立项，无法进行细分操作';
 $lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';
 
-$lang->story->featureBar['browse']['all']      = $lang->all;
-$lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
+$lang->story->featureBar['browse']['all']       = $lang->all;
+$lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
+$lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
+$lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";
@@ -466,7 +481,7 @@ $lang->requirement->activateAction     = "激活{$lang->URCommon}";
 $lang->requirement->deleteAction       = "删除{$lang->URCommon}";
 $lang->requirement->exportAction       = "导出{$lang->URCommon}";
 $lang->requirement->reportAction       = "统计报表";
-$lang->requirement->recall             = '撤销评审';
+$lang->requirement->recall             = $lang->story->recallAction;
 $lang->requirement->batchReview        = '批量评审';
 $lang->requirement->batchEdit          = "批量编辑";
 $lang->requirement->batchClose         = '批量关闭';
@@ -475,3 +490,4 @@ $lang->requirement->linkRequirementsAB = "关联相关{$lang->URCommon}";
 $lang->requirement->batchChangeBranch  = "批量修改分支";
 $lang->requirement->batchAssignTo      = "批量指派";
 $lang->requirement->batchChangeModule  = "批量修改模块";
+$lang->requirement->submitReview       = $lang->story->submitReview;

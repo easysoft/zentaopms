@@ -1604,33 +1604,31 @@ class executionTest
     }
 
     /**
-     * function getBurnDataFlot test by execution
+     * Function getBurnDataFlot test by execution.
      *
-     * @param  int $executionID
-     * @param  string $count
+     * @param  int   $executionID
      * @access public
-     * @return array
+     * @return int
      */
-    public function getBurnDataFlotTest($executionID = 0, $count)
+    public function getBurnDataFlotTest($executionID = 0)
     {
         $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
 
         $todayData = array();
-        foreach ($object[$date] as $key => $value) $todayData[$key] = $value;
+        if(isset($object[$date]))
+        {
+            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
+        }
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return sizeof($todayData);
-        }
         else
         {
-            return $object;
+            return sizeof($todayData);
         }
     }
 

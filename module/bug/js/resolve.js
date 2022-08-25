@@ -45,4 +45,10 @@ $(function()
             $('#newBuildExecutionBox').addClass('hidden');
         }
     })
+
+    $('#duplicateBug').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto'
+    });
 })

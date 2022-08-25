@@ -350,7 +350,7 @@ class projectModel extends model
      */
     public function getTotalStoriesByProject($projectIdList = 0)
     {
-        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changed', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.type')->eq('story')
@@ -758,7 +758,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
@@ -797,16 +797,17 @@ class projectModel extends model
     /**
      * Get project by id list.
      *
-     * @param  array    $projectIdList
+     * @param  array  $projectIdList
+     * @param  string $mode all
      * @access public
      * @return object
      */
-    public function getByIdList($projectIdList = array())
+    public function getByIdList($projectIdList = array(), $mode = '')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');
     }
 

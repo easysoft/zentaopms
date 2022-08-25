@@ -398,3 +398,4 @@ $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;
+$config->maxPriValue  = '256';

@@ -269,6 +269,12 @@ class portModel extends model
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
+
+        if(!empty($fieldList['mailto']))
+        {
+            $fieldList['mailto']['control'] = 'multiple';
+            $fieldList['mailto']['values']  = $this->portConfig->sysDataList['user'];
+        }
         return $fieldList;
     }
 
@@ -403,7 +409,11 @@ class portModel extends model
 
         $sysDataFields = explode(',', $this->portConfig->sysDataFields);
 
-        foreach($sysDataFields as $field) $dataList[$field] = $this->loadModel($field)->getPairs();
+        foreach($sysDataFields as $field)
+        {
+            $dataList[$field] = $this->loadModel($field)->getPairs();
+            if($field == 'user') $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+        }
 
         return $dataList;
     }
@@ -479,7 +489,7 @@ class portModel extends model
     {
         $getParams = $this->session->{$model . 'PortParams'};
 
-        if($params and $getParams)
+        if($params)
         {
             $params = explode('&', $params);
             foreach($params as $param => $value)
@@ -560,9 +570,12 @@ class portModel extends model
                 {
                     if($fieldList[$field]['control'] == 'multiple')
                     {
-                        $multiple = '';
+                        $multiple     = '';
+                        $separator    = $field == 'mailto' ? ',' : "\n";
                         $multipleLsit = explode(',', $value);
-                        foreach($multipleLsit as $tmpValue) $multiple .= "\n" . zget($exportDatas[$field], $tmpValue);
+
+                        foreach($multipleLsit as $key => $tmpValue) $multipleLsit[$key] = zget($exportDatas[$field], $tmpValue);
+                        $multiple = join($separator, $multipleLsit);
                         $rows[$id]->$field = $multiple;
                     }
                     else

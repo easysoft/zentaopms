@@ -785,6 +785,18 @@ class executionModel extends model
                 return false;
             }
 
+            /* Replace required language. */
+            if($this->app->tab == 'project')
+            {
+                $this->lang->project->name = $this->lang->execution->name;
+                $this->lang->project->code = $this->lang->execution->code;
+            }
+            else
+            {
+                $this->lang->project->name = $this->lang->execution->execName;
+                $this->lang->project->code = $this->lang->execution->execCode;
+            }
+
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
@@ -1303,12 +1315,16 @@ class executionModel extends model
      * Get execution by idList.
      *
      * @param  array  $executionIdList
+     * @param  string $mode all
      * @access public
      * @return array
      */
-    public function getByIdList($executionIdList = array())
+    public function getByIdList($executionIdList = array(), $mode = '')
     {
-        return $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('id')->in($executionIdList)
+            ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -2688,7 +2704,7 @@ class executionModel extends model
         parse_str($extra, $output);
         foreach($stories as $key => $storyID)
         {
-            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
+            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
@@ -2783,7 +2799,7 @@ class executionModel extends model
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft')
+                            if($story->status == 'draft' or $story->status == 'reviewing')
                             {
                                 unset($planStory[$id]);
                                 continue;
@@ -3636,7 +3652,8 @@ class executionModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $tasks   = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
              ->from(TABLE_TASK)->alias('t1')
              ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
              ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
