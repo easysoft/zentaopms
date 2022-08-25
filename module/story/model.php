@@ -784,7 +784,7 @@ class storyModel extends model
             return false;
         }
 
-        if($this->checkForceReview() and empty($_POST['reviewer']))
+        if(strpos('draft,changing', $oldStory->status) !== false and $this->checkForceReview() and empty($_POST['reviewer']))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
             return false;
