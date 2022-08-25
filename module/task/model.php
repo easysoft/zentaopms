@@ -2916,7 +2916,6 @@ class taskModel extends model
                     if($lastTwoEstimate) $left = $lastTwoEstimate->left;
                 }
 
-
                 $newTeamInfo = new stdClass();
                 $newTeamInfo->consumed = $currentTeam->consumed - $estimate->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
