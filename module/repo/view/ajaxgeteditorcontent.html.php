@@ -170,7 +170,7 @@ $(function()
             $('.history').text(content);
             $('#log').data('line', p_line);
             $('#log').css('display', 'flex');
-            getRelation(version);
+            getRelation(blame.revision);
         })
     });
 });
