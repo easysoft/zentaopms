@@ -1961,7 +1961,15 @@ class taskModel extends model
 
         if(!empty($oldTask->team) and $currentTeam)
         {
-            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
+            $this->dao->update(TABLE_TASKTEAM)
+                ->set('left')->eq(0)
+                ->set('consumed')->eq($task->consumed)
+                ->set('status')->eq('done')
+                ->where('task')->eq((int)$taskID)
+                ->andWhere('account')->eq($this->app->user->account)->exec();
+
+            $skipMembers = $oldTask->mode == 'linear' ? $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo) : $this->getFinishedUsers($oldTask->id, array_keys($oldTask->team));
+            foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->where('task')->eq($taskID)->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
 
@@ -3668,19 +3676,25 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
+        $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
         if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
         {
             $assignedToText = $this->lang->task->team;
 
             $teamMembers = array();
-            foreach($task->team as $teamMember) $teamMembers[] = zget($users, $teamMember->account);
+            foreach($task->team as $teamMember)
+            {
+                $realname = zget($users, $teamMember->account);
+                if($this->app->user->account == $teamMember->account)
+                {
+                    $task->assignedTo = $this->app->user->account;
+                    $assignedToText   = $realname;
+                }
+                $teamMembers[] = $realname;
+            }
+
             $assignedToTitle = implode($this->lang->comma, $teamMembers);
         }
-        else
-        {
-            $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
-        }
-        $assignedToText = (!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed') ? $this->lang->task->team : zget($users, $task->assignedTo);
 
         if(empty($task->assignedTo))
         {
