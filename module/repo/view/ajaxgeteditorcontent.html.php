@@ -80,6 +80,7 @@ $(function()
                 if($tabs)
                 {
                     $tabs.open(tab);
+                    $tabs.reload(tab)
                 }
                 else
                 {

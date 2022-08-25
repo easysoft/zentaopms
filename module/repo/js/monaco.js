@@ -44,9 +44,19 @@ $(function()
     }
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
 
-    var paneHeight = $(window).height() - 120;
-    $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
-    $('#filesTree').css('height', paneHeight + 45)
+    /**
+     * Set pane height.
+     *
+     * @access public
+     * @return void
+     */
+    function setWidth()
+    {
+        var paneHeight = $(window).height() - 120;
+        $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
+        $('#filesTree').css('height', paneHeight + 45)
+    }
+    setWidth();
 
     $(document).on('click', '.repoFileName', function()
     {
@@ -56,6 +66,7 @@ $(function()
         if(openedFiles.indexOf(path) == -1) openedFiles.push(path);
 
         $tabs.open(createTab(name, path));
+        setWidth();
     });
 
     /* Remove file path for opened files. */

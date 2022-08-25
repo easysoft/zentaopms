@@ -43,6 +43,7 @@ $(function()
 {
     $('a').attr('href', 'javascript:;').removeClass('iframe').css('color', '#3c4353');
     $('blockquote a').empty();
-    $('.left-content').css('width', $('.repoCode .content').width() / 5 * 3);
 });
+
+if(window.onblur) $('.left-content').css('width', $('.repoCode .content').width() / 5 * 3);
 </script>
