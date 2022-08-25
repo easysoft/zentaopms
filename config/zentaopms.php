@@ -399,3 +399,5 @@ $config->waterfallModules = array('workestimation', 'durationestimation', 'budge
 
 $config->showMainMenu = true;
 $config->maxPriValue  = '256';
+
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');
