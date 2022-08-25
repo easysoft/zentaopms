@@ -554,6 +554,7 @@ if($config->URAndSR)
     $lang->resource->requirement->create            = 'create';
     $lang->resource->requirement->batchCreate       = 'batchCreate';
     $lang->resource->requirement->edit              = 'editAction';
+    $lang->resource->requirement->linkStory         = 'linkStory';
     $lang->resource->requirement->batchEdit         = 'batchEdit';
     $lang->resource->requirement->export            = 'exportAction';
     $lang->resource->requirement->delete            = 'deleteAction';
@@ -573,26 +574,27 @@ if($config->URAndSR)
     $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
     $lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
 
-    $lang->requirement->methodOrder[5]  = 'create';
-    $lang->requirement->methodOrder[10] = 'batchCreate';
-    $lang->requirement->methodOrder[15] = 'edit';
-    $lang->requirement->methodOrder[20] = 'export';
-    $lang->requirement->methodOrder[25] = 'delete';
-    $lang->requirement->methodOrder[30] = 'view';
-    $lang->requirement->methodOrder[35] = 'change';
-    $lang->requirement->methodOrder[40] = 'review';
-    $lang->requirement->methodOrder[44] = 'submitReview';
-    $lang->requirement->methodOrder[45] = 'batchReview';
-    $lang->requirement->methodOrder[50] = 'recall';
-    $lang->requirement->methodOrder[55] = 'close';
-    $lang->requirement->methodOrder[60] = 'batchClose';
-    $lang->requirement->methodOrder[65] = 'assignTo';
-    $lang->requirement->methodOrder[70] = 'batchAssignTo';
-    $lang->requirement->methodOrder[75] = 'activate';
-    $lang->requirement->methodOrder[80] = 'report';
-    $lang->requirement->methodOrder[85] = 'batchChangeBranch';
-    $lang->requirement->methodOrder[90] = 'batchChangeModule';
-    $lang->requirement->methodOrder[95] = 'linkRequirements';
+    $lang->requirement->methodOrder[5]   = 'create';
+    $lang->requirement->methodOrder[10]  = 'batchCreate';
+    $lang->requirement->methodOrder[15]  = 'edit';
+    $lang->requirement->methodOrder[20]  = 'export';
+    $lang->requirement->methodOrder[25]  = 'delete';
+    $lang->requirement->methodOrder[30]  = 'view';
+    $lang->requirement->methodOrder[35]  = 'change';
+    $lang->requirement->methodOrder[40]  = 'review';
+    $lang->requirement->methodOrder[44]  = 'submitReview';
+    $lang->requirement->methodOrder[45]  = 'batchReview';
+    $lang->requirement->methodOrder[50]  = 'recall';
+    $lang->requirement->methodOrder[55]  = 'close';
+    $lang->requirement->methodOrder[60]  = 'batchClose';
+    $lang->requirement->methodOrder[65]  = 'assignTo';
+    $lang->requirement->methodOrder[70]  = 'batchAssignTo';
+    $lang->requirement->methodOrder[75]  = 'activate';
+    $lang->requirement->methodOrder[80]  = 'report';
+    $lang->requirement->methodOrder[85]  = 'linkStory';
+    $lang->requirement->methodOrder[90]  = 'batchChangeBranch';
+    $lang->requirement->methodOrder[95]  = 'batchChangeModule';
+    $lang->requirement->methodOrder[100] = 'linkRequirements';
 }
 
 /* Product plan. */
