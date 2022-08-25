@@ -934,7 +934,7 @@ class docModel extends model
         if($this->app->getMethodName() == 'objectlibs')
         {
             $queryName = $type . 'Doc';
-            $type      = 'objectlibs';
+            $type      = 'objectLibs';
         }
 
         if($this->app->rawMethod == 'contribute')
