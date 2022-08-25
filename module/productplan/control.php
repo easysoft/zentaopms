@@ -732,7 +732,7 @@ class productplan extends control
             $this->productplan->unlinkStory($storyID, $planID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
-            return print (js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent'));
+            return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent'));
         }
     }
 
@@ -876,7 +876,7 @@ class productplan extends control
     {
         foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
         $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIDList));
-        return print (js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
+        return print(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 
     /**
