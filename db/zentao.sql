@@ -7091,6 +7091,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `assignedTo` varchar(255) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `feedbackBy` varchar(100) NOT NULL,
+  `repeatFeedback` mediumint(8) NOT NULL DEFAULT 0,
   `mailto` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
