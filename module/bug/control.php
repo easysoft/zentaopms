@@ -1152,9 +1152,13 @@ class bug extends control
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->product          = $product;
+        $this->view->productBugs      = $productBugs;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
         $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
@@ -1301,6 +1305,7 @@ class bug extends control
         $branchIdList    = array();
         $projectIdList   = array();
         $executionIdList = array();
+        $productBugList  = array();
         foreach($bugs as $bug)
         {
             $projectIdList[$bug->project]     = $bug->project;
@@ -1309,6 +1314,10 @@ class bug extends control
             $branchIdList[$bug->product][$bug->branch] = $bug->branch;
 
             if(!isset($modules[$bug->product][$bug->branch]) and isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
+
+            $bugProduct  = isset($productList) ? $productList[$bug->product] : $product;
+            $branch      = $bugProduct->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+            if(!isset($productBugList[$bug->product][$bug->branch])) $productBugList[$bug->product][$bug->branch] = $this->bug->getProductBugPairs($bug->product, $branch);
         }
 
         /* Get assigned to member. */
@@ -1388,6 +1397,7 @@ class bug extends control
         $this->view->users            = $users;
         $this->view->modules          = $modules;
         $this->view->branchTagOption  = $branchTagOption;
+        $this->view->productBugList   = $productBugList;
 
         $this->display();
     }
@@ -1797,17 +1807,22 @@ class bug extends control
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
 
+        $product     = $this->loadModel('product')->getById($productID);
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->bug        = $bug;
-        $this->view->users      = $users;
-        $this->view->assignedTo = $assignedTo;
-        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
-        $this->view->builds     = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
-        $this->view->actions    = $this->action->getList('bug', $bugID);
-        $this->view->execution  = isset($execution) ? $execution : '';
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->bug         = $bug;
+        $this->view->users       = $users;
+        $this->view->assignedTo  = $assignedTo;
+        $this->view->productBugs = $productBugs;
+        $this->view->executions  = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
+        $this->view->actions     = $this->action->getList('bug', $bugID);
+        $this->view->execution   = isset($execution) ? $execution : '';
         $this->display();
     }
 

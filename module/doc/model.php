@@ -60,18 +60,20 @@ class docModel extends model
      * @param  string $type
      * @param  string $extra
      * @param  string $appendLibs
-     * @param  int    $projectID
+     * @param  int    $objectID
+     * @param  string $excludeType
      *
      * @access public
      * @return array
      */
-    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
+    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('`order` asc, id_desc')
                 ->query();

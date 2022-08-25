@@ -510,7 +510,8 @@ class actionModel extends model
             elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
             {
                 $action->appendLink = '';
-                if(strpos($action->extra, ':')!== false)
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
                 {
                     list($extra, $id) = explode(':', $action->extra);
                     $action->extra    = $extra;
@@ -1539,7 +1540,11 @@ class actionModel extends model
                 if($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story)) $moduleName = $story->type;
+                    if(!empty($story))
+                    {
+                        $moduleName = $story->type;
+                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                    }
                 }
 
                 if($action->objectType == 'doclib')

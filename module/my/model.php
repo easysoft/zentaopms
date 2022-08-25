@@ -336,24 +336,27 @@ class myModel extends model
 
         if($objectType == 'task')
         {
-            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')
+            $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
+            $objectList = $this->dao->select("t1.*, t2.name as executionName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($objectIDList))
-                ->orderBy('t1.' . $orderBy)
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
         elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
         {
-            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+            $orderBy = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
+            $select  = strpos($orderBy, 'severity') !== false ? "t1.*,IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder" : "t1.*,IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
+            $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($objectIDList))
                 ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
-                ->orderBy('t1.' . $orderBy)
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -580,7 +583,8 @@ class myModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
-        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
+        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+        $tasks   = $this->dao->select("t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
@@ -827,7 +831,7 @@ class myModel extends model
                 $storyIDList[$storyID] = $storyID;
             }
 
-            $stories = $this->dao->select('distinct t1.*, t2.name as productTitle, t4.title as planTitle')->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -846,7 +850,7 @@ class myModel extends model
         }
         else
         {
-            $stories = $this->dao->select('distinct t1.*, t2.name as productTitle, t4.title as planTitle')->from(TABLE_STORY)->alias('t1')
+            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
@@ -946,7 +950,7 @@ class myModel extends model
                 $requirementIDList[$requirementID] = $requirementID;
             }
 
-            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)
@@ -963,7 +967,7 @@ class myModel extends model
         }
         else
         {
-            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
                 ->where($myRequirementQuery)

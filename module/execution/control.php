@@ -783,6 +783,7 @@ class execution extends control
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         $queryID     = ($type == 'bysearch') ? $param : 0;
         $execution   = $this->commonAction($executionID);
@@ -3996,7 +3997,7 @@ class execution extends control
         {
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft')
+                if($story->status == 'draft' or $story->status == 'reviewing')
                 {
                     $count++;
                     unset($planStory[$id]);

@@ -76,11 +76,13 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t3.name), t3.name)" : 't3.name';
+        return $this->dao->select("t1.*, t2.name AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
 
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
@@ -294,11 +296,13 @@ class testtaskModel extends model
      */
     public function getByUser($account, $pager = null, $orderBy = 'id_desc', $type = '')
     {
-        return $this->dao->select('t1.*, t2.name AS executionName, t3.name AS buildName')
+        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t2.name), t2.name)" : 't2.name';
+        return $this->dao->select("t1.*, $executionNameField AS executionName, t3.name AS buildName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t2.project = t5.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')

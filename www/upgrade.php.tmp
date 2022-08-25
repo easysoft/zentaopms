@@ -80,8 +80,4 @@ if($app->isContainer())
 
 /* Run it. */
 $app->parseRequest();
-if($common->checkUpgradeStatus())
-{
-    $app->setParams();
-    $app->loadModule();
-}
+if($common->checkUpgradeStatus()) $app->loadModule();

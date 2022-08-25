@@ -19,9 +19,10 @@
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('reviewedReviewer', $reviewedReviewer);?>
 <?php js::set('storyModule', $lang->story->module);?>
-<?php js::set('reviewers', explode(',', $reviewers));?>
+<?php js::set('reviewers', $reviewers);?>
 <?php js::set('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
+<?php js::set('storyStatus', $story->status);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -34,7 +35,7 @@
     <div class='main-row'>
       <div class='main-col col-8'>
         <div class='cell'>
-          <div class='form-group'>
+          <div class='form-group titleBox'>
             <div class="input-control has-icon-right">
               <div class="colorpicker">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
@@ -43,16 +44,46 @@
                 </ul>
                 <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
               </div>
-              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title" disabled="disabled"');?>
+              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title"' . (strpos('draft,changing', $story->status) !== false ? '' : ' disabled="disabled"'));?>
+            </div>
+          </div>
+          <?php if(strpos('draft,changing', $story->status) !== false):?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->story->reviewers;?></div>
+            <div class='detail-content'>
+              <div class="table-row">
+                <?php if(!$this->story->checkForceReview()):?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
+                </div>
+                <div class="table-col needNotReviewBox">
+                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
+                    <div class='checkbox-primary'>
+                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo empty($reviewers) ? 'checked' : '';?>/>
+                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+                    </div>
+                  </span>
+                </div>
+                <?php else:?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple required')?>
+                </div>
+                <?php endif;?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
+            <div class='detail-content article-content'>
+              <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
             </div>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
-            <div class='detail-content article-content'><?php echo $story->spec;?></div>
-          </div>
-          <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->verify;?></div>
-            <div class='detail-content article-content'><?php echo $story->verify;?></div>
+            <div class='detail-content article-content'>
+              <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
+            </div>
           </div>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
@@ -64,7 +95,15 @@
           <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
-            echo html::submitButton($lang->save);
+            if(strpos('draft,changing', $story->status) !== false)
+            {
+                echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');
+                echo html::commonButton($story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');
+            }
+            else
+            {
+                echo html::submitButton($lang->save);
+            }
             if(!isonlybody()) echo html::backButton();
             ?>
           </div>
@@ -153,7 +192,7 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if($story->status != 'draft' and $story->type == 'story'):?>
+              <?php if(strpos('draft,changing', $story->status) !== false and $story->type == 'story'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
@@ -220,7 +259,7 @@
                 <?php $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;?>
                 <td><?php echo html::select('assignedTo', $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($isShowReviewer):?>
+              <?php if($story->status == 'reviewing'):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
                 <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
@@ -244,12 +283,10 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
-              <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
                 <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
               </tr>
-              <?php endif;?>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $lang->story->linkStory;?></th>
                 <td>
