@@ -388,8 +388,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
-            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
-            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage):?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <?php endif;?>
             <ul class='dropdown-menu'>
