@@ -183,6 +183,7 @@ elseif($config->systemMode == 'new')
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
+else
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
