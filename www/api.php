@@ -46,7 +46,6 @@ $app->parseRequest();
 /* Old version need check priv here, new version check priv in entry. */
 if(!$app->version) $common->checkPriv();
 
-$app->setParams();
 $app->loadModule();
 
 $output = ob_get_clean();

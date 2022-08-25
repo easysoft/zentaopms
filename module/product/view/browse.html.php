@@ -388,8 +388,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
-            <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage):?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <?php endif;?>
             <ul class='dropdown-menu'>
               <?php
               $class      = $canBatchClose ? '' : "class='disabled'";
@@ -449,7 +451,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<ul class='dropdown-list'>";
                   foreach($branchTagOption as $id => $branchName)
                   {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
+                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id&confirm=&storyIdList=&storyType=$storyType");
                       echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                   }
                   echo '</ul>';
@@ -549,7 +551,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($users) > 10;
-            $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
+            $actionLink = $this->createLink('story', 'batchAssignTo', "storyType=$storyType");
             echo html::select('assignedTo', $users, '', 'class="hidden"');
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">

@@ -137,7 +137,7 @@ class story extends control
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
                 if($objectID == 0)
                 {
-                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
+                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType=$storyType");
                 }
                 else
                 {
@@ -563,7 +563,7 @@ class story extends control
 
             if($storyID)
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
             elseif($executionID)
             {
@@ -796,7 +796,8 @@ class story extends control
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
+            $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1023,7 +1024,8 @@ class story extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Append module when change product type. */
-        $moduleList = array(0 => '/');
+        $moduleList       = array(0 => '/');
+        $productStoryList = array();
         foreach($stories as $story)
         {
             if(isset($modules[$story->product][$story->branch]))
@@ -1033,6 +1035,13 @@ class story extends control
             else
             {
                 $moduleList[$story->id] = $modules[$story->product][0] + $this->tree->getModulesName($story->module);
+            }
+
+            if($story->status == 'closed')
+            {
+                $storyProduct = $products[$story->product];
+                $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
             }
         }
 
@@ -1055,6 +1064,7 @@ class story extends control
         $this->view->executionID       = $executionID;
         $this->view->branchTagOption   = $branchTagOption;
         $this->view->moduleList        = $moduleList;
+        $this->view->productStoryList  = $productStoryList;
         $this->display();
     }
 
@@ -1127,7 +1137,8 @@ class story extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1198,7 +1209,7 @@ class story extends control
                     return print(js::closeModal('parent.parent', 'this'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1330,7 +1341,7 @@ class story extends control
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from"), ''));
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
         }
         else
         {
@@ -1425,7 +1436,8 @@ class story extends control
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         /* Get story and product. */
@@ -1528,7 +1540,7 @@ class story extends control
             $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
             $this->loadModel('action')->create('story', $storyID, $action);
 
-            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
@@ -1539,10 +1551,11 @@ class story extends control
      * Submit review.
      *
      * @param  int    $storyID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function submitReview($storyID)
+    public function submitReview($storyID, $storyType = 'story')
     {
         if($_POST)
         {
@@ -1556,7 +1569,7 @@ class story extends control
             }
 
             if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         /* Get story and product. */
@@ -1649,12 +1662,12 @@ class story extends control
             }
             else
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
         }
 
         /* Get story and product. */
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
 
         $this->story->replaceURLang($story->type);
 
@@ -1662,19 +1675,24 @@ class story extends control
         $this->product->setMenu($product->id, $story->branch);
 
         /* Set the closed reason options and remove subdivided options. */
-        if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-        unset($this->lang->story->reasonList['subdivided']);
+        $reasonList = $this->lang->story->reasonList;
+        if($story->status == 'draft') unset($reasonList['cancel']);
+        unset($reasonList['subdivided']);
+
+        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->close;
 
-        $this->view->product    = $product;
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getPairs();
-        $this->view->reasonList = $this->lang->story->reasonList;
+        $this->view->product        = $product;
+        $this->view->story          = $story;
+        $this->view->productStories = $productStories;
+        $this->view->actions        = $this->action->getList('story', $storyID);
+        $this->view->users          = $this->loadModel('user')->getPairs();
+        $this->view->reasonList     = $reasonList;
         $this->display();
     }
 
@@ -1696,6 +1714,8 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
+        $productStoryList = array();
+        $productList      = array();
         foreach($stories as $story)
         {
             if($story->parent == -1)
@@ -1708,6 +1728,10 @@ class story extends control
                 $closedStory[] = $story->id;
                 unset($stories[$story->id]);
             }
+
+            $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
+            $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
         }
 
         if($this->post->comments)
@@ -1791,6 +1815,7 @@ class story extends control
         $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
+        $this->view->productStoryList = $productStoryList;
 
         $this->display();
     }
@@ -2029,7 +2054,7 @@ class story extends control
                     return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         /* Get story and product. */
@@ -2127,11 +2152,12 @@ class story extends control
      * @param  int    $storyID
      * @param  string $type
      * @param  string $browseType
-     * @param  int    $param
+     * @param  int    $queryID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0)
+    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0, $storyType = 'story')
     {
         $this->commonAction($storyID);
 
@@ -2165,7 +2191,7 @@ class story extends control
         }
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         /* Get stories to link. */
@@ -2206,9 +2232,10 @@ class story extends control
         $products = $this->product->getPairs();
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
+        $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         $this->view->story        = $story;

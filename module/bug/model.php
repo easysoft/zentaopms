@@ -1569,7 +1569,6 @@ class bugModel extends model
             $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
                 ->where('product')->eq($productID)
                 ->andWhere($field)->ne('0000-00-00 00:00:00')
-                ->andWhere($field)->ne('')
                 ->andWhere('deleted')->eq(0)
                 ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')
                 ->groupBy('date')
@@ -1994,16 +1993,18 @@ class bugModel extends model
     /**
      * get Product Bug Pairs
      *
-     * @param  int    $productID
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
-    public function getProductBugPairs($productID)
+    public function getProductBugPairs($productID, $branch = '')
     {
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();

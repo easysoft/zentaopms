@@ -125,7 +125,7 @@ class action extends control
         }
 
         /* Get the products name of story. */
-        if($browseType == 'story')
+        if(strpos(',story,requirement,', ",$browseType,") !== false)
         {
             $this->loadModel('story');
             $storyIdList = array();

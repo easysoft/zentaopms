@@ -546,9 +546,8 @@ class upgradeModel extends model
             case '17_5':
                 $this->updateOSAndBrowserOfBug();
                 $this->addURPriv();
-                break;
-            case '17_5':
                 $this->updateStoryStatus();
+                if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
                 break;
         }
 
@@ -1011,6 +1010,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '17_4':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
+            case '17_5':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.5'));
         }
 
         return $confirmContent;
@@ -7062,11 +7063,16 @@ class upgradeModel extends model
      */
     public function updateStoryStatus()
     {
-        /* After cancel the review of changed story, the story status should be 'changing'. */
+        /* After cancel the review of changed story, the story status should be "changing". */
         $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
 
-        /* Other stories in draft status should be 'reviewing'. */
-        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('status')->eq('draft')->exec();
+        /* The draft story with reviewers should be "reviewing". */
+        $reviewingStories = $this->dao->select('story')->from(TABLE_STORYREVIEW)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id and t1.version = t2.version')
+            ->where('t2.status')->eq('draft')
+            ->andWhere('t2.version')->eq(1)
+            ->fetchPairs();
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('id')->in($reviewingStories)->exec();
 
         return !dao::isError();
     }
@@ -7153,5 +7159,49 @@ class upgradeModel extends model
         $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
+    }
+
+    /**
+     * Sync case to project|execution if case create from import.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project()
+    {
+        $linkStoryCases   = $this->dao->select('id, story, version, product')->from(TABLE_CASE)->where('story')->ne('0')->fetchAll('id');
+        $linkProjectCases = $this->dao->select('`case`, project')->from(TABLE_PROJECTCASE)->where('`case`')->ne('0')->andWhere('project')->ne('0')->fetchGroup('case', 'project');
+
+        if(empty($linkStoryCases)) return true;
+
+        $projectList = $this->dao->select('t1.project, t1.story, t1.product')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.status')->ne('closed')
+            ->fetchGroup('story', 'project');
+
+        if(empty($projectList)) return true;
+
+        foreach($linkStoryCases as $caseID => $case)
+        {
+            /* If story unlink project continue. */
+            if(!isset($projectList[$case->story])) continue;
+
+            $storyProjects = $projectList[$case->story];
+
+            $lastOrder = 1;
+            foreach($storyProjects as $projectID => $value)
+            {
+                /* If case linked project continue.*/
+                if(isset($linkProjectCases[$caseID][$projectID])) continue;
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = $case->version;
+                $data->order   = $lastOrder ++;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
     }
 }

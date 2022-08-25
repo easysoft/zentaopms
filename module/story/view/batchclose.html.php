@@ -15,7 +15,7 @@
 <?php js::set('app', $app->tab);?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
-    <h2><?php echo $lang->story->common . $lang->colon . $lang->story->batchClose;?></h2>
+    <h2><?php echo ($storyType == 'story' ? $lang->SRCommon : $lang->URCommon) . $lang->colon . $lang->story->batchClose;?></h2>
   </div>
   <?php if(isset($suhosinInfo)):?>
   <div class='alert alert-info'><?php echo $suhosinInfo;?></div>
@@ -43,8 +43,8 @@
               <td class='pd-0'>
                 <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
               </td>
-              <td class='pd-0 required' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
-              <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>
+              <td class='pd-0 w-p50 required' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
+                <?php echo html::select("duplicateStoryIDList[$storyID]", $productStoryList[$story->product][$story->branch], $story->duplicateStory, "class='form-control' placeholder='{$lang->idAB}'");?>
               </td>
               <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
               <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}'");?>

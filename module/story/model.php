@@ -608,7 +608,6 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
             /* Save the story reviewer to storyreview table. */
-            $assignedTo = '';
             foreach($_POST['reviewer'][$i] as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -618,10 +617,7 @@ class storyModel extends model
                 $reviewData->version  = 1;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
 
             $this->executeHooks($storyID);
 
@@ -1511,10 +1507,11 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             if(!$storyID) continue;
-            $oldStory = $oldStories[$storyID];
-            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
 
-            if($oldStory->status != 'draft' and $oldStory->status != 'changing') continue;
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+            $oldStory        = $oldStories[$storyID];
+
+            if($oldStory->status != 'reviewing') continue;
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
@@ -1633,7 +1630,6 @@ class storyModel extends model
 
         if(isset($_POST['reviewer']))
         {
-            $assignedTo = '';
             foreach($this->post->reviewer as $reviewer)
             {
                 if(empty($reviewer)) continue;
@@ -1643,10 +1639,7 @@ class storyModel extends model
                 $reviewData->version  = $oldStory->version;
                 $reviewData->reviewer = $reviewer;
                 $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
-            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq(helper::now())->where('id')->eq($storyID)->exec();
             $story->status = 'reviewing';
         }
 
@@ -2355,8 +2348,6 @@ class storyModel extends model
             ->add('closedDate', '0000-00-00')
             ->add('reviewedBy', '')
             ->add('reviewedDate', '0000-00-00')
-            ->add('changedBy', '')
-            ->add('changedDate', '0000-00-00')
             ->add('duplicateStory', 0)
             ->add('childStories', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -4182,7 +4173,7 @@ class storyModel extends model
 
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change')     return ($isSuperReviewer !== false or $story->status == 'active');
+        if($action == 'change')     return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
         if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
         if($action == 'close')      return $story->status != 'closed';
@@ -4223,7 +4214,7 @@ class storyModel extends model
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id", $story, $type, 'sub-review', '', 'iframe', true, "data-width='50%'");
+                    $menu .= $this->buildMenu('story', 'submitReview', "storyID=$story->id&storyType=$story->type", $story, $type, 'sub-review', '', 'iframe', true, "data-width='50%'");
                 }
                 else
                 {
@@ -4264,7 +4255,7 @@ class storyModel extends model
                 $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+                $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
@@ -4300,7 +4291,7 @@ class storyModel extends model
         if($type == 'view')
         {
             $menu .= $this->buildMenu('story', 'change', $params . "&from=&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody');
-            if($story->status == 'draft') $menu .= $this->buildMenu('story', 'submitReview', $params, $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
+            if(strpos('draft,changing', $story->status) !== false) $menu .= $this->buildMenu('story', 'submitReview', $params . "&storyType=$story->type", $story, $type, 'sub-review', '', 'showinonlybody iframe', true, "data-width='50%'");
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
             $menu .= $this->buildMenu('story', 'recall', $params . "&from=view&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
@@ -4578,7 +4569,7 @@ class storyModel extends model
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
         $account     = $this->app->user->account;
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
-        $canView     = common::hasPriv('story', 'view');
+        $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
         if($tab == 'project')
         {
@@ -4618,9 +4609,13 @@ class storyModel extends model
         {
             $canBatchAction = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
         }
-        else
+        elseif($tab == 'project')
         {
             $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
+        }
+        else
+        {
+            $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo);
         }
 
         $id = $col->id;
@@ -4710,7 +4705,8 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                if($canBatchAction) echo html::checkbox('storyIdList', array($story->id => ''));
+                if($canBatchAction and ($storyType == 'story' or ($storyType == 'requirement' and $story->type == 'requirement'))) echo html::checkbox('storyIdList', array($story->id => ''));
+                if($canBatchAction and $storyType == 'requirement' and $story->type == 'story') echo "<span class='c-span'></span>";
                 echo $canView ? html::a($storyLink, sprintf('%03d', $story->id), '', "data-app='$tab'") : sprintf('%03d', $story->id);
                 break;
             case 'order':
@@ -4735,7 +4731,7 @@ class storyModel extends model
                 {
                     $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
                 }
-                if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
+                if($storyType == 'requirement' and $story->type == 'story') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') echo "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
@@ -5572,7 +5568,8 @@ class storyModel extends model
 
         if($reviewRule == 'halfpass')
         {
-            if($rejectCount == floor(count($revireList) / 2)) return 'closed';
+            /* When the number of reviewers is even, half of them reject to close. */
+            if(count($reviewerList) > 1 and count($reviewerList) % 2 == 0 and $rejectCount == floor(count($reviewerList) / 2)) return 'closed';
 
             if($passCount   >= floor(count($reviewerList) / 2) + 1) $status = 'active';
             if($rejectCount >= floor(count($reviewerList) / 2) + 1) $status = 'closed';
