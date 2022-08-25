@@ -285,7 +285,7 @@
             <table class='table table-form'>
               <tr id='duplicateStoryBox'>
                 <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
+                <td><?php echo html::select('duplicateStory', $productStories, $story->duplicateStory, 'class="form-control"'); ?></td>
               </tr>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $lang->story->linkStory;?></th>

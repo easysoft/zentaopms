@@ -79,4 +79,10 @@ $(function()
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%', url: link});
         modalTrigger.show();
     });
+
+    $('#duplicateStory').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto'
+    });
 })

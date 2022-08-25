@@ -853,6 +853,9 @@ class story extends control
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
+        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
@@ -861,6 +864,7 @@ class story extends control
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch == 0 ? 'all' : $story->branch, 'skipParent');
         $this->view->products         = $products;
+        $this->view->productStories   = $productStories;
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = array_keys($reviewerList);
