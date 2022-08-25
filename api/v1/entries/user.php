@@ -254,7 +254,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'todo')) break;
 
                     $control = $this->loadController('my', 'todo');
-                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 5), 1);
+                    $control->todo($this->param('date', 'before'), '', 'all', 'date_desc', 0, $this->param('limit', 5), 1);
                     $data = $this->getData();
 
                     if($data->status == 'success')
@@ -313,7 +313,7 @@ class userEntry extends Entry
                     {
                         $this->config->openMethods[] = 'my.risk';
                         $control = $this->loadController('my', 'risk');
-                        $control->risk('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->risk('assignedTo', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
@@ -331,7 +331,7 @@ class userEntry extends Entry
                     {
                         $this->config->openMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('all', '', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('futureMeeting', '', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')

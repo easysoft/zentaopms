@@ -458,6 +458,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
                   echo '</div></li>';
               }
+              else
+              {
+                  $class= "class='disabled'";
+                  echo "<li $class>" . html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType],  '', $class) . '</li>';
+              }
 
               if($storyType == 'story')
               {
