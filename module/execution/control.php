@@ -3752,6 +3752,7 @@ class execution extends control
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->status         = $status;
         $this->view->from           = $from;
         $this->view->param          = $param;

@@ -285,13 +285,13 @@
             <table class='table table-form'>
               <tr id='duplicateStoryBox'>
                 <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
+                <td><?php echo html::select('duplicateStory', $productStories, $story->duplicateStory, 'class="form-control"'); ?></td>
               </tr>
               <tr class='text-top'>
-                <th class='thWidth'><?php echo $lang->story->linkStory;?></th>
+                <th class='thWidth'><?php echo $story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory;?></th>
                 <td>
                   <?php if(common::hasPriv('story', 'linkStories') and $story->type == 'story') echo html::a("#", $lang->story->linkStoriesAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
-                  <?php if(common::hasPriv('story', 'linkRequirements') and $story->type == 'requirement') echo html::a("#", $lang->story->linkRequirementsAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
+                  <?php if(common::hasPriv('requirement', 'linkRequirements') and $story->type == 'requirement') echo html::a("#", $lang->story->linkRequirementsAB, '', "class='btn btn-info' id='linkStoriesLink'");?>
                 </td>
               </tr>
               <tr>
