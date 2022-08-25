@@ -889,9 +889,9 @@ class taskModel extends model
             $member->task     = $taskID;
             $member->order    = $row;
             $member->account  = $account;
-            $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
-            $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
-            $member->left     = $this->post->teamLeft[$row] === '' ? 0 : $this->post->teamLeft[$row];
+            $member->estimate = zget($this->post->teamEstimate, $row, 0);
+            $member->consumed = zget($this->post->teamConsumed, $row, 0);
+            $member->left     = $this->post->teamLeft[$row] === '' ? 0 : zget($this->post->teamLeft, $row, 0);
             $member->status   = 'wait';
             if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
             if($taskStatus == 'done') $member->left = 0;
@@ -905,12 +905,15 @@ class taskModel extends model
                 if(!empty($teamSource) and $teamSource != $account and isset($doingUsers[$teamSource])) $member->transfer = $teamSource;
                 if(isset($doingUsers[$account]) and ($mode == 'multi' or ($mode == 'linear' and $minStatus != 'wait'))) $member->status = 'doing';
             }
+            if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
+            if($member->status == 'wait') $minStatus = 'wait';
 
             /* Doing status is only one in linear task. */
             if($mode == 'linear' and $member->status == 'doing') $minStatus = 'wait';
             if($member->status == 'wait') $minStatus = 'wait';
             if($minStatus != 'wait' and $member->status == 'doing') $minStatus = 'doing';
 
+            /* Insert or update team. */
             if($mode == 'multi' and isset($teams[$account]))
             {
                 $this->dao->update(TABLE_TASKTEAM)->set("estimate= estimate + {$member->estimate}")
