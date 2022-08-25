@@ -780,9 +780,12 @@ class portModel extends model
             if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t2") !== false) $selectKey = 't2.id';
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
-            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+            while($row = $stmt->fetch())
+            {
+                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
+                $modelDatas[$row->id] = $row;
+            }
         }
-
         return $modelDatas;
     }
 
