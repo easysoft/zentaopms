@@ -155,8 +155,7 @@
 $(function()
 {
     var contentHeight = $(document).height() - 100;
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
-    setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
 
