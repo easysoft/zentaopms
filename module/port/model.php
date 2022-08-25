@@ -1286,7 +1286,7 @@ class portModel extends model
                 $control  = $value['control'];
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
-                $selected = !empty($object->$field) ? $object->$field : '';
+                $selected = isset($values[$object->$field]) ? $object->$field : '';
                 if($model)
                 {
                     if($control == 'hidden' and isset($this->session->{$model.'PortParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'PortParams'}[$field. 'ID'];
