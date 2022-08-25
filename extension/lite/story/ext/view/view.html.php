@@ -108,7 +108,14 @@
                 <td class='c-actions'>
                   <?php
                   common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
-                  common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', 'search', '', 'iframe showinonlybody', true);
+                  if(strpos('draft,changing', $child->status) !== false)
+                  {
+                      common::printIcon('story', 'submitReview', "storyID=$child->id", $child, 'list', 'sub-review', '', 'iframe showinonlybody', true);
+                  }
+                  else
+                  {
+                      common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', 'search', '', 'iframe showinonlybody', true);
+                  }
                   common::printIcon('story', 'assignTo', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'close',  "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'activate', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
@@ -134,7 +141,14 @@
         <?php if(!$story->deleted):?>
         <?php
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
-        common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', 'search', '', 'showinonlybody');
+        if(strpos('draft,changing', $story->status) !== false)
+        {
+            common::printIcon('story', 'submitReview', "storyID=$story->id", $story, 'button', 'sub-review', '', 'iframe showinonlybody', true);
+        }
+        else
+        {
+            common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', 'search', '', 'iframe showinonlybody', true);
+        }
         if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {
             $divideLang = $lang->story->subdivide;

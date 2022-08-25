@@ -12,6 +12,7 @@ $(function()
             $('.input-group-addon').addClass('required');
         }
     });
+    if(!$('#reviewer').val()) $('#needNotReview').change();
 
     if($('.tabs .tab-content .tab-pane.active').children().length == 0) $('.tabs .nav-tabs li.active').css('border-bottom', '1px solid #ccc');
 });
