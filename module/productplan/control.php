@@ -732,7 +732,7 @@ class productplan extends control
             $this->productplan->unlinkStory($storyID, $planID);
             $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
-            echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent');
+            return js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story"), 'parent');
         }
     }
 
