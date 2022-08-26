@@ -4320,7 +4320,7 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
+            if($this->app->tab == 'execution' and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -4365,7 +4365,7 @@ class storyModel extends model
                 }
 
                 $this->lang->task->create = $this->lang->execution->wbs;
-                $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
+                $toTaskDisabled = $story->status == 'active' ? '' : 'disabled';
                 if(commonModel::isTutorialMode())
                 {
                     $wizardParams = helper::safe64Encode($param);
