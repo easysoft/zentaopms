@@ -332,7 +332,8 @@
                   {
                       foreach(explode(',', $story->mailto) as $account)
                       {
-                          if(empty($account)) continue; echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;';
+                          if(empty($account)) continue;
+                          echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;';
                       }
                   }
                   ?>
