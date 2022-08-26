@@ -41,6 +41,8 @@ $lang->repo->downloadZip     = '下载压缩包';
 $lang->repo->sshClone        = '使用SSH克隆';
 $lang->repo->httpClone       = '使用HTTP克隆';
 $lang->repo->cloneUrl        = '克隆地址';
+$lang->repo->linkTask        = '关联任务';
+$lang->repo->unlinkedTasks   = '未关联任务';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -104,6 +106,9 @@ $lang->repo->job                = '构建任务';
 $lang->repo->fileServerUrl      = '预合并后上传服务器目录';
 $lang->repo->fileServerAccount  = '文件服务器登录用户名';
 $lang->repo->fileServerPassword = '文件服务器登录密码';
+$lang->repo->linkStory          = '关联' . $lang->SRCommon;
+$lang->repo->linkBug            = '关联Bug';
+$lang->repo->linkTask           = '关联任务';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';

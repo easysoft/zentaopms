@@ -1005,6 +1005,274 @@ class repo extends control
     }
 
     /**
+     * Link story to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStory($repoID, $revision, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['stories']))
+        {
+            $this->repo->link($repoID, $revision, 'story');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent[1].getRelation('$revision')"));
+        }
+
+        $this->loadModel('story');
+        $this->app->loadLang('productplan');
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($repo->product, 'story');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        unset($this->lang->story->statusList['closed']);
+        $storyStatusList = $this->lang->story->statusList;
+        $queryID         = $browseType == 'bySearch' ? (int)$param : 0;
+
+        unset($this->config->product->search['fields']['product']);
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['style']                       = 'simple';
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($repo->product => $repo->product));
+        $this->config->product->search['params']['module']['values']  = $modules;
+        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+
+        if($product->type == 'normal')
+        {
+            unset($this->config->product->search['fields']['branch']);
+            unset($this->config->product->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+        session_write_close();
+
+        $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        if($browseType == 'bySearch')
+        {
+            $allStories = $this->story->getBySearch($product->id, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
+        }
+        else
+        {
+            $allStories = $this->story->getProductStories($product->id, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
+        }
+
+        $this->view->modules        = $modules;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allStories     = $allStories;
+        $this->view->product        = $product;
+        $this->view->repoID         = $repoID;
+        $this->view->revision       = $revision;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->pager          = $pager;
+        $this->display();
+    }
+
+    /**
+     * Link bug to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkBug($repoID, $revision = '', $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['bugs']))
+        {
+            $this->repo->link($repoID, $revision, 'bug');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent[1].getRelation('$revision')"));
+        }
+
+        $this->loadModel('bug');
+        $this->app->loadLang('productplan');
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        $this->config->bug->search['actionURL']                         = $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $this->config->bug->search['queryID']                           = $queryID;
+        $this->config->bug->search['style']                             = 'simple';
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($product->id, $branch = 'all', $params = '');
+
+        unset($this->config->bug->search['fields']['product']);
+        if($product->type == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
+            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        }
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+        session_write_close();
+
+        $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        if($browseType == 'bySearch')
+        {
+            $allBugs = $this->bug->getBySearch($product->id, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
+        }
+        else
+        {
+            $allBugs = $this->bug->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), $pager);
+        }
+
+        $this->view->modules     = $modules;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allBugs     = $allBugs;
+        $this->view->product     = $product;
+        $this->view->repoID      = $repoID;
+        $this->view->revision    = $revision;
+        $this->view->browseType  = $browseType;
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->display();
+    }
+
+    /**
+     * Link task to commit.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkTask($repoID, $revision = '', $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        if(!empty($_POST['tasks']))
+        {
+            $this->repo->link($repoID, $revision, 'task');
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent', '', "parent[1].getRelation('$revision')"));
+        }
+
+        $this->loadModel('execution');
+        $this->loadModel('product');
+        $this->app->loadLang('task');
+
+        /* Set browse type. */
+        $browseType = strtolower($browseType);
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        $repo    = $this->repo->getRepoByID($repoID);
+        $product = $this->loadModel('product')->getById($repo->product);
+        $modules = $this->loadModel('tree')->getOptionMenu($product->id, $viewType = 'task');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build search form. */
+        $this->config->execution->search['actionURL']                     = $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
+        $this->config->execution->search['queryID']                       = $queryID;
+        $this->config->execution->search['style']                         = 'simple';
+        $this->config->execution->search['params']['module']['values']    = $modules;
+        $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($product->id);
+
+        /* Get executions by product. */
+        $productExecutions   = $this->product->getExecutionPairsByProduct($product->id);
+        $productExecutionIDs = array_filter(array_keys($productExecutions));
+        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        session_start();
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+        session_write_close();
+
+        /* Get tasks by executions. */
+        $allTasks = array();
+        foreach($productExecutionIDs as $productExecutionID)
+        {
+            $tasks    = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
+            $allTasks = array_merge($tasks, $allTasks);
+        }
+
+        /* Filter linked tasks. */
+        $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
+        $linkedTaskIDs = array_keys($linkedTasks);
+        foreach($allTasks as $key => $task)
+        {
+            if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
+        }
+
+        /* Page the records. */
+        $pager->setRecTotal(count($allTasks));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        $count    = 1;
+        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
+        $limitMax = $pager->pageID * $pager->recPerPage;
+        foreach($allTasks as $key => $task)
+        {
+            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+            $count ++;
+        }
+
+        $this->view->modules      = $modules;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allTasks     = $allTasks;
+        $this->view->product      = $product;
+        $this->view->repoID       = $repoID;
+        $this->view->revision     = $revision;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->display();
+    }
+
+    /**
      * Ajax sync comment.
      *
      * @param  int    $repoID

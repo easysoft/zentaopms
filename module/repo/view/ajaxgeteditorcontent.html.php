@@ -17,8 +17,13 @@ js::set('codeContent', trim($content));
 js::set('file', $pathInfo);
 js::set('blames', $blames);
 js::set('blameTmpl', $lang->repo->blamTmpl);
+js::set('repoID', $repoID);
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
+$canLinkStory    = common::hasPriv('repo', 'linkStory');
+$canLinkBug      = common::hasPriv('repo', 'linkBug');
+$canLinkTask     = common::hasPriv('repo', 'linkTask');
+$canUnlinkObject = common::hasPriv('repo', 'unlinkObject');
 ?>
 <div id="monacoEditor">
   <div id="codeContainer"></div>
@@ -31,13 +36,14 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
       <div class="content panel">
         <div class='btn-toolbar'>
           <div class="btn btn-left pull-left"><i class="icon icon-chevron-left"></i></div>
-          <?php if(common::hasPriv('repo', 'blame') or common::hasPriv('repo', 'download')):?>
+          <?php if($canLinkStory or $canLinkBug or $canLinkTask or $canUnlinkObject):?>
           <div class="dropdown pull-right">
             <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
             <ul class="dropdown-menu">
               <?php
-              if(common::hasPriv('repo', 'blame')) echo '<li>' . html::a($this->repo->createLink('blame', ""), '<i class="icon icon-change"></i> ' . $lang->repo->blame, '', "data-app='{$app->tab}'") . '</li>';
-              if(common::hasPriv('repo', 'download')) echo '<li>' . html::a($this->repo->createLink('download', ""), '<i class="icon icon-download"></i> ' . $lang->repo->download, 'hiddenwin') . '</li>';
+              if($canLinkStory) echo '<li id="linkStory">' . html::a('javascript:;', '<i class="icon icon-lightbulb"></i> ' . $lang->repo->linkStory) . '</li>';
+              if($canLinkBug) echo '<li id="linkBug">' . html::a('javascript:;', '<i class="icon icon-bug"></i> ' . $lang->repo->linkBug) . '</li>';
+              if($canLinkTask) echo '<li id="linkTask">' . html::a('javascript:;', '<i class="icon icon-todo"></i> ' . $lang->repo->linkTask) . '</li>';
               ?>
             </ul>
           </div>
@@ -52,74 +58,87 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
   </div>
 </div>
 <script>
-$(function()
+var codeHeight = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
+$('#codeContainer').css('height', codeHeight);
+
+/**
+ * Get relation by commit.
+ *
+ * @param  string $commit
+ * @access public
+ * @return void
+ */
+function getRelation(commit)
 {
-    var codeHeight = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
-    $('#codeContainer').css('height', codeHeight);
+    $('#codeContainer').css('height', codeHeight / 5 * 3);
+    $tabs = $('#relationTabs').data('zui.tabs');
+    if($tabs) $tabs.closeAll();
 
-    /**
-     * Get relation by commit.
-     *
-     * @param  string $commit
-     * @access public
-     * @return void
-     */
-    function getRelation(commit)
+    $.post(createLink('repo', 'ajaxGetCommitRelation', 'revision=' + commit), function(data)
     {
-        $('#codeContainer').css('height', codeHeight / 5 * 3);
-        $tabs = $('#relationTabs').data('zui.tabs');
-        if($tabs) $tabs.closeAll();
-
-        $.post(createLink('repo', 'ajaxGetCommitRelation', 'commit=' + commit), function(data)
+        var titleList = JSON.parse(data).titleList;
+        var tabs = [];
+        $.each(titleList, function(i, titleObj)
         {
-            var titleList = JSON.parse(data).titleList;
-            var tabs = [];
-            $.each(titleList, function(i, titleObj)
+            var tab = setTab(titleObj);
+            if($tabs)
             {
-                var tab = setTab(titleObj);
-                if($tabs)
-                {
-                    $tabs.open(tab);
-                }
-                else
-                {
-                    tabs.push(tab);
-                }
-            });
-
-            if(titleList.length > 0)
+                $tabs.open(tab);
+            }
+            else
             {
-                if($tabs)
-                {
-                    $tabs.open(setTab(titleList[0]));
-                }
-                else
-                {
-                    $('#relationTabs').tabs({tabs: tabs});
-                }
+                tabs.push(tab);
             }
         });
-        $('#related').show();
-    }
 
-    /**
-     * Set tab data.
-     *
-     * @param  object $titleObj
-     * @access public
-     * @return object
-     */
-    function setTab(titleObj)
+        if(titleList.length > 0)
+        {
+            if($tabs)
+            {
+                $tabs.open(setTab(titleList[0]));
+            }
+            else
+            {
+                $('#relationTabs').tabs({tabs: tabs});
+            }
+        }
+    });
+
+    var linkStory = createLink('repo', 'linkStory', 'repoID=' + repoID + '&commit=' + commit, '', true);
+    var linkBug   = createLink('repo', 'linkBug',   'repoID=' + repoID + '&commit=' + commit, '', true);
+    var linkTask  = createLink('repo', 'linkTask',  'repoID=' + repoID + '&commit=' + commit, '', true);
+    $('#linkStory a').attr('data-link', linkStory);
+    $('#linkBug a').attr('data-link', linkBug);
+    $('#linkTask a').attr('data-link', linkTask);
+    $('#related').show();
+
+    $('#linkStory a, #linkBug a, #linkTask a').on('click', function()
     {
-        return {
-            id:    titleObj.type + '-' + titleObj.id,
-            title: ' ' + titleObj.title,
-            icon:  titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
-            type:  'iframe',
-            url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
-        };
-    }
+        var link = $(this).data('link');
+        parent.loadLinkPage(link);
+    })
+}
 
+/**
+ * Set tab data.
+ *
+ * @param  object $titleObj
+ * @access public
+ * @return object
+ */
+function setTab(titleObj)
+{
+    return {
+        id:    titleObj.type + '-' + titleObj.id,
+        title: ' ' + titleObj.title,
+        icon:  titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
+        type:  'iframe',
+        url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
+    };
+}
+
+$(function()
+{
     require.config({
         paths: {vs: jsRoot + 'monaco-editor/min/vs'},
         'vs/nls': {

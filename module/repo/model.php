@@ -314,6 +314,40 @@ class repoModel extends model
     }
 
     /**
+     * Create commit link.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function link($repoID, $revision, $type = 'story')
+    {
+        $this->loadModel('action');
+        if($type == 'story') $links = $this->post->stories;
+        if($type == 'bug')   $links = $this->post->bugs;
+        if($type == 'task')  $links = $this->post->tasks;
+
+        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        foreach($links as $linkID)
+        {
+            $relation           = new stdclass;
+            $relation->AType    = 'revision';
+            $relation->AID      = $revisionID;
+            $relation->relation = 'commit';
+            $relation->BType    = $type;
+            $relation->BID      = $linkID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+            if($type == 'story') $this->action->create('story', $linkID, 'createmr');
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr');
+            if($type == 'task')  $this->action->create('task', $linkID, 'createmr');
+        }
+    }
+
+    /**
      * Save repo state.
      *
      * @param  int    $repoID
@@ -2593,16 +2627,18 @@ class repoModel extends model
      *
      * @param  int    $repoID
      * @param  string $commit
+     * @param  string $type story|bug|task
      * @access public
      * @return array
      */
-    public function getRelationByCommit($repoID, $commit)
+    public function getRelationByCommit($repoID, $commit, $type = '')
     {
         $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')
-            ->on('t1.AID = t2.id')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
             ->where('t2.revision')->eq($commit)
             ->andWhere('t2.repo')->eq($repoID)
+            ->andWhere('t1.AType')->eq('revision')
+            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
             ->fetchAll();
 
         $storyIDs = array();
@@ -2630,6 +2666,8 @@ class repoModel extends model
         $titleList = array();
         foreach($relationList as $key => $relation)
         {
+            if($type) $key = $relation->id;
+
             $titleList[$key] = array(
                 'id'    => $relation->id,
                 'type'  => $relation->type,
