@@ -44,7 +44,7 @@
       <div class="btn-toolbar">
         <?php
         $backLink = $this->createLink('design', 'browse', "projectID=$design->project");
-        $app->session->designList != false ? common::printBack($app->session->designList) : common::printBack($backLink);
+        common::printBack($app->session->designList != false ? $app->session->designList : $backLink);
         ?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
