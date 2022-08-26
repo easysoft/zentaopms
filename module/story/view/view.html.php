@@ -377,12 +377,12 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->closedReason;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     if($story->closedReason) echo $lang->story->reasonList[$story->closedReason];
                     if(isset($story->extraStories[$story->duplicateStory]))
                     {
-                        echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]);
+                        echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory], '', "title='{$story->extraStories[$story->duplicateStory]}'");
                     }
                     ?>
                   </td>

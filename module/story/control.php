@@ -1046,7 +1046,7 @@ class story extends control
             {
                 $storyProduct = $products[$story->product];
                 $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
         }
 
@@ -1685,7 +1685,7 @@ class story extends control
         unset($reasonList['subdivided']);
 
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
@@ -1737,7 +1737,7 @@ class story extends control
 
             $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
             $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
         }
 
         if($this->post->comments)

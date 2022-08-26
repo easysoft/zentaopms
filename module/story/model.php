@@ -1744,6 +1744,7 @@ class storyModel extends model
             ->setDefault('closedDate',     $now)
             ->setDefault('closedBy',       $this->app->user->account)
             ->setDefault('assignedDate',   $now)
+            ->setDefault('duplicateStory', 0)
             ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')

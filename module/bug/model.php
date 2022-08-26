@@ -1129,6 +1129,7 @@ class bugModel extends model
             ->setDefault('assignedDate',   $now)
             ->setDefault('resolvedDate',   $now)
             ->setDefault('assignedTo',     $oldBug->openedBy)
+            ->setDefault('duplicateBug',   0)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
             ->stripTags($this->config->bug->editor->resolve['id'], $this->config->allowedTags)
             ->remove('files,labels')

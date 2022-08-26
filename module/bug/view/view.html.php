@@ -355,10 +355,10 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->resolution;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
-                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
+                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "title='{$bug->duplicateBugTitle}' class='iframe' data-width='80%'");
                     ?>
                   </td>
                 </tr>
