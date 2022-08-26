@@ -1344,7 +1344,6 @@ class task extends control
         $members      = $task->team ? $this->task->getMemberPairs($task) : $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
-        $this->view->users = $members;
         if(!empty($task->team))
         {
             $teams = array_keys($task->team);
