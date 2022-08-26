@@ -1087,12 +1087,15 @@ class task extends control
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
+        if(!empty($task->team)) $assignedTo = $this->task->getAssignedTo4Multi($task->team, $task);
+
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
-        $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
+        $this->view->assignedTo = $assignedTo;
         $this->display();
     }
 

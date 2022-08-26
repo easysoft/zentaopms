@@ -790,24 +790,18 @@ class taskModel extends model
             }
 
             $currentTask->estimate = 0;
-            $currentTask->consumed = 0;
             $currentTask->left     = 0;
             foreach($team as $member)
             {
                 $currentTask->estimate += (float)$member->estimate;
-                $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
 
-            $oldTask->team = $oldTeam;
-            if($this->app->rawMethod == 'edit')
-            {
-                if(empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
+            $efforts = $this->getTaskEstimate($oldTask->id);
+            $currentTask->consumed = 0;
+            foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
 
-                $efforts = $this->getTaskEstimate($oldTask->id);
-                $currentTask->consumed = 0;
-                foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
-            }
+            $oldTask->team = $oldTeam;
 
             if(!empty($task))
             {
@@ -1594,11 +1588,7 @@ class taskModel extends model
     public function updateTeam($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
-        {
-            dao::$errors[] = $this->lang->task->error->recordMinus;
-            return false;
-        }
+        if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0) return dao::$errors[] = $this->lang->task->error->recordMinus;
 
         $now  = helper::now();
         $task = fixer::input('post')
@@ -1617,7 +1607,7 @@ class taskModel extends model
         if(count(array_filter($this->post->team)) > 1)
         {
             $teams = $this->manageTaskTeam($oldTask->mode, $taskID, $task->status);
-            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
+            if(!empty($teams)) $task = $this->computeHours4Multiple($oldTask, $task);
         }
         if(empty($teams)) $task->mode = '';
 
@@ -1797,7 +1787,7 @@ class taskModel extends model
         $consumed = 0;
         $left     = $task->left;
         $now      = helper::now();
-        $lastDate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc')->limit(1)->fetch('date');
+        $lastDate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
 
         foreach($estimates as $estimate)
         {
@@ -1823,7 +1813,7 @@ class taskModel extends model
         $data->lastEditedDate = $now;
         if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
 
-        if($left == 0 and strpos('done,cancel,closed', $task->status) === false)
+        if($left == 0 and strpos('done,cancel,closed,pause', $task->status) === false)
         {
             $data->status       = 'done';
             $data->assignedTo   = $task->openedBy;
@@ -1845,6 +1835,13 @@ class taskModel extends model
             $data->status       = 'doing';
             $data->assignedTo   = $this->app->user->account;
             $data->assignedDate = $now;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = '0000-00-00';
+            $data->canceledDate = '0000-00-00';
+            $data->closedDate   = '0000-00-00';
         }
 
         if(!empty($task->team))
@@ -1971,6 +1968,8 @@ class taskModel extends model
             if(count($finishedUsers) == count($oldTask->team))
             {
                 $task->status       = 'done';
+                $task->assignedTo   = $task->openedBy;
+                $task->assignedDate = $now;
                 $task->finishedBy   = $this->app->user->account;
                 $task->finishedDate = $task->finishedDate;
             }
@@ -2923,13 +2922,18 @@ class taskModel extends model
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
                 if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
                 if($task->mode == 'multi' and $currentTeam->status == 'done' and $left > 0) $newTeamInfo->status = 'doing';
+                if($task->mode == 'multi' and $currentTeam->status == 'done' and ($newTeamInfo->consumed == 0 and $left == 0))
+                {
+                    $newTeamInfo->status = 'doing';
+                    $newTeamInfo->left   = $currentTeam->estimate;
+                }
                 $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-
-                $data = $this->computeHours4Multiple($task, $data);
             }
         }
 
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
+        if(!empty($task->team)) $data = $this->computeHours4Multiple($task, $data);
+
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
@@ -3444,18 +3448,27 @@ class taskModel extends model
         if($action == 'recordestimate' and $task->parent == -1)     return false;
         if($action == 'delete'         and $task->parent < 0)       return false;
 
-        if(!empty($task->team) and $task->mode == 'linear')
+        if(!empty($task->team))
         {
             global $app;
-            if($action == 'assignto') return false;
-            if($action == 'start')
+            if($task->mode == 'linear')
             {
-                if($task->assignedTo != $app->user->account) return false;
+                if($action == 'assignto') return false;
+                if($action == 'start')
+                {
+                    if($task->assignedTo != $app->user->account) return false;
 
-                $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
-                if($currentTeam and $currentTeam->status == 'wait') return true;
+                    $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                    if($currentTeam and $currentTeam->status == 'wait') return true;
+                }
+                if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
             }
-            if($action == 'finish' and $task->assignedTo != $app->user->account) return false;
+            elseif($task->mode == 'multi')
+            {
+                $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
+                if($action == 'start' and $currentTeam and $currentTeam->status == 'wait') return true;
+                if($action == 'finish' and (empty($currentTeam) or $currentTeam->status == 'done')) return false;
+            }
         }
 
         if($action == 'start')    return $task->status == 'wait';

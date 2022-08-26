@@ -1,26 +1,6 @@
 $(function()
 {
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
-
-    $('#modalTeam').on('change', 'select#team', function()
-    {
-        $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
-
-        var $teamSource = $(this).siblings('[name^=teamSource]');
-        if($teamSource.val() == '') return;
-
-        var $tr      = $(this).closest('tr');
-        var consumed = 0;
-        var estimate = $tr.attr('data-left');;
-        if($(this).val() == $teamSource.val())
-        {
-            consumed = $tr.attr('data-consumed');
-            estimate = $tr.attr('data-estimate');
-        }
-        $tr.find('[name^=teamConsumed]').val(consumed);
-        $tr.find('[name^=teamEstimate]').val(estimate);
-    });
-    $('#modalTeam select:enabled').change()
 })
 
 /**
