@@ -64,6 +64,7 @@ $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
 $lang->project->ignore             = 'Ignorer';
+$lang->project->delay              = 'Delayed';
 
 /* Fields. */
 $lang->project->common             = 'Projets';
@@ -278,7 +279,6 @@ $lang->project->statusList['wait']      = 'Waiting';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
 $lang->project->statusList['closed']    = 'Closed';
-$lang->project->statusList['delay']     = 'Delayed';
 
 $lang->project->endList[31]  = 'One month';
 $lang->project->endList[93]  = 'Trimester';
