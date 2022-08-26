@@ -1339,20 +1339,6 @@ class task extends control
             $task->myConsumed = 0;
             $currentTeam      = $this->task->getTeamByAccount($task->team);
             if($currentTeam) $task->myConsumed = $currentTeam->consumed;
-
-            $task->nextBy     = $this->task->getAssignedTo4Multi($members, $task);
-            $task->myConsumed = isset($task->team[$this->app->user->account]) ? $task->team[$this->app->user->account]->consumed : 0;
-
-            $lastAccount   = end($task->members);
-            $finishedUsers = $this->task->getFinishedUsers($taskID, $task->members);
-            if(($lastAccount != $task->assignedTo and $task->mode == 'linear') or ($task->mode == 'multi' and count($task->members) != count($finishedUsers)))
-            {
-                $members = $this->task->getMemberPairs($task);
-            }
-            else
-            {
-                $task->nextBy = $task->openedBy;
-            }
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
