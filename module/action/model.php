@@ -1025,7 +1025,7 @@ class actionModel extends model
                 $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
-                $productCondition   = "product like '%,$productID,%'";
+                $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
                 $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
                 $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
             }
