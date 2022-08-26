@@ -833,6 +833,8 @@ class taskModel extends model
                     else
                     {
                         $currentTask->status = 'done';
+                        $currentTask->assignedTo   = $oldTask->openedBy;
+                        $currentTask->assignedDate = $now;
                         $currentTask->finishedBy   = $this->app->user->account;
                         $currentTask->finishedDate = $task->finishedDate;
                     }
@@ -989,7 +991,7 @@ class taskModel extends model
         }
         elseif($effortID)
         {
-            $efforts = $this->getTaskEstimate($taskID);
+            $efforts = $this->getTaskEstimate($taskID, '', $effortID);
 
             $prevTeam = null;
             $thisTeam = null;
@@ -1003,10 +1005,7 @@ class taskModel extends model
                     return false;
                 }
 
-                if(empty($currentEffort) and $effort->left == 0)
-                {
-                    if($thisTeam->account == $effort->account) $prevTeam = array_shift($teams);
-                }
+                if($effort->left == 0 and $thisTeam->account == $effort->account) $prevTeam = array_shift($teams);
             }
         }
     }
@@ -2906,6 +2905,7 @@ class taskModel extends model
             $lastTwoEstimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEstimate  = isset($lastTwoEstimates[1]) ? $lastTwoEstimates[1] : '';
             if($lastTwoEstimate) $left = $lastTwoEstimate->left;
+            if(empty($lastTwoEstimate) and $left == 0) $left = $task->estimate;
         }
 
         $data = new stdclass();
@@ -2941,18 +2941,23 @@ class taskModel extends model
             $currentTeam = $this->getTeamByAccount($task->team, $estimate->account, array('effortID' => $estimateID));
             if($currentTeam)
             {
-                $accountEstimates = $this->getTaskEstimate($currentTeam->task, $estimate->account);
-                $lastEstimate     = array_pop($accountEstimates);
-                $left             = $currentTeam->left;
-                if($lastEstimate->id == $estimateID)
+                $left = $currentTeam->left;
+                if($task->mode == 'multi')
                 {
-                    $lastTwoEstimate = array_pop($accountEstimates);
-                    if($lastTwoEstimate) $left = $lastTwoEstimate->left;
+                    $accountEstimates = $this->getTaskEstimate($currentTeam->task, $estimate->account, $estimateID);
+                    $lastEstimate     = array_pop($accountEstimates);
+                    if($lastEstimate->id == $estimateID)
+                    {
+                        $lastTwoEstimate = array_pop($accountEstimates);
+                        if($lastTwoEstimate) $left = $lastTwoEstimate->left;
+                    }
                 }
 
                 $newTeamInfo = new stdClass();
                 $newTeamInfo->consumed = $currentTeam->consumed - $estimate->consumed;
                 if($currentTeam->status != 'done') $newTeamInfo->left = $left;
+                if($currentTeam->status == 'done' and $left > 0 and $task->mode == 'multi') $newTeamInfo->left = $left;
+
                 if($currentTeam->status != 'done' and $newTeamInfo->consumed > 0 and $left == 0) $newTeamInfo->status = 'done';
                 if($task->mode == 'multi' and $currentTeam->status == 'done' and $left > 0) $newTeamInfo->status = 'doing';
                 if($task->mode == 'multi' and $currentTeam->status == 'done' and ($newTeamInfo->consumed == 0 and $left == 0))
@@ -3486,7 +3491,7 @@ class taskModel extends model
             global $app;
             if($task->mode == 'linear')
             {
-                if($action == 'assignto') return false;
+                if($action == 'assignto' and strpos('done,cencel,closed', $task->status) === false) return false;
                 if($action == 'start')
                 {
                     if($task->assignedTo != $app->user->account) return false;

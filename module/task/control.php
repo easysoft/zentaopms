@@ -776,7 +776,7 @@ class task extends control
         $this->commonAction($taskID);
         $task = $this->task->getByID($taskID);
 
-        if(!empty($task->team) and $task->mode == 'multi')
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
         {
             return $this->editTeam($executionID, $taskID, $kanbanGroup, $from);
         }
@@ -830,7 +830,7 @@ class task extends control
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         /* Compute next assignedTo. */
-        if(!empty($task->team))
+        if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
         {
             $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
