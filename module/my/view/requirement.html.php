@@ -90,10 +90,10 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
-            <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : "<span title='$story->title'>$story->title</span>";?>
+            <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product' title='$story->title'") : "<span title='$story->title'>$story->title</span>";?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
-          <td class='c-product'><?php echo $story->productTitle;?></td>
+          <td class='c-product' title="<?php echo $story->productTitle;?>"><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
           <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
@@ -133,9 +133,9 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . (common::hasPriv('story', 'view') ? html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'") : $child->title);?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . (common::hasPriv('story', 'view') ? html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product' title='$child->title'") : $child->title);?>
           </td>
-          <td class='c-product'><?php echo $child->productTitle;?></td>
+          <td class='c-product' title="<?php echo $child->productTitle;?>"><?php echo $child->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
           <td class='c-status'><?php echo $child->URChanged ? "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>" : "<span class='status-story status-$child->status'>" . $this->processStatus('story', $child) . '</span>'?></td>
