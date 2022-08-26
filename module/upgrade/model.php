@@ -3233,7 +3233,7 @@ class upgradeModel extends model
             }
         }
 
-        $openVersion = $this->getOpenVersion($fromVersion);
+        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
         if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
 
         return $needProcess;

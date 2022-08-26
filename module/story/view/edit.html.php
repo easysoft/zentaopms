@@ -240,7 +240,7 @@
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control picker-select' multiple");?>
+                    <?php echo html::select('mailto[]', $users, $story->mailto, "class='form-control picker-select' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -285,7 +285,7 @@
             <table class='table table-form'>
               <tr id='duplicateStoryBox'>
                 <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::select('duplicateStory', $productStories, $story->duplicateStory, 'class="form-control"'); ?></td>
+                <td><?php echo html::select('duplicateStory', array('' => '') + $productStories, $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td>
               </tr>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory;?></th>

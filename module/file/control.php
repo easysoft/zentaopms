@@ -314,6 +314,7 @@ class file extends control
         $this->view->files    = $files;
         $this->view->fieldset = $fieldset;
         $this->view->object   = $object;
+        $this->view->method   = $method;
 
         if($method == 'view') return $this->display('file', 'viewfiles');
         $this->display();

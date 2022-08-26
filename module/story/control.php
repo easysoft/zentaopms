@@ -747,6 +747,7 @@ class story extends control
      */
     public function edit($storyID, $kanbanGroup = 'default', $storyType = 'story')
     {
+        $this->app->loadLang('bug');
         $story = $this->story->getById($storyID, 0, true);
 
         if(!empty($_POST))
@@ -1611,6 +1612,7 @@ class story extends control
      */
     public function close($storyID, $from = '', $storyType = 'story')
     {
+        $this->app->loadLang('bug');
         $story = $this->story->getById($storyID);
 
         if(!empty($_POST))
@@ -1712,6 +1714,7 @@ class story extends control
      */
     public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
+        $this->app->loadLang('bug');
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
