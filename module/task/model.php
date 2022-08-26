@@ -1591,10 +1591,15 @@ class taskModel extends model
     public function updateTeam($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
+        foreach($this->post->team as $i => $account)
         {
-            dao::$errors[] = $this->lang->task->error->recordMinus;
-            return false;
+            if(!$account) continue;
+
+            if($this->post->teamConsumed[$i] == 0 and $this->post->teamLeft[$i] == 0)
+            {
+                dao::$errors[] = $this->lang->task->noticeTaskStart;
+                return false;
+            }
         }
 
         $now  = helper::now();
@@ -3695,8 +3700,7 @@ class taskModel extends model
 
             $assignedToTitle = implode($this->lang->comma, $teamMembers);
         }
-
-        if(empty($task->assignedTo))
+        elseif(empty($task->assignedTo))
         {
             $btnTextClass   = 'text-primary';
             $assignedToText = $this->lang->task->noAssigned;

@@ -355,7 +355,10 @@
               </thead>
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
-                  <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                  <td class='text-left'>
+                    <?php echo zget($users, $member->account);?>
+                    <?php if($member->transfer) echo "({$lang->task->replace})";?>
+                 </td>
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>
