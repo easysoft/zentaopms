@@ -20,9 +20,8 @@ class executionEntry extends Entry
      */
     public function get($executionID)
     {
-        $fields    = $this->param('fields');
-        $productID = $this->param('productID');
-        $status    = $this->param('status', 'all');
+        $fields = $this->param('fields');
+        $status = $this->param('status', 'all');
 
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
@@ -47,8 +46,8 @@ class executionEntry extends Entry
             foreach($executionProduct->plans as $planID)
             {
                 $plan = new stdclass();
-                $plan->id = $planID;
-                $plan->name = $data->data->planGroups->{$productID}->{$planID};
+                $plan->id   = trim($planID, ',');
+                $plan->name = $data->data->planGroups->{$productID}->{$plan->id};
                 $product->plans[] = $plan;
             }
             $execution->products[] = $product;

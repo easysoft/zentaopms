@@ -37,6 +37,7 @@ $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
+$lang->design->more          = 'Suite';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';

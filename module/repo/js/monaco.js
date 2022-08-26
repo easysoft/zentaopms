@@ -1,27 +1,7 @@
 $(function()
 {
-    var distance = 0;
-
-    /**
-     * Arrow tab line.
-     *
-     * @param  int    $num
-     * @access public
-     * @return void
-     */
-    function arrow(num){
-        var tabItemWidth = $('#fileTabs > .tabs-navbar > .nav-tabs')[0].clientWidth;
-        var tabsWidth    = $('#fileTabs')[0].clientWidth;
-        if(tabItemWidth < tabsWidth) return;
-
-        distance += tabsWidth * num * 0.2;
-        if(distance > 0) distance = 0;
-        if((tabItemWidth + distance) < tabsWidth * 0.7) return;
-
-        $('#fileTabs > .tabs-navbar > .tabs-nav')[0].style.transform = 'translateX('+ distance +'px)';
-    }
-    $('.btn-left').click(function()  {arrow(1);});
-    $('.btn-right').click(function() {arrow(-1);});
+    $('.btn-left').click(function()  {arrowTabs('fileTabs', 1);});
+    $('.btn-right').click(function() {arrowTabs('fileTabs', -2);});
 
     /**
      * Create file tab.
@@ -67,6 +47,7 @@ $(function()
 
         $tabs.open(createTab(name, path));
         setHeight();
+        arrowTabs('fileTabs', -2);
     });
 
     /* Remove file path for opened files. */
@@ -78,6 +59,8 @@ $(function()
             openedFiles.splice(index, 1)
             $('[data-path="' + filepath + '"]').closest('li').removeClass('selected');
         }
+
+        if(index == openedFiles.length) arrowTabs('fileTabs', -2);
     });
 
     /* Append file path into the title. */

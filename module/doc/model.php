@@ -60,18 +60,20 @@ class docModel extends model
      * @param  string $type
      * @param  string $extra
      * @param  string $appendLibs
-     * @param  int    $projectID
+     * @param  int    $objectID
+     * @param  string $excludeType
      *
      * @access public
      * @return array
      */
-    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
+    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('`order` asc, id_desc')
                 ->query();
@@ -928,6 +930,13 @@ class docModel extends model
     {
         $this->loadModel('product');
 
+        /* Fixed search modal for doc view. */
+        if($this->app->getMethodName() == 'objectlibs')
+        {
+            $queryName = $type . 'Doc';
+            $type      = 'objectLibs';
+        }
+
         if($this->app->rawMethod == 'contribute')
         {
             $this->config->doc->search['module'] = 'contributeDoc';
@@ -951,6 +960,7 @@ class docModel extends model
         }
         else
         {
+            $this->config->doc->search['module'] = $queryName;
             $products = $this->product->getPairs('nocode', $this->session->project);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);

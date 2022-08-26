@@ -326,7 +326,18 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->legendMailto;?></th>
-                  <td><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) {if(empty($account)) continue; echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;'; }?></td>
+                  <td>
+                  <?php
+                  if(!empty($story->mailto))
+                  {
+                      foreach(explode(',', $story->mailto) as $account)
+                      {
+                          if(empty($account)) continue;
+                          echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;';
+                      }
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -366,12 +377,12 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->closedReason;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     if($story->closedReason) echo $lang->story->reasonList[$story->closedReason];
                     if(isset($story->extraStories[$story->duplicateStory]))
                     {
-                        echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]);
+                        echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory], '', "title='{$story->extraStories[$story->duplicateStory]}'");
                     }
                     ?>
                   </td>
@@ -409,11 +420,11 @@
               foreach($relation as $id => $title)
               {
                   echo "<li title='$title'>" . ($canViewLinkStory ? html::a($this->createLink('story', 'view', "id=$id&version=0&param=0&storyType=$relationType", '', true), "#$id $title", '', "class='iframe' data-width='80%'") : "#$id $title");
-                  echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
+                  echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID=$id&browseType=&queryID=0&storyType=$story->type"), '<i class="icon icon-close"></i>', 'hiddenwin', "class='deleter hide removeButton'");
               }
               ?>
               <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
-              <li><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
+              <li><?php if(common::hasPriv($story->type, 'linkStory')) echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
               <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>

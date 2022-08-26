@@ -2,6 +2,7 @@ window.ignoreTips = {
     'beyondBudgetTip' : false,
     'dateTip'         : false
 };
+var batchEditDateTips = new Array();
 
 /**
  * Access rights are equal to private, and the white list settings are displayed.
@@ -295,7 +296,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
-            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         }
         else
         {
@@ -340,7 +341,7 @@ function budgetOverrunTips()
 
     if(selectedProgramID == 0)
     {
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         return false;
     }
 
@@ -351,9 +352,10 @@ function budgetOverrunTips()
         if(typeof(data.availableBudget) == 'undefined') return;
 
         var tip = "";
-        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>"
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(tip);
+        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<tr><td></td><td colspan='2'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>"
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        $('#budgetBox').parent().parent().after(tip);
+        $('#beyondBudgetTip').parent().css('line-height', '0');
 
         var placeholder = '';
         if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2);
@@ -365,16 +367,18 @@ function budgetOverrunTips()
 /**
  *The date is out of the range of the parent project set, and a prompt is given.
  *
- * @param  int    $currentID
+ * @param  string $currentID
  * @access public
  * @return void
  */
-function outOfDateTip(currentID = 0)
+function outOfDateTip(currentID)
 {
     if(window.ignoreTips['dateTip']) return;
+    if(batchEditDateTips.includes(Number(currentID))) return;
+
     var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
     var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
-    if($('#dateTip.text-remind').length > 0) $('#dateTip').remove();
+    if($('#dateTip.text-remind').length > 0) $('#dateTip').parent().parent().remove();
     if(currentID) $('#dateTip\\[' + currentID + '\\]').remove();
 
     if(end == longTime) end = LONG_TIME;
@@ -402,20 +406,22 @@ function outOfDateTip(currentID = 0)
             var dateTip = "";
             if(projectBegin < parentBegin)
             {
-                dateTip = currentID ? beginLetterParentTip + "'>" + beginLetterParentTip : beginLetterParentTip;
+                dateTip = currentID ? beginLetterParentTip + "'><p>" + beginLetterParentTip : beginLetterParentTip;
             }
             else if(projectEnd > parentEnd)
             {
-                dateTip = currentID ? endGreaterParentTip + "'>" + endGreaterParentTip : endGreaterParentTip;
+                dateTip = currentID ? endGreaterParentTip + "'><p>" + endGreaterParentTip : endGreaterParentTip;
             }
 
             if(currentID)
             {
-                $("#projects\\[" + currentID + "\\]").after("<tr id='dateTip[" + currentID + "]'><td colspan='5'></td><td id='dateTip' class='c-name' colspan='3'><span class='text-remind' title='" + dateTip + "</span></td></tr>");
+                $("#projects\\[" + currentID + "\\]").after("<tr><td colspan='5'></td><td class='c-name' colspan='3'><span id='dateTip" + currentID + "' class='text-remind' title='" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this," + currentID + ")'>" + ignore + "</p></span></td></tr>");
+                $('#dateTip'+ currentID).parent().css('line-height', '0')
             }
             else
             {
-                $('#dateBox').after("<span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span>");
+                $('#dateRange').parent().after("<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td><tr>");
+                $('#dateTip').parent().css('line-height', '0')
             }
         });
     }
@@ -425,14 +431,16 @@ function outOfDateTip(currentID = 0)
  * Make this prompt no longer appear.
  *
  * @param  string  $obj
+ * @param  string  $currentID
  * @access public
  * @return void
  */
-function ignoreTip(obj)
+function ignoreTip(obj, currentID)
 {
     var parentID = obj.parentNode.id;
-    $('#' + parentID).addClass('hidden');
+    currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).parent().parent().remove();
 
     if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'dateTip' + currentID) batchEditDateTips.push(currentID);
     if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }

@@ -487,10 +487,11 @@ class webhookModel extends model
             $tab     = $meeting->project ? '#app=project' : '#app=my';
         }
 
+        $sysUrl   = common::getSysURL();
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
-        return $viewLink;
+        return ltrim($viewLink, $sysUrl);
     }
 
     /**

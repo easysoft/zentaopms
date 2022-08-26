@@ -265,7 +265,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr id='duplicateBugBox' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                   <th><?php echo $lang->bug->duplicateBug;?></th>
-                  <td><?php echo html::input('duplicateBug', $bug->duplicateBug, 'class=form-control');?></td>
+                  <td class='required'><?php echo html::select('duplicateBug', $productBugs, $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->closedBy;?></th>

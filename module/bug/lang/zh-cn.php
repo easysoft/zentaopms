@@ -77,7 +77,7 @@ $lang->bug->deadlineAB       = '截止';
 $lang->bug->plan             = '所属' . '计划';
 $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
-$lang->bug->duplicateBug     = '重复ID';
+$lang->bug->duplicateBug     = '重复Bug';
 $lang->bug->lastEditedBy     = '最后修改者';
 $lang->bug->linkBug          = '相关Bug';
 $lang->bug->linkBugs         = '关联相关Bug';
@@ -177,6 +177,7 @@ $lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
 $lang->bug->linkMR         = '相关合并请求';
 $lang->bug->linkCommit     = '相关代码版本';
+$lang->bug->duplicateTip   = '请输入关键字';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';
@@ -420,6 +421,7 @@ $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
 $lang->bug->featureBar['browse']['assignedbyme'] = $lang->bug->assignedByMe;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
+
 
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;

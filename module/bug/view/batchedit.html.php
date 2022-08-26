@@ -139,11 +139,11 @@
             <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bug->keywords, 'class=form-control');?></td>
             <td class='<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>
-              <table class='table-borderless table no-margin'>
+              <table class='table-borderless table no-margin table-form'>
                 <tr>
                   <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class='form-control' onchange=setDuplicate(this.value,$bugID)");?></td>
                   <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
-                    <?php echo html::input("duplicateBugs[$bugID]", '', "class='form-control duplicate-input' placeholder='{$lang->bug->duplicateBug}'");?>
+                    <?php echo html::select("duplicateBugs[$bugID]", $productBugList[$bug->product][$bug->branch], $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
                   </td>
                 </tr>
               </table>

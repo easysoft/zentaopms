@@ -269,6 +269,12 @@ class portModel extends model
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
+
+        if(!empty($fieldList['mailto']))
+        {
+            $fieldList['mailto']['control'] = 'multiple';
+            $fieldList['mailto']['values']  = $this->portConfig->sysDataList['user'];
+        }
         return $fieldList;
     }
 
@@ -403,7 +409,11 @@ class portModel extends model
 
         $sysDataFields = explode(',', $this->portConfig->sysDataFields);
 
-        foreach($sysDataFields as $field) $dataList[$field] = $this->loadModel($field)->getPairs();
+        foreach($sysDataFields as $field)
+        {
+            $dataList[$field] = $this->loadModel($field)->getPairs();
+            if($field == 'user') $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+        }
 
         return $dataList;
     }
@@ -479,7 +489,7 @@ class portModel extends model
     {
         $getParams = $this->session->{$model . 'PortParams'};
 
-        if($params and $getParams)
+        if($params)
         {
             $params = explode('&', $params);
             foreach($params as $param => $value)
@@ -560,9 +570,12 @@ class portModel extends model
                 {
                     if($fieldList[$field]['control'] == 'multiple')
                     {
-                        $multiple = '';
+                        $multiple     = '';
+                        $separator    = $field == 'mailto' ? ',' : "\n";
                         $multipleLsit = explode(',', $value);
-                        foreach($multipleLsit as $tmpValue) $multiple .= "\n" . zget($exportDatas[$field], $tmpValue);
+
+                        foreach($multipleLsit as $key => $tmpValue) $multipleLsit[$key] = zget($exportDatas[$field], $tmpValue);
+                        $multiple = join($separator, $multipleLsit);
                         $rows[$id]->$field = $multiple;
                     }
                     else
@@ -767,9 +780,12 @@ class portModel extends model
             if(strpos($queryCondition, "`{$this->config->db->prefix}$model` AS t2") !== false) $selectKey = 't2.id';
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN({$this->cookie->checkedItem})" : ''));
-            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+            while($row = $stmt->fetch())
+            {
+                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
+                $modelDatas[$row->id] = $row;
+            }
         }
-
         return $modelDatas;
     }
 
@@ -1273,7 +1289,7 @@ class portModel extends model
                 $control  = $value['control'];
                 $values   = $value['values'];
                 $name     = "{$field}[$row]";
-                $selected = !empty($object->$field) ? $object->$field : '';
+                $selected = isset($object->$field) ? $object->$field : '';
                 if($model)
                 {
                     if($control == 'hidden' and isset($this->session->{$model.'PortParams'}[$field. 'ID'])) $selected = $this->session->{$model . 'PortParams'}[$field. 'ID'];

@@ -1370,10 +1370,13 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkCases($caseID, $browseType = '', $param = 0)
+    public function linkCases($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Get case and queryID. */
         $case    = $this->testcase->getById($caseID);
@@ -1392,14 +1395,21 @@ class testcase extends control
         /* Get cases to link. */
         $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);
 
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal   = count($cases2Link);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $cases2Link = array_chunk($cases2Link, $pager->recPerPage);
+
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
         $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
-        $this->view->cases2Link = $cases2Link;
+        $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -1410,10 +1420,13 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs($caseID, $browseType = '', $param = 0)
+    public function linkBugs($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('bug');
 
@@ -1431,11 +1444,18 @@ class testcase extends control
         /* Get cases to link. */
         $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
 
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal  = count($bugs2Link);
+        $pager     = new pager($recTotal, $recPerPage, $pageID);
+        $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
+
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->linkBugs;
         $this->view->case       = $case;
-        $this->view->bugs2Link  = $bugs2Link;
+        $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
 
         $this->display();
     }
