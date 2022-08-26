@@ -2723,7 +2723,7 @@ class taskModel extends model
         return $this->dao->select('*')->from(TABLE_TASKESTIMATE)
             ->where('task')->eq($taskID)
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
-            ->beginIF($append)->orWhere('append')->eq($append)->fi()
+            ->beginIF($append)->orWhere('id')->eq($append)->fi()
             ->orderBy('date,id')
             ->fetchAll();
     }

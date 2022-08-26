@@ -232,7 +232,7 @@ $(document).ready(function()
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
             })
         }
-        $taskTeamEditor.find('tfoot .btn').click();
+        if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
 </script>
