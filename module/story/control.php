@@ -1482,7 +1482,7 @@ class story extends control
         $this->view->product   = $product;
         $this->view->story     = $story;
         $this->view->actions   = $this->action->getList('story', $storyID);
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter', "$story->lastEditedBy,$story->openedBy");
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
         $this->view->reviewers = $reviewers;
         $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) == 1 ? true : false;
 

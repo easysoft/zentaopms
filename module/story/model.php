@@ -786,7 +786,7 @@ class storyModel extends model
 
         if(strpos('draft,changing', $oldStory->status) !== false and $this->checkForceReview() and empty($_POST['reviewer']))
         {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
             return false;
         }
 
@@ -4210,7 +4210,7 @@ class storyModel extends model
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
-                $title   = (!$isClick and $story->status != 'closed' and $story->status != 'draft') ? $this->lang->story->changeTip : '';
+                $title   = $isClick ? '' : $this->lang->story->changeTip;
                 $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 if(strpos('draft,changing', $story->status) !== false)
@@ -4235,30 +4235,19 @@ class storyModel extends model
                         {
                             $title = $this->lang->story->reviewTip['notReviewer'];
                         }
-                        elseif(empty($storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['recalled'];
-                        }
                     }
                     $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 }
 
                 $isClick = $this->isClickable($story, 'recall');
                 $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                if(!$isClick and $story->status != 'closed')
-                {
-                    if($story->status == 'draft' and empty($storyReviewer)) $title = $this->lang->story->recallTip['recalled'];
-                    if($story->status == 'draft' and !empty($storyReviewer)) $title = $this->lang->story->recallTip['reviewed'];
-                    if(empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
-                    if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
-                }
-
-                $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+                $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
+                $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
-                $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
+                $tab = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
@@ -4274,8 +4263,7 @@ class storyModel extends model
                         else
                         {
                             if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
-                            if(!empty($story->plan)) $title = $this->lang->story->subDivideTip['planned'];
-                            if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
+                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         }
                     }
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
@@ -4320,20 +4308,20 @@ class storyModel extends model
 
                 if(common::hasPriv('testcase', 'create', $story))
                 {
-                    $link = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
+                    $link  = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
                     $menu .= "<li>" . html::a($link, $this->lang->testcase->create, '', $misc) . "</li>";
                 }
 
                 if(common::hasPriv('testcase', 'batchCreate'))
                 {
-                    $link = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
+                    $link  = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
                     $menu .= "<li>" . html::a($link, $this->lang->testcase->batchCreate, '', $misc) . "</li>";
                 }
 
                 $menu .= "</ul></div>";
             }
 
-            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
+            if($this->app->tab == 'execution' and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -4378,7 +4366,7 @@ class storyModel extends model
                 }
 
                 $this->lang->task->create = $this->lang->execution->wbs;
-                $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
+                $toTaskDisabled = $story->status == 'active' ? '' : 'disabled';
                 if(commonModel::isTutorialMode())
                 {
                     $wizardParams = helper::safe64Encode($param);
