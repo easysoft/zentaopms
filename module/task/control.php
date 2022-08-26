@@ -1367,6 +1367,7 @@ class task extends control
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
