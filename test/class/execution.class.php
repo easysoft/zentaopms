@@ -2081,4 +2081,109 @@ class executionTest
             return $object;
         }
     }
+
+    /**
+     * Test get execution burn data.
+     *
+     * @param  array  $executionIDList
+     * @access public
+     * @return array
+     */
+    public function getBurnDataTest($executionIDList)
+    {
+        global $tester;
+
+        $executions = $this->objectModel->getByIdList($executionIDList);
+        $objects    = $this->objectModel->getBurnData($executions);
+
+        $returns = array();
+        foreach($objects as $executionID => $burnData)
+        {
+            $returns[$executionID] = '';
+            foreach($burnData as $data) $returns[$executionID] .= ",$data->value";
+            $returns[$executionID] = trim($returns[$executionID], ',');
+        }
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $returns;
+        }
+    }
+
+    /**
+     * Test get begin and end for CFD.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getBeginEnd4CFDTest($executionID)
+    {
+        global $tester;
+
+        $execution = $this->objectModel->getByID($executionID);
+        $object    = $this->objectModel->getBeginEnd4CFD($execution);
+
+        $object[0] = $object[0] == date('Y-m-d', strtotime('-13 days', time())) ? 1 : 0;
+        $object[1] = $object[1] == helper::today() ? 1 : 0;
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get taskes by search.
+     *
+     * @param  string $condition
+     * @param  int    $recPerPage
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getSearchTasksTest($condition, $recPerPage, $orderBy)
+    {
+        global $tester;
+
+        /* Load pager. */
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager(0, $recPerPage, 1);
+
+        $objects = $this->objectModel->getSearchTasks($condition, $pager, $orderBy);
+
+        $returns = '';
+        foreach($objects as $object)
+        {
+            $returns .= "$object->id:name:$object->name";
+            if(!empty($object->team))
+            {
+                $returns .= ',team:[';
+                foreach($object->team as $team) $returns .= "$team->id,";
+                $returns = trim($returns, ',');
+                $returns .= ']';
+            }
+            $returns .= ';';
+        }
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $returns;
+        }
+    }
 }
