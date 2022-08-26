@@ -42,7 +42,10 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($this->session->designList);?>
+        <?php
+        $backLink = $this->createLink('design', 'browse', "projectID=$design->project");
+        $app->session->designList != false ? common::printBack($app->session->designList) : common::printBack($backLink);
+        ?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
         <?php
