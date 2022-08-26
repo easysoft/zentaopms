@@ -8,6 +8,9 @@ title=测试 sonarqubeModel::getLinkedProducts();
 cid=1
 pid=1
 
+通过错误的sonarqubeID和projectKey获取关联产品ID >> return false
+通过正确的sonarqubeID和projectKey获取关联产品ID >> 1
+
 */
 
 $sonarqube = $tester->loadModel('sonarqube');

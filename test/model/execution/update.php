@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,7 +11,7 @@ title=测试executionModel->update();
 cid=1
 pid=1
 
-测试重复迭代code >> 『迭代代号』已经有『project1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+测试重复迭代code >> 『迭代代号』已经有『project1』这条记录了。
 测试修改迭代名称 >> name,迭代1,迭代名修改
 测试修改迭代项目为瀑布项目 >> project,11,41
 测试修改迭代项目为看板项目 >> project,41,71
@@ -43,7 +44,7 @@ $noCode         = array('code' => '');
 $repeatcode     = array('name' => '迭代名修改1');
 
 $execution = new executionTest();
-r($execution->updateObject($executionIDList[0], $repeatcode))     && p('code:0')          && e('『迭代代号』已经有『project1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试重复迭代code
+r($execution->updateObject($executionIDList[0], $repeatcode))     && p('code:0')          && e('『迭代代号』已经有『project1』这条记录了。'); // 测试重复迭代code
 r($execution->updateObject($executionIDList[0], $changeName))     && p('0:field,old,new') && e('name,迭代1,迭代名修改');      // 测试修改迭代名称
 r($execution->updateObject($executionIDList[0], $changeStage))    && p('0:field,old,new') && e('project,11,41');              // 测试修改迭代项目为瀑布项目
 r($execution->updateObject($executionIDList[0], $changeKanban))   && p('0:field,old,new') && e('project,41,71');              // 测试修改迭代项目为看板项目
@@ -56,4 +57,4 @@ r($execution->updateObject($executionIDList[1], $noName))         && p('name:0')
 r($execution->updateObject($executionIDList[1], $noCode))         && p('code:0')          && e('『迭代代号』不能为空。');     // 测试修改code为空
 r($execution->updateObject($executionIDList[1], $noChange))       && p()                  && e('没有数据更新');               // 测试无修改
 
-system("./ztest init");
+$db->restoreDB();

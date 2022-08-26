@@ -10,6 +10,10 @@ title=测试 tutorialModel->checkNovice();
 cid=1
 pid=1
 
+检查当account是admin的时候的返回值。 >> 0
+检查当->app->user->modifyPassword是不为空的时候的返回值。 >> 0
+检查当account是guest的时候的返回值。 >> 0
+
 */
 
 $tutorial = new tutorialTest();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
+$db->switchDB();
 
 #su('admin');
 
@@ -41,4 +42,4 @@ r($product->createObject($t_namecode))     && p('name,code')           && e('cas
 r($product->createObject($t_pronamecode))  && p('program,name,code')   && e('3,case4,testcase4');      // 测试传入program、name、code
 r($product->createObject($t_intypestatus)) && p('program,type,status') && e('4,branch,closed');        // 测试传入program、name、code、type、status
 r($product->createObject($t_noacl))        && p('acl:0')               && e('『访问控制』不符合格式，应当为:『/open|private|custom/』。'); // 测试不填权限控制的情况
-system("./ztest init");
+$db->restoreDB();

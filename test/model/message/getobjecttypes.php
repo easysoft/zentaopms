@@ -10,6 +10,18 @@ title=测试 messageModel->getObjectTypes();
 cid=1
 pid=1
 
+查询objectType为product的objectTypes >> 产品
+查询objectType为story的objectTypes >> 研发需求
+查询objectType为productplan的objectTypes >> 计划
+查询objectType为project的objectTypes >> 项目
+查询objectType为task的objectTypes >> 任务
+查询objectType为bug的objectTypes >> Bug
+查询objectType为case的objectTypes >> 用例
+查询objectType为testcase的objectTypes >> 测试单
+查询objectType为todo的objectTypes >> 待办
+查询objectType为doc的objectTypes >> 文档
+查询objectType为mr的objectTypes >> 合并请求
+
 */
 
 $message = new messageTest();

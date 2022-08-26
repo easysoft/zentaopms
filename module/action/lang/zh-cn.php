@@ -57,6 +57,7 @@ $lang->action->historyEdit        = '历史记录编辑不能为空。';
 $lang->action->noDynamic          = '暂时没有动态。';
 $lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 $lang->action->executionNoProject = '该执行没有所属的项目，请先还原项目再还原执行';
+$lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
 
 $lang->action->repeatChange     = '系统内已有同名、同代号的%s，恢复后名称为\"%s\"、代号为\"%s\"。';
 $lang->action->nameRepeatChange = '系统内已有同名的%s，恢复后名称为\"%s\"。';
@@ -220,6 +221,8 @@ $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->adjusttasktowait     = '$date, 系统判断由于消耗工时调整为0，将任务状态置为未开始。' . "\n";
 $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 重新打开。' . "\n";
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
+$lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
+$lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -242,8 +245,8 @@ $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关
 $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述计划关联和移除需求、bug时的历史操作记录。*/
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
@@ -273,6 +276,7 @@ $lang->action->label->blocked               = '阻塞了';
 $lang->action->label->resolved              = '解决了';
 $lang->action->label->reviewed              = '评审了';
 $lang->action->label->recalled              = '撤销评审';
+$lang->action->label->recalledchange        = '撤销变更';
 $lang->action->label->moved                 = '移动了';
 $lang->action->label->confirmed             = "确认了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed          = '确认了';
@@ -384,6 +388,8 @@ $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
 $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
+$lang->action->label->ganttmove             = '排序了';
+$lang->action->label->submitreview          = '提交了评审';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -541,6 +547,7 @@ $lang->action->dynamicAction->task['undeleted']           = '还原任务';
 $lang->action->dynamicAction->task['hidden']              = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']         = 'SVN提交';
 $lang->action->dynamicAction->task['gitcommited']         = 'GIT提交';
+$lang->action->dynamicAction->task['ganttmove']           = '排序';
 
 $lang->action->dynamicAction->build['opened']  = '创建版本';
 $lang->action->dynamicAction->build['edited']  = '编辑版本';

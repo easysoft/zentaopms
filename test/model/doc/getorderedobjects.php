@@ -10,7 +10,14 @@ title=测试 docModel->getOrderedObjects();
 cid=1
 pid=1
 
-
+all类型查询 >> 0
+api类型查询 >> 0
+product类型查询 >> 已关闭的多分支产品70
+project类型查询 >> 项目87
+execution类型查询 >> 项目60 / 阶段600
+product类型查询统计 >> 120
+project类型查询统计 >> 110
+execution类型查询统计 >> 630
 
 */
 global $tester;

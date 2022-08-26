@@ -859,6 +859,7 @@ class bug extends control
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+
         $this->display();
     }
 
@@ -1132,6 +1133,8 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
+        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+
         /* Get assigned to member. */
         if($bug->execution)
         {
@@ -1149,22 +1152,27 @@ class bug extends control
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->product          = $product;
+        $this->view->productBugs      = $productBugs;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
         $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
-        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
+        $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->assignedToList   = $assignedToList;
+        $this->view->cases            = array('' => '') + $cases;
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -1297,6 +1305,7 @@ class bug extends control
         $branchIdList    = array();
         $projectIdList   = array();
         $executionIdList = array();
+        $productBugList  = array();
         foreach($bugs as $bug)
         {
             $projectIdList[$bug->project]     = $bug->project;
@@ -1305,6 +1314,10 @@ class bug extends control
             $branchIdList[$bug->product][$bug->branch] = $bug->branch;
 
             if(!isset($modules[$bug->product][$bug->branch]) and isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
+
+            $bugProduct  = isset($productList) ? $productList[$bug->product] : $product;
+            $branch      = $bugProduct->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+            if(!isset($productBugList[$bug->product][$bug->branch])) $productBugList[$bug->product][$bug->branch] = $this->bug->getProductBugPairs($bug->product, $branch);
         }
 
         /* Get assigned to member. */
@@ -1379,13 +1392,12 @@ class bug extends control
         $this->view->priList          = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
         $this->view->resolutionList   = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
         $this->view->statusList       = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
-        $this->view->osList           = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->osList;
-        $this->view->browserList      = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->browserList;
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;
         $this->view->modules          = $modules;
         $this->view->branchTagOption  = $branchTagOption;
+        $this->view->productBugList   = $productBugList;
 
         $this->display();
     }
@@ -1795,17 +1807,22 @@ class bug extends control
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
 
+        $product     = $this->loadModel('product')->getById($productID);
+        $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
-        $this->view->bug        = $bug;
-        $this->view->users      = $users;
-        $this->view->assignedTo = $assignedTo;
-        $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
-        $this->view->builds     = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
-        $this->view->actions    = $this->action->getList('bug', $bugID);
-        $this->view->execution  = isset($execution) ? $execution : '';
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->bug->resolve;
+        $this->view->bug         = $bug;
+        $this->view->users       = $users;
+        $this->view->assignedTo  = $assignedTo;
+        $this->view->productBugs = $productBugs;
+        $this->view->executions  = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
+        $this->view->actions     = $this->action->getList('bug', $bugID);
+        $this->view->execution   = isset($execution) ? $execution : '';
         $this->display();
     }
 
@@ -2090,7 +2107,7 @@ class bug extends control
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
         $bugIDList = array_unique($this->post->bugIDList);
-        $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->qa->setMenu($this->products, $productID, $branch);
 
@@ -2292,183 +2309,10 @@ class bug extends control
     {
         if($_POST)
         {
-            $this->loadModel('file');
-            $this->loadModel('branch');
-            $bugLang   = $this->lang->bug;
-            $bugConfig = $this->config->bug;
-
-            /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $bugConfig->list->exportFields);
-            foreach($fields as $key => $fieldName)
-            {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = isset($bugLang->$fieldName) ? $bugLang->$fieldName : $fieldName;
-                unset($fields[$key]);
-            }
-
-            /* Get bugs. */
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                ->orderBy($orderBy)->fetchAll('id');
-
-            /* Get users, products and executions. */
-            $users      = $this->loadModel('user')->getPairs('noletter');
-            $products   = $this->loadModel('product')->getPairs();
-            $projects   = $this->loadModel('project')->getPairsByProgram();
-            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'all');
-
-            /* Get related objects id lists. */
-            $relatedProductIdList = array();
-            $relatedStoryIdList   = array();
-            $relatedTaskIdList    = array();
-            $relatedBugIdList     = array();
-            $relatedCaseIdList    = array();
-            $relatedBuildIdList   = array();
-            $relatedBranchIdList  = array();
-
-            foreach($bugs as $bug)
-            {
-                $relatedProductIdList[$bug->product]  = $bug->product;
-                $relatedStoryIdList[$bug->story]      = $bug->story;
-                $relatedTaskIdList[$bug->task]        = $bug->task;
-                $relatedCaseIdList[$bug->case]        = $bug->case;
-                $relatedBugIdList[$bug->duplicateBug] = $bug->duplicateBug;
-                $relatedBranchIdList[$bug->branch]    = $bug->branch;
-
-                /* Process link bugs. */
-                $linkBugs = explode(',', $bug->linkBug);
-                foreach($linkBugs as $linkBugID)
-                {
-                    if($linkBugID) $relatedBugIdList[$linkBugID] = trim($linkBugID);
-                }
-
-                /* Process builds. */
-                $builds = $bug->openedBuild . ',' . $bug->resolvedBuild;
-                $builds = explode(',', $builds);
-                foreach($builds as $buildID)
-                {
-                    if($buildID) $relatedBuildIdList[$buildID] = trim($buildID);
-                }
-            }
-
-            /* Get related objects title or names. */
-            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
-            $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
-            $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
-            $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
-            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs('bug');
-            if($this->config->edition == 'max') $reviews = $this->loadModel('review')->getPairs(0, $productID);
-
-            foreach($bugs as $bug)
-            {
-                if($this->post->fileType == 'csv')
-                {
-                    $bug->steps = str_replace("<br />", "\n", $bug->steps);
-                    $bug->steps = str_replace('"', '""', $bug->steps);
-                    $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
-                }
-
-                $bug->openedDate     = !helper::isZeroDate($bug->openedDate)     ? $bug->openedDate     : '';
-                $bug->assignedDate   = !helper::isZeroDate($bug->assignedDate)   ? $bug->assignedDate   : '';
-                $bug->resolvedDate   = !helper::isZeroDate($bug->resolvedDate)   ? $bug->resolvedDate   : '';
-                $bug->closedDate     = !helper::isZeroDate($bug->closedDate)     ? $bug->closedDate     : '';
-                $bug->lastEditedDate = !helper::isZeroDate($bug->lastEditedDate) ? $bug->lastEditedDate : '';
-                $bug->deadline       = !helper::isZeroDate($bug->deadline)       ? $bug->deadline       : '';
-
-                /* fill some field with useful value. */
-                $bug->product   = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";
-                $bug->project   = !isset($projects[$bug->project])     ? '' : $projects[$bug->project] . "(#$bug->project)";
-                $bug->execution = !isset($executions[$bug->execution]) ? '' : $executions[$bug->execution] . "(#$bug->execution)";
-                $bug->story     = !isset($relatedStories[$bug->story]) ? '' : $relatedStories[$bug->story] . "(#$bug->story)";
-                $bug->task      = !isset($relatedTasks[$bug->task])    ? '' : $relatedTasks[$bug->task] . "($bug->task)";
-                $bug->case      = !isset($relatedCases[$bug->case])    ? '' : $relatedCases[$bug->case] . "($bug->case)";
-                if($this->config->edition == 'max' and isset($reviews)) $bug->identify = !isset($reviews[$bug->identify]) ? '' : $reviews[$bug->identify] . "(#$bug->identify)";
-
-                if(isset($relatedModules[$bug->module]))       $bug->module        = $relatedModules[$bug->module] . "(#$bug->module)";
-                if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
-                if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
-                if(isset($relatedBranch[$bug->branch]))        $bug->branch        = $relatedBranch[$bug->branch] . "(#$bug->branch)";
-
-                if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
-                if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
-                if(isset($bugLang->severityList[$bug->severity]))     $bug->severity   = $bugLang->severityList[$bug->severity];
-                if(isset($bugLang->osList[$bug->os]))                 $bug->os         = $bugLang->osList[$bug->os];
-                if(isset($bugLang->browserList[$bug->browser]))       $bug->browser    = $bugLang->browserList[$bug->browser];
-                if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $this->processStatus('bug', $bug);
-                if(isset($bugLang->confirmedList[$bug->confirmed]))   $bug->confirmed  = $bugLang->confirmedList[$bug->confirmed];
-                if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
-
-                if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
-                if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo] . "(#$bug->assignedTo)";
-                if(isset($users[$bug->resolvedBy]))   $bug->resolvedBy   = $users[$bug->resolvedBy];
-                if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
-                if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
-
-                $bug->title = htmlspecialchars_decode($bug->title,ENT_QUOTES);
-
-                if($bug->linkBug)
-                {
-                    $tmpLinkBugs = array();
-                    $linkBugIdList = explode(',', $bug->linkBug);
-                    foreach($linkBugIdList as $linkBugID)
-                    {
-                        $linkBugID = trim($linkBugID);
-                        $tmpLinkBugs[] = isset($relatedBugs[$linkBugID]) ? $relatedBugs[$linkBugID] : $linkBugID;
-                    }
-                    $bug->linkBug = join("; \n", $tmpLinkBugs);
-                }
-
-                if($bug->openedBuild)
-                {
-                    $tmpOpenedBuilds   = array();
-                    $tmpResolvedBuilds = array();
-                    $buildIdList = explode(',', $bug->openedBuild);
-                    foreach($buildIdList as $buildID)
-                    {
-                        $buildID = trim($buildID);
-                        $tmpOpenedBuilds[] = isset($relatedBuilds[$buildID]) ? $relatedBuilds[$buildID] . "(#$buildID)" : $buildID;
-                    }
-                    $bug->openedBuild = join("\n", $tmpOpenedBuilds);
-                    if($this->post->fileType == 'html') $bug->openedBuild = nl2br($bug->openedBuild);
-                }
-
-                /* Set related files. */
-                $bug->files = '';
-                if(isset($relatedFiles[$bug->id]))
-                {
-                    foreach($relatedFiles[$bug->id] as $file)
-                    {
-                        $fileURL = common::getSysURL() . $this->file->webPath . $this->file->getRealPathName($file->pathname);
-                        $bug->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
-                    }
-                }
-
-                $bug->mailto = trim(trim($bug->mailto), ',');
-                $mailtos     = explode(',', $bug->mailto);
-                $bug->mailto = '';
-                foreach($mailtos as $mailto)
-                {
-                    $mailto = trim($mailto);
-                    if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
-                }
-                $bug->mailto = rtrim($bug->mailto, ',');
-
-                unset($bug->caseVersion);
-                unset($bug->result);
-                unset($bug->deleted);
-            }
-
-            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
-            if($this->config->edition != 'open') list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
-
-            $this->post->set('fields', $fields);
-            $this->post->set('rows', $bugs);
-            $this->post->set('kind', 'bug');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+            $this->loadModel('port');
+            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            $this->port->export('bug');
+            $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
 
         $fileName = $this->lang->bug->common;
@@ -2486,7 +2330,7 @@ class bug extends control
         }
 
         $this->view->fileName        = $fileName;
-        $this->view->allExportFields = $this->config->bug->list->exportFields;
+        $this->view->allExportFields = $this->config->bug->exportFields;
         $this->view->customExport    = true;
         $this->display();
     }

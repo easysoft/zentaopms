@@ -8,8 +8,8 @@ title=测试 mrModel::saveBug();
 cid=1
 pid=1
 
-使用空的repoID, MRID                   >> return false
-使用正确的repoID, MRID。空的title。    >> return false
+使用空的repoID, MRID >> return false
+使用正确的repoID, MRID。空的title。 >> return false
 使用正确的repoID, MRID。POST数据正确。 >> Test Bug Review
 
 */

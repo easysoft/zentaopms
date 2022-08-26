@@ -139,6 +139,7 @@ $lang->story->linkStories    = "相關{$lang->SRCommon}";
 $lang->story->childStories   = "細分需求";
 $lang->story->duplicateStory = "重複需求ID";
 $lang->story->reviewResult   = '評審意見';
+$lang->story->reviewResultAB = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = "繼續添加{$lang->SRCommon}";
@@ -172,11 +173,12 @@ $lang->story->needNotReviewList[1] = '不需要評審';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已關閉';
-$lang->story->statusList['changed'] = '已變更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已關閉';
+$lang->story->statusList['changing']  = '變更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';

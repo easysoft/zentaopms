@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -22,4 +23,4 @@ r($doc->saveDraftTest($docIDList[1], $content)) && p('118:draft') && e('测试')
 r($doc->saveDraftTest($docIDList[2], $content)) && p('217:draft') && e('测试');//执行文档内容保存
 r($doc->saveDraftTest($docIDList[0]))           && p('17:draft')  && e('测试');//文档无内容保存
 
-system("./ztest init");
+$db->restoreDB();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +26,4 @@ $branch = new branchTest();
 r($branch->batchUpdateTest($changeName))   && p('field,old,new') && e('name,分支9,修改分支9的名称'); // 测试批量更新名称
 r($branch->batchUpdateTest($changeDesc))   && p('field,old,new') && e('desc,,修改分支9的描述');      // 测试批量更新描述
 r($branch->batchUpdateTest($changeStatus)) && p('field,old,new') && e('status,active,closed');       // 测试批量更新状态
-system("./ztest init");
+$db->restoreDB();

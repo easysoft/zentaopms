@@ -11,7 +11,7 @@ cid=1
 pid=1
 
 根据storyID查找comment >> 这是一个系统日志测试备注2
-根据storyID查找comment >> 0
+根据不存在的storyID查找comment >> 0
 
 */
 

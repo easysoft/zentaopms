@@ -241,7 +241,7 @@ class execution extends control
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
@@ -469,10 +469,13 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $fromExecution
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function importTask($toExecution, $fromExecution = 0)
+    public function importTask($toExecution, $fromExecution = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -509,13 +512,20 @@ class execution extends control
             $tasks2Imported = zget($tasks, $fromExecution, array());
         }
 
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($tasks2Imported);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
+
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
 
         $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->pager            = $pager;
         $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
         $this->view->position[]       = $this->lang->execution->importTask;
-        $this->view->tasks2Imported   = $tasks2Imported;
+        $this->view->tasks2Imported   = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
@@ -632,7 +642,7 @@ class execution extends control
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
         $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
-        $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
+        $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
 
@@ -773,6 +783,7 @@ class execution extends control
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
         $queryID     = ($type == 'bysearch') ? $param : 0;
         $execution   = $this->commonAction($executionID);
@@ -943,6 +954,7 @@ class execution extends control
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
@@ -1057,7 +1069,7 @@ class execution extends control
         $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
@@ -1383,19 +1395,37 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
+        $minDate = !helper::isZeroDate($execution->openedDate) ? date('Y-m-d', strtotime($execution->openedDate)) : date('Y-m-d', strtotime($execution->begin));
+        $maxDate = !helper::isZeroDate($execution->closedDate) ? date('Y-m-d', strtotime($execution->closedDate)) : helper::today();
+
         if(!empty($_POST))
         {
             $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
             $end   = htmlspecialchars($this->post->end, ENT_QUOTES);
 
-            if(empty($begin)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin));
-            if(empty($end)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end));
+            $dateError = array();
+
+            if(empty($begin)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin);
+            if(empty($end)) $dateError[] = sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end);
+            if(empty($dateError))
+            {
+                if($begin < $minDate) $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->begin, $minDate);
+                if($begin > $maxDate) $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->begin, $maxDate);
+                if($end < $minDate)   $dateError[] = sprintf($this->lang->error->gt, $this->lang->execution->charts->cfd->end, $minDate);
+                if($end > $maxDate)   $dateError[] = sprintf($this->lang->error->lt, $this->lang->execution->charts->cfd->end, $maxDate);
+            }
+            if(!empty($dateError))
+            {
+                foreach($dateError as $index => $error) $dateError[$index] = str_replace(array('。', '.'), array('', ''), $error) . '<br/>';
+                return $this->sendError($dateError);
+            }
+
             if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
             if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
 
             $this->execution->computeCFD($executionID);
             $this->execution->checkCFDData($executionID, $begin);
-            return print(js::locate($this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end))), 'parent'));
+            return $this->send(array('result' => 'success', 'locate' => $this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end)))));
         }
 
         if($begin and $end)
@@ -1423,6 +1453,8 @@ class execution extends control
         $this->view->chartData     = $chartData;
         $this->view->begin         = $begin;
         $this->view->end           = $end;
+        $this->view->minDate       = $minDate;
+        $this->view->maxDate       = $maxDate;
         $this->display();
     }
 
@@ -2158,15 +2190,9 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-            $changes = $this->execution->activate($executionID);
+            $this->execution->activate($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
             {
@@ -2209,16 +2235,10 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
             $this->execution->computeBurn($executionID);
-            $changes = $this->execution->close($executionID);
+            $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $actionID = $this->action->create($this->objectType, $executionID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->executeHooks($executionID);
             if(isonlybody() and $from == 'kanban')
             {
@@ -2289,9 +2309,7 @@ class execution extends control
         {
             $this->app->loadClass('date');
 
-            $begin     = date('Y-m-d', strtotime('-13 days'));
-            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($begin, $execution->begin) > 0) ? $begin : $execution->begin;
-            $end       = helper::today();
+            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
             $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
             $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
             if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
@@ -2473,7 +2491,7 @@ class execution extends control
             unset($this->lang->kanban->type['all']);
         }
 
-        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
@@ -2533,7 +2551,7 @@ class execution extends control
     {
         $this->loadModel('project');
         $projects   = $this->project->getPairsByProgram('', 'noclosed');
-        $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
+        $executions = $this->execution->getStatData(0, 'all', 0, 0, false, '', 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -2871,6 +2889,7 @@ class execution extends control
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
+            $this->loadModel('common')->syncPPEStatus($executionID);
 
             $this->session->set('execution', '');
             $message = $this->executeHooks($executionID);
@@ -3675,16 +3694,16 @@ class execution extends control
      * All execution.
      *
      * @param  string $status
-     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $productID
+     * @param  string $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3697,27 +3716,22 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
-            {
-                $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->saveState($projectID, $projects);
-                $this->project->setMenu($projectID);
-            }
-            else
-            {
-                $executionID = $this->execution->saveState(0, $this->executions);
-                $this->execution->setMenu($executionID);
-            }
+            $executionID = $this->execution->saveState(0, $this->executions);
+            $this->execution->setMenu($executionID);
         }
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $queryID   = ($status == 'bySearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
+        $this->execution->buildSearchFrom($queryID, $actionURL);
+
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
+        $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $orderBy, $pager);
 
         $parentIdList = array();
         foreach($executionStats as $execution)
@@ -3728,20 +3742,20 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->project->getStats($projectID, 'all');
+        $allExecutionsNum = $this->execution->getStatData(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
-        $this->view->projectID      = $projectID;
         $this->view->parents        = $parents;
-        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->status         = $status;
         $this->view->from           = $from;
+        $this->view->param          = $param;
         $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
 
         $this->display();
@@ -3840,7 +3854,7 @@ class execution extends control
             }
 
             $project        = $this->project->getByID($projectID);
-            $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, '', 'id_asc');
             if(isset($project->model) and $project->model == 'waterfall')
             {
                 $stageList = array();
@@ -3984,7 +3998,7 @@ class execution extends control
         {
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft')
+                if($story->status == 'draft' or $story->status == 'reviewing')
                 {
                     $count++;
                     unset($planStory[$id]);

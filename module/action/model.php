@@ -104,7 +104,7 @@ class actionModel extends model
      *
      * @param  int    $actionID
      * @access public
-     * @return void
+     * @return string
      */
     public function getUnreadActions($actionID = 0)
     {
@@ -473,7 +473,7 @@ class actionModel extends model
                 $action->extra = '';
                 if($names)
                 {
-                    foreach($names as $id => $name) $action->extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+                    foreach($names as $id => $name) $action->extra .= common::hasPriv('requriement', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
@@ -510,7 +510,8 @@ class actionModel extends model
             elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
             {
                 $action->appendLink = '';
-                if(strpos($action->extra, ':')!== false)
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
                 {
                     list($extra, $id) = explode(':', $action->extra);
                     $action->extra    = $extra;
@@ -707,6 +708,7 @@ class actionModel extends model
      */
     public function getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager = null)
     {
+        if($objectType == 'all') return array();
         if($queryID and $queryID != 'myQueryID')
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -787,7 +789,7 @@ class actionModel extends model
      */
     public function getHistory($actionID)
     {
-        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->orderBy('id')->fetchGroup('action');
+        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
@@ -858,7 +860,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -989,39 +991,43 @@ class actionModel extends model
             if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
             if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
 
+            if(empty($authedProducts)) $authedProducts = '0';
+
             if($productID == 'all' and $projectID == 'all')
             {
                 $productCondition = '';
-                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "project " . helper::dbIN($authedProjects);
-                $executionCondition = isset($authedExecutions) ? "execution " . helper::dbIN($authedExecutions) : '';
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
+                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID);
+                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
 
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
                 $productCondition = '';
-                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "project = $projectID";
-                $executionCondition = "execution " . helper::dbIN($authedExecutions);
+                $projectCondition   = "(execution = '0' and project = '$projectID')";
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
             }
             elseif(is_numeric($productID) and $projectID == 'all')
             {
                 $this->loadModel('product');
                 $projects   = $this->product->getProjectPairsByProduct($productID);
-                $executions = $this->product->getExecutionPairsByProduct($productID);
+                $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
 
                 $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
-                $productCondition   = "product like '%,$productID,%'";
-                $projectCondition   = 'project ' . helper::dbIN($authedProjects);
-                $executionCondition = 'execution ' . helper::dbIN($authedExecutions);
+                $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
             }
 
             $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
@@ -1048,7 +1054,7 @@ class actionModel extends model
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
+            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
@@ -1211,6 +1217,7 @@ class actionModel extends model
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
         $this->app->loadLang('branch');
+        $this->app->loadLang('execution');
 
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -1222,17 +1229,8 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
-        $aclViews         = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? ",{$this->app->user->view->projects}," : '';
-        $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? ",{$this->app->user->view->sprints},": '';
-
         foreach($actions as $i => $action)
         {
-            if(($action->execution != '0' and strpos($authedExecutions, ",$action->execution,") === false) or ($action->execution == '0' and $action->project != '0' and strpos($authedProjects, ",$action->project,") === false))
-            {
-                unset($actions[$i]);
-                continue;
-            }
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
@@ -1262,6 +1260,10 @@ class actionModel extends model
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
             }
+            elseif($action->objectType == 'mr' and $action->action == 'deleted')
+            {
+                $action->objectName = $action->extra;
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
@@ -1284,7 +1286,7 @@ class actionModel extends model
             $this->setObjectLink($action, $deptUsers);
 
             /* Set merge request link. */
-            if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
+            if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
@@ -1469,7 +1471,7 @@ class actionModel extends model
             }
 
             if($this->config->edition == 'max'
-               and strpos($this->config->action->assetType, $action->objectType) !== false
+               and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
                 if($action->objectType == 'doc')
@@ -1533,6 +1535,16 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
+
+                if($action->objectType == 'story')
+                {
+                    $story = $this->loadModel('story')->getByID($action->objectID);
+                    if(!empty($story))
+                    {
+                        $moduleName = $story->type;
+                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                    }
                 }
 
                 if($action->objectType == 'doclib')
@@ -1727,6 +1739,16 @@ class actionModel extends model
             if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
         }
 
+        if($action->objectType == 'repo')
+        {
+            $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($action->objectID)->fetch();
+            if($repo and in_array($repo->SCM, array('Gitlab', 'Gitea', 'Gogs')))
+            {
+                $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($repo->serviceHost)->andWhere('deleted')->eq('0')->fetch();
+                if(empty($server)) return print(js::error($this->lang->action->repoNoServer));
+            }
+        }
+
         if($action->objectType == 'product')
         {
             $product = $this->dao->select('id,name,code,acl')->from(TABLE_PRODUCT)->where('id')->eq($action->objectID)->fetch();
@@ -1755,6 +1777,12 @@ class actionModel extends model
         {
             $products = $this->product->getProducts($project->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
+
+            if($action->objectType == 'execution')
+            {
+                $execution = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+                $this->loadModel('common')->syncExecutionByChild($execution);
+            }
         }
 
         /* Revert doclib when undelete product or project. */

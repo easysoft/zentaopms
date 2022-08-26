@@ -23,7 +23,7 @@ type为out查询 >> 测试10
 
 */
 
-$deptIDList = array('0', '2', '5');
+$deptIDList = array(0, '2', '5');
 $key        = array('id', 'account', 'out');
 $type       = array('inside', 'outside', 'out');
 $count      = array('0', '1');

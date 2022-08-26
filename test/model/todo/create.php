@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/todo.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -11,10 +12,10 @@ cid=1
 pid=1
 
 创建没有名字的待办 >> 『待办名称』不能为空。
-创建自定义待办     >> 时间待定的月周期待办,custom,wait
-创建bug待办        >> 测试单转Bug13,bug,doing
-创建task待办       >> 开发任务11,task,done
-创建story待办      >> 用户需求1,story,closed
+创建自定义待办 >> 时间待定的月周期待办,custom,wait
+创建bug待办 >> 测试单转Bug13,bug,doing
+创建task待办 >> 开发任务11,task,done
+创建story待办 >> 用户需求1,story,closed
 
 */
 
@@ -62,4 +63,4 @@ r($todo->createTest($accountList[1], $todo1))    && p('name,type,status') && e('
 r($todo->createTest($accountList[2], $todo2))    && p('name,type,status') && e('测试单转Bug13,bug,doing');          //创建bug待办
 r($todo->createTest($accountList[0], $todo3))    && p('name,type,status') && e('开发任务11,task,done');             //创建task待办
 r($todo->createTest($accountList[0], $todo4))    && p('name,type,status') && e('用户需求1,story,closed');           //创建story待办
-system("./ztest init");
+$db->restoreDB();

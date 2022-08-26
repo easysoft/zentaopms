@@ -41,7 +41,7 @@ class executionsEntry extends entry
         else
         {
             $control = $this->loadController('execution', 'all');
-            $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->all($this->param('status', 'all'), $this->param('order', 'id_desc'), 0, '', 0, $this->param('limit', 20), $this->param('page', 1));
             $data = $this->getData();
 
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');

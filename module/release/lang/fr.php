@@ -64,6 +64,9 @@ $lang->release->mailContent   = '<p>Dear users,</p><p style="margin-left: 30px;"
 $lang->release->storyList     = '<p style="margin-left: 30px;">Story List：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug List：%s。</p>';
 
+$lang->release->storyTitle = 'Story Name';
+$lang->release->bugTitle   = 'Bug Name';
+
 $lang->release->filePath = 'Télecharger : ';
 $lang->release->scmPath  = 'SCM Path : ';
 
@@ -90,3 +93,7 @@ $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
 $lang->release->notifyList['CT'] = "Copy To";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

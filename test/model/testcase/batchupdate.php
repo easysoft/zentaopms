@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -53,4 +54,4 @@ r($testcase->batchUpdateTest(2, $changeTypes))        && p('field,old,new') && e
 r($testcase->batchUpdateTest(3, $changePrecondition)) && p('field,old,new') && e('precondition,这是前置条件3,修改后的前置条件3'); // 测试批量修改用例前置条件
 r($testcase->batchUpdateTest(4, $changeKeywords))     && p('field,old,new') && e('keywords,这是关键词4,修改后的关键词4');         // 测试批量修改用例关键词
 r($testcase->batchUpdateTest(1, $changeStages))       && p('field,old,new') && e('stage,unittest,unittest,feature');              // 测试批量修改用例阶段
-system("./ztest init");
+$db->restoreDB();

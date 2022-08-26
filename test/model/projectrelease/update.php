@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/projectrelease.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -39,4 +40,4 @@ r($projectrelease->updateTest($releaseID[0], $name[3], $date[1])) && p('name:0;d
 
 r($projectrelease->updateTest($releaseID[0], $name[1], $date[0])) && p('name:0')          && e('『name』已经有『产品发布9』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //测试releaseID正常存在，name在其他发布存在，date正常，不可修改
 
-system("./ztest init");
+$db->restoreDB();

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -50,4 +51,4 @@ r($kanban->createLaneTest($lane2, $kanbanID, $regionID)) && p('name,region,group
 r($kanban->createLaneTest($lane3, $kanbanID, $regionID)) && p('name:0')            && e('『泳道名称』不能为空。');                     //测试创建不填写名称的泳道
 r($kanban->createLaneTest($lane4, $kanbanID, $regionID)) && p('name,region,group') && e('默认泳道,1,1');                               //测试创建复用泳道1信息的泳道
 r($kanban->createLaneTest($lane5, $kanbanID, $regionID)) && p('name,region,group') && e('默认泳道,2,2');                               //测试创建复用泳道2信息的泳道
-system("./ztest init");
+$db->restoreDB();

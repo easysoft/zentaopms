@@ -288,11 +288,12 @@ $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
 $lang->devops->set      = 'Set';
 
-$lang->admin->system     = 'System';
-$lang->admin->entry      = 'Application';
-$lang->admin->data       = 'Data';
-$lang->admin->cron       = 'Cron';
-$lang->admin->buildIndex = 'Full Text Search';
+$lang->admin->system      = 'System';
+$lang->admin->entry       = 'Application';
+$lang->admin->data        = 'Data';
+$lang->admin->cron        = 'Cron';
+$lang->admin->buildIndex  = 'Full Text Search';
+$lang->admin->tableEngine = 'Table Engine';
 
 $lang->convert->importJira = 'Import Jira';
 
@@ -431,6 +432,7 @@ $lang->colorPicker->errorTip = 'Not a valid color value';
 $lang->downNotify     = "Download Desktop Notification";
 $lang->clientName     = "Desktop";
 $lang->downloadClient = "Download ZenTao Desktop";
+$lang->downloadMobile = "Download Mobile Terminal";
 $lang->clientHelp     = "Client Help";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html";
 $lang->website        = "http://www.zentao.net";

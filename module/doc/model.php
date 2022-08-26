@@ -60,18 +60,20 @@ class docModel extends model
      * @param  string $type
      * @param  string $extra
      * @param  string $appendLibs
-     * @param  int    $projectID
+     * @param  int    $objectID
+     * @param  string $excludeType
      *
      * @access public
      * @return array
      */
-    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0)
+    public function getLibs($type = '', $extra = '', $appendLibs = '', $objectID = 0, $excludeType = '')
     {
         if($type == 'all' or $type == 'includeDeleted')
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('`order` asc, id_desc')
                 ->query();
@@ -928,6 +930,13 @@ class docModel extends model
     {
         $this->loadModel('product');
 
+        /* Fixed search modal for doc view. */
+        if($this->app->getMethodName() == 'objectlibs')
+        {
+            $queryName = $type . 'Doc';
+            $type      = 'objectLibs';
+        }
+
         if($this->app->rawMethod == 'contribute')
         {
             $this->config->doc->search['module'] = 'contributeDoc';
@@ -951,6 +960,7 @@ class docModel extends model
         }
         else
         {
+            $this->config->doc->search['module'] = $queryName;
             $products = $this->product->getPairs('nocode', $this->session->project);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
@@ -1649,7 +1659,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1685,9 +1695,10 @@ class docModel extends model
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+                $reviewIdList  = $this->dao->select('id')->from(TABLE_REVIEW)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             }
 
-            $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $designIdList    = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
@@ -1720,6 +1731,7 @@ class docModel extends model
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
+            ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
             ->fi()
@@ -1761,11 +1773,14 @@ class docModel extends model
             $sourceList[$file->objectType][$file->objectID] = $file->objectID;
         }
 
+        $this->app->loadConfig('action');
         foreach($sourceList as $type => $idList)
         {
-            $table              = $this->config->objectTables[$type];
-            $title              = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
-            $name               = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
+            $table = zget($this->config->objectTables, $type, '');
+            $field = zget($this->config->action->objectNameFields, $type, '');
+            if(empty($table) or empty($field)) continue;
+
+            $name = $this->dao->select('id,' . $field)->from($table)->where('id')->in($idList)->fetchPairs('id', $field);
             $sourcePairs[$type] = $name;
         }
 
@@ -2126,11 +2141,12 @@ class docModel extends model
             {
                 foreach($this->lang->doc->typeList as $typeKey => $typeName)
                 {
-                    $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
-                    $icon  = zget($this->config->doc->iconList, $typeKey);
-                    $html .= "<li>";
-                    $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                    $html .= "</li>";
+                    $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
+                    $icon   = zget($this->config->doc->iconList, $typeKey);
+                    $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+                    $html  .= "<li>";
+                    $html  .= html::a(helper::createLink('doc', $method, "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                    $html  .= "</li>";
                     if($typeKey == 'url') $html .= '<li class="divider"></li>';
                 }
             }

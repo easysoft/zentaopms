@@ -57,14 +57,12 @@ function scmChanged(scm)
     if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').addClass('hidden');
-
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
     }
     else
     {
         $('.account-fields').removeClass('hidden');
-
         $('.tips-git').addClass('hidden');
         $('.tips-svn').removeClass('hidden');
     }

@@ -77,4 +77,10 @@ $(function()
     {
         hiddenRequireFields();
     });
+
+    $('select[id^="duplicateBugs"]').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto'
+    });
 });

@@ -36,7 +36,7 @@
         <td><?php echo html::radio('type', $lang->doc->types, 'text');?></td>
       </tr>
       <tr>
-        <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->confirm);?></td>
+        <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->doc->nextStep);?></td>
       </tr>
     </table>
   </form>

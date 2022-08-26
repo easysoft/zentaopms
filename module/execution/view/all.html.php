@@ -16,14 +16,11 @@
 $datatableId  = $this->moduleName . ucfirst($this->methodName);
 $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
 ?>
+<?php js::set('unfoldExecutions', array());?>
 <?php js::set('useDatatable', $useDatatable);?>
 <?php js::set('from', $from);?>
-<?php js::set('projectID', $projectID);?>
 <?php
 /* Set unfold parent executionID. */
-$unfoldExecutions = isset($config->execution->all->unfoldExecutions) ? json_decode($config->execution->all->unfoldExecutions, true) : array();
-$unfoldExecutions = zget($unfoldExecutions, $projectID, array());
-js::set('unfoldExecutions', $unfoldExecutions);
 js::set('unfoldAll', $lang->execution->treeLevel['all']);
 js::set('foldAll', $lang->execution->treeLevel['root']);
 js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
@@ -38,48 +35,38 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
         <?php
           $class = '';
           if($productID == 0) $class = 'class="active"';
-          echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
+          echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
           foreach($productList as $key => $product)
           {
               $class = $productID == $key ? 'class="active"' : '';
-              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $product) . "</li>";
+              echo "<li $class>" . html::a($this->createLink('project', 'execution', "status=$status&orderby=$orderBy&productID=$key"), $product) . "</li>";
           }
         ?>
       </ul>
     </div>
     <?php endif;?>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
-    <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
-    <div class='input-control w-180px'>
-      <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
-    </div>
-    <?php endif;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
-     <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
-     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
-    <?php else: ?>
-    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
-    <?php endif;?>
+    <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='execution' onclick='$(this).removeAttr(\"data-toggle\")'");?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='execution'></div>
   <?php if(empty($executionStats)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
       <?php if(empty($allExecutionsNum)):?>
-        <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
-        <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
-        <?php else: ?>
-          <?php if(common::hasPriv('execution', 'create')):?>
-          <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
-          <?php endif;?>
+        <?php if(common::hasPriv('execution', 'create')):?>
+        <?php echo html::a($this->createLink('execution', 'create'), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
         <?php endif;?>
       <?php endif;?>
     </p>
@@ -91,7 +78,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
     <?php
-    $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+    $vars = "status=$status&orderBy=%s&productID=$productID&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
     if($useDatatable) include '../../common/view/datatable.html.php';
     else              include '../../common/view/tablesorter.html.php';
 
@@ -163,12 +150,6 @@ $(document).on('click', '.plan-toggle', function(e)
 
     e.stopPropagation();
     e.preventDefault();
-});
-
-$('#project').change(function()
-{
-    var projectID = $('#project').val();
-    location.href = createLink('execution', 'all', 'status=' + status + '&projectID=' + projectID);
 });
 </script>
 <?php js::set('orderBy', $orderBy)?>

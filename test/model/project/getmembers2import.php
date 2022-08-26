@@ -9,6 +9,9 @@ title=测试 projectModel->getMembers2Import();
 cid=1
 pid=1
 
+获取id为11的项目团队成员个数,排除admin >> 1
+获取id为11的项目团队成员的角色 >> 产品经理92
+
 */
 
 global $tester;

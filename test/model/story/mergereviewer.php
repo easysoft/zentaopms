@@ -10,7 +10,12 @@ title=测试 storyModel->mergeReviewer();
 cid=1
 pid=1
 
-
+获取需求301的评审人 >> admin
+获取需求301的待评审人 >> admin
+获取产品76下的需求评审人 >> admin
+获取产品76下的需求待评审人 >> admin
+获取产品76下的需求评审人 >> admin
+获取产品76下的需求待评审人 >> admin
 
 */
 

@@ -51,6 +51,12 @@ $(function()
     {
         hiddenRequireFields();
     });
+
+    $('select[id^="duplicateStoryIDList"]').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto'
+    });
 });
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.

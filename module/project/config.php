@@ -69,7 +69,7 @@ $config->project->datatable->fieldList['PM']['pri']      = '2';
 
 $config->project->datatable->fieldList['status']['title']    = 'status';
 $config->project->datatable->fieldList['status']['fixed']    = 'left';
-$config->project->datatable->fieldList['status']['width']    = '80';
+$config->project->datatable->fieldList['status']['width']    = '65';
 $config->project->datatable->fieldList['status']['required'] = 'no';
 $config->project->datatable->fieldList['status']['sort']     = 'yes';
 $config->project->datatable->fieldList['status']['pri']      = '2';
@@ -88,7 +88,7 @@ $config->project->datatable->fieldList['end']['pri']      = '3';
 
 $config->project->datatable->fieldList['budget']['title']    = 'budget';
 $config->project->datatable->fieldList['budget']['fixed']    = 'no';
-$config->project->datatable->fieldList['budget']['width']    = '80';
+$config->project->datatable->fieldList['budget']['width']    = '100';
 $config->project->datatable->fieldList['budget']['required'] = 'yes';
 $config->project->datatable->fieldList['budget']['pri']      = '3';
 
@@ -175,9 +175,9 @@ $config->project->search['params']['closedDate']     = array('operator' => '='  
 $config->project->includedPriv['project']    = array('edit', 'group', 'createGroup', 'managePriv', 'manageMembers', 'manageGroupMember', 'copyGroup', 'editGroup', 'start', 'suspend', 'close', 'activate', 'delete', 'view', 'whitelist', 'addWhitelist', 'unbindWhitelist', 'manageProducts', 'dynamic', 'build', 'bug', 'testcase', 'testtask', 'testreport', 'execution', 'team', 'unlinkMember');
 $config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
 $config->project->includedPriv['task']       = array('create');
-$config->project->includedPriv['story']      = array('create', 'batchCreate', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'batchChangePlan', 'batchChangeStage', 'assignTo', 'batchAssignTo', 'activate', 'zeroCase', 'batchEdit', 'import', 'showImport', 'exportTemplet', 'importToLib', 'batchImportToLib', 'relation', 'browse');
-$config->project->includedPriv['bug']        = array('create', 'confirmBug', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplet');
-$config->project->includedPriv['testcase']   = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchCaseTypeChange', 'exportTemplet', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit');
+$config->project->includedPriv['story']      = array('create', 'batchCreate', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'batchChangePlan', 'batchChangeStage', 'assignTo', 'batchAssignTo', 'activate', 'zeroCase', 'batchEdit', 'import', 'showImport', 'exportTemplate', 'importToLib', 'batchImportToLib', 'relation', 'browse');
+$config->project->includedPriv['bug']        = array('create', 'confirmBug', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate');
+$config->project->includedPriv['testcase']   = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchCaseTypeChange', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit');
 $config->project->includedPriv['testtask']   = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'browseUnits', 'unitCases', 'importUnitResult', 'batchRun', 'runDeployCase', 'deployCaseResults');
 $config->project->includedPriv['doc']        = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'delete', 'deleteFile', 'allLibs', 'objectLibs', 'collect', 'tableContents', 'showFiles', 'diff', 'manageBook', 'importToPracticeLib', 'importToComponentLib');
 $config->project->includedPriv['repo']       = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'editBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');

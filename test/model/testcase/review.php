@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -52,4 +53,4 @@ r($testcase->reviewTest($caseIDList[1], $case2)) && p('0:field,old,new') && e('r
 r($testcase->reviewTest($caseIDList[2], $case3)) && p('0:field,old,new') && e('status,wait,normal');     // 测试评审用例 3
 r($testcase->reviewTest($caseIDList[3], $case4)) && p('0:field,old,new') && e('reviewedBy,admin,test4'); // 测试评审用例 4
 r($testcase->reviewTest($caseIDList[4], $case5)) && p('0:field,old,new') && e('status,wait,normal');     // 测试评审用例 5
-system("./ztest init");
+$db->restoreDB();

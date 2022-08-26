@@ -46,8 +46,7 @@ class repo extends control
     public function commonAction($repoID = 0, $objectID = 0)
     {
         $tab = $this->app->tab;
-        $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
-        $this->repoGroup = $this->repo->getRepoGroup($tab, $objectID);
+        $this->repos = $this->repo->getRepoPairs($tab, $objectID);
 
         if($tab == 'project')
         {
@@ -343,6 +342,7 @@ class repo extends control
         $this->view->pager        = $pager;
         $this->view->logType      = $logType;
         $this->view->info         = $info;
+        $this->view->pathInfo     = $pathInfo;
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->position[] = $this->lang->repo->common;
@@ -491,7 +491,7 @@ class repo extends control
         $this->view->repo            = $repo;
         $this->view->repos           = $this->repos;
         $this->view->revisions       = $revisions;
-        $this->view->repoGroup       = $this->repoGroup;
+        $this->view->repoGroup       = $this->repo->getRepoGroup($this->app->tab, $objectID);
         $this->view->revision        = $revision;
         $this->view->infos           = $infos;
         $this->view->repoID          = $repoID;
@@ -741,6 +741,12 @@ class repo extends control
         $file  = $entry;
         $repo  = $this->repo->getRepoByID($repoID);
         $entry = $this->repo->decodePath($entry);
+
+        if($repo->SCM == 'Git' and !is_dir($repo->path))
+        {
+            $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
+            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
+        }
 
         $pathInfo = pathinfo($entry);
         $suffix   = '';
@@ -1253,10 +1259,11 @@ class repo extends control
     public function ajaxGetGogsProjects($gogsID)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
-        if(!$projects) $this->send(array('message' => array()));
-
         $options = "<option value=''></option>";
-        foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
+        if(!empty($projects))
+        {
+            foreach($projects as $project) $options .= "<option value='{$project->full_name}' data-name='{$project->name}'>{$project->full_name}</option>";
+        }
 
         return print($options);
     }
@@ -1403,7 +1410,6 @@ class repo extends control
     {
         $repo     = $this->repo->getRepoByID($repoID);
         $savePath = $this->app->getDataRoot() . 'repo';
-        $fileName = $savePath . DS . $repo->name . '.zip';
         if(!is_dir($savePath))
         {
             if(!is_writable($this->app->getDataRoot())) return print(js::alert(sprintf($this->lang->repo->error->noWritable, dirname($savePath))) . js::close());
@@ -1411,50 +1417,9 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if($repo->SCM == 'Gitlab')
-        {
-            $this->scm = $this->app->loadClass('scm');
-            $this->scm->setEngine($repo);
-            $url = $this->scm->getDownloadUrl($branch);
-        }
-        elseif($repo->SCM == 'Gitea')
-        {
-            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
-            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
-        }
-        elseif($repo->SCM == 'Subversion')
-        {
-            /* Checkout repo. */
-            chdir($savePath);
-            $this->scm = $this->app->loadClass('scm');
-            $this->scm->setEngine($repo);
-            $this->scm->exec('export ' . $repo->path);
-
-            /* Get repo name. */
-            $pathList = explode('/', trim($repo->path, '/'));
-            $repoDir  = end($pathList);
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($fileName);
-            if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
-
-            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
-        }
-        else
-        {
-            $gitDir = scandir($repo->path);
-            $files  = '';
-            foreach($gitDir as $path)
-            {
-                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
-            }
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($fileName);
-            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
-
-            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
-        }
+        $this->scm = $this->app->loadClass('scm');
+        $this->scm->setEngine($repo);
+        $url = $this->scm->getDownloadUrl($branch, $savePath);
 
         $this->locate($url);
     }

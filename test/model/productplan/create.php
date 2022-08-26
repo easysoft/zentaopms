@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -58,5 +59,5 @@ r($plan->create($noBeginEnd)) && p()            && e('113');                    
 r($plan->create($noUid))      && p()            && e('114');                    //测试不传UID的情况
 r($plan->create($noProduct))  && p('product:0') && e('『产品』应当是数字。');   //测试不传关联产品的情况
 r($plan->create($noParent))   && p('parent:0')  && e('『父计划』应当是数字。'); //测试不传父级计划的情况
-system("./ztest init");
 ?>
+$db->restoreDB();

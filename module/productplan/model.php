@@ -105,9 +105,10 @@ class productplanModel extends model
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,bySearch,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,bySearch,review,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($productplanQuery)->fi()
+            ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -115,16 +116,21 @@ class productplanModel extends model
 
         if(!empty($plans))
         {
-            $plans      = $this->reorder4Children($plans);
-            $planIdList = array_keys($plans);
+            $plans        = $this->reorder4Children($plans);
+            $planIdList   = array_keys($plans);
+            $planProjects = array();
 
-            $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($product)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.plan')->in(array_keys($plans))
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->fetchPairs('plan', 'project');
+            foreach($planIdList as $planID)
+            {
+                $planProjects[$planID] = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($product)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t1.plan')->like(",$planID,")
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
+                    ->orderBy('project_desc')
+                    ->fetch('project');
+            }
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
@@ -443,6 +449,8 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
             ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->remove('delta,uid,future')
             ->get();
 
@@ -1017,7 +1025,7 @@ class productplanModel extends model
             {
                 foreach($planStory as $id => $story)
                 {
-                    if($story->status == 'draft')
+                    if($story->status == 'draft' or $story->status == 'reviewing')
                     {
                         unset($planStory[$id]);
                         continue;

@@ -192,7 +192,7 @@ class projectModel extends model
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->eq($projectID)
-            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('`type`')->in($type)->fi()
             ->fetch();
 
         if(!$project) return false;
@@ -240,7 +240,7 @@ class projectModel extends model
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentProgram($project);
@@ -259,7 +259,7 @@ class projectModel extends model
     {
         if($project->parent == 0) return '';
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
@@ -350,7 +350,7 @@ class projectModel extends model
      */
     public function getTotalStoriesByProject($projectIdList = 0)
     {
-        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changed', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.type')->eq('story')
@@ -437,7 +437,7 @@ class projectModel extends model
             $progressList[$projectID] = $progress;
         }
 
-        return is_numeric($projectIDList) ? $progressList[$projectIDList] : $progressList;
+        return is_numeric($projectIDList) ? (empty($progressList) ? 0 : $progressList[$projectIDList]) : $progressList;
     }
 
     /**
@@ -758,7 +758,7 @@ class projectModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
@@ -797,16 +797,17 @@ class projectModel extends model
     /**
      * Get project by id list.
      *
-     * @param  array    $projectIdList
+     * @param  array  $projectIdList
+     * @param  string $mode all
      * @access public
      * @return object
      */
-    public function getByIdList($projectIdList = array())
+    public function getByIdList($projectIdList = array(), $mode = '')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');
     }
 
@@ -1093,6 +1094,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         $linkedProductsCount = 0;
         if(isset($_POST['products']))
@@ -1107,29 +1109,11 @@ class projectModel extends model
         if($project->parent)
         {
             $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
-            $project->budgetUnit = $program->budgetUnit;
-            if(isset($project->budget) and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($availableBudget > 0 and $project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
 
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
-                dao::$errors[] = $this->lang->project->productNotEmpty;
+                dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
             }
         }
@@ -1369,30 +1353,6 @@ class projectModel extends model
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
-        if($project->parent)
-        {
-            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent project. */
-            $project->budgetUnit = $program->budgetUnit;
-            if($project->budget != 0 and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
-        }
-
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
             ->where('project')->eq($project->id)
             ->andWhere('deleted')->eq('0')
@@ -1553,25 +1513,6 @@ class projectModel extends model
             $projects[$projectID]->lastEditedDate = helper::now();
 
             if(isset($data->codes)) $projects[$projectID]->code = $projectCode;
-            if($projects[$projectID]->parent)
-            {
-                $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
-
-                if($parentProject)
-                {
-                    /* Child project begin cannot less than parent. */
-                    if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
-                    {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->beginGreateChild, $parentProject->begin) . "\n";
-                    }
-
-                    /* When parent set end then child project end cannot greater than parent. */
-                    if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
-                    {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->endLetterChild, $parentProject->end) . "\n";
-                    }
-                }
-            }
 
             foreach($extendFields as $extendField)
             {
@@ -1583,6 +1524,7 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -1594,8 +1536,8 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}'")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}'")
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}' and `deleted` = '0'")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($projectID)
                 ->exec();
@@ -2088,7 +2030,7 @@ class projectModel extends model
                     echo $project->end;
                     break;
                 case 'status':
-                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
+                    echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
                 case 'budget':
                     echo $budgetTitle;
@@ -2323,179 +2265,6 @@ class projectModel extends model
     }
 
     /**
-     * Get project stats.
-     *
-     * @param  int     $projectID
-     * @param  string  $status
-     * @param  int     $productID
-     * @param  int     $itemCounts
-     * @param  string  $orderBy
-     * @param  object  $pager
-     * @access public
-     * @return array
-     */
-    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null, $withTasks = false)
-    {
-        if(empty($productID))
-        {
-            $myExecutionIDList = array();
-            if($status == 'involved')
-            {
-                $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
-                    ->where('account')->eq($this->app->user->account)
-                    ->andWhere('type')->eq('execution')
-                    ->fetchPairs();
-            }
-
-            $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
-                ->beginIF($projectID == 0 and $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-                ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
-                ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.deleted')->eq('0')
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            $executions = $this->dao->select('t2.*,t3.name projectName, t3.model as projectModel')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-                ->where('t1.product')->eq($productID)
-                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-                ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t2.vision')->eq($this->config->vision)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-
-        $hours     = $this->computerProgress($executions);
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-
-        /* Get burndown charts datas. */
-        $burns = $this->dao->select('execution, date AS name, `left` AS value')
-            ->from(TABLE_BURN)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('task')->eq(0)
-            ->orderBy('date desc')
-            ->fetchGroup('execution', 'name');
-
-        $this->loadModel('execution');
-        foreach($burns as $executionID => $executionBurns)
-        {
-            /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            $begin = $executions[$executionID]->begin;
-            $end   = $executions[$executionID]->end;
-            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->execution->processBurnData($executionBurns, $itemCounts, $begin, $end);
-
-            /* Shorter names. */
-            foreach($executionBurns as $executionBurn)
-            {
-                $executionBurn->name = substr($executionBurn->name, 5);
-                unset($executionBurn->execution);
-            }
-
-            ksort($executionBurns);
-            $burns[$executionID] = $executionBurns;
-        }
-
-        if($withTasks)
-        {
-            $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
-                ->where('deleted')->eq(0)
-                ->andWhere('status')->notin('closed,cancel')
-                ->andWhere('execution')->in(array_keys($executions))
-                ->orderBy('id_asc')
-                ->fetchGroup('execution', 'id');
-
-            foreach($executionTasks as $executionID => $tasks)
-            {
-                foreach($tasks as $task)
-                {
-                    if($task->parent > 0)
-                    {
-                        if(isset($executionTasks[$executionID][$task->parent]))
-                        {
-                            $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
-                            unset($executionTasks[$executionID][$task->id]);
-                        }
-                    }
-                }
-            }
-        }
-
-        /* Process executions. */
-        $parents  = array();
-        $children = array();
-        foreach($executions as $key => $execution)
-        {
-            /* Process the end time. */
-            $execution->end = date(DT_DATE1, strtotime($execution->end));
-
-            /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
-            {
-                $delay = helper::diffDate(helper::today(), $execution->end);
-                if($delay > 0) $execution->delay = $delay;
-            }
-
-            /* Process the burns. */
-            $execution->burns = array();
-            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
-            foreach($burnData as $data) $execution->burns[] = $data->value;
-
-            /* Process the hours. */
-            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-
-            $execution->children = array();
-            $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
-            if(isset($executionTasks) and isset($executionTasks[$execution->id]))
-            {
-                $tasks = array_chunk($executionTasks[$execution->id], 50, true);
-                $execution->tasks = $tasks[0];
-            }
-        }
-
-        /* In the case of the waterfall model, calculate the sub-stage. */
-        if($projectID == 0)
-        {
-            foreach($executions as $key => $execution)
-            {
-                if($execution->type == 'stage')
-                {
-                    $execution->children = isset($children[$execution->id]) ? $children[$execution->id] : array();
-                    unset($children[$execution->id]);
-                }
-            }
-        }
-        $project = $this->getByID($projectID);
-        if($project and $project->model == 'waterfall')
-        {
-            foreach($parents as $id => $execution)
-            {
-                $execution->children = isset($children[$id]) ? $children[$id] : array();
-                unset($children[$id]);
-            }
-        }
-
-        $orphan = array();
-        foreach($children as $child) $orphan = array_merge($child, $orphan);
-
-        return array_merge($parents, $orphan);
-    }
-
-    /**
      * Get stats for project kanban.
      *
      * @access public
@@ -2506,7 +2275,7 @@ class projectModel extends model
         $this->loadModel('program');
 
         $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->getStats(0, 'doing');
+        $executions = $this->loadModel('execution')->getStatData(0, 'doing');
 
         $doingExecutions  = array();
         $latestExecutions = array();
@@ -2641,9 +2410,10 @@ class projectModel extends model
     public function setMenu($objectID)
     {
         global $lang;
-        $project = $this->getByID($objectID);
 
-        $model = 'scrum';
+        $model    = 'scrum';
+        $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
+        $project  = $this->getByID($objectID);
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2680,7 +2450,6 @@ class projectModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
-        $project = $this->getById($objectID);
 
         if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 

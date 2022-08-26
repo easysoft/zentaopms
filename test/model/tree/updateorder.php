@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +28,4 @@ r($tree->updateOrderTest($orders1)) && p() && e(',2221,2821,1822,2822,1823,2222,
 r($tree->updateOrderTest($orders2)) && p() && e(',2221,2821,1822,2822,1823,1824,2222,2223,2224'); // 测试更新模块顺序 2
 r($tree->updateOrderTest($orders3)) && p() && e(',2221,2822,1822,2821,1823,1824,2222,2223,2224'); // 测试更新模块顺序 3
 r($tree->updateOrderTest($orders4)) && p() && e(',1984,2901,2381,2902,2382,2383,2384'); // 测试更新模块顺序 4
-system("./ztest init");
+$db->restoreDB();

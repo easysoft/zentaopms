@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -18,11 +19,10 @@ pid=1
 测试创建看板公开执行 >> 新增公开看板执行code,kanban
 测试创建迭代团队分配 >> pd58,pd72,dev10,dev10
 测试不输入项目 >> 所属项目不能为空。
-测试不输入产品 >> 关联产品不能为空！
 测试不输入执行名称 >> 『执行名称』不能为空。
 测试不输入执行代号 >> 『执行代号』不能为空。
-测试一样的执行名称 >> 『执行名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
-测试一样的执行代号 >> 『执行代号』已经有『新增私有敏捷执行code』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+测试一样的执行名称 >> 『执行名称』已经有『新增私有敏捷执行』这条记录了。
+测试一样的执行代号 >> 『执行代号』已经有『新增私有敏捷执行code』这条记录了。
 
 */
 
@@ -55,10 +55,9 @@ r($task->createObject($prvExecution_kanban, $projectIDList[3], $dayNum, $days)) 
 r($task->createObject($openExecution_kanban, $projectIDList[3], $dayNum, $days))    && p('code,type')   && e('新增公开看板执行code,kanban');                                                                                   // 测试创建看板公开执行
 r($task->createObject($teamExecution, $projectIDList[1], $dayNum, $days))           && p('PO,QD,PM,RD') && e('pd58,pd72,dev10,dev10');                                                                                         // 测试创建迭代团队分配
 r($task->createObject($prvExecution, '', $dayNum, $days))                           && p('message:0')   && e('所属项目不能为空。');                                                                                            // 测试不输入项目
-r($task->createObject($noProductID, $projectIDList[1], $dayNum, $days))             && p('message:0')   && e('关联产品不能为空！');                                                                                            // 测试不输入产品
 r($task->createObject($noName, $projectIDList[1], $dayNum, $days))                  && p('name:0')      && e('『执行名称』不能为空。');                                                                                        // 测试不输入执行名称
 r($task->createObject($noCode, $projectIDList[1], $dayNum, $days))                  && p('code:0')      && e('『执行代号』不能为空。');                                                                                        // 测试不输入执行代号
-r($task->createObject($equallyName, $projectIDList[1], $dayNum, $days))             && p('name:0')      && e('『执行名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');     // 测试一样的执行名称
-r($task->createObject($equallyCode, $projectIDList[1], $dayNum, $days))             && p('code:0')      && e('『执行代号』已经有『新增私有敏捷执行code』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试一样的执行代号
+r($task->createObject($equallyName, $projectIDList[1], $dayNum, $days))             && p('name:0')      && e('『执行名称』已经有『新增私有敏捷执行』这条记录了。');     // 测试一样的执行名称
+r($task->createObject($equallyCode, $projectIDList[1], $dayNum, $days))             && p('code:0')      && e('『执行代号』已经有『新增私有敏捷执行code』这条记录了。'); // 测试一样的执行代号
 
-system("./ztest init");
+$db->restoreDB();

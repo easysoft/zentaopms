@@ -203,7 +203,7 @@ $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",  'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
-$lang->product->viewMenu->track       = array('link' => "Track|story|track|productID=%s");
+$lang->product->viewMenu->track       = array('link' => "Track|product|track|productID=%s");
 $lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');

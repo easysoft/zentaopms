@@ -57,6 +57,9 @@ $(function()
 
             if(!changed) $("#parent").val(oldParent).trigger("chosen:updated");
             oldParent = $('#parent').val();
+
+            budgetOverrunTips();
+            outOfDateTip();
         });
     });
 

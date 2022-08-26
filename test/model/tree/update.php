@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/tree.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +33,4 @@ r($tree->updateTest($moduleID[0], $changeParent)) && p('root,branch,parent,name,
 r($tree->updateTest($moduleID[0], $changeName))   && p('root,branch,parent,name,short') && e('2,0,1822,修改后的模块名,模块简称1');    // 测试更新module 1821 的 root
 r($tree->updateTest($moduleID[0], $changeShort))  && p('root,branch,parent,name,short') && e('2,0,1822,修改后的模块名,修改后的简称'); // 测试更新module 1821 的 root
 r($tree->updateTest($moduleID[1], $changeBranch)) && p('root,branch,parent,name,short') && e('41,1,0,产品模块161,模块简称161');       // 测试更新module 1981 的 root
-system("./ztest init");
+$db->restoreDB();

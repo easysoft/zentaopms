@@ -75,7 +75,7 @@
                     <th class="text-left"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
                     <th class='c-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-80px text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-                    <th class='w-90px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+                    <th class='w-90px text-center'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                     <th class='w-100px'><?php common::printOrderLink('stage',  $orderBy, $vars, $lang->story->stageAB);?></th>
                     <th class='c-actions-1'><?php echo $lang->actions?></th>
                   </tr>
@@ -96,13 +96,13 @@
                     <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'>
                       <?php
-                      if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                      if($story->parent > 0) echo "<span class='label label-badge label-light' title='{$lang->story->childrenAB}'>{$lang->story->childrenAB}</span>";
                       echo html::a($storyLink,$story->title, '', "class='preview'");
                       ?>
                     </td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td class='text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-                    <td>
+                    <td class='text-center'>
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -196,7 +196,7 @@
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo substr($bug->openedDate, 5, 11)?></td>
                     <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                    <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                    <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                     <td class='c-actions'>
                       <?php
                       if(common::hasPriv('release', 'unlinkBug') and $canBeChanged)

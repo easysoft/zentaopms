@@ -15,6 +15,7 @@
 .icon-exclamation-sign.icon {color:#2667E3; margin-right: 8px;}
 .notice {color:#2667E3; margin-left: 12px;}
 </style>
+<?php js::set('adminLang', $lang->admin);?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -40,7 +41,7 @@
           <tr>
             <th class='thWidth'><?php echo $lang->admin->safe->password?></th>
             <td class='w-250px'><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
-            <td class='notice'><?php echo $lang->admin->safe->noticeMode?></td>
+            <td class='notice'><?php echo !empty($config->safe->changeWeak) ? $lang->admin->safe->noticeWeakMode : $lang->admin->safe->noticeMode;?></td>
           </tr>
           <tr id='mode1Rule' class='hidden'>
             <th></th>
@@ -62,7 +63,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->changeWeak?></th>
-            <td colspan='2'><?php echo html::radio('changeWeak', $lang->admin->safe->modifyPasswordList, isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0)?></td>
+            <td colspan='2'><?php echo html::radio('changeWeak', $lang->admin->safe->modifyPasswordList, isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0, "onchange='changeWeakChange(this.value)'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->modifyPasswordFirstLogin?></th>

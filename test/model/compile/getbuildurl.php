@@ -10,6 +10,11 @@ title=测试 compileModel->getBuildUrl();
 cid=1
 pid=1
 
+检测password为空时获取的信息 >> 123456:zxd
+检测token为空时获取的信息 >> pms.cc.cc/job/11/buildWithParameters/api/json
+检测jenkins为空时获取的信息 >> /job//buildWithParameters/api/json
+检测jenkins为空时获取的信息 >> :
+
 */
 $jenkins1 = new stdclass();
 $jenkins1->url      = 'pms.cc.cc'; 

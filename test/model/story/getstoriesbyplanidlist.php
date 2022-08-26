@@ -9,7 +9,11 @@ title=测试 storyModel->getStoriesByPlanIdList();
 cid=1
 pid=1
 
-
+传入计划ID列表，获取其下面的需求数量 >> 20
+传入计划ID列表，查看其下面的需求详情 >> 软件需求388,story,draft
+传入计划ID列表，获取其下面的需求数量 >> 20
+传入计划ID列表，查看其下面的需求详情 >> 软件需求392,story,draft
+传入空的计划ID列表，获取系统中所有需求数量 >> 424
 
 */
 

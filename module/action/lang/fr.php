@@ -57,6 +57,7 @@ $lang->action->historyEdit        = "l'historique Edité Par ne peut pas être v
 $lang->action->noDynamic          = "Pas d'historique.";
 $lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 $lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
+$lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
 
 $lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
 $lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';
@@ -220,6 +221,8 @@ $lang->action->desc->updatetolib          = '$date, MàJ de ' . $lang->testcase-
 $lang->action->desc->adjusttasktowait     = '$date, System Reminder: The task status will be set to Not Started as the consumed work hour is adjusted to 0. ' . "\n";
 $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -242,10 +245,10 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> a fait 
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> a délié le CasTest <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
-$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
@@ -273,6 +276,7 @@ $lang->action->label->blocked               = 'a bloqué ';
 $lang->action->label->resolved              = 'a résolu ';
 $lang->action->label->reviewed              = 'a revu ';
 $lang->action->label->recalled              = 'recalled';
+$lang->action->label->recalledchange        = 'undo changes';
 $lang->action->label->moved                 = 'a déplacé ';
 $lang->action->label->confirmed             = 'a confirmé Story ';
 $lang->action->label->bugconfirmed          = 'a confirmé le Bug ';
@@ -384,6 +388,8 @@ $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
 $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
+$lang->action->label->ganttmove             = 'sorted';
+$lang->action->label->submitreview          = 'submitted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -541,6 +547,7 @@ $lang->action->dynamicAction->task['undeleted']           = 'Restaurer Tâche';
 $lang->action->dynamicAction->task['hidden']              = 'Masquer Tâche';
 $lang->action->dynamicAction->task['svncommited']         = 'Committer SVN';
 $lang->action->dynamicAction->task['gitcommited']         = 'Committer GIT';
+$lang->action->dynamicAction->task['ganttmove']           = 'Order';
 
 $lang->action->dynamicAction->build['opened']  = 'Créer Build';
 $lang->action->dynamicAction->build['edited']  = 'Editer Build';

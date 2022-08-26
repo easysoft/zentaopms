@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -34,5 +35,5 @@ $late['end']      = '2021-10-10';
 r($plan->update($planId[0], $posts)) && p('0:old') && e('1.1'); //修改planId=5的数据,打印出旧的名称
 r($plan->update($planId[0], $posts)) && p('0:old') && e('0');   //二次修改旧的数据，由于数据发生变化，理应失败
 r($plan->update($planId[0], $late))  && p('end')   && e('父计划[5]的完成日期：2021-10-10，不能小于子计划的完成日期: 2021-10-26');   //测试传入结束时间小于开始时间的情况
-system("./ztest init");
 ?>
+$db->restoreDB();

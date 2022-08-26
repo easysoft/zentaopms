@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stakeholder.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -44,4 +45,4 @@ r($stakeholder->createTest($objectIDList[0],$noUser)[0])          && p()        
 r($stakeholder->createTest($objectIDList[2],$noKey))              && p('key:0')    && e('『key』不符合格式，应当为:『/0|1/』。');//输入错误的key值
 r($stakeholder->createTest($objectIDList[0],$teamStakeholder))    && p('user:0')   && e('『用户』已经有『po22』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');//创建相同的干系人
 
-system("./ztest init");
+$db->restoreDB();

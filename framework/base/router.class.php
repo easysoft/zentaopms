@@ -996,14 +996,7 @@ class baseRouter
             if($writable)
             {
                 $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-                session_set_save_handler(
-                    array($ztSessionHandler, "open"),
-                    array($ztSessionHandler, "close"),
-                    array($ztSessionHandler, "read"),
-                    array($ztSessionHandler, "write"),
-                    array($ztSessionHandler, "destroy"),
-                    array($ztSessionHandler, "gc")
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -1436,6 +1429,138 @@ class baseRouter
     }
 
     /**
+     * 设置要被调用方法的参数。
+     * Set the params of method calling.
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        try
+        {
+            $appName    = $this->appName;
+            $moduleName = $this->moduleName;
+            $methodName = $this->methodName;
+
+            /*
+             * 引入该模块的control文件。
+             * Include the control file of the module.
+             **/
+            $isExt = $this->setActionExtFile();
+            if($isExt)
+            {
+                $controlFile = $this->controlFile;
+                spl_autoload_register(function($class) use ($moduleName, $controlFile)
+                {
+                    if($class == $moduleName) include $controlFile;
+                });
+            }
+
+            $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
+
+            /* Check file is encode by ioncube. */
+            $isEncrypted = false;
+            if($isExt)
+            {
+                $fp = fopen($file2Included, 'r');
+                $line1 = fgets($fp);
+                $line2 = fgets($fp);
+                fclose($fp);
+                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+            }
+
+            /*
+             * 设置control的类名。
+             * Set the class name of the control.
+             **/
+            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+
+            /*
+             * 创建control类的实例。
+             * Create a instance of the control.
+             **/
+            $module = new $className();
+            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+            $this->control = $module;
+
+            /* include default value for module*/
+            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+
+            /*
+             * 使用反射机制获取函数参数的默认值。
+             * Get the default settings of the method to be called using the reflecting.
+             *
+             * */
+            $defaultParams = array();
+            $methodReflect = new reflectionMethod($className, $methodName);
+            foreach($methodReflect->getParameters() as $param)
+            {
+                $name = $param->getName();
+
+                $default = '_NOT_SET';
+                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted and $param->isDefaultValueAvailable())
+                {
+                    $default = $param->getDefaultValue();
+                }
+
+                $defaultParams[$name] = $default;
+            }
+
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
+            if ('cli' === PHP_SAPI)
+            {
+                if ($this->params)
+                {
+                    $this->params = array_merge($defaultParams, $this->params);
+                }
+                else
+                {
+                    $this->params = $defaultParams;
+                }
+            }
+            else
+            {
+                if($this->config->framework->filterParam == 2)
+                {
+                    $_GET     = validater::filterParam($_GET, 'get');
+                    $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+                }
+            }
+            return true;
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            echo $endResponseException->getContent();
+            return false;
+        }
+    }
+
+    /**
      * 获取一个模块的路径。
      * Get the path of one module.
      *
@@ -1532,8 +1657,14 @@ class baseRouter
     public function checkModuleName($var, $exit = true)
     {
         global $filter;
-        $rule = $filter->default->moduleName;
-        if(validater::checkByRule($var, $rule)) return true;
+        static $checkedModule = array();
+        if(!isset($checkedModule[$var]))
+        {
+            $rule   = $filter->default->moduleName;
+            $result = validater::checkByRule($var, $rule);
+            $checkedModule[$var] = $result;
+        }
+        if($checkedModule[$var]) return true;
         if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
@@ -2027,110 +2158,12 @@ class baseRouter
     public function loadModule()
     {
         try {
-            $appName    = $this->appName;
-            $moduleName = $this->moduleName;
-            $methodName = $this->methodName;
-
-            /*
-            * 引入该模块的control文件。
-            * Include the control file of the module.
-            **/
-            $isExt = $this->setActionExtFile();
-            if($isExt)
-            {
-                $controlFile = $this->controlFile;
-                spl_autoload_register(function($class) use ($moduleName, $controlFile)
-                {
-                    if($class == $moduleName) include $controlFile;
-                });
-            }
-
-            $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
-            chdir(dirname($file2Included));
-            helper::import($file2Included);
-
-            /*
-            * 设置control的类名。
-            * Set the class name of the control.
-            **/
-            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
-
-            /*
-            * 创建control类的实例。
-            * Create a instance of the control.
-            **/
-            $module = new $className();
-            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
-            $this->control = $module;
-
-            /* include default value for module*/
-            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
-
-            /*
-            * 使用反射机制获取函数参数的默认值。
-            * Get the default settings of the method to be called using the reflecting.
-            *
-            * */
-            $defaultParams = array();
-            $methodReflect = new reflectionMethod($className, $methodName);
-            foreach($methodReflect->getParameters() as $param)
-            {
-                $name = $param->getName();
-
-                $default = '_NOT_SET';
-                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
-                }
-                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$className][$methodName][$name];
-                }
-                elseif($param->isDefaultValueAvailable())
-                {
-                    $default = $param->getDefaultValue();
-                }
-
-                $defaultParams[$name] = $default;
-            }
-
-            /**
-             * 根据PATH_INFO或者GET方式设置请求的参数。
-             * Set params according PATH_INFO or GET.
-             */
-            if($this->config->requestType != 'GET')
-            {
-                $this->setParamsByPathInfo($defaultParams);
-            }
-            else
-            {
-                $this->setParamsByGET($defaultParams);
-            }
-
-            if ('cli' === PHP_SAPI)
-            {
-                if ($this->params)
-                {
-                    $this->params = array_merge($defaultParams, $this->params);
-                }
-                else
-                {
-                    $this->params = $defaultParams;
-                }
-            }
-            else
-            {
-                if($this->config->framework->filterParam == 2)
-                {
-                    $_GET     = validater::filterParam($_GET, 'get');
-                    $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
-                }
-            }
+            if(is_null($this->params) and !$this->setParams()) return false;
 
             /* 调用该方法   Call the method. */
-            call_user_func_array(array($module, $methodName), $this->params);
+            $module = $this->control;
+
+            call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
             return $module;
         } catch (EndResponseException $endResponseException) {
@@ -3107,7 +3140,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $tagID;
@@ -3171,6 +3204,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         $this->sessSavePath = $savePath;
@@ -3183,6 +3217,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return true;
@@ -3195,6 +3230,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3214,6 +3250,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3244,6 +3281,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3260,6 +3298,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifeTime)
     {
         $time = time();

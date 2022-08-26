@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -51,4 +52,4 @@ r($task->updateObject($taskIDList[6], $changeexecution))  && p('0:field,old,new'
 r($task->updateObject($taskIDList[8], $changedeadline))   && p('0:field,new')     && e("deadline,2022-03-29");   // 测试修改任务截止时间
 r($task->updateObject($taskIDList[0], $ckclosedReason))   && p('closedReason:0')  && e(' 『关闭原因』必须为空。');          // 测试修改任务关闭原因
 
-system("./ztest init");
+$db->restoreDB();

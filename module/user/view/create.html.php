@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'md5.js');?>
-<?php if(!empty($config->safe->mode)) $lang->user->placeholder->password1 = $lang->user->placeholder->passwordStrength[$config->safe->mode]?>
+<?php $lang->user->placeholder->password1 = zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '');?>
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
 <?php
@@ -110,6 +110,7 @@ $showVisionList = count($visionList) > 1;
           <th></th>
           <td class='text-center form-actions'>
             <?php if(!$showVisionList) echo html::hidden("visions[]", $this->config->vision);?>
+            <?php echo html::hidden('passwordLength', 0);?>
             <?php echo html::submitButton();?>
             <?php echo html::a($this->createLink('company', 'browse'), $lang->goback, '', "class='btn btn-wide'")?>
           </td>

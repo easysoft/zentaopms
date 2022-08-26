@@ -90,7 +90,7 @@ $(function()
             output += checkbox;
         });
         $.closeModal();
-        parent.$('#linkBugsBox').html(output);
+        parent.$('#linkBugsBox').html(output).closest('tr').removeClass('hidden');
         return false;
     });
 });

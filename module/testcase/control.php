@@ -296,6 +296,72 @@ class testcase extends control
     }
 
     /**
+     * Show zero case story.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  string $orderBy
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
+        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
+
+        $this->loadModel('story');
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+            $this->app->rawModule = 'qa';
+            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
+            $productID = $this->product->saveState($productID, $products);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'zeroCase', "projectID=$projectID", $branchID);
+        }
+        else
+        {
+            $products  = $this->product->getPairs();
+            $productID = $this->product->saveState($productID, $products);
+            $this->loadModel('qa');
+            $this->app->rawModule = 'testcase';
+            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
+            $this->qa->setMenu($products, $productID, $branchID);
+        }
+
+        /* Append id for secend sort. */
+        $sort    = common::appendOrder($orderBy);
+        $stories = $this->story->getZeroCase($productID, $branchID, $sort);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($stories);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $stories  = array_chunk($stories, $pager->recPerPage);
+
+        $this->view->title      = $this->lang->story->zeroCase;
+        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
+        $this->view->position[] = $this->lang->story->zeroCase;
+
+        $this->view->stories    = empty($stories) ? $stories : $stories[$pageID - 1];
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->projectID  = $projectID;
+        $this->view->productID  = $productID;
+        $this->view->branchID   = $branchID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->browseType = '';
+        $this->view->product    = $this->product->getByID($productID);
+        $this->view->pager      = $pager;
+        $this->display();
+    }
+
+    /**
      * Create a test case.
      * @param        $productID
      * @param string $branch
@@ -1037,8 +1103,7 @@ class testcase extends control
             $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($tab == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
-                ->beginIF($tab != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
+                ->andWhere('t1.id')->in($caseIDList)
                 ->fetchAll('id');
             $caseIDList = array_keys($cases);
 
@@ -1305,10 +1370,13 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkCases($caseID, $browseType = '', $param = 0)
+    public function linkCases($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Get case and queryID. */
         $case    = $this->testcase->getById($caseID);
@@ -1327,14 +1395,21 @@ class testcase extends control
         /* Get cases to link. */
         $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);
 
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal   = count($cases2Link);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $cases2Link = array_chunk($cases2Link, $pager->recPerPage);
+
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
         $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
-        $this->view->cases2Link = $cases2Link;
+        $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -1345,10 +1420,13 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $browseType
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs($caseID, $browseType = '', $param = 0)
+    public function linkBugs($caseID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('bug');
 
@@ -1366,11 +1444,18 @@ class testcase extends control
         /* Get cases to link. */
         $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
 
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal  = count($bugs2Link);
+        $pager     = new pager($recTotal, $recPerPage, $pageID);
+        $bugs2Link = array_chunk($bugs2Link, $pager->recPerPage);
+
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->linkBugs;
         $this->view->case       = $case;
-        $this->view->bugs2Link  = $bugs2Link;
+        $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -1731,7 +1816,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($productID)
+    public function exportTemplate($productID)
     {
         if($_POST)
         {

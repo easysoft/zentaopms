@@ -83,14 +83,13 @@ class upgradeModel extends model
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
 
-        $editions    = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
+        $fromEdition = $this->getEditionByVersion($fromVersion);
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
         /* Execute. */
-        $fromOpenVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition . 'Version'}[$fromVersion];
+        $fromOpenVersion = $this->getOpenVersion($fromVersion);
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
@@ -530,6 +529,26 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+                break;
+            case '17_4':
+                $this->rebuildFULLTEXT();
+                $this->updateSearchIndex();
+                if(!$executedXuanxuan)
+                {
+                    $table  = $this->config->db->prefix . 'im_chat';
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    if(!$exists)
+                    {
+                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+                    }
+                }
+                break;
+            case '17_5':
+                $this->updateOSAndBrowserOfBug();
+                $this->addURPriv();
+                $this->updateStoryStatus();
+                if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
+                break;
         }
 
         $this->deletePatch();
@@ -668,11 +687,20 @@ class upgradeModel extends model
             case 'biz6_4':
                 $this->importLiteModules();
                 break;
-            case 'biz7.0.beta1':
+            case 'biz7_0_beta1':
                 $this->processViewFields();
                 break;
-            case 'biz7.0':
+            case 'biz7_0':
                 $this->processFlowPosition();
+                break;
+            case 'biz7_4':
+                $this->processCreatedInfo();
+                $this->processCreatedBy();
+                $this->updateApproval();
+                $this->addDefaultRuleToWorkflow();
+                $this->processReviewLinkages();
+                $this->addFlowActions('biz7.4');
+                $this->addFlowFields('biz7.4');
                 break;
         }
     }
@@ -980,6 +1008,10 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.3'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.0.1.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
+            case '17_5':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.5'));
         }
 
         return $confirmContent;
@@ -1193,6 +1225,32 @@ class upgradeModel extends model
         }
 
         return $confirmContent;
+    }
+
+    /**
+     * Get edition by version.
+     *
+     * @param  string    $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersion($version)
+    {
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+    }
+
+    /**
+     * Get openVersion
+     *
+     * @param  int    $version.
+     * @access public
+     * @return string
+     */
+    public function getOpenVersion($version)
+    {
+        $edition = $this->getEditionByVersion($version);
+        return is_numeric($version[0]) ? $version : zget($this->config->upgrade->{$edition . 'Version'}, $version);
     }
 
     /**
@@ -2993,7 +3051,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'testsuite';
-            $newMethods   = array('batchCreateCase', 'exportTemplet', 'import', 'showImport');
+            $newMethods   = array('batchCreateCase', 'exportTemplate', 'import', 'showImport');
             foreach($newMethods as $method)
             {
                 $data->method = $method;
@@ -3158,22 +3216,26 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
-        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
             if(strpos($fromVersion, 'pro') !== false)
             {
-                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(strpos($fromVersion, 'biz') !== false)
             {
-                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(version_compare($fromVersion, '15.0.rc1', '<'))
             {
-                $needProcess['search'] = true;
+                $needProcess['search'] = 'notice';
             }
         }
+
+        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
+        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
+
         return $needProcess;
     }
 
@@ -4004,7 +4066,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('browse')->where('module')->eq('testsuite')->andWhere('method')->eq('library')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('create')->where('module')->eq('testsuite')->andWhere('method')->eq('createLib')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('view')->where('module')->eq('testsuite')->andWhere('method')->eq('libView')->exec();
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplet,import,showImport,batchCreateCase,createCase')->exec();
+        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplate,import,showImport,batchCreateCase,createCase')->exec();
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
@@ -4880,17 +4942,17 @@ class upgradeModel extends model
 
         if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
 
         /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -6277,7 +6339,7 @@ class upgradeModel extends model
         {
             if(!empty($story->assignedTo))
             {
-                $story->reviewer = $story->assingnedTo;
+                $story->reviewer = $story->assignedTo;
             }
             elseif(!empty($story->PO))
             {
@@ -6734,5 +6796,412 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Process created information.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCreatedInfo()
+    {
+        $objectTypes = array('productplan', 'release', 'testtask', 'build');
+        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK, 'build' => TABLE_BUILD);
+
+        $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
+        foreach($actions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $action)
+            {
+                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update approval process in Workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateApproval()
+    {
+        /* Judge whether the action has opened the approval process before. */
+        /* 判断动作 看之前是否开启过审批流 */
+        $actions = $this->dao->select('id, module, action, createdDate')->from(TABLE_WORKFLOWACTION)
+            ->where('role')->eq('approval')
+            ->andWhere('action')->in('submit, cancel, review')
+            ->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $module     = $action->module;
+            $actionCode = $action->action;
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('action')->eq('approval' . $action->action)->where('id')->eq($id)->exec();
+            /* Change the approval action of the module that has already enabled the approval function */
+            /* 改原来已经开启过审批功能的模块的审批动作 */
+            if(isset($this->config->upgrade->recoveryActions->{$module}->{$actionCode}))
+            {
+                $data = array_merge($this->config->upgrade->defaultActions, $this->config->upgrade->recoveryActions->{$module}->{$actionCode});
+                if(isset($data['hasLite']) && $data['hasLite'] === true)
+                {
+                    unset($data['hasLite']);
+                    $liteData = $data;
+                    $liteData['vision'] = 'lite';
+                    $this->dao->insert(TABLE_WORKFLOWACTION)->data($liteData)->exec();
+                }
+                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+
+            /* Change history */
+            /* 改历史记录 */
+            $this->dao->update(TABLE_ACTION)->set('action')->eq('approval' . $action->action)->where('objectType')->eq($module)->andWhere('action')->eq($action->action)->andWhere('date')->gt($action->createdDate)->exec();
+
+            /* Change the action field of the workflowlayout table */
+            /* 改workflowlayout表的action字段 */
+            $this->dao->update(TABLE_WORKFLOWLAYOUT)->set('action')->eq('approval' . $action->action)->where('module')->eq($module)->andWhere('action')->eq($action->action)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process createdBy of conditions.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCreatedBy()
+    {
+        $this->app->loadLang('workflow');
+        $this->app->loadModuleConfig('workflow');
+
+        $modules = $this->dao->select('module')->from(TABLE_WORKFLOW)->where('buildin')->eq('1')->andWhere('approval')->eq('enabled')->andWhere('module')->in(array_keys($this->config->workflow->buildin->createdBy))->fetchPairs();
+        $actions = $this->dao->select('id, module, conditions')->from(TABLE_WORKFLOWACTION)->where('module')->in($modules)->andWhere('action')->in('submit, cancel, edit, delete')->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $conditions = json_decode($action->conditions);
+            if(empty($conditions)) continue;
+
+            foreach($conditions as $index => $condition)
+            {
+                foreach($condition->fields as $field)
+                {
+                    if($field->field == 'createdBy' && zget($this->config->workflow->buildin->createdBy, $action->module, '')) $field->field = zget($this->config->workflow->buildin->createdBy, $action->module);
+                }
+                $conditions[$index] = $condition;
+            }
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('conditions')->eq(json_encode($conditions))->where('id')->eq($id)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update story search index.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSearchIndex()
+    {
+        $requirementIds = $this->dao->select('t1.id')->from(TABLE_SEARCHINDEX)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t2.type')->eq('requirement')
+            ->fetchPairs('id');
+        $this->dao->update(TABLE_SEARCHINDEX)->set('objectType')->eq('requirement')->where('id')->in($requirementIds)->exec();
+    }
+
+    /**
+     * Add required rule to the built-in workflow status field.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultRuleToWorkflow()
+    {
+        $notemptyRule = $this->dao->select('id')->from(TABLE_WORKFLOWRULE)->where('rule')->eq('notempty')->fetch();
+        if(empty($notemptyRule)) return false;
+
+        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('buildin')->eq(1)->fetchAll();
+
+        foreach($fields as $field)
+        {
+            if(strpos(',' . $field->rules . ',', ',' . $notemptyRule->id . ',') !== false) continue;
+
+            $rules = $notemptyRule->id;
+            if(!empty($field->rules)) $rules = $field->rules . ',' . $rules;
+
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('rules')->eq($rules)->where('id')->eq($field->id)->exec();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * Add workflow actions.
+     *
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function addFlowActions($version)
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $upgradeLang   = $this->lang->workflowaction->upgrade[$version];
+        $upgradeConfig = $this->config->workflowaction->upgrade[$version];
+        if(empty($upgradeLang) || empty($upgradeConfig)) return true;
+
+        $this->lang->workflowaction->upgrade   = new stdclass();
+        $this->config->workflowaction->upgrade = new stdclass();
+        foreach($upgradeLang as $module => $labels)
+        {
+            $this->lang->workflowaction->upgrade->actions = $labels;
+            foreach($upgradeConfig[$module] as $code => $config) $this->config->workflowaction->upgrade->$code = $config;
+
+            $flow = $this->workflow->getByModule($module);
+            $this->workflow->createActions($flow, 'upgrade');
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('none')->set('role')->eq('buildin')->where('module')->eq($module)->andWhere('action')->in(array_keys($labels))->exec();
+            foreach($labels as $method => $label)
+            {
+                $workflowAction = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($method)->fetch();
+                unset($workflowAction->id);
+                $workflowAction->vision = $workflowAction->vision == 'lite' ? 'rnd' : 'lite';
+                $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
+            }
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * Add flow fields.
+     *
+     * @param  int    $version
+     * @access public
+     * @return bool
+     */
+    public function addFlowFields($version)
+    {
+        $this->loadModel('workflowfield');
+
+        $upgradeLang   = $this->lang->workflowfield->upgrade[$version];
+        $upgradeConfig = $this->config->workflowfield->upgrade[$version];
+
+        $now = helper::now();
+        foreach($upgradeLang as $module => $fields)
+        {
+            $field = new stdclass();
+            $field->buildin     = '1';
+            $field->role        = 'buildin';
+            $field->module      = $module;
+            $field->createdBy   = $this->app->user->account;
+            $field->createdDate = $now;
+
+            foreach($fields as $code => $name)
+            {
+                $field->field = $code;
+                $field->name  = $name;
+
+                $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                foreach($fieldConfig as $key => $value) $field->$key = $value;
+
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process review linkages of approval.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processReviewLinkages()
+    {
+        $linkagePairs = $this->dao->select('id, linkages')->from(TABLE_WORKFLOWACTION)->where('action')->eq('approvalreview')->andWhere('role')->eq('approval')->fetchPairs();
+
+        $oldLinkages = array();
+        $oldLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $oldLinkages[0]['sources'][0]['operator'] = '==';
+        $oldLinkages[0]['sources'][0]['value']    = 'reject';
+        $oldLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $oldLinkages[0]['targets'][0]['status']   = 'show';
+
+        $newLinkages = array();
+        $newLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $newLinkages[0]['sources'][0]['operator'] = '==';
+        $newLinkages[0]['sources'][0]['value']    = 'pass';
+        $newLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $newLinkages[0]['targets'][0]['status']   = 'hide';
+
+        foreach($linkagePairs as $id => $linkages)
+        {
+            if(helper::jsonEncode($oldLinkages) == $linkages)
+            {
+                $this->dao->update(TABLE_WORKFLOWACTION)->set('linkages')->eq(helper::jsonEncode($newLinkages))->where('id')->eq($id)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update story status.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryStatus()
+    {
+        /* After cancel the review of changed story, the story status should be "changing". */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
+
+        /* The draft story with reviewers should be "reviewing". */
+        $reviewingStories = $this->dao->select('story')->from(TABLE_STORYREVIEW)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id and t1.version = t2.version')
+            ->where('t2.status')->eq('draft')
+            ->andWhere('t2.version')->eq(1)
+            ->fetchPairs();
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('id')->in($reviewingStories)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Change FULLTEXT index for searchindex table.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildFULLTEXT()
+    {
+        try
+        {
+            $table   = TABLE_SEARCHINDEX;
+            $stmt    = $this->dao->query("show index from $table");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE {$table} ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `content`");
+        }
+        catch(PDOException $e){}
+
+        return true;
+    }
+
+    /**
+     * Check whether the field exists.
+     *
+     * @param  string  $table
+     * @param  string  $field
+     * @access public
+     * @return bool
+     */
+    public function checkFieldsExists($table, $field)
+    {
+        $result = $this->dbh->query("show columns from `$table` like '$field'");
+
+        return $result->rowCount() > 0;
+    }
+
+    /**
+     * Update OS and browser of bug.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateOSAndBrowserOfBug()
+    {
+        $existOSList        = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $existBrowserList   = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $deletedOSList      = array('vista', 'win2012', 'win2008', 'win2003', 'win2000', 'wp8', 'wp7', 'symbian', 'freebsd');
+        $deletedBrowserList = array('ie7', 'ie6', 'firefox4', 'firefox3', 'firefox2', 'opera11', 'opera10', 'opera9', 'maxthon', 'uc');
+        $existList          = array_merge($existOSList, $existBrowserList);
+        $deletedList        = array_merge($deletedOSList, $deletedBrowserList);
+
+        foreach($deletedList as $deletedLang)
+        {
+            if(in_array($deletedLang, $existList)) continue;
+            $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('bug')->andWhere('`key`')->eq($deletedLang)->andWhere('`system`')->eq(1)->andWhere('vision')->eq('rnd')->exec();
+        }
+
+        $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
+        $this->dao->update(TABLE_LANG)->set('value')->eq('Opera 系列')->where('module')->eq('bug')->andWhere('`key`')->eq('opera')->andWhere('value')->eq('opera 系列')->exec();
+        return true;
+    }
+
+    /**
+     * Add user requirement privilege when URAndSR is open.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addURPriv()
+    {
+        if(empty($this->config->URAndSR)) return true;
+
+        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $this->dbh->exec($sql);
+        return true;
+    }
+
+    /**
+     * Sync case to project|execution if case create from import.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project()
+    {
+        $linkStoryCases   = $this->dao->select('id, story, version, product')->from(TABLE_CASE)->where('story')->ne('0')->fetchAll('id');
+        $linkProjectCases = $this->dao->select('`case`, project')->from(TABLE_PROJECTCASE)->where('`case`')->ne('0')->andWhere('project')->ne('0')->fetchGroup('case', 'project');
+
+        if(empty($linkStoryCases)) return true;
+
+        $projectList = $this->dao->select('t1.project, t1.story, t1.product')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.status')->ne('closed')
+            ->fetchGroup('story', 'project');
+
+        if(empty($projectList)) return true;
+
+        foreach($linkStoryCases as $caseID => $case)
+        {
+            /* If story unlink project continue. */
+            if(!isset($projectList[$case->story])) continue;
+
+            $storyProjects = $projectList[$case->story];
+
+            $lastOrder = 1;
+            foreach($storyProjects as $projectID => $value)
+            {
+                /* If case linked project continue.*/
+                if(isset($linkProjectCases[$caseID][$projectID])) continue;
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = $case->version;
+                $data->order   = $lastOrder ++;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
     }
 }

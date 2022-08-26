@@ -8,11 +8,11 @@ title=测试 gitlabModel::apiGetTagPrivs();
 cid=1
 pid=1
 
-通过gitlabID,projectID,获取GitLab标签保护列表           >> 1
-通过gitlabID,projectID,获取GitLab标签保护数量           >> 1
-当前项目没有标签保护时,获取GitLab标签保护列表           >> 0
-当gitlabID存在,projectID不存在时,获取GitLab标签保护列表 >> return empty
-当gitlabID,projectID都为0时,获取GitLab标签保护列表      >> return empty
+通过gitlabID,projectID,获取GitLab标签保护列表 >> 1
+通过gitlabID,projectID,获取GitLab标签保护数量 >> 1
+当前项目没有标签保护时,获取GitLab标签保护列表 >> 0
+通过gitlabID,projectID,获取GitLab标签保护列表 >> return empty
+当gitlabID,projectID都为0时,获取GitLab标签保护列表 >> return empty
 
 */
 

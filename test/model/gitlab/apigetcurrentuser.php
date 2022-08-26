@@ -8,6 +8,12 @@ title=测试 gitlabModel::apiGetCurrentUser();
 cid=1
 pid=1
 
+使用空的数据获取用户信息 >> return false
+使用错误的host获取用户信息 >> return null
+使用正确的host,错误的token获取用户信息 >> 401 Unauthorized
+通过host,token获取用户信息 >> 1
+通过host,权限不足的token获取用户信息 >> insufficient_scope
+
 */
 
 $gitlab = $tester->loadModel('gitlab');

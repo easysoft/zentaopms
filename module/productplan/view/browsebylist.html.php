@@ -16,6 +16,7 @@
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php $label   = "<span class='text'>{$menuItem->text}</span>";?>

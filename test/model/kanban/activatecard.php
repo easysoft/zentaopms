@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -38,4 +39,4 @@ r($kanban->activateCardTest($cardIDList[2], $progressList[1])) && p('id,name,sta
 r($kanban->activateCardTest($cardIDList[3], $progressList[0])) && p('id,name,status,progress') && e('4,卡片4,doing,0');  // 测试激活卡片4，进度0
 r($kanban->activateCardTest($cardIDList[4], $progressList[1])) && p('id,name,status,progress') && e('5,卡片5,doing,50'); // 测试激活卡片5，进度0
 r($kanban->activateCardTest($cardIDList[5], $progressList[0])) && p('id,name,status,progress') && e('0');                // 测试激活不存在的卡片，进度0
-system("./ztest init");
+$db->restoreDB();

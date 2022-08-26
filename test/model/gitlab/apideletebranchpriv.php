@@ -8,10 +8,10 @@ title=测试 gitlabModel::apiDeleteBranchPriv();
 cid=1
 pid=1
 
-使用空的gitlabID、projectID、保护分支删除保护分支             >> return false
+使用空的gitlabID,projectID,分支名称删除保护分支 >> return false
 使用正确的gitlabID、保护分支信息，错误的projectID删除保护分支 >> 404 Project Not Found
-使用正确的gitlabID,projectID，保护分支删除保护分支            >> return true 
-使用错误的保护分支信息删除保护分支                            >> 404 Not found 
+通过gitlabID,projectID,分支名称正确删除保护分支 >> return true
+使用错误的保护分支信息删除保护分支 >> 404 Not found
 
 */
 

@@ -137,11 +137,12 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = 'List';
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
-$lang->execution->estimate = 'estimate';
-$lang->execution->consumed = 'consumed';
+$lang->execution->estimate = 'Estimate';
+$lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
 if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "copy Project/{$lang->execution->common} team members";
@@ -153,6 +154,7 @@ $lang->execution->putoff   = 'Delay';
 $lang->execution->suspend  = 'Suspend';
 $lang->execution->close    = 'Close';
 $lang->execution->export   = 'Export';
+$lang->execution->next     = "Next";
 
 $lang->execution->endList[7]   = '1 Week';
 $lang->execution->endList[14]  = '2 Weeks';
@@ -172,6 +174,7 @@ $lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team->account    = 'User';
 $lang->team->role       = 'Role';
+$lang->team->roleAB     = 'My Role';
 $lang->team->join       = 'Joined';
 $lang->team->hours      = 'Hours/day';
 $lang->team->days       = 'Day';
@@ -408,10 +411,11 @@ $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
 $lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
-$lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
+$lang->execution->storyDragError              = "The {$lang->SRCommon} is not active. Please activate and drag again.";
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = 'Seleted %s items';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -512,6 +516,11 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
+
 $lang->execution->myExecutions = 'Mine';
 $lang->execution->doingProject = 'Ongoing Projects';
 
@@ -527,10 +536,19 @@ $lang->execution->treeLevel['task']  = 'Stories&Tasks';
 $lang->execution->treeLevel['story'] = 'Only Stories';
 
 $lang->execution->action = new stdclass();
-$lang->execution->action->opened  = '$date, created by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->edited  = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
-$lang->execution->action->extra   = 'Linked products is %s.';
+$lang->execution->action->opened               = '$date, created by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->managed              = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->edited               = '$date, edited by <strong>$actor</strong>. $extra' . "\n";
+$lang->execution->action->extra                = 'Linked products is %s.';
+$lang->execution->action->startbychildactivate = '$date, activating the sub stage sets the execution status as Ongoing.' . "\n";
+$lang->execution->action->waitbychilddelete    = '$date, deleting the sub stage sets the execution status as waitting.' . "\n";
+$lang->execution->action->closebychilddelete   = '$date, deleting the sub stage sets the execution status as closing.' . "\n";
+$lang->execution->action->closebychildclose    = '$date, closing the sub stage sets the execution status as closing.' . "\n";
+
+$lang->execution->startbychildactivate = 'activated';
+$lang->execution->waitbychilddelete    = 'stop';
+$lang->execution->closebychilddelete   = 'closed';
+$lang->execution->closebychildclose    = 'closed';
 
 $lang->execution->statusColorList = array();
 $lang->execution->statusColorList['wait']      = '#0991FF';
@@ -539,11 +557,37 @@ $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
 if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
-$lang->execution->gantt->color[0] = 'bbb';
-$lang->execution->gantt->color[1] = 'ff5d5d';
-$lang->execution->gantt->color[2] = 'ff9800';
-$lang->execution->gantt->color[3] = '16a8f8';
-$lang->execution->gantt->color[4] = '00da88';
+$lang->execution->gantt->progressColor[0] = '#B7B7B7';
+$lang->execution->gantt->progressColor[1] = '#FF8287';
+$lang->execution->gantt->progressColor[2] = '#FFC73A';
+$lang->execution->gantt->progressColor[3] = '#6BD5F5';
+$lang->execution->gantt->progressColor[4] = '#9DE88A';
+$lang->execution->gantt->progressColor[5] = '#9BA8FF';
+
+$lang->execution->gantt->color[0] = '#E7E7E7';
+$lang->execution->gantt->color[1] = '#FFDADB';
+$lang->execution->gantt->color[2] = '#FCECC1';
+$lang->execution->gantt->color[3] = '#D3F3FD';
+$lang->execution->gantt->color[4] = '#DFF5D9';
+$lang->execution->gantt->color[5] = '#EBDCF9';
+
+$lang->execution->gantt->textColor[0] = '#2D2D2D';
+$lang->execution->gantt->textColor[1] = '#8D0308';
+$lang->execution->gantt->textColor[2] = '#9D4200';
+$lang->execution->gantt->textColor[3] = '#006D8E';
+$lang->execution->gantt->textColor[4] = '#1A8100';
+$lang->execution->gantt->textColor[5] = '#660ABC';
+
+$lang->execution->gantt->stage = new stdclass();
+$lang->execution->gantt->stage->progressColor = '#70B8FE';
+$lang->execution->gantt->stage->color         = '#D2E7FC';
+$lang->execution->gantt->stage->textColor     = '#0050A7';
+
+$lang->execution->gantt->defaultColor         = '#EBDCF9';
+$lang->execution->gantt->defaultProgressColor = '#9BA8FF';
+$lang->execution->gantt->defaultTextColor     = '#660ABC';
+
+$lang->execution->gantt->bar_height = '24';
 
 $lang->execution->gantt->exportImg  = 'Export as Image';
 $lang->execution->gantt->exportPDF  = 'Export as PDF';

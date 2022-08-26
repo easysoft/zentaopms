@@ -9,7 +9,9 @@ title=测试 programModel::getParentPairs();
 cid=1
 pid=1
 
- >> 11
+获取所有父项目集的数量 >> 7
+获取瀑布类型父项目集的数量 >> 1
+获取ID为1的父项目集的名称 >> /项目集1
 
 */
 

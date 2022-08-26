@@ -132,7 +132,7 @@
     <div id='kanbans'></div>
   </div>
   <div class='table-empty-tip hidden' id='emptyBox'>
-    <p><span class="text-muted"><?php echo $lang->kanban->empty?></span></p>
+    <p><span class="text-muted"><?php echo $lang->kanbancard->empty;?></span></p>
   </div>
 </div>
 

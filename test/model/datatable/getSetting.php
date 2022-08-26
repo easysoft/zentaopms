@@ -10,9 +10,9 @@ title=测试 datatableModel::getSetting();
 cid=1
 pid=1
 
-获取产品模块browse方法设置     >> ID
-获取项目模块browse方法设置     >> 项目名称
-获取执行模块task方法设置       >> 70
+获取产品模块browse方法设置 >> ID
+获取项目模块browse方法设置 >> 项目名称
+获取执行模块task方法设置 >> 70
 获取测试用例模块browse方法设置 >> auto
 
 */

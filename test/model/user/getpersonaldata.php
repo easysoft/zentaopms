@@ -10,6 +10,10 @@ title=测试 userModel::getPersonalData();
 cid=1
 pid=1
 
+获取admin用户的createdBugs数量 >> 270
+获取test2用户createdCases数量 >> 4
+当获取一个空用户的数据时，系统默认返回当前登录用户的数据 >> 2
+
 */
 $user = new userTest();
 $adminData = $user->getPersonalDataTest('admin');

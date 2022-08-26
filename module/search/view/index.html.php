@@ -22,7 +22,7 @@ adjustMenuWidth();
     <form method='post' action='<?php echo inlink('index')?>' style='margin-bottom:10px;'>
       <div class='input-group col-md-8 col-md-offset-2'>
         <span class='input-group-btn w-auto'><?php echo html::input('words', $words, "class='form-control'")?></span>
-        <span class='input-group-btn select'><?php echo html::select('type[]', $lang->search->modules, $type, "class='form-control chosen' multiple")?></span>
+        <span class='input-group-btn select'><?php echo html::select('type[]', $typeList, $type, "class='form-control chosen' multiple")?></span>
         <span class='input-group-btn'><?php echo html::submitButton($lang->search->common, '', 'btn btn-primary')?></span>
       </div>
     </form>
@@ -41,7 +41,7 @@ adjustMenuWidth();
               <?php
               $objectType = $object->objectType == 'case' ? 'testcase' : $object->objectType;
               echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
-              if(($objectType == 'story' || $objectType == 'execution' || $objectType == 'issue') and !empty($object->extraType))
+              if(($objectType == 'story' || $objectType == 'requirement' || $objectType == 'execution' || $objectType == 'issue') and !empty($object->extraType))
               {
                   echo "<small class=''>[{$lang->search->objectTypeList[$object->extraType]} #{$object->objectID}]</small> ";
               }

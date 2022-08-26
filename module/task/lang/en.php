@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = 'Select Story Tested';
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
 $lang->task->noAssigned        = 'Unassigned';
@@ -261,7 +261,7 @@ $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
-$lang->task->error->date              = 'The date should be >= today.';
+$lang->task->error->date              = 'The date should be <= today.';
 $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left" cannot be 0';
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 
@@ -352,3 +352,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Estimates';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

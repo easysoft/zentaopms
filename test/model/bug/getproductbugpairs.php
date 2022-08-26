@@ -9,16 +9,15 @@ title=bugModel->getProductBugPairs();
 cid=1
 pid=1
 
-测试获取productID为1的bug    >> 3:BUG3,2:BUG2,1:BUG1
-测试获取productID为2的bug    >> 6:BUG6,5:BUG5,4:BUG4
-测试获取productID为3的bug    >> 9:BUG9,8:bug8,7:缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-测试获取productID为4的bug    >> 12:BUG12,11:BUG11,10:BUG10
-测试获取productID为5的bug    >> 15:缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,14:BUG14,13:BUG13
-测试获取productID为6的bug    >> 18:BUG18,17:BUG17,16:bug16
+测试获取productID为1的bug >> 3:BUG3,2:BUG2,1:BUG1
+测试获取productID为2的bug >> 6:BUG6,5:BUG5,4:BUG4
+测试获取productID为3的bug >> 9:BUG9,8:bug8,7:缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
+测试获取productID为4的bug >> 12:BUG12,11:BUG11,10:BUG10
+测试获取productID为5的bug >> 15:缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,14:BUG14,13:BUG13
+测试获取productID为6的bug >> 18:BUG18,17:BUG17,16:bug16
 测试获取不存在的product的bug >> 0
 
 */
-
 
 $productIDList = array('1', '2', '3', '4','5', '6', '1000001');
 

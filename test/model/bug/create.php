@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -18,10 +19,10 @@ pid=1
 测试正常的创建标准规范bug >> active
 测试正常的创建测试脚本bug >> admin
 测试正常的创建设计缺陷bug >> 3
-测试正常的创建其他bug     >> 2021-03-19
-测试不输入名称创建bug     >> 『Bug标题』不能为空。
+测试正常的创建其他bug >> 2021-03-19
+测试不输入名称创建bug >> 『Bug标题』不能为空。
 测试不输入影响版本创建bug >> 『影响版本』不能为空。
-测试指派人bug             >> user92
+测试指派人bug >> user92
 
 */
 
@@ -52,4 +53,4 @@ r($bug->createObject($b_notitle))      && p('title:0')       && e('『Bug标题�
 r($bug->createObject($b_nobuild))      && p('openedBuild:0') && e('『影响版本』不能为空。'); // 测试不输入影响版本创建bug
 r($bug->createObject($b_assign))       && p('assignedTo')    && e('user92');                 // 测试指派人bug
 
-system("./ztest init");
+$db->restoreDB();

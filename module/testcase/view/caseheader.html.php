@@ -40,7 +40,7 @@
     <?php
     $hasBrowsePriv = $isProjectApp ? common::hasPriv('project', 'testcase') : common::hasPriv('testcase', 'browse');
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
-    $hasZeroPriv   = common::hasPriv('story', 'zerocase');
+    $hasZeroPriv   = common::hasPriv('testcase', 'zerocase');
     $hasUnitPriv   = common::hasPriv('testtask', 'browseunits');
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
@@ -100,7 +100,7 @@
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
     elseif($hasUnitPriv and $menuType == 'browseunits')
     {
@@ -127,10 +127,10 @@
       $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc . "data-app={$this->app->tab}") . "</li>";
 
-      $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
-      $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc . "data-app={$this->app->tab} data-width='50%'") . "</li>";
+      $class = common::hasPriv('testcase', 'exportTemplate') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='65%'") . "</li>";
       ?>
       </ul>
     </div>

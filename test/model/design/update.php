@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/design.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -39,4 +40,4 @@ r($design->updateTest($designIDList[0],$updateDesc))    && p('0:field,old,new') 
 r($design->updateTest($designIDList[0],$noName))        && p('name:0')          && e('『设计名称』不能为空。');     //设计名称不能为空
 r($design->updateTest($designIDList[0],$noType))        && p('type:0')          && e('『设计类型』不能为空。');     //设计类型不能为空
 
-system("./ztest init");
+$db->restoreDB();

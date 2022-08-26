@@ -58,7 +58,7 @@ class repoModel extends model
             }
 
             if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-            $this->lang->switcherMenu = $this->getSwitcher($repoID);
+            if(count($repos) > 1) $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 
         common::setMenuVars('devops', $repoID);
@@ -191,9 +191,9 @@ class repoModel extends model
 
         $data = fixer::input('post')
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'path', '')
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'client', '')
-            ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'path', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
             ->setIf($isPipelineServer, 'prefix', '')
             ->setIf($this->post->SCM == 'Git', 'account', '')
             ->setIf($this->post->SCM == 'Git', 'password', '')
@@ -219,8 +219,9 @@ class repoModel extends model
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}'")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'")
+            ->check('name', 'unique', "`SCM` = '{$data->SCM}'")
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}'")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}'")
             ->autoCheck()
             ->exec();
 
@@ -257,7 +258,7 @@ class repoModel extends model
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
             ->setIf($this->post->SCM == 'Gitlab', 'path', '')
             ->setIf($this->post->SCM == 'Gitlab', 'client', '')
-            ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
+            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
             ->setDefault('prefix', $repo->prefix)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
             ->setDefault('client', 'svn')
@@ -293,8 +294,9 @@ class repoModel extends model
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'  and `id` <> $id")
+            ->check('name', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}' and `serviceHost` = '{$data->serviceHost}' and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
@@ -2062,8 +2064,10 @@ class repoModel extends model
      */
     public function getRepoListByClient($gitlabID, $projectID = 0)
     {
+        $server = $this->loadModel('pipeline')->getByID($gitlabID);
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('synced')->eq(1)
+            ->beginIF($server)->andWhere('SCM')->eq(ucfirst($server->type))->fi()
             ->andWhere('serviceHost')->eq($gitlabID)
             ->beginIF($projectID)->andWhere('serviceProject')->eq($projectID)->fi()
             ->fetchAll();

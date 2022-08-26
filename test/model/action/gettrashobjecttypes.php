@@ -10,6 +10,9 @@ title=测试 actionModel->getTrashObjectTypes();
 cid=1
 pid=1
 
+查询type all 的对象类型列表 >> story
+查询type all 的对象类型列表 >> testcase
+
 */
 
 $typeList = array('all', 'hidden');

@@ -232,11 +232,29 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                  <td>
+                  <?php $osList = explode(',', $bug->os);?>
+                  <?php if($osList):?>
+                  <p class='osContent'>
+                    <?php foreach($osList as $os):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->osList, $os) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                  <td>
+                  <?php $browserList = explode(',', $bug->browser);?>
+                  <?php if($browserList):?>
+                  <p class='browserContent'>
+                    <?php foreach($browserList as $browser):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>
@@ -244,7 +262,14 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
+                  <td>
+                  <?php
+                  if(empty($bug->mailto))
+                  {
+                      foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account) echo ' ' . zget($users, $account);
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -330,10 +355,10 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->resolution;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
-                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
+                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "title='{$bug->duplicateBugTitle}' class='iframe' data-width='80%'");
                     ?>
                   </td>
                 </tr>

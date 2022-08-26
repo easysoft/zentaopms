@@ -21,3 +21,6 @@
 #productsBox .input-group-addon > div {display: inline-block !important;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block; padding-right: 5px;}
+#dataform th {vertical-align: top; padding-top: 13px;}
+.futureBox {vertical-align: top !important; padding-top: 13px !important;}
+#linkPlan {padding-top: 25px !important;}

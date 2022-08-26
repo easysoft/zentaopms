@@ -10,7 +10,10 @@ title=测试 storyModel->getUserStoryPairs();
 cid=1
 pid=1
 
-
+获取指派给User2的需求数量，每页10条 >> 10
+获取指派给admin的用户需求，每页50条 >> 50
+获取指派给User2的所有需求总数 >> 100
+获取指派给admin的、不在产品91/92/93里的用户需求，每页50条 >> 97
 
 */
 

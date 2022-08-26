@@ -10,10 +10,9 @@ title=测试 sonarqubeModel::createProject();
 cid=1
 pid=1
 
-使用空的项目数据，空的sonarqubeID创建Sonarqube项目        >> 『项目名称』不能为空
-使用错误项目数据，正确的sonarqubeID创建Sonarqube项目      >> return error
-使用正确的项目数据，空的sonarqubeID创建Sonarqube项目      >> return false
-使用正确的sonarqubeID和Sonarqube项目信息创建Sonarqube项目 >> 1
+使用空的项目数据，空的sonarqubeID创建Sonarqube项目 >> 『项目名称』不能为空
+使用错误项目数据，正确的sonarqubeID创建Sonarqube项目 >> return error
+使用正确的项目数据，空的sonarqubeID创建Sonarqube项目 >> return false
 
 */
 

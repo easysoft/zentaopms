@@ -163,7 +163,7 @@ $lang->product->menu->release  = array('link' => "{$lang->release->common}|relea
 $lang->product->menu->roadmap  = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 if($config->systemMode == 'new')     $lang->product->menu->project  = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
 if($config->systemMode == 'classic') $lang->product->menu->project  = array('link' => "{$lang->execution->common}|product|project|status=all&productID=%s");
-$lang->product->menu->track    = array('link' => "{$lang->track}|story|track|productID=%s");
+$lang->product->menu->track    = array('link' => "{$lang->track}|product|track|productID=%s");
 $lang->product->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
 $lang->product->menu->dynamic  = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
@@ -320,7 +320,10 @@ $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execut
 $lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
-$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
+
+if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
+
+$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
@@ -511,7 +514,7 @@ if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = arr
 
 if($config->systemMode == 'new')
 {
-    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting');
+    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 }
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
@@ -569,6 +572,7 @@ $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->sec
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
 
 $lang->admin->dividerMenu = ',company,message,system,';
@@ -603,6 +607,7 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
+$lang->navGroup->requirement = 'product';
 
 $lang->navGroup->project     = 'project';
 $lang->navGroup->deploy      = 'project';

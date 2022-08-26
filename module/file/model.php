@@ -167,6 +167,8 @@ class fileModel extends model
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
 
+        if(!is_array($_FILES[$htmlTagName]['error']) and $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
+
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
         $config->set('Cache.DefinitionImpl', null);
@@ -523,6 +525,58 @@ class fileModel extends model
         {
             return false;
         }
+    }
+
+    /**
+     * Check file priv.
+     *
+     * @param  int    $file
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($file)
+    {
+        if($this->app->user->admin) return true;
+
+        $objectType = $file->objectType;
+        $objectID   = $file->objectID;
+
+        $projectObjects   = array('design', 'issue', 'risk');
+        $productObjects   = array('story', 'bug', 'testcase', 'productplan');
+        $executionObjects = array('task', 'build');
+
+        $table = $this->config->objectTables[$objectType];
+        if(!$table) return true;
+
+        if(in_array($objectType, $projectObjects))
+        {
+            $projectID = $this->dao->findByID($objectID)->from($table)->fetch('project');
+        }
+        elseif(in_array($objectType, $productObjects))
+        {
+            $productID = $this->dao->findByID($objectID)->from($table)->fetch('product');
+        }
+        elseif(in_array($objectType, $executionObjects))
+        {
+            $executionID = $this->dao->findByID($objectID)->from($table)->fetch('execution');
+        }
+        elseif($objectType == 'doc')
+        {
+            $doc = $this->dao->findById($objectID)->from(TABLE_DOC)->fetch();
+            return $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+        elseif($objectType == 'feedback')
+        {
+            $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch('product');
+            $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+            return in_array($productID, array_keys($grantProducts));
+        }
+
+        if(isset($projectID)   and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
+        if(isset($productID)   and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
+        if(isset($executionID) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
+
+        return true;
     }
 
 	/**

@@ -19,5 +19,5 @@ $executionID = '131';
 $count       = array('0','1');
 
 $execution = new executionTest();
-r($execution->getChildExecutionsTest($executionID,$count[0])) && p('701')  && e('子阶段1'); // 查询子阶段
-r($execution->getChildExecutionsTest($executionID,$count[1])) && p()       && e('1');       // 查询子阶段数量
+r($execution->getChildExecutionsTest($executionID, $count[0])) && p('701:name') && e('子阶段1'); // 查询子阶段
+r($execution->getChildExecutionsTest($executionID, $count[1])) && p()           && e('1');       // 查询子阶段数量

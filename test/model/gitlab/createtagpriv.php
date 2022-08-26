@@ -8,11 +8,11 @@ title=测试 gitlabModel::createTagPriv();
 cid=1
 pid=1
 
-使用空的gitlabID,projectID,保护标签对象创建GitLab保护标签         >> 标签不能为空
+使用空的gitlabID,projectID,保护标签对象创建GitLab保护标签 >> 标签不能为空
 使用正确的保护标签对象，空的gitlabID、projectID创建GitLab保护标签 >> return false
-使用正确的gitlabID、保护标签信息，错误的projectID创建保护标签     >> 404 Project Not Found
-使用正确的gitlabID、projectID和保护标签信息创建保护标签           >> return true
-使用正确的gitlabID、projectID、保护标签信息，编辑保护标签         >> return true
+使用正确的gitlabID、保护标签信息，错误的projectID创建保护标签 >> 404 Project Not Found
+使用正确的gitlabID、projectID和保护标签信息创建保护标签 >> return true
+使用正确的gitlabID、projectID、保护标签信息，编辑保护标签 >> return true
 
 */
 

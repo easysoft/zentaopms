@@ -10,6 +10,11 @@ title=测试 userModel->getProductViewListUsers();
 cid=1
 pid=1
 
+获取对ID为1的产品有权限的用户 >> 11
+获取对ID为1的产品有权限的用户 >> test9
+获取对ID为1的产品有权限的用户 >> admin
+获取对ID为2的产品有权限的用户 >> astaw
+
 */
 
 $user = new userTest();

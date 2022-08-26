@@ -389,27 +389,21 @@ class control extends baseControl
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
      * @param  bool   $print
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '', $print = true)
+    public function printExtendFields($object, $type, $extras = '', $print = true, $moduleName = '', $methodName = '')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
         $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
         if(!$print) return $fields;
 
-        $picker = '';
-        //$jsRoot = $this->config->webRoot . "js/";
-        //$picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
-        //$picker = substr($picker, strpos($picker, '<style>'));
-
-        //js::import($jsRoot . 'picker/min.js');
-        //css::import($jsRoot . 'picker/min.css');
-
-        echo $picker . $fields;
+        echo $fields;
     }
 
     /**

@@ -12,11 +12,10 @@ pid=1
 测试获取用户admin的bug >> 85
 测试获取用户test1的bug >> 85
 测试获取用户test2的bug >> 0
-测试获取用户dev1的bug  >> 55
-测试获取用户po1的bug   >> 0
+测试获取用户dev1的bug >> 55
+测试获取用户po1的bug >> 0
 
 */
-
 
 $accountIDList = array('admin', 'test1', 'test2', 'dev1', 'po1');
 

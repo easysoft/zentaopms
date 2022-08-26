@@ -13,6 +13,5 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfClosedBugsPerUserTest()) && p('admin:name,value') && e('admin,100');   // 获取admin关闭的数据

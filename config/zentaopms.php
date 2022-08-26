@@ -222,6 +222,8 @@ $config->openMethods[] = 'kanban.deleteobjectcard';
 $config->openMethods[] = 'admin.ignore';
 $config->openMethods[] = 'personnel.unbindwhitelist';
 $config->openMethods[] = 'tree.viewhistory';
+$config->openMethods[] = 'doc.createbasicinfo';
+$config->openMethods[] = 'project.createguide';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -331,6 +333,10 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
+define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
+define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
+define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
 $config->objectTables['story']        = TABLE_STORY;
@@ -392,3 +398,6 @@ $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;
+$config->maxPriValue  = '256';
+
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');

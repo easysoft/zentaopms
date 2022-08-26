@@ -29,6 +29,7 @@ $filter->default->cookie['fingerprint'] = 'reg::word';
 $filter->default->cookie['hideMenu']    = 'equal::true';
 $filter->default->cookie['tab']         = 'reg::word';
 $filter->default->cookie['goback']      = 'reg::any';
+$filter->default->cookie['maxImport']   = 'reg::any';
 
 $filter->index        = new stdclass();
 $filter->my           = new stdclass();

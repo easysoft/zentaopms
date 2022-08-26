@@ -3,6 +3,7 @@ class Gitea
 {
     public $client;
     public $root;
+    public $repo;
 
     /**
      * Construct
@@ -43,6 +44,7 @@ class Gitea
             if(isset($branches[$branch])) $branch = "origin/$branch";
         }
         $this->branch = $branch;
+        $this->repo   = $repo;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -698,5 +700,21 @@ class Gitea
         }
 
         return $parsedLogs;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
+    {
+        global $app;
+        $api = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
+        return sprintf($api, "/repos/{$this->repo->serviceProject}/archive/{$branch}.zip");
     }
 }

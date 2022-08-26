@@ -9,8 +9,10 @@ title=测试 programModel::getInvolvedPrograms();
 cid=1
 pid=1
 
-查看用户admin可以看到的项目和执行id列表 >> 1
-查看用户test2可以看到的项目和执行id列表 >> 1
+获取admin参与的项目集数量 >> 2
+获取test2参与的项目集数量 >> 1
+获取admin参与的项目集ID >> 10
+获取test2参与的项目集ID >> 1
 
 */
 

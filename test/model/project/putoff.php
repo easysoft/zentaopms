@@ -9,6 +9,9 @@ title=测试 projectModel->start();
 cid=1
 pid=1
 
+延期ID为81的项目，查看延期后的日期 >> 2023-07-01
+延期ID为0的项目，返回空 >> 0
+
 */
 
 global $tester;
@@ -20,4 +23,4 @@ $changes2 = $tester->project->putoff(0);
 
 r($changes1[0]) && p('new') && e('2023-07-01'); // 延期ID为81的项目，查看延期后的日期
 r($changes2)    && p()      && e('0');          // 延期ID为0的项目，返回空
-system("./ztest init");
+$db->restoreDB();

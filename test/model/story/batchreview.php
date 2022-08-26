@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +36,4 @@ r(count($review2)) && p()                                && e('2');             
 r($review2)        && p('308:status,stage,closedReason') && e('closed,closed,bydesign');  // 批量评审需求，查看被评审后的需求状态、阶段等信息
 r(count($review3)) && p()                                && e('2');                       // 批量评审传入三个ID，查看被评审的需求数量
 r($review3)        && p('314:status,stage,closedReason') && e('active,projected,cancel'); // 批量评审需求，查看被评审后的需求状态、阶段等信息
-system("./ztest init");
+$db->restoreDB();

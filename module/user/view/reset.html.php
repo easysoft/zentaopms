@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <?php if($needCreateFile):?>
 <div class='container mw-700px' style='margin-top:100px;'>
   <div class='panel panel-default'>
@@ -34,7 +35,7 @@
     <div class='panel-heading'>
       <strong><?php echo $lang->user->resetPassword?></strong>
     </div>
-    <form method='post' target='hiddenwin'>
+    <form method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->user->account?></th>

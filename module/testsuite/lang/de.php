@@ -54,3 +54,5 @@ $lang->testsuite->lblUnlinkCase = 'Unverknüpfte Fälle';
 
 $lang->testsuite->authorList['private'] = 'Privat';
 $lang->testsuite->authorList['public']  = 'Öffentlich';
+
+$lang->testsuite->featureBar['browse']['all'] = 'Suite List';

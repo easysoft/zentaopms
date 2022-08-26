@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -58,4 +59,4 @@ r($task->createObject($t_notype, $executionID))    && p('type:0')     && e('『�
 r($task->createObject($t_errortime, $executionID)) && p('deadline:0') && e('『截止日期』应当不小于『2021-04-10』。'); // 测试开始时间大于结束时间
 r($task->createObject($t_assign, $executionID))    && p('assignedTo') && e('user92');                                 // 测试指派人任务
 
-system("./ztest init");
+$db->restoreDB();

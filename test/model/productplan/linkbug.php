@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -39,5 +40,5 @@ r($plan->linkBug($planID[0], $bugID[2]))     && p() && e('0'); //传入不存在
 r($plan->unlinkBug($planID[0], $unbugID[0])) && p() && e('0'); //解除bugid为1的关联关系
 r($plan->unlinkBug($planID[0], $unbugID[1])) && p() && e('0'); //解除bugid为2的关联关系
 r($plan->unlinkBug($planID[0], $unbugID[2])) && p() && e('0'); //解除不存在的id
-system("./ztest init");
 ?>
+$db->restoreDB();

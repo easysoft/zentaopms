@@ -10,7 +10,7 @@ title=测试 ciModel->syncGitlabTaskStatus();
 cid=1
 pid=1
 
-同步gitlab构建结果 >> 1
+
 
 */
 

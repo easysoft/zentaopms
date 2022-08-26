@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/build.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +43,4 @@ r($build->createTest($executionIDList[0], $noName))          && p('name:0')    &
 r($build->createTest($executionIDList[0], $noProduct))       && p('product:0') && e('『产品』不能为空。');    //产品为空测试
 r($build->createTest($executionIDList[0], $noBuilder))       && p('builder:0') && e('『构建者』不能为空。');  //构建者为空测试
 
-system("./ztest init");
+$db->restoreDB();

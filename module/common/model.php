@@ -66,7 +66,7 @@ class commonModel extends model
             if($rawModule == 'execution')
             {
                 $executionID = $objectID;
-                $execution   = $this->dao->select('id, project, grade, parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
                 $this->syncExecutionByChild($execution);
                 $project     = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
@@ -153,7 +153,7 @@ class commonModel extends model
         $today = helper::today();
         $parentExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentExecutionID)->fetch();
 
-        if($parentExecution->status == 'wait')
+        if($execution->deleted == '0' and $execution->status == 'doing' and in_array($parentExecution->status, array('wait', 'closed')))
         {
             $this->dao->update(TABLE_EXECUTION)
                  ->set('status')->eq('doing')
@@ -161,6 +161,32 @@ class commonModel extends model
                  ->where('id')->eq($parentExecutionID)
                  ->exec();
             $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
+        }
+
+        if($parentExecution->type == 'stage')
+        {
+            $childExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($parentExecutionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            if($execution->deleted == '1' and count($childExecutions) > 0)
+            {
+                $childWait   = true;
+                $childClosed = true;
+                foreach($childExecutions as $childExecution)
+                {
+                    if($childExecution->status != 'wait')   $childWait = false;
+                    if($childExecution->status != 'closed') $childClosed = false;
+                }
+
+                if($childWait and $parentExecution->status != 'wait')
+                {
+                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('wait')->where('id')->eq($parentExecutionID)->exec();
+                    $this->loadModel('action')->create('execution', $parentExecutionID, 'waitbychilddelete');
+                }
+                if($childClosed and $parentExecution->status != 'closed')
+                {
+                    $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parentExecutionID)->exec();
+                    $this->loadModel('action')->create('execution', $parentExecutionID, 'closebychilddelete');
+                }
+            }
         }
 
         return $parentExecution;
@@ -185,6 +211,11 @@ class commonModel extends model
         {
             $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
+            if($execution->parent)
+            {
+                $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($execution->id)->fetch(); // Get updated execution.
+                $this->syncExecutionByChild($execution);
+            }
         }
         return $execution;
     }
@@ -1232,8 +1263,7 @@ class commonModel extends model
     /**
      * Print the module menu.
      *
-     * @param  string $actveMenu
-     * @param  string $methodName
+     * @param  string $activeMenu
      * @static
      * @access public
      * @return void
@@ -1305,28 +1335,31 @@ class commonModel extends model
 
                 $label    = $menuItem->text;
                 $dropMenu = '';
+
                 /* Print sub menus. */
                 if(isset($menuItem->dropMenu))
                 {
-                    foreach($menuItem->dropMenu as $dropMenuItem)
+                    foreach($menuItem->dropMenu as $dropMenuKey => $dropMenuItem)
                     {
-                        if($dropMenuItem->hidden) continue;
+                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                         $subActive = '';
                         $subModule = '';
                         $subMethod = '';
                         $subParams = '';
-                        $subLabel  = $dropMenuItem->text;
-                        if(isset($dropMenuItem->link['module'])) $subModule = $dropMenuItem->link['module'];
-                        if(isset($dropMenuItem->link['method'])) $subMethod = $dropMenuItem->link['method'];
-                        if(isset($dropMenuItem->link['vars']))   $subParams = $dropMenuItem->link['vars'];
+                        $subLabel  = '';
+                        list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuItem['link']);
+                        if(isset($dropMenuModule)) $subModule = $dropMenuModule;
+                        if(isset($dropMenuMethod)) $subMethod = $dropMenuMethod;
+                        if(isset($dropMenuParams)) $subParams = $dropMenuParams;
+                        if(isset($dropMenuName))   $subLabel  = $dropMenuName;
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
                         $misc = (isset($lang->navGroup->$subModule) and $tab != $lang->navGroup->$subModule) ? "data-app='$tab'" : '';
-                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuItem->name'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuKey'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
                     }
 
                     if(empty($dropMenu)) continue;
@@ -1423,6 +1456,9 @@ class commonModel extends model
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
+            echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
+            echo "<li><div class='mobile-qrcode'><img src='{$config->webRoot}theme/default/images/main/mobile_qrcode.png' /><div class='mobile-version'><span>v1.2</span></div></div></li>";
+            echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';
         }
@@ -1521,10 +1557,12 @@ class commonModel extends model
     public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
-        global $app;
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
@@ -1642,7 +1680,8 @@ EOD;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
-        if(!commonModel::hasPriv($module, $method, $object)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
+
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
@@ -1892,8 +1931,9 @@ EOD;
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
             $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
 
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}");
-            $link .= '#app=' . $app->tab;
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->pre->type}" : '';
+            $link   = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}" . $params);
+            $link  .= '#app=' . $app->tab;
             if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
             {
                 echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
@@ -1908,7 +1948,8 @@ EOD;
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}");
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->next->type}" : '';
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}" . $params);
             $link .= '#app=' . $app->tab;
             if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
             {
@@ -1966,7 +2007,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -2073,9 +2114,12 @@ EOD;
         $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
+        $select  = '';
         if($this->session->$typeOnlyCondition)
         {
-            $sql = $this->dao->select('*')->from($table)
+            if(strpos($orderBy, 'priOrder') !== false) $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
+            if(strpos($orderBy, 'severityOrder') !== false) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
+            $sql = $this->dao->select("*$select")->from($table)
                 ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->get();
@@ -2194,7 +2238,6 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
-        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
@@ -2364,7 +2407,11 @@ EOD;
                 if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
 
                 $this->app->user = $this->session->user;
-                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
+                if(!commonModel::hasPriv($module, $method))
+                {
+                    if($module == 'story' and !empty($this->app->params['storyType']) and strpos(",story,requirement,", ",{$this->app->params['storyType']},") !== false) $module = $this->app->params['storyType'];
+                    $this->deny($module, $method);
+                }
             }
             else
             {
@@ -2413,10 +2460,10 @@ EOD;
            $module == 'tutorial' or
            $module == 'install' or
            $module == 'upgrade' or
+           $module == 'sso' or
           ($module == 'user' and strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) or
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
-          ($module == 'sso' and $method == 'login') or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
           ($module == 'execution' and $method == 'printkanban') or
@@ -2437,15 +2484,24 @@ EOD;
      *
      * @param  string $module
      * @param  string $method
+     * @param  object $object
+     * @param  string $vars
      * @static
      * @access public
      * @return bool
      */
-    public static function hasPriv($module, $method, $object = null)
+    public static function hasPriv($module, $method, $object = null, $vars = '')
     {
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+        parse_str($vars, $params);
+
+        if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
+        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
+        if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
+        if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))
@@ -2484,7 +2540,7 @@ EOD;
         $acls   = $app->user->rights['acls'];
 
         /* White list of import method. */
-        if(in_array($module, array('user', 'task', 'story', 'bug', 'testcase')) and $method == 'showimport')
+        if(in_array($module, $app->config->importWhiteList) and $method == 'showimport')
         {
             if(isset($rights[$module]['import']) and commonModel::hasDBPriv($object, $module, 'import')) return true;
         }
@@ -3372,6 +3428,45 @@ EOD;
         $Parsedown->voidElementSuffix = '>'; // HTML5
 
         return $Parsedown->text($markdown);
+    }
+
+    /**
+     * Sort featureBar.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function sortFeatureMenu($module = '', $method = '')
+    {
+        global $lang, $config, $app;
+
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
+
+        /* It will be sorted according to the workflow in the future */
+        if(!empty($config->featureBarSort[$module][$method]))
+        {
+            $featureBar = array();
+            if(empty($lang->$module->featureBar[$method])) return false;
+            foreach($lang->$module->featureBar[$method] as $key => $label)
+            {
+                foreach($config->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                {
+                    if($key == $currentKey) continue;
+                    $featureBar[$method][$key] = $label;
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
+                }
+            }
+            $lang->$module->featureBar = $featureBar;
+        }
+
+        return true;
     }
 }
 

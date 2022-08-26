@@ -272,13 +272,17 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
             ->orWhere('t1.QD')->eq($this->app->user->account)
             ->orWhere('t1.RD')->eq($this->app->user->account)
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
+            ->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -597,7 +601,7 @@ class productModel extends model
         /* Init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
         {
-            $storyMethods = ",track,create,batchcreate,batchclose,zerocase,";
+            $storyMethods = ",create,batchcreate,batchclose,";
             if(strpos($storyMethods, "," . $currentMethod . ",") === false) $currentModule = 'product';
             if($currentMethod == 'view' or $currentMethod == 'change' or $currentMethod == 'review') $currentMethod = 'browse';
         }
@@ -626,7 +630,7 @@ class productModel extends model
         if($notNormalProduct)
         {
             $isShowBranch = false;
-            if($currentModule == 'story' and $currentMethod == 'track') $isShowBranch = true;
+            if($currentModule == 'product' and $currentMethod == 'track') $isShowBranch = true;
             if($currentModule == 'tree' and $currentMethod == 'browse') $isShowBranch = true;
             if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
@@ -676,7 +680,7 @@ class productModel extends model
         $programID = isset($product->program) ? $product->program : 0;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
@@ -750,7 +754,6 @@ class productModel extends model
     {
         $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
             ->add('id', $productID)
@@ -766,10 +769,10 @@ class productModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
-        $programID = isset($product->program) ? $product->program : '';
+        $programID = isset($product->program) ? $product->program : 0;
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($productID)
@@ -833,6 +836,7 @@ class productModel extends model
 
         $unlinkProducts = array();
         $linkProducts   = array();
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
@@ -842,7 +846,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
@@ -1014,7 +1018,8 @@ class productModel extends model
         if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
         if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
-        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $type, $sort, $pager);
+        if($browseType == 'changingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
+        if($browseType == 'reviewingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
         if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
         if($browseType == 'assignedbyme') $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
@@ -1072,7 +1077,7 @@ class productModel extends model
                 $modules          = array();
                 $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
+                foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
             }
             else
             {
@@ -1151,16 +1156,18 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $appendProject
+     * @param  string $status all|closed|unclosed
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0)
+    public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0, $status = '')
     {
         $product = $this->getById($productID);
 
         $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
+            ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
@@ -2224,7 +2231,7 @@ class productModel extends model
             {
                 $link = helper::createLink('testsuite', 'browse', "productID=%s");
             }
-            elseif(($module == 'testcase' and $method == 'groupCase') or ($module == 'story' and $method == 'zeroCase') and $this->app->tab == 'project')
+            elseif($module == 'testcase' and in_array($method, array('groupCase', 'zeroCase')) and $this->app->tab == 'project')
             {
                 parse_str($extra, $output);
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
@@ -2414,6 +2421,8 @@ class productModel extends model
             $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         }
+
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 
     /**

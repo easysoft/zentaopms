@@ -64,6 +64,9 @@ $lang->release->mailContent   = '<p>尊敬的用户，您好！</p><p style="mar
 $lang->release->storyList     = '<p style="margin-left: 30px;">需求列表：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug列表：%s。</p>';
 
+$lang->release->storyTitle = '需求名称';
+$lang->release->bugTitle   = 'Bug名称';
+
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
 
@@ -90,3 +93,7 @@ $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
 $lang->release->notifyList['PT'] = "所在项目团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

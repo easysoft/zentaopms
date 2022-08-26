@@ -10,6 +10,10 @@ title=测试 pipelineModel->getPairs();
 cid=1
 pid=1
 
+id为1且type为gitlab的pipeline名称 >> gitlab服务器
+id为2且type为sonarqube的pipeline名称 >> sonarqube服务器
+获取不存在的type >> 没有获取到数据
+
 */
 
 $pipeline = new pipelineTest();

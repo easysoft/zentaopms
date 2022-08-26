@@ -166,10 +166,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function startTest($executionID,$param = array())
+    public function startTest($executionID,$param = array(), $testParent = false)
     {
         $data = date('Y-m-d');
 
@@ -196,6 +197,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -268,10 +275,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function activateTest($executionID, $param = array())
+    public function activateTest($executionID, $param = array(), $testParent = false)
     {
         self::suspendTest($executionID);
 
@@ -294,6 +302,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -303,10 +317,11 @@ class executionTest
      *
      * @param  string $executionID
      * @param  array  $param
+     * @param  bool   $testParent
      * @access public
      * @return array
      */
-    public function closeTest($executionID, $param = array())
+    public function closeTest($executionID, $param = array(), $testParent = false)
     {
         $todate = date('Y-m-d');
 
@@ -326,6 +341,12 @@ class executionTest
         }
         else
         {
+            if($testParent)
+            {
+                $execution       = $this->objectModel->getByID($executionID);
+                $executionParent = $this->objectModel->getByID($execution->parent);
+                return $executionParent;
+            }
             return $obj;
         }
     }
@@ -1583,33 +1604,31 @@ class executionTest
     }
 
     /**
-     * function getBurnDataFlot test by execution
+     * Function getBurnDataFlot test by execution.
      *
-     * @param  int $executionID
-     * @param  string $count
+     * @param  int   $executionID
      * @access public
-     * @return array
+     * @return int
      */
-    public function getBurnDataFlotTest($executionID = 0, $count)
+    public function getBurnDataFlotTest($executionID = 0)
     {
         $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
 
         $todayData = array();
-        foreach ($object[$date] as $key => $value) $todayData[$key] = $value;
+        if(isset($object[$date]))
+        {
+            foreach($object[$date] as $key => $value) $todayData[$key] = $value;
+        }
 
         if(dao::isError())
         {
             $error = dao::getError();
             return $error;
         }
-        elseif($count == "1")
-        {
-            return sizeof($todayData);
-        }
         else
         {
-            return $object;
+            return sizeof($todayData);
         }
     }
 

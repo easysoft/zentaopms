@@ -3,6 +3,7 @@ class GitRepo
 {
     public $client;
     public $root;
+    public $repo;
 
     /**
      * Construct
@@ -30,6 +31,7 @@ class GitRepo
             if(isset($branches[$branch])) $branch = "origin/$branch";
         }
         $this->branch = $branch;
+        $this->repo   = $repo;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -682,5 +684,32 @@ class GitRepo
         }
 
         return $parsedLogs;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
+    {
+        global $app, $config;
+        $gitDir = scandir($this->root);
+        $files  = '';
+        foreach($gitDir as $path)
+        {
+            if(!in_array($path, array('.', '..', '.git'))) $files .= $this->root . DS . "$path,";
+        }
+
+        $app->loadClass('pclzip', true);
+        $fileName = $savePath . DS . "{$this->repo->name}_$branch.zip";
+        $zip      = new pclzip($fileName);
+        $zip->create($files, PCLZIP_OPT_REMOVE_PATH, $this->root);
+
+        return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . "{$this->repo->name}_$branch.zip";
     }
 }

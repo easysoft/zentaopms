@@ -947,11 +947,13 @@ class convertModel extends model
             $productID    = $projectProduct[$projectID];
 
             $build = new stdclass();
-            $build->product = $productID;
-            $build->project = $projectID;
-            $build->name    = $data->vname;
-            $build->date    = substr($data->RELEASEDATE, 0, 10);
-            $build->builder = $this->app->user->account;
+            $build->product     = $productID;
+            $build->project     = $projectID;
+            $build->name        = $data->vname;
+            $build->date        = substr($data->RELEASEDATE, 0, 10);
+            $build->builder     = $this->app->user->account;
+            $build->createdBy   = $this->app->user->account;
+            $build->createdDate = helper::now();
 
             $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($build)->exec();
             $buildID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -989,12 +991,14 @@ class convertModel extends model
             if(empty($data->RELEASEDATE)) continue;
 
             $release = new stdclass();
-            $release->product = $build->product;
-            $release->build   = $buildID;
-            $release->name    = $build->name;
-            $release->date    = $build->date;
-            $release->desc    = $data->DESCRIPTION;
-            $release->status  = 'normal';
+            $release->product     = $build->product;
+            $release->build       = $buildID;
+            $release->name        = $build->name;
+            $release->date        = $build->date;
+            $release->desc        = $data->DESCRIPTION;
+            $release->status      = 'normal';
+            $release->createdBy   = $this->app->user->account;
+            $release->createdDate = helper::now();
 
             $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
             $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();

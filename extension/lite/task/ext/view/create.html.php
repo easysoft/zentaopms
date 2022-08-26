@@ -336,6 +336,7 @@
 <?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
+<?php js::set('executionType', $execution->type);?>
 <?php if(isonlybody()):?>
 <style>
 .body-modal .main-header {padding-right: 0px; z-index: 1000;}

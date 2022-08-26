@@ -9,7 +9,9 @@ title=测试 programModel::getParentPM();
 cid=1
 pid=1
 
-GetParentPM(). >> 0
+获取父项目集的负责人数量 >> 2
+获取父项目集的负责人account >> pm2
+获取父项目集的负责人account >> pm3
 
 */
 

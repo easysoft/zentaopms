@@ -14,12 +14,11 @@ pid=1
 计算有assignedto 有mailto的发信列表1 >> user1,user2,user3
 计算有assignedto 无mailto的发信列表2 >> po82
 计算有assignedto 无mailto的发信列表1 >> 0
-计算无assignedto 无mailto的发信列表  >> 0
-计算不存在的task的发信列表           >> 0
+计算无assignedto 无mailto的发信列表 >> 0
+计算不存在的task的发信列表 >> 0
 
 */
 $taskIDList = array('1', '601', '100001');
-
 
 $task = new taskTest();
 r($task->getToAndCcListTest($taskIDList[0]))       && p('2') && e('po82');              //计算有assignedto 有mailto的发信列表2

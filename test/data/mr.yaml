@@ -4,7 +4,7 @@ version: "1.0"
 fields:
   - field: id
     range: 1
-  - field: gitlabID
+  - field: hostID
     range: 1
   - field: sourceProject
     range: 42

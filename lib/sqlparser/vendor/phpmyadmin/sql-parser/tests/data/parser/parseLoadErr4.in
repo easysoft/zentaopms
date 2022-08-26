@@ -1,0 +1,3 @@
+LOAD DATA INFILE '/tmp/test.txt' IGNORE
+INTO test
+DATA @a = 1;

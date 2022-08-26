@@ -34,6 +34,7 @@ $status = $this->session->testTaskVersionStatus;
         ?>
       </ul>
     </div>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
     <?php $key = strtolower($key);?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>

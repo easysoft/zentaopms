@@ -253,10 +253,15 @@ class baseModel
     {
         if(empty($extensionName)) return false;
 
-        /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
         $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
         $moduleName    = strtolower($moduleName);
         $extensionName = strtolower($extensionName);
+
+        /* 设置扩展类的名字。Set the extension class name. */
+        $extensionClass = $extensionName . ucfirst($moduleName);
+        if(isset($this->$extensionClass)) return $this->$extensionClass;
+
+        /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
         $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
@@ -264,10 +269,6 @@ class baseModel
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['vision'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['xuan']   . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
-
-        /* 设置扩展类的名字。Set the extension class name. */
-        $extensionClass = $extensionName . ucfirst($moduleName);
-        if(isset($this->$extensionClass)) return $this->$extensionClass;
 
         /* 载入父类。Try to import parent model file auto and then import the extension file. */
         if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($this->appName, $moduleName) . 'model.php');

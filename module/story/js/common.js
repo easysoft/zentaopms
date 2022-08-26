@@ -11,6 +11,40 @@ $(function()
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
         $('#subNavbar li[data-id="' + storyType + '"]').addClass('active');
     }
+
+    $('#saveButton').on('click', function()
+    {
+        $('#saveButton').attr('disabled', true);
+        $('#saveDraftButton').attr('disabled', true);
+
+        var storyStatus = !$('#reviewer').val() || $('#needNotReview').is(':checked') ? 'active' : 'reviewing';
+        $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
+        $('#dataform').submit();
+
+        setTimeout(function()
+        {
+            $('#saveButton').removeAttr('disabled');
+            $('#saveDraftButton').removeAttr('disabled');
+        }, 1000);
+    });
+
+    $('#saveDraftButton').on('click', function()
+    {
+        $('#saveButton').attr('disabled', true);
+        $('#saveDraftButton').attr('disabled', true);
+
+        storyStatus = 'draft';
+        if(typeof(page) != 'undefined' && page == 'change') storyStatus = 'changing';
+        if(typeof(page) !== 'undefined' && page == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
+        $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
+        $('#dataform').submit();
+
+        setTimeout(function()
+        {
+            $('#saveButton').removeAttr('disabled');
+            $('#saveDraftButton').removeAttr('disabled');
+        }, 1000);
+    });
 })
 
 /**

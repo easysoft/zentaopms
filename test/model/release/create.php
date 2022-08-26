@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/release.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -40,4 +41,4 @@ r($release->createTest($projectID, $branch, $projectID, $syncRelease))         &
 r($release->createTest($projectID, $branch, $projectID, $noSyncnormalRelease)) && p('id,name,build') && e('15,新增不关联发布,13'); //创建将版本中完成的研发需求和已解决的Bug不关联的发布
 r($release->createTest($projectID, $branch, $projectID, $noNameRelease))       && p('name:0') && e('『发布名称』不能为空。'); //名称为空测试
 r($release->createTest($projectID, $branch, $projectID, $executionRelease))    && p('name:0') && e('『发布名称』已经有『新增执行版本发布』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //名称重复测试
-system("./ztest init");
+$db->restoreDB();

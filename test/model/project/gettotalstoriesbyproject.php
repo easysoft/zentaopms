@@ -9,6 +9,9 @@ title=测试 projectModel::getTotalStoriesByProject;
 cid=1
 pid=1
 
+不传入产品ID列表，获取项目11下的所有需求数量 >> 0
+传入产品ID列表，获取项目11下的所有需求数量 >> 2
+
 */
 
 global $tester;

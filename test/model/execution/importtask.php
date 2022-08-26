@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($execution->importTaskTest($executionIDList[1], $count[0], $stageTasks))  && p
 r($execution->importTaskTest($executionIDList[0], $count[1], $sprintTasks)) && p()                 && e('5');       // 敏捷执行导入任务统计
 r($execution->importTaskTest($executionIDList[1], $count[1], $stageTasks))  && p()                 && e('5');       // 瀑布执行导入任务统计
 
-system("./ztest init");
+$db->restoreDB();

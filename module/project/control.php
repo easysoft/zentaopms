@@ -143,14 +143,14 @@ class project extends control
     public function ajaxGetCopyProjects()
     {
         $data = fixer::input('post')->get();
-        $projects = $this->dao->select('id, name')->from(TABLE_PROJECT)
+        $projectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(trim($data->name))->andWhere('name')->like("%$data->name%")->fi()
             ->fetchPairs();
-
+        $projects = $this->project->getPairsByModel('', 0, '', array_keys($projectPairs));
         $html = empty($projects) ? "<div class='text-center'>{$this->lang->noData}</div>" : '';
         foreach($projects as $id => $name)
         {
@@ -217,6 +217,60 @@ class project extends control
         }
 
         echo json_encode($productsWithBranch);
+    }
+
+    /**
+     * Ajax: Get selected object's information.
+     *
+     * @param  str    $objectType
+     * @param  int    $objectID
+     * @param  int    $selectedProgramID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetObjectInfo($objectType, $objectID, $selectedProgramID)
+    {
+        if($selectedProgramID)
+        {
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
+            if(isset($selectedProgram)) $allProducts = $this->program->getProductPairs($selectedProgram->id, 'assign', 'noclosed');
+        }
+
+        if(!empty($objectID))
+        {
+            $object = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
+
+            if(isset($availableBudget)) $availableBudget = $object->parent == $selectedProgramID ? $availableBudget + (int)$object->budget : $availableBudget;
+
+            if($objectType == 'program')
+            {
+                $minChildBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->orderBy('begin_asc')->fetch('minBegin');
+                $maxChildEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($objectID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$objectID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch('maxEnd');
+            }
+        }
+
+        $data = array();
+        if(isset($selectedProgram))
+        {
+            $data['selectedProgramBegin']  = $selectedProgram->begin;
+            $data['selectedProgramEnd']    = $selectedProgram->end;
+            $data['budgetUnit']            = $selectedProgram->budgetUnit;
+            $allProducts = array(0 => '') + $allProducts;
+            /* Finish task #64882.Get the path of the currently selected program. */
+            $data['selectedProgramPath']   = explode(',', $selectedProgram->path);
+            /* Get the products that can be linked with the currently selected program. */
+            $data['allProducts']           = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+            $data['plans']                 = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
+        }
+
+        /* Finish task #64882.Get the path of the last selected program. */
+        if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
+        if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
+        if(isset($minChildBegin))   $data['minChildBegin']   = $minChildBegin;
+        if(isset($maxChildEnd))     $data['maxChildEnd']     = $maxChildEnd;
+
+        echo json_encode($data);
     }
 
     /**
@@ -422,7 +476,7 @@ class project extends control
                     {
                         foreach($planStory as $id => $story)
                         {
-                            if($story->status == 'draft')
+                            if($story->status == 'draft' or $story->status == 'reviewing')
                             {
                                 unset($planStory[$id]);
                                 continue;
@@ -537,7 +591,7 @@ class project extends control
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
-        $this->display();
+        $this->display('project', 'create');
     }
 
     /**
@@ -964,6 +1018,7 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('task');
         $this->loadModel('programplan');
+        $this->session->set('executionList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 
@@ -979,13 +1034,13 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $allExecution = $this->project->getStats($projectID, 'all');
+        $allExecution = $this->execution->getStatData($projectID, 'all');
         $this->view->allExecutionNum = empty($allExecution);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, $this->cookie->showTask);
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
@@ -1092,6 +1147,10 @@ class project extends control
             }
         }
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
         {
@@ -1144,7 +1203,7 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID ? $productID : array_keys($products));
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->project->getPairsByProgram();

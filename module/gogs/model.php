@@ -410,10 +410,9 @@ class gogsModel extends model
 
         for($page = 1; true; $page++)
         {
-            $url    = sprintf($apiRoot, "/users/search") . "&page={$page}&limit=50";
+            $url    = sprintf($apiRoot, "/admin/users") . "&page={$page}&limit=20";
             $result = json_decode(commonModel::http($url));
             if(empty($result->data)) break;
-
             $response = array_merge($response, $result->data);
             $page += 1;
         }
@@ -436,7 +435,7 @@ class gogsModel extends model
             $user->email          = zget($gogsUser, 'email', '');
             $user->avatar         = $gogsUser->avatar_url;
             $user->createdAt      = zget($gogsUser, 'created', '');
-            $user->lastActivityOn = zget($gogsUser, 'last_login', '');
+            $user->lastActivityOn = zget($gogsUser, 'login', '');
 
             $users[] = $user;
         }
@@ -516,5 +515,69 @@ class gogsModel extends model
             ->where('providerType')->eq('gogs')
             ->andWhere('providerID')->eq($gogsID)
             ->fetchPairs();
+    }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $branchName
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($gogsID, $project, $branchName)
+    {
+        $url    = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branchName");
+        $branch = json_decode(commonModel::http($url));
+        if($branch)
+        {
+            $gogs = $this->getByID($gogsID);
+            $branch->web_url = "{$gogs->url}/$project/src/$branchName";
+        }
+
+        return $branch;
+    }
+
+    /**
+     * Get protect branches of one project.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $keyword
+     * @access public
+     * @return array
+     */
+    public function apiGetBranchPrivs($gogsID, $project, $keyword = '')
+    {
+        $keyword  = urlencode($keyword);
+        $url      = sprintf($this->getApiRoot($gogsID), "/repos/$project/branch_protections");
+        $branches = json_decode(commonModel::http($url));
+
+        if(!is_array($branches)) return array();
+
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            $branch->name = $branch->Name;
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[] = $branch;
+        }
+
+        return $newBranches;
+    }
+
+    /**
+     * Api delete branch.
+     *
+     * @param  int    $gogsID
+     * @param  string $project
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function apiDeleteBranch($gogsID, $project, $branch)
+    {
+        $url = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branch");
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 }

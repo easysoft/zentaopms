@@ -58,7 +58,7 @@
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo strpos(",{$app->user->view->programs},", ",$program->id,") !== false ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
+          <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
           <?php
@@ -80,7 +80,7 @@
           <?php endif;?>
         </td>
         <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
-        <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
+        <td class='text-right c-budget'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -40,4 +41,4 @@ r($user->updateUserTest(1000, $normalUser))         && p('account')    && e('new
 r($user->updateUserTest(1000, $existUser))          && p('account:0')  && e('『用户名』已经有『newtestuser4』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');//编辑用户，有重名用户的情况
 r($user->updateUserTest(1000, $differentPassword))  && p('password:0') && e('两次密码应该相同。'); //两次密码不相同的情况
 r($user->updateUserTest(1000, $specialUser))        && p('account:0')  && e('『用户名』只能是字母、数字或下划线的组合三位以上。'); //用户名包含特殊字符的情况
-system("./ztest init");
+$db->restoreDB();

@@ -48,6 +48,7 @@ $lang->kanban->removeCard          = 'Remove Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->settingSpace        = 'Setting Space';
+$lang->kanban->settingKanban       = 'Setting Kanban';
 $lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->closeSpace          = 'Close Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
@@ -133,11 +134,11 @@ $lang->kanban->aclGroup['extend']  = 'Extend';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->archiveList['0'] = 'Disable';
 $lang->kanban->archiveList['1'] = 'Enable';
+$lang->kanban->archiveList['0'] = 'Disable';
 
-$lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+$lang->kanban->enableList['0'] = 'Disable';
 
 $lang->kanban->alignmentList['center'] = 'Center';
 $lang->kanban->alignmentList['left']   = 'Left';
@@ -200,7 +201,6 @@ $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 $lang->kanban->limitExceeded      = 'Limit Exceeded';
 $lang->kanban->fullScreen         = 'Full Screen';
-$lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 $lang->kanban->showWIP            = 'Show WIP';
@@ -216,12 +216,17 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
-$lang->kanban->orderList['pri_asc']  = 'Story Priority Ascending';
-$lang->kanban->orderList['pri_desc'] = 'Story Priority Descending';
+$lang->kanban->orderList['id_asc']          = 'Story ID Ascending';
+$lang->kanban->orderList['id_desc']         = 'Story ID Descending';
+$lang->kanban->orderList['pri_asc']         = 'Story Priority Ascending';
+$lang->kanban->orderList['pri_desc']        = 'Story Priority Descending';
+$lang->kanban->orderList['stage_asc']       = 'Story Stage Ascending';
+$lang->kanban->orderList['stage_desc']      = 'Story Stage Descending';
+$lang->kanban->orderList['assignedTo_desc'] = 'Assigned To';
 
 $lang->kanban->importList = array();
-$lang->kanban->importList['off'] = 'Import is not enabled';
 $lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
+$lang->kanban->importList['off'] = 'Import is not enabled';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = 'Product Plan';

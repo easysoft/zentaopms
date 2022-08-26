@@ -10,10 +10,10 @@ title=测试 sonarqubeModel::apiDeleteProject();
 cid=1
 pid=1
 
-通过不正确的sonarqubeID、projectKey,删除SonarQube项目  >> return false
-正确的sonarqubeID,空的projectKey,删除SonarQube项目     >> The 'project' parameter is missing
+通过不正确的sonarqubeID、projectKey,删除SonarQube项目 >> return false
+正确的sonarqubeID,空的projectKey,删除SonarQube项目 >> The 'project' parameter is missing
 正确的sonarqubeID,不存在的projectKey,删除SonarQube项目 >> Project 'no_project' not found
-正确的sonarqubeID、projectKey,删除SonarQube项目        >> return true
+正确的sonarqubeID、projectKey,删除SonarQube项目 >> return true
 
 */
 

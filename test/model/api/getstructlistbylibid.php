@@ -10,6 +10,8 @@ title=测试 apiModel->getStructListByLibID();
 cid=1
 pid=1
 
+用libID获取刚插入的数据结构 >> 910
+
 */
 
 global $tester;

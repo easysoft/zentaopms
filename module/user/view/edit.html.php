@@ -71,7 +71,7 @@
           <td>
             <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+              <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '') . "'");?>
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
@@ -117,6 +117,7 @@
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>
+            <?php echo html::hidden('passwordLength', 0);?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>

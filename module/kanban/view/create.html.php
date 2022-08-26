@@ -78,11 +78,11 @@
       <tr id='emptyTip' class='hidden'><th></th><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
       <tr>
         <th class='w-90px'><?php echo $lang->kanban->archive;?></th>
-        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '0'));?></td>
+        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, isset($copyKanban->archived) ? $copyKanban->archived : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->manageProgress;?></th>
-        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '0'));?></td>
+        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, isset($copyKanban->performable) ? $copyKanban->performable : '1'));?></td>
       </tr>
       <tr>
         <th id='c-title'><?php echo $lang->kanban->alignment;?></th>

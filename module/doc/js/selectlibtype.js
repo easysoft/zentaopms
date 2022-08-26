@@ -1,3 +1,8 @@
+$(function()
+{
+    loadDocLibs('product');
+})
+
 /**
  * Redirect the parent window.
  *

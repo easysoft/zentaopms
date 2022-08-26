@@ -8,11 +8,11 @@ title=测试 gitlabModel::apiGetBranches();
 cid=1
 pid=1
 
-通过gitlabID,projectID,获取GitLab分支列表           >> 1
-通过gitlabID,projectID,获取GitLab分支数量           >> 1
-当前项目没有分支时,获取GitLab分支列表               >> 0
+通过gitlabID,projectID,获取GitLab分支列表 >> 1
+通过gitlabID,projectID,获取GitLab分支数量 >> 1
+当前项目没有分支时,获取GitLab分支列表 >> 0
 当gitlabID存在,projectID不存在时,获取GitLab分支列表 >> return empty
-当gitlabID,projectID都为0时,获取GitLab分支列表      >> return empty
+当gitlabID,projectID都为0时,获取GitLab分支列表 >> return empty
 
 */
 

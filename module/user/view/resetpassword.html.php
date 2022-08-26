@@ -10,6 +10,7 @@
  */
 include '../../common/view/header.lite.html.php';
 ?>
+<?php js::import($jsRoot . 'md5.js');?>
 <?php js::set('expired', $expired);?>
 <?php if($expired):?>
 <style>body {background: none;}</style>
@@ -28,7 +29,7 @@ include '../../common/view/header.lite.html.php';
               <div class='form-group'>
                 <label for='password1'><?php echo $lang->user->password;?></label>
                 <span class='input-group'>
-                  <?php echo html::password('password1', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+                  <?php echo html::password('password1', '', "class='form-control' required placeholder='" . zget($lang->user->placeholder->loginPassword, $config->safe->mode, '') . "' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
                   <span class='input-group-addon' id='passwordStrength'></span>
                 </span>
               </div>
@@ -41,6 +42,7 @@ include '../../common/view/header.lite.html.php';
                   <?php
                   echo html::hidden('account', $user->account);
                   echo html::hidden('passwordStrength', '');
+                  echo html::hidden('passwordLength', 0);
                   echo html::submitButton($lang->user->submit);
                   echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
                   ?>
@@ -49,6 +51,7 @@ include '../../common/view/header.lite.html.php';
             </tbody>
           </table>
         </form>
+        <?php echo html::hidden('verifyRand', $rand);?>
       </div>
     </div>
   </div>

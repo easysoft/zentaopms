@@ -49,12 +49,24 @@ class job extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->app->loadLang('compile');
-        $this->view->jobList = $this->job->getList($repoID, $orderBy, $pager);
+        $jobList = $this->job->getList($repoID, $orderBy, $pager);
+        $this->loadModel('gitlab');
+        foreach($jobList as $job)
+        {
+            $job->canExec = true;
+            if($job->engine == 'gitlab')
+            {
+                $pipeline = json_decode($job->pipeline);
+                $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
+                if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
+            }
+        }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->job->browse;
         $this->view->repoID     = $repoID;
+        $this->view->jobList    = $jobList;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 

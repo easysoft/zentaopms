@@ -22,7 +22,6 @@ pid=1
 
 $users = array('admin', 'user1', 'user2', 'po1', 'po2', 'pm1', 'pm2');
 
-
 $task = new taskTest();
 r($task->getNextUserTest($users, $users[0])) && p() && e('user1'); //计算current为0的下一个用户
 r($task->getNextUserTest($users, $users[1])) && p() && e('user2'); //计算current为1的下一个用户

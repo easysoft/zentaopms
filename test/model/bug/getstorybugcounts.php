@@ -9,16 +9,15 @@ title=bugModel->getStoryBugCounts();
 cid=1
 pid=1
 
-测试获取关联storyID为2的bug数量    >> 4
-测试获取关联storyID为6的bug数量    >> 4
-测试获取关联storyID为10的bug数量   >> 4
-测试获取关联storyID为14的bug数量   >> 4
-测试获取关联storyID为18的bug数量   >> 4
-测试获取关联storyID为22的bug数量   >> 4
+测试获取关联storyID为2的bug数量 >> 4
+测试获取关联storyID为6的bug数量 >> 4
+测试获取关联storyID为10的bug数量 >> 4
+测试获取关联storyID为14的bug数量 >> 4
+测试获取关联storyID为18的bug数量 >> 4
+测试获取关联storyID为22的bug数量 >> 4
 测试获取关联storyID不存在的bug数量 >> 0
 
 */
-
 
 $storyIDList = array('2', '6', '10', '14', '18', '22', '1000001');
 

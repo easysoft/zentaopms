@@ -9,7 +9,9 @@ title=测试 projectModel->getTotalTaskByProject();
 cid=1
 pid=1
 
-状态一致时正常打印id为11的项目bug数量 >> 3
+获取id为11的项目下激活的task数量 >> 14
+获取id为15的项目下完成的task数量 >> 2
+获取id为27的项目下激活的task数量 >> 8
 
 */
 

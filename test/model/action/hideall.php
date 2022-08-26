@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/action.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -17,4 +18,4 @@ pid=1
 $action = new actionTest();
 
 r($action->hideAllTest()) && p('0:extra;1:extra;2:extra') && e('2;2;2'); // 隐藏回收站全部信息
-system("./ztest init");
+$db->restoreDB();

@@ -10,12 +10,12 @@ title=taskModel->processTask();
 cid=1
 pid=1
 
-根据taskID计算wait 未延迟的任务进度   >>  ,,normal,75
-根据taskID计算wait 延迟的任务进度     >>  1,,normal,75
-根据taskID计算doing 延迟的任务进度    >>  1,,normal,80
-根据taskID计算doing 未延迟的任务进度  >>  ,,normal,80
-根据taskID计算done 延迟的任务进度     >>  ,,normal,100
-根据taskID计算算done 未延迟的任务进度 >>  ,,normal,100
+根据taskID计算wait 未延迟的任务进度 >> ,,normal,75
+根据taskID计算wait 延迟的任务进度 >> 1,,normal,75
+根据taskID计算doing 延迟的任务进度 >> 1,,normal,80
+根据taskID计算doing 未延迟的任务进度 >> ,,normal,80
+根据taskID计算done 延迟的任务进度 >> ,,normal,100
+根据taskID计算算done 未延迟的任务进度 >> ,,normal,100
 
 */
 
@@ -92,4 +92,3 @@ r($task->processTaskTest($task3)) && p('delay,needConfirm,productType,progress')
 r($task->processTaskTest($task4)) && p('delay,needConfirm,productType,progress') && e(',,normal,80');   //根据taskID计算doing 未延迟的任务进度
 r($task->processTaskTest($task5)) && p('delay,needConfirm,productType,progress') && e(',,normal,100'); //根据taskID计算done 延迟的任务进度
 r($task->processTaskTest($task6)) && p('delay,needConfirm,productType,progress') && e(',,normal,100'); //根据taskID计算算done 未延迟的任务进度
-

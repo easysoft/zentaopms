@@ -23,10 +23,14 @@ $lang->story->change            = "Thay đổi";
 $lang->story->changed           = "Đã đổi";
 $lang->story->assignTo          = 'Giao cho';
 $lang->story->review            = 'Xét duyệt';
+$lang->story->submitReview      = "Submit Review";
 $lang->story->recall            = 'Revoke';
+$lang->story->recallChange      = 'Undo Changes';
+$lang->story->recallAction      = 'Undo';
 $lang->story->needReview        = 'Duyệt nhu cầu';
 $lang->story->batchReview       = 'Duyệt hàng loạt';
 $lang->story->edit              = "Sửa câu chuyện";
+$lang->story->editDraft         = "Sửa soạn thảo";
 $lang->story->batchEdit         = "Sửa hàng loạt";
 $lang->story->subdivide         = 'Phân rã';
 $lang->story->link              = 'Link';
@@ -68,6 +72,8 @@ $lang->story->batchToTask       = 'Batch Convert to Task';
 $lang->story->convertRelations  = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
+$lang->story->saveDraft          = 'Save as draft';
+$lang->story->doNotSubmit        = 'Do Not Submit';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
@@ -80,11 +86,13 @@ $lang->story->deleteAction    = "Delete {$lang->SRCommon}";
 $lang->story->exportAction    = "Export {$lang->SRCommon}";
 $lang->story->reportAction    = "Report";
 
-$lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory     = 'Story %s is closed and will not be closed.';
-$lang->story->batchToTaskTips = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
-$lang->story->successToTask   = "Converted to task.";
-$lang->story->storyRound      = '%s time estimation';
+$lang->story->skipStory        = '%s is a parent story. It cannot be closed.';
+$lang->story->closedStory      = 'Story %s is closed and will not be closed.';
+$lang->story->batchToTaskTips  = "This action will create a task with the same name as the selected {$lang->SRCommon} and link {$lang->SRCommon} to the task. The closed {$lang->SRCommon} will not be converted into tasks.";
+$lang->story->successToTask    = "Converted to task.";
+$lang->story->storyRound       = '%s time estimation';
+$lang->story->float            = "『%s』should be positive number, decimals included.";
+$lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Mẹ';
@@ -124,6 +132,8 @@ $lang->story->closedBy       = 'Người đóng';
 $lang->story->closedDate     = 'Ngày đóng';
 $lang->story->closedReason   = 'Lý do';
 $lang->story->rejectedReason = 'Lý do từ chối';
+$lang->story->changedBy      = 'ChangedBy';
+$lang->story->changedDate    = 'ChangedDate';
 $lang->story->reviewedBy     = 'Người duyệt';
 $lang->story->reviewer       = $lang->story->reviewedBy;
 $lang->story->reviewers      = 'Reviewers';
@@ -141,6 +151,7 @@ $lang->story->linkStories    = 'Câu chuyện liên kết';
 $lang->story->childStories   = 'Câu chuyện được phân rã';
 $lang->story->duplicateStory = 'ID câu chuyện được nhân bản';
 $lang->story->reviewResult   = 'Duyệt kết quả';
+$lang->story->reviewResultAB = 'Kết quả đánh giá';
 $lang->story->preVersion     = 'Phiên bản mới nhất';
 $lang->story->keywords       = 'Tags';
 $lang->story->newStory       = 'Tiếp tục thêm';
@@ -174,11 +185,12 @@ $lang->story->needNotReviewList[1] = 'Need Not Review';
 $lang->story->useList[0] = 'Có';
 $lang->story->useList[1] = 'Không';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = 'Nháp';
-$lang->story->statusList['active']  = 'Kích hoạt';
-$lang->story->statusList['closed']  = 'Đã đóng';
-$lang->story->statusList['changed'] = 'Đã thay đổi';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = 'Nháp';
+$lang->story->statusList['reviewing'] = 'Đang xem xét';
+$lang->story->statusList['active']    = 'Kích hoạt';
+$lang->story->statusList['closed']    = 'Đã đóng';
+$lang->story->statusList['changing']  = 'Đã thay đổi';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Đang đợi';
@@ -285,6 +297,8 @@ $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
+$lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
+$lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Phạm vi';
@@ -315,6 +329,7 @@ $lang->story->action->linkrelatedstory      = array('main' => '$date, liên kế
 $lang->story->action->subdividestory        = array('main' => '$date, được phân rã bởi <strong>$actor</strong> tới Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Câu chuyện <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, bị hủy bởi <strong>$actor</strong> Câu chuyện được phân rã <strong>$extra</strong>.');
+$lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -439,3 +454,8 @@ $lang->story->subDivideTip['subStory']  = 'The Sub-stories cannot be subdivided.
 $lang->story->subDivideTip['planned']   = 'The Story has been planned and cannot be subdivided.';
 $lang->story->subDivideTip['projected'] = 'The Story has been initiated and cannot be subdivided.';
 $lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be subdivided.';
+
+$lang->story->featureBar['browse']['all']       = $lang->all;
+$lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
+$lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
+$lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
