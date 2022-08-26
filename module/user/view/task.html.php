@@ -62,8 +62,8 @@
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php
-                  $onlybody = $task->executionType == 'kanban' ? true : '';
-                  $class    = $task->executionType == 'kanban' ? 'iframe' : '';
+            $onlybody = $task->executionType == 'kanban' ? true : '';
+            $class    = $task->executionType == 'kanban' ? 'iframe' : '';
             ?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");?>
           </td>
