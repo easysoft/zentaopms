@@ -52,6 +52,7 @@ $lang->task->progressTips        = 'Đã làm/(Đã làm + Còn lại)';
 $lang->task->copy                = 'Copy nhiệm vụ';
 $lang->task->waitTask            = 'Đang đợi nhiệm vụ';
 $lang->task->allModule           = 'Tất cả Module';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common           = 'Nhiệm vụ';
 $lang->task->id               = 'ID';

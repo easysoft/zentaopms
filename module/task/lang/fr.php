@@ -54,6 +54,7 @@ $lang->task->progressTips        = 'Coût/(Coût+Reste)';
 $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
 $lang->task->allModule           = 'Tous Modules';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';

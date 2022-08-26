@@ -778,7 +778,7 @@ class task extends control
 
         if(!empty($task->team) and $task->mode == 'multi')
         {
-            return $this->editTeam($executionID, $task, $kanbanGroup, $from);
+            return $this->editTeam($executionID, $taskID, $kanbanGroup, $from);
         }
 
         if(!empty($_POST))
@@ -2303,15 +2303,15 @@ class task extends control
      * Update assign of multi task.
      *
      * @param  int    $requestID
-     * @param  object $task
+     * @param  object $taskID
      * @param  string $kanbanGroup
      * @param  string $from
      * @access public
      * @return void
      */
-    public function editTeam($executionID, $task, $kanbanGroup = 'default', $from = '')
+    public function editTeam($executionID, $taskID, $kanbanGroup = 'default', $from = '')
     {
-        $taskID = $task->id;
+        $task = $this->task->getById($taskID);
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -2333,7 +2333,6 @@ class task extends control
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             if(isonlybody())
             {
-                $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
 
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')

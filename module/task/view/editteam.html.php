@@ -37,7 +37,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin'>
+    <form method='post' target='hiddenwin' action='<?php echo inlink('editTeam', "executionID=$task->execution&taskID=$task->id")?>' id='teamForm'>
       <table class='table table-form'>
         <tbody class="sortable">
           <tr class='hidden'>
@@ -47,6 +47,7 @@
               <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
             </td>
           </tr>
+          <?php echo html::hidden('status', $task->status);?>
           <tr class='hidden'>
             <th><?php echo $lang->task->left;?></th>
             <td>
