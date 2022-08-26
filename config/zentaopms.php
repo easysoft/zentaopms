@@ -224,6 +224,7 @@ $config->openMethods[] = 'personnel.unbindwhitelist';
 $config->openMethods[] = 'tree.viewhistory';
 $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
+$config->openMethods[] = 'task.editteam';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
