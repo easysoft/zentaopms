@@ -172,6 +172,8 @@ $lang->bug->legendComment               = 'Ghi chú';
 $lang->bug->legendLife                  = 'Toàn bộ';
 $lang->bug->legendMisc                  = 'Khác';
 $lang->bug->legendRelated               = 'Thông tin liên quan';
+$lang->bug->linkMRs                     = 'Related MRs';
+$lang->bug->linkCommit                  = 'Related Commits';
 
 /* Button. */
 $lang->bug->buttonConfirm = 'Xác nhận';

@@ -77,4 +77,5 @@ $encodePath = $this->repo->encodePath($entry);
 <?php if(!isonlybody()):?>
 </div>
 <?php endif;?>
+<a href='' class='iframe' data-width='90%' id='linkObject'></a>
 <?php include '../../common/view/footer.html.php';?>

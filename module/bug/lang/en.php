@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->linkCommit     = 'Related Commits';
 $lang->bug->duplicateTip   = 'Please enter keyword search';
 
 /* Page tags. */

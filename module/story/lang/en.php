@@ -181,6 +181,7 @@ $lang->story->completeRate     = 'Completion Rate';
 $lang->story->reviewed         = 'Reviewed';
 $lang->story->toBeReviewed     = 'To Be Reviewed';
 $lang->story->linkMR           = 'Related MRs';
+$lang->story->linkCommit       = 'Related Commits';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';

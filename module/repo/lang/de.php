@@ -41,6 +41,8 @@ $lang->repo->downloadZip     = 'Download Zip file';
 $lang->repo->sshClone        = 'Clone with SSH';
 $lang->repo->httpClone       = 'Clone with HTTP';
 $lang->repo->cloneUrl        = 'Clone URL';
+$lang->repo->linkTask        = 'Link Task';
+$lang->repo->unlinkedTasks   = 'Unlinked Tasks';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -104,6 +106,9 @@ $lang->repo->job                = 'Job';
 $lang->repo->fileServerUrl      = 'File Server Url';
 $lang->repo->fileServerAccount  = 'File Server Account';
 $lang->repo->fileServerPassword = 'File Server Password';
+$lang->repo->linkStory          = 'Link ' . $lang->SRCommon;
+$lang->repo->linkBug            = 'Link Bug';
+$lang->repo->linkTask           = 'Link Task';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';

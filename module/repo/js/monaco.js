@@ -115,3 +115,16 @@ $(function()
         }
     })
 });
+
+/**
+ * Load link object page.
+ *
+ * @param  string $link
+ * @access public
+ * @return void
+ */
+function loadLinkPage(link)
+{
+    $('#linkObject').attr('href', link);
+    $('#linkObject').click()
+}
