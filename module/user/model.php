@@ -1087,7 +1087,7 @@ class userModel extends model
         if(!$stmt) return array('rights' => $rights, 'acls' => $acls);
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-            $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
+            if($row['module'] and $row['method']) $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
 
         /* Get can manage projects by user. */

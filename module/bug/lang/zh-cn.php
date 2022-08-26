@@ -77,7 +77,7 @@ $lang->bug->deadlineAB       = '截止';
 $lang->bug->plan             = '所属' . '计划';
 $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
-$lang->bug->duplicateBug     = '重复ID';
+$lang->bug->duplicateBug     = '重复Bug';
 $lang->bug->lastEditedBy     = '最后修改者';
 $lang->bug->linkBug          = '相关Bug';
 $lang->bug->linkBugs         = '关联相关Bug';
@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = '被延期';
 $lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
 $lang->bug->linkMR         = '相关合并请求';
+$lang->bug->duplicateTip   = '请输入关键字';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';

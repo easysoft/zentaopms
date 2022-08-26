@@ -262,7 +262,14 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
+                  <td>
+                  <?php
+                  if(empty($bug->mailto))
+                  {
+                      foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account) echo ' ' . zget($users, $account);
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>

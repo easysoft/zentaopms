@@ -143,7 +143,7 @@
                 <tr>
                   <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class='form-control' onchange=setDuplicate(this.value,$bugID)");?></td>
                   <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
-                    <?php echo html::select("duplicateBugs[$bugID]", $productBugList[$bug->product][$bug->branch], $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateBug}'");?>
+                    <?php echo html::select("duplicateBugs[$bugID]", $productBugList[$bug->product][$bug->branch], $bug->duplicateBug, "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>
                   </td>
                 </tr>
               </table>
