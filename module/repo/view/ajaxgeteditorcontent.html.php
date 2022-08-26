@@ -67,6 +67,8 @@ $(function()
     function getRelation(commit)
     {
         $('#codeContainer').css('height', codeHeight / 5 * 3);
+        var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 10;
+        $('#related').css('height', relatedHeight);
         $tabs = $('#relationTabs').data('zui.tabs');
         if($tabs) $tabs.closeAll();
 
@@ -101,6 +103,11 @@ $(function()
         });
         $('#related').show();
     }
+
+    $('#relationTabs').on('onOpen', function(event, tab) {
+        var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 45;
+        $('#relationTabs iframe').css('height', relatedHeight);
+    });
 
     /**
      * Set tab data.

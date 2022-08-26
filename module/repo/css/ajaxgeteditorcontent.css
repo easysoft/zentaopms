@@ -2,7 +2,7 @@
 #monacoEditor .tip {width: 15px; height: 15px; background: #D9D9D9; border-radius: 10px;}
 #log {background: #fff; margin-top: 2px; color: #707070; display: none; padding: 5px;}
 #log .history {margin-left: 5px;}
-#related {display: none; margin-top: 2px;}
+#related {display: none; margin-top: 2px; background: #fff;}
 #relationTabs .tab-pane {display: none;}
 #relationTabs .tabs-navbar {background: #F4F5F7;}
 #relationTabs .tab-pane.active {display: block;}
