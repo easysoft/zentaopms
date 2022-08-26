@@ -3,9 +3,10 @@ class todoTest
 {
     public function __construct()
     {
-         global $tester;
-         $this->objectModel = $tester->loadModel('todo');
-         $tester->app->loadClass('dao');
+        global $tester;
+        $this->objectModel = $tester->loadModel('todo');
+        $tester->app->loadClass('dao');
+        $_SERVER['HTTP_HOST'] = 'test.zentao.net';
     }
 
     /**

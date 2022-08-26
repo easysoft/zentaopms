@@ -60,7 +60,7 @@ class programEntry extends Entry
     public function delete($programID)
     {
         $control = $this->loadController('program', 'delete');
-        $control->delete(0, $programID, 'true');
+        $control->delete($programID, 'true');
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

@@ -326,7 +326,18 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->legendMailto;?></th>
-                  <td><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) {if(empty($account)) continue; echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;'; }?></td>
+                  <td>
+                  <?php
+                  if(!empty($story->mailto))
+                  {
+                      foreach(explode(',', $story->mailto) as $account)
+                      {
+                          if(empty($account)) continue;
+                          echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;';
+                      }
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>

@@ -71,9 +71,6 @@ $config->task->datatable->fieldList['mode']['control'] = 'hidden';
 $config->task->datatable->fieldList['desc']['title']   = 'idAB';
 $config->task->datatable->fieldList['desc']['control'] = 'textarea';
 
-$config->task->datatable->fieldList['deadline']['title']   = 'idAB';
-$config->task->datatable->fieldList['deadline']['control'] = 'date';
-
 $config->task->datatable->fieldList['pri']['title']    = 'priAB';
 $config->task->datatable->fieldList['pri']['fixed']    = 'left';
 $config->task->datatable->fieldList['pri']['width']    = '50';
@@ -94,6 +91,18 @@ $config->task->datatable->fieldList['status']['title']    = 'statusAB';
 $config->task->datatable->fieldList['status']['fixed']    = 'no';
 $config->task->datatable->fieldList['status']['width']    = '60';
 $config->task->datatable->fieldList['status']['required'] = 'no';
+
+$config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
+$config->task->datatable->fieldList['assignedTo']['fixed']      = 'no';
+$config->task->datatable->fieldList['assignedTo']['width']      = '100';
+$config->task->datatable->fieldList['assignedTo']['required']   = 'no';
+$config->task->datatable->fieldList['assignedTo']['control']    = 'select';
+$config->task->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
+
+$config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
+$config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['finishedBy']['width']    = '80';
+$config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
@@ -121,6 +130,7 @@ $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
 $config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
+$config->task->datatable->fieldList['deadline']['control'] = 'date';
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->task->datatable->fieldList['openedBy']['fixed']    = 'no';
@@ -143,22 +153,10 @@ $config->task->datatable->fieldList['realStarted']['fixed']    = 'no';
 $config->task->datatable->fieldList['realStarted']['width']    = '95';
 $config->task->datatable->fieldList['realStarted']['required'] = 'no';
 
-$config->task->datatable->fieldList['assignedTo']['title']      = 'assignedTo';
-$config->task->datatable->fieldList['assignedTo']['fixed']      = 'no';
-$config->task->datatable->fieldList['assignedTo']['width']      = '100';
-$config->task->datatable->fieldList['assignedTo']['required']   = 'no';
-$config->task->datatable->fieldList['assignedTo']['control']    = 'select';
-$config->task->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
-
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['assignedDate']['width']    = '110';
 $config->task->datatable->fieldList['assignedDate']['required'] = 'no';
-
-$config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
-$config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
-$config->task->datatable->fieldList['finishedBy']['width']    = '80';
-$config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedDate']['title']    = 'finishedDateAB';
 $config->task->datatable->fieldList['finishedDate']['fixed']    = 'no';

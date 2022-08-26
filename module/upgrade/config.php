@@ -23,7 +23,7 @@ $config->upgrade->maxVersion['max3_3']       = '17_2';
 $config->upgrade->maxVersion['max3_4']       = '17_3';
 $config->upgrade->maxVersion['max3_5']       = '17_4';
 $config->upgrade->maxVersion['max3_6']       = '17_5';
-$config->upgrade->maxVersion['max3_7']       = '17_6';
+$config->upgrade->maxVersion['max3_6_1']     = '17_6';
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']       = '9_5_1';

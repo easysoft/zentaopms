@@ -77,7 +77,7 @@ $lang->bug->deadlineAB       = 'Butoir';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Fermé par';
 $lang->bug->closedDate       = 'Date Fermeture';
-$lang->bug->duplicateBug     = 'Bug ID en doublon';
+$lang->bug->duplicateBug     = 'Bug en doublon';
 $lang->bug->lastEditedBy     = 'Edité par';
 $lang->bug->linkBug          = 'Bugs Liés';
 $lang->bug->linkBugs         = 'Associer Bug';
@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->duplicateTip   = 'Please enter keyword search';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'Affecté à';
