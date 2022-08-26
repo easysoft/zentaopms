@@ -3,10 +3,14 @@
 #log {background: #fff; margin-top: 2px; color: #707070; display: none; padding: 5px;}
 #log .history {margin-left: 5px;}
 #related {display: none; margin-top: 2px; background: #fff;}
+
+#relationTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
+#relationTabs .nav-tabs > li > a > span {margin-right: 5px;}
 #relationTabs .tab-pane {display: none;}
 #relationTabs .tabs-navbar {background: #F4F5F7;}
 #relationTabs .tab-pane.active {display: block;}
 #relationTabs .tab-nav-item {max-width: none !important;}
+#relationTabs .tab-nav-item .icon {line-height: inherit;}
 #relationTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
 #relationTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
 #related .content, #related .btn {background-color: #F4F5F7; border: none;}
