@@ -13,7 +13,7 @@ fields:
   - field: account
     range: [],[admin]{2},[]{2}
   - field: password
-    range: [],[UDJzc3cwcmQ=],[]{3}
+    range: [],[UDJzc3cwcmQ=],[RWFzeXNvZnRAcWQyMDEwIQ==],[]{2}
   - field: token
     range: x88fZokrp5hShia2jyBN,YWRtaW46UDJzc3cwcmQ=,1196c85ba525a268570df9da627e3a7b2d,c6769e6761a7d719129b2421dcb3112d936e2b1f,9ff43f9d1a369465bcf0781a3785f46bcef782d1
   - field: private
@@ -21,6 +21,6 @@ fields:
   - field: createdBy
     range: admin
   - field: createdDate
-    range: [2021-12-09 11:23:35],[2022-01-12 08:47:37],[2022-01-12 08:47:37],[2022-08-01 09:07:37],[2022-08-01 09:09:37]
+    range: [2022-08-01 09:09:37]
   - field: deleted
     range: 0
