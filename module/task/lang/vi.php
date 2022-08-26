@@ -142,6 +142,8 @@ $lang->task->noFinished        = 'Chưa kết thúc';
 $lang->task->noClosed          = 'Chưa đóng';
 $lang->task->yesterdayFinished = 'Kết thúc hôm qua';
 $lang->task->allTasks          = 'Nhiệm vụ';
+$lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = 'Đang đợi';

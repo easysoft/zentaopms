@@ -2540,6 +2540,96 @@ class repoModel extends model
     }
 
     /**
+     * Get relation by commit.
+     *
+     * @param  int    $repoID
+     * @param  string $commit
+     * @param  string $type story|bug|task
+     * @access public
+     * @return array
+     */
+    public function getRelationByCommit($repoID, $commit, $type = '')
+    {
+        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t2.revision')->eq($commit)
+            ->andWhere('t2.repo')->eq($repoID)
+            ->andWhere('t1.AType')->eq('revision')
+            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
+            ->fetchAll();
+
+        $storyIDs = array();
+        $bugIDs   = array();
+        $taskIDs  = array();
+        foreach($relationList as $relation)
+        {
+            if($relation->type == 'story')
+            {
+                $storyIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bugIDs[] = $relation->id;
+            }
+            elseif($relation->type == 'task')
+            {
+                $taskIDs[] = $relation->id;
+            }
+        }
+        $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
+        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
+        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
+
+        $titleList = array();
+        foreach($relationList as $key => $relation)
+        {
+            if($type) $key = $relation->id;
+
+            $titleList[$key] = array(
+                'id'    => $relation->id,
+                'type'  => $relation->type,
+                'title' => "#$relation->id "
+            );
+            if($relation->type == 'story')
+            {
+                $story = zget($stories, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($story, 'title', '');
+            }
+            elseif($relation->type == 'bug')
+            {
+                $bug = zget($bugs, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($bug, 'title', '');
+            }
+            elseif($relation->type == 'task')
+            {
+                $task = zget($tasks, $relation->id, array());
+                $titleList[$key]['title'] .=  zget($task, 'name', '');
+            }
+        }
+
+        return $titleList;
+    }
+
+    /**
+     * Get relation commit.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType story|bug|task
+     * @access public
+     * @return array
+     */
+    public function getCommitsByObject($objectID, $objectType)
+    {
+        return $this->dao->select('t2.*')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t1.BID')->eq($objectID)
+            ->andWhere('t1.BType')->eq($objectType)
+            ->andWhere('t1.AType')->eq('revision')
+            ->andWhere('t1.relation')->eq('commit')
+            ->fetchAll();
+    }
+
+    /**
      * Insert delete record.
      *
      * @param  int    $repoID
@@ -2620,76 +2710,5 @@ class repoModel extends model
         }
 
         $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
-    }
-
-    /**
-     * Get relation by commit.
-     *
-     * @param  int    $repoID
-     * @param  string $commit
-     * @param  string $type story|bug|task
-     * @access public
-     * @return array
-     */
-    public function getRelationByCommit($repoID, $commit, $type = '')
-    {
-        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
-            ->where('t2.revision')->eq($commit)
-            ->andWhere('t2.repo')->eq($repoID)
-            ->andWhere('t1.AType')->eq('revision')
-            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
-            ->fetchAll();
-
-        $storyIDs = array();
-        $bugIDs   = array();
-        $taskIDs  = array();
-        foreach($relationList as $relation)
-        {
-            if($relation->type == 'story')
-            {
-                $storyIDs[] = $relation->id;
-            }
-            elseif($relation->type == 'bug')
-            {
-                $bugIDs[] = $relation->id;
-            }
-            elseif($relation->type == 'task')
-            {
-                $taskIDs[] = $relation->id;
-            }
-        }
-        $stories = empty($storyIDs) ? array() : $this->loadModel('story')->getByList($storyIDs);
-        $bugs    = empty($bugIDs)   ? array() : $this->loadModel('bug')->getByList($bugIDs);
-        $tasks   = empty($taskIDs)  ? array() : $this->loadModel('task')->getByList($taskIDs);
-
-        $titleList = array();
-        foreach($relationList as $key => $relation)
-        {
-            if($type) $key = $relation->id;
-
-            $titleList[$key] = array(
-                'id'    => $relation->id,
-                'type'  => $relation->type,
-                'title' => "#$relation->id "
-            );
-            if($relation->type == 'story')
-            {
-                $story = zget($stories, $relation->id, array());
-                $titleList[$key]['title'] .=  zget($story, 'title', '');
-            }
-            elseif($relation->type == 'bug')
-            {
-                $bug = zget($bugs, $relation->id, array());
-                $titleList[$key]['title'] .=  zget($bug, 'title', '');
-            }
-            elseif($relation->type == 'task')
-            {
-                $task = zget($tasks, $relation->id, array());
-                $titleList[$key]['title'] .=  zget($task, 'name', '');
-            }
-        }
-
-        return $titleList;
     }
 }

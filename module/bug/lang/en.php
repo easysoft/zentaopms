@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->linkCommit     = 'Related Commits';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';

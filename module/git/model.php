@@ -189,7 +189,20 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        if($lastVersion != $version) $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
+                        if($lastVersion != $version)
+                        {
+                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
+
+                            /* Objects link commit. */
+                            foreach($objects as $objectType => $objectIDs)
+                            {
+                                $objectTypeMap = array('stories' => 'story', 'bugs' => 'bug', 'tasks' => 'task');
+                                if(empty($objectIDs) or !isset($objectTypeMap[$objectType])) continue;
+
+                                $this->post->$objectType = $objectIDs;
+                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType]);
+                            }
+                        }
                     }
                     else
                     {

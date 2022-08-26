@@ -170,6 +170,7 @@ $lang->task->noClosed          = 'Non Fermées';
 $lang->task->yesterdayFinished = 'Tâche Terminée Hier';
 $lang->task->allTasks          = 'Tâche';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'A Faire';

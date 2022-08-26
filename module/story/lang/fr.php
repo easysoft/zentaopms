@@ -172,6 +172,7 @@ $lang->story->completeRate     = 'Completion Rate';
 $lang->story->reviewed         = 'Reviewed';
 $lang->story->toBeReviewed     = 'To Be Reviewed';
 $lang->story->linkMR           = 'Related MRs';
+$lang->story->linkCommit       = 'Related Commits';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
