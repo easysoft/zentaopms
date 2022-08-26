@@ -201,6 +201,11 @@ $(function()
     {
         var link = $(this).data('link');
         parent.loadLinkPage(link);
-    })
+    });
+
+    $('#relationTabs').on('onOpen', function(event, tab) {
+        var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 45;
+        $('#relationTabs iframe').css('height', relatedHeight);
+    });
 });
 </script>
