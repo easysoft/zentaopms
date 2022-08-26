@@ -13,6 +13,9 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
     $memberDisabled = true;
     $sortDisabled   = true;
 }
+
+$hourDisabled = $memberDisabled;
+if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = false;
 ?>
 <tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
   <td class='w-250px'>
@@ -23,16 +26,18 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
   <td>
     <div class='input-group'>
       <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-      <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
+      <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
       <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
       <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
       <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($memberDisabled ? ' readonly' : ''))?>
+      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
     </div>
   </td>
   <td class='w-130px sort-handler'>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <?php if(isset($task->mode) and $task->mode == 'linear'):?>
     <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+    <?php endif;?>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
@@ -62,7 +67,9 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
   </td>
   <td class='w-130px sort-handler'>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <?php if(empty($task->mode) or $task->mode == 'linear'):?>
     <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+    <?php endif;?>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
@@ -78,6 +85,10 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
 <script>
 $(document).ready(function()
 {
+    <?php if(isset($task->mode) and $task->mode == 'multi'):?>
+    $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
+    <?php endif;?>
+
     /* Init task team manage dialog */
     var $taskTeamEditor = $('tr.teamTemplate').closest('table').batchActionForm(
     {
@@ -159,11 +170,14 @@ $(document).ready(function()
             return false;
         }
 
+        <?php if($app->rawMethod == 'edit'):?>
         if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
         {
             bootbox.alert(totalLeftError);
             return false;
         }
+        <?php endif;?>
+
         return true;
     }
 

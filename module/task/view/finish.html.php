@@ -67,7 +67,7 @@
           ?>
           </td>
         </tr>
-        <tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
           <td>
             <?php
