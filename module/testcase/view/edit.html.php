@@ -173,7 +173,7 @@
               </tr>
               <?php else:?>
               <tr>
-                <th class='w-85px'><?php echo $lang->testcase->product;?></th>
+                <th><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
@@ -248,9 +248,9 @@
                     {
                         foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li title='$linkCaseTitle'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkCase[]' value=$linkCaseID />";
-                            echo "<label>#{$linkCaseID} {$linkCaseTitle}</label>";
+                            echo "<label class='linkCaseTitle'>#{$linkCaseID} {$linkCaseTitle}</label>";
                             echo '</div></li>';
                         }
                     }
@@ -275,9 +275,9 @@
                     {
                         foreach($case->toBugs as $bugID => $bugTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li title='$bugTitle'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$bugID />";
-                            echo "<label>#{$bugID} {$bugTitle}</label>";
+                            echo "<label class='linkBugTitle'>#{$bugID} {$bugTitle}</label>";
                             echo '</div></li>';
                         }
                     }
@@ -294,7 +294,7 @@
             <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->testcase->openedBy;?></th>
+                <th><?php echo $lang->testcase->openedBy;?></th>
                 <td><?php echo zget($users, $case->openedBy) . $lang->at . $case->openedDate;?></td>
               </tr>
               <tr>

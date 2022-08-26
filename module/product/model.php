@@ -754,7 +754,6 @@ class productModel extends model
     {
         $productID  = (int)$productID;
         $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
             ->add('id', $productID)
@@ -1019,7 +1018,8 @@ class productModel extends model
         if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
         if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
         if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
-        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $type, $sort, $pager);
+        if($browseType == 'changingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changing', $type, $sort, $pager);
+        if($browseType == 'reviewingstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'reviewing', $type, $sort, $pager);
         if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
         if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
         if($browseType == 'assignedbyme') $stories = $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
@@ -1077,7 +1077,7 @@ class productModel extends model
                 $modules          = array();
                 $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
+                foreach($branchModuleList as $branchID => $branchModules) $modules = array_merge($modules, $branchModules);
             }
             else
             {
@@ -2421,6 +2421,8 @@ class productModel extends model
             $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         }
+
+        if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
     }
 
     /**

@@ -77,7 +77,7 @@ $lang->bug->deadlineAB       = 'Deadline';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
-$lang->bug->duplicateBug     = 'Duplicated Bug ID';
+$lang->bug->duplicateBug     = 'Duplicated Bug';
 $lang->bug->lastEditedBy     = 'EditedBy';
 $lang->bug->linkBug          = 'Linked Bugs';
 $lang->bug->linkBugs         = 'Link Bug';
@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->duplicateTip   = 'Please enter keyword search';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';
@@ -416,6 +417,7 @@ $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
+
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 

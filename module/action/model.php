@@ -510,7 +510,8 @@ class actionModel extends model
             elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
             {
                 $action->appendLink = '';
-                if(strpos($action->extra, ':')!== false)
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
                 {
                     list($extra, $id) = explode(':', $action->extra);
                     $action->extra    = $extra;
@@ -996,10 +997,10 @@ class actionModel extends model
             {
                 $productCondition = '';
                 foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                $productCondition .= '))';
+                if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : '';
+                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
@@ -1010,7 +1011,7 @@ class actionModel extends model
 
                 $productCondition = '';
                 foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
-                $productCondition .= '))';
+                if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project = '$projectID')";
                 $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
@@ -1024,7 +1025,7 @@ class actionModel extends model
                 $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
                 $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
-                $productCondition   = "product like '%,$productID,%'";
+                $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
                 $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
                 $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
             }
@@ -1539,7 +1540,11 @@ class actionModel extends model
                 if($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story)) $moduleName = $story->type;
+                    if(!empty($story))
+                    {
+                        $moduleName = $story->type;
+                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                    }
                 }
 
                 if($action->objectType == 'doclib')

@@ -99,3 +99,7 @@ $lang->programplan->error->parentWorkload  = 'The sum of the workload of the chi
 $lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
 $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
 $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';
+$lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
+
+$lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
+$lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';

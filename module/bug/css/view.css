@@ -7,3 +7,4 @@
 .select-project-modal .modal-body {right: 15px;}
 .osContent, .browserContent {margin: 0 0 5px;}
 .browserContent {margin-left: -4px;}
+.resolution {white-space: nowrap; overflow: hidden;}

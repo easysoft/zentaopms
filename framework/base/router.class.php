@@ -1461,6 +1461,17 @@ class baseRouter
             chdir(dirname($file2Included));
             helper::import($file2Included);
 
+            /* Check file is encode by ioncube. */
+            $isEncrypted = false;
+            if($isExt)
+            {
+                $fp = fopen($file2Included, 'r');
+                $line1 = fgets($fp);
+                $line2 = fgets($fp);
+                fclose($fp);
+                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+            }
+
             /*
              * 设置control的类名。
              * Set the class name of the control.
@@ -1500,7 +1511,7 @@ class baseRouter
                 {
                     $default = $paramDefaultValue[$className][$methodName][$name];
                 }
-                elseif($param->isDefaultValueAvailable())
+                elseif(!$isEncrypted and $param->isDefaultValueAvailable())
                 {
                     $default = $param->getDefaultValue();
                 }
@@ -1540,11 +1551,12 @@ class baseRouter
                     $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
-
+            return true;
         }
         catch(EndResponseException $endResponseException)
         {
             echo $endResponseException->getContent();
+            return false;
         }
     }
 
@@ -2146,6 +2158,8 @@ class baseRouter
     public function loadModule()
     {
         try {
+            if(is_null($this->params) and !$this->setParams()) return false;
+
             /* 调用该方法   Call the method. */
             $module = $this->control;
 
@@ -3190,6 +3204,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         $this->sessSavePath = $savePath;
@@ -3202,6 +3217,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return true;
@@ -3214,6 +3230,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3233,6 +3250,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3263,6 +3281,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
@@ -3279,6 +3298,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifeTime)
     {
         $time = time();

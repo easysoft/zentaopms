@@ -290,14 +290,14 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchClose        = (common::hasPriv($storyType, 'batchClose') and strtolower($browseType) != 'closedbyme' and strtolower($browseType) != 'closedstory');
       $canBatchReview       = ($canBeChanged and common::hasPriv($storyType, 'batchReview'));
       $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
-      $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch'));
+      $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
       $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story');
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
       $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
       $canBatchImportToLib  = ($canBeChanged and $this->app->tab == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
-      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib);
+      $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
@@ -388,8 +388,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
             $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
-            <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
+            <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <?php endif;?>
             <ul class='dropdown-menu'>
               <?php
               $class      = $canBatchClose ? '' : "class='disabled'";
@@ -440,7 +442,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID)
+              if($canBatchChangeBranch)
               {
                   $withSearch = count($branchTagOption) > 8;
                   echo "<li class='dropdown-submenu'>";
@@ -449,12 +451,17 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<ul class='dropdown-list'>";
                   foreach($branchTagOption as $id => $branchName)
                   {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
+                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id&confirm=&storyIdList=&storyType=$storyType");
                       echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                   }
                   echo '</ul>';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
                   echo '</div></li>';
+              }
+              else
+              {
+                  $class= "class='disabled'";
+                  echo "<li $class>" . html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType],  '', $class) . '</li>';
               }
 
               if($storyType == 'story')
@@ -549,7 +556,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($users) > 10;
-            $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
+            $actionLink = $this->createLink('story', 'batchAssignTo', "storyType=$storyType");
             echo html::select('assignedTo', $users, '', 'class="hidden"');
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">

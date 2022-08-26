@@ -332,15 +332,16 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'story');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
@@ -396,15 +397,16 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');
+            $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
         }
         elseif($type == 'bysearch')
         {
-            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
+            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
@@ -569,9 +571,11 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         if($type == 'assignedBy')
         {
-            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'bug');
+            $bugs = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'bug');
         }
         else
         {

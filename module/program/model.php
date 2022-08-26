@@ -1570,10 +1570,10 @@ class programModel extends model
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program",                $program, $type, 'link',         '', '', '', "data-app={$this->app->tab}");
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', '', '', "data-app='project'");
 
                 $disabledWhitelist = $program->acl == 'open' ? " disabled='disabled' style='pointer-events: none;'" : '';
-                $menu             .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', '', '', "data-app='project'" . $disabledWhitelist);
+                $menu             .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=browse", $program, $type, 'shield-check', '', '', '', "data-app='project'" . $disabledWhitelist);
                 if(common::hasPriv('project','delete'))
                 {
                     $menu .= $this->buildMenu("project", "delete", $params, $program, $type, 'trash', 'hiddenwin', '', '', "data-group='program'", $this->lang->delete);
