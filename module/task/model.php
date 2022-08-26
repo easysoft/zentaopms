@@ -2714,14 +2714,16 @@ class taskModel extends model
      *
      * @param  int    $taskID
      * @param  string $account
+     * @param  string $append
      * @access public
      * @return array
      */
-    public function getTaskEstimate($taskID, $account = '')
+    public function getTaskEstimate($taskID, $account = '', $append = '')
     {
         return $this->dao->select('*')->from(TABLE_TASKESTIMATE)
             ->where('task')->eq($taskID)
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
+            ->beginIF($append)->orWhere('append')->eq($append)->fi()
             ->orderBy('date,id')
             ->fetchAll();
     }
