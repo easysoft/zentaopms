@@ -14,6 +14,18 @@ class executionTest
     }
 
     /**
+     * Check the privilege.
+     *
+     * @param mixed $executionID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivTest($executionID)
+    {
+        return $this->objectModel->checkPriv($executionID);
+    }
+
+    /**
      * get todate
      *
      * @access public
@@ -352,6 +364,76 @@ class executionTest
     }
 
     /**
+     * Check the workload format and total.
+     *
+     * @param int    $executionID
+     * @param string $type
+     * @param int    $percent
+     * @access public
+     * @return bool
+     */
+    public function checkWorkloadTest($executionID = 0, $type = '', $percent = 0)
+    {
+        global $tester;
+        $tester->app->loadLang('programplan');
+        $_POST['products'] = array(1, 81, 91);
+        $_POST['percent']  = $percent;
+        $_POST['parent']   = 0;
+
+        $oldExecution = $executionID ? $this->objectModel->getByID($executionID) : '';
+        if(!empty($oldExecution->parent)) $_POST['parent'] = $oldExecution->parent;
+
+        $result = $this->objectModel->checkWorkload($type, $percent, $oldExecution);
+        if(dao::isError()) return dao::getError(true);
+
+        return $result;
+    }
+
+    /**
+     * Check begin and end date.
+     *
+     * @param int    $projectID
+     * @param string $checkType empty|normal|gt|lt|eq
+     * @access public
+     * @return bool
+     */
+    public function checkBeginAndEndDateTest($projectID, $checkType)
+    {
+        if($projectID) $project = $this->objectModel->getByID($projectID);
+        switch($checkType)
+        {
+        case 'empty':
+            $_POST['begin'] = '';
+            $_POST['end']   = '';
+        break;
+        case 'normal':
+            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->begin)));
+            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->end)));
+        break;
+        case 'lt':
+            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->begin)));
+            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->end)));
+        break;
+        case 'gt':
+            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->begin)));
+            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->end)));
+        break;
+        case 'eq':
+            $_POST['begin'] = empty($project->begin) ? '' : $project->begin;
+            $_POST['end']   = empty($project->end) ? '' : $project->end;
+        break;
+        }
+
+        $begin = $_POST['begin'];
+        $end   = $_POST['end'];
+
+        $this->objectModel->checkBeginAndEndDate($projectID, $begin, $end);
+        if(dao::isError()) return dao::getError(true);
+
+        return true;
+    }
+
+    /**
      * function getPairs test by execution
      *
      * @param  string $projectID
@@ -523,7 +605,6 @@ class executionTest
     {
         $object = $this->objectModel->getIdList($projectID);
 
-
         if(dao::isError())
         {
             $error = dao::getError();
@@ -537,6 +618,26 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Get execution stat data. 
+     * 
+     * @param int    $projectID 
+     * @param string $browseType 
+     * @param int    $productID 
+     * @param int    $branch 
+     * @param bool   $withTasks 
+     * @param string $param 
+     * @param string $orderBy 
+     * @param object $pager 
+     * @access public
+     * @return int
+     */
+    public function getStatDataTest($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
+    {
+        $objects = $this->objectModel->getStatData($projectID);
+        return count($objects);
     }
 
     /**
