@@ -2804,7 +2804,7 @@ class taskModel extends model
         if($task->mode == 'linear')
         {
             if(strpos('|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
-            if($task->status == 'doing') return ($task->assignedTo == $effort->account and $task->assignedTo == $this->app->user->account);
+            if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
         if($this->app->user->account == $effort->account) return true;
         return false;
