@@ -60,7 +60,7 @@ $encodePath = $this->repo->encodePath($entry);
           <button class="btn" type="button" data-toggle="context-dropdown"><i class="icon icon-ellipsis-v icon-rotate-90"></i></button>
           <ul class="dropdown-menu">
             <?php
-            if(common::hasPriv('repo', 'blame')) echo '<li>' . html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), '<i class="icon icon-change"></i> ' . $lang->repo->blame, '', "data-app='{$app->tab}'") . '</li>';
+            if(common::hasPriv('repo', 'blame')) echo '<li>' . html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), '<i class="icon icon-blame"></i> ' . $lang->repo->blame, '', "data-app='{$app->tab}'") . '</li>';
             if(common::hasPriv('repo', 'download')) echo '<li>' . html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), '<i class="icon icon-download"></i> ' . $lang->repo->download, 'hiddenwin') . '</li>';
             ?>
           </ul>

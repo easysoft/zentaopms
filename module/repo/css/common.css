@@ -234,3 +234,5 @@ h3 {font-size: 16px;}
 .file-tree #modules .icon {color: #9EA3B0;}
 .file-tree #modules .icon-folder {padding-left: 5px;}
 li.selected .doc-title .icon, li.selected .doc-title a {color: #438EFF !important;}
+
+.btn-left, .btn-right {display: none;}

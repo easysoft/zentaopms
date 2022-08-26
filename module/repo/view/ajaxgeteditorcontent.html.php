@@ -42,7 +42,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
             </ul>
           </div>
           <?php endif;?>
-          <div class="btn btn-right  pull-right"><i class="icon icon-chevron-right"></i></div>
+          <div class="btn btn-right pull-right"><i class="icon icon-chevron-right"></i></div>
           <div class='panel-title'>
             <div class="tabs w-10" id="relationTabs"></div>
           </div>
@@ -51,11 +51,16 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
     </div>
   </div>
 </div>
+<?php include '../../common/view/footer.lite.html.php';?>
 <script>
 $(function()
 {
+    $('.btn-left').click(function()  {arrowTabs('relationTabs', 1);});
+    $('.btn-right').click(function() {arrowTabs('relationTabs', -2);});
+
     var codeHeight = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
-    $('#codeContainer').css('height', codeHeight);
+    if(codeHeight > 0) $.cookie('codeContainerHeight', codeHeight);
+    $('#codeContainer').css('height', $.cookie('codeContainerHeight'));
 
     /**
      * Get relation by commit.
@@ -67,6 +72,8 @@ $(function()
     function getRelation(commit)
     {
         $('#codeContainer').css('height', codeHeight / 5 * 3);
+        var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 10;
+        $('#related').css('height', relatedHeight);
         $tabs = $('#relationTabs').data('zui.tabs');
         if($tabs) $tabs.closeAll();
 
@@ -98,9 +105,16 @@ $(function()
                     $('#relationTabs').tabs({tabs: tabs});
                 }
             }
+
+            arrowTabs('relationTabs', 1);
         });
         $('#related').show();
     }
+
+    $('#relationTabs').on('onOpen', function(event, tab) {
+        var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 45;
+        $('#relationTabs iframe').css('height', relatedHeight);
+    });
 
     /**
      * Set tab data.
@@ -114,7 +128,7 @@ $(function()
         return {
             id:    titleObj.type + '-' + titleObj.id,
             title: ' ' + titleObj.title,
-            icon:  titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
+            icon:  titleObj.type == 'story' ? 'icon-lightbulb text-primary' : (titleObj.type == 'task' ? 'icon-check-sign text-info' : 'icon-bug text-red'),
             type:  'iframe',
             url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
         };
