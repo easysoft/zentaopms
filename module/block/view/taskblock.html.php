@@ -44,8 +44,11 @@
       <tr>
         <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
         <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
-        <?php $class = ($task->executionType == 'kanban') ? 'iframe' : '';?>
-        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true, $task->project), $task->name, null, "class='$class' data-width='80%' data-toggle='modal'")?></td>
+        <?php
+        $onlybody = $task->executionType == 'kanban' ? true : '';
+        $class    = $task->executionType == 'kanban' ? "class='iframe' data-toggle='modal'" : '';
+        ?>
+        <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "$class data-width='80%'")?></td>
         <?php if($longBlock):?>
         <td class='c-estimate text-center' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
