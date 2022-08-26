@@ -885,7 +885,7 @@ class taskModel extends model
             $member->account  = $account;
             $member->estimate = zget($this->post->teamEstimate, $row, 0);
             $member->consumed = zget($this->post->teamConsumed, $row, 0);
-            $member->left     = $this->post->teamLeft[$row] === '' ? 0 : zget($this->post->teamLeft, $row, 0);
+            $member->left     = zget($this->post->teamLeft, $row, 0);
             $member->status   = 'wait';
             if($taskStatus == 'wait' and $member->estimate > 0 and $member->left == 0) $member->left = $member->estimate;
             if($taskStatus == 'done') $member->left = 0;
@@ -972,7 +972,14 @@ class taskModel extends model
          * 3. Not by effort;
          * Then direct get team by account.
          */
-        if(empty($duplicates) or (!isset($duplicates[$account])) or empty($effortID))
+        if(empty($duplicates) or (!isset($duplicates[$account])))
+        {
+            foreach($teams as $team)
+            {
+                if($team->account == $account) return $team;
+            }
+        }
+        elseif(empty($effortID))
         {
             foreach($teams as $team)
             {
@@ -1761,7 +1768,8 @@ class taskModel extends model
         if(dao::isError()) return false;
 
         $estimates    = array();
-        $task         = $this->getById($taskID);
+        $task         = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
+        $task->team   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         $earliestTime = '';
         foreach(array_keys($record->id) as $id)
         {
@@ -1793,92 +1801,98 @@ class taskModel extends model
 
         $this->loadModel('action');
 
-        $consumed = 0;
-        $left     = $task->left;
-        $now      = helper::now();
-        $lastDate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
+        $allChanges = array();;
+        $left       = $task->left;
+        $now        = helper::now();
+        $oldStatus  = $task->status;
+        $lastDate   = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
 
         foreach($estimates as $estimate)
         {
             $this->addTaskEstimate($estimate);
 
-            $consumed  += $estimate->consumed;
             $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
+
+            $newTask = clone $task;
+            $newTask->consumed      += $estimate->consumed;
+            $newTask->lastEditedBy   = $this->app->user->account;
+            $newTask->lastEditedDate = $now;
+            if(helper::isZeroDate($task->realStarted)) $newTask->realStarted = $now;
 
             if(empty($lastDate) or $lastDate <= $estimate->date)
             {
-                $left     = $estimate->left;
-                $lastDate = $estimate->date;
+                $newTask->left = $estimate->left;
+                $lastDate      = $estimate->date;
             }
-        }
 
-        $data = new stdClass();
-        $data->consumed       = $task->consumed + $consumed;
-        $data->left           = $left;
-        $data->status         = $task->status;
-        $data->lastEditedBy   = $this->app->user->account;
-        $data->lastEditedDate = $now;
-        if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
-
-        if($left == 0 and strpos('done,cancel,closed,pause', $task->status) === false)
-        {
-            $data->status       = 'done';
-            $data->assignedTo   = $task->openedBy;
-            $data->assignedDate = $now;
-            $data->finishedBy   = $this->app->user->account;
-            $data->finishedDate = $now;
-
-            $this->action->create('task', $taskID, 'Finished');
-        }
-        elseif($task->status == 'wait')
-        {
-            $data->status       = 'doing';
-            $data->assignedTo   = $this->app->user->account;
-            $data->assignedDate = $now;
-            $data->realStarted  = $earliestTime;
-        }
-        elseif($left != 0 and strpos('done,cancel,closed,pause', $task->status) !== false)
-        {
-            $data->status       = 'doing';
-            $data->assignedTo   = $this->app->user->account;
-            $data->assignedDate = $now;
-            $data->finishedBy   = '';
-            $data->canceledBy   = '';
-            $data->closedBy     = '';
-            $data->closedReason = '';
-            $data->finishedDate = '0000-00-00';
-            $data->canceledDate = '0000-00-00';
-            $data->closedDate   = '0000-00-00';
-        }
-
-        if(!empty($task->team))
-        {
-            $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account);
-            if($currentTeam)
+            if($newTask->left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
             {
-                $newTeamInfo = new stdClass();
-                $newTeamInfo->consumed = $currentTeam->consumed + $consumed;
-                $newTeamInfo->left     = $left;
-                $newTeamInfo->status   = ($newTeamInfo->consumed > 0 and $left == 0) ? 'done' : 'doing';
-                $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
-
-                $data = $this->computeHours4Multiple($task, $data);
+                $newTask->status         = 'done';
+                $newTask->assignedTo     = $task->openedBy;
+                $newTask->assignedDate   = $now;
+                $newTask->finishedBy     = $this->app->user->account;
+                $newTask->finishedDate   = $now;
+                $actionID = $this->action->create('task', $taskID, 'Finished', $work);
             }
+            elseif($newTask->status == 'wait')
+            {
+                $newTask->status       = 'doing';
+                $newTask->assignedTo   = $this->app->user->account;
+                $newTask->assignedDate = $now;
+                $actionID = $this->action->create('task', $taskID, 'Started', $work);
+            }
+            elseif($newTask->left != 0 and strpos('done,pause,cancel,closed,pause', $task->status) !== false)
+            {
+                $newTask->status         = 'doing';
+                $newTask->assignedTo     = $this->app->user->account;
+                $newTask->finishedBy     = '';
+                $newTask->canceledBy     = '';
+                $newTask->closedBy       = '';
+                $newTask->closedReason   = '';
+                $newTask->finishedDate   = '0000-00-00';
+                $newTask->canceledDate   = '0000-00-00';
+                $newTask->closedDate     = '0000-00-00';
+                $actionID = $this->action->create('task', $taskID, 'Activated', $work);
+            }
+            else
+            {
+                $actionID = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
+            }
+
+            /* Process multi-person task. Update consumed on team table. */
+            if(!empty($task->team))
+            {
+                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account);
+                if($currentTeam)
+                {
+                    $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
+                    $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
+                    $currentTeam->consumed += $estimate->consumed;
+                    $currentTeam->left      = $estimate->left;
+                    $currentTeam->status    = $teamStatus;
+                }
+
+                $newTask = $this->computeHours4Multiple($task, $newTask, $task->team);
+            }
+
+            $changes = common::createChanges($task, $newTask, 'task');
+            if($changes and !empty($actionID)) $this->action->logHistory($actionID, $changes);
+            if($changes) $allChanges = array_merge($allChanges, $changes);
+            $task = $newTask;
         }
 
-        $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
+        if($allChanges)
+        {
+            $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
-        $changes = common::createChanges($task, $data);
-        if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
+            if($task->parent > 0) $this->updateParentStatus($task->id);
+            if($task->story)  $this->loadModel('story')->setStage($task->story);
+            if($task->status != $oldStatus) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+            if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
+        }
 
-        if($task->parent > 0) $this->updateParentStatus($task->id);
-        if($task->story)  $this->loadModel('story')->setStage($task->story);
-        if(isset($data->status) and $task->status != $data->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
-        if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
-
-        return $changes;
+        return $allChanges;
     }
 
     /**
@@ -2728,8 +2742,18 @@ class taskModel extends model
      */
     public function getTaskEstimate($taskID, $account = '', $append = '')
     {
-        return $this->dao->select('*')->from(TABLE_TASKESTIMATE)
-            ->where('task')->eq($taskID)
+        if($this->config->edition == 'open')
+        {
+            return $this->dao->select('*')->from(TABLE_TASKESTIMATE)
+                ->where('task')->eq($taskID)
+                ->beginIF($account)->andWhere('account')->eq($account)->fi()
+                ->beginIF($append)->orWhere('id')->eq($append)->fi()
+                ->orderBy('date,id')
+                ->fetchAll();
+        }
+        return $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
+            ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
             ->orderBy('date,id')
