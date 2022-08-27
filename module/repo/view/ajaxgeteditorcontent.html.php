@@ -55,6 +55,9 @@ $canUnlinkObject = common::hasPriv('repo', 'unlinkObject');
         </div>
       </div>
     </div>
+    <div class="table-empty-tip">
+      <p>暂时没有关联禅道对象</p>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
