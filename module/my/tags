@@ -1,0 +1,407 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+PMList	control.php	/^        $PMList = $this->user->getListByAccounts($accounts, 'account');$/;"	v
+__construct	control.php	/^    public function __construct($module = '', $method = '')$/;"	f
+account	control.php	/^        $account = $user->account;$/;"	v
+account	model.php	/^        $account    = $this->app->user->account;$/;"	v
+accounts	control.php	/^        $accounts = array();$/;"	v
+actionLink	view/bug.html.php	/^            $actionLink = $this->createLink('bug', 'batchEdit');$/;"	v
+actionLink	view/bug.html.php	/^          $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my", '', '', $bug->project);$/;"	v
+actionLink	view/bug.html.php	/^          $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $bug->project);$/;"	v
+actionLink	view/bug.html.php	/^          $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $bug->project);$/;"	v
+actionLink	view/requirement.html.php	/^                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");$/;"	v
+actionLink	view/requirement.html.php	/^                $actionLink = $this->createLink('story', 'batchReview', "result=$key");$/;"	v
+actionLink	view/requirement.html.php	/^            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=requirement&from={$app->rawMethod}");$/;"	v
+actionLink	view/requirement.html.php	/^          $actionLink = $this->createLink('story', 'batchAssignTo');$/;"	v
+actionLink	view/requirement.html.php	/^        $actionLink = $this->createLink('story', 'batchClose', "productID=0&executionID=0&storyType=requirement&from={$app->rawMethod}");$/;"	v
+actionLink	view/story.html.php	/^                        $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");$/;"	v
+actionLink	view/story.html.php	/^                $actionLink = $this->createLink('story', 'batchReview', "result=$key");$/;"	v
+actionLink	view/story.html.php	/^            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=story&from={$app->rawMethod}");$/;"	v
+actionLink	view/story.html.php	/^          $actionLink = $this->createLink('story', 'batchAssignTo');$/;"	v
+actionLink	view/story.html.php	/^        $actionLink = $this->createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}");$/;"	v
+actionLink	view/task.html.php	/^          $actionLink = $this->createLink('task', 'batchClose', null, '', '', $task->project);$/;"	v
+actionLink	view/task.html.php	/^          $actionLink = $this->createLink('task', 'batchEdit');$/;"	v
+actionLink	view/testcase.html.php	/^            $actionLink = $this->createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&tab=my");$/;"	v
+actionLink	view/todo.html.php	/^          $actionLink = $this->createLink('todo', 'batchClose');$/;"	v
+actionLink	view/todo.html.php	/^          $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status");$/;"	v
+actionLink	view/todo.html.php	/^          $actionLink = $this->createLink('todo', 'batchFinish');$/;"	v
+actionLink	view/todo.html.php	/^          $actionLink = $this->createLink('todo', 'import2Today');$/;"	v
+actionURL	control.php	/^        $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");$/;"	v
+actionURL	control.php	/^        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");$/;"	v
+actionURL	control.php	/^        $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");$/;"	v
+actionURL	control.php	/^        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");$/;"	v
+actionURL	control.php	/^        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");$/;"	v
+actionURL	control.php	/^        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");$/;"	v
+actionURL	control.php	/^        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");$/;"	v
+actionURL	control.php	/^        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");$/;"	v
+actionURL	control.php	/^        $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");$/;"	v
+actions	control.php	/^        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);$/;"	v
+actions	model.php	/^        $actions  = $this->action->processDynamicForAPI($actions);$/;"	v
+actions	model.php	/^        $actions  = array_slice($actions, 0, $maxCount);$/;"	v
+actions	model.php	/^        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);$/;"	v
+active	view/dynamic.html.php	/^        $active = 'btn-active-text';$/;"	v
+active	view/dynamic.html.php	/^    $active = '';$/;"	v
+active	view/todo.html.php	/^        $active = 'btn-active-text';$/;"	v
+active	view/todo.html.php	/^    $active = '';$/;"	v
+ajaxSwitchVision	control.php	/^    public function ajaxSwitchVision($vision)$/;"	f
+allConsumed	model.php	/^            $allConsumed      = 0;$/;"	v
+allCount	model.php	/^        $allCount      = count($products);$/;"	v
+assignedByMe	model.php	/^            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'risk');$/;"	v
+assignedRequirementCount	control.php	/^            $assignedRequirementCount = $pager->recTotal;$/;"	v
+assignedRequirements	control.php	/^            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement');$/;"	v
+assignedToStories	control.php	/^        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false);$/;"	v
+assignedToStoryCount	control.php	/^        $assignedToStoryCount = $pager->recTotal;$/;"	v
+attr	view/task.html.php	/^                      $attr = isset($kanbanList[$task->execution]) ? "disabled" : '';$/;"	v
+audit	control.php	/^    public function audit($browseType = 'needreview', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)$/;"	f
+branchParam	model.php	/^        $branchParam   = '';$/;"	v
+browseType	control.php	/^        $browseType = strtolower($type);$/;"	v
+bug	control.php	/^    public function bug($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+bugCount	control.php	/^        $bugCount = $pager->recTotal;$/;"	v
+bugOrder	model.php	/^                $bugOrder  = '20';$/;"	v
+bugs	control.php	/^            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, '', $queryID);$/;"	v
+bugs	control.php	/^            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'bug');$/;"	v
+bugs	control.php	/^        $bugs     = $this->bug->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);$/;"	v
+bugs	control.php	/^        $bugs    = $bugIdList   ? $this->loadModel('bug')->getByList($bugIdList) : array();$/;"	v
+bugs	control.php	/^        $bugs = $this->bug->checkDelayedBugs($bugs);$/;"	v
+buildBugSearchForm	model.php	/^    public function buildBugSearchForm($queryID, $actionURL)$/;"	f
+buildContactLists	control.php	/^    public function buildContactLists($dropdownName = 'mailto', $attr = '')$/;"	f
+buildRequirementSearchForm	model.php	/^    public function buildRequirementSearchForm($queryID, $actionURL, $type)$/;"	f
+buildRiskSearchForm	model.php	/^    public function buildRiskSearchForm($queryID, $actionURL, $type)$/;"	f
+buildStorySearchForm	model.php	/^    public function buildStorySearchForm($queryID, $actionURL, $type)$/;"	f
+buildTaskSearchForm	model.php	/^    public function buildTaskSearchForm($queryID, $actionURL)$/;"	f
+buildTestCaseSearchForm	model.php	/^    public function buildTestCaseSearchForm($queryID, $actionURL, $type)$/;"	f
+calendar	control.php	/^    public function calendar()$/;"	f
+canBatchAction	view/bug.html.php	/^    $canBatchAction   = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchAssignTo);$/;"	v
+canBatchAction	view/requirement.html.php	/^      $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);$/;"	v
+canBatchAction	view/story.html.php	/^      $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);$/;"	v
+canBatchAssignTo	view/bug.html.php	/^    $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');$/;"	v
+canBatchAssignTo	view/requirement.html.php	/^      $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');$/;"	v
+canBatchAssignTo	view/story.html.php	/^      $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');$/;"	v
+canBatchClose	view/bug.html.php	/^    $canBatchClose    = (common::hasPriv('bug', 'batchClose') and strtolower($type) != 'closedby');$/;"	v
+canBatchClose	view/requirement.html.php	/^      $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');$/;"	v
+canBatchClose	view/story.html.php	/^      $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');$/;"	v
+canBatchClose	view/todo.html.php	/^    $canBatchClose  = common::hasPriv('todo', 'batchClose');$/;"	v
+canBatchConfirm	view/bug.html.php	/^    $canBatchConfirm  = common::hasPriv('bug', 'batchConfirm');$/;"	v
+canBatchEdit	view/bug.html.php	/^    $canBatchEdit     = (common::hasPriv('bug', 'batchEdit') and $type == 'assignedTo');$/;"	v
+canBatchEdit	view/requirement.html.php	/^      $canBatchEdit     = common::hasPriv('story', 'batchEdit');$/;"	v
+canBatchEdit	view/story.html.php	/^      $canBatchEdit     = common::hasPriv('story', 'batchEdit');$/;"	v
+canBatchEdit	view/testcase.html.php	/^      $canBatchEdit = (common::hasPriv('testcase', 'batchEdit') and $type == 'assigntome');$/;"	v
+canBatchEdit	view/todo.html.php	/^    $canBatchEdit   = common::hasPriv('todo', 'batchEdit');$/;"	v
+canBatchFinish	view/todo.html.php	/^    $canBatchFinish = common::hasPriv('todo', 'batchFinish');$/;"	v
+canBatchReview	view/requirement.html.php	/^      $canBatchReview   = common::hasPriv('story', 'batchReview');$/;"	v
+canBatchReview	view/story.html.php	/^      $canBatchReview   = common::hasPriv('story', 'batchReview');$/;"	v
+canBeChanged	view/requirement.html.php	/^        $canBeChanged = common::canBeChanged('story', $story);$/;"	v
+canBeChanged	view/story.html.php	/^        $canBeChanged = common::canBeChanged('story', $story);$/;"	v
+canBeChanged	view/testcase.html.php	/^        $canBeChanged = common::canBeChanged('testcase', $case);$/;"	v
+canbatchAction	view/todo.html.php	/^    $canbatchAction = ($type != 'cycle' and ($canBatchEdit or $canBatchFinish or $canBatchClose or (common::hasPriv('todo', 'import2Today') and $importFuture)));$/;"	v
+caseCount	control.php	/^        $caseCount = $pager->recTotal;$/;"	v
+caseID	view/testcase.html.php	/^        $caseID       = $type == 'assigntome' ? $case->case : $case->id;$/;"	v
+cases	control.php	/^        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, 'id_desc', $pager, 'skip');$/;"	v
+cases	control.php	/^        $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');$/;"	v
+cases	control.php	/^        $cases = array();$/;"	v
+cases	model.php	/^            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')$/;"	v
+cases	model.php	/^            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')$/;"	v
+changeButton	view/selectproject.html.php	/^function changeButton()$/;"	f
+changeDate	js/todo.js	/^function changeDate(date)$/;"	f
+changePassword	control.php	/^    public function changePassword()$/;"	f
+changeTaskButton	view/selectproject.html.php	/^function changeTaskButton()$/;"	f
+checkPassword	view/changepassword.html.php	/^function checkPassword(password)$/;"	f
+checkPassword	view/editprofile.html.php	/^function checkPassword(password)$/;"	f
+checkedRows	view/task.html.php	/^            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');$/;"	v
+contribute	control.php	/^    public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+contribute	model.php	/^        $contribute = new stdclass();$/;"	v
+currentMethod	control.php	/^        $currentMethod = $this->app->rawMethod;$/;"	v
+customMenu	model.php	/^        $customMenu = isset($this->config->customMenu->$flowModule) ? $this->config->customMenu->$flowModule : array();$/;"	v
+data	control.php	/^            $data = fixer::input('post')->setDefault('users', array())->get();$/;"	v
+data	model.php	/^        $data = new stdClass();$/;"	v
+date	control.php	/^        $date    = empty($date) ? '' : date('Y-m-d', $date);$/;"	v
+deleteContacts	control.php	/^    public function deleteContacts($listID, $confirm = 'no')$/;"	f
+deleteURL	view/testtask.html.php	/^              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");$/;"	v
+deleteURL	view/todo.html.php	/^                $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");$/;"	v
+deptID	control.php	/^        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;$/;"	v
+disabled	control.php	/^        $disabled   = $globalContacts;$/;"	v
+disabled	view/testcase.html.php	/^                $disabled = $case->status == 'wait' ? 'disabled' : '';$/;"	v
+disabled	view/testcase.html.php	/^                $disabled = (isset($case->lastRunResult) and $case->lastRunResult != 'fail') ? 'disabled' : '';$/;"	v
+doc	control.php	/^    public function doc($type = 'openedbyme', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+docs	control.php	/^        $docs = $this->doc->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);$/;"	v
+doingProjects	model.php	/^        $doingProjects = $this->loadModel('project')->getOverviewList('byStatus', 'doing', 'id_desc');$/;"	v
+dynamic	control.php	/^    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)$/;"	f
+editProfile	control.php	/^    public function editProfile()$/;"	f
+estimateCount	model.php	/^            $estimateCount = 0;$/;"	v
+execution	control.php	/^    public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)$/;"	f
+execution	model.php	/^            $execution = $this->execution->getById($execution->id);$/;"	v
+executionIDList	control.php	/^        $executionIDList = array();$/;"	v
+executions	model.php	/^        $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')$/;"	v
+executions	model.php	/^        $executions = $this->execution->getPairs();$/;"	v
+feedback	control.php	/^    public function feedback($browseType = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+feedbackCount	control.php	/^            $feedbackCount = $pager->recTotal;$/;"	v
+feedbackCount	control.php	/^        $feedbackCount = 0;$/;"	v
+feedbacks	control.php	/^            $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);$/;"	v
+feedbacks	control.php	/^            $feedbacks = $this->feedback->getBySearch($queryID, $orderBy, $pager);$/;"	v
+feedbacks	control.php	/^            $feedbacks = $this->feedback->getList($browseType, $orderBy, $pager);$/;"	v
+finishedTotal	model.php	/^            $finishedTotal = 0;$/;"	v
+firstDate	view/dynamic.html.php	/^$firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);$/;"	v
+flowModule	model.php	/^        $flowModule = $this->config->global->flow . '_my';$/;"	v
+formName	model.php	/^        $formName   = $moduleName . 'Form';$/;"	v
+getActions	model.php	/^    public function getActions()$/;"	f
+getAssignedByMe	model.php	/^    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $objectType = '')$/;"	f
+getContribute	model.php	/^    public function getContribute()$/;"	f
+getDoingProjects	model.php	/^    public function getDoingProjects()$/;"	f
+getExecutions	view/selectproject.html.php	/^function getExecutions(projectID)$/;"	f
+getFeedbackID	view/selectproject.html.php	/^function getFeedbackID(obj)$/;"	f
+getOverview	model.php	/^    public function getOverview()$/;"	f
+getProducts	model.php	/^    public function getProducts($type = 'undone')$/;"	f
+getProjects	view/selectproject.html.php	/^function getProjects(obj)$/;"	f
+getRequirementsBySearch	model.php	/^    public function getRequirementsBySearch($queryID, $type, $orderBy, $pager)$/;"	f
+getRisksBySearch	model.php	/^    public function getRisksBySearch($queryID, $type, $orderBy, $pager)$/;"	f
+getStoriesBySearch	model.php	/^    public function getStoriesBySearch($queryID, $type, $orderBy, $pager)$/;"	f
+getTasksBySearch	model.php	/^    public function getTasksBySearch($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)$/;"	f
+getTestcasesBySearch	model.php	/^    public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)$/;"	f
+globalContacts	control.php	/^        $globalContacts = !empty($globalContacts) ? explode(',', $globalContacts) : array();$/;"	v
+globalContacts	control.php	/^        $globalContacts = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';$/;"	v
+hasCustomSeverity	view/bug.html.php	/^              $hasCustomSeverity = true;$/;"	v
+hasCustomSeverity	view/bug.html.php	/^      $hasCustomSeverity = false;$/;"	v
+hasNext	view/dynamic.html.php	/^$hasNext   = $this->action->hasPreOrNext($lastDate, 'next');$/;"	v
+hasPre	view/dynamic.html.php	/^$hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');$/;"	v
+inAdminGroup	model.php	/^        $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')$/;"	v
+inTeam	model.php	/^        $inTeam = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->fetchPairs('root', 'root');$/;"	v
+index	control.php	/^    public function index()$/;"	f
+initToBug	view/selectproject.html.php	/^function initToBug(obj)$/;"	f
+isBiz	control.php	/^        $isBiz         = $this->config->edition == 'biz' ? 1 : 0;$/;"	v
+isMax	control.php	/^        $isMax        = $this->config->edition == 'max' ? 1 : 0;$/;"	v
+isOpenedURAndSR	control.php	/^        $isOpenedURAndSR  = $this->config->URAndSR;$/;"	v
+issue	control.php	/^    public function issue($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+issueCount	control.php	/^            $issueCount = $pager->recTotal;$/;"	v
+issueCount	control.php	/^        $issueCount   = 0;$/;"	v
+issues	control.php	/^            $issues     = $this->issue->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);$/;"	v
+label	view/dynamic.html.php	/^    $label  = "<span class='text'>$label<\/span>";$/;"	v
+label	view/todo.html.php	/^    $label  = "<span class='text'>$label<\/span>";$/;"	v
+lastDate	view/dynamic.html.php	/^$lastDate  = substr($action->originalDate, 0, 10);$/;"	v
+leftTotal	model.php	/^            $leftTotal     = 0;$/;"	v
+listClass	view/managecontacts.html.php	/^        $listClass = ($id == $listID and $mode == 'edit') ? 'btn btn-block active' : 'btn btn-block';$/;"	v
+listID	control.php	/^                $listID = $this->user->createContactList($data->newList, $data->users);$/;"	v
+listID	control.php	/^        $listID = $listID ? $listID : key($lists);$/;"	v
+lists	control.php	/^        $lists = $this->user->getContactLists($this->app->user->account);$/;"	v
+manageContacts	control.php	/^    public function manageContacts($listID = 0, $mode = 'new')$/;"	f
+maxCount	model.php	/^        $maxCount      = 5;$/;"	v
+maxCount	model.php	/^        $maxCount = 5;$/;"	v
+meetingCount	control.php	/^            $meetingCount = $pager->recTotal;$/;"	v
+meetingCount	control.php	/^        $meetingCount = 0;$/;"	v
+meetings	control.php	/^            $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);$/;"	v
+membersPinYin	view/bug.html.php	/^              $membersPinYin = common::convert2Pinyin($memberPairs);$/;"	v
+misc	view/bug.html.php	/^            $misc       = "data-form-action='$actionLink'";$/;"	v
+misc	view/bug.html.php	/^          $misc = "onclick=\\"setFormAction('$actionLink', 'hiddenwin')\\"";$/;"	v
+misc	view/requirement.html.php	/^            $misc       = "data-form-action='$actionLink'";$/;"	v
+misc	view/requirement.html.php	/^        $misc = "data-form-action=\\"$actionLink\\"";$/;"	v
+misc	view/story.html.php	/^            $misc       = "data-form-action='$actionLink'";$/;"	v
+misc	view/story.html.php	/^        $misc = "data-form-action=\\"$actionLink\\"";$/;"	v
+misc	view/task.html.php	/^          $misc       = "data-form-action='$actionLink'";$/;"	v
+misc	view/testcase.html.php	/^            $misc       = "data-form-action='$actionLink'";$/;"	v
+mode	control.php	/^        $mode  = empty($mode) ? 'edit' : $mode;$/;"	v
+module	model.php	/^        $module = $objectType == 'requirement' ? 'story' : $objectType;$/;"	v
+moduleName	model.php	/^        $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';$/;"	v
+my	control.php	/^class my extends control$/;"	c
+myContacts	control.php	/^        $myContacts = $this->user->getListByAccount($this->app->user->account);$/;"	v
+myMeeting	control.php	/^    public function myMeeting($browseType = 'futureMeeting', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+myModel	model.php	/^class myModel extends model$/;"	c
+myProjects	model.php	/^        $myProjects    = array();$/;"	v
+myRequirementQuery	model.php	/^        $myRequirementQuery = $this->session->$queryName;$/;"	v
+myRequirementQuery	model.php	/^        $myRequirementQuery = preg_replace('\/`(\\w+)`\/', 't1.`$1`', $myRequirementQuery);$/;"	v
+myStoryQuery	model.php	/^        $myStoryQuery = $this->session->$queryName;$/;"	v
+myStoryQuery	model.php	/^        $myStoryQuery = preg_replace('\/`(\\w+)`\/', 't1.`$1`', $myStoryQuery);$/;"	v
+myTestcaseQuery	model.php	/^        $myTestcaseQuery = $this->session->$queryName;$/;"	v
+myTestcaseQuery	model.php	/^        $myTestcaseQuery = preg_replace('\/`(\\w+)`\/', 't1.`$1`', $myTestcaseQuery);$/;"	v
+nc	control.php	/^    public function nc($browseType = 'assignedToMe', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+ncCount	control.php	/^            $ncCount = $pager->recTotal;$/;"	v
+ncCount	control.php	/^        $ncCount      = 0;$/;"	v
+ncList	control.php	/^            $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');$/;"	v
+ncList	control.php	/^        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');$/;"	v
+nextLink	view/dynamic.html.php	/^$nextLink  = $hasNext ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next&originTotal=' . $originTotal) : 'javascript:;';$/;"	v
+objectIDList	model.php	/^        $objectIDList = $this->dao->select('objectID')->from(TABLE_ACTION)$/;"	v
+objectList	model.php	/^            $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])$/;"	v
+objectList	model.php	/^            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')$/;"	v
+objectList	model.php	/^            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')$/;"	v
+orderBy	control.php	/^        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';$/;"	v
+originTable	view/task.html.php	/^            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;$/;"	v
+overview	model.php	/^        $overview = new stdclass();$/;"	v
+pager	control.php	/^        $pager  = new pager($recTotal, $recPerPage, $pageID);$/;"	v
+pager	control.php	/^        $pager  = pager::init($recTotal, $recPerPage, $pageID);$/;"	v
+pager	control.php	/^        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);$/;"	v
+pager	control.php	/^        $pager = new pager($recTotal, $recPerPage, $pageID);$/;"	v
+pager	control.php	/^        $pager = pager::init($recTotal, $recPerPage, $pageID);$/;"	v
+pager	model.php	/^        $pager = new pager(0, 50, 1);$/;"	v
+params	view/bug.html.php	/^                $params = "bugID=$bug->id";$/;"	v
+parent	control.php	/^                    $parent = $parents[$task->parent];$/;"	v
+parents	control.php	/^        $parents         = array();$/;"	v
+parents	control.php	/^        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');$/;"	v
+pendingList	control.php	/^            $pendingList = $this->loadModel('approval')->getPendingReviews('review');$/;"	v
+pendingList	control.php	/^        $pendingList = $this->loadModel('approval')->getPendingReviews('review');$/;"	v
+planList	model.php	/^            $planList = array();$/;"	v
+planPairs	model.php	/^            $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');$/;"	v
+plans	model.php	/^        $plans = $this->dao->select('product, count(*) AS count')$/;"	v
+preLink	view/dynamic.html.php	/^$preLink   = $hasPre ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre&originTotal=' . $originTotal) : 'javascript:;';$/;"	v
+preference	control.php	/^    public function preference($showTip = true)$/;"	f
+productIdList	model.php	/^        $productIdList = array_keys($products);$/;"	v
+productKeys	model.php	/^        $productKeys = array_keys($products);$/;"	v
+productLink	view/bug.html.php	/^            $productLink = explode('-', $config->productLink);$/;"	v
+productList	model.php	/^            $productList = array();$/;"	v
+productPairs	model.php	/^            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');$/;"	v
+products	control.php	/^        $products = $this->loadModel('product')->getPairs();$/;"	v
+products	model.php	/^        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)$/;"	v
+products	model.php	/^        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')$/;"	v
+products	model.php	/^        $products = $this->loadModel('product')->getPairs();$/;"	v
+products	model.php	/^        $products = array_slice($products, 0, 5);$/;"	v
+products	model.php	/^        $products = json_decode(json_encode($products), true);$/;"	v
+profile	control.php	/^    public function profile()$/;"	f
+project	control.php	/^    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1, $orderBy = 'id_desc')$/;"	f
+projectOrder	model.php	/^                $projectOrder = 35;$/;"	v
+projects	control.php	/^            $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')$/;"	v
+projects	control.php	/^        $projects = $this->user->getObjects($this->app->user->account, 'project', $status, $orderBy, $pager);$/;"	v
+projects	model.php	/^            $projects         = $this->loadModel('project')->getOverviewList('byStatus', 'all', 'id_desc', 0);$/;"	v
+projects	model.php	/^        $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)$/;"	v
+projects	model.php	/^        $projects = $this->loadModel('project')->getPairsByProgram();$/;"	v
+projectsConsumed	model.php	/^            $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');$/;"	v
+query	model.php	/^            $query = $this->loadModel('search')->getQuery($queryID);$/;"	v
+query	model.php	/^        $query = $this->session->$queryName;$/;"	v
+query	model.php	/^        $query = preg_replace('\/`(\\w+)`\/', 't1.`$1`', $query);$/;"	v
+query	model.php	/^        $query = str_replace('t1.`project`', 't2.`project`', $query);$/;"	v
+queryForm	model.php	/^        $queryForm = $type == 'contribute' ? 'contributeRequirementForm' : 'workRequirementForm';$/;"	v
+queryForm	model.php	/^        $queryForm = $type == 'contribute' ? 'contributeStoryForm' : 'workStoryForm';$/;"	v
+queryForm	model.php	/^        $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';$/;"	v
+queryID	control.php	/^        $queryID       = ($type == 'bysearch') ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID  = ($type == 'bySearch') ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID = $browseType == 'bysearch' ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID = ($type == 'bySearch') ? (int)$param : 0;$/;"	v
+queryID	control.php	/^        $queryID = ($type == 'bysearch') ? (int)$param : 0;$/;"	v
+queryName	model.php	/^        $queryName  = $moduleName . 'Query';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeRequirement' : 'workRequirement';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeRequirementQuery' : 'workRequirementQuery';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeStory' : 'workStory';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeStoryQuery' : 'workStoryQuery';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';$/;"	v
+queryName	model.php	/^        $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';$/;"	v
+rawMethod	model.php	/^        $rawMethod = $this->app->rawMethod;$/;"	v
+recTotalLabel	view/bug.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/doc.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/execution.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/feedback.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/requirement.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/story.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/testcase.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+recTotalLabel	view/testtask.html.php	/^    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}<\/span>";$/;"	v
+releases	model.php	/^        $releases = $this->dao->select('product, count(*) AS count')$/;"	v
+requirement	control.php	/^    public function requirement($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+requirementCount	control.php	/^            $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;$/;"	v
+requirementCount	control.php	/^        $requirementCount = 0;$/;"	v
+requirementIDList	model.php	/^        $requirementIDList = array();$/;"	v
+requirementOrder	model.php	/^                $requirementOrder = 29;$/;"	v
+requirements	model.php	/^            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')$/;"	v
+requirementsAssignedByMe	model.php	/^            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'requirement');$/;"	v
+result	control.php	/^            $result = $this->loadModel('user')->uploadAvatar();$/;"	v
+reviewByRequirementCount	control.php	/^            $reviewByRequirementCount = $pager->recTotal;$/;"	v
+reviewByRequirements	control.php	/^            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement');$/;"	v
+reviewByStories	control.php	/^        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false);$/;"	v
+reviewByStoryCount	control.php	/^        $reviewByStoryCount   = $pager->recTotal;$/;"	v
+reviewCount	control.php	/^            $reviewCount = $pager->recTotal;$/;"	v
+reviewCount	control.php	/^        $reviewCount  = 0;$/;"	v
+reviewList	control.php	/^            $reviewList  = $this->loadModel('review')->getByList($pendingList, $orderBy, $pager);$/;"	v
+reviewList	control.php	/^            $reviewList  = $this->review->getByList($pendingList, 'id_desc', $pager);$/;"	v
+reviewList	control.php	/^            $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);$/;"	v
+risk	control.php	/^    public function risk($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+riskCount	control.php	/^            $riskCount = $pager->recTotal;$/;"	v
+riskCount	control.php	/^        $riskCount    = 0;$/;"	v
+riskQuery	model.php	/^        $riskQuery = $this->session->$queryName;$/;"	v
+risks	control.php	/^            $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);$/;"	v
+risks	control.php	/^            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');$/;"	v
+risks	model.php	/^            $risks = $this->dao->select('*')->from(TABLE_RISK)$/;"	v
+role	model.php	/^            $role = $this->app->user->role;$/;"	v
+row	view/task.html.php	/^                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');$/;"	v
+row	view/task.html.php	/^                var $row = $(this);$/;"	v
+rows	view/task.html.php	/^            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');$/;"	v
+runID	view/testcase.html.php	/^        $runID        = $type == 'assigntome' ? $case->run  : 0;$/;"	v
+score	control.php	/^    public function score($recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+scores	control.php	/^        $scores = $this->loadModel('score')->getListByAccount($this->app->user->account, $pager);$/;"	v
+searchKey	view/bug.html.php	/^              $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\\"") : "data-key='@$key'";$/;"	v
+searchKey	view/requirement.html.php	/^              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\\"") : "data-key='@$key'";$/;"	v
+searchKey	view/story.html.php	/^              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\\"") : "data-key='@$key'";$/;"	v
+setMenu	model.php	/^    public function setMenu()$/;"	f
+showWorkCount	control.php	/^    public function showWorkCount($recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+simplifyUser	model.php	/^            $simplifyUser = new stdclass();$/;"	v
+simplifyUsers	model.php	/^        $simplifyUsers = array();$/;"	v
+sort	control.php	/^        $sort = common::appendOrder($orderBy);$/;"	v
+statisticCreator	view/task.html.php	/^        statisticCreator: function(table)$/;"	j
+stories	control.php	/^            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');$/;"	v
+stories	control.php	/^            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'story');$/;"	v
+stories	control.php	/^            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');$/;"	v
+stories	control.php	/^            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false);$/;"	v
+stories	control.php	/^            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);$/;"	v
+stories	control.php	/^            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);$/;"	v
+stories	control.php	/^        $stories = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();$/;"	v
+stories	model.php	/^            $stories = $this->dao->select('distinct t1.*, t2.name as productTitle, t4.title as planTitle')->from(TABLE_STORY)->alias('t1')$/;"	v
+storiesAssignedByMe	model.php	/^            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'story');$/;"	v
+story	control.php	/^    public function story($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+storyCount	control.php	/^        $storyCount           = $assignedToStoryCount + $reviewByStoryCount;$/;"	v
+storyGroups	model.php	/^        $storyGroups = $this->dao->select('id,product,status,stage,estimate')$/;"	v
+storyIDList	model.php	/^        $storyIDList = array();$/;"	v
+storyIdList	control.php	/^        $storyIdList = $bugIdList = $todoIdList = $taskIdList = array();$/;"	v
+storyLink	view/requirement.html.php	/^        $storyLink    = $this->createLink('story', 'view', "id=$story->id");$/;"	v
+storyLink	view/story.html.php	/^        $storyLink    = $this->createLink('story', 'view', "id=$story->id");$/;"	v
+summaryStories	model.php	/^        $summaryStories = array();$/;"	v
+summaryStory	model.php	/^            $summaryStory = new stdclass();$/;"	v
+table	view/task.html.php	/^            var $table = table.getTable();$/;"	v
+task	control.php	/^    public function task($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+taskCount	control.php	/^        $taskCount = $pager->recTotal;$/;"	v
+taskIDList	model.php	/^        $taskIDList = array();$/;"	v
+taskOrder	model.php	/^                $taskOrder = '15';$/;"	v
+taskTeam	model.php	/^        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');$/;"	v
+tasks	control.php	/^            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');$/;"	v
+tasks	control.php	/^            $tasks = $this->my->getTasksBySearch($this->app->user->account, 0, $pager, $sort, $queryID);$/;"	v
+tasks	control.php	/^            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);$/;"	v
+tasks	control.php	/^        $tasks     = $this->task->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager);$/;"	v
+tasks	control.php	/^        $tasks   = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList) : array();$/;"	v
+tasks	control.php	/^        $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);$/;"	v
+tasks	model.php	/^        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')$/;"	v
+tasksAssignedByMe	model.php	/^            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, '', $orderBy, 'task');$/;"	v
+team	control.php	/^    public function team($orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)$/;"	f
+testTaskCount	control.php	/^        $testTaskCount = $pager->recTotal;$/;"	v
+testTasks	control.php	/^        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');$/;"	v
+testcase	control.php	/^    public function testcase($type = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+testtask	control.php	/^    public function testtask($type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+thisYearConsumed	model.php	/^            $thisYearConsumed = 0;$/;"	v
+todo	control.php	/^    public function todo($type = 'before', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+todos	control.php	/^        $todos   = $todoIdList  ? $this->loadModel('todo')->getByList($todoIdList) : array();$/;"	v
+todos	control.php	/^        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);$/;"	v
+unbind	control.php	/^    public function unbind($confirm = 'no')$/;"	f
+unclosedCount	model.php	/^        $unclosedCount = 0;$/;"	v
+uploadAvatar	control.php	/^    public function uploadAvatar()$/;"	f
+uploadAvatar	js/profile.js	/^function uploadAvatar()$/;"	f
+uri	control.php	/^            $uri = $this->app->getURI(true);$/;"	v
+uri	control.php	/^        $uri = $this->app->getURI(true);$/;"	v
+user	control.php	/^        $user    = $this->loadModel('user')->getById($userID, 'id');$/;"	v
+user	control.php	/^        $user = $this->user->getById($this->app->user->account);$/;"	v
+userGroups	control.php	/^        $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);$/;"	v
+users	control.php	/^        $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);$/;"	v
+users	control.php	/^        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);$/;"	v
+users	model.php	/^        $users   = $this->loadModel('user')->getList();$/;"	v
+usersPinYin	view/requirement.html.php	/^              $usersPinYin = common::convert2Pinyin($users);$/;"	v
+usersPinYin	view/story.html.php	/^              $usersPinYin = common::convert2Pinyin($users);$/;"	v
+vars	view/requirement.html.php	/^                $vars = "story={$child->id}";$/;"	v
+vars	view/requirement.html.php	/^                $vars = "story={$story->id}";$/;"	v
+vars	view/story.html.php	/^                $vars = "story={$child->id}";$/;"	v
+vars	view/story.html.php	/^                $vars = "story={$story->id}";$/;"	v
+vars	view/testcase.html.php	/^      $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";$/;"	v
+vars	view/todo.html.php	/^    $vars = "date=$period";$/;"	v
+width	view/buildcontactlists.html.php	/^    $width = isonlybody() ? 'data-width=100%' : '';$/;"	v
+withSearch	view/bug.html.php	/^          $withSearch = count($memberPairs) > 10;$/;"	v
+withSearch	view/requirement.html.php	/^          $withSearch = count($users) > 10;$/;"	v
+withSearch	view/story.html.php	/^          $withSearch = count($users) > 10;$/;"	v
+work	control.php	/^    public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+workhour	model.php	/^            $workhour = $this->project->getWorkhour($project->id);$/;"	v
