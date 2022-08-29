@@ -58,7 +58,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project, $dayNum, $days)
+    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -1511,7 +1511,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getCanCopyObjectsTest($projectID = 0, $count)
+    public function getCanCopyObjectsTest($projectID = 0, $count = 0)
     {
         $object = $this->objectModel->getCanCopyObjects($projectID);
 
@@ -1601,7 +1601,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function addProjectMembersTest($projectID = 0, $executionID, $count)
+    public function addProjectMembersTest($projectID = 0, $executionID = 0, $count = 0)
     {
         global $tester;
         $tester->dbh->query("delete from zt_team where root = $projectID");
