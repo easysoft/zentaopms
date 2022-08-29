@@ -181,7 +181,7 @@ $(function()
             var editor = monaco.editor.create(document.getElementById('codeContainer'),
             {
                 autoIndent: true,
-                value: codeContent,
+                value: codeContent.toString(),
                 language: lang,
                 contextmenu: true,
                 EditorMinimapOptions: {
