@@ -13,7 +13,7 @@ $(function()
      */
     function createTab(filename, filepath)
     {
-        $('[data-path="' + filepath + '"]').closest('li').addClass('selected');
+        $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
         var tabID = Base64.encode(filepath).replaceAll('=', '-');
         return {
             title: filename,
@@ -40,7 +40,7 @@ $(function()
 
     $(document).on('click', '.repoFileName', function()
     {
-        var path  = $(this).data('path');
+        var path  = encodeURIComponent($(this).data('path'));
         var name  = $(this).text();
         var $tabs = $('#fileTabs').data('zui.tabs');
         if(openedFiles.indexOf(path) == -1) openedFiles.push(path);
@@ -52,7 +52,7 @@ $(function()
 
     /* Remove file path for opened files. */
     $('#fileTabs').on('onClose', function(event, tab) {
-        var filepath = Base64.decode(tab.id.replaceAll('-', '='));
+        var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
         var index    = openedFiles.indexOf(filepath);
         if(index > -1)
         {
@@ -66,7 +66,7 @@ $(function()
     /* Append file path into the title. */
     $('#fileTabs').on('onLoad', function(event, tab) {
         var filepath = Base64.decode(tab.id.replaceAll('-', '='));
-        $('#tab-nav-item-' + tab.id).attr('title', filepath);
+        $('#tab-nav-item-' + tab.id).attr('title', decodeURIComponent(filepath));
     });
 
     var link  = createLink('repo', 'ajaxGetBranchesAndTags', 'repoID=' + repoID + '&oldRevision=' + branchID);

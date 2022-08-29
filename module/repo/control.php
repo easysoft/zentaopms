@@ -263,7 +263,7 @@ class repo extends control
     {
         $file     = $entry;
         $repo     = $this->repo->getRepoByID($repoID);
-        $entry    = $this->repo->decodePath($entry);
+        $entry    = urldecode($this->repo->decodePath($entry));
         $revision = str_replace('*', '-', $revision);
 
         $this->scm->setEngine($repo);
@@ -303,9 +303,10 @@ class repo extends control
         $this->view->entry        = $entry;
         $this->view->path         = $entry;
         $this->view->suffix       = $suffix;
-        $this->view->content      = $content;
+        $this->view->content      = $content ? $content : '';
         $this->view->pathInfo     = $pathInfo;
-        $this->view->blames       = $blames;
+        $this->view->blames       = $blames ? $blames : array();
+        $this->view->showEditor   = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->display();
     }
 
