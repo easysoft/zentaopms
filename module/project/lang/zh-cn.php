@@ -64,7 +64,6 @@ $lang->project->budgetNumber       = '『预算』金额必须为数字。';
 $lang->project->budgetGe0          = '『预算』金额必须大于等于0。';
 $lang->project->allProjects        = '所有项目';
 $lang->project->ignore             = '忽略';
-$lang->project->delay              = '已延期';
 
 /* Fields. */
 $lang->project->common             = '项目';
@@ -279,6 +278,7 @@ $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['closed']    = '已关闭';
+$lang->project->statusList['delay']     = '已延期';
 
 $lang->project->endList[31]  = '一个月';
 $lang->project->endList[93]  = '三个月';

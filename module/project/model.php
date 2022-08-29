@@ -875,6 +875,10 @@ class projectModel extends model
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['actionURL'] = $actionURL;
 
+        $statusList = $this->lang->project->statusList;
+        unset($statusList['delay']);
+        $this->config->project->search['params']['status']['values'] = $statusList;
+
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
