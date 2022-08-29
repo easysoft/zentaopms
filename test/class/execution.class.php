@@ -621,16 +621,16 @@ class executionTest
     }
 
     /**
-     * Get execution stat data. 
-     * 
-     * @param int    $projectID 
-     * @param string $browseType 
-     * @param int    $productID 
-     * @param int    $branch 
-     * @param bool   $withTasks 
-     * @param string $param 
-     * @param string $orderBy 
-     * @param object $pager 
+     * Get execution stat data.
+     *
+     * @param int    $projectID
+     * @param string $browseType
+     * @param int    $productID
+     * @param int    $branch
+     * @param bool   $withTasks
+     * @param string $param
+     * @param string $orderBy
+     * @param object $pager
      * @access public
      * @return int
      */
@@ -2285,6 +2285,195 @@ class executionTest
         else
         {
             return $returns;
+        }
+    }
+
+    /**
+     * Test Get bugs by search in execution.
+     *
+     * @param array  $products
+     * @param int    $executionID
+     * @param string $sql
+     * @param object $pager
+     * @param string $orderBy
+     * @access public
+     * @return void
+     */
+    public function getSearchBugsTest($products, $executionID, $sql, $pager = null, $orderBy = 'id_desc')
+    {
+        $object = $this->objectModel->getSearchBugs($products, $executionID, $sql, $pager, $orderBy);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test Get kanban group data.
+     *
+     * @param array $stories
+     * @param array $tasks
+     * @param array $bugs
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function getKanbanGroupDataTest($stories, $tasks, $bugs, $type = 'story')
+    {
+        $object = $this->objectModel->getKanbanGroupData($stories, $tasks, $bugs, $type);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(count((array)$object['closed']) == 0 and count((array)$object['nokey']) == 0) return 'empty';
+            return $object;
+        }
+    }
+
+    /**
+     * Test Get Prev Kanban.
+     *
+     * @param int $executionID
+     * @access public
+     * @return void
+     */
+    public function getPrevKanbanTest($executionID)
+    {
+        $result = $this->objectModel->getPrevKanban($executionID);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return !$result ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * Test save Kanban Data.
+     *
+     * @param int $executionID
+     * @param array $kanbanDatas
+     * @access public
+     * @return void
+     */
+    public function saveKanbanDataTest($executionID, $kanbanDatas = '')
+    {
+        if($kanbanDatas === '')
+        {
+            global $tester;
+            $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
+            $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 'id_asc');
+            $kanbanTasks = $this->objectModel->getKanbanTasks($executionID, "id");
+            $kanbanBugs  = $tester->loadModel('bug')->getExecutionBugs($executionID);
+            $users       = array();
+            $taskAndBugs = array();
+            foreach($kanbanTasks as $task)
+            {
+                $storyID = $task->storyID;
+                $status  = $task->status;
+                $users[] = $task->assignedTo;
+
+                $taskAndBugs[$status]["task{$task->id}"] = $task;
+            }
+            foreach($kanbanBugs as $bug)
+            {
+                $storyID = $bug->story;
+                $status  = $bug->status;
+                $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
+                $users[] = $bug->assignedTo;
+
+                $taskAndBugs[$status]["bug{$bug->id}"] = $bug;
+            }
+
+            $datas = array();
+            foreach($contents as $content)
+            {
+                if($content != 'story' and !isset($taskAndBugs[$content])) continue;
+                $datas[$content] = $content == 'story' ? $stories : $taskAndBugs[$content];
+            }
+            $kanbanDatas = $datas;
+        }
+
+        $object = $this->objectModel->saveKanbanData($executionID, $kanbanDatas);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            $result = $this->objectModel->getPrevKanban($executionID);
+            return !$result ? 'empty' : $result;
+        }
+    }
+
+    /**
+     * Test Get lifetime by id list.
+     *
+     * @param array $idList
+     * @access public
+     * @return void
+     */
+    public function getLifetimeByIdListTest($idList = '')
+    {
+        $result = $this->objectModel->getLifetimeByIdList($idList);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(!$result) return 'empty';
+
+            foreach($result as $id => $lifetime)
+            {
+                if(!$lifetime) $result[$id] = 'emptyLifetime';
+            }
+            return $result;
+        }
+    }
+
+    /**
+     * Test Update user view of execution and it's product.
+     *
+     * @param int    $executionID
+     * @param string $objectType
+     * @param array $users
+     * @access public
+     * @return void
+     */
+    public function updateUserViewTest($executionID, $objectType = 'sprint', $users = array())
+    {
+        $this->objectModel->updateUserView($executionID, $objectType, $users);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(count($users) > 0) su($users[0]);
+
+            global $tester;
+            return $tester->app->user->view->sprints;
         }
     }
 }
