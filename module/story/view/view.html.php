@@ -586,11 +586,11 @@
                         $commitTitle = $revision . ' ' . $commit->comment;
                         if($canViewRevision)
                         {
-                            echo "<li title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), "$commitTitle") . '</li>';
+                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . ' ' . $commit->comment . '</li>';
                         }
                         else
                         {
-                            echo "<li title='$commitTitle'>" . "$commitTitle" . '</li>';
+                            echo "<li class='link-commit' title='$commitTitle'>" . "$commitTitle" . '</li>';
                         }
                     }
                     ?>

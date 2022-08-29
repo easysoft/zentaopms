@@ -441,7 +441,8 @@
                     foreach($linkCommits as $commit)
                     {
                         $revision = substr($commit->revision, 0, 10);
-                        echo ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), "$revision {$commit->comment}") : "$revisioin {$commit->comment}") . '<br />';
+                        $title    = $revision . ' ' . $commit->comment;
+                        echo "<div class='link-commit' title='$title'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . " $commit->comment" : $title) . '</div>';
                     }
                     ?>
                   </td>
