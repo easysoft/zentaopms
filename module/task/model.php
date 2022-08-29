@@ -3761,7 +3761,7 @@ class taskModel extends model
             foreach($task->team as $teamMember)
             {
                 $realname = zget($users, $teamMember->account);
-                if($this->app->user->account == $teamMember->account)
+                if($this->app->user->account == $teamMember->account and $teamMember->status != 'done')
                 {
                     $task->assignedTo = $this->app->user->account;
                     $assignedToText   = $realname;
