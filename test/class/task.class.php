@@ -450,12 +450,17 @@ class taskTest
      * Test get tasks of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $modules
+     * @param  string $orderBy
+     * @param  string $count
      * @access public
      * @return array
      */
-    public function getExecutionTasksTest($executionID,$count)
+    public function getExecutionTasksTest($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $count = '0')
     {
-        $object = $this->objectModel->getExecutionTasks($executionID);
+        $object = $this->objectModel->getExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
         if(dao::isError())
         {
             $error = dao::getError();
