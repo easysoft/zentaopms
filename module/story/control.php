@@ -1878,7 +1878,7 @@ class story extends control
         $storyGroup = array();
         foreach($stories as $story)
         {
-            if(strpos('draft,closed', $story->status) !== false) continue;
+            if(strpos('draft,reviewing,changing,closed', $story->status) !== false) continue;
             if(isset($storyGroup[$story->module])) continue;
             $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
         }
