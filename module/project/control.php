@@ -363,8 +363,6 @@ class project extends control
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
-        $this->lang->project->statusList['delay'] = $this->lang->project->delay;
-
         $this->view->title          = $this->lang->project->browse;
         $this->view->projectStats   = $projectStats;
         $this->view->pager          = $pager;
