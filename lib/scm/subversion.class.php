@@ -311,7 +311,7 @@ class Subversion
                     $blame['lines']     = 1;
                     $blame['content']   = $content[$blame['line'] - 1];
 
-                    $log = $this->log('', 0, 'HEAD', 1);
+                    $log = $this->log('', $blame['revision'], 'HEAD', 1);
                     $blame['message'] = $log[0]->comment;
 
                     $revision         = $blame['revision'];
