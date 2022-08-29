@@ -1151,7 +1151,7 @@ class executionModel extends model
         }
 
         /* The total workload of the first stage should not exceed 100%. */
-        if($type == 'create' or $oldExecution->grade == 1)
+        if($type == 'create' or (empty($oldExecution) and $oldExecution->grade == 1))
         {
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
@@ -1198,6 +1198,7 @@ class executionModel extends model
     public function checkBeginAndEndDate($projectID, $begin, $end)
     {
         $project = $this->loadModel('project')->getByID($projectID);
+        if(empty($project)) return;
 
         if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
         if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
@@ -1463,6 +1464,8 @@ class executionModel extends model
      */
     public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
     {
+        if($projectID) return array();
+
         /* Construct the query SQL at search executions. */
         $executionQuery = '';
         if($browseType == 'bySearch')

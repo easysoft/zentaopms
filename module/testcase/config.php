@@ -203,7 +203,7 @@ $config->testcase->datatable->fieldList['story']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['story']['width']    = '90';
 $config->testcase->datatable->fieldList['story']['required'] = 'no';
 $config->testcase->datatable->fieldList['story']['control']    = 'select';
-$config->testcase->datatable->fieldList['story']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&story&id,title');
+$config->testcase->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => '$productID&$branch');
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';

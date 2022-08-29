@@ -187,6 +187,9 @@ switch($argv[1])
     case 'gitea':
         ztfRun('model/gitea');
         break;
+    case 'webhook':
+        ztfRun('model/webhook');
+        break;
 
     default:
         ztfExtract($argv[1]);
