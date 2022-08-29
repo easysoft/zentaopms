@@ -83,6 +83,7 @@ $(function()
     $('#duplicateStory').picker(
     {
         disableEmptySearch : true,
-        dropWidth : 'auto'
+        dropWidth : 'auto',
+        maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
     });
 })

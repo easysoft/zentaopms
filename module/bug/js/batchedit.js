@@ -78,10 +78,12 @@ $(function()
         hiddenRequireFields();
     });
 
+    var maxAutoDropWidth = document.body.scrollWidth + (document.getElementById('resolutions1').offsetWidth / 2) - document.getElementById('resolutions1').getBoundingClientRect().right;
     $('select[id^="duplicateBugs"]').picker(
     {
         disableEmptySearch : true,
         dropWidth : 'auto',
+        maxAutoDropWidth : maxAutoDropWidth,
         onReady: function(event)
         {
             $(event.picker.$container).addClass('required');
