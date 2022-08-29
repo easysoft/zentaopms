@@ -8,3 +8,4 @@
 .osContent, .browserContent {margin: 0 0 5px;}
 .browserContent {margin-left: -4px;}
 .resolution {white-space: nowrap; overflow: hidden;}
+.main-actions .btn-toolbar{display: flex; flex-wrap: wrap;}
