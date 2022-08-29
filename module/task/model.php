@@ -2793,8 +2793,8 @@ class taskModel extends model
         /* Check for add effort. */
         if(empty($effort))
         {
-            if($task->mode == 'linear' and strpos('|done|done|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
-            $members = array_column($task->team, 'account');
+            if($task->mode == 'linear' and strpos('|done|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
+            $members = array_map(function($member){ return $member->account; }, $task->team);
             if(!in_array($this->app->user->account, $members)) return false;
             if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
             return true;

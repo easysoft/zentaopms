@@ -195,7 +195,7 @@ class taskTest
         return $object[1];
     }
 
-    public function startTest($taskID,$param = array())
+    public function startTest($taskID, $param = array())
     {
         $createFields = array( 'status' => 'doing', 'consumed' => '9', 'assignedTo' => '', 'comment' => '9', 'realStarted' => '', 'left' => '3');
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
@@ -650,12 +650,14 @@ class taskTest
      * Test get task estimate.
      *
      * @param  int    $taskID
+     * @param  string $account
+     * @param  string $append
      * @access public
      * @return object
      */
-    public function getTaskEstimateTest($taskID)
+    public function getTaskEstimateTest($taskID, $account = '', $append = '')
     {
-        $object = $this->objectModel->getTaskEstimate($taskID);
+        $object = $this->objectModel->getTaskEstimate($taskID, $account, $append);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -1386,7 +1388,7 @@ class taskTest
      * @access public
      * @return string
      */
-    public function getTeamByAccount($users, $account, array('filter' => 'done'))
+    public function getTeamByAccount($users, $account, $filter = array('filter' => 'done'))
     {
         $object = $this->objectModel->getTeamByAccount($users, $account, $filter);
         if(empty($object)) return '_';
@@ -1405,6 +1407,20 @@ class taskTest
     {
         $assignedTo = $this->objectModel->getAssignedTo4Multi($users, $task, $type);
         return empty($assignedTo) ? 'null' : $assignedTo;
+    }
+
+    /**
+     * Test for can operate effort;
+     *
+     * @param  object  $task
+     * @param  object  $effort
+     * @access public
+     * @return bool
+     */
+    public function canOperateEffort($task, $effort = null)
+    {
+        $result = $this->objectModel->canOperateEffort($task, $effort);
+        return $result ? 1 : 0;
     }
 
     /**
