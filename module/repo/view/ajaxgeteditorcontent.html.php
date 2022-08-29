@@ -55,6 +55,9 @@ $canUnlinkObject = common::hasPriv('repo', 'unlinkObject');
         </div>
       </div>
     </div>
+    <div class="table-empty-tip">
+      <p><?php echo $lang->repo->notRelated;?></p>
+    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
@@ -72,6 +75,7 @@ $('#codeContainer').css('height', $.cookie('codeContainerHeight'));
  */
 function getRelation(commit)
 {
+    $('.table-empty-tip').show();
     $('#codeContainer').css('height', codeHeight / 5 * 3);
     var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 10;
     $('#related').css('height', relatedHeight);
@@ -105,6 +109,8 @@ function getRelation(commit)
             {
                 $('#relationTabs').tabs({tabs: tabs});
             }
+
+            $('.table-empty-tip').hide();
         }
 
         arrowTabs('relationTabs', 1);

@@ -15,3 +15,4 @@
 #relationTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
 #related .content, #related .btn {background-color: #F4F5F7; border: none;}
 #related .nav-tabs > li.active > a:before {background: none; height: 0;}
+#related .table-empty-tip {padding: 35px 10px;}

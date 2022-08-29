@@ -13,8 +13,8 @@ include '../../common/view/header.lite.html.php';
 ?>
 <div class="main-col linkContent main">
   <div class="content pane">
-    <div class="fade main-row split-row in">
-      <div class="side-col left-content">
+    <div class="fade main-row split-row in col-md-12">
+      <div class="left-content col-md-8">
         <table class="menu-title">
           <?php if($objectType == 'story'):?>
           <tr><th class='text-right'><?php echo $lang->release->storyTitle;?>: </th><td class="text"><?php echo $object->title; ?></td></tr>
@@ -31,7 +31,7 @@ include '../../common/view/header.lite.html.php';
           <?php endif;?>
         </table>
       </div>
-      <div class="main-col right-content">
+      <div class="main-col right-content col-md-4">
         <?php include '../../common/view/action.html.php';?>
       </div>
     </div>
@@ -43,13 +43,5 @@ $(function()
 {
     $('a').attr('href', 'javascript:;').removeClass('iframe').css('color', '#3c4353');
     $('blockquote a').empty();
-
-    if($('.linkContent .content').width() != 0) $.cookie('eidtorLinkedContentWidth', $('.linkContent .content').width());
-    $('.right-content').css('width', $.cookie('eidtorLinkedContentWidth') / 5 * 2);
 });
-
-if(window.onblur)
-{
-    $('.right-content').css('width', $.cookie('eidtorLinkedContentWidth') / 5 * 2);
-}
 </script>
