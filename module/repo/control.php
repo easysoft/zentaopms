@@ -1786,8 +1786,9 @@ class repo extends control
      */
     public function ajaxGetFileTree($repoID, $branch = '')
     {
-        $repo  = $this->repo->getRepoByID($repoID);
-        $files = $this->repo->getFileTree($repo, $branch);
+        $branch = base64_decode($branch);
+        $repo   = $this->repo->getRepoByID($repoID);
+        $files  = $this->repo->getFileTree($repo, $branch);
         return print($files);
     }
 

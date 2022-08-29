@@ -87,7 +87,7 @@ $(function()
      */
     function refreshFiles(branchOrTag)
     {
-        var link  = createLink('repo', 'ajaxGetFileTree', 'repoID=' + repoID + '&branch=' + branchOrTag);
+        var link  = createLink('repo', 'ajaxGetFileTree', 'repoID=' + repoID + '&branch=' + Base64.encode(branchOrTag));
         $.get(link, function(data)
         {
             $('#modules').remove();
