@@ -13,11 +13,15 @@ include '../../common/view/header.lite.html.php';
 js::set('jsRoot', $jsRoot);
 js::set('clientLang', $app->clientLang);
 js::set('fileExt', $this->config->repo->fileExt);
-js::set('codeContent', trim($content));
 js::set('file', $pathInfo);
-js::set('blames', $blames);
 js::set('blameTmpl', $lang->repo->blamTmpl);
 js::set('repoID', $repoID);
+js::set('showEditor', $showEditor);
+if($showEditor)
+{
+    js::set('codeContent', trim($content));
+    js::set('blames', $blames);
+}
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 $canLinkStory    = common::hasPriv('repo', 'linkStory');
@@ -25,8 +29,14 @@ $canLinkBug      = common::hasPriv('repo', 'linkBug');
 $canLinkTask     = common::hasPriv('repo', 'linkTask');
 $canUnlinkObject = common::hasPriv('repo', 'unlinkObject');
 ?>
-<div id="monacoEditor">
+<div id="monacoEditor" class='repoCode'>
+  <?php if(strpos($config->repo->images, "|$suffix|") !== false):?>
+  <div class='image'><img src='data:image/<?php echo $suffix?>;base64,<?php echo $content?>' /></div>
+  <?php elseif($suffix == 'binary'):?>
+  <div class='binary'><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision"), "<i class='icon-download'></i>", 'hiddenwin', "title='{$lang->repo->download}'"); ?></div>
+  <?php else:?>
   <div id="codeContainer"></div>
+  <?php endif;?>
   <div id="log">
     <div class="tip"></div>
     <div class="history"></div>
@@ -149,59 +159,62 @@ $(function()
     $('.btn-left').click(function()  {arrowTabs('relationTabs', 1);});
     $('.btn-right').click(function() {arrowTabs('relationTabs', -2);});
 
-    require.config({
-        paths: {vs: jsRoot + 'monaco-editor/min/vs'},
-        'vs/nls': {
-            availableLanguages: {
-                '*': clientLang
-            }
-        }
-    });
-
-    require(['vs/editor/editor.main'], function ()
+    if(showEditor)
     {
-        var lang = 'php';
-        $.each(fileExt, function(langName, ext)
-        {
-            if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
-        });
-
-        var editor = monaco.editor.create(document.getElementById('codeContainer'),
-        {
-            autoIndent: true,
-            value: codeContent,
-            language: lang,
-            contextmenu: true,
-            EditorMinimapOptions: {
-                enabled: false
-            },
-            readOnly: true,
-            automaticLayout: true
-        });
-
-        editor.onMouseDown(function(obj)
-        {
-            var line = obj.target.position.lineNumber;
-
-            var blame  = blames[line];
-            var p_line = parseInt(line);
-            while(!blame.revision)
-            {
-                p_line--;
-                blame = blames[p_line];
+        require.config({
+            paths: {vs: jsRoot + 'monaco-editor/min/vs'},
+            'vs/nls': {
+                availableLanguages: {
+                    '*': clientLang
+                }
             }
-            if($('#log').data('line') == p_line) return;
+        });
 
-            var time    = blame.time != 'unknown' ? blame.time : '';
-            var user    = blame.committer != 'unknown' ? blame.committer : '';
-            var version = blame.revision.toString().substring(0, 10);
-            var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
-            $('.history').text(content);
-            $('#log').data('line', p_line);
-            $('#log').css('display', 'flex');
-            getRelation(blame.revision);
-        })
-    });
+        require(['vs/editor/editor.main'], function ()
+        {
+            var lang = 'php';
+            $.each(fileExt, function(langName, ext)
+            {
+                if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
+            });
+
+            var editor = monaco.editor.create(document.getElementById('codeContainer'),
+            {
+                autoIndent: true,
+                value: codeContent,
+                language: lang,
+                contextmenu: true,
+                EditorMinimapOptions: {
+                    enabled: false
+                },
+                readOnly: true,
+                automaticLayout: true
+            });
+
+            editor.onMouseDown(function(obj)
+            {
+                var line = obj.target.position.lineNumber;
+
+                var blame  = blames[line];
+                var p_line = parseInt(line);
+                while(!blame.revision)
+                {
+                    p_line--;
+                    blame = blames[p_line];
+                }
+                if($('#log').data('line') == p_line) return;
+
+                var time    = blame.time != 'unknown' ? blame.time : '';
+                var user    = blame.committer != 'unknown' ? blame.committer : '';
+                var version = blame.revision.toString().substring(0, 10);
+                var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
+                $('.history').text(content);
+                $('#log').data('line', p_line);
+                $('#log').css('display', 'flex');
+                getRelation(blame.revision);
+            })
+        });
+    }
 
     $('#linkStory a, #linkBug a, #linkTask a').on('click', function()
     {
