@@ -253,6 +253,8 @@ class actionModel extends model
                 case 'task':
                     $fields = 'project, execution, story';
                     $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if(empty($result)) break;
+
                     if($result->story != 0)
                     {
                         $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($result->story)->fetchPairs('product');
