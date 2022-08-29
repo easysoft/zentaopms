@@ -332,7 +332,7 @@ class testreportModel extends model
         $this->loadModel('tree');
         $modules = array();
         $data    = array();
-        if(is_string($productIdList)) $productIdList = explode(',', $productIdList);
+        if(!is_array($productIdList)) $productIdList = explode(',', $productIdList);
         foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
         foreach($moduleGroups as $moduleID => $count)
         {
