@@ -1200,7 +1200,7 @@ class productModel extends model
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
             ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
-            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(strpos('all,undone', $browseType) === false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
