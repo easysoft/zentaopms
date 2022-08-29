@@ -1464,8 +1464,6 @@ class executionModel extends model
      */
     public function getStatData($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
     {
-        if(empty($projectID)) return array();
-
         /* Construct the query SQL at search executions. */
         $executionQuery = '';
         if($browseType == 'bySearch')
