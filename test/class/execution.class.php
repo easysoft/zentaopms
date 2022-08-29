@@ -749,6 +749,18 @@ class executionTest
     }
 
     /**
+     * Check the privilege.
+     *
+     * @access public
+     * @return string|bool
+     */
+    public function getLimitedExecutionTest()
+    {
+        $this->objectModel->getProductGroupList();
+        return isset($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : true;
+    }
+
+    /**
      * function getProductGroupList test execution
      *
      * @param  string $count
@@ -810,6 +822,19 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Get the task data group by execution id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return int
+     */
+    public function getTaskGroupByExecutionTest($executionIdList = array())
+    {
+        $objects = $this->objectModel->getTaskGroupByExecution($executionIdList);
+        return count($objects);
     }
 
     /**
