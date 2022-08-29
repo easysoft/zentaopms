@@ -1718,6 +1718,8 @@ class story extends control
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
+        $this->story->replaceURLang($storyType);
+
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
