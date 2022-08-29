@@ -264,7 +264,7 @@
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td>
                   <?php
-                  if(empty($bug->mailto))
+                  if(!empty($bug->mailto))
                   {
                       foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account) echo ' ' . zget($users, $account);
                   }
