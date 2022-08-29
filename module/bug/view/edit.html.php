@@ -191,7 +191,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control picker-select" multiple');?>
+                      <?php echo html::select('mailto[]', $users, $bug->mailto, 'class="form-control picker-select" multiple');?>
                       <?php echo $this->fetch('my', 'buildContactLists');?>
                     </div>
                   </td>
