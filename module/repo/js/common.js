@@ -74,6 +74,7 @@ var distance = 0;
  */
 function arrowTabs(domID, shift, hideRightBtn)
 {
+    return;
     $('.btn-right, .btn-left').show();
     if(hideRightBtn) $('.btn-right').hide();
 

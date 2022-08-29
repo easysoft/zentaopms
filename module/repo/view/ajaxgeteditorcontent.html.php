@@ -82,7 +82,7 @@ function getRelation(commit)
     $tabs = $('#relationTabs').data('zui.tabs');
     if($tabs) $tabs.closeAll();
 
-    $.post(createLink('repo', 'ajaxGetCommitRelation', 'commit=' + commit), function(data)
+    $.post(createLink('repo', 'ajaxGetCommitRelation', 'repoID=' + repoID + '&commit=' + commit), function(data)
     {
         var titleList = JSON.parse(data).titleList;
         var tabs = [];

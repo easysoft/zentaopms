@@ -386,6 +386,7 @@ $lang->bug->action->unlinkedfromplan    = array('main' => '$date, được xóa 
 $lang->bug->action->linked2build        = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bản dựng <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfrombuild   = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ bản dựng <strong>$extra</strong>.');
 $lang->bug->action->linked2release      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Phát hành <strong>$extra</strong>.');
+$lang->bug->action->linked2revision     = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrelease = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Phát hành <strong>$extra</strong>.');
 $lang->bug->action->linkrelatedbug      = array('main' => '$date, liên kết bởi <strong>$actor</strong> tới Bug <strong>$extra</strong>.');
 $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, bị hủy bởi <strong>$actor</strong> từ Bug <strong>$extra</strong>.');

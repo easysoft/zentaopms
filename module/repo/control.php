@@ -1806,13 +1806,13 @@ class repo extends control
     /**
      * Get relation by commit.
      *
+     * @param  int    $repoID
      * @param  string $commit
      * @access public
      * @return object
      */
-    public function ajaxGetCommitRelation($commit)
+    public function ajaxGetCommitRelation($repoID, $commit)
     {
-        $repoID    = $this->repo->saveState();
         $titleList = $this->repo->getRelationByCommit($repoID, $commit);
         return $this->send(array('titleList' => $titleList));
     }

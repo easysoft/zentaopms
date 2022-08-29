@@ -215,6 +215,9 @@ $lang->task->legendDesc   = 'Task Description';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+
 $lang->task->confirmDelete             = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
 $lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
@@ -229,7 +232,7 @@ $lang->task->confirmFinish             = '"Left Hour" is 0. Do you want to chang
 $lang->task->confirmRecord             = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to transfer task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
-$lang->task->noticeLinkStory           = "No story has been linked. You can %s for this project, then %s.";
+$lang->task->noticeLinkStory           = "No story has been lY29uZmlninked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord          = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions            = '%s. %s, commented by <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Only the %s can %s the task.';
