@@ -364,8 +364,10 @@ function toggleSelectTestStory()
     }
 }
 
+var index = 0;
 function addItem(obj)
 {
+    index ++;
     var $tr = $(obj).closest('tr');
     $tr.after($tr.clone());
     var $nextTr = $tr.next();
@@ -377,11 +379,31 @@ function addItem(obj)
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
     $nextTr.find('.form-date').val('').datepicker();
+    $nextTr.find('.startInput').attr('id', 'testEstStarted\[' + index + '\]');
+    $nextTr.find('.deadlineInput').attr('id', 'testDeadline\[' + index + '\]');
+
+    if($nextTr.find('.deadlineBox').length == 0)
+      $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>同上</span>');
+    if($nextTr.find('.estStartedBox').length == 0)
+      $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>同上</span>');
+
+    if($nextTr.find('.deadlineBox').is(':hidden'))
+    {
+      $nextTr.find('.deadlineBox').show();
+      $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
+    }
+    if($nextTr.find('.estStartedBox').is(':hidden'))
+    {
+      $nextTr.find('.estStartedBox').show();
+      $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
+    }
 }
 
 function removeItem(obj)
 {
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+    $('.resarch').find('tr:first').find('.estStartedBox').remove();
+    $('.resarch').find('tr:first').find('.deadlineBox').remove();
 }
 
 function markTestStory()
@@ -629,3 +651,20 @@ $('#modalTeam .btn').click(function()
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
+
+function hiddenDitto(obj)
+{
+    var $this  = $(obj);
+    var date   = $this.val();
+    var $ditto = $this.closest('div').find("input[type='checkBox']");
+    if(date == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}
