@@ -63,9 +63,7 @@ function computeWorkDays(currentID)
     isBactchEdit = false;
     if(currentID)
     {
-        index = currentID.replace('begins[', '');
-        index = index.replace('ends[', '');
-        index = index.replace(']', '');
+        index = currentID.replace(/\w*\[|\]/g, '');
         if(!isNaN(index)) isBactchEdit = true;
     }
 
