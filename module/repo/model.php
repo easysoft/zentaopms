@@ -2289,9 +2289,10 @@ class repoModel extends model
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
-        $files   = array();
-        $folders = array();
-        $dirList = array();
+        $files    = array();
+        $folders  = array();
+        $dirList  = array();
+        $fileSort = $dirSort = array(); // Use it to sort array.
         foreach($fileCommits as $fileCommit)
         {
             /* Filter by parent. */
@@ -2309,7 +2310,8 @@ class repoModel extends model
                 $file->account  = $fileCommit->committer;
                 $file->date     = $fileCommit->time;
 
-                $files[] = $file;
+                $files[]    = $file;
+                $fileSort[] = $file->name;
             }
             else
             {
@@ -2328,8 +2330,11 @@ class repoModel extends model
 
                 $dirList[] = $fileName;
                 $folders[] = $folder;
+                $dirSort[] = $fileName;
             }
         }
+        array_multisort($fileSort, SORT_ASC, $files);
+        array_multisort($dirSort, SORT_ASC, $folders);
 
         return array_merge($folders, $files);
     }

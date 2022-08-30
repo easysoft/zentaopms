@@ -1049,7 +1049,7 @@ class repo extends control
         $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($repo->product => $repo->product));
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
         $this->config->product->search['params']['module']['values']  = $modules;
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
 
@@ -1061,7 +1061,7 @@ class repo extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->product->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
 
         session_start();
