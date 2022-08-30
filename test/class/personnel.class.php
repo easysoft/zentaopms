@@ -280,7 +280,7 @@ class personnelTest
      * @access public
      * @return void
      */
-    public function addWhitelistTest($objectType = '', $objectID = 0, $user)
+    public function addWhitelistTest($objectType = '', $objectID = 0, $user = '')
     {
         $users = array('accounts' => $user);
         foreach($users as $key => $value) $_POST[$key] = $value;

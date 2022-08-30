@@ -234,7 +234,6 @@ class project extends control
         {
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
             if($selectedProgram->budget) $availableBudget = $this->program->getBudgetLeft($selectedProgram);
-            if(isset($selectedProgram)) $allProducts = $this->program->getProductPairs($selectedProgram->id, 'assign', 'noclosed');
         }
 
         if(!empty($objectID))
@@ -253,16 +252,15 @@ class project extends control
         $data = array();
         if(isset($selectedProgram))
         {
-            $data['selectedProgramBegin']  = $selectedProgram->begin;
-            $data['selectedProgramEnd']    = $selectedProgram->end;
-            $data['budgetUnit']            = $selectedProgram->budgetUnit;
-            $allProducts = array(0 => '') + $allProducts;
-            /* Finish task #64882.Get the path of the currently selected program. */
-            $data['selectedProgramPath']   = explode(',', $selectedProgram->path);
-            /* Get the products that can be linked with the currently selected program. */
-            $data['allProducts']           = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
-            $data['plans']                 = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
+            $data['selectedProgramBegin'] = $selectedProgram->begin;
+            $data['selectedProgramEnd']   = $selectedProgram->end;
+            $data['budgetUnit']           = $selectedProgram->budgetUnit;
+            $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
+
+        $allProducts = array(0 => '') + $this->program->getProductPairs($selectedProgramID, 'assign', 'noclosed');
+        $data['allProducts'] = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+        $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
 
         /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
@@ -362,8 +360,6 @@ class project extends control
 
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
-
-        $this->lang->project->statusList['delay'] = $this->lang->project->delay;
 
         $this->view->title          = $this->lang->project->browse;
         $this->view->projectStats   = $projectStats;

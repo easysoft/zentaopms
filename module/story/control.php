@@ -329,7 +329,7 @@ class story extends control
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
             $pri       = !empty($oldBug->pri) ? $oldBug->pri : '3';
-            if(strpos($oldBug->mailto, $oldBug->openedBy) === false)
+            if($oldBug->mailto and strpos($oldBug->mailto, $oldBug->openedBy) === false)
             {
                 $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
             }
@@ -1717,6 +1717,8 @@ class story extends control
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
+
+        $this->story->replaceURLang($storyType);
 
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);

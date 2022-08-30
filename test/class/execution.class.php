@@ -58,7 +58,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function createObject($param = array(), $project, $dayNum, $days)
+    public function createObject($param = array(), $project = '', $dayNum = '', $days = '')
     {
         $products  = array('');
         $plans     = array('');
@@ -749,6 +749,18 @@ class executionTest
     }
 
     /**
+     * Check the privilege.
+     *
+     * @access public
+     * @return string|bool
+     */
+    public function getLimitedExecutionTest()
+    {
+        $this->objectModel->getProductGroupList();
+        return isset($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : true;
+    }
+
+    /**
      * function getProductGroupList test execution
      *
      * @param  string $count
@@ -810,6 +822,19 @@ class executionTest
         {
             return $object;
         }
+    }
+
+    /**
+     * Get the task data group by execution id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return int
+     */
+    public function getTaskGroupByExecutionTest($executionIdList = array())
+    {
+        $objects = $this->objectModel->getTaskGroupByExecution($executionIdList);
+        return count($objects);
     }
 
     /**
@@ -1486,7 +1511,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function getCanCopyObjectsTest($projectID = 0, $count)
+    public function getCanCopyObjectsTest($projectID = 0, $count = 0)
     {
         $object = $this->objectModel->getCanCopyObjects($projectID);
 
@@ -1576,7 +1601,7 @@ class executionTest
      * @access public
      * @return array
      */
-    public function addProjectMembersTest($projectID = 0, $executionID, $count)
+    public function addProjectMembersTest($projectID = 0, $executionID = 0, $count = 0)
     {
         global $tester;
         $tester->dbh->query("delete from zt_team where root = $projectID");

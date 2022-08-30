@@ -108,7 +108,7 @@
                   <?php if(count($teams) > 3):?>
                   <?php $lastMember = end($teams);?>
                   <div title="<?php echo $lastMember->realname;?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account, 'name' => $lastMember->realname), 'avatar-circle avatar-' . key($lastMember)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account, 'name' => $lastMember->realname), 'avatar-circle avatar-' . key((array)$lastMember)); ?>
                   </div>
                   <?php endif;?>
                 </div>

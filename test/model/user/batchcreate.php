@@ -20,7 +20,7 @@ $user = new userTest();
 $normalUser = array();
 $normalUser['account']  = array(1 => 'newtestuser1', 2 => 'newtestuser2', 3 => 'newtestuser3');
 $normalUser['realname'] = array(1 => '新测试用户1', 2 => '新测试用户2', 3 => '新测试用户3');
-$normalUser['visions']  = array(1 => 'rnd', 2 => 'rnd,lite', 3 => 'lite');
+$normalUser['visions']  = array(1 => array('rnd'), 2 => array('rnd','lite'), 3 => array('lite'));
 $normalUser['role']     = array(1 => 'qa', 2 => 'dev', 3 => 'pm');
 $normalUser['email']    = array(1 => 'testasd@163.com', 2 => '', 3 => '11773@qq.com');
 $normalUser['password'] = array(1 => 'e10adc3949ba59abbe56e057f20f883e', 2 => 'e10adc3949ba59abbe56e057f20f883e', 3 => 'e10adc3949ba59abbe56e057f20f883e');

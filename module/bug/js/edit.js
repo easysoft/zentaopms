@@ -23,7 +23,8 @@ $(function()
     $('#duplicateBug').picker(
     {
         disableEmptySearch : true,
-        dropWidth : 'auto'
+        dropWidth : 'auto',
+        maxAutoDropWidth : document.body.scrollWidth + document.getElementById('resolution').offsetWidth - document.getElementById('resolution').getBoundingClientRect().right
     });
 });
 

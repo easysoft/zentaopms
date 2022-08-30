@@ -1,6 +1,6 @@
 $(function()
 {
-    loadDocLibs('product');
+    loadDocLibs(defaultType);
 })
 
 /**
