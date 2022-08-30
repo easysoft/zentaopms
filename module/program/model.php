@@ -1201,10 +1201,12 @@ class programModel extends model
      * Get program parent pairs
      *
      * @param  string $model
+     * @param  string $mode
+     * @param  bool   $showRoot
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = 'noclosed')
+    public function getParentPairs($model = '', $mode = 'noclosed', $showRoot = true)
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
@@ -1219,7 +1221,7 @@ class programModel extends model
         {
             if(strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
-            $moduleName    = '/';
+            $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
             foreach($parentModules as $parentModuleID)
             {
@@ -1240,7 +1242,7 @@ class programModel extends model
         $topMenu = array_shift($treeMenu);
         $topMenu = empty($topMenu) ? '' : $topMenu;
         $topMenu = explode("\n", trim($topMenu));
-        $lastMenu[] = '/';
+        $showRoot ? $lastMenu[] = '/' : $lastMenu = array();
         foreach($topMenu as $menu)
         {
             if(strpos($menu, '|') === false) continue;
