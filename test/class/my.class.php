@@ -104,10 +104,7 @@ class myTest
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $actionID = $tester->loadModel('action')->create('task', 6, 'assigned', '', '', 'admin', '');
-        $actionID = $tester->loadModel('action')->create('bug', 6, 'assigned', '', '', 'admin', '');
-        $actionID = $tester->loadModel('action')->create('story', 5, 'assigned', '', '', 'admin', '');
-        $objects = $this->objectModel->getAssignedByMe($account, $limit, $pager, $orderBy, $projectID, $objectType);
+        $objects = $this->objectModel->getAssignedByMe($account, $limit, $pager, $orderBy, $objectType);
 
         if(dao::isError()) return dao::getError();
 

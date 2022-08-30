@@ -1345,7 +1345,6 @@ class task extends control
         $members      = $task->team ? $this->task->getMemberPairs($task) : $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
-        $this->view->users = $members;
         if(!empty($task->team))
         {
             $teams = array_keys($task->team);
@@ -1368,6 +1367,7 @@ class task extends control
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }

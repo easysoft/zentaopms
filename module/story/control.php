@@ -329,7 +329,7 @@ class story extends control
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
             $pri       = !empty($oldBug->pri) ? $oldBug->pri : '3';
-            if(strpos($oldBug->mailto, $oldBug->openedBy) === false)
+            if($oldBug->mailto and strpos($oldBug->mailto, $oldBug->openedBy) === false)
             {
                 $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
             }
@@ -1484,7 +1484,7 @@ class story extends control
         $this->view->product   = $product;
         $this->view->story     = $story;
         $this->view->actions   = $this->action->getList('story', $storyID);
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter', "$story->lastEditedBy,$story->openedBy");
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
         $this->view->reviewers = $reviewers;
         $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) == 1 ? true : false;
 
@@ -1720,6 +1720,8 @@ class story extends control
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
+        $this->story->replaceURLang($storyType);
+
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
         $productStoryList = array();
@@ -1880,7 +1882,7 @@ class story extends control
         $storyGroup = array();
         foreach($stories as $story)
         {
-            if(strpos('draft,closed', $story->status) !== false) continue;
+            if(strpos('draft,reviewing,changing,closed', $story->status) !== false) continue;
             if(isset($storyGroup[$story->module])) continue;
             $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
         }

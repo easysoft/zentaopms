@@ -34,7 +34,7 @@ class productIssueEntry extends entry
         {
             case 'story':
                 $this->app->loadLang('story');
-                $storyStatus = array('' => '', 'draft' => 'opened', 'active' => 'opened', 'changed' => 'opened', 'closed' => 'closed');
+                $storyStatus = array('' => '', 'draft' => 'opened', 'reviewing' => 'opened', 'active' => 'opened', 'changing' => 'opened', 'closed' => 'closed');
 
                 $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($id)->fetch();
                 if(!$story) $this->send404();

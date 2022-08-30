@@ -923,7 +923,7 @@ class bugModel extends model
                 }
                 else
                 {
-                    return print(js::error('bug#' . $bugID . dao::getError(true)));
+                    return helper::end(js::error('bug#' . $bugID . dao::getError(true)));
                 }
             }
         }

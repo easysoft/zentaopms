@@ -175,7 +175,7 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-if(!isset($config->setCode) or $config->setCode == 1)
+if((!isset($config->setCode) or $config->setCode == 1) and $config->systemMode == 'new')
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }

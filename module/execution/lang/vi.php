@@ -315,7 +315,7 @@ $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linke
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Bạn có muốn xóa {$lang->executionCommon}[%s] này?";
 $lang->execution->confirmUnlinkMember         = "Bạn có muốn hủy liên kết người dùng này từ {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?;"
+$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
 $lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";

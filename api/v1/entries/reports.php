@@ -273,7 +273,7 @@ class reportsEntry extends entry
         }
 
         /* Set story status statistics integrate into product. */
-        $storyStatusList = array('draft' => array(), 'active' => array(), 'changed' => array(), 'closed' => array());
+        $storyStatusList = array('draft' => array(), 'reviewing' => array(), 'active' => array(), 'changing' => array(), 'closed' => array());
         foreach($processedProducts as $productID => $product)
         {
             $product->storyStat = array();

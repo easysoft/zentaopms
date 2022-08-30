@@ -95,7 +95,7 @@ class releaseTest
         $files  = array();
         $mailto = array();
 
-        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);  
+        $createFields = array('name' => '','marker' => '1', 'build' => '', 'date' => $date, 'desc' => '', 'mailto' => $mailto , 'labels' => $labels, 'files' => $files);
 
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
@@ -230,11 +230,12 @@ class releaseTest
      *
      * @param  int    $releaseID
      * @param  string $type
+     * @param  string $bugs
      * @access public
      * @return array
      */
 
-    public function linkBugTest($releaseID, $type = 'bug', $bugs)
+    public function linkBugTest($releaseID, $type = 'bug', $bugs = '')
     {
         $_POST['bugs'] = $bugs;
         $this->objectModel->linkBug($releaseID, $type);
@@ -275,10 +276,11 @@ class releaseTest
      *
      * @param  int    $releaseID
      * @param  string $type
+     * @param  string $bugs
      * @access public
      * @return array
      */
-    public function batchUnlinkBugTest($releaseID, $type = 'bug', $bugs)
+    public function batchUnlinkBugTest($releaseID, $type = 'bug', $bugs = '')
     {
         $_POST['bugs'] = $bugs;
         $this->objectModel->linkBug($releaseID);

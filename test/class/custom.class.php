@@ -302,7 +302,7 @@ class customTest
      * @access public
      * @return object
      */
-    public function updateURAndSRTest($key = 0, $SRName)
+    public function updateURAndSRTest($key = 0, $SRName = '')
     {
         global $app, $tester;
 

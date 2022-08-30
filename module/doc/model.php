@@ -960,7 +960,7 @@ class docModel extends model
         }
         else
         {
-            $this->config->doc->search['module'] = $queryName;
+            if(isset($queryName)) $this->config->doc->search['module'] = $queryName;
             $products = $this->product->getPairs('nocode', $this->session->project);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
