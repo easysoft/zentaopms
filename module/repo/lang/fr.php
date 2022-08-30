@@ -110,6 +110,7 @@ $lang->repo->fileServerPassword = 'File Server Password';
 $lang->repo->linkStory          = 'Link ' . $lang->SRCommon;
 $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
+$lang->repo->unlink             = 'Unlink';
 
 $lang->repo->title      = 'Titre';
 $lang->repo->status     = 'Statut';

@@ -333,8 +333,9 @@ $lang->story->action->unlinkedfromproject   = array('main' => '$date, 由 <stron
 $lang->story->action->linked2build          = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2release        = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
-$lang->story->action->linked2revision       = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>');
 $lang->story->action->unlinkedfromrelease   = array('main' => '$date, 由 <strong>$actor</strong> 从发布 <strong>$extra</strong> 移除。');
+$lang->story->action->linked2revision       = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>');
+$lang->story->action->unlinkedfromrevision  = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>');
 $lang->story->action->linkrelatedstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 关联相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->subdividestory        = array('main' => "\$date, 由 <strong>\$actor</strong> 细分为{$lang->SRCommon}   <strong>\$extra</strong>。");
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
