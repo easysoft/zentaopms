@@ -106,8 +106,8 @@
               ?>
             </td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$executionID]", $lang->execution->statusList, $executions[$executionID]->status, 'class=form-control');?></td>
-            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
-            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$executionID]",  $executions[$executionID]->desc,  "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$executionID]",  $executions[$executionID]->team,  "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
@@ -154,7 +154,7 @@ $('#executionForm').submit(function()
     /* Clear all error messages. */
     $('input[name^=begins]').each(function()
     {
-        var beginDateID = $(this).attr('id');
+        var beginDateID = $(this).attr('id').replace(/\[|]/g, '');
         var endDateID   = beginDateID.replace('begins', 'ends');
         $('#help' + beginDateID).remove();
         $('#help' + endDateID).remove();
@@ -164,7 +164,7 @@ $('#executionForm').submit(function()
     $('input[name^=begins]').each(function()
     {
         var beginDate   = $(this).val();
-        var beginDateID = $(this).attr('id');
+        var beginDateID = $(this).attr('id').replace(/\[|]/g, '');
 
         var nameID      = beginDateID.replace('begins', 'names');
         var endDateID   = beginDateID.replace('begins', 'ends');
