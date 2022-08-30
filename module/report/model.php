@@ -674,7 +674,7 @@ class reportModel extends model
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
 
-        $effort->consumed = round($effort->consumed, 2);
+        $effort->consumed = !empty($effort->consumed) ? round($effort->consumed, 2) : 0;
         return $effort;
     }
 

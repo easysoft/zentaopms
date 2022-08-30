@@ -299,14 +299,13 @@
                   <th><?php echo $lang->task->mailto;?></th>
                   <td>
                     <?php
-                    $mailto = explode(',', str_replace(' ', '', $task->mailto));
-                    if(empty($mailto))
+                    if(empty($task->mailto))
                     {
                         echo $lang->noData;
                     }
                     else
                     {
-                        foreach($mailto as $account) echo ' ' . zget($users, $account, $account);
+                        foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) echo ' ' . zget($users, $account, $account);
                     }
                     ?>
                   </td>

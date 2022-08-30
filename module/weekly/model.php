@@ -495,6 +495,8 @@ class weeklyModel extends model
                 ->fetch('consumed');
         }
 
+        if(is_null($AC)) $AC = 0;
+
         return round($AC, 2);
     }
 

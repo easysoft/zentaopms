@@ -181,11 +181,17 @@ switch($argv[1])
     case 'user':
         ztfRun('model/user');
         break;
+    case 'weekly':
+        ztfRun('model/weekly');
+        break;
     case 'gitlab':
         ztfRun('model/gitlab');
         break;
     case 'gitea':
         ztfRun('model/gitea');
+        break;
+    case 'webhook':
+        ztfRun('model/webhook');
         break;
 
     default:
