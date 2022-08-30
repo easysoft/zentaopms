@@ -341,9 +341,9 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            if($type == 'story') $this->action->create('story', $linkID, 'createmr');
-            if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr');
-            if($type == 'task')  $this->action->create('task', $linkID, 'createmr');
+            if($type == 'story') $this->action->create('story', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'linked2revision', '', $revisionID);
+            if($type == 'task')  $this->action->create('task', $linkID, 'linked2revision', '', $revisionID);
         }
     }
 
