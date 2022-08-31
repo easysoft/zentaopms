@@ -60,9 +60,17 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
     <div class='leftBtn hidden disabled'><a><i class='icon icon-angle-left'></i></a></div>
     <div id='regionNavTabs'>
       <ul class="nav nav-tabs">
-        <li data-id='all' class="<?php echo $regionID === 'all' ? 'active' : '';?>" title="<?php echo $lang->kanbanregion->all;?>"><a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=all");?>"><?php echo $lang->kanbanregion->all;?></a></li>
+        <li data-id='all' class="<?php echo $regionID === 'all' ? 'active' : '';?>" title="<?php echo $lang->kanbanregion->all;?>">
+          <a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=all");?>" class="<?php echo $regionID === 'all' ? 'btn-active-text' : '';?>">
+            <span class='text'><?php echo $lang->kanbanregion->all;?></span>
+          </a>
+        </li>
         <?php foreach($regions as $region):?>
-        <li data-id="<?php echo $region->id;?>" class="<?php echo $region->id == $regionID ? 'active' : '';?>" title="<?php echo $region->name;?>"><a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=$region->id");?>"><?php echo $region->name;?></a></li>
+        <li data-id="<?php echo $region->id;?>" class="<?php echo $region->id == $regionID ? 'active' : '';?>" title="<?php echo $region->name;?>">
+          <a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=$region->id");?>" class="<?php echo $region->id == $regionID ? 'btn-active-text' : '';?>">
+            <span class='text'><?php echo $region->name;?></span>
+          </a>
+        </li>
         <?php endforeach;?>
       </ul>
     </div>
