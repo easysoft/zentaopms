@@ -390,13 +390,18 @@ function addItem(obj)
     $nextTr.find('.startInput').attr('id', 'testEstStarted\[' + index + '\]');
     $nextTr.find('.deadlineInput').attr('id', 'testDeadline\[' + index + '\]');
 
+    if($nextTr.find('#testAssignedTo option:selected').val() == '')
+    {
+        $nextTr.find('#testAssignedTo').append("<option value='ditto' title='" + ditto + "'>" + ditto + "</option>");
+        $nextTr.find('#testAssignedTo').val('ditto').chosen().trigger('chosen:updated');
+    }
     if($nextTr.find('.deadlineBox').length == 0)
     {
-        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>' + ditto + '</span>');
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/> ' + ditto + '</span>');
     }
     if($nextTr.find('.estStartedBox').length == 0)
     {
-        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>' + ditto + '</span>');
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/> ' + ditto + '</span>');
     }
 
     if($nextTr.find('.deadlineBox').is(':hidden'))
@@ -423,6 +428,8 @@ function removeItem(obj)
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
     $('.resarch').find('tr:first').find('.estStartedBox').remove();
     $('.resarch').find('tr:first').find('.deadlineBox').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo option[value="ditto"]').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo').val('').chosen().trigger('chosen:updated');
 }
 
 function markTestStory()
