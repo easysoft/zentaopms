@@ -348,6 +348,29 @@ class repoModel extends model
     }
 
     /**
+     * Unlink object and commit revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $objectType story|bug|task
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function unlink($repoID, $revision, $objectType, $objectID)
+    {
+        $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch('id');
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AID')->eq($revisionID)
+            ->andWhere('AType')->eq('revision')
+            ->andWhere('relation')->eq('commit')
+            ->andWhere('BType')->eq($objectType)
+            ->andWhere('BID')->eq($objectID)->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create($objectType, $objectID, 'unlinkedfromrevision', '', $revisionID);
+    }
+
+    /**
      * Save repo state.
      *
      * @param  int    $repoID
@@ -1768,11 +1791,10 @@ class repoModel extends model
         }
 
         $action  = new stdclass();
-        $action->actor = $log->author;
-        $action->date  = $log->date;
-        $action->extra = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
-
-        $comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
+        $action->actor   = $log->author;
+        $action->date    = $log->date;
+        $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+        $action->comment = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->iconvComment($log->msg, $encodings));
 
         $this->loadModel('action');
         $actions = $objects['actions'];
@@ -1789,7 +1811,6 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
-                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $comment;
                 foreach($taskActions as $taskAction => $params)
                 {
                     $_POST = array();

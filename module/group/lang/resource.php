@@ -1207,6 +1207,10 @@ $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
 $lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
 $lang->resource->repo->downloadCode    = 'downloadCode';
+$lang->resource->repo->linkStory       = 'linkStory';
+$lang->resource->repo->linkBug         = 'linkBug';
+$lang->resource->repo->linkTask        = 'linkTask';
+$lang->resource->repo->unlink          = 'unlink';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1223,6 +1227,10 @@ $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 $lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75] = 'downloadCode';
+$lang->repo->methodOrder[80] = 'linkStory';
+$lang->repo->methodOrder[85] = 'linkBug';
+$lang->repo->methodOrder[90] = 'linkTask';
+$lang->repo->methodOrder[95] = 'unlink';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';

@@ -1274,6 +1274,24 @@ class repo extends control
     }
 
     /**
+     * Unlink object and commit revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $objectType story|task|bug
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function unlink($repoID, $revision, $objectType, $objectID)
+    {
+        $this->repo->unlink($repoID, $revision, $objectType, $objectID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'revision' => $revision));
+    }
+
+    /**
      * Ajax sync comment.
      *
      * @param  int    $repoID

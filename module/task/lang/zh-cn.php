@@ -216,7 +216,8 @@ $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
 
 $lang->task->action = new stdclass();
-$lang->task->action->linked2revision = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";
