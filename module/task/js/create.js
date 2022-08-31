@@ -364,6 +364,14 @@ function toggleSelectTestStory()
     }
 }
 
+/**
+ * Add Ditto checkBox.
+ *
+ * @param  object $obj
+ * @param  int    $index
+ * @access public
+ * @return void
+ */
 var index = 0;
 function addItem(obj)
 {
@@ -383,22 +391,33 @@ function addItem(obj)
     $nextTr.find('.deadlineInput').attr('id', 'testDeadline\[' + index + '\]');
 
     if($nextTr.find('.deadlineBox').length == 0)
-      $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>同上</span>');
+    {
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>' + ditto + '</span>');
+    }
     if($nextTr.find('.estStartedBox').length == 0)
-      $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>同上</span>');
+    {
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/>' + ditto + '</span>');
+    }
 
     if($nextTr.find('.deadlineBox').is(':hidden'))
     {
-      $nextTr.find('.deadlineBox').show();
-      $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
+        $nextTr.find('.deadlineBox').show();
+        $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
     }
     if($nextTr.find('.estStartedBox').is(':hidden'))
     {
-      $nextTr.find('.estStartedBox').show();
-      $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
+        $nextTr.find('.estStartedBox').show();
+        $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
     }
 }
 
+/**
+ * remove Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function removeItem(obj)
 {
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
@@ -652,6 +671,13 @@ $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
 
+/**
+ * Toggle checkBox Ditto Whether to hide.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function hiddenDitto(obj)
 {
     var $this  = $(obj);
