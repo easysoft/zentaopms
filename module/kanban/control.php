@@ -388,8 +388,8 @@ class kanban extends control
      /**
      * View a kanban.
      *
-     * @param  int    $kanbanID
-     * @param  int    $regionID
+     * @param  int        $kanbanID
+     * @param  int|string $regionID
      * @access public
      * @return void
      */

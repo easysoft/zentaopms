@@ -1831,7 +1831,7 @@ function updateRegionTabAffixState()
  * @param  object $object
  * @param  string $direction
  * @access public
- * @return void
+ * @return bool
  */
 function swipeRegionNavTabs($object, direction)
 {
@@ -1861,7 +1861,7 @@ function swipeRegionNavTabs($object, direction)
                 distance = radius;
                 $('.leftBtn').addClass('disabled');
             }
-            $object[0].style.transform = 'translateX('+ distance +'px)';
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
 
             /* If the width of regionNavTabs plus offsetWidth is less than the width of object, change rightBtn to clickable. */
             if(offsetWidth - distance < objectWidth) $('.rightBtn').removeClass('disabled');
@@ -1877,7 +1877,7 @@ function swipeRegionNavTabs($object, direction)
                 distance = - objectWidth + offsetWidth - radius;
                 $('.rightBtn').addClass('disabled');
             }
-            $object[0].style.transform = 'translateX('+ distance +'px)';
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
 
             /* If distance is less than 0, change leftBtn to clickable. */
             if(distance < 0) $('.leftBtn').removeClass('disabled');
@@ -1913,7 +1913,7 @@ function initRegionTabs()
     radiusWidth = 10;
     distance    = (acitiveItemLeft + acitiveItemWidth) > regionTabsWidth ? - (acitiveItemLeft + acitiveItemWidth - regionTabsWidth + radiusWidth) : 0;
     if($acitiveItem.prev().length == 0) distance = radiusWidth;
-    $regionNavTabs.find('ul')[0].style.transform = 'translateX('+ distance +'px)';
+    $regionNavTabs.find('ul')[0].style.transform = 'translateX(' + distance + 'px)';
     if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
     if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
 }
