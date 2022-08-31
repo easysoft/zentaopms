@@ -130,7 +130,7 @@
         <?php endif;?>
       <?php endif;?>
       -->
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('story', $story);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");

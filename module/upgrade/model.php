@@ -549,6 +549,9 @@ class upgradeModel extends model
                 $this->updateStoryStatus();
                 if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
                 break;
+            case '17_6':
+                $this->updateStoryFile();
+                break;
         }
 
         $this->deletePatch();
@@ -7203,5 +7206,39 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
             }
         }
+    }
+
+    /**
+     * Update story file version.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryFile()
+    {
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        /* Get story version. */
+        $storyIDList = array();
+        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
+        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
+
+        foreach($storyFileList as $file)
+        {
+            if(!is_numeric($file->extra)) continue;
+
+            $fileExtra    = '';
+            $storyVersion = $storyVersionList[$file->objectID];
+            if($file->extra != $storyVersion)
+            {
+                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
+                $fileExtra .= ',';
+            }
+            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+
+            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
     }
 }

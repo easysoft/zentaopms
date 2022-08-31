@@ -92,7 +92,7 @@
               if(common::hasPriv($objectType, 'edit', $object))
               {
                   echo "<span class='right-icon'>&nbsp; ";
-                  if($method != 'storyChange') common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$lang->file->edit}'");
+                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$lang->file->edit}'");
                   if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
                   echo '</span>';
               }

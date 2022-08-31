@@ -306,17 +306,19 @@ class file extends control
      * @param  string $fieldset
      * @param  object $object
      * @param  string $method
+     * @param  bool   $showDelete
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset, $object = null, $method = 'view')
+    public function printFiles($files, $fieldset, $object = null, $method = 'view', $showDelete = true)
     {
-        $this->view->files    = $files;
-        $this->view->fieldset = $fieldset;
-        $this->view->object   = $object;
-        $this->view->method   = $method;
+        $this->view->files      = $files;
+        $this->view->fieldset   = $fieldset;
+        $this->view->object     = $object;
+        $this->view->method     = $method;
+        $this->view->showDelete = $showDelete;
 
-        if($method == 'view') return $this->display('file', 'viewfiles');
+        if(strpos('view,edit', $method) !== false) return $this->display('file', 'viewfiles');
         $this->display();
     }
 
