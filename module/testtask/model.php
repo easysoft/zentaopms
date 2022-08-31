@@ -2122,7 +2122,7 @@ class testtaskModel extends model
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = $now;
             $case->version    = 1;
-            $case->auto       = 'func';
+            // $case->auto       = 'unit';
             $case->frame      = $frame;
 
             $result = new stdclass();
