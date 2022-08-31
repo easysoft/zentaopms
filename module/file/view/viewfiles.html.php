@@ -7,6 +7,7 @@
 <?php endif;?>
 <style>
 .file {padding-top: 2px;}
+ul.files-list {margin-bottom: unset}
 .files-list>li>a {display: inline; word-wrap: break-word;}
 .files-list>li>.right-icon {opacity: 1;}
 .fileAction {color: #0c64eb !important;}
@@ -15,7 +16,7 @@
 .renameFile .icon {margin-top: 8px;}
 .renameFile .input-group-addon {width: 60px;}
 .backgroundColor {background: #eff5ff; }
-.icon.icon-file-text {margin-left: 4px;}
+.icon.icon-file-text {padding-left: 7px}
 .right-icon .btn {padding: 0 6px;}
 </style>
 <script>
@@ -38,13 +39,20 @@ $(document).ready(function()
  * Delete a file.
  *
  * @param  int    $fileID
+ * @param  object $obj
  * @access public
  * @return void
  */
-function deleteFile(fileID)
+function deleteFile(fileID, obj)
 {
     if(!fileID) return;
+
+    <?php if($showDelete and $method == 'edit'):?>
+    $('<input />').attr('type', 'hidden').attr('name', 'deleteFiles[' + fileID + ']').attr('value', fileID).appendTo('ul.files-list');
+    $(obj).closest('li.file').addClass('hidden');
+    <?php else:?>
     hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
+    <?php endif;?>
 }
 
 /**
@@ -95,7 +103,7 @@ function downloadFile(fileID, extension, imageWidth, fileTitle)
 function showRenameBox(fileID)
 {
     $('#renameFile' + fileID).closest('li').addClass('hidden');
-    $('#renameBox' + fileID).removeClass('hidden');
+    $('#renameBox' + fileID).closest('li').removeClass('hidden');
 }
 
 /**
@@ -107,7 +115,7 @@ function showRenameBox(fileID)
  */
 function showFile(fileID)
 {
-    $('#renameBox' + fileID).addClass('hidden');
+    $('#renameBox' + fileID).closest('li').addClass('hidden');
     $('#renameFile' + fileID).closest('li').removeClass('hidden');
 }
 
@@ -123,7 +131,6 @@ function setFileName(fileID)
     var fileName  = $('#fileName' + fileID).val();
     var extension = $('#extension' + fileID).val();
     var postData  = {'fileName' : fileName, 'extension' : extension};
-    $('#renameBox' + fileID ).addClass('hidden');
     $.ajax(
     {
         url:createLink('file', 'edit', 'fileID=' + fileID),
@@ -134,7 +141,7 @@ function setFileName(fileID)
         {
             $('#fileTitle' + fileID).html("<i class='icon icon-file-text'></i> &nbsp;" + data['title']);
             $('#renameFile' + fileID).closest('li').removeClass('hidden');
-            $('#renameBox' + fileID).addClass('hidden');
+            $('#renameBox' + fileID).closest('li').addClass('hidden');
         }
     })
 }
@@ -212,12 +219,12 @@ function setFileName(fileID)
 
               common::printLink('file', 'download', "fileID=$file->id", "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
               if(common::hasPriv('file', 'edit')) echo html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
+              if($showDelete and common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id, this)' title='$lang->delete'");
               echo '</span>';
           }
           echo '</li>';?>
 
-          <li class='file'>
+          <li class='file hidden'>
             <div>
               <?php
               if(strrpos($file->title, '.') !== false)
@@ -230,11 +237,11 @@ function setFileName(fileID)
                   $file->title = join('.', $title);
               }
               ?>
-              <div class='hidden renameFile w-300px' id='renameBox<?php echo $file->id;?>'>
+              <div class='renameFile w-300px' id='renameBox<?php echo $file->id;?>'>
                 <i class='icon icon-file-text'></i>
                 <div class='input-group'>
-                  <?php echo html::input('fileName' . $file->id, $file->title, "class='form-control' size='40'");?>
-                  <input type="hidden" name="extension" id="extension<?php echo $file->id?>" value="<?php echo $file->extension;?>"/>
+                  <input type="text" id="<?php echo 'fileName' . $file->id?>" value="<?php echo $file->title;?>" class='form-control'/>
+                  <input type="hidden" id="extension<?php echo $file->id?>" value="<?php echo $file->extension;?>"/>
                   <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
                 </div>
                 <div class="input-group-btn">
