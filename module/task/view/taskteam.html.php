@@ -178,6 +178,8 @@ $(document).ready(function()
         }
         <?php endif;?>
 
+        if($taskTeamEditor.find('td > .btn-delete:enabled').length == 1) return false;
+
         return true;
     }
 
