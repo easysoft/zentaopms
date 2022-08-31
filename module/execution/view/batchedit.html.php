@@ -235,7 +235,7 @@ $('#executionForm').submit(function()
             submitForm = false;
             var errorEndTip  = errorEnd.replace('%s', projectEndDate);
             var errorEndHtml = '<div id="helpends' + executionID + '" class="text-danger help-text">' + errorEndTip + '</div>';
-            $("[name='begins[" + executionID + "]']").after(errorEndHtml);
+            $("[name='ends[" + executionID + "]']").after(errorEndHtml);
             alert(errorEndTip);
             return false;
         }
