@@ -16,7 +16,7 @@
 .table-recorded thead{background: rgb(245 245 245);}
 </style>
 <?php $members = $task->members;?>
-<?php js::set('confirmRecord',    (!empty($members) && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
+<?php js::set('confirmRecord',    (!empty($members) && $task->mode == 'linear' && && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
