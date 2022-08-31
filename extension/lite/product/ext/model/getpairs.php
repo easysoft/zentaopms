@@ -5,10 +5,9 @@
  * @param  string       $mode
  * @param  string       $programID
  * @param  string|array $append
- * @param  object       $pager
  * @return array
  */
-public function getPairs($mode = '', $programID = 0, $append = '', $pager = NULL)
+public function getPairs($mode = '', $programID = 0, $append = '')
 {
     if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
