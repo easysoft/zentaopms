@@ -25,6 +25,7 @@ $lang->task->delayed             = '延期';
 $lang->task->view                = "查看任务";
 $lang->task->logEfforts          = "记录工时";
 $lang->task->record              = "工时";
+$lang->task->recordedBy          = "记录人";
 $lang->task->teamConsumed        = "团队工时";
 $lang->task->start               = "开始";
 $lang->task->startAction         = "开始任务";

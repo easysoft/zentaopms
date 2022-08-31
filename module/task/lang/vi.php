@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Tạm ngưng';
 $lang->task->view                = "Chi tiết nhiệm vụ";
 $lang->task->logEfforts          = "Chấm công";
 $lang->task->record              = "Dự tính";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->start               = "Bắt đầu";
 $lang->task->startAction         = "Bắt đầu nhiệm vụ";
 $lang->task->restart             = "Tiếp tục";

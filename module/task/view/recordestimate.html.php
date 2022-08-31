@@ -13,13 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
-<?php if(empty($estimates) and strpos('wait,pause,doing', $task->status) !== false):?>
-#recordForm {margin-top:60px;}
-<?php endif;?>
-<?php if(count($estimates) == 1 and strpos('wait,pause,doing', $task->status) !== false):?>
-#recordForm {margin-top:20px;}
-<?php endif;?>
-#recordForm table .form-actions{padding:25px;}
+.table-recorded thead{background: rgb(245 245 245);}
 </style>
 <?php $members = $task->members;?>
 <?php js::set('confirmRecord',    (!empty($members) && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
@@ -37,65 +31,82 @@
       </div>
     </div>
     <form id="recordForm" method='post' target='hiddenwin'>
-      <table class='table table-form table-fixed'>
+      <?php if(count($estimates)):?>
+      <table class='table table-bordered table-fixed table-recorded'>
         <thead>
           <tr class='text-center'>
-            <th class="w-id"><?php echo $lang->idAB;?></th>
             <th class="w-120px"><?php echo $lang->task->date;?></th>
+            <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
+            <th><?php echo $lang->comment;?></th>
             <th class="thWidth"><?php echo $lang->task->consumed;?></th>
             <th class="thWidth"><?php echo $lang->task->left;?></th>
-            <th><?php echo $lang->comment;?></th>
             <th class='c-actions-2'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
-          <?php if(count($estimates)):?>
           <?php foreach($estimates as $estimate):?>
           <tr class="text-center">
-            <td><?php echo $estimate->id;?></td>
             <td><?php echo $estimate->date;?></td>
+            <td><?php echo zget($users, $estimate->account);?></td>
+            <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
             <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
             <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
-            <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
             <td align='center' class='c-actions'>
               <?php
               $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
-              common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and ($task->mode != 'linear' or ($task->mode == 'linear' and $estimate->left > 0))) ? '' : 'disabled');
+              common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and ($task->mode != 'multi' or ($task->mode == 'linear' and $estimate->left > 0))) ? '' : 'disabled');
               ?>
             </td>
           </tr>
           <?php endforeach;?>
-          <?php endif;?>
-          <?php if(!$this->task->canOperateEffort($task)):?>
         </tbody>
       </table>
-    </form>
-    <div class="alert with-icon">
-      <i class="icon-exclamation-sign"></i>
-      <div class="content">
-        <?php if(strpos('|done|closed|cancel|pause|', $task->status) !== false):?>
-        <p><?php echo sprintf($lang->task->deniedStatusNotice, '<strong>' . zget($this->lang->task->statusList, $task->status) . '</strong>');?></p>
-        <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-        <?php else:?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
-        <?php endif;?>
+      <?php endif;?>
+      <?php if(!$this->task->canOperateEffort($task)):?>
+      <div class="alert with-icon">
+        <i class="icon-exclamation-sign"></i>
+        <div class="content">
+          <?php if(strpos('|done|closed|cancel|pause|', $task->status) !== false):?>
+          <p><?php echo sprintf($lang->task->deniedStatusNotice, '<strong>' . zget($this->lang->task->statusList, $task->status) . '</strong>');?></p>
+          <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
+          <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+          <?php else:?>
+          <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+          <?php endif;?>
+        </div>
       </div>
-    </div>
-    <?php else:?>
-          <?php for($i = 1; $i <= 3; $i++):?>
+      <?php else:?>
+      <table class='table table-form table-fixed table-record'>
+        <thead>
+          <tr class='text-center'>
+            <th class="w-120px"><?php echo $lang->task->date;?></th>
+            <th><?php echo $lang->comment;?></th>
+            <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
+            <th class="w-100px"><?php echo $lang->task->leftAB;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
-            <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
             <td><?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?></td>
-            <td><?php echo html::input("consumed[$i]", '', "class='form-control text-center'");?></td>
-            <td><?php echo html::input("left[$i]", '', "class='form-control text-center left'");?></td>
-            <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' style='height:50px;'");?></td>
-            <td></td>
+            <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' rows=1");?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::input("consumed[$i]", '', "class='form-control text-center'");?>
+                <span class='input-group-addon'>h</span>
+              </div>
+            </td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::input("left[$i]", '', "class='form-control text-center left'");?>
+                <span class='input-group-addon'>h</span>
+              </div>
+            </td>
           </tr>
           <?php endfor;?>
           <tr>
-            <td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></td>
+            <td colspan='4' class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></td>
           </tr>
         </tbody>
       </table>
