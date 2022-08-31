@@ -153,7 +153,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                       ?>
                     </div>
                   </td>
-                  <td><?php echo html::select("testAssignedTo[$i]", $members, $i == 0 ? $task->assignedTo : 'ditto', "class='testAssignedTo form-control chosen'");?></td>
+                  <td><?php echo html::select("testAssignedTo[$i]", $members, $i == 0 ? $task->assignedTo : 'ditto', "class='form-control chosen'");?></td>
                   <td><?php echo html::input("testEstimate[$i]", '', "class='form-control'");?></td>
                   <td class='text-center'>
                     <div class="btn-group">
