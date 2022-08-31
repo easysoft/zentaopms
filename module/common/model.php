@@ -1028,6 +1028,8 @@ class commonModel extends model
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
+                    if(!isset($menu['link'])) continue;
+
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
