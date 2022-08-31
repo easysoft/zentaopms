@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Delayed';
 $lang->task->view                = "Task Detail";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimates";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Start";
 $lang->task->startAction         = "Start Task";

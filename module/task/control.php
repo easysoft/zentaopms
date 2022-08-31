@@ -1169,6 +1169,7 @@ class task extends control
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
         $this->view->title     = $this->lang->task->record;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
