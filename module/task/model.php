@@ -1773,7 +1773,7 @@ class taskModel extends model
         $task         = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();;
         $task->team   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
         $earliestTime = '';
-        foreach(array_keys($record->id) as $id)
+        foreach(array_keys($record->dates) as $id)
         {
             if($earliestTime == '')
             {

@@ -55,7 +55,7 @@
               <?php
               $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
               common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and ($task->mode != 'multi' or ($task->mode == 'linear' and $estimate->left > 0))) ? '' : 'disabled');
+              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and ($task->mode != 'linear' or ($task->mode == 'linear' and $estimate->left > 0))) ? '' : 'disabled');
               ?>
             </td>
           </tr>
