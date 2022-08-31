@@ -136,8 +136,8 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 <?php foreach($testStories as $storyID => $storyTitle):?>
                 <?php if($i > 0) $members['ditto'] = $lang->task->ditto;?>
                 <tr>
-                  <td><?php echo html::select("testStory[$i]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
-                  <td><?php echo html::select("testPri[$i]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testStory[]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
                       <?php
@@ -153,8 +153,8 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                       ?>
                     </div>
                   </td>
-                  <td><?php echo html::select("testAssignedTo[$i]", $members, $i == 0 ? $task->assignedTo : 'ditto', "class='form-control chosen'");?></td>
-                  <td><?php echo html::input("testEstimate[$i]", '', "class='form-control'");?></td>
+                  <td><?php echo html::select("testAssignedTo[]", $members, $i == 0 ? $task->assignedTo : 'ditto', "class='form-control chosen'");?></td>
+                  <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
                   <td class='text-center'>
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
