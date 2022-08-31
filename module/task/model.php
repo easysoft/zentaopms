@@ -355,16 +355,9 @@ class taskModel extends model
 
             if(empty($tasks->name[$i]))
             {
-                foreach(explode(',', $this->config->task->custom->batchCreateFields . ',' . $this->config->task->create->requiredFields) as $field)
-                {
-                    if(empty($field) or $field == 'pri') continue;
+                $this->common->checkFieldEmpty('task', 'name', $tasks, $i);
+                if(dao::isError()) return false;
 
-                    if(isset($tasks->$field) and !empty($tasks->$field[$i]) and $tasks->$field[$i] != 'ditto')
-                    {
-                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
-                        return false;
-                    }
-                }
                 continue;
             }
 

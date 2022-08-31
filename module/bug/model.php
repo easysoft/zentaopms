@@ -194,17 +194,9 @@ class bugModel extends model
             $title = trim($title);
             if(empty($title))
             {
-                foreach(explode(',', $this->config->bug->create->requiredFields . ',' . $this->config->bug->custom->batchCreateFields) as $field)
-                {
-                    if(empty($field) or strpos('severity,title,keywords', $field) !== false) continue;
+                $this->common->checkFieldEmpty('bug', 'title', $data, $i);
+                if(dao::isError()) return false;
 
-                    $field = strpos('steps,os', $field) !== false ? $field . 'es' : $field . 's';
-                    if(isset($data->$field) and !empty($data->$field[$i]))
-                    {
-                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-                        return false;
-                    }
-                }
                 continue;
             }
 

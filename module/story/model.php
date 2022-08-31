@@ -499,17 +499,9 @@ class storyModel extends model
         {
             if(empty($title))
             {
-                $checkFields = $this->config->story->create->requiredFields . ',' . $this->config->story->custom->batchCreateFields . ',sourceNote,';
-                foreach(explode(',', $checkFields) as $field)
-                {
-                    if(empty($field)) continue;
+                $this->common->checkFieldEmpty('story', 'title', $stories, $i);
+                if(dao::isError()) return false;
 
-                    if(isset($stories->$field) and !empty($stories->$field[$i]) and $stories->$field[$i] != 'ditto')
-                    {
-                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
-                        return false;
-                    }
-                }
                 continue;
             }
 

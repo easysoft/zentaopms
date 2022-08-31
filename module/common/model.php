@@ -3481,6 +3481,35 @@ EOD;
 
         return true;
     }
+
+    /**
+     * Check the field should be empty.
+     *
+     * @param  string $objectType
+     * @param  string $checkField
+     * @param  array  $postData
+     * @param  int    $index
+     * @access public
+     * @return bool
+     */
+    public function checkFieldEmpty($objectType, $checkField, $postData = array(), $index = 0)
+    {
+        if(empty($postData)) return true;
+
+        foreach(explode(',', $this->config->$objectType->custom->batchCreateFields . ',' . $this->config->$objectType->create->requiredFields) as $field)
+        {
+            if(empty($field) or strpos($this->config->$objectType->excludeCheckFileds, $field) !== false) continue;
+
+            if($objectType == 'bug') $field = strpos('steps,os', $field) !== false ? $field . 'es' : $field . 's';
+            if(isset($postData->$field) and !empty($postData->$field[$index]) and $postData->$field[$index] != 'ditto')
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->$objectType->$checkField);
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 class common extends commonModel
