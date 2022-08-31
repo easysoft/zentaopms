@@ -1766,6 +1766,19 @@ class actionModel extends model
             $repeatName = $this->loadModel('tree')->checkUnique($module);
             if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         }
+        elseif($action->objectType == 'reviewissue')
+        {
+            $issue = $this->dao->select('*')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch();
+            if(!empty($issue->approval))
+            {
+                $approval = $this->dao->select('*')->from(TABLE_APPROVAL)->where('id')->eq($issue->approval)->fetch();
+                if($approval->deleted)
+                {
+                    $this->app->loadLang('reviewissue');
+                    return print(js::alert($this->lang->reviewissue->undeleteAction));
+                }
+            }
+        }
 
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];
