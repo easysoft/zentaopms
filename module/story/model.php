@@ -497,7 +497,21 @@ class storyModel extends model
         $data         = array();
         foreach($stories->title as $i => $title)
         {
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                $checkFields = $this->config->story->create->requiredFields . ',' . $this->config->story->custom->batchCreateFields . ',sourceNote,';
+                foreach(explode(',', $checkFields) as $field)
+                {
+                    if(empty($field)) continue;
+
+                    if(isset($stories->$field) and !empty($stories->$field[$i]) and $stories->$field[$i] != 'ditto')
+                    {
+                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                        return false;
+                    }
+                }
+                continue;
+            }
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
 

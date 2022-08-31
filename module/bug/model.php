@@ -192,7 +192,22 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                foreach(explode(',', $this->config->bug->create->requiredFields . ',' . $this->config->bug->custom->batchCreateFields) as $field)
+                {
+                    if(empty($field) or strpos('severity,title,keywords', $field) !== false) continue;
+
+                    $field = strpos('steps,os', $field) !== false ? $field . 'es' : $field . 's';
+                    if(isset($data->$field) and !empty($data->$field[$i]))
+                    {
+                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                        return false;
+                    }
+                }
+                continue;
+            }
+
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -202,7 +217,7 @@ class bugModel extends model
             $bug->module      = (int)$data->modules[$i];
             $bug->project     = (int)$data->projects[$i];
             $bug->execution   = (int)$data->executions[$i];
-            $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$i]) : '';
             $bug->color       = $data->color[$i];
             $bug->title       = $title;
             $bug->deadline    = $data->deadlines[$i];

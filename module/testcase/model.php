@@ -155,7 +155,20 @@ class testcaseModel extends model
         $data           = array();
         foreach($cases->title as $i => $title)
         {
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                foreach(explode(',', $this->config->testcase->custom->batchCreateFields . ',' . $this->config->testcase->create->requiredFields) as $field)
+                {
+                    if(empty($field) or strpos('pri,type,stage', $field) !== false) continue;
+
+                    if(isset($cases->$field) and !empty($cases->$field[$i]))
+                    {
+                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
+                        return false;
+                    }
+                }
+                continue;
+            }
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;

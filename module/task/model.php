@@ -353,7 +353,20 @@ class taskModel extends model
             $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
             $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
-            if(empty($tasks->name[$i])) continue;
+            if(empty($tasks->name[$i]))
+            {
+                foreach(explode(',', $this->config->task->custom->batchCreateFields . ',' . $this->config->task->create->requiredFields) as $field)
+                {
+                    if(empty($field) or $field == 'pri') continue;
+
+                    if(isset($tasks->$field) and !empty($tasks->$field[$i]) and $tasks->$field[$i] != 'ditto')
+                    {
+                        dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
+                        return false;
+                    }
+                }
+                continue;
+            }
 
             $data[$i]             = new stdclass();
             $data[$i]->story      = (int)$story;

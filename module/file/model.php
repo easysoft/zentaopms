@@ -1132,7 +1132,7 @@ class fileModel extends model
     public function updateStoryFileVersion($storyID, $storyVersion, $deleteFiles = array())
     {
         $oldStoryVersion = $storyVersion - 1;
-        $this->dao->dbh($this->dbh)->update(TABLE_FILE)->set("extra = CONCAT(extra, '$storyVersion,')")
+        $this->dao->update(TABLE_FILE)->set("extra = CONCAT(extra, '$storyVersion,')")
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->like("%,$oldStoryVersion,%")
