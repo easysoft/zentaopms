@@ -78,7 +78,8 @@ $(function()
         hiddenRequireFields();
     });
 
-    var maxAutoDropWidth = document.body.scrollWidth + (document.getElementById('resolutions1').offsetWidth / 2) - document.getElementById('resolutions1').getBoundingClientRect().right;
+    var firstResolution  = $('select[id^="resolutions"]').eq(0);
+    var maxAutoDropWidth = document.body.scrollWidth + ($(firstResolution)[0].offsetWidth / 2) - $(firstResolution)[0].getBoundingClientRect().right;
     $('select[id^="duplicateBugs"]').picker(
     {
         disableEmptySearch : true,
