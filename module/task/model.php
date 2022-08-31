@@ -1852,9 +1852,9 @@ class taskModel extends model
                 $newTask->canceledBy     = '';
                 $newTask->closedBy       = '';
                 $newTask->closedReason   = '';
-                $newTask->finishedDate   = '0000-00-00';
-                $newTask->canceledDate   = '0000-00-00';
-                $newTask->closedDate     = '0000-00-00';
+                $newTask->finishedDate   = '0000-00-00 00:00:00';
+                $newTask->canceledDate   = '0000-00-00 00:00:00';
+                $newTask->closedDate     = '0000-00-00 00:00:00';
                 $actionID = $this->action->create('task', $taskID, 'Activated', $work);
             }
             else
@@ -2931,9 +2931,9 @@ class taskModel extends model
             $data->canceledBy     = '';
             $data->closedBy       = '';
             $data->closedReason   = '';
-            $data->finishedDate   = '0000-00-00';
-            $data->canceledDate   = '0000-00-00';
-            $data->closedDate     = '0000-00-00';
+            $data->finishedDate   = '0000-00-00 00:00:00';
+            $data->canceledDate   = '0000-00-00 00:00:00';
+            $data->closedDate     = '0000-00-00 00:00:00';
         }
         else
         {
