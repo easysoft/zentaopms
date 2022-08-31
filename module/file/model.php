@@ -46,8 +46,8 @@ class fileModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->andWhere('extra')->ne('editor')
-            ->beginIF($objectType == 'story' and $extra)->andWhere('extra')->like("%,$extra,%")->fi()
-            ->beginIF($objectType != 'story' and $extra)->andWhere('extra')->eq($extra)->fi()
+            ->beginIF(strpos('story,requirement', $objectType) !== false and $extra)->andWhere('extra')->like("%,$extra,%")->fi()
+            ->beginIF(strpos('story,requirement', $objectType) === false and $extra)->andWhere('extra')->eq($extra)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');
@@ -1133,7 +1133,7 @@ class fileModel extends model
     {
         $oldStoryVersion = $storyVersion - 1;
         $this->dao->update(TABLE_FILE)->set("extra = CONCAT(extra, '$storyVersion,')")
-            ->where('objectType')->eq('story')
+            ->where('objectType')->in('story,requirement')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->like("%,$oldStoryVersion,%")
             ->beginIF(!empty($deleteFiles))->andWhere('id')->notin($deleteFiles)->fi()
@@ -1152,7 +1152,7 @@ class fileModel extends model
     public function deleteStoryFile($storyID, $storyVersion, $deleteFiles = array())
     {
         $deleteFileList = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->eq('story')
+            ->where('objectType')->in('story,requirement')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->eq(",$storyVersion,")
             ->beginIF(!empty($deleteFiles))->andWhere('id')->in($deleteFiles)->fi()
@@ -1171,7 +1171,7 @@ class fileModel extends model
 
         /* When the file is in multiple story versions, 'extra' need delete the version to be deleted. */
         $this->dao->update(TABLE_FILE)->set("extra = REPLACE(extra, '$storyVersion,', '')")
-            ->where('objectType')->eq('story')
+            ->where('objectType')->in('story,requirement')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->like("%,$storyVersion,%")
             ->beginIF(!empty($deleteFiles))->andWhere('id')->in($deleteFiles)->fi()
