@@ -1411,18 +1411,22 @@ class programModel extends model
         }
 
         /* Get the number of project teams. */
-        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectKeys)
-            ->andWhere('type')->eq('project')
-            ->groupBy('root')
+        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectKeys)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
             ->fetchAll('root');
 
         /* Get the members of project teams. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
-            $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
-                ->where('root')->in($projectKeys)
-                ->andWhere('type')->eq('project')
+            $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where('t1.root')->in($projectKeys)
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t2.deleted')->eq(0)
                 ->fetchGroup('root', 'account');
         }
 

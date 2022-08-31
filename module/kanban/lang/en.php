@@ -361,6 +361,7 @@ $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';
 $lang->kanbanregion->default = 'Default Region';
 $lang->kanbanregion->style   = 'Region Style';
+$lang->kanbanregion->all     = 'All Region';
 
 $lang->kanbanregion->confirmDelete = 'Are you sure to delete this region? After deleting this region, all data in this region will be deleted.';
 
