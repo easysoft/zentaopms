@@ -168,11 +168,10 @@
 #regionNavTabs > ul > li.active::before {content: ''; width: 10px; height: 10px; position: absolute; left: -10px; top: 21px; background: radial-gradient(circle at 0% 0%,transparent 10px,#fff 0);}
 #regionNavTabs > ul > li.active::after {content: ''; width: 10px; height: 10px; position: absolute; left: calc(100%); top: 21px; background: radial-gradient(circle at 100% 0%,transparent 10px,#fff 0);}
 #regionNavTabs > ul > li > a {max-width: 195px; overflow: hidden; white-space: nowrap; padding: 0;}
-#regionNavTabs > ul > li.active > a {color: #0c64eb !important;}
 #regionNavTabs > ul > li.active > a:before {background: unset;}
 #regionTabs.affixed {margin-bottom: 5px; position: fixed; top: 0px;}
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header {margin-top: 30px;}
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header + .kanban-lane {margin-top: 38px;}
 #regionTabs.affixed ul > li {margin-bottom: 0px !important;}
 #regionTabs .region-actions .dropdown-menu {top: 25px;}
-#region-tab-actions {display: flex; position: relative; right: 0px;}
+#region-tab-actions {display: flex; position: relative; right: 0px; top: -2px;}
