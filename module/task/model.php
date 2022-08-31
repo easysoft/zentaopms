@@ -3492,7 +3492,7 @@ class taskModel extends model
             if($task->mode == 'linear')
             {
                 if($action == 'assignto' and strpos('done,cencel,closed', $task->status) === false) return false;
-                if($action == 'start')
+                if($action == 'start' and strpos('wait,doing', $task->status) !== false)
                 {
                     if($task->assignedTo != $app->user->account) return false;
 
@@ -3504,7 +3504,7 @@ class taskModel extends model
             elseif($task->mode == 'multi')
             {
                 $currentTeam = (new self())->getTeamByAccount($task->team, $app->user->account);
-                if($action == 'start' and $currentTeam and $currentTeam->status == 'wait') return true;
+                if($action == 'start' and strpos('wait,doing', $task->status) !== false and $currentTeam and $currentTeam->status == 'wait') return true;
                 if($action == 'finish' and (empty($currentTeam) or $currentTeam->status == 'done')) return false;
             }
         }
