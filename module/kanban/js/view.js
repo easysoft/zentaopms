@@ -1508,6 +1508,7 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+        if($('#regionTabs').length > 0) updateRegionTabAffixState();
     });
 
     $(document).on('click', '#splitTable .btn-plus', function()
@@ -1547,8 +1548,28 @@ $(function()
     if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
 
     setToolTip();
+
+    $(window).on('resize', initRegionTabs);
+
+    $('.leftBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'left');
+    });
+
+    $('.rightBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'right');
+    });
 });
 
+/**
+ * Init sortable.
+ *
+ * @access public
+ * @return void
+ */
 function initSortable()
 {
     var sortType  = '';
@@ -1776,4 +1797,123 @@ $(document).on('click', '.dropdown-menu', function()
 function setToolTip()
 {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+}
+
+/**
+ * Update kanban affix state for all boards in page.
+ *
+ * @access public
+ * @return void
+ */
+function updateRegionTabAffixState()
+{
+    var $kanbanContainer = $('#kanbanContainer');
+    var kanbanContainer  = $kanbanContainer[0].getBoundingClientRect();
+    var $regionTabs      = $('#regionTabs');
+    var regionTabs       = $regionTabs[0].getBoundingClientRect();
+    if(regionTabs.top <= 0 && !$regionTabs.hasClass('affixed'))
+    {
+        $regionTabs.addClass('affixed');
+        $regionTabs.find('#region-tab-actions').addClass('hidden');
+    }
+    else if($regionTabs.hasClass('affixed') && kanbanContainer.top >= 0)
+    {
+        $regionTabs.removeClass('affixed');
+        $regionTabs.find('#region-tab-actions').removeClass('hidden');
+    }
+
+    initRegionTabs();
+}
+
+/**
+ * Swipe region navigation tabs.
+ *
+ * @param  object $object
+ * @param  string $direction
+ * @access public
+ * @return void
+ */
+function swipeRegionNavTabs($object, direction)
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    var offsetWidth    = $regionNavTabs[0].offsetWidth;
+    var objectWidth    = $object[0].offsetWidth;
+    var radius         = 0;
+
+    $object.css('transition-duration', '1s');
+
+    $object.find('li').each(function()
+    {
+        if($(this).hasClass('active') && radius == 0) radius = radiusWidth;
+
+        /* Get the offset of the item. */
+        var itemLeft   = $(this)[0].offsetLeft;
+        var itemWidth  = $(this)[0].offsetWidth;
+        var itemOffset = itemLeft + itemWidth;
+
+        /* Calculate the offset after sliding. */
+        if(direction == 'left' && (itemOffset + distance + radius) >= 0)
+        {
+            /* If you swipe left, the distance is equal to the item's left. */
+            distance = - itemLeft - radius;
+            if(distance + radius >= 0)
+            {
+                distance = radius;
+                $('.leftBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX('+ distance +'px)';
+
+            /* If the width of regionNavTabs plus offsetWidth is less than the width of object, change rightBtn to clickable. */
+            if(offsetWidth - distance < objectWidth) $('.rightBtn').removeClass('disabled');
+            return false;
+        }
+
+        if(direction == 'right' && itemOffset > (offsetWidth - distance + radius))
+        {
+            /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
+            distance = offsetWidth - itemOffset - radius;
+            if($(this).next().length == 0)
+            {
+                distance = - objectWidth + offsetWidth - radius;
+                $('.rightBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX('+ distance +'px)';
+
+            /* If distance is less than 0, change leftBtn to clickable. */
+            if(distance < 0) $('.leftBtn').removeClass('disabled');
+            return false;
+        }
+    });
+}
+
+/**
+ * Init region tabs.
+ *
+ * @access public
+ * @return void
+ */
+function initRegionTabs()
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    if($regionNavTabs.length == 0) return;
+
+    /* Set the width of regionTab. */
+    $('#regionTabs').width($('#kanban').outerWidth());
+
+    var regionTabsWidth  = $regionNavTabs[0].offsetWidth;
+    var regionTabULWidth = $regionNavTabs.find('ul')[0].offsetWidth;
+    var $acitiveItem     = $('#regionNavTabs > ul > li.active');
+    var acitiveItemWidth = $acitiveItem[0].offsetWidth;
+    var acitiveItemLeft  = $acitiveItem[0].offsetLeft;
+
+    /* Print left and right button. */
+    if(regionTabULWidth > regionTabsWidth) $('.leftBtn, .rightBtn').removeClass('hidden');
+
+    /* Locate the position of the currently selected item. */
+    radiusWidth = 10;
+    distance    = (acitiveItemLeft + acitiveItemWidth) > regionTabsWidth ? - (acitiveItemLeft + acitiveItemWidth - regionTabsWidth + radiusWidth) : 0;
+    if($acitiveItem.prev().length == 0) distance = radiusWidth;
+    $regionNavTabs.find('ul')[0].style.transform = 'translateX('+ distance +'px)';
+    if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
+    if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
 }
