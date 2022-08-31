@@ -1151,14 +1151,26 @@ class fileModel extends model
      */
     public function deleteStoryFile($storyID, $storyVersion, $deleteFiles = array())
     {
-        $this->dao->delete()->from(TABLE_FILE)
+        $deleteFileList = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->eq(",$storyVersion,")
             ->beginIF(!empty($deleteFiles))->andWhere('id')->in($deleteFiles)->fi()
-            ->exec();
+            ->fetchAll('id');
 
-        $this->dao->dbh($this->dbh)->update(TABLE_FILE)->set("extra = REPLACE(extra, '$storyVersion,', '')")
+        if(!empty($deleteFileList))
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->in(array_keys($deleteFileList))->exec();
+
+            foreach($deleteFileList as $file)
+            {
+                $realPathName = $this->getRealPathName($file->pathname);
+                @unlink($realPathName);
+            }
+        }
+
+        /* When the file is in multiple story versions, 'extra' need delete the version to be deleted. */
+        $this->dao->update(TABLE_FILE)->set("extra = REPLACE(extra, '$storyVersion,', '')")
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('extra')->like("%,$storyVersion,%")
