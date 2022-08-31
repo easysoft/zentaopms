@@ -826,11 +826,14 @@ class taskModel extends model
                     $finisedUsers = $this->getFinishedUsers($oldTask->id, $members);
                     if(count($finisedUsers) != count($team))
                     {
-                        $currentTask->status       = 'doing';
-                        $currentTask->finishedBy   = '';
-                        $currentTask->finishedDate = '';
+                        if(strpos('cancel,pause', $oldTask->status) === false or ($oldTask->status == 'closed' and $oldTask->reason == 'done'))
+                        {
+                            $currentTask->status       = 'doing';
+                            $currentTask->finishedBy   = '';
+                            $currentTask->finishedDate = '';
+                        }
                     }
-                    else
+                    elseif(strpos('wait,doing,pause', $oldTask->status) !== false)
                     {
                         $currentTask->status = 'done';
                         $currentTask->assignedTo   = $oldTask->openedBy;
@@ -1825,7 +1828,7 @@ class taskModel extends model
                 $lastDate      = $estimate->date;
             }
 
-            if($newTask->left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+            if($newTask->left == 0 and strpos('done,cancel,closed', $task->status) === false)
             {
                 $newTask->status         = 'done';
                 $newTask->assignedTo     = $task->openedBy;
@@ -2840,11 +2843,12 @@ class taskModel extends model
         $data = new stdClass();
         $data->consumed       = $consumed;
         $data->left           = $left;
-        $data->status         = $left == 0 ? 'done' : $task->status;
+        $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
-        if(empty($left))
+        if(empty($left) and strpos('wait,doing,pause', $task->status) !== false)
         {
+            $data->status       = 'done';
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
             $data->assignedTo   = $task->openedBy;
