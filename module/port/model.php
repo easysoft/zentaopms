@@ -198,8 +198,12 @@ class portModel extends model
         /* Get export rows and fields datas */
         $exportDatas = $this->getExportDatas($fieldList, $rows);
 
-        $this->post->set('rows',   $exportDatas['rows']);
-        $this->post->set('fields', $exportDatas['fields']);
+        $fields = $exportDatas['fields'];
+        $rows   = $exportDatas['rows'];
+        if($this->config->edition != 'open') list($fields, $rows) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $rows, $model);
+
+        $this->post->set('rows',   $rows);
+        $this->post->set('fields', $fields);
         $this->post->set('kind',   $model);
     }
 
@@ -249,6 +253,7 @@ class portModel extends model
         if(empty($fields)) return false;
 
         if(!is_array($fields)) $fields = explode(',', $fields);
+
         $fieldList = array();
         /* build module fieldList. */
         foreach ($fields as $key => $field)
@@ -275,6 +280,32 @@ class portModel extends model
             $fieldList['mailto']['control'] = 'multiple';
             $fieldList['mailto']['values']  = $this->portConfig->sysDataList['user'];
         }
+
+        /* Set workflow fields .*/
+        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq($model)
+            ->andWhere('buildin')->eq(0)
+            ->fetchAll('id');
+
+        foreach($workflowFields as $field)
+        {
+            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
+            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
+            if(empty($field->options)) continue;
+
+            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
+            $options = $this->workflowfield->getFieldOptions($field, true);
+            if($options)
+            {
+                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
+                $fieldList[$field->field]['title']   = $field->name;
+                $fieldList[$field->field]['control'] = $control;
+                $fieldList[$field->field]['values']  = $options;
+                $fieldList[$field->field]['from']    = 'workflow';
+                $this->config->$model->listFields .=  ',' . $field->field;
+            }
+        }
+
         return $fieldList;
     }
 
@@ -441,7 +472,7 @@ class portModel extends model
 
             $modelData = $this->processRows4Fields($rows, $fields);
 
-            $modelData = $this->getNatureDatas($model, $modelData, $filter);
+            $modelData = $this->getNatureDatas($model, $modelData, $filter, $fields);
 
             $this->createTmpFile($modelData);
         }
@@ -449,7 +480,8 @@ class portModel extends model
         {
             $modelData = $this->getDatasByFile($tmpFile);
         }
-
+        if(isset($fields['id'])) unset($fields['id']);
+        $this->session->set($model . 'TemplateFields', array_keys($fields));
         return $modelData;
     }
 
@@ -648,7 +680,6 @@ class portModel extends model
     {
         $lists = array();
         $this->commonActions($model);
-
         if(!empty($this->modelListFields))
         {
             $listFields = $this->modelListFields;
@@ -661,6 +692,7 @@ class portModel extends model
                     $lists[$listName] = $fieldList[$field]['values'];
                     if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
                 }
+                $this->config->excel->sysDataField[] = $field;
             }
 
             $lists['listStyle'] = $listFields;
@@ -829,17 +861,35 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function getNatureDatas($model, $datas, $filter = '')
+    public function getNatureDatas($model, $datas, $filter = '', $fields = '')
     {
+        $fieldList = $this->initFieldList($model, array_keys($fields), false);
         $lang = $this->lang->$model;
+
         foreach($datas as $key => $data)
         {
             foreach($data as $field => $cellValue)
             {
+                if(empty($cellValue)) continue;
                 if(strpos($this->portConfig->dateFeilds, $field) !== false and helper::isZeroDate($cellValue)) $datas[$key]->$field = '';
-                if(strpos($filter, $field) !== false) continue;
+                //if(strpos($filter, $field) !== false) continue;
                 if(is_array($cellValue)) continue;
-                if(strrpos($cellValue, '(#') === false)
+
+                if(!empty($fieldList[$field]['from']) and in_array($fieldList[$field]['control'], array('select', 'multiple')))
+                {
+                    $control = $fieldList[$field]['control'];
+                    if($control == 'multiple')
+                    {
+                        $cellValue = explode("\n", $cellValue);
+                        foreach($cellValue as &$value) $value = array_search($value, $fieldList[$field]['values'], true);
+                        $datas[$key]->$field = join(',', $cellValue);
+                    }
+                    else
+                    {
+                        $datas[$key]->$field = array_search($cellValue, $fieldList[$field]['values']);
+                    }
+                }
+                elseif(strrpos($cellValue, '(#') === false)
                 {
                     if(!isset($lang->{$field . 'List'}) or !is_array($lang->{$field . 'List'})) continue;
 
@@ -942,12 +992,22 @@ class portModel extends model
         $this->commonActions($model);
         $modelLang = $this->lang->$model;
         $fields    = explode(',', $this->modelConfig->templateFields);
+
         array_unshift($fields, 'id');
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
             $fields[$fieldName] = isset($modelLang->$fieldName) ? $modelLang->$fieldName : $fieldName;
             unset($fields[$key]);
+        }
+
+        if($this->config->edition != 'open')
+        {
+            $appendFields = $this->loadModel('workflowaction')->getFields($model, 'showimport', false);
+            foreach($appendFields as $appendField)
+            {
+                if(!$appendField->buildin and $appendField->show) $fields[$appendField->field] = $appendField->name;
+            }
         }
 
         return $fields;
@@ -1224,8 +1284,6 @@ class portModel extends model
 
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
-        $this->getWorkFlowFields($model);
-
         $datas->requiredFields = $this->config->$model->create->requiredFields;
         $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
         $datas->pagerID        = $pagerID;
@@ -1257,7 +1315,6 @@ class portModel extends model
         $addID = 1;
         if($model == 'task') $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
 
-        $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
         $lastRow         = $lastID + $key + $showImportCount;
 
@@ -1344,16 +1401,6 @@ class portModel extends model
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
 
-            if(!empty($appendFields))
-            {
-                $this->loadModel('flow');
-                foreach($appendFields as $field)
-                {
-                    if(!$field->show) continue;
-                    $value = $field->defaultValue ? $field->defaultValue : zget($object, $field->field, '');
-                    $html .='<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
-                }
-            }
             $html .= '</tr>' . "\n";
         }
 
