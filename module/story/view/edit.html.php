@@ -85,6 +85,8 @@
               <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
             </div>
           </div>
+          <?php $showFile = strpos('draft,changing', $story->status) === false and empty($files) ? false : true;?>
+          <?php if($showFile):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->attatch;?></div>
             <div class='form-group'>
@@ -93,6 +95,7 @@
               <?php echo $canChangeFile ? $this->fetch('file', 'buildform') : '';?>
             </div>
           </div>
+          <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
