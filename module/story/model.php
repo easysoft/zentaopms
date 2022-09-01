@@ -499,8 +499,12 @@ class storyModel extends model
         {
             if(empty($title))
             {
-                $this->common->checkFieldEmpty('story', 'title', $stories, $i);
-                if(dao::isError()) return false;
+                $canNotEmpty = $this->common->checkFieldEmpty('story', $stories, $i);
+                if($canNotEmpty)
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                    return false;
+                }
 
                 continue;
             }

@@ -355,9 +355,12 @@ class taskModel extends model
 
             if(empty($tasks->name[$i]))
             {
-                $this->common->checkFieldEmpty('task', 'name', $tasks, $i);
-                if(dao::isError()) return false;
-
+                $canNotEmpty = $this->common->checkFieldEmpty('task', $tasks, $i);
+                if($canNotEmpty)
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
+                    return false;
+                }
                 continue;
             }
 

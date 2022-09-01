@@ -194,12 +194,15 @@ class bugModel extends model
             $title = trim($title);
             if(empty($title))
             {
-                $this->common->checkFieldEmpty('bug', 'title', $data, $i);
-                if(dao::isError()) return false;
+                $canNotEmpty = $this->common->checkFieldEmpty('bug', $data, $i);
+                if($canNotEmpty)
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                    return false;
+                }
 
                 continue;
             }
-
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;

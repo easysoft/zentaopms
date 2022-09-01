@@ -3486,29 +3486,22 @@ EOD;
      * Check the field should be empty.
      *
      * @param  string $objectType
-     * @param  string $checkField
      * @param  array  $postData
      * @param  int    $index
      * @access public
      * @return bool
      */
-    public function checkFieldEmpty($objectType, $checkField, $postData = array(), $index = 0)
+    public function checkFieldEmpty($objectType, $postData = array(), $index = 0)
     {
-        if(empty($postData)) return true;
+        if(empty($postData)) return false;
 
-        foreach(explode(',', $this->config->$objectType->custom->batchCreateFields . ',' . $this->config->$objectType->create->requiredFields) as $field)
+        foreach($postData as $key => $value)
         {
-            if(empty($field) or strpos($this->config->$objectType->excludeCheckFileds, $field) !== false) continue;
-
-            if($objectType == 'bug') $field = strpos('steps,os', $field) !== false ? $field . 'es' : $field . 's';
-            if(isset($postData->$field) and !empty($postData->$field[$index]) and $postData->$field[$index] != 'ditto')
-            {
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->$objectType->$checkField);
-                return false;
-            }
+            if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFileds, ",$key,") !== false) continue;
+            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
         }
 
-        return true;
+        return false;
     }
 }
 

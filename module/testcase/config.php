@@ -32,7 +32,7 @@ $config->testcase->custom->createFields      = $config->testcase->customCreateFi
 $config->testcase->custom->batchCreateFields = 'module,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,story';
 
-$config->testcase->excludeCheckFileds = 'pri,type,stage';
+$config->testcase->excludeCheckFileds = ',pri,type,stage,';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
