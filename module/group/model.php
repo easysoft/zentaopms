@@ -252,7 +252,14 @@ class groupModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
+        /* Get the list of program sets under administrator permission. */
+        if(!$this->app->user->admin)
+        {
+            $this->app->user->admin = true;
+            $changeAdmin            = true;
+        }
         $programs = $this->loadModel('program')->getParentPairs('', '', false);
+        if(!empty($changeAdmin)) $this->app->user->admin = false;
 
         $projects   = array();
         $executions = array();
