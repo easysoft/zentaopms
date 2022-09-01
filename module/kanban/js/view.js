@@ -1838,13 +1838,12 @@ function swipeRegionNavTabs($object, direction)
     var $regionNavTabs = $('#regionNavTabs');
     var offsetWidth    = $regionNavTabs[0].offsetWidth;
     var objectWidth    = $object[0].offsetWidth;
-    var radius         = 0;
 
     $object.css('transition-duration', '1s');
 
     $object.find('li').each(function()
     {
-        if($(this).hasClass('active') && radius == 0) radius = radiusWidth;
+        var radius = $(this).hasClass('active') ? radiusWidth : 0;
 
         /* Get the offset of the item. */
         var itemLeft   = $(this)[0].offsetLeft;
@@ -1852,10 +1851,10 @@ function swipeRegionNavTabs($object, direction)
         var itemOffset = itemLeft + itemWidth;
 
         /* Calculate the offset after sliding. */
-        if(direction == 'left' && (itemOffset + distance + radius) >= 0)
+        if(direction == 'left' && (itemOffset + distance) >= 0)
         {
             /* If you swipe left, the distance is equal to the item's left. */
-            distance = - itemLeft - radius;
+            distance = - itemLeft + radius;
             if(distance + radius >= 0)
             {
                 distance = radius;
@@ -1868,7 +1867,7 @@ function swipeRegionNavTabs($object, direction)
             return false;
         }
 
-        if(direction == 'right' && itemOffset > (offsetWidth - distance + radius))
+        if(direction == 'right' && itemOffset > (offsetWidth - distance))
         {
             /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
             distance = offsetWidth - itemOffset - radius;

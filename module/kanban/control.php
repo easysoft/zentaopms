@@ -1143,7 +1143,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         /* Find Kanban other than this kanban. */
@@ -1190,7 +1190,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedProductplan', '', $planID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('product');
@@ -1242,7 +1242,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedRelease', '', $releaseID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('product');
@@ -1291,7 +1291,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedBuild', '', $buildID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('build');
@@ -1353,7 +1353,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedExecution', '', $executionID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('project');
