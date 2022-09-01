@@ -80,7 +80,7 @@
               <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
             </div>
           </div>
-          <?php $showFile = strpos('draft,changing', $story->status) === false and empty($files) ? false : true;?>
+          <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($files)) ? false : true;?>
           <?php if($showFile):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->attatch;?></div>
