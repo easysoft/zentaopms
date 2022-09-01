@@ -892,9 +892,9 @@ function updateRegion(regionID, regionData)
     var $region = $('#kanban'+ regionID).kanban();
 
     if(!$region.length) return false;
-    if(!regionData) regionData = regions[regionID];
+    regions[regionID] = regionData ? regionData : regions[regionID];
 
-    $region.data('zui.kanban').render(regionData.groups);
+    $region.data('zui.kanban').render(regions[regionID].groups);
     resetRegionHeight('open');
     return true;
 }

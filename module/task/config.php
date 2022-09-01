@@ -75,7 +75,7 @@ $config->task->datatable->fieldList['desc']['control'] = 'textarea';
 
 $config->task->datatable->fieldList['pri']['title']    = 'priAB';
 $config->task->datatable->fieldList['pri']['fixed']    = 'left';
-$config->task->datatable->fieldList['pri']['width']    = '50';
+$config->task->datatable->fieldList['pri']['width']    = '35';
 $config->task->datatable->fieldList['pri']['required'] = 'no';
 $config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
 
@@ -108,29 +108,29 @@ $config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->task->datatable->fieldList['estimate']['width']    = '60';
+$config->task->datatable->fieldList['estimate']['width']    = '55';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
 $config->task->datatable->fieldList['consumed']['fixed']    = 'no';
-$config->task->datatable->fieldList['consumed']['width']    = '60';
+$config->task->datatable->fieldList['consumed']['width']    = '55';
 $config->task->datatable->fieldList['consumed']['required'] = 'no';
 
 $config->task->datatable->fieldList['left']['title']    = 'leftAB';
 $config->task->datatable->fieldList['left']['fixed']    = 'no';
-$config->task->datatable->fieldList['left']['width']    = '60';
+$config->task->datatable->fieldList['left']['width']    = '55';
 $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
 $config->task->datatable->fieldList['progress']['fixed']    = 'no';
-$config->task->datatable->fieldList['progress']['width']    = '80';
+$config->task->datatable->fieldList['progress']['width']    = '75';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['sort']     = 'no';
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '70';
+$config->task->datatable->fieldList['deadline']['width']    = '65';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 $config->task->datatable->fieldList['deadline']['control'] = 'date';
 
