@@ -155,7 +155,16 @@ class testcaseModel extends model
         $data           = array();
         foreach($cases->title as $i => $title)
         {
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                if($this->common->checkValidRow('testcase', $cases, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
+                    return false;
+                }
+
+                continue;
+            }
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;

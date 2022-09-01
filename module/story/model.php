@@ -501,7 +501,16 @@ class storyModel extends model
         $data         = array();
         foreach($stories->title as $i => $title)
         {
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                if($this->common->checkValidRow('story', $stories, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                    return false;
+                }
+
+                continue;
+            }
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
 

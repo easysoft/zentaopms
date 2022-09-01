@@ -192,7 +192,16 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                if($this->common->checkValidRow('bug', $data, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                    return false;
+                }
+
+                continue;
+            }
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -202,7 +211,7 @@ class bugModel extends model
             $bug->module      = (int)$data->modules[$i];
             $bug->project     = (int)$data->projects[$i];
             $bug->execution   = (int)$data->executions[$i];
-            $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$i]) : '';
             $bug->color       = $data->color[$i];
             $bug->title       = $title;
             $bug->deadline    = $data->deadlines[$i];

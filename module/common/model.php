@@ -3481,6 +3481,28 @@ EOD;
 
         return true;
     }
+
+    /**
+     * Check valid row.
+     *
+     * @param  string $objectType
+     * @param  array  $postData
+     * @param  int    $index
+     * @access public
+     * @return bool
+     */
+    public function checkValidRow($objectType, $postData = array(), $index = 0)
+    {
+        if(empty($postData)) return false;
+
+        foreach($postData as $key => $value)
+        {
+            if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFileds, ",$key,") !== false) continue;
+            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
+        }
+
+        return false;
+    }
 }
 
 class common extends commonModel

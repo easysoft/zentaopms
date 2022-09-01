@@ -7216,7 +7216,7 @@ class upgradeModel extends model
      */
     public function updateStoryFile()
     {
-        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('extra')->ne('editor')->fetchAll('id');
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
 
         /* Get story version. */
         $storyIDList = array();

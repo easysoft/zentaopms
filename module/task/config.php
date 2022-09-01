@@ -48,6 +48,8 @@ $config->task->custom->createFields      = $config->task->customCreateFields;
 $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,desc,pri';
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
+$config->task->excludeCheckFileds = ',pri,estStartedDitto,deadlineDitto,';
+
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
 
