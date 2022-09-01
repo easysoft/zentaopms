@@ -1626,6 +1626,11 @@ class actionModel extends model
             $action->objectLink = helper::createLink('reviewissue', 'view', "project=$project&issueID=$action->objectID");
         }
 
+        if($action->objectType == 'review')
+        {
+            $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
+        }
+
         return $action;
     }
 
