@@ -3838,8 +3838,7 @@ class taskModel extends model
      */
     public function getAssignedTo4Multi($users, $task, $type = 'current')
     {
-        if(empty($task->team)) return $task->assignedTo;
-        if($task->mode != 'linear') return '';
+        if(empty($task->team) or $task->mode != 'linear') return $task->assignedTo;
 
         $teamHours = array_values($task->team);
 
