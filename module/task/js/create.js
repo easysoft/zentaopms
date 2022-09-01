@@ -368,14 +368,11 @@ function toggleSelectTestStory()
  * Add Ditto checkBox.
  *
  * @param  object $obj
- * @param  int    $index
  * @access public
  * @return void
  */
-var index = 0;
 function addItem(obj)
 {
-    index ++;
     var $tr = $(obj).closest('tr');
     $tr.after($tr.clone());
     var $nextTr = $tr.next();
@@ -387,8 +384,6 @@ function addItem(obj)
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
     $nextTr.find('.form-date').val('').datepicker();
-    $nextTr.find('.startInput').attr('id', 'testEstStarted\[' + index + '\]');
-    $nextTr.find('.deadlineInput').attr('id', 'testDeadline\[' + index + '\]');
 
     if($nextTr.find('#testAssignedTo option:selected').val() == '')
     {
@@ -397,11 +392,11 @@ function addItem(obj)
     }
     if($nextTr.find('.deadlineBox').length == 0)
     {
-        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/> ' + ditto + '</span>');
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[]" id="deadlineDitto" checked/> ' + ditto + '</span>');
     }
     if($nextTr.find('.estStartedBox').length == 0)
     {
-        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="deadlineDitto\[' +index + '\]" id="deadlineDitto\[' + index + '\]" checked/> ' + ditto + '</span>');
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[] id="estStartedDitto" checked/> ' + ditto + '</span>');
     }
 
     if($nextTr.find('.deadlineBox').is(':hidden'))

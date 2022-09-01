@@ -141,15 +141,15 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                   <td>
                     <div class='input-group'>
                       <?php
-                        echo html::input("testEstStarted[$i]", $task->estStarted, "class='startInput form-control form-date' data-inputID='$i' onchange='hiddenDitto(this)' placeholder='{$lang->task->estStarted}'");
-                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testEstStarted[]", $task->estStarted, "class='startInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->estStarted}'");
+                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[]' id='estStartedDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
                     </div>
                   <td>
                     <div class='input-group'>
                       <?php
-                        echo html::input("testDeadline[$i]", $task->deadline, "class='deadlineInput form-control form-date' data-inputID='$i' onchange='hiddenDitto(this)' placeholder='{$lang->task->deadline}'");
-                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testDeadline[]", $task->deadline, "class='deadlineInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->deadline}'");
+                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[]' id='deadlineDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
                     </div>
                   </td>
