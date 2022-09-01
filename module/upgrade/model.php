@@ -551,6 +551,7 @@ class upgradeModel extends model
                 break;
             case '17_6':
                 $this->updateStoryFile();
+                $this->convertTaskteam();
                 break;
         }
 
@@ -7240,5 +7241,32 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Convert task team to table: zt_taskteam.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertTaskteam()
+    {
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, left')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        foreach($oldTeamGroup as $taskID => $oldTeams)
+        {
+            $order = 0;
+            foreach($oldTeams as $oldTeam)
+            {
+                $oldTeam->order  = $order;
+                $oldTeam->status = 'wait';
+                if($oldTeam->consumed > 0 and $oldTeam->left > 0)  $oldTeam->status = 'doing';
+                if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
+
+                $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+                $order ++;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
     }
 }
