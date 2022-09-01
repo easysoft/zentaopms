@@ -1433,6 +1433,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    $(document).find('main#main').css('padding-top', '16px');
+
     window.isMultiLanes = laneCount > 1;
 
     $.cookie('isFullScreen', 0);
@@ -1565,6 +1567,8 @@ $(function()
         if($(this).hasClass('disabled')) return;
         swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'right');
     });
+
+    if(Object.values(regions).length <= 1) $('#kanbanBox').removeClass('hidden');
 });
 
 /**
@@ -1919,4 +1923,5 @@ function initRegionTabs()
     $regionNavTabs.find('ul')[0].style.transform = 'translateX(' + distance + 'px)';
     if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
     if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
+    $('#kanbanBox').removeClass('hidden');
 }

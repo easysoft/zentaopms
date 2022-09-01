@@ -54,7 +54,7 @@ $canViewArchivedCard   = commonModel::hasPriv('kanban', 'viewArchivedCard');
 $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
 ?>
 
-<div id='kanbanBox'>
+<div id='kanbanBox' class='hidden'>
   <?php if(count($regions) > 1):?>
   <div id='regionTabs'>
     <div class='leftBtn hidden disabled'><a><i class='icon icon-angle-left'></i></a></div>
