@@ -145,6 +145,18 @@ function setParentProgram(parentProgram)
         }
         budgetOverrunTips();
         outOfDateTip();
+
+        $('#budgetUnit').val(data.budgetUnit).trigger("chosen:updated");
+        if(typeof(data.availableBudget) == 'undefined')
+        {
+            $('#budget').removeAttr('placeholder').attr('disabled', 'disabled');
+            $("#future").prop("checked", true);
+        }
+        else
+        {
+            $('#budget').removeAttr('disabled', 'disabled')
+            $("#future").prop("checked", false);
+        }
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
