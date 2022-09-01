@@ -194,8 +194,7 @@ class bugModel extends model
             $title = trim($title);
             if(empty($title))
             {
-                $canNotEmpty = $this->common->checkFieldEmpty('bug', $data, $i);
-                if($canNotEmpty)
+                if($this->common->checkValidRow('bug', $data, $i))
                 {
                     dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
                     return false;

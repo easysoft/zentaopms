@@ -3483,7 +3483,7 @@ EOD;
     }
 
     /**
-     * Check the field should be empty.
+     * Check valid row.
      *
      * @param  string $objectType
      * @param  array  $postData
@@ -3491,7 +3491,7 @@ EOD;
      * @access public
      * @return bool
      */
-    public function checkFieldEmpty($objectType, $postData = array(), $index = 0)
+    public function checkValidRow($objectType, $postData = array(), $index = 0)
     {
         if(empty($postData)) return false;
 

@@ -157,8 +157,7 @@ class testcaseModel extends model
         {
             if(empty($title))
             {
-                $canNotEmpty = $this->common->checkFieldEmpty('testcase', $cases, $i);
-                if($canNotEmpty)
+                if($this->common->checkValidRow('testcase', $cases, $i))
                 {
                     dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
                     return false;
