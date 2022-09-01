@@ -1856,7 +1856,7 @@ function swipeRegionNavTabs($object, direction)
         var radius     = $item.hasClass('active') ? radiusWidth : 0;
 
         /* Calculate the offset after sliding. */
-        if(direction == 'left' && (itemOffset + distance + radius) >= 0)
+        if(direction == 'left' && (itemOffset + distance + radius) >= -5)
         {
             /* If you swipe left, the distance is equal to the item's left. */
             distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
