@@ -1988,16 +1988,6 @@ class taskModel extends model
         {
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
             $task = $this->computeHours4Multiple($oldTask, $task);
-
-            $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
-            if(count($finishedUsers) == count($oldTask->team))
-            {
-                $task->status       = 'done';
-                $task->assignedTo   = $task->openedBy;
-                $task->assignedDate = $now;
-                $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = $task->finishedDate;
-            }
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
@@ -3995,8 +3985,7 @@ class taskModel extends model
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'view', 'split', '', '', '', "title='{$this->lang->task->children}'", $this->lang->task->children);
         }
 
-        $assignToLang = (!empty($task->team) and $task->mode == 'linear') ? $this->lang->task->transfer : $this->lang->task->assignTo;
-        $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $assignToLang);
+        $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $this->lang->task->assignTo);
 
         $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);

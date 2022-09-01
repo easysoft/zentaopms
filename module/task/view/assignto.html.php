@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->members) and (!isset($task->members[$app->user->account]) or $task->mode == 'linear')):?>
+    <?php if(!empty($task->members) and strpos('wait,doing,pause', $task->status) !== false and (!isset($task->members[$app->user->account]) or $task->mode == 'linear')):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
