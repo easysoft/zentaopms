@@ -12,9 +12,6 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<style>
-.table-recorded thead{background: rgb(245 245 245);}
-</style>
 <?php $members = $task->members;?>
 <?php js::set('confirmRecord',    (!empty($members) && $task->mode == 'linear' && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
@@ -25,10 +22,17 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? ("<span title='$task->name'>" . $task->name . '</span>') : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
-        <?php if(!isonlybody()):?>
-        <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
-        <?php endif;?>
-      </div>
+      </h2>
+      <ul class='nav nav-default hours'>
+        <li><span><?php echo $lang->task->estimate;?></span> </li>
+        <li><span class='estimateTotally'><?php echo $task->estimate . 'h';?></span></li>
+        <li class='divider'></li>
+        <li><span><?php echo $lang->task->consumed;?></span> </li>
+        <li><span class='consumedTotally'><?php echo $task->consumed . 'h';?></span></li>
+      </ul>
+      <?php if(!isonlybody()):?>
+      <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
+      <?php endif;?>
     </div>
     <form id="recordForm" method='post' target='hiddenwin'>
       <?php if(count($estimates)):?>
