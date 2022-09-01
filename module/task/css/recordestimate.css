@@ -1,5 +1,5 @@
 .form-condensed .table-form {margin-bottom: 20px;}
-.estimateTitle {font-weight: normal;}
-.consumedTitle {font-weight: normal;}
-.estimateShow {background: #FFEFEF; border-radius: 9px; color: #FF6262; padding: 3px 7px; margin: 0 5px 0 5px; font-weight: normal; min-width: 18px;}
-.consumedShow {background: #EAF3FF; border-radius: 9px; color: #2B80FF; padding: 3px 7px; margin: 0 5px 0 5px; font-weight: normal; min-width: 18px;}
+.hours {display: flex; float: left; transform: translate(0, 50%); margin: 0 0 0 10px;}
+.estimateTotally {background: #FFEFEF; border-radius: 9px; color: #FF6262; padding: 3px 7px; margin: 0 5px 0 5px; font-weight: normal; min-width: 18px;}
+.consumedTotally {background: #EAF3FF; border-radius: 9px; color: #2B80FF; padding: 3px 7px; margin: 0 5px 0 5px; font-weight: normal; min-width: 18px;}
+.nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}

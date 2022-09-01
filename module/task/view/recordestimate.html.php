@@ -25,8 +25,11 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? ("<span title='$task->name'>" . $task->name . '</span>') : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
-        <?php echo "<span class='estimateTitle'>{$lang->task->estimate}</span>" . "<span class='estimateShow'>{$task->estimate}h</span>";?>
-        <?php echo "<span class='consumedTitle'>{$lang->task->consumed}</span>" . "<span class='consumedShow'>{$task->consumed}h</span>";?>
+      </h2>
+        <?php echo "<ul class='nav nav-default hours'>"?>
+        <?php echo "<li><span>{$lang->task->estimate}</span></li>" . "<li><span class='estimateTotally'>{$task->estimate}h</span></li>";?>
+        <?php echo "<li class='divider'></li>";?>
+        <?php echo "<li><span>{$lang->task->consumed}</span></li>" . "<li><span class='consumedTotally'>{$task->consumed}h</span></li>";?>
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
         <?php endif;?>
