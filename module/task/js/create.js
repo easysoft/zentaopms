@@ -364,6 +364,13 @@ function toggleSelectTestStory()
     }
 }
 
+/**
+ * Add Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function addItem(obj)
 {
     var $tr = $(obj).closest('tr');
@@ -377,11 +384,47 @@ function addItem(obj)
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
     $nextTr.find('.form-date').val('').datepicker();
+
+    if($nextTr.find('#testAssignedTo option:selected').val() == '')
+    {
+        $nextTr.find('#testAssignedTo').append("<option value='ditto' title='" + ditto + "'>" + ditto + "</option>");
+        $nextTr.find('#testAssignedTo').val('ditto').chosen().trigger('chosen:updated');
+    }
+    if($nextTr.find('.deadlineBox').length == 0)
+    {
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[]" id="deadlineDitto" checked/> ' + ditto + '</span>');
+    }
+    if($nextTr.find('.estStartedBox').length == 0)
+    {
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[] id="estStartedDitto" checked/> ' + ditto + '</span>');
+    }
+
+    if($nextTr.find('.deadlineBox').is(':hidden'))
+    {
+        $nextTr.find('.deadlineBox').show();
+        $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
+    }
+    if($nextTr.find('.estStartedBox').is(':hidden'))
+    {
+        $nextTr.find('.estStartedBox').show();
+        $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
+    }
 }
 
+/**
+ * remove Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function removeItem(obj)
 {
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+    $('.resarch').find('tr:first').find('.estStartedBox').remove();
+    $('.resarch').find('tr:first').find('.deadlineBox').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo option[value="ditto"]').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo').val('').chosen().trigger('chosen:updated');
 }
 
 function markTestStory()
@@ -629,3 +672,27 @@ $('#modalTeam .btn').click(function()
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
+
+/**
+ * Toggle checkBox Ditto Whether to hide.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function hiddenDitto(obj)
+{
+    var $this  = $(obj);
+    var date   = $this.val();
+    var $ditto = $this.closest('div').find("input[type='checkBox']");
+    if(date == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}

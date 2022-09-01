@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
@@ -123,13 +124,14 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 <tr class='text-center'>
                   <th class='w-150px'><?php echo $lang->task->storyAB;?></th>
                   <th class='w-60px'><?php echo $lang->task->pri;?></th>
-                  <th class='w-200px'><?php echo $lang->task->datePlan;?></th>
+                  <th class='w-100px'><?php echo $lang->task->estStarted;?></th>
+                  <th class='w-100px'><?php echo $lang->task->deadline;?></th>
                   <th class='w-60px'><?php echo $lang->task->assignedTo;?></th>
                   <th class='w-60px'><?php echo $lang->task->estimate;?></th>
                   <th class='w-60px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="resarch">
                 <?php $i = 0;?>
                 <?php foreach($testStories as $storyID => $storyTitle):?>
                 <?php if($i > 0) $members['ditto'] = $lang->task->ditto;?>
@@ -139,13 +141,15 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                   <td>
                     <div class='input-group'>
                       <?php
-                        echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");
-                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testEstStarted[]", $task->estStarted, "class='startInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->estStarted}'");
+                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[]' id='estStartedDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
-                      <span class='input-group-addon fix-border'>~</span>
+                    </div>
+                  <td>
+                    <div class='input-group'>
                       <?php
-                        echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");
-                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testDeadline[]", $task->deadline, "class='deadlineInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->deadline}'");
+                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[]' id='deadlineDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
                     </div>
                   </td>
