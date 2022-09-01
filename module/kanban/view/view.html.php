@@ -61,15 +61,13 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
     <div id='regionNavTabs'>
       <ul class="nav nav-tabs">
         <li data-id='all' class="<?php echo $regionID === 'all' ? 'active' : '';?>" title="<?php echo $lang->kanbanregion->all;?>">
-          <a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=all");?>" class="<?php echo $regionID === 'all' ? 'btn-active-text' : '';?>">
-            <span class='text'><?php echo $lang->kanbanregion->all;?></span>
-          </a>
+          <?php $active = $regionID == 'all' ? 'btn-active-text' : '';?>
+          <?php echo html::a('all', "<span class='text'>{$lang->kanbanregion->all}</span>", '', "class='$active' data-tab");?>
         </li>
         <?php foreach($regions as $region):?>
         <li data-id="<?php echo $region->id;?>" class="<?php echo $region->id == $regionID ? 'active' : '';?>" title="<?php echo $region->name;?>">
-          <a href="<?php echo inlink('view', "kanbanID=$kanban->id&regionID=$region->id");?>" class="<?php echo $region->id == $regionID ? 'btn-active-text' : '';?>">
-            <span class='text'><?php echo $region->name;?></span>
-          </a>
+          <?php $active = $region->id == $regionID ? 'btn-active-text' : '';?>
+          <?php echo html::a("#region{$region->id}", "<span class='text'>$region->name</span>", '', "class='$active' data-tab");?>
         </li>
         <?php endforeach;?>
       </ul>
@@ -96,9 +94,8 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
   <div class='panel' id='kanbanContainer'>
     <div class='panel-body'>
       <div id="kanban" data-id='<?php echo $kanban->id;?>'>
-        <?php $regionGroup = ($regionID !== 'all' and isset($regions[$regionID])) ? array($regionID => $regions[$regionID]) : $regions;?>
-        <?php foreach($regionGroup as $region):?>
-        <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
+        <?php foreach($regions as $region):?>
+        <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>" id="<?php echo 'region' . $region->id?>">
           <div class="region-header dropdown">
             <strong><?php echo $region->name;?></strong>
             <i class="icon icon-angle-top btn-link" data-id="<?php echo $region->id;?>"></i>

@@ -1923,3 +1923,28 @@ function initRegionTabs()
     if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
     $('#kanbanBox').removeClass('hidden');
 }
+
+$('[data-tab]').on('shown.zui.tab', function(e)
+{
+    var $current  = $(e.target);
+    var $prev     = $(e.relatedTarget);
+    var contentID = $current.attr('href');
+
+    $current.addClass('btn-active-text');
+    $current.parent().addClass('active');
+    $prev.removeClass('btn-active-text');
+    $prev.parent().removeClass('active');
+
+    if(contentID == 'all')
+    {
+        $('.region').addClass('active');
+        $('.region').removeClass('notAll');
+    }
+    else
+    {
+        var $currentRegion = $(contentID);
+        $('.region').removeClass('active');
+        $currentRegion.addClass('active notAll');
+        $currentRegion.find('.kanban').css('display', 'block');
+    }
+});
