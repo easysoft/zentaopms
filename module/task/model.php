@@ -1745,8 +1745,10 @@ class taskModel extends model
         foreach($record->dates    as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
+        $task = $this->getById($taskID);
+        if(!empty($task->team) and !isset($task->team[$this->app->user->account])) return false;
+
         $estimates    = array();
-        $task         = $this->getById($taskID);
         $earliestTime = '';
         foreach(array_keys($record->id) as $id)
         {
