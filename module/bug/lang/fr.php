@@ -97,8 +97,8 @@ $lang->bug->fixedRate        = 'Repair Rate';
 $lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
 $lang->bug->selectProjects   = 'Select Projects';
 $lang->bug->nextStep         = 'Next Step';
-$lang->bug->noProject        = 'Haven’t chosen a project yet';
-$lang->bug->noExecution      = 'Haven’t chosen a execution yet';
+$lang->bug->noProject        = 'Haven’t chosen a project yet.';
+$lang->bug->noExecution      = 'Haven’t chosen a ' . strtolower($lang->execution->common) . ' yet.';
 
 /* Method list. */
 $lang->bug->index              = 'Accueil Bug';
