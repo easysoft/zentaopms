@@ -151,11 +151,18 @@ class group extends control
         $group = $this->group->getByID($groupID);
         $this->view->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
 
+        /* Get the list of data sets under administrator permission. */
+        if(!$this->app->user->admin)
+        {
+            $this->app->user->admin = true;
+            $changeAdmin            = true;
+        }
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
         $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         $this->view->products   = $this->loadModel('product')->getPairs();
+        if(!empty($changeAdmin)) $this->app->user->admin = false;
 
         $navGroup = array();
         foreach($this->lang->navGroup as $moduleName => $groupName)
