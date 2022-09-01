@@ -78,7 +78,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           </td>
           <td>
             <div class="checkbox-primary c-multipleTask affair">
-              <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
+              <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
@@ -293,24 +293,11 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             <div class='modal-body'>
               <table class="table table-form" id='taskTeamEditor'>
                 <tbody class='sortable'>
-                  <tr class='template'>
-                    <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                    <td class="<?php echo zget($requiredFields, 'estimate', '', ' required')?>">
-                      <div class='input-group'>
-                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                        <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                      </div>
-                    </td>
-                    <td class='w-130px sort-handler'>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                      <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                    </td>
-                  </tr>
+                  <?php include __DIR__ . DS . 'taskteam.html.php';?>
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
+                    <td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>
@@ -347,6 +334,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('executionType', $execution->type);?>
+<?php js::set('newRowCount', 5);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
