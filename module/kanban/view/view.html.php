@@ -73,7 +73,7 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
       </ul>
     </div>
     <div class='rightBtn hidden disabled'><a><i class='icon icon-angle-right'></i></a></div>
-    <div id='region-tab-actions'>
+    <div id='region-tab-actions' class="<?php echo $regionID !== 'all' ? 'active' : '';?>">
       <div class='region-actions'>
         <?php if(($canEditRegion or $canCreateLane or $canDeleteRegion or $canCreateRegion or ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn))) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
         <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
@@ -95,7 +95,10 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
     <div class='panel-body'>
       <div id="kanban" data-id='<?php echo $kanban->id;?>'>
         <?php foreach($regions as $region):?>
-        <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>" id="<?php echo 'region' . $region->id?>">
+        <?php $regionClass = ($regionID == 'all' or $region->id == $regionID) ? 'active' : '';?>
+        <?php if($canSortRegion) $regionClass .= ' sort';?>
+        <?php if($regionID !== 'all') $regionClass .= ' notAll';?>
+        <div class="region <?php echo $regionClass;?>" data-id="<?php echo $region->id;?>" id="<?php echo 'region' . $region->id?>">
           <div class="region-header dropdown">
             <strong><?php echo $region->name;?></strong>
             <i class="icon icon-angle-top btn-link" data-id="<?php echo $region->id;?>"></i>

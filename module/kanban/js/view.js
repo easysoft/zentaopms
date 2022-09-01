@@ -1926,9 +1926,12 @@ function initRegionTabs()
 
 $('[data-tab]').on('shown.zui.tab', function(e)
 {
-    var $current  = $(e.target);
-    var $prev     = $(e.relatedTarget);
-    var contentID = $current.attr('href');
+    var $current       = $(e.target);
+    var $prev          = $(e.relatedTarget);
+    var $regionActions = $('#region-tab-actions');
+    var $regions       = $('.region');
+    var contentID      = $current.attr('href');
+    var hasActions     = $regionActions.hasClass('active');
 
     $current.addClass('btn-active-text');
     $current.parent().addClass('active');
@@ -1937,14 +1940,18 @@ $('[data-tab]').on('shown.zui.tab', function(e)
 
     if(contentID == 'all')
     {
-        $('.region').addClass('active');
-        $('.region').removeClass('notAll');
-    }
+        $regions.addClass('active').removeClass('notAll');
+        if(hasActions) $regionActions.removeClass('active');
+     }
     else
     {
         var $currentRegion = $(contentID);
-        $('.region').removeClass('active');
+        $regions.removeClass('active');
         $currentRegion.addClass('active notAll');
         $currentRegion.find('.kanban').css('display', 'block');
+        if(!hasActions) $regionActions.addClass('active');
     }
+
+    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + $current.parent().attr('data-id'));
+    $.get(url);
 });

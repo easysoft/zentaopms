@@ -174,7 +174,8 @@
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header + .kanban-lane {margin-top: 38px;}
 #regionTabs.affixed ul > li {margin-bottom: 0px !important;}
 #regionTabs .region-actions .dropdown-menu {top: 25px;}
-#region-tab-actions {display: flex; position: relative; right: 0px; top: -2px;}
+#region-tab-actions {display: none;}
+#region-tab-actions.active {display: flex; position: relative; right: 0px; top: -2px;}
 .region {display: none;}
 .region.active {display: block;}
 .region.active.notAll {margin-top: 0px;}
