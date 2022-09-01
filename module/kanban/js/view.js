@@ -910,6 +910,9 @@ function updateRegion(regionID, regionData)
 function updateRegionName(regionID, name)
 {
     $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').attr('title', name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').find('a > span').text(name);
+    initRegionTabs();
 }
 
 /**
