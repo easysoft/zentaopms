@@ -25,6 +25,8 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? ("<span title='$task->name'>" . $task->name . '</span>') : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <?php echo "<span class='estimateTitle'>{$lang->task->estimate}</span>" . "<span class='estimateShow'>{$task->estimate}h</span>";?>
+        <?php echo "<span class='consumedTitle'>{$lang->task->consumed}</span>" . "<span class='consumedShow'>{$task->consumed}h</span>";?>
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
         <?php endif;?>
