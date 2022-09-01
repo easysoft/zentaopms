@@ -1448,7 +1448,7 @@ class taskModel extends model
                 {
                     $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                     $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                    if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'finished', '', "task {$task->status}");
+                    if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task {$task->status}");
                 }
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }

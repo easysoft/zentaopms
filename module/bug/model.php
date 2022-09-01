@@ -923,7 +923,7 @@ class bugModel extends model
                     {
                         $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                         $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                        if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', "bug {$bug->status}");
+                        if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
                     }
                 }
                 else
@@ -1404,7 +1404,7 @@ class bugModel extends model
             {
                 $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', 'bug resolved');
+                $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug resolved');
             }
         }
 
