@@ -89,6 +89,7 @@
         <tbody>
           <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
+            <?php echo html::hidden("id[$i]", $i);?>
             <td><?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?></td>
             <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' rows=1");?></td>
             <td>
