@@ -1846,8 +1846,6 @@ function swipeRegionNavTabs($object, direction)
     var offsetWidth    = $regionNavTabs[0].offsetWidth;
     var objectWidth    = $object[0].offsetWidth;
 
-    $object.css('transition-duration', '1s');
-
     $object.find('li').each(function()
     {
         /* Get the offset of the item. */

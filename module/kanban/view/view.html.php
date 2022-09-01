@@ -75,39 +75,22 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
       </ul>
     </div>
     <div class='rightBtn hidden disabled'><a><i class='icon icon-angle-right'></i></a></div>
-    <?php if($regionID !== 'all'):?>
     <div id='region-tab-actions'>
       <div class='region-actions'>
-        <?php if(($canViewArchivedCard or $canViewArchivedColumn) and $kanban->archived):?>
-        <div>
-          <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
-            <span><?php echo $this->lang->kanban->archived;?></span>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu pull-right">
-            <?php if($canViewArchivedCard) echo '<li>' . html::a("javascript:loadMore(\"Card\", $regionID)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
-            <?php if($canViewArchivedColumn) echo '<li>' . html::a("javascript:loadMore(\"Column\", $regionID)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
-          </ul>
-        </div>
-        <?php endif;?>
-        <ul class="dropdown-menu pull-right">
-          <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-          <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-        </ul>
-      </div>
-      <div class='region-actions'>
-        <?php if(($canEditRegion || $canCreateLane || $canDeleteRegion || $canCreateRegion) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
+        <?php if(($canEditRegion or $canCreateLane or $canDeleteRegion or $canCreateRegion or ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn))) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
         <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
         <ul class="dropdown-menu pull-right">
           <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
           <?php if($canEditRegion)   echo '<li>' . html::a(inlink('editRegion', "regionID={$regionID}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
           <?php if($canCreateLane)   echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$regionID}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
           <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$regionID}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
+          <?php if(($canCreateRegion or $canEditRegion or $canCreateLane or ($canDeleteRegion and count($regions) > 1)) and ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn)))echo "<li class='divider'></li>"?>
+          <?php if($canViewArchivedCard and $kanban->archived) echo '<li>' . html::a("javascript:loadMore(\"Card\", $regionID)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
+          <?php if($canViewArchivedColumn and $kanban->archived) echo '<li>' . html::a("javascript:loadMore(\"Column\", $regionID)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
         </ul>
         <?php endif;?>
       </div>
     </div>
-    <?php endif;?>
   </div>
   <?php endif;?>
   <div class='panel' id='kanbanContainer'>
@@ -117,39 +100,22 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
         <?php foreach($regionGroup as $region):?>
         <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
           <div class="region-header dropdown">
-            <?php if($regionID === 'all'):?>
             <strong><?php echo $region->name;?></strong>
             <i class="icon icon-angle-top btn-link" data-id="<?php echo $region->id;?>"></i>
             <div class='region-actions'>
-              <?php if(($canEditRegion || $canCreateLane || $canDeleteRegion || $canCreateRegion) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
+              <?php if(($canEditRegion or $canCreateLane or $canDeleteRegion or $canCreateRegion or ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn))) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
               <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
               <ul class="dropdown-menu pull-right">
                 <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
                 <?php if($canEditRegion)   echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
                 <?php if($canCreateLane)   echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$region->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
                 <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
+                <?php if(($canCreateRegion or $canEditRegion or $canCreateLane or ($canDeleteRegion and count($regions) > 1)) and ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn)))echo "<li class='divider'></li>"?>
+                <?php if($canViewArchivedCard and $kanban->archived) echo '<li>' . html::a("javascript:loadMore(\"Card\", $regionID)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
+                <?php if($canViewArchivedColumn and $kanban->archived) echo '<li>' . html::a("javascript:loadMore(\"Column\", $regionID)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
               </ul>
               <?php endif;?>
             </div>
-            <div class='region-actions'>
-              <?php if(($canViewArchivedCard or $canViewArchivedColumn) and $kanban->archived):?>
-              <div>
-                <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
-                  <span><?php echo $this->lang->kanban->archived;?></span>
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu pull-right">
-                  <?php if($canViewArchivedCard) echo '<li>' . html::a("javascript:loadMore(\"Card\", $region->id)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
-                  <?php if($canViewArchivedColumn) echo '<li>' . html::a("javascript:loadMore(\"Column\", $region->id)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
-                </ul>
-              </div>
-              <?php endif;?>
-              <ul class="dropdown-menu pull-right">
-                <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-                <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-              </ul>
-            </div>
-            <?php endif;?>
           </div>
           <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
         </div>
