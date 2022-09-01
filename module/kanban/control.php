@@ -1530,6 +1530,7 @@ class kanban extends control
 
             $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);
+            if($card->archived) return print(js::reload(parent));
             return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
     }
