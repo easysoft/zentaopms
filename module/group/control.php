@@ -152,7 +152,7 @@ class group extends control
         $this->view->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
 
         $this->view->group      = $group;
-        $this->view->programs   = $this->loadModel('program')->getPairs(true, 'order_desc');
+        $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
         $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         $this->view->products   = $this->loadModel('product')->getPairs();

@@ -243,6 +243,7 @@ class groupModel extends model
     {
         $objects = $this->dao->select('id, name, path, type, project, grade, parent')->from(TABLE_PROJECT)
             ->where('vision')->eq($this->config->vision)
+            ->andWhere('type')->ne('program')
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
@@ -251,7 +252,8 @@ class groupModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $programs   = array();
+        $programs = $this->loadModel('program')->getParentPairs('', '', false);
+
         $projects   = array();
         $executions = array();
         $products   = array();
@@ -261,12 +263,7 @@ class groupModel extends model
             $path  = explode(',', trim($object->path, ','));
             $topID = $path[0];
 
-            if($type == 'program')
-            {
-                if($topID != $object->id) $object->name = isset($objects[$topID]) ? $objects[$topID]->name . '/' . $object->name : $object->name;
-                $programs[$object->id] = $object->name;
-            }
-            elseif($type == 'project')
+            if($type == 'project')
             {
                 if($topID != $object->id) $object->name = isset($objects[$topID]) ? $objects[$topID]->name . '/' . $object->name : $object->name;
                 $projects[$object->id] = $object->name;

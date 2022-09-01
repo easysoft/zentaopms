@@ -1028,6 +1028,8 @@ class commonModel extends model
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
+                    if(!isset($menu['link'])) continue;
+
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
@@ -1457,7 +1459,18 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
             echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
-            echo "<li><div class='mobile-qrcode'><iframe src='https://www.zentao.net/page/appqrcode.html?v={$config->version}' frameborder='0' scrolling='no' seamless></iframe></div></li>";
+
+            $appqrcode = self::http('https://www.zentao.net/page/appqrcode.json');
+            /* Intranet users use local pictures. */
+            if(!empty($appqrcode))
+            {
+                echo "<li><div class='mobile-qrcode'><iframe src='https://www.zentao.net/page/appqrcode.html?v={$config->version}' frameborder='0' scrolling='no' seamless></iframe></div></li>";
+            }
+            else
+            {
+                echo "<li><div class='mobile-qrcode local-img'><img src='{$config->webRoot}theme/default/images/main/mobile_qrcode.png' /><div class='mobile-version'><span>v1.2</span></div></li>";
+            }
+
             echo "</ul></li>";
             echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
             echo '</ul></li>';

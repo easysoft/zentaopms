@@ -2949,7 +2949,21 @@ class bugModel extends model
 
         /* If search criteria don't have products, append the selected product from the top left dropdown-menu. */
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
-        if(strpos($bugQuery, '`product`') === false) $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        if(strpos($bugQuery, '`product`') === false)
+        {
+            $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        }
+        else
+        {
+            $productParis  = $this->loadModel('product')->getPairs();
+            $productIDList = array_keys($productParis);
+
+            if(!empty($productIDList))
+            {
+                $productIDList = implode(',', $productIDList);
+                $bugQuery     .= ' AND `product` IN (' . $productIDList . ')';
+            }
+        }
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";

@@ -127,7 +127,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php if($execution->type != 'ops'):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
-                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down'");?></span></td>
+                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down' data-max_drop_width='0'");?></span></td>
               </tr>
               <?php endif;?>
               <?php if($task->parent >= 0 and empty($task->team)):?>
