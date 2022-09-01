@@ -435,7 +435,7 @@ class admin extends control
             foreach($dbProcesses as $dbProcess)
             {
                 if($dbProcess->db != $this->config->db->name) continue;
-                if(strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
                     $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
                     return print(json_encode($response));
