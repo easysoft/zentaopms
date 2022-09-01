@@ -784,7 +784,7 @@ class bugModel extends model
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
             {
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', "bug {$bug->status}");
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
             }
 
             return common::createChanges($oldBug, $bug);
@@ -1224,7 +1224,7 @@ class bugModel extends model
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
             {
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', "bug {$bug->status}");
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
             }
 
             return common::createChanges($oldBug, $bug);
@@ -1520,7 +1520,7 @@ class bugModel extends model
         if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
         {
             $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-            $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', 'bug closed');
+            $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug closed');
         }
 
         return common::createChanges($oldBug, $bug);

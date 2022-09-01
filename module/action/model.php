@@ -1769,10 +1769,10 @@ class actionModel extends model
         elseif($action->objectType == 'reviewissue')
         {
             $issue = $this->dao->select('*')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch();
-            if(!empty($issue->approval))
+            if(!empty($issue->review))
             {
-                $approval = $this->dao->select('*')->from(TABLE_APPROVAL)->where('id')->eq($issue->approval)->fetch();
-                if($approval->deleted)
+                $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($issue->review)->fetch();
+                if($review->deleted)
                 {
                     $this->app->loadLang('reviewissue');
                     return print(js::alert($this->lang->reviewissue->undeleteAction));

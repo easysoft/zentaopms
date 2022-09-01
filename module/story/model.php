@@ -366,7 +366,7 @@ class storyModel extends model
                 if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback)
                 {
                     $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
-                    $this->loadModel('action')->create('feedback', $oldBug->feedback, 'finished', '', "bug closed");
+                    $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug closed");
                 }
 
                 /* add files to story from bug. */
@@ -1018,7 +1018,7 @@ class storyModel extends model
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback)
             {
                 $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'finished', '', "story {$story->status}");
+                if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story {$story->status}");
             }
 
             $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
@@ -1157,7 +1157,7 @@ class storyModel extends model
                 if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback)
                 {
                     $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
-                    if($newParentStory->status == 'closed') $this->loadModel('action')->create('feedback', $oldParentStory->feedback, 'finished', '', "story {$newParentStory->status}");
+                    if($newParentStory->status == 'closed') $this->loadModel('action')->create('feedback', $oldParentStory->feedback, 'processed', '', "story {$newParentStory->status}");
                 }
             }
         }
@@ -1398,7 +1398,7 @@ class storyModel extends model
                     {
                         $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                         $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                        if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'finished', '', "story {$story->status}");
+                        if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story {$story->status}");
                     }
                 }
                 else
@@ -1803,7 +1803,7 @@ class storyModel extends model
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback)
             {
                 $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                $this->loadModel('action')->create('feedback', $oldStory->feedback, 'finished', '', "story closed");
+                $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story closed");
             }
         }
         return common::createChanges($oldStory, $story);
@@ -1873,7 +1873,7 @@ class storyModel extends model
                 {
                     $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                     $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
-                    $this->loadModel('action')->create('feedback', $oldStory->feedback, 'finished', '', "story closed");
+                    $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story closed");
                 }
             }
             else
