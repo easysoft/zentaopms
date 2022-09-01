@@ -765,7 +765,11 @@ class taskModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback)
+                {
+                    $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
+                    if(in_array($newParentTask->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldParentTask->feedback, 'processed', '', "task {$newParentTask->status}");
+                }
             }
         }
         else
@@ -1162,7 +1166,11 @@ class taskModel extends model
             unset($oldTask->parent);
             unset($task->parent);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+                if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task {$task->status}");
+            }
 
             return common::createChanges($oldTask, $task);
         }
@@ -1440,6 +1448,7 @@ class taskModel extends model
                 {
                     $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                     $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+                    if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task {$task->status}");
                 }
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
@@ -2008,7 +2017,11 @@ class taskModel extends model
                 if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
             }
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+                $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task done");
+            }
 
             return common::createChanges($oldTask, $task);
         }
@@ -2094,7 +2107,11 @@ class taskModel extends model
             if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
             if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+                $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task closed");
+            }
 
             return common::createChanges($oldTask, $task);
         }

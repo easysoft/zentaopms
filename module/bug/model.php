@@ -781,7 +781,11 @@ class bugModel extends model
 
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
+            }
 
             return common::createChanges($oldBug, $bug);
         }
@@ -919,6 +923,7 @@ class bugModel extends model
                     {
                         $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                         $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                        if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
                     }
                 }
                 else
@@ -1216,7 +1221,11 @@ class bugModel extends model
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
+            }
 
             return common::createChanges($oldBug, $bug);
         }
@@ -1395,6 +1404,7 @@ class bugModel extends model
             {
                 $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug resolved');
             }
         }
 
@@ -1507,7 +1517,11 @@ class bugModel extends model
             if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+        {
+            $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug closed');
+        }
 
         return common::createChanges($oldBug, $bug);
     }
