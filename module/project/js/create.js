@@ -153,7 +153,7 @@ function setParentProgram(parentProgram)
         }
         else
         {
-            $('#budget').removeAttr('disabled', true)
+            $('#budget').removeAttr('disabled')
             $('#future').prop('checked', false);
         }
     });
