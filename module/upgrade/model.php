@@ -7160,7 +7160,7 @@ class upgradeModel extends model
     {
         if(empty($this->config->URAndSR)) return true;
 
-        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM `" . TABLE_GROUPPRIV . "` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM " . TABLE_GROUPPRIV . " WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
     }
