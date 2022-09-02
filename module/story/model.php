@@ -473,6 +473,12 @@ class storyModel extends model
 
         foreach($stories->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('story', $stories, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                return false;
+            }
+
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
@@ -490,16 +496,7 @@ class storyModel extends model
         $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
-            if(empty($title))
-            {
-                if($this->common->checkValidRow('story', $stories, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
-                    return false;
-                }
-
-                continue;
-            }
+            if(empty($title)) continue;
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
             $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];

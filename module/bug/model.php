@@ -167,6 +167,12 @@ class bugModel extends model
         $pri       = 0;
         foreach($data->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('bug', $data, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                return false;
+            }
+
             $oses     = array_filter($data->oses[$i]);
             $browsers = array_filter($data->browsers[$i]);
 
@@ -192,16 +198,7 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title))
-            {
-                if($this->common->checkValidRow('bug', $data, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-                    return false;
-                }
-
-                continue;
-            }
+            if(empty($title)) continue;
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
