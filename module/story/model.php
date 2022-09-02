@@ -449,18 +449,6 @@ class storyModel extends model
     {
         $forceReview = $this->checkForceReview();
 
-        $reviewers = '';
-        foreach($_POST['title'] as $index => $value)
-        {
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and empty($_POST['reviewDitto'][$index])) $reviewers = $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and !empty($_POST['reviewDitto'][$index])) $_POST['reviewer'][$index] = $reviewers;
-            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]) and $forceReview)
-            {
-                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                return false;
-            }
-        }
-
         $this->loadModel('action');
         $branch    = (int)$branch;
         $productID = (int)$productID;
@@ -499,6 +487,7 @@ class storyModel extends model
 
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
+        $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
             if(empty($title))
@@ -513,6 +502,14 @@ class storyModel extends model
             }
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
+            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
+            $stories->reviewer[$i] = $reviewers;
+            $_POST['reviewer'][$i] = $reviewers;
+            if(empty($stories->reviewer[$i]) and $forceReview)
+            {
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
+            }
 
             $story = new stdclass();
             $story->type       = $type;
