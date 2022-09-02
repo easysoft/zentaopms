@@ -145,17 +145,7 @@ function setParentProgram(parentProgram)
         }
         budgetOverrunTips();
         outOfDateTip();
-        $('#budgetUnit').val(data.budgetUnit).trigger('chosen:updated');
-        if(typeof(data.availableBudget) == 'undefined')
-        {
-            $('#budget').removeAttr('placeholder').attr('disabled', true);
-            $('#future').prop('checked', true);
-        }
-        else
-        {
-            $('#budget').removeAttr('disabled')
-            $('#future').prop('checked', false);
-        }
+        refreshBudgetUnit(data);
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
