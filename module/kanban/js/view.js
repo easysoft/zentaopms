@@ -1433,6 +1433,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    $(document).find('main#main').css('padding-top', '16px');
+
     window.isMultiLanes = laneCount > 1;
 
     $.cookie('isFullScreen', 0);
@@ -1552,6 +1554,8 @@ $(function()
 
     setToolTip();
 
+    distance    = 0;
+    radiusWidth = 10;
     $(window).on('resize', initRegionTabs);
 
     $('.leftBtn').click(function()
@@ -1565,6 +1569,8 @@ $(function()
         if($(this).hasClass('disabled')) return;
         swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'right');
     });
+
+    if(Object.values(regions).length <= 1) $('#kanbanBox').removeClass('hidden');
 });
 
 /**
@@ -1842,8 +1848,6 @@ function swipeRegionNavTabs($object, direction)
     var offsetWidth    = $regionNavTabs[0].offsetWidth;
     var objectWidth    = $object[0].offsetWidth;
 
-    $object.css('transition-duration', '1s');
-
     $object.find('li').each(function()
     {
         /* Get the offset of the item. */
@@ -1854,13 +1858,13 @@ function swipeRegionNavTabs($object, direction)
         var radius     = $item.hasClass('active') ? radiusWidth : 0;
 
         /* Calculate the offset after sliding. */
-        if(direction == 'left' && (itemOffset + distance + radius) >= 0)
+        if(direction == 'left' && (itemOffset + distance + radius) >= -5)
         {
             /* If you swipe left, the distance is equal to the item's left. */
             distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
-            if(distance + radius >= 0)
+            if($item.prev().length == 0)
             {
-                distance = radius;
+                distance = 0;
                 $('.leftBtn').addClass('disabled');
             }
             $object[0].style.transform = 'translateX(' + distance + 'px)';
@@ -1871,13 +1875,13 @@ function swipeRegionNavTabs($object, direction)
         }
 
         var nextRadius = $item.next().hasClass('active') ? radiusWidth : 0;
-        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius))
+        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius + radiusWidth * 2))
         {
             /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
-            distance = offsetWidth - itemOffset - radius + nextRadius;
+            distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
             if($item.next().length == 0)
             {
-                distance = - objectWidth + offsetWidth - radius;
+                distance = - objectWidth + offsetWidth - radiusWidth * 2;
                 $('.rightBtn').addClass('disabled');
             }
             $object[0].style.transform = 'translateX(' + distance + 'px)';
@@ -1912,11 +1916,75 @@ function initRegionTabs()
     /* Print left and right button. */
     if(regionTabULWidth > regionTabsWidth) $('.leftBtn, .rightBtn').removeClass('hidden');
 
-    /* Locate the position of the currently selected item. */
-    radiusWidth = 10;
-    distance    = (acitiveItemLeft + acitiveItemWidth) > regionTabsWidth ? - (acitiveItemLeft + acitiveItemWidth - regionTabsWidth + radiusWidth) : 0;
-    if($acitiveItem.prev().length == 0) distance = radiusWidth;
-    $regionNavTabs.find('ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    if(acitiveItemLeft + distance < 0)
+    {
+        distance = - acitiveItemLeft;
+        if($acitiveItem.prev().length == 0)
+        {
+            distance = 0;
+            $('.leftBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+    else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
+    {
+        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+        if($acitiveItem.next().length == 0)
+        {
+            distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+            $('.rightBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+
     if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
     if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
+    $('#kanbanBox').removeClass('hidden');
 }
+
+$('[data-tab]').on('shown.zui.tab', function(e)
+{
+    /* Init vars. */
+    var $current       = $(e.target);
+    var $prev          = $(e.relatedTarget);
+    var $regionActions = $('#region-tab-actions');
+    var $regions       = $('.region');
+    var contentID      = $current.attr('href');
+    var regionID       = $current.parent().attr('data-id');
+    var hasActions     = $regionActions.hasClass('active');
+
+    /* Highlight the currently selected tab. */
+    $current.addClass('btn-active-text');
+    $current.parent().addClass('active');
+    $prev.removeClass('btn-active-text');
+    $prev.parent().removeClass('active');
+
+    /* Dynamic display and hidden of regions. */
+    if(contentID == 'all')
+    {
+        $regions.addClass('active').removeClass('notAll');
+        if(hasActions) $regionActions.removeClass('active');
+    }
+    else
+    {
+        var $currentRegion = $(contentID);
+        $regions.removeClass('active');
+        $currentRegion.addClass('active notAll');
+        $currentRegion.find('.kanban').css('display', 'block');
+        if(!hasActions) $regionActions.addClass('active');
+
+        /* Replace the link of the region actions button with the ID of the current region. */
+        $regionActions.find('li').each(function()
+        {
+            if($(this).hasClass('editRegion')) $(this).find('a').attr('href', createLink('kanban', 'editRegion', 'regionID=' + regionID, '', true));
+            if($(this).hasClass('createLane')) $(this).find('a').attr('href', createLink('kanban', 'createLane', 'kanbanID=' + kanbanID + '&regionID=' + regionID, '', true));
+            if($(this).hasClass('deleteRegion')) $(this).find('a').attr('href', createLink('kanban', 'deleteRegion', 'regionID=' + regionID));
+            if($(this).hasClass('archivedCard')) $(this).find('a').attr('href', "javascript:loadMore(\"Card\", " + regionID + ')');
+            if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
+        });
+    }
+
+    /* To manually refresh stay under the current tab, save the ID of the current region. */
+    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);
+    $.get(url);
+});
