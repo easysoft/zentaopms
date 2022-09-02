@@ -935,7 +935,7 @@ class repoModel extends model
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
 
-                        if($file->oldPath)
+                        if($file->oldPath and $file->action == 'R')
                         {
                             $file->path    = $file->oldPath;
                             $file->parent  = dirname($file->path);
@@ -1002,7 +1002,7 @@ class repoModel extends model
                 $repoFile->oldPath  = $info['oldPath'];
                 $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
 
-                if($repoFile->oldPath)
+                if($repoFile->oldPath and $file->action == 'R')
                 {
                     $parentPath = dirname($repoFile->oldPath);
 
