@@ -1213,7 +1213,7 @@ class task extends control
         $this->view->title      = $this->lang->task->editEstimate;
         $this->view->position[] = $this->lang->task->editEstimate;
         $this->view->estimate   = $estimate;
-        $this->view->task       = $this->task->getById($estimate->task);
+        $this->view->task       = $this->task->getById($estimate->objectID);
         $this->display();
     }
 

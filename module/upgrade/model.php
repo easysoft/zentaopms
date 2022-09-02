@@ -131,7 +131,7 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open') $this->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -552,6 +552,7 @@ class upgradeModel extends model
             case '17_6':
                 $this->updateStoryFile();
                 $this->convertTaskteam();
+                $this->convertEstToEffort();
                 break;
         }
 
@@ -7264,18 +7265,45 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
 
-                if($this->config->edition == 'open')
-                {
-                    $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->exec();
-                }
-                else
-                {
-                    $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
-                }
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
                 $order ++;
             }
         }
 
         $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
+    }
+
+    /**
+     * Convert estimate to effort.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertEstToEffort()
+    {
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+
+        $this->loadModel('action');
+        foreach($estimates as $estimate)
+        {
+            $relation = $this->action->getRelatedFields('task', $estimate->task);
+
+            $effort = new stdclass();
+            $effort->objectType = 'task';
+            $effort->objectID   = $estimate->task;
+            $effort->product    = $relation['product'];
+            $effort->project    = (int)$relation['project'];
+            $effort->account    = $estimate->account;
+            $effort->work       = empty($estimate->work) ? $this->lang->effort->handleTask : $estimate->work;
+            $effort->date       = $estimate->date;
+            $effort->left       = $estimate->left;
+            $effort->consumed   = $estimate->consumed;
+            $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
+
+            $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
+            $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
     }
 }
