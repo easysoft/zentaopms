@@ -13,8 +13,10 @@ function loadMore(type, regionID)
     var link     = createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
-        var windowHeight = $(window).height();
-        $(selector + ' .panel-body').css('height', windowHeight - 100);
+        var windowHeight  = $(window).height();
+        var affixedHeight = $('#regionTabs.affixed').height() + $('#kanbanContainer .kanban-affixed .kanban-cols').height();
+        $(selector + ' .panel-body').css('height', windowHeight - affixedHeight);
+        $(selector).css('top', $('#regionTabs.affixed').height() + $('#kanbanContainer .kanban-affixed .kanban-cols').height());
         $(selector).animate({right: 0}, 500);
     });
 }
