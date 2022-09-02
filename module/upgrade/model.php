@@ -7251,7 +7251,7 @@ class upgradeModel extends model
      */
     public function convertTaskteam()
     {
-        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, left')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, `left`')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
         foreach($oldTeamGroup as $taskID => $oldTeams)
         {
             $order = 0;
@@ -7263,6 +7263,15 @@ class upgradeModel extends model
                 if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+
+                if($this->config->edition == 'open')
+                {
+                    $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                }
                 $order ++;
             }
         }
