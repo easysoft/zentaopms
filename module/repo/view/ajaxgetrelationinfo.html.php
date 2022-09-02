@@ -41,7 +41,11 @@ include '../../common/view/header.lite.html.php';
 <script>
 $(function()
 {
-    $('a').attr('href', 'javascript:;').removeClass('iframe').css('color', '#3c4353');
+    $('a').each(function()
+    {
+        var content = $(this).html();
+        $(this).replaceWith(content);
+    })
     $('blockquote a').empty();
 });
 </script>

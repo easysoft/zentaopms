@@ -302,6 +302,7 @@ class repo extends control
         $this->view->file         = $file;
         $this->view->entry        = $entry;
         $this->view->path         = $entry;
+        $this->view->info         = $info;
         $this->view->suffix       = $suffix;
         $this->view->content      = $content ? $content : '';
         $this->view->pathInfo     = $pathInfo;
