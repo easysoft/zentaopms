@@ -69,14 +69,21 @@ $(function()
         $('#tab-nav-item-' + tab.id).attr('title', decodeURIComponent(filepath));
     });
 
-    var link  = createLink('repo', 'ajaxGetBranchesAndTags', 'repoID=' + repoID + '&oldRevision=' + branchID);
-    $.get(link, function(data)
+    if(['Git', 'Gitlab', 'Gogs', 'Gitea'].indexOf(repo.SCM) != -1)
     {
-        var result = $.parseJSON(data);
-        $('#branchList').empty();
-        $('#branchList').append(result.sourceHtml);
-        $('#branchList #branchesAndTags').tree({initialState: 'expand'});
-    });
+        var link  = createLink('repo', 'ajaxGetBranchesAndTags', 'repoID=' + repoID + '&oldRevision=' + branchID);
+        $.get(link, function(data)
+        {
+            var result = $.parseJSON(data);
+            $('#branchList').empty();
+            $('#branchList').append(result.sourceHtml);
+            $('#branchList #branchesAndTags').tree({initialState: 'expand'});
+        });
+    }
+    else
+    {
+        $('#sourceSwapper').hide();
+    }
 
     /**
      * Refresh files tree.

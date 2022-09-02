@@ -14,6 +14,7 @@ js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot . 'misc/base64.js');
 js::set('entry', $entry);
 js::set('repoID', $repoID);
+js::set('repo', $repo);
 js::set('revision', $revision);
 js::set('branchID', $branchID);
 js::set('file', $pathInfo);
