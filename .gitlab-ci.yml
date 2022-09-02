@@ -1,6 +1,7 @@
 stages:
   - sonar
   - unit_test
+  - uitest
   - cleanup_packages
   - package
 sonarqube:
@@ -28,6 +29,14 @@ unit_test:
   stage: unit_test
   script:
   - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
+  only:
+  - master 
+  - merge_requests
+uitest:
+  stage: uitest
+  script:
+  - "/home/gitlab-runner/bin/zentao-uitest.sh ${CI_PROJECT_DIR}"
   allow_failure: true
   only:
   - master 
