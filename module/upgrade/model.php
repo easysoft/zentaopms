@@ -7299,6 +7299,7 @@ class upgradeModel extends model
             $effort->left       = $estimate->left;
             $effort->consumed   = $estimate->consumed;
             $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
 
             $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
             $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
