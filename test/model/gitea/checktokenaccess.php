@@ -31,8 +31,7 @@ r($result) && p() && e('return null'); //使用正确的host,错误的token验�
 
 $token  = 'c6769e6761a7d719129b2421dcb3112d936e2b1f';
 $result = $gitea->checkTokenAccess($host, $token);
-if(isset($result->id)) $result = 'success';
-r($result) && p() && e('success'); //通过host,token验证token权限
+r($result) && p() && e('1'); //通过host,token验证token权限
 
 $token  = 'wVFHE6NZA-cJy-3U2y2J';
 $result = $gitea->checkTokenAccess($host, $token);
