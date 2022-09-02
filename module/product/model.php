@@ -76,7 +76,7 @@ class productModel extends model
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
-
+        $isFeedbackModel = strpos(',feedback,', ",{$this->app->tab},") !== false ? true : false;
         if(count($products) <= 2 and isset($products[0]))
         {
             unset($products[0]);
@@ -86,7 +86,7 @@ class productModel extends model
         if(empty($products)) return;
 
         $this->app->loadLang('product');
-        if(!$isQaModule and !$productID)
+        if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
             return;
@@ -107,6 +107,12 @@ class productModel extends model
         {
             $currentProduct = new stdclass();
             $currentProduct->name = $products[$productID];
+            $currentProduct->type = 'normal';
+        }
+        if($isFeedbackModel and !$productID)
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = isset($products[$productID]) ? $products[$productID] : current($products);
             $currentProduct->type = 'normal';
         }
         $this->session->set('currentProductType', $currentProduct->type);

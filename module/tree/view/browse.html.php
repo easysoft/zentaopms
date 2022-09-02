@@ -28,20 +28,14 @@ $name = $lang->tree->name;
 if($viewType == 'line') $name = $lang->tree->line;
 if($viewType == 'api')  $name = $lang->tree->dir;
 if($viewType == 'doc')  $name = $lang->doc->catalogName;
-if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
+if($viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
-if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
 if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
 if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
 
 $editTitle   = $lang->tree->edit;
 $deleteTitle = $lang->tree->delete;
-if($viewType == 'feedback')
-{
-    $editTitle   = $lang->tree->editCategory;
-    $deleteTitle = $lang->tree->delCategory;
-}
 if($viewType == 'doc' or $viewType == 'api')
 {
     $editTitle   = $lang->doc->editType;
@@ -64,10 +58,6 @@ if($viewType == 'doc' or $viewType == 'api')
         elseif($viewType == 'api')
         {
             echo $lang->api->manageType . $lang->colon . $root->name;
-        }
-        elseif($viewType == 'feedback')
-        {
-            echo $lang->feedback->manageCate;
         }
         elseif($viewType == 'line')
         {

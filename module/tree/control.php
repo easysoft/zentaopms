@@ -45,6 +45,11 @@ class tree extends control
             $products = $this->product->getProducts($this->session->project, 'all', '', false);
             if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
+        else if($this->app->tab == 'feedback')
+        {
+            $products = $this->product->getProducts(0, 'all', '', false);
+            if($viewType == 'feedback') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'feedback', '', '', '', false);
+        }
 
         /* According to the type, set the module root and modules. */
         if(strpos('story|bug|case', $viewType) !== false)
@@ -131,8 +136,9 @@ class tree extends control
         {
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
+            $productItem = $this->product->getById($rootID);
             $root                   = new stdclass();
-            $root->name             = $this->lang->feedback->common;
+            $root->name             = !empty($rootID) ? $productItem->name : $this->lang->feedback->common;
             $this->view->root       = $root;
 
             $title      = $this->lang->tree->manageFeedback;
