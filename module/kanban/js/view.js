@@ -1926,18 +1926,22 @@ function initRegionTabs()
 
 $('[data-tab]').on('shown.zui.tab', function(e)
 {
+    /* Init vars. */
     var $current       = $(e.target);
     var $prev          = $(e.relatedTarget);
     var $regionActions = $('#region-tab-actions');
     var $regions       = $('.region');
     var contentID      = $current.attr('href');
+    var regionID       = $current.parent().attr('data-id');
     var hasActions     = $regionActions.hasClass('active');
 
+    /* Highlight the currently selected tab. */
     $current.addClass('btn-active-text');
     $current.parent().addClass('active');
     $prev.removeClass('btn-active-text');
     $prev.parent().removeClass('active');
 
+    /* Dynamic display and hidden of regions. */
     if(contentID == 'all')
     {
         $regions.addClass('active').removeClass('notAll');
@@ -1950,8 +1954,19 @@ $('[data-tab]').on('shown.zui.tab', function(e)
         $currentRegion.addClass('active notAll');
         $currentRegion.find('.kanban').css('display', 'block');
         if(!hasActions) $regionActions.addClass('active');
+
+        /* Replace the link of the region actions button with the ID of the current region. */
+        $regionActions.find('li').each(function()
+        {
+            if($(this).hasClass('editRegion')) $(this).find('a').attr('href', createLink('kanban', 'editRegion', 'regionID=' + regionID, '', true));
+            if($(this).hasClass('createLane')) $(this).find('a').attr('href', createLink('kanban', 'createLane', 'kanbanID=' + kanbanID + '&regionID=' + regionID, '', true));
+            if($(this).hasClass('deleteRegion')) $(this).find('a').attr('href', createLink('kanban', 'deleteRegion', 'regionID=' + regionID));
+            if($(this).hasClass('archivedCard')) $(this).find('a').attr('href', "javascript:loadMore(\"Card\", " + regionID + ')');
+            if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
+        });
     }
 
-    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + $current.parent().attr('data-id'));
+    /* To manually refresh stay under the current tab, save the ID of the current region. */
+    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);
     $.get(url);
 });
