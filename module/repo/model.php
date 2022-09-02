@@ -935,7 +935,7 @@ class repoModel extends model
                         $file->repo     = $repoID;
                         $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
 
-                        if($file->oldPath)
+                        if($file->oldPath and $file->action == 'R')
                         {
                             $file->path    = $file->oldPath;
                             $file->parent  = dirname($file->path);
@@ -2439,7 +2439,7 @@ class repoModel extends model
             }
             else
             {
-                $html .= "<span class='item doc-title text-ellipsis'><i class='icon icon-file-text-alt'></i> " . html::a('#filePath' . $file['key'], $file['name'], '', "class='repoFileName' data-path='{$file['path']}'") . '</span>';
+                $html .= "<span class='item doc-title text-ellipsis'><i class='icon icon-file-text-alt'></i> " . html::a('#filePath' . $file['key'], $file['name'], '', "class='repoFileName' data-path='{$file['path']}' title='{$file['path']}'") . '</span>';
             }
             $html .= '</li>';
         }
@@ -2508,7 +2508,7 @@ class repoModel extends model
             }
             else
             {
-                $html .= "<span class='item doc-title text-ellipsis'><i class='file icon icon-file-text-alt'></i> " . html::a('#filePath' . $childNode['key'], $childNode['name'], '', "class='repoFileName' data-path='{$childNode['path']}'") . '</span>';
+                $html .= "<span class='item doc-title text-ellipsis'><i class='file icon icon-file-text-alt'></i> " . html::a('#filePath' . $childNode['key'], $childNode['name'], '', "class='repoFileName' data-path='{$childNode['path']}' title='{$childNode['path']}'") . '</span>';
             }
             $html .= '</li>';
         }

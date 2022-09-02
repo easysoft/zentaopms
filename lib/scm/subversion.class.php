@@ -322,7 +322,7 @@ class Subversion
                 {
                     $blame            = array();
                     $blame['line']    = (int)$line['line-number'];
-                    $blame['content'] = $content[$blame['line'] - 1];
+                    $blame['content'] = zget($content, $blame['line'] - 1, '');
 
                     $blames[$blame['line']] = $blame;
                     $blames[$revLine]['lines'] ++;
