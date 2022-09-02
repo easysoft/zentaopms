@@ -1928,7 +1928,7 @@ function initRegionTabs()
     }
     else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
     {
-        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft + (distance != 0 ? - radiusWidth * 2 : radiusWidth);
         if($acitiveItem.next().length == 0)
         {
             distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
