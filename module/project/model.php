@@ -505,9 +505,8 @@ class projectModel extends model
         $projects = array();
 
         $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.objectID=t2.id')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
             ->where('t2.project')->in($projectIdList)
-            ->andWhere('t1.objectType')->eq('task')
             ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.parent')->lt(1)
