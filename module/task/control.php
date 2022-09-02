@@ -1181,9 +1181,9 @@ class task extends control
         $orderBy = 'date,id';
         if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
 
+        $this->view->title     = $this->lang->task->record;
         $this->view->task      = $task;
         $this->view->estimates = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
-        $this->view->title     = $this->lang->task->record;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }

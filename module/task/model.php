@@ -1907,7 +1907,7 @@ class taskModel extends model
                 {
                     $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
                     $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
-                    if($task->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
+                    if($task->mode == 'linear' and empty($estimate->order)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
                     $currentTeam->consumed += $estimate->consumed;
                     $currentTeam->left      = $estimate->left;
                     $currentTeam->status    = $teamStatus;
