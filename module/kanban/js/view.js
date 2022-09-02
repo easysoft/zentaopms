@@ -1964,7 +1964,7 @@ $('[data-tab]').on('shown.zui.tab', function(e)
     {
         $regions.addClass('active').removeClass('notAll');
         if(hasActions) $regionActions.removeClass('active');
-     }
+    }
     else
     {
         var $currentRegion = $(contentID);
