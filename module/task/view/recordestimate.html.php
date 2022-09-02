@@ -34,7 +34,7 @@
       <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
       <?php endif;?>
     </div>
-    <?php if(count($estimates)):?>
+    <?php if(!empty($efforts)):?>
     <?php if(!empty($task->team) and $task->mode == 'linear'):?>
     <?php include __DIR__ . '/lineareffort.html.php';?>
     <?php else:?>
@@ -50,18 +50,18 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($estimates as $estimate):?>
+        <?php foreach($efforts as $effort):?>
         <tr class="text-center">
-          <td><?php echo $estimate->date;?></td>
-          <td><?php echo zget($users, $estimate->account);?></td>
-          <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-          <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-          <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
+          <td><?php echo $effort->date;?></td>
+          <td><?php echo zget($users, $effort->account);?></td>
+          <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
+          <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+          <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
           <td align='center' class='c-actions'>
             <?php
-            $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
-            common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-            common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $canOperateEffort ? '' : 'disabled');
+            $canOperateEffort = $this->task->canOperateEffort($task, $effort);
+            common::printIcon('task', 'editEstimate', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+            common::printIcon('task', 'deleteEstimate', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $canOperateEffort ? '' : 'disabled');
             ?>
           </td>
         </tr>
@@ -131,11 +131,9 @@
             </td>
           </tr>
           <?php endfor;?>
-          <tr>
-            <td colspan='4' class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></td>
-          </tr>
         </tbody>
       </table>
+      <div class='table-footer text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></div>
     </form>
     <?php endif;?>
   </div>

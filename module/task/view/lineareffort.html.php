@@ -5,17 +5,18 @@
 #linearefforts div.caption .account{font-weight: bolder;}
 </style>
 <?php
+$this->app->loadLang('execution');
 $teamOrders = array();
 foreach($task->team as $team) $teamOrders[$team->order] = $team->account;
 
 $myOrders   = array();
 $allEfforts = array();
 $recorders   = array();
-foreach($estimates as $estimate)
+foreach($efforts as $effort)
 {
-    $order   = $estimate->order;
-    $account = $estimate->account;
-    $allEfforts[$order][] = $estimate;
+    $order   = $effort->order;
+    $account = $effort->account;
+    $allEfforts[$order][] = $effort;
     $recorders[$order][$account] = $account;
     if($app->user->account == $account) $myOrders[$order] = $order;
 }
@@ -45,18 +46,18 @@ foreach($estimates as $estimate)
           </tr>
         </thead>
         <tbody>
-          <?php foreach($allEfforts[$order] as $estimate):?>
+          <?php foreach($allEfforts[$order] as $effort):?>
           <tr class="text-center">
-            <td><?php echo $estimate->date;?></td>
-            <td><?php echo zget($users, $estimate->account);?></td>
-            <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-            <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
+            <td><?php echo $effort->date;?></td>
+            <td><?php echo zget($users, $effort->account);?></td>
+            <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
+            <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+            <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td align='center' class='c-actions'>
               <?php
-              $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
-              common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $estimate->left > 0) ? '' : 'disabled');
+              $canOperateEffort = $this->task->canOperateEffort($task, $effort);
+              common::printIcon('task', 'editEstimate', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+              common::printIcon('task', 'deleteEstimate', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $effort->left > 0) ? '' : 'disabled');
               ?>
             </td>
           </tr>
@@ -84,18 +85,18 @@ foreach($estimates as $estimate)
           </tr>
         </thead>
         <tbody>
-          <?php foreach($allEfforts[$order] as $estimate):?>
+          <?php foreach($allEfforts[$order] as $effort):?>
           <tr class="text-center">
-            <td><?php echo $estimate->date;?></td>
-            <td><?php echo zget($users, $estimate->account);?></td>
-            <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
-            <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
+            <td><?php echo $effort->date;?></td>
+            <td><?php echo zget($users, $effort->account);?></td>
+            <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
+            <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
+            <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td align='center' class='c-actions'>
               <?php
-              $canOperateEffort = $this->task->canOperateEffort($task, $estimate);
-              common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-              common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $estimate->left > 0) ? '' : 'disabled');
+              $canOperateEffort = $this->task->canOperateEffort($task, $effort);
+              common::printIcon('task', 'editEstimate', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
+              common::printIcon('task', 'deleteEstimate', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $effort->left > 0) ? '' : 'disabled');
               ?>
             </td>
           </tr>

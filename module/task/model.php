@@ -1830,7 +1830,7 @@ class taskModel extends model
                 $estimates[$id]->left     = $record->left[$id];
                 $estimates[$id]->work     = $record->work[$id];
                 $estimates[$id]->account  = $this->app->user->account;
-                $estimates[$id]->order    = !empty($record->order[$id]) ? $record->order[$id] : 0;
+                if(isset($record->order[$id])) $estimates[$id]->order = $record->order[$id];
             }
         }
 
@@ -1863,7 +1863,14 @@ class taskModel extends model
                 $lastDate      = $estimate->date;
             }
 
-            if($newTask->left == 0 and strpos('done,cancel,closed', $task->status) === false)
+            if(!empty($task->team))
+            {
+                $extra = array('filter' => 'done');
+                if(isset($estimate->order)) $extra['order'] = $estimate->order;
+                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
+            }
+
+            if($newTask->left == 0 and ((empty($currentTeam) and strpos('done,cancel,closed', $task->status) === false) or (!empty($currentTeam) and $currentTeam->status != 'done')))
             {
                 $newTask->status         = 'done';
                 $newTask->assignedTo     = $task->openedBy;
@@ -1900,10 +1907,7 @@ class taskModel extends model
             /* Process multi-person task. Update consumed on team table. */
             if(!empty($task->team))
             {
-                $extra = array('filter' => 'done');
-                if(!empty($estimate->order)) $extra['order'] = $estimate->order;
-                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
-                if($currentTeam)
+                if(!empty($currentTeam))
                 {
                     $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
                     $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
