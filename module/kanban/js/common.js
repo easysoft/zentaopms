@@ -148,3 +148,16 @@ function loadOwners(spaceID)
         $('#owner').chosen();
     });
 }
+
+/**
+ * Load kanban.
+ *
+ * @param  int    $kanbanID
+ * @param  int    $regionID
+ * @access public
+ * @return void
+ */
+function loadKanban(kanbanID, regionID)
+{
+    location.href = createLink('kanban', 'view', 'kanbanID=' + kanbanID + '&regionID=' + regionID);
+}

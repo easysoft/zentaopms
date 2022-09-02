@@ -32,7 +32,9 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
-          <td><?php echo html::input('left', $estimate->left, 'class="form-control"');?></td>
+          <?php $readonly = $estimate->isLast ? '' : 'readonly';?>
+          <?php if(!empty($task->team) and $estimate->left == 0) $readonly = 'readonly';?>
+          <td><?php echo html::input('left', $estimate->left, "class='form-control' {$readonly}");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>

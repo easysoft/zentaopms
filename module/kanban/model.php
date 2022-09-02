@@ -1534,17 +1534,27 @@ class kanbanModel extends model
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
+        $multiTasks = array();
         if($browseType == 'task' and $groupBy == 'assignedTo')
         {
             foreach($cardList as $id => $task)
             {
-                if($task->mode == 'multi')
-                {
-                    $task->team = $this->dao->select('t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-                        ->where('t1.root')->eq($id)->andWhere('t1.type')->eq('task')->orderBy('t1.order')->fetchPairs('account');
-                }
+                if($task->mode == 'multi') $multiTasks[$id] = $task;
             }
+        }
+
+        $taskTeams = $this->dao->select('t1.account,t1.task,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.task')->in(array_keys($multiTasks))
+            ->orderBy('t1.order')
+            ->fetchGroup('task', 'account');
+        foreach($multiTasks as $taskID => $task)
+        {
+            if(!isset($taskTeams[$taskID])) continue;
+
+            $teamPairs = array();
+            foreach($taskTeams[$taskID] as $account => $team) $teamPairs[$account] = $team->realname;
+            $task->team = $teamPairs;
         }
 
         /* Get objects cards menus. */

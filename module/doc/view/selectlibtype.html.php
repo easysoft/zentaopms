@@ -41,4 +41,5 @@
     </table>
   </form>
 </div>
+<?php js::set('defaultType', $defaultType);?>
 <?php include '../../common/view/footer.lite.html.php';?>

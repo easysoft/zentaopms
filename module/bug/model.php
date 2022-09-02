@@ -192,7 +192,16 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                if($this->common->checkValidRow('bug', $data, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                    return false;
+                }
+
+                continue;
+            }
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -202,7 +211,7 @@ class bugModel extends model
             $bug->module      = (int)$data->modules[$i];
             $bug->project     = (int)$data->projects[$i];
             $bug->execution   = (int)$data->executions[$i];
-            $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$i]) : '';
             $bug->color       = $data->color[$i];
             $bug->title       = $title;
             $bug->deadline    = $data->deadlines[$i];
@@ -781,7 +790,11 @@ class bugModel extends model
 
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
+            }
 
             return common::createChanges($oldBug, $bug);
         }
@@ -919,11 +932,12 @@ class bugModel extends model
                     {
                         $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                         $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                        if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
                     }
                 }
                 else
                 {
-                    return print(js::error('bug#' . $bugID . dao::getError(true)));
+                    return helper::end(js::error('bug#' . $bugID . dao::getError(true)));
                 }
             }
         }
@@ -1216,7 +1230,11 @@ class bugModel extends model
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
+            }
 
             return common::createChanges($oldBug, $bug);
         }
@@ -1395,6 +1413,7 @@ class bugModel extends model
             {
                 $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+                $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug resolved');
             }
         }
 
@@ -1507,7 +1526,11 @@ class bugModel extends model
             if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
+        {
+            $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+            $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug closed');
+        }
 
         return common::createChanges($oldBug, $bug);
     }
@@ -2935,7 +2958,21 @@ class bugModel extends model
 
         /* If search criteria don't have products, append the selected product from the top left dropdown-menu. */
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
-        if(strpos($bugQuery, '`product`') === false) $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        if(strpos($bugQuery, '`product`') === false)
+        {
+            $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        }
+        else
+        {
+            $productParis  = $this->loadModel('product')->getPairs();
+            $productIDList = array_keys($productParis);
+
+            if(!empty($productIDList))
+            {
+                $productIDList = implode(',', $productIDList);
+                $bugQuery     .= ' AND `product` IN (' . $productIDList . ')';
+            }
+        }
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";

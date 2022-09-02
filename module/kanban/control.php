@@ -388,12 +388,15 @@ class kanban extends control
      /**
      * View a kanban.
      *
-     * @param  int    $kanbanID
+     * @param  int        $kanbanID
+     * @param  int|string $regionID
      * @access public
      * @return void
      */
-    public function view($kanbanID)
+    public function view($kanbanID, $regionID = 'all')
     {
+        $this->session->set('kanbanView',  $this->app->getURI(true), 'kanban');
+
         $kanban = $this->kanban->getByID($kanbanID);
         $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
@@ -419,11 +422,14 @@ class kanban extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
+        $regions = $this->kanban->getKanbanData($kanbanID);
+
         $this->view->users    = $users;
         $this->view->title    = $this->lang->kanban->view;
-        $this->view->regions  = $this->kanban->getKanbanData($kanbanID);
         $this->view->userList = $userList;
         $this->view->kanban   = $kanban;
+        $this->view->regions  = $regions;
+        $this->view->regionID = isset($regions[$regionID]) ? $regionID : 'all';
 
         $this->display();
     }
@@ -469,7 +475,14 @@ class kanban extends control
             $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID, $from);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if($from == 'kanban')
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadKanban($kanbanID, $regionID)"));
+            }
+            else
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
         }
 
         $regions     = $this->kanban->getRegionPairs($kanbanID, 0, $from);
@@ -935,7 +948,7 @@ class kanban extends control
         {
             $this->kanban->batchCreateCard($kanbanID, $regionID, $groupID, $columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->kanbanView));
         }
 
         $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
@@ -1130,7 +1143,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         /* Find Kanban other than this kanban. */
@@ -1177,7 +1190,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedProductplan', '', $planID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('product');
@@ -1229,7 +1242,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedRelease', '', $releaseID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('product');
@@ -1278,7 +1291,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedBuild', '', $buildID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('build');
@@ -1340,7 +1353,7 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedExecution', '', $executionID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            return print(js::locate($this->session->kanbanView, 'parent.parent'));
         }
 
         $this->loadModel('project');
@@ -1517,6 +1530,7 @@ class kanban extends control
 
             $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);
+            if($card->archived) return print(js::reload(parent));
             return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
     }

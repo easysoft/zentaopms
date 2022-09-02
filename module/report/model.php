@@ -358,10 +358,9 @@ class reportModel extends model
             $taskGroups[$task->assignedTo][$task->id] = $task;
         }
 
-        $multiTaskTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('task')
-            ->andWhere('root')->in(array_keys($allTasks))
+        $multiTaskTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($allTasks))
             ->beginIF($dept)->andWhere('account')->in(array_keys($deptUsers))->fi()
-            ->fetchGroup('account', 'root');
+            ->fetchGroup('account', 'task');
         foreach($multiTaskTeams as $assignedTo => $multiTasks)
         {
             foreach($multiTasks as $task)
@@ -674,7 +673,7 @@ class reportModel extends model
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
 
-        $effort->consumed = round($effort->consumed, 2);
+        $effort->consumed = !empty($effort->consumed) ? round($effort->consumed, 2) : 0;
         return $effort;
     }
 

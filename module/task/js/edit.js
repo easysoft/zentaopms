@@ -70,76 +70,6 @@ function setPreview(){}
 
 $(document).ready(function()
 {
-    /* show team menu. */
-    $('[name=multiple]').change(function()
-    {
-        var checked = $(this).prop('checked');
-        if(checked)
-        {
-            $('#teamTr').removeClass('hidden');
-            $('.modeBox').removeClass('hidden');
-            $('#mode').removeAttr('disabled').trigger('chosen:updated');
-            $('#parent').val('');
-            $('#parent').trigger('chosen:updated');
-            $('#parent').closest('tr').addClass('hidden');
-            $('#estimate').attr('disabled', 'disabled');
-            $('#left').attr('disabled', 'disabled');
-
-            var mode = $('#mode').val();
-            if((mode == 'linear' && currentUser != oldAssignedTo) || !team[currentUser]) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
-        }
-        else
-        {
-            $('#teamTr').addClass('hidden');
-            $('.modeBox').addClass('hidden');
-            $('#mode').attr('disabled', 'disabled').trigger('chosen:updated');
-            $('#parent').closest('tr').removeClass('hidden');
-            $('#estimate').removeAttr('disabled');
-            $('#left').removeAttr('disabled');
-            $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
-        }
-
-        updateAssignedTo();
-    });
-
-    /* Init task team manage dialog */
-    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
-    {
-        idStart: 0,
-        idEnd: newRowCount - 1,
-        chosen: true,
-        datetimepicker: false,
-        colorPicker: false,
-    });
-    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
-
-    var adjustButtons = function()
-    {
-        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
-    };
-
-    $taskTeamEditor.on('click', '.btn-add', function()
-    {
-        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
-        $newRow.addClass('highlight');
-        setTimeout(function()
-        {
-            $newRow.removeClass('highlight');
-        }, 1600);
-        adjustButtons();
-    }).on('click', '.btn-delete', function()
-    {
-        var $row = $(this).closest('tr');
-        $row.addClass('highlight').fadeOut(700, function()
-        {
-            $row.remove();
-            adjustButtons();
-        });
-    });
-
-    adjustButtons();
-
     $('#showAllModule').change(function()
     {
         var moduleID = $('#moduleIdBox #module').val();
@@ -153,20 +83,6 @@ $(document).ready(function()
 
 $('#confirmButton').click(function()
 {
-    /* Unique team. */
-    $('select[name^=team]').each(function(i)
-    {
-        value = $(this).val();
-        if(value == '') return;
-        $('select[name^=team]').each(function(j)
-        {
-            if(i <= j) return;
-            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
-        })
-    });
-
-    $('select[name^=team]').closest('tr.hidden').remove();
-
     var memberCount   = '';
     var totalEstimate = 0;
     var totalConsumed = oldConsumed;
@@ -174,24 +90,38 @@ $('#confirmButton').click(function()
     var error         = false;
     $('select[name^=team]').each(function()
     {
-        if($(this).find('option:selected').text() == '') return;
+        if($(this).val() == '') return;
 
         memberCount++;
 
-        estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
-        if(!isNaN(estimate)) totalEstimate += estimate;
+        var $tr     = $(this).closest('tr');
+        var account = $(this).find('option:selected').text();
 
-        consumed = parseFloat($(this).parents('td').next('td').find('[name^=teamConsumed]').val());
+        estimate = parseFloat($tr.find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate)) totalEstimate += estimate;
+        if(isNaN(estimate) || estimate == 0)
+        {
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
+        }
+
+        consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
         if(!isNaN(consumed)) totalConsumed += consumed;
 
-        left = parseFloat($(this).parents('td').next('td').find('[name^=teamLeft]').val());
+        left = parseFloat($tr.find('[name^=teamLeft]').val());
         if(!isNaN(left)) totalLeft += left;
+        if(!$tr.hasClass('member-done') && (isNaN(left) || left == 0))
+        {
+              bootbox.alert(account + ' ' + leftNotEmpty);
+              error = true;
+              return false;
+        }
 
-        var requiredFieldList = ',' + requiredFields + ',';
-        if(requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
+        if(estimate == 0 || isNaN(estimate))
         {
             $(this).val('').trigger("chosen:updated");
-            alert(estimateNotEmpty);
+            bootbox.alert(estimateNotEmpty);
             error = true;
             return false;
         }
@@ -201,13 +131,13 @@ $('#confirmButton').click(function()
 
     if(memberCount < 2)
     {
-        alert(teamMemberError);
+        bootbox.alert(teamMemberError);
         return false;
     }
 
     if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        alert(totalLeftError);
+        bootbox.alert(totalLeftError);
         return false;
     }
 
@@ -246,13 +176,13 @@ function updateAssignedTo()
             html += "<option value='" + account + "' title='" + realName + "'" + selected + ">" + realName + "</option>";
         });
 
-        if(mode == 'multi' && isTeamMember)
+        if(mode == 'multi' && isTeamMember && mode != 'linear')
         {
             $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
         }
         else
         {
-            if(currentUser != oldAssignedTo || !isTeamMember) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
+            $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     }
     else
@@ -265,5 +195,6 @@ function updateAssignedTo()
     }
 
     $('#assignedTo').html(html);
+    if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) $('[name=assignedTo]').val($('#modalTeam tr.member-wait:first').find('select[name^=team]:first').val());
     $('#assignedTo').trigger('chosen:updated');
 }

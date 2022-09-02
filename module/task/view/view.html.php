@@ -262,7 +262,7 @@
                   <th><?php echo $lang->task->assignedTo;?></th>
                   <td>
                     <?php
-                    if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+                    if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
                     {
                         foreach($task->team as $member) echo ' ' . zget($users, $member->account);
                     }
@@ -299,14 +299,13 @@
                   <th><?php echo $lang->task->mailto;?></th>
                   <td>
                     <?php
-                    $mailto = explode(',', str_replace(' ', '', $task->mailto));
-                    if(empty($mailto))
+                    if(empty($task->mailto))
                     {
                         echo $lang->noData;
                     }
                     else
                     {
-                        foreach($mailto as $account) echo ' ' . zget($users, $account, $account);
+                        foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) echo ' ' . zget($users, $account, $account);
                     }
                     ?>
                   </td>
@@ -350,14 +349,19 @@
                 <th class='text-center'><?php echo $lang->task->estimate?></th>
                 <th class='text-center'><?php echo $lang->task->consumed?></th>
                 <th class='text-center'><?php echo $lang->task->left?></th>
+                <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
-                  <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                  <td class='text-left'>
+                    <?php echo zget($users, $member->account);?>
+                    <?php if($member->transfer) echo "({$lang->task->replace})";?>
+                 </td>
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>
+                  <td class="status-<?php echo $member->status;?>"><?php echo zget($lang->task->statusList, $member->status);?></td>
                 </tr>
                 <?php endforeach;?>
             </table>

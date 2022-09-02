@@ -85,7 +85,7 @@ $user2->estimate = 2;
 $user2->consumed = 2;
 $user2->left     = 2;
 
-$team = array('po82' => $user1, 'user92' => $user2);
+$team = array($user1, $user2);
 
 $autoStatusList = array(true, false);
 

@@ -4,3 +4,4 @@
 .titleBox {margin: 0px 10px 10px 10px;}
 .needNotReviewBox {width: 130px;}
 .needNotReviewBox span.input-group-addon {border: 1px solid #dcdcdc; border-left-width: 0px;}
+#moduleIdBox .chosen-container, #planIdBox .chosen-container {min-width: unset;}

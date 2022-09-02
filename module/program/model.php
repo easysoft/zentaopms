@@ -574,8 +574,8 @@ class programModel extends model
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review'), true))->andWhere('t1.status')->eq($browseType)->fi()
-            ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
@@ -1201,10 +1201,12 @@ class programModel extends model
      * Get program parent pairs
      *
      * @param  string $model
+     * @param  string $mode
+     * @param  bool   $showRoot
      * @access public
      * @return array
      */
-    public function getParentPairs($model = '', $mode = 'noclosed')
+    public function getParentPairs($model = '', $mode = 'noclosed', $showRoot = true)
     {
         $modules = $this->dao->select('id,name,parent,path,grade')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
@@ -1219,7 +1221,7 @@ class programModel extends model
         {
             if(strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
-            $moduleName    = '/';
+            $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
             foreach($parentModules as $parentModuleID)
             {
@@ -1240,7 +1242,7 @@ class programModel extends model
         $topMenu = array_shift($treeMenu);
         $topMenu = empty($topMenu) ? '' : $topMenu;
         $topMenu = explode("\n", trim($topMenu));
-        $lastMenu[] = '/';
+        $showRoot ? $lastMenu[] = '/' : $lastMenu = array();
         foreach($topMenu as $menu)
         {
             if(strpos($menu, '|') === false) continue;
@@ -1409,18 +1411,22 @@ class programModel extends model
         }
 
         /* Get the number of project teams. */
-        $teams = $this->dao->select('root,count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectKeys)
-            ->andWhere('type')->eq('project')
-            ->groupBy('root')
+        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectKeys)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
             ->fetchAll('root');
 
         /* Get the members of project teams. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
-            $teamMembers = $this->dao->select('root,account')->from(TABLE_TEAM)
-                ->where('root')->in($projectKeys)
-                ->andWhere('type')->eq('project')
+            $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where('t1.root')->in($projectKeys)
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t2.deleted')->eq(0)
                 ->fetchGroup('root', 'account');
         }
 

@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Ajournées';
 $lang->task->view                = "Détail Tâche";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimés";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Démarrer";
 $lang->task->startAction         = "Démarrer Tâche";
@@ -54,6 +55,7 @@ $lang->task->progressTips        = 'Coût/(Coût+Reste)';
 $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
 $lang->task->allModule           = 'Tous Modules';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
@@ -216,7 +218,6 @@ $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
 $lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
-$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = '<span style="color:blue;">StoryModel</span>';
 $lang->task->afterSubmit               = "Suiv. ";
 $lang->task->successSaved              = "Créée !";
@@ -232,6 +233,8 @@ $lang->task->noticeLinkStory           = "Aucune Story n'est associée. Vous pou
 $lang->task->noticeSaveRecord          = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
 $lang->task->commentActions            = '%s. %s, commenté par <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Seulement le %s peut %s la tâche.';
+$lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
+$lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = "Pas de tâche pour l'instant. ";
 $lang->task->createDenied              = 'La création de tâches est interdite dans ce projet';
 $lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche parente';

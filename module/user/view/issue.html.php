@@ -52,7 +52,7 @@
           <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
           <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php echo html::a($this->createLink('issue', 'view', "id=$issue->id", '', '', $issue->project), $issue->title, '', "data-group='project'");?></td>
           <td title="<?php echo zget($lang->issue->severityList, $issue->severity);?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
-          <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
+          <td title="<?php echo $issue->pri;?>" class="c-pri text-center"><span class="label-pri <?php echo 'label-pri-' . $issue->pri;?>"><?php echo $issue->pri;?></span></td>
           <td title="<?php echo zget($users, $issue->owner);?>"><?php echo zget($users, $issue->owner);?></td>
           <td title="<?php echo zget($lang->issue->statusList, $issue->status);?>"><?php echo zget($lang->issue->statusList, $issue->status);?></td>
           <?php $issue->createdDate = substr($issue->createdDate, 0, 10)?>

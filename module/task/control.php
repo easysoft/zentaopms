@@ -719,12 +719,12 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchGroup('root', 'account');
+        $teams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($taskIDList)->fetchGroup('task', 'id');
 
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($executionIDList)->fetchGroup('task', 'id');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -787,9 +787,9 @@ class task extends control
         $this->commonAction($taskID);
         $task = $this->task->getByID($taskID);
 
-        if(!empty($task->team) and $task->mode == 'multi')
+        if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
         {
-            return $this->editTeam($executionID, $task, $kanbanGroup);
+            return $this->editTeam($executionID, $taskID, $kanbanGroup, $from);
         }
 
         if(!empty($_POST))
@@ -841,9 +841,9 @@ class task extends control
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
 
         /* Compute next assignedTo. */
-        if(!empty($task->team))
+        if(!empty($task->team) and strpos('done,cencel,closed', $task->status) === false)
         {
-            $task->nextUser = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
         }
 
@@ -903,7 +903,7 @@ class task extends control
             if(!is_array($taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID=$execution"), 'parent'));
             $taskIDList = array_unique($taskIDList);
 
-            $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
+            $muletipleTasks = $this->dao->select('task, account')->from(TABLE_TASKTEAM)->where('task')->in($taskIDList)->fetchGroup('task', 'account');
             $tasks          = $this->task->getByList($taskIDList);
             $this->loadModel('action');
             foreach($tasks as $taskID => $task)
@@ -1098,12 +1098,15 @@ class task extends control
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
+        if(!empty($task->team)) $assignedTo = $this->task->getAssignedTo4Multi($task->team, $task);
+
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->members    = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
-        $this->view->assignedTo = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
+        $this->view->assignedTo = $assignedTo;
         $this->display();
     }
 
@@ -1177,6 +1180,7 @@ class task extends control
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
         $this->view->title     = $this->lang->task->record;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
@@ -1202,11 +1206,10 @@ class task extends control
             return print(js::locate($url, 'parent'));
         }
 
-        $estimate = $this->task->getEstimateById($estimateID);
-
         $this->view->title      = $this->lang->task->editEstimate;
         $this->view->position[] = $this->lang->task->editEstimate;
         $this->view->estimate   = $estimate;
+        $this->view->task       = $this->task->getById($estimate->task);
         $this->display();
     }
 
@@ -1220,35 +1223,21 @@ class task extends control
      */
     public function deleteEstimate($estimateID, $confirm = 'no')
     {
-        $estimate = $this->task->getEstimateById($estimateID);
-        $task     = $this->task->getById($estimate->task);
-        if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
+        if($confirm == 'no')
         {
             return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
         }
-        elseif($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
-        {
-            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
-        }
         else
         {
+            $estimate = $this->task->getEstimateById($estimateID);
+            $task     = $this->task->getById($estimate->task);
             $changes  = $this->task->deleteEstimate($estimateID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
             $this->action->logHistory($actionID, $changes);
-            if($task->consumed - $estimate->consumed == 0)
-            {
-                $actionID = $this->loadModel('action')->create('task', $estimate->task, 'Adjusttasktowait');
-            }
-            if($task->consumed - $estimate->consumed == 0)
-            {
-                return print(js::reload('parent.parent'));
-            }
-            else
-            {
-                return print(js::reload('parent'));
-            }
+
+            return print(js::reload('parent'));
         }
     }
 
@@ -1344,29 +1333,18 @@ class task extends control
         $members      = $task->team ? $this->task->getMemberPairs($task) : $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
-        $this->view->users = $members;
         if(!empty($task->team))
         {
-            $teams = array_keys($task->team);
-
-            $task->nextBy     = $this->task->getNextUser($teams, $this->app->user->account);
-            $task->myConsumed = isset($task->team[$this->app->user->account]) ? $task->team[$this->app->user->account]->consumed : 0;
-
-            $lastAccount   = end($teams);
-            $finishedUsers = $this->task->getFinishedUsers($taskID, $teams);
-            if(($lastAccount != $task->assignedTo and $task->mode == 'linear') or ($task->mode == 'multi' and count($teams) != count($finishedUsers)))
-            {
-                $members = $this->task->getMemberPairs($task);
-            }
-            else
-            {
-                $task->nextBy = $task->openedBy;
-            }
+            $task->nextBy     = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
+            $task->myConsumed = 0;
+            $currentTeam      = $this->task->getTeamByAccount($task->team);
+            if($currentTeam) $task->myConsumed = $currentTeam->consumed;
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
@@ -1817,14 +1795,8 @@ class task extends control
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        if(!empty($this->view->task->team))
-        {
-            $members = array();
-            foreach($this->view->task->team as $account => $member) $members[$account] = zget($this->view->members, $account);
-            $this->view->members = $members;
-        }
-
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
+
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -2107,10 +2079,7 @@ class task extends control
             }
 
             /* Get team for multiple task. */
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)
-                ->where('root')->in(array_keys($tasks))
-                ->andWhere('type')->eq('task')
-                ->fetchGroup('root');
+            $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
 
             /* Process multiple task info. */
             if(!empty($taskTeam))
@@ -2332,14 +2301,15 @@ class task extends control
      * Update assign of multi task.
      *
      * @param  int    $requestID
-     * @param  object $task
+     * @param  object $taskID
      * @param  string $kanbanGroup
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function editTeam($executionID, $task, $kanbanGroup = 'default')
+    public function editTeam($executionID, $taskID, $kanbanGroup = 'default', $from = '')
     {
-        $taskID = $task->id;
+        $task = $this->task->getById($taskID);
         $this->commonAction($taskID);
 
         if(!empty($_POST))
@@ -2361,9 +2331,18 @@ class task extends control
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
             if(isonlybody())
             {
-                $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
-                if(($this->app->tab == 'execution' or $this->config->vision == 'lite') and $this->app->tab == 'execution')
+
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project' and $this->session->kanbanview == 'kanban')) and $execution->type == 'kanban')
+                {
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+
+                if($from == 'taskkanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
@@ -2371,10 +2350,8 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this'));
-                }
+
+                return print(js::closeModal('parent.parent', 'this'));
             }
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }

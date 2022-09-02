@@ -265,7 +265,7 @@ class storyModel extends model
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
-            $this->file->saveUpload($story->type, $storyID, $extra = 1);
+            $this->file->saveUpload($story->type, $storyID, ',1,');
 
             if(!empty($story->plan))
             {
@@ -363,7 +363,11 @@ class storyModel extends model
                 $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
                 $this->action->create('bug', $bugID, 'Closed');
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback)
+                {
+                    $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+                    $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug closed");
+                }
 
                 /* add files to story from bug. */
                 $files = $this->dao->select('*')->from(TABLE_FILE)
@@ -497,7 +501,16 @@ class storyModel extends model
         $data         = array();
         foreach($stories->title as $i => $title)
         {
-            if(empty($title)) continue;
+            if(empty($title))
+            {
+                if($this->common->checkValidRow('story', $stories, $i))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                    return false;
+                }
+
+                continue;
+            }
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
 
@@ -685,7 +698,7 @@ class storyModel extends model
         $oldStoryReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
         $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
         $reviewerHasChanged = (array_diff(array_keys($oldStoryReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStoryReviewers)));
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged) $specChanged = true;
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or isset($_POST['deleteFiles'])) $specChanged = true;
 
         $now   = helper::now();
         $story = fixer::input('post')
@@ -703,7 +716,7 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
             ->setIF(!$specChanged, 'status', $oldStory->status)
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,comment,needNotReview,uid')
+            ->remove('files,labels,reviewer,comment,needNotReview,uid,deleteFiles')
             ->get();
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
@@ -760,6 +773,10 @@ class storyModel extends model
                     $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
                     $story->reviewers    = implode(',', $_POST['reviewer']);
                 }
+
+                $deleteFiles = isset($_POST['deleteFiles']) ? $_POST['deleteFiles'] : array();
+                if(!empty($deleteFiles)) $this->file->deleteStoryFile($story->id, $story->version, $deleteFiles);
+                $this->file->updateStoryFileVersion($story->id, $story->version, $deleteFiles);
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
@@ -786,7 +803,7 @@ class storyModel extends model
 
         if(strpos('draft,changing', $oldStory->status) !== false and $this->checkForceReview() and empty($_POST['reviewer']))
         {
-            dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+            dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
             return false;
         }
 
@@ -824,7 +841,7 @@ class storyModel extends model
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview,deleteFiles')
             ->get();
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
@@ -1007,7 +1024,11 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story {$story->status}");
+            }
 
             $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
             $linkStories    = explode(',', $story->{$linkStoryField});
@@ -1031,6 +1052,9 @@ class storyModel extends model
                     $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
+
+            if(isset($_POST['deleteFiles'])) $this->file->deleteStoryFile($storyID, $oldStory->version, $_POST['deleteFiles']);
+            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1139,7 +1163,11 @@ class storyModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback)
+                {
+                    $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
+                    if($newParentStory->status == 'closed') $this->loadModel('action')->create('feedback', $oldParentStory->feedback, 'processed', '', "story {$newParentStory->status}");
+                }
             }
         }
         else
@@ -1379,6 +1407,7 @@ class storyModel extends model
                     {
                         $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                         $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                        if($story->status == 'closed') $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story {$story->status}");
                     }
                 }
                 else
@@ -1478,7 +1507,7 @@ class storyModel extends model
                 $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($deleteVersion)->exec();
             }
 
-            $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
+            $this->file->deleteStoryFile($storyID, $oldStory->version);
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
 
@@ -1585,10 +1614,10 @@ class storyModel extends model
      */
     public function recallChange($storyID)
     {
-        $story      = $this->getById($storyID);
-        $preVersion = $story->version - 1;
+        $story = $this->getById($storyID);
 
         /* Update story title and version and status. */
+        $preVersion = $story->version - 1;
         $preTitle   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($preVersion)->fetch('title');
         $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->set('version')->eq($preVersion)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
 
@@ -1596,7 +1625,7 @@ class storyModel extends model
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
 
-        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($story->version)->exec();
+        $this->loadModel('file')->deleteStoryFile($storyID, $story->version);
     }
 
     /**
@@ -1780,7 +1809,11 @@ class storyModel extends model
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback)
+            {
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story closed");
+            }
         }
         return common::createChanges($oldStory, $story);
     }
@@ -1849,6 +1882,7 @@ class storyModel extends model
                 {
                     $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                     $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                    $this->loadModel('action')->create('feedback', $oldStory->feedback, 'processed', '', "story closed");
                 }
             }
             else
@@ -3010,7 +3044,7 @@ class storyModel extends model
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
-        if($executionID != '')
+        if(!empty($executionID))
         {
             $normalProducts = array();
             $branchProducts = array();
@@ -4210,7 +4244,7 @@ class storyModel extends model
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'ok', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
-                $title   = (!$isClick and $story->status != 'closed' and $story->status != 'draft') ? $this->lang->story->changeTip : '';
+                $title   = $isClick ? '' : $this->lang->story->changeTip;
                 $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 if(strpos('draft,changing', $story->status) !== false)
@@ -4235,30 +4269,19 @@ class storyModel extends model
                         {
                             $title = $this->lang->story->reviewTip['notReviewer'];
                         }
-                        elseif(empty($storyReviewer))
-                        {
-                            $title = $this->lang->story->reviewTip['recalled'];
-                        }
                     }
                     $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from&storyType=$story->type", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 }
 
                 $isClick = $this->isClickable($story, 'recall');
                 $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-                if(!$isClick and $story->status != 'closed')
-                {
-                    if($story->status == 'draft' and empty($storyReviewer)) $title = $this->lang->story->recallTip['recalled'];
-                    if($story->status == 'draft' and !empty($storyReviewer)) $title = $this->lang->story->recallTip['reviewed'];
-                    if(empty($story->reviewedBy) and strpos('draft,changing', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
-                    if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
-                }
-
-                $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+                $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
+                $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
-                $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
+                $tab = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
@@ -4274,8 +4297,7 @@ class storyModel extends model
                         else
                         {
                             if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
-                            if(!empty($story->plan)) $title = $this->lang->story->subDivideTip['planned'];
-                            if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
+                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         }
                     }
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
@@ -4320,20 +4342,20 @@ class storyModel extends model
 
                 if(common::hasPriv('testcase', 'create', $story))
                 {
-                    $link = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
+                    $link  = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
                     $menu .= "<li>" . html::a($link, $this->lang->testcase->create, '', $misc) . "</li>";
                 }
 
                 if(common::hasPriv('testcase', 'batchCreate'))
                 {
-                    $link = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
+                    $link  = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
                     $menu .= "<li>" . html::a($link, $this->lang->testcase->batchCreate, '', $misc) . "</li>";
                 }
 
                 $menu .= "</ul></div>";
             }
 
-            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
+            if($this->app->tab == 'execution' and $story->status == 'active') $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonlybody');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
@@ -4378,7 +4400,7 @@ class storyModel extends model
                 }
 
                 $this->lang->task->create = $this->lang->execution->wbs;
-                $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
+                $toTaskDisabled = $story->status == 'active' ? '' : 'disabled';
                 if(commonModel::isTutorialMode())
                 {
                     $wizardParams = helper::safe64Encode($param);

@@ -549,6 +549,10 @@ class upgradeModel extends model
                 $this->updateStoryStatus();
                 if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
                 break;
+            case '17_6':
+                $this->updateStoryFile();
+                $this->convertTaskteam();
+                break;
         }
 
         $this->deletePatch();
@@ -7203,5 +7207,75 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
             }
         }
+    }
+
+    /**
+     * Update story file version.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryFile()
+    {
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        /* Get story version. */
+        $storyIDList = array();
+        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
+        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
+
+        foreach($storyFileList as $file)
+        {
+            if(!is_numeric($file->extra)) continue;
+
+            $fileExtra    = '';
+            $storyVersion = $storyVersionList[$file->objectID];
+            if($file->extra != $storyVersion)
+            {
+                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
+                $fileExtra .= ',';
+            }
+            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+
+            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Convert task team to table: zt_taskteam.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertTaskteam()
+    {
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, `left`')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        foreach($oldTeamGroup as $taskID => $oldTeams)
+        {
+            $order = 0;
+            foreach($oldTeams as $oldTeam)
+            {
+                $oldTeam->order  = $order;
+                $oldTeam->status = 'wait';
+                if($oldTeam->consumed > 0 and $oldTeam->left > 0)  $oldTeam->status = 'doing';
+                if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
+
+                $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+
+                if($this->config->edition == 'open')
+                {
+                    $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->exec();
+                }
+                else
+                {
+                    $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                }
+                $order ++;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
     }
 }
