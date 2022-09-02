@@ -483,26 +483,14 @@ class weeklyModel extends model
             ->andWhere("deleted")->eq(0)
             ->fetchPairs();
 
-        if($this->config->edition != 'open')
-        {
-            $AC = $this->dao->select('sum(consumed) as consumed')
-                ->from(TABLE_EFFORT)
-                ->where('objectType')->eq('task')
-                ->andWhere('objectID')->in($taskIdList)
-                ->andWhere('execution')->in($executionIdList)
-                ->andWhere('date')->ge($monday)
-                ->andWhere('date')->lt($nextMonday)
-                ->fetch('consumed');
-        }
-        else
-        {
-            $AC = $this->dao->select('sum(consumed) as consumed')
-                ->from(TABLE_TASKESTIMATE)
-                ->where('task')->in($taskIdList)
-                ->andWhere('date')->ge($monday)
-                ->andWhere('date')->lt($nextMonday)
-                ->fetch('consumed');
-        }
+        $AC = $this->dao->select('sum(consumed) as consumed')
+            ->from(TABLE_EFFORT)
+            ->where('objectType')->eq('task')
+            ->andWhere('objectID')->in($taskIdList)
+            ->andWhere('execution')->in($executionIdList)
+            ->andWhere('date')->ge($monday)
+            ->andWhere('date')->lt($nextMonday)
+            ->fetch('consumed');
 
         if(is_null($AC)) $AC = 0;
 
