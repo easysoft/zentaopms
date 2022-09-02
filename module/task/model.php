@@ -487,7 +487,7 @@ class taskModel extends model
                 $clonedTaskID = $this->dao->lastInsertID();
 
                 /* Update the table by judging the beginning of the version number. */
-                if(preg_match('/^\d/', $this->config->version))
+                if($this->config->edition == 'open')
                 {
                     /* ZenTao Pms update TABLE_TASKESTIMATE. */
                     $this->dao->update(TABLE_TASKESTIMATE)->set('task')->eq($clonedTaskID)->where('task')->eq($oldParentTask->id)->exec();
@@ -985,6 +985,8 @@ class taskModel extends model
         $taskID     = 0;
         foreach($teams as $team)
         {
+            if(isset($extra['order']) and $team->order == $extra['order'] and $team->account == $account) return $team;
+
             if(empty($taskID)) $taskID = $team->task;
             if(isset($members[$team->account]))  $duplicates[$team->account] = $team->account;
             if(!isset($members[$team->account])) $members[$team->account]    = 0;
@@ -1746,7 +1748,7 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = (!empty($oldTask->team) and $currentTeam) ? $estimate->consumed - $currentTeam->consumed : $estimate->consumed - $oldTask->consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        $this->addTaskEstimate($estimate);
+        $estimateID = $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team) and $currentTeam)
         {
@@ -1756,6 +1758,7 @@ class taskModel extends model
             $data->status   = 'doing';
 
             $this->dao->update(TABLE_TASKTEAM)->data($data)->where('id')->eq($currentTeam->id)->exec();
+            if($oldTask->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
             $task = $this->computeHours4Multiple($oldTask, $task);
 
@@ -1834,6 +1837,7 @@ class taskModel extends model
                 $estimates[$id]->left     = $record->left[$id];
                 $estimates[$id]->work     = $record->work[$id];
                 $estimates[$id]->account  = $this->app->user->account;
+                $estimates[$id]->order    = !empty($record->order[$id]) ? $record->order[$id] : 0;
             }
         }
 
@@ -1903,11 +1907,14 @@ class taskModel extends model
             /* Process multi-person task. Update consumed on team table. */
             if(!empty($task->team))
             {
-                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account);
+                $extra = array('filter' => 'done');
+                if(!empty($estimate->order)) $extra['order'] = $estimate->order;
+                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
                 if($currentTeam)
                 {
                     $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
                     $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
+                    if($task->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
                     $currentTeam->consumed += $estimate->consumed;
                     $currentTeam->left      = $estimate->left;
                     $currentTeam->status    = $teamStatus;
@@ -1946,12 +1953,15 @@ class taskModel extends model
     public function resetEffortLeft($taskID, $members)
     {
         $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
-        $this->dao->update($table)->set('`left`')->eq(0)->where('account')->in($members)
-            ->beginIF($this->config->edition == 'open')->andWhere('task')->eq($taskID)->fi()
-            ->beginIF($this->config->edition != 'open')->andWhere('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fi()
-            ->orderBy('date_desc,id_desc')
-            ->limit('1')
-            ->exec();
+        foreach($members as $account)
+        {
+            $this->dao->update($table)->set('`left`')->eq(0)->where('account')->eq($account)
+                ->beginIF($this->config->edition == 'open')->andWhere('task')->eq($taskID)->fi()
+                ->beginIF($this->config->edition != 'open')->andWhere('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fi()
+                ->orderBy('date_desc,id_desc')
+                ->limit('1')
+                ->exec();
+        }
     }
 
     /**
@@ -2020,11 +2030,12 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        if($estimate->consumed) $this->addTaskEstimate($estimate);
+        if($estimate->consumed) $estimateID = $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team) and $currentTeam)
         {
             $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
+            if($oldTask->mode == 'linear' and isset($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
 
@@ -2776,15 +2787,30 @@ class taskModel extends model
     }
 
     /**
+     * Update estimate order for linear task team.
+     *
+     * @param  int    $estimateID
+     * @param  int    $order
+     * @access public
+     * @return void
+     */
+    public function updateEstimateOrder($estimateID, $order)
+    {
+        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
+        $this->dao->update($table)->set('`order`')->eq((int)$order)->where('id')->eq($estimateID)->exec();
+    }
+
+    /**
      * Get task estimate.
      *
      * @param  int    $taskID
      * @param  string $account
      * @param  string $append
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getTaskEstimate($taskID, $account = '', $append = '')
+    public function getTaskEstimate($taskID, $account = '', $append = '', $orderBy = 'date,id')
     {
         if($this->config->edition == 'open')
         {
@@ -2792,7 +2818,7 @@ class taskModel extends model
                 ->where('task')->eq($taskID)
                 ->beginIF($account)->andWhere('account')->eq($account)->fi()
                 ->beginIF($append)->orWhere('id')->eq($append)->fi()
-                ->orderBy('date,id')
+                ->orderBy($orderBy)
                 ->fetchAll();
         }
         return $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
@@ -2800,7 +2826,7 @@ class taskModel extends model
             ->andWhere('deleted')->eq('0')
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
-            ->orderBy('date,id')
+            ->orderBy($orderBy)
             ->fetchAll();
     }
 
@@ -2838,7 +2864,6 @@ class taskModel extends model
         /* Check for add effort. */
         if(empty($effort))
         {
-            if($task->mode == 'linear' and strpos('|done|closed|cancel|pause|', "|{$task->status}|") !== false) return false;
             $members = array_map(function($member){ return $member->account; }, $task->team);
             if(!in_array($this->app->user->account, $members)) return false;
             if($task->mode == 'linear' and $this->app->user->account != $task->assignedTo) return false;
@@ -2899,7 +2924,7 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('effortID' => $estimateID));
+            $currentTeam = $this->getTeamByAccount($task->team, $oldEstimate->account, array('order' => $oldEstimate->order));
             if($currentTeam)
             {
                 $newTeamInfo = new stdClass();
@@ -2985,7 +3010,7 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $currentTeam = $this->getTeamByAccount($task->team, $estimate->account, array('effortID' => $estimateID));
+            $currentTeam = $this->getTeamByAccount($task->team, $estimate->account, array('effortID' => $estimateID, 'order' => $estimate->order));
             if($currentTeam)
             {
                 $left = $currentTeam->left;
@@ -3589,11 +3614,12 @@ class taskModel extends model
      *
      * @param  object    $data
      * @access public
-     * @return void
+     * @return int
      */
     public function addTaskEstimate($data)
     {
         $this->dao->insert(TABLE_TASKESTIMATE)->data($data)->autoCheck()->exec();
+        return $this->dao->lastInsertID();
     }
 
     /**

@@ -35,6 +35,10 @@ class api extends control
      */
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs($appendLib);
+        if($libID == 0 and !empty($libs)) $libID = key($libs);
+
         /* Get an api doc. */
         if($apiID > 0)
         {
@@ -60,11 +64,6 @@ class api extends control
             $this->view->apiList  = $apiList;
             $this->view->typeList = $this->api->getTypeList($libID);
         }
-
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib);
-        if($libID == 0 and $apiID > 0) $libID = $api->lib;
-        if($libID == 0 and !empty($libs)) $libID = key($libs);
 
         $lib       = $this->doc->getLibById($libID);
         $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;

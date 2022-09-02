@@ -1307,3 +1307,25 @@ function setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth)
 
     if($name.width() < nameMinWidth) $name.width(200);
 }
+
+/**
+ * Refresh budget units of the project.
+ *
+ * @param  object $data
+ * @access public
+ * @return void
+ */
+function refreshBudgetUnit(data)
+{
+    $('#budgetUnit').val(data.budgetUnit).trigger('chosen:updated');
+    if(typeof(data.availableBudget) == 'undefined')
+    {
+        $('#budget').removeAttr('placeholder').attr('disabled', true);
+        $('#future').prop('checked', true);
+    }
+    else
+    {
+        $('#budget').removeAttr('disabled');
+        $('#future').prop('checked', false);
+    }
+}

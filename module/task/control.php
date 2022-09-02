@@ -1177,8 +1177,12 @@ class task extends control
         $this->session->set('estimateList', $uri, 'execution');
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
-        $this->view->task      = $this->task->getById($taskID);
-        $this->view->estimates = $this->task->getTaskEstimate($taskID);
+        $task    = $this->task->getById($taskID);
+        $orderBy = 'date,id';
+        if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
+
+        $this->view->task      = $task;
+        $this->view->estimates = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
         $this->view->title     = $this->lang->task->record;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
