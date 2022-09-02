@@ -12,7 +12,7 @@ cid=1
 pid=1
 
 Gogs名称为空    >> name
-服务器地址为空   >> url
+服务器地址为空  >> url
 正确Gogs数据    >> Gogs,http://10.0.7.242:9021,9ff43f9d1a369465bcf0781a3785f46bcef782d1
 
 */

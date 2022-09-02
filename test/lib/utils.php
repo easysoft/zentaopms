@@ -236,7 +236,7 @@ function copyDB()
 
     foreach($dbUsed as $db)
     {
-        if ($currentDBNum->num > 0) $dao->query('drop database ' . $db);
+        if($currentDBNum->num > 0) $dao->query('DROP DATABASE IF EXISTS ' . $db);
         $dao->query('CREATE DATABASE ' . $db);
         shell_exec("mysql -h{$config->db->host} -P {$config->db->port} -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
         echo '数据库<' . $db . '>复制成功！' . PHP_EOL;
