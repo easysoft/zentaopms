@@ -1858,10 +1858,10 @@ function swipeRegionNavTabs($object, direction)
         var radius     = $item.hasClass('active') ? radiusWidth : 0;
 
         /* Calculate the offset after sliding. */
-        if(direction == 'left' && (itemOffset + distance + radius + radiusWidth) >= -5)
+        if(direction == 'left' && (itemOffset + distance + radius) >= -5)
         {
             /* If you swipe left, the distance is equal to the item's left. */
-            distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0) - radiusWidth;
+            distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
             if($item.prev().length == 0)
             {
                 distance = 0;
@@ -1875,10 +1875,10 @@ function swipeRegionNavTabs($object, direction)
         }
 
         var nextRadius = $item.next().hasClass('active') ? radiusWidth : 0;
-        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius + radiusWidth))
+        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius + radiusWidth * 2))
         {
             /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
-            distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth;
+            distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
             if($item.next().length == 0)
             {
                 distance = - objectWidth + offsetWidth - radiusWidth * 2;
@@ -1916,13 +1916,27 @@ function initRegionTabs()
     /* Print left and right button. */
     if(regionTabULWidth > regionTabsWidth) $('.leftBtn, .rightBtn').removeClass('hidden');
 
-    if(acitiveItemLeft + distance + radiusWidth < 0 || acitiveItemWidth + acitiveItemLeft + distance + radiusWidth> regionTabsWidth)
+    if(acitiveItemLeft + distance < 0)
     {
-        /* Locate the position of the currently selected item. */
-        distance    = (acitiveItemLeft + acitiveItemWidth) > regionTabsWidth ? - (acitiveItemLeft + acitiveItemWidth - regionTabsWidth + radiusWidth * 2) : 0;
-        if($acitiveItem.prev().length == 0) distance = 0;
-        $regionNavTabs.find('ul')[0].style.transform = 'translateX(' + distance + 'px)';
+        distance = - acitiveItemLeft;
+        if($acitiveItem.prev().length == 0)
+        {
+            distance = 0;
+            $('.leftBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
     }
+    else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
+    {
+        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+        if($acitiveItem.next().length == 0)
+        {
+            distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+            $('.rightBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+
     if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
     if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
     $('#kanbanBox').removeClass('hidden');
