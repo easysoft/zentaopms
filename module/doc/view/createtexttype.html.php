@@ -48,7 +48,10 @@
 
 #basicInfoLink {border: unset;}
 
+#modalBasicInfo .modal-content {overflow-x: hidden; overflow-y: scroll;}
+#modalBasicInfo .modal-body {padding-bottom: 10px;}
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
+#basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
@@ -81,7 +84,7 @@
       </tbody>
     </table>
 
-    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='false'>
+    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='true'>
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
@@ -159,6 +162,7 @@ $(function()
 {
     var contentHeight = $(document).height() - 120;
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
+    $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
 
