@@ -23,7 +23,7 @@ $jenkinsID = 3;
 
 $_POST = array();
 $_POST['name']     = '';
-$_POST['url']      = 'http://10.0.1.161:58080';
+$_POST['url']      = 'http://10.0.7.242:9580';
 $_POST['account']  = 'admin';
 $_POST['token']    = '1196c85ba525a268570df9da627e3a7b2d';
 $_POST['password'] = '';
@@ -34,7 +34,7 @@ $_POST['name']     = 'Changed Jenkins';
 $_POST['url']      = '';
 r($jenkins->update($jenkinsID)) && p() && e('url');    // 服务器地址为空
 
-$_POST['url'] = 'http://10.0.1.161:58080';
+$_POST['url'] = 'http://10.0.7.242:9580';
 r($jenkins->update($jenkinsID)) && p('name') && e('Changed Jenkins');    // 正确Jenkins数据
 
 $db->restoreDB();
