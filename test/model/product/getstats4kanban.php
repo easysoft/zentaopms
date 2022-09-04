@@ -14,7 +14,7 @@ pid=1
 测试获取产品的看板stats信息 >> 项目3;项目4;项目5
 测试获取产品的看板stats信息 >> 迭代544;迭代546;迭代552
 测试获取产品的看板stats信息 >> 44.44,9;100,10
-测试获取产品的看板stats信息 >> 14
+测试获取产品的看板stats信息 >> 13
 测试获取产品的看板stats信息 >> 22
 测试获取产品的看板stats信息 >> 72
 测试获取产品的看板stats信息 >> 2
@@ -30,7 +30,7 @@ r($product->getStats4KanbanTest($typeList[1]))       && p('1:name;2:name;3:name'
 r($product->getStats4KanbanTest($typeList[3]))       && p('13:name;14:name;15:name')                       && e('项目3;项目4;项目5');             // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[6]))       && p('14:name;16:name;22:name')                       && e('迭代544;迭代546;迭代552');       // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[7]))       && p('612:progress,totalReal;618:progress,totalReal') && e('44.44,9;100,10');                // 测试获取产品的看板stats信息
-r($product->getStats4KanbanTest($typeList[2], true)) && p()                                                && e('14');                            // 测试获取产品的看板stats信息
+r($product->getStats4KanbanTest($typeList[2], true)) && p()                                                && e('13');                            // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[4], true)) && p()                                                && e('22');                            // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[5], true)) && p()                                                && e('72');                            // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[8], true)) && p()                                                && e('2');                             // 测试获取产品的看板stats信息
