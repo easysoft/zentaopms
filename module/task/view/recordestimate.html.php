@@ -99,7 +99,7 @@
           <tr class='text-center'>
             <th class="w-150px"><?php echo $lang->task->date;?></th>
             <?php if($readonly):?>
-            <th class="w-60px"><?php echo $lang->task->teamOrder;?></th>
+            <th class="w-60px <?php if(count($reverseOrders) == 1) echo "hidden"?>"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
             <th><?php echo $lang->task->work;?></th>
             <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
@@ -107,7 +107,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 1; $i <= 5; $i++):?>
+          <?php for($i = 1; $i <= 3; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
@@ -117,7 +117,7 @@
               <?php echo html::hidden("id[$i]", $i);?>
             </td>
             <?php if($readonly):?>
-            <td><?php echo html::select("order[$i]", $reverseOrders, '', "class='form-control'")?></td>
+            <td class='<?php if(count($reverseOrders) == 1) echo "hidden"?>'><?php echo html::select("order[$i]", $reverseOrders, '', "class='form-control'")?></td>
             <?php endif;?>
             <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' rows=1");?></td>
             <td>
