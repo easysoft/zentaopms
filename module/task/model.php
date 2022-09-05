@@ -2981,7 +2981,12 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+        if($consumed == 0 and $task->status != 'wait')
+        {
+            $data->status = 'wait';
+            $data->left   = $task->estimate;
+        }
+        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
         {
             $data->status         = 'done';
             $data->assignedTo     = $task->openedBy;
