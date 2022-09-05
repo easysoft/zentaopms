@@ -43,7 +43,7 @@
         <tr class='text-center'>
           <th class="w-120px"><?php echo $lang->task->date;?></th>
           <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
-          <th><?php echo $lang->comment;?></th>
+          <th><?php echo $lang->task->work;?></th>
           <th class="thWidth"><?php echo $lang->task->consumed;?></th>
           <th class="thWidth"><?php echo $lang->task->left;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
@@ -97,11 +97,11 @@
       <table class='table table-form table-fixed table-record'>
         <thead>
           <tr class='text-center'>
-            <th class="w-120px"><?php echo $lang->task->date;?></th>
+            <th class="w-150px"><?php echo $lang->task->date;?></th>
             <?php if($readonly):?>
             <th class="w-60px"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
-            <th><?php echo $lang->comment;?></th>
+            <th><?php echo $lang->task->work;?></th>
             <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
             <th class="w-100px"><?php echo $lang->task->leftAB;?></th>
           </tr>
@@ -110,7 +110,10 @@
           <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
+              <div class='input-group'>
               <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
+              <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
+              </div>
               <?php echo html::hidden("id[$i]", $i);?>
             </td>
             <?php if($readonly):?>
