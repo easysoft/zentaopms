@@ -294,10 +294,12 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
+              <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
-                <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
+                <th class='w-100px'><?php echo $lang->story->duplicateStory;?></th>
                 <td><?php echo html::select('duplicateStory', array('' => '') + $productStories, $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td>
               </tr>
+              <?php endif;?>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory;?></th>
                 <td>

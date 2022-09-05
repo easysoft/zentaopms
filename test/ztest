@@ -190,6 +190,9 @@ switch($argv[1])
     case 'gitea':
         ztfRun('model/gitea');
         break;
+    case 'gogs':
+        ztfRun('model/gogs');
+        break;
     case 'webhook':
         ztfRun('model/webhook');
         break;

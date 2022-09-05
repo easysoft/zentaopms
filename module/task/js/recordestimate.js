@@ -6,9 +6,9 @@ $(function()
     {
         $('#recordForm .left').each(function()
         {
-            if($(this).val() !== '') left = $(this).val();
+            if($(this).val() !== '' && !$(this).prop('readonly')) left = $(this).val();
         });
-        if(left == '0')
+        if(typeof(left) != 'undefined' && left == '0')
         {
             var confirmMsg = confirm(confirmRecord);
             if(confirmMsg == false)

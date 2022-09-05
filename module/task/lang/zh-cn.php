@@ -56,6 +56,9 @@ $lang->task->copy                = '复制任务';
 $lang->task->waitTask            = '未开始的任务';
 $lang->task->allModule           = '所有模块';
 $lang->task->replace             = '替换';
+$lang->task->myEffort            = '我的日志';
+$lang->task->allEffort           = '所有日志';
+$lang->task->teamOrder           = '工序';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';

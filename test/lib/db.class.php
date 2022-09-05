@@ -143,7 +143,7 @@ class db
     {
         for($i = 1; $i <= $this->config->test->dbNum; $i++)
         {
-            $this->dao->query('DROP DATABASE ' . $this->config->test->dbPrefix . $i);
+            $this->dao->query('DROP DATABASE IF EXISTS ' . $this->config->test->dbPrefix . $i);
             $this->dao->query('CREATE DATABASE ' . $this->config->test->dbPrefix . $i);
 
             shell_exec("mysql -h{$this->config->db->host} -u {$this->config->db->user} -p{$this->config->db->password} -P {$this->config->db->port} {$this->config->test->dbPrefix}{$i} < {$this->sqlFile}");
