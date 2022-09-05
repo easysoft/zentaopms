@@ -1976,7 +1976,7 @@ class storyModel extends model
                 {
                     if(!empty($oldStory->plan) and isset($branchPlanPairs[$plan->branch]) and $branchPlanPairs[$plan->branch] != $planID) $unlinkPlans[$branchPlanPairs[$plan->branch]] = empty($unlinkPlans[$branchPlanPairs[$plan->branch]]) ? $storyID : "{$unlinkPlans[$branchPlanPairs[$plan->branch]]},$storyID";
                     if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
-                    $story->plan = $oldStory->plan ? ',' . implode(',', $branchPlanPairs) : $planID;
+                    $story->plan = $oldStory->plan ? implode(',', $branchPlanPairs) : $planID;
                     $story->plan = trim($story->plan, ',');
                     if($story->plan != $oldStory->plan and !empty($planID)) $link2Plans[$planID]  = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
                 }
