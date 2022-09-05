@@ -335,6 +335,8 @@ $(function()
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
     if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
 });
+
+if("<?php $from == 'doc'?>") parent.$('#triggerModal .modal-content .modal-header .close').on('click', function(){parent.location.reload();});
 </script>
 <style>
 .module-name {display: inline-block; max-width: calc(100% - 85px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
