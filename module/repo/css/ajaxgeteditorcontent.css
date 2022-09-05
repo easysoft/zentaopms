@@ -13,6 +13,7 @@
 #relationTabs .tab-nav-item .icon {line-height: inherit;}
 #relationTabs > .tabs-navbar {overflow: hidden; padding-bottom: 10px; position: relative; height: 35px;}
 #relationTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex;}
+#relationTabs .tab-nav-link .title {max-width: 300px; display: inline-block; white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 0 5px;}
 #related .content, #related .btn {background-color: #F4F5F7; border: none;}
 #related .nav-tabs > li.active > a:before {background: none; height: 0;}
 #related .table-empty-tip {padding: 35px 10px;}

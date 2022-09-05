@@ -162,8 +162,7 @@ function setTab(titleObj)
 {
     return {
         id:    titleObj.type + '-' + titleObj.id,
-        title: ' ' + titleObj.title,
-        icon:  titleObj.type == 'story' ? 'icon-lightbulb' : (titleObj.type == 'task' ? 'icon-check-sign' : 'icon-bug'),
+        title: titleObj.title,
         icon:  titleObj.type == 'story' ? 'icon-lightbulb text-primary' : (titleObj.type == 'task' ? 'icon-check-sign text-info' : 'icon-bug text-red'),
         type:  'iframe',
         url:   createLink('repo', 'ajaxGetRelationInfo', 'objectID=' + titleObj.id + '&objectType=' + titleObj.type)
@@ -257,6 +256,8 @@ $(function()
 
     $('#relationTabs').on('onOpen', function(event, tab)
     {
+        $('#tab-nav-item-' + tab.id).attr('title', tab.title);
+
         var objectInfo = tab.id.split('-');
         objectID       = objectInfo[0];
         objectType     = objectInfo[1];
