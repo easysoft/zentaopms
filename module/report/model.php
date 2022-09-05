@@ -373,7 +373,7 @@ class reportModel extends model
             {
                 $multiTaskTeams[$account][$taskTeam->task]->estimate += $taskTeam->estimate;
                 $multiTaskTeams[$account][$taskTeam->task]->consumed += $taskTeam->consumed;
-                $multiTaskTeams[$account][$taskTeam->task]->left      = $taskTeam->left;
+                $multiTaskTeams[$account][$taskTeam->task]->left     += $taskTeam->left;
             }
         }
         foreach($multiTaskTeams as $assignedTo => $taskTeams)
