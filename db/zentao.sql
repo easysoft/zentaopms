@@ -1594,6 +1594,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `consumed` float unsigned NOT NULL,
   `account` char(30) NOT NULL default '',
   `work` text,
+  `order` tinyint(3) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1605,6 +1606,20 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `estStarted` date NOT NULL,
   `deadline` date NOT NULL,
   UNIQUE KEY `task` (`task`,`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_taskteam`;
+CREATE TABLE `zt_taskteam` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `task` mediumint(8) unsigned NOT NULL,
+  `account` char(30) NOT NULL,
+  `estimate` decimal(12,2) NOT NULL,
+  `consumed` decimal(12,2) NOT NULL,
+  `left` decimal(12,2) NOT NULL,
+  `transfer` char(30) NOT NULL,
+  `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `order` tinyint(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task` (`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
@@ -6520,6 +6535,7 @@ ALTER TABLE `zt_effort` ADD `consumed` float NOT NULL AFTER `left`;
 ALTER TABLE `zt_effort` CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL AFTER `consumed`;
 ALTER TABLE `zt_effort` CHANGE `end` `end` smallint(4) unsigned zerofill NOT NULL AFTER `begin`;
 ALTER TABLE `zt_effort` ADD `deleted` enum('0','1') NOT NULL DEFAULT '0' AFTER `end`;
+ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
 ALTER TABLE `zt_effort` ADD INDEX `execution` (`execution`);
 ALTER TABLE `zt_effort` ADD INDEX `objectID` (`objectID`);
 ALTER TABLE `zt_effort` ADD INDEX `date` (`date`);

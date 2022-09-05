@@ -50,6 +50,8 @@ $config->story->custom->createFields      = $config->story->list->customCreateFi
 $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
+$config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto,';
+
 global $lang, $app;
 $config->story->datatable = new stdclass();
 if($app->tab == 'execution')
@@ -70,7 +72,7 @@ if($app->tab == 'execution')
 {
     $config->story->datatable->fieldList['order']['title']    = 'order';
     $config->story->datatable->fieldList['order']['fixed']    = 'left';
-    $config->story->datatable->fieldList['order']['width']    = '60';
+    $config->story->datatable->fieldList['order']['width']    = '45';
     $config->story->datatable->fieldList['order']['sort']     = 'no';
     $config->story->datatable->fieldList['order']['required'] = 'no';
     $config->story->datatable->fieldList['order']['name']     = $this->lang->story->order;
@@ -78,7 +80,7 @@ if($app->tab == 'execution')
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '50';
+$config->story->datatable->fieldList['pri']['width']    = '35';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 $config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 

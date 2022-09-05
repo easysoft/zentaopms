@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
@@ -77,7 +78,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           </td>
           <td>
             <div class="checkbox-primary c-multipleTask affair">
-              <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
+              <input type="checkbox" name="multiple" value="1" id="multipleBox" /><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
@@ -123,13 +124,14 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 <tr class='text-center'>
                   <th class='w-150px'><?php echo $lang->task->storyAB;?></th>
                   <th class='w-60px'><?php echo $lang->task->pri;?></th>
-                  <th class='w-200px'><?php echo $lang->task->datePlan;?></th>
+                  <th class='w-100px'><?php echo $lang->task->estStarted;?></th>
+                  <th class='w-100px'><?php echo $lang->task->deadline;?></th>
                   <th class='w-60px'><?php echo $lang->task->assignedTo;?></th>
                   <th class='w-60px'><?php echo $lang->task->estimate;?></th>
                   <th class='w-60px'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="resarch">
                 <?php $i = 0;?>
                 <?php foreach($testStories as $storyID => $storyTitle):?>
                 <?php if($i > 0) $members['ditto'] = $lang->task->ditto;?>
@@ -139,13 +141,15 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                   <td>
                     <div class='input-group'>
                       <?php
-                        echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");
-                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testEstStarted[]", $task->estStarted, "class='startInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->estStarted}'");
+                        if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[]' id='estStartedDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
-                      <span class='input-group-addon fix-border'>~</span>
+                    </div>
+                  <td>
+                    <div class='input-group'>
                       <?php
-                        echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");
-                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                        echo html::input("testDeadline[]", $task->deadline, "class='deadlineInput form-control form-date' onchange='hiddenDitto(this)' placeholder='{$lang->task->deadline}'");
+                        if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[]' id='deadlineDitto' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                       ?>
                     </div>
                   </td>
@@ -289,24 +293,11 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             <div class='modal-body'>
               <table class="table table-form" id='taskTeamEditor'>
                 <tbody class='sortable'>
-                  <tr class='template'>
-                    <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                    <td class="<?php echo zget($requiredFields, 'estimate', '', ' required')?>">
-                      <div class='input-group'>
-                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                        <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                      </div>
-                    </td>
-                    <td class='w-130px sort-handler'>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                      <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                    </td>
-                  </tr>
+                  <?php include __DIR__ . DS . 'taskteam.html.php';?>
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
+                    <td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>
@@ -343,6 +334,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('executionType', $execution->type);?>
+<?php js::set('newRowCount', 5);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>

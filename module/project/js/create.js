@@ -145,6 +145,7 @@ function setParentProgram(parentProgram)
         }
         budgetOverrunTips();
         outOfDateTip();
+        refreshBudgetUnit(data);
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);

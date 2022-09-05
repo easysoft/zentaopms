@@ -6,7 +6,8 @@
  */
 function confirmLeft()
 {
-    if($('#left').val() === '0') return confirm(confirmRecord);
+    $left = $('#left');
+    if(!$left.prop('readonly') && $left.val() === '0') return confirm(confirmRecord);
 }
 
 $(function()

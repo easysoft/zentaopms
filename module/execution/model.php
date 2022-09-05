@@ -2343,7 +2343,8 @@ class executionModel extends model
     {
         $this->loadModel('task');
 
-        $tasks = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
+        $execution = $this->getByID($executionID);
+        $tasks     = $this->dao->select('id,execution,assignedTo,story,consumed,status')->from(TABLE_TASK)->where('id')->in($this->post->tasks)->fetchAll('id');
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to execution. */
@@ -2351,8 +2352,9 @@ class executionModel extends model
             $stories[$task->story]           = $task->story;
 
             $data = new stdclass();
+            $data->project   = $execution->project;
             $data->execution = $executionID;
-            $data->status  = $task->consumed > 0 ? 'doing' : 'wait';
+            $data->status    = $task->consumed > 0 ? 'doing' : 'wait';
 
             if($task->status == 'cancel')
             {
@@ -2929,29 +2931,6 @@ class executionModel extends model
             ->andWhere('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('root');
-    }
-
-    /**
-     * Get the skip members of the team.
-     *
-     * @param  array  $teams
-     * @param  string $begin
-     * @param  string $end
-     * @access public
-     * @return array
-     */
-    public function getTeamSkip($teams, $begin, $end)
-    {
-        $members = array();
-        foreach($teams as $account => $team)
-        {
-            if($account == $end) break;
-            if(!empty($begin) and $account != $begin and empty($members)) continue;
-
-            $members[$account] = $team;
-        }
-
-        return $members;
     }
 
     /**
@@ -3669,7 +3648,7 @@ class executionModel extends model
 
         if(empty($tasks)) return array();
 
-        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
         if(!empty($taskTeam))
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
@@ -4642,7 +4621,7 @@ class executionModel extends model
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
         $class = !empty($execution->children) ? 'disabled' : '';
-        common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+        common::printIcon('task', 'create', "executionID={$execution->id}", '', 'list', '', '', $class, false, "data-app='execution'");
 
         if($execution->type == 'stage')
         {

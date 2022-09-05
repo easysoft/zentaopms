@@ -98,7 +98,7 @@ $lang->bug->noticefeedbackBy = '通知反馈者';
 $lang->bug->selectProjects   = '选择项目';
 $lang->bug->nextStep         = '下一步';
 $lang->bug->noProject        = '还没有选择项目！';
-$lang->bug->noExecution      = '还没有选择执行！';
+$lang->bug->noExecution      = "还没有选择{$lang->execution->common}！";
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';

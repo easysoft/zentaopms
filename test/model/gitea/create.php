@@ -13,7 +13,7 @@ pid=1
 
 Gitea名称为空    >> name
 服务器地址为空   >> url
-正确Gitea数据    >> Gitea,http://10.0.1.161:58080,1196c85ba525a268570df9da627e3a7b2d
+正确Gitea数据    >> Gitea,http://10.0.7.242:9020,1196c85ba525a268570df9da627e3a7b2d
 
 */
 

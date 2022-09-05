@@ -131,7 +131,7 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open') $this->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -549,6 +549,11 @@ class upgradeModel extends model
                 $this->updateStoryStatus();
                 if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
                 break;
+            case '17_6':
+                $this->updateStoryFile();
+                $this->convertTaskteam();
+                $this->convertEstToEffort();
+                break;
         }
 
         $this->deletePatch();
@@ -702,6 +707,8 @@ class upgradeModel extends model
                 $this->addFlowActions('biz7.4');
                 $this->addFlowFields('biz7.4');
                 break;
+            case 'biz7_6':
+                //$this->processFeedbackModule();
         }
     }
 
@@ -7156,7 +7163,7 @@ class upgradeModel extends model
     {
         if(empty($this->config->URAndSR)) return true;
 
-        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM " . TABLE_GROUPPRIV . " WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
     }
@@ -7203,5 +7210,155 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
             }
         }
+    }
+
+    /**
+     * Update story file version.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryFile()
+    {
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        /* Get story version. */
+        $storyIDList = array();
+        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
+        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
+
+        foreach($storyFileList as $file)
+        {
+            if(!is_numeric($file->extra)) continue;
+
+            $fileExtra    = '';
+            $storyVersion = $storyVersionList[$file->objectID];
+            if($file->extra != $storyVersion)
+            {
+                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
+                $fileExtra .= ',';
+            }
+            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+
+            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Process feedback module
+     * 
+     * @access public
+     * @return void
+     */
+    public function processFeedbackModule()
+    {
+
+        $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
+        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
+        $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
+
+        $allProductRelation = array();
+        foreach($products as $product)
+        {
+            $productID = $product->id;
+            $relation  = array();
+            foreach($modules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $productID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $allProductRelation[$productID][$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+                $newPaths = join(',', $newPaths);
+                $parent   = !empty($module->parent) and isset($relation[$module->parent]) ? $relation[$module->parent] : 0;
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
+            }
+        }
+
+        /* Update feedback module */
+        foreach($feedbacks as $feedback)
+        {
+            $moduleID = $feedback->module;
+            $product  = $feedback->product;
+            if(empty($moduleID)) continue;
+            $newModuleID = $allProductRelation[$product][$moduleID];
+            if(empty($newModuleID)) continue;
+
+            $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
+        }
+
+        /* Delete history module */
+        $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+    
+    /*
+     * Convert task team to table: zt_taskteam.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertTaskteam()
+    {
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, `left`')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        foreach($oldTeamGroup as $taskID => $oldTeams)
+        {
+            $order = 0;
+            foreach($oldTeams as $oldTeam)
+            {
+                $oldTeam->order  = $order;
+                $oldTeam->status = 'wait';
+                if($oldTeam->consumed > 0 and $oldTeam->left > 0)  $oldTeam->status = 'doing';
+                if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
+
+                $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                $order ++;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
+    }
+
+    /**
+     * Convert estimate to effort.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertEstToEffort()
+    {
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+
+        $this->loadModel('action');
+        foreach($estimates as $estimate)
+        {
+            $relation = $this->action->getRelatedFields('task', $estimate->task);
+
+            $effort = new stdclass();
+            $effort->objectType = 'task';
+            $effort->objectID   = $estimate->task;
+            $effort->product    = $relation['product'];
+            $effort->project    = (int)$relation['project'];
+            $effort->account    = $estimate->account;
+            $effort->work       = empty($estimate->work) ? $this->lang->effort->handleTask : $estimate->work;
+            $effort->date       = $estimate->date;
+            $effort->left       = $estimate->left;
+            $effort->consumed   = $estimate->consumed;
+            $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
+
+            $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
+            $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
     }
 }

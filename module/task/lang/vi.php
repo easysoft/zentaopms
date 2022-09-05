@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Tạm ngưng';
 $lang->task->view                = "Chi tiết nhiệm vụ";
 $lang->task->logEfforts          = "Chấm công";
 $lang->task->record              = "Dự tính";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->start               = "Bắt đầu";
 $lang->task->startAction         = "Bắt đầu nhiệm vụ";
 $lang->task->restart             = "Tiếp tục";
@@ -52,6 +53,7 @@ $lang->task->progressTips        = 'Đã làm/(Đã làm + Còn lại)';
 $lang->task->copy                = 'Copy nhiệm vụ';
 $lang->task->waitTask            = 'Đang đợi nhiệm vụ';
 $lang->task->allModule           = 'Tất cả Module';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common           = 'Nhiệm vụ';
 $lang->task->id               = 'ID';

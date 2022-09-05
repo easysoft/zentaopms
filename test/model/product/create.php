@@ -14,7 +14,7 @@ pid=1
 
 测试正常的创建 >> case1
 测试不填产品代号的情况 >> 『产品代号』不能为空。
-测试创建重复的产品 >> 『产品代号』已经有『testcase1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+测试创建重复的产品 >> 『产品代号』已经有『testcase1』这条记录了。
 测试不填产品名称的情况 >> 『产品名称』不能为空。
 测试传入name和code >> case3,testcase3
 测试传入program、name、code >> 3,case4,testcase4
@@ -36,7 +36,7 @@ $t_noacl = array('name' => 'case12', 'code' => 'testcase1', 'acl' => '');
 
 r($product->createObject($t_create))       && p('name')                && e('case1');                  // 测试正常的创建
 r($product->createObject($t_noid))         && p('code:0')              && e('『产品代号』不能为空。'); // 测试不填产品代号的情况
-r($product->createObject($t_repeat))       && p('code:0')              && e('『产品代号』已经有『testcase1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试创建重复的产品
+r($product->createObject($t_repeat))       && p('code:0')              && e('『产品代号』已经有『testcase1』这条记录了。'); // 测试创建重复的产品
 r($product->createObject($t_noname))       && p('name:0')              && e('『产品名称』不能为空。'); // 测试不填产品名称的情况
 r($product->createObject($t_namecode))     && p('name,code')           && e('case3,testcase3');        // 测试传入name和code
 r($product->createObject($t_pronamecode))  && p('program,name,code')   && e('3,case4,testcase4');      // 测试传入program、name、code

@@ -138,6 +138,12 @@ class testcaseModel extends model
         $pri    = 3;
         foreach($cases->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('testcase', $cases, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
+                return false;
+            }
+
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
             $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];

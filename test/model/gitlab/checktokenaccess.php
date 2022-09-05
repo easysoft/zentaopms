@@ -30,7 +30,7 @@ $result = $gitlab->checkTokenAccess($host, $token);
 if(!$result) $result = 'return false';
 r($result) && p() && e('return false'); //使用错误的host验证token权限
 
-$host   = 'http://10.0.1.161:51080';
+$host   = 'http://10.0.7.242:9980';
 $result = $gitlab->checkTokenAccess($host, $token);
 if(empty($result)) $result = 'return null';
 r($result) && p() && e('return null'); //使用正确的host,错误的token验证token权限

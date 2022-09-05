@@ -364,6 +364,13 @@ function toggleSelectTestStory()
     }
 }
 
+/**
+ * Add Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function addItem(obj)
 {
     var $tr = $(obj).closest('tr');
@@ -377,11 +384,47 @@ function addItem(obj)
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
     $nextTr.find('.form-date').val('').datepicker();
+
+    if($nextTr.find('#testAssignedTo option:selected').val() == '')
+    {
+        $nextTr.find('#testAssignedTo').append("<option value='ditto' title='" + ditto + "'>" + ditto + "</option>");
+        $nextTr.find('#testAssignedTo').val('ditto').chosen().trigger('chosen:updated');
+    }
+    if($nextTr.find('.deadlineBox').length == 0)
+    {
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[]" id="deadlineDitto" checked/> ' + ditto + '</span>');
+    }
+    if($nextTr.find('.estStartedBox').length == 0)
+    {
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[] id="estStartedDitto" checked/> ' + ditto + '</span>');
+    }
+
+    if($nextTr.find('.deadlineBox').is(':hidden'))
+    {
+        $nextTr.find('.deadlineBox').show();
+        $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
+    }
+    if($nextTr.find('.estStartedBox').is(':hidden'))
+    {
+        $nextTr.find('.estStartedBox').show();
+        $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
+    }
 }
 
+/**
+ * remove Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function removeItem(obj)
 {
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+    $('.resarch').find('tr:first').find('.estStartedBox').remove();
+    $('.resarch').find('tr:first').find('.deadlineBox').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo option[value="ditto"]').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo').val('').chosen().trigger('chosen:updated');
 }
 
 function markTestStory()
@@ -493,44 +536,6 @@ $(document).ready(function()
         $('#dataPlanGroup').fixInputGroup();
     });
 
-    /* Init task team manage dialog */
-    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
-    {
-        idStart: 0,
-        idEnd: 5,
-        chosen: true,
-        datetimepicker: false,
-        colorPicker: false,
-    });
-    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
-
-    var adjustButtons = function()
-    {
-        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
-    };
-
-    $taskTeamEditor.on('click', '.btn-add', function()
-    {
-        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
-        $newRow.addClass('highlight');
-        setTimeout(function()
-        {
-            $newRow.removeClass('highlight');
-        }, 1600);
-        adjustButtons();
-    }).on('click', '.btn-delete', function()
-    {
-        var $row = $(this).closest('tr');
-        $row.addClass('highlight').fadeOut(700, function()
-        {
-            $row.remove();
-            adjustButtons();
-        });
-    });
-
-    adjustButtons();
-
     $('#showAllModule').change(function()
     {
         var executionID = $('#execution').val();
@@ -561,45 +566,28 @@ $(document).on('click', '#testStory_chosen', function()
     $obj.trigger("chosen:updated");
 })
 
-$('#modalTeam .btn').click(function()
+$('#modalTeam tfoot .btn').click(function()
 {
     var team  = '';
     var time  = 0;
     var error = false;
-
-    /* Unique team. */
-    $('select[name^=team]').each(function(i)
-    {
-        value = $(this).val();
-        if(value == '') return;
-        $('select[name^=team]').each(function(j)
-        {
-            if(i <= j) return;
-            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
-        })
-    })
-    $('select[name^=team]').closest('tr.hidden').remove();
+    var mode  = $('#mode').val();
 
     $('select[name^=team]').each(function()
     {
+        if($(this).val() == '') return;
+
+        var tr      = $(this).closest('tr');
         var account = $(this).find('option:selected').text();
-        if(account != '')
-        {
-            team += ' ' + account;
-        }
+        team += ' ' + account;
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
-        if(!isNaN(estimate))
+        if(!isNaN(estimate) && estimate > 0) time += estimate;
+        if(account != '' && (isNaN(estimate) || estimate == 0))
         {
-            time += estimate;
-        }
-
-        var requiredFieldList = ',' + requiredFields + ',';
-        if(account && requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
-        {
-            alert(estimateNotEmpty);
-            error = true;
-            return false;
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
         }
     });
 
@@ -607,7 +595,7 @@ $('#modalTeam .btn').click(function()
     var teamList = team.split(" ");
     if(teamList.length <= 2)
     {
-        alert(teamMemberError);
+        bootbox.alert(teamMemberError);
         return false;
     }
     else
@@ -629,3 +617,27 @@ $('#modalTeam .btn').click(function()
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
+
+/**
+ * Toggle checkBox Ditto Whether to hide.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function hiddenDitto(obj)
+{
+    var $this  = $(obj);
+    var date   = $this.val();
+    var $ditto = $this.closest('div').find("input[type='checkBox']");
+    if(date == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}

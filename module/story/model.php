@@ -265,7 +265,7 @@ class storyModel extends model
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
-            $this->file->saveUpload($story->type, $storyID, $extra = 1);
+            $this->file->saveUpload($story->type, $storyID, ',1,');
 
             if(!empty($story->plan))
             {
@@ -445,18 +445,6 @@ class storyModel extends model
     {
         $forceReview = $this->checkForceReview();
 
-        $reviewers = '';
-        foreach($_POST['title'] as $index => $value)
-        {
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and empty($_POST['reviewDitto'][$index])) $reviewers = $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and !empty($_POST['reviewDitto'][$index])) $_POST['reviewer'][$index] = $reviewers;
-            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]) and $forceReview)
-            {
-                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                return false;
-            }
-        }
-
         $this->loadModel('action');
         $branch    = (int)$branch;
         $productID = (int)$productID;
@@ -481,6 +469,12 @@ class storyModel extends model
 
         foreach($stories->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('story', $stories, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->story->title);
+                return false;
+            }
+
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
@@ -495,11 +489,20 @@ class storyModel extends model
 
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
+        $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
             if(empty($title)) continue;
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
+            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
+            $stories->reviewer[$i] = $reviewers;
+            $_POST['reviewer'][$i] = $reviewers;
+            if(empty($stories->reviewer[$i]) and $forceReview)
+            {
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
+            }
 
             $story = new stdclass();
             $story->type       = $type;
@@ -685,7 +688,7 @@ class storyModel extends model
         $oldStoryReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
         $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
         $reviewerHasChanged = (array_diff(array_keys($oldStoryReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStoryReviewers)));
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged) $specChanged = true;
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or isset($_POST['deleteFiles'])) $specChanged = true;
 
         $now   = helper::now();
         $story = fixer::input('post')
@@ -703,7 +706,7 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
             ->setIF(!$specChanged, 'status', $oldStory->status)
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,comment,needNotReview,uid')
+            ->remove('files,labels,reviewer,comment,needNotReview,uid,deleteFiles')
             ->get();
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
@@ -760,6 +763,10 @@ class storyModel extends model
                     $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
                     $story->reviewers    = implode(',', $_POST['reviewer']);
                 }
+
+                $deleteFiles = isset($_POST['deleteFiles']) ? $_POST['deleteFiles'] : array();
+                if(!empty($deleteFiles)) $this->file->deleteStoryFile($story->id, $story->version, $deleteFiles);
+                $this->file->updateStoryFileVersion($story->id, $story->version, $deleteFiles);
             }
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
@@ -824,7 +831,7 @@ class storyModel extends model
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview,deleteFiles')
             ->get();
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
@@ -1031,6 +1038,9 @@ class storyModel extends model
                     $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
+
+            if(isset($_POST['deleteFiles'])) $this->file->deleteStoryFile($storyID, $oldStory->version, $_POST['deleteFiles']);
+            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1478,7 +1488,7 @@ class storyModel extends model
                 $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($deleteVersion)->exec();
             }
 
-            $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
+            $this->file->deleteStoryFile($storyID, $oldStory->version);
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
 
@@ -1585,10 +1595,10 @@ class storyModel extends model
      */
     public function recallChange($storyID)
     {
-        $story      = $this->getById($storyID);
-        $preVersion = $story->version - 1;
+        $story = $this->getById($storyID);
 
         /* Update story title and version and status. */
+        $preVersion = $story->version - 1;
         $preTitle   = $this->dao->select('title')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($preVersion)->fetch('title');
         $this->dao->update(TABLE_STORY)->set('title')->eq($preTitle)->set('version')->eq($preVersion)->set('status')->eq('active')->where('id')->eq($storyID)->exec();
 
@@ -1596,7 +1606,7 @@ class storyModel extends model
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
 
-        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($story->version)->exec();
+        $this->loadModel('file')->deleteStoryFile($storyID, $story->version);
     }
 
     /**

@@ -167,6 +167,12 @@ class bugModel extends model
         $pri       = 0;
         foreach($data->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('bug', $data, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                return false;
+            }
+
             $oses     = array_filter($data->oses[$i]);
             $browsers = array_filter($data->browsers[$i]);
 
@@ -202,7 +208,7 @@ class bugModel extends model
             $bug->module      = (int)$data->modules[$i];
             $bug->project     = (int)$data->projects[$i];
             $bug->execution   = (int)$data->executions[$i];
-            $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
+            $bug->openedBuild = isset($data->openedBuilds) ? implode(',', $data->openedBuilds[$i]) : '';
             $bug->color       = $data->color[$i];
             $bug->title       = $title;
             $bug->deadline    = $data->deadlines[$i];
@@ -2935,7 +2941,21 @@ class bugModel extends model
 
         /* If search criteria don't have products, append the selected product from the top left dropdown-menu. */
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
-        if(strpos($bugQuery, '`product`') === false) $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        if(strpos($bugQuery, '`product`') === false)
+        {
+            $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
+        }
+        else
+        {
+            $productParis  = $this->loadModel('product')->getPairs();
+            $productIDList = array_keys($productParis);
+
+            if(!empty($productIDList))
+            {
+                $productIDList = implode(',', $productIDList);
+                $bugQuery     .= ' AND `product` IN (' . $productIDList . ')';
+            }
+        }
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";

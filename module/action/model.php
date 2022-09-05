@@ -1620,6 +1620,11 @@ class actionModel extends model
             }
         }
 
+        if($action->objectType == 'review')
+        {
+            $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
+        }
+
         return $action;
     }
 
@@ -1765,6 +1770,19 @@ class actionModel extends model
             $module     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
             $repeatName = $this->loadModel('tree')->checkUnique($module);
             if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        }
+        elseif($action->objectType == 'reviewissue')
+        {
+            $issue = $this->dao->select('*')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch();
+            if(!empty($issue->review))
+            {
+                $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($issue->review)->fetch();
+                if($review->deleted)
+                {
+                    $this->app->loadLang('reviewissue');
+                    return print(js::alert($this->lang->reviewissue->undeleteAction));
+                }
+            }
         }
 
         /* Update deleted field in object table. */

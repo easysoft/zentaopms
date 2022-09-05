@@ -17,7 +17,7 @@
 <?php js::set('consumedEmpty', $lang->task->error->consumedEmptyAB);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+    <?php if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
@@ -67,9 +67,20 @@
           ?>
           </td>
         </tr>
-        <tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
-          <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
+          <td>
+            <?php
+            if(!empty($task->team) and $task->mode == 'linear')
+            {
+                echo zget($members, $task->nextBy) . html::hidden('assignedTo', $task->nextBy);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->realStarted;?></th>

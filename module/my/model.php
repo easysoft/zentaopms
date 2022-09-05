@@ -588,6 +588,7 @@ class myModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t1.id = t5.task")
             ->where($query)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -598,7 +599,7 @@ class myModel extends model
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.canceledBy')->eq($account)
             ->orWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->orWhere('t5.status')->eq("done")
             ->orWhere('t1.id')->in($taskIDList)
             ->markRight(1)
             ->fi()
@@ -612,7 +613,7 @@ class myModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
-        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
         if(!empty($taskTeam))
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;

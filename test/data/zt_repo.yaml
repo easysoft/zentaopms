@@ -47,7 +47,7 @@ fields:
     format: ""
   - field: SCM
     note: "类型"
-    range: Subversion,Git
+    range: Subversion,Git,Gitlab,Gitea,Gogs
     prefix: ""
     postfix: ""
     loop: 0
@@ -55,6 +55,20 @@ fields:
   - field: client
     note: "客户端"
     range: svn,git
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: serviceHost
+    note: "服务器ID"
+    range: 0,0,1,4,5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: serviceProject
+    note: "项目地址"
+    range: []{2},1569,root/repo121,root/yuyu_project
     prefix: ""
     postfix: ""
     loop: 0
