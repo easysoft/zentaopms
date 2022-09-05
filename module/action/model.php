@@ -1620,12 +1620,6 @@ class actionModel extends model
             }
         }
 
-        if($action->objectType == 'reviewissue')
-        {
-            $project  = $this->dao->select('project')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch('project');
-            $action->objectLink = helper::createLink('reviewissue', 'view', "project=$project&issueID=$action->objectID");
-        }
-
         if($action->objectType == 'review')
         {
             $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");

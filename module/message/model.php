@@ -201,6 +201,7 @@ class messageModel extends model
         }
 
         if($toList == 'closed') $toList = '';
+        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         return $toList;
     }
 
