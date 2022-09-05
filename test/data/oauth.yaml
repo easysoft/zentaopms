@@ -10,8 +10,8 @@ fields:
     - field: account2
       range: 3-100
   - field: openID
-    range: 1-100
+    range: 1-98,root{2}
   - field: providerType
-    range: gitlab
+    range: gitlab{98},gitea,gogs
   - field: providerID
     range: 1

@@ -22,7 +22,7 @@ $gitlabID = 3;
 
 $_POST = array();
 $_POST['name']     = '';
-$_POST['url']      = 'http://10.0.1.161:51080';
+$_POST['url']      = 'http://10.0.7.242:9980';
 $_POST['account']  = 'admin';
 $_POST['token']    = 'y2UBqwPPzaLxsniy8R6A';
 $_POST['password'] = '';
@@ -33,7 +33,7 @@ $_POST['name']     = 'Changed GitLab';
 $_POST['url']      = '';
 r($gitlab->update($gitlabID)) && p() && e('url');    // 服务器地址为空
 
-$_POST['url'] = 'http://10.0.1.161:51080';
+$_POST['url'] = 'http://10.0.7.242:9980';
 r($gitlab->update($gitlabID)) && p('name') && e('Changed GitLab');    // 正确GitLab数据
 
 system("./ztest init");
