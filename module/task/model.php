@@ -2873,7 +2873,7 @@ class taskModel extends model
         if($estimate->consumed < 0)  return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->record, '0');
         if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
-        $task = $this->getById($oldEstimate->task);
+        $task = $this->getById($oldEstimate->objectID);
         $this->dao->update(TABLE_EFFORT)->data($estimate)
             ->autoCheck()
             ->where('id')->eq((int)$estimateID)
@@ -2946,7 +2946,7 @@ class taskModel extends model
     public function deleteEstimate($estimateID)
     {
         $estimate = $this->getEstimateById($estimateID);
-        $task     = $this->getById($estimate->task);
+        $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
         $consumed = $task->consumed - $estimate->consumed;
@@ -2954,7 +2954,7 @@ class taskModel extends model
         if($estimate->isLast)
         {
             $lastTwoEstimates = $this->dao->select('*')->from(TABLE_EFFORT)
-                ->where('objectID')->eq($estimate->task)
+                ->where('objectID')->eq($estimate->objectID)
                 ->andWhere('objectType')->eq('task')
                 ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEstimate  = isset($lastTwoEstimates[1]) ? $lastTwoEstimates[1] : '';
@@ -3031,7 +3031,7 @@ class taskModel extends model
         $this->dao->update(TABLE_EFFORT)->set('deleted')->eq('1')->where('id')->eq($estimateID)->exec();
         if(!empty($task->team)) $data = $this->computeHours4Multiple($task, $data);
 
-        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
+        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->objectID)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
