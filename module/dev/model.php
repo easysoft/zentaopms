@@ -245,7 +245,7 @@ class devModel extends model
      * Get all modules.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getModules()
     {
@@ -258,7 +258,7 @@ class devModel extends model
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
             $group  = zget($this->config->dev->group, $module, 'other');
-            $modules[$group][] = $module;
+            $modules[$group][$module] = $module;
         }
 
         $extPaths = $this->getModuleExtPath();
@@ -272,7 +272,7 @@ class devModel extends model
                 $module = basename($path);
                 if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
                 $group  = zget($this->config->dev->group, $module, 'other');
-                $modules[$group][] = $module;
+                $modules[$group][$module] = $module;
             }
         }
 
