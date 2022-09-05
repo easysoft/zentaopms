@@ -154,7 +154,7 @@ $lang->install->saved2File         = 'Le fichier de configuration a été enregi
 $lang->install->errorNotSaveConfig = "Le fichier de configuration n'est pas enregistré.";
 
 global $app;
-$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->moduleRoot}config/config.php file.";
+$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
 
 $lang->install->getPriv            = 'Paramétrage Admin';
 $lang->install->company            = 'Nom Entreprise';
