@@ -248,6 +248,52 @@ class repo extends control
     }
 
     /**
+     * Get diff editor content by ajax.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $entry
+     * @param  string $oldRevision
+     * @param  string $newRevision
+     * @param  string $showBug
+     * @param  string $encoding
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
+    {
+        $file      = $entry;
+        $repo      = $this->repo->getRepoByID($repoID);
+        $entry     = urldecode($this->repo->decodePath($entry));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
+
+        $entry    = urldecode($entry);
+        $pathInfo = pathinfo($entry);
+        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = strtolower(str_replace('_', '-', $encoding));
+
+        $this->scm->setEngine($repo);
+        $info = $this->scm->info($entry, $nRevision);
+        $path = $entry ? $info->path : '';
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->type       = 'diff';
+        $this->view->encoding   = str_replace('-', '_', $encoding);
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->revision   = $nRevision;
+        $this->view->file       = $file;
+        $this->view->content    = '';
+        $this->view->pathInfo   = $pathInfo;
+        $this->view->suffix     = 'c';
+        $this->view->blames     = array();
+        $this->view->showEditor = true;
+        $this->display('repo', 'ajaxGetEditorContent');
+    }
+
+    /**
      * Get editor content by ajax.
      *
      * @param  int    $repoID

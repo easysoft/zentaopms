@@ -27,9 +27,10 @@ js::set('canLinkBug', $canLinkBug);
 js::set('canLinkTask', $canLinkTask);
 js::set('objectID', 0);
 js::set('objectType', 'story');
+js::set('pageType', $type);
 if($showEditor)
 {
-    js::set('codeContent', trim($content));
+    js::set('codeContent', $content);
     js::set('blames', $blames);
 }
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
@@ -193,24 +194,51 @@ $(function()
                 if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
             });
 
-            var editor = monaco.editor.create(document.getElementById('codeContainer'),
+            if(pageType == 'diff')
             {
-                autoIndent: true,
-                value: codeContent.toString(),
-                language: lang,
-                contextmenu: true,
-                EditorMinimapOptions: {
-                    enabled: false
-                },
-                readOnly: true,
-                automaticLayout: true
-            });
+                var diffContent = parent.getDiffs(file.basename);
+                var editor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
+                {
+                    tabCompletion: 'on',
+                    autoIndent: true,
+                    language: lang,
+                    contextmenu: true,
+                    EditorMinimapOptions: {
+                        enabled: false
+                    },
+                    readOnly: true,
+                    automaticLayout: true
+                });
+
+                editor.setModel({
+                    original: monaco.editor.createModel(diffContent.old, lang),
+                    modified: monaco.editor.createModel(diffContent.new, lang),
+                });
+            }
+            else
+            {
+                var editor = monaco.editor.create(document.getElementById('codeContainer'),
+                {
+                    tabCompletion: 'on',
+                    autoIndent: true,
+                    value: codeContent.toString(),
+                    language: lang,
+                    contextmenu: true,
+                    EditorMinimapOptions: {
+                        enabled: false
+                    },
+                    readOnly: true,
+                    automaticLayout: true
+                });
+            }
 
             editor.onMouseDown(function(obj)
             {
                 var line = obj.target.position.lineNumber;
 
-                var blame  = blames[line];
+                var blame = blames[line];
+                if(!blame) return;
+
                 var p_line = parseInt(line);
                 while(!blame.revision)
                 {

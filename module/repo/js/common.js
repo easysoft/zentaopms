@@ -124,3 +124,51 @@ $(function()
         });
     }
 })
+
+/**
+ * Set pane height.
+ *
+ * @access public
+ * @return void
+ */
+function setHeight()
+{
+    var paneHeight = $(window).height() - 120;
+    $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
+
+    paneHeight += 45;
+    if($('.label-exchange').html()) paneHeight -= 50;
+    $('#filesTree').css('height', paneHeight + 'px')
+}
+setHeight();
+
+$(document).on('click', '.repoFileName', function()
+{
+    var path  = encodeURIComponent($(this).data('path'));
+    var name  = $(this).text();
+    var $tabs = $('#fileTabs').data('zui.tabs');
+    if(openedFiles.indexOf(path) == -1) openedFiles.push(path);
+
+    $tabs.open(createTab(name, path));
+    setHeight();
+    arrowTabs('fileTabs', -2);
+});
+
+/* Remove file path for opened files. */
+$('#fileTabs').on('onClose', function(event, tab) {
+    var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+    var index    = openedFiles.indexOf(filepath);
+    if(index > -1)
+    {
+        openedFiles.splice(index, 1)
+        $('[data-path="' + filepath + '"]').closest('li').removeClass('selected');
+    }
+
+    if(index == openedFiles.length) arrowTabs('fileTabs', -2);
+});
+
+/* Append file path into the title. */
+$('#fileTabs').on('onLoad', function(event, tab) {
+    var filepath = Base64.decode(tab.id.replaceAll('-', '='));
+    $('#tab-nav-item-' + tab.id).attr('title', decodeURIComponent(filepath));
+});
