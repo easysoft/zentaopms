@@ -51,7 +51,10 @@
 
 #basicInfoLink {border: unset;}
 
+#modalBasicInfo .modal-content {overflow-x: hidden; overflow-y: scroll;}
+#modalBasicInfo .modal-body {padding-bottom: 10px;}
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
+#basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
 <?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}");?>
 <div id="mainContent" class="main-content">
@@ -81,7 +84,7 @@
       </tbody>
     </table>
 
-    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='false'>
+    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='true'>
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
@@ -156,6 +159,7 @@ $(function()
 {
     var contentHeight = $(document).height() - 100;
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
+    $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
 
