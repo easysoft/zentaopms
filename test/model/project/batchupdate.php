@@ -31,7 +31,7 @@ $data['acls']          = array(11 => 'open', 12 => 'private', 13 => 'program');
 
 $projects = $project->batchUpdate($data);
 
-r(count($projects)) && p()                              && e('3');                                      // 查看被编辑了的项目数量 
+r(count($projects)) && p()                              && e('3');                                      // 查看被编辑了的项目数量
 r($projects)        && p('11:name,parent,PM,begin,acl') && e('批量修改项目11,1,admin,2022-02-08,open'); // 查看被编辑了的项目11详情
 r($projects)        && p('12:name,parent,PM,begin,acl') && e('批量修改项目12,2,,2022-03-05,private');   // 查看被编辑了的项目12详情
 $db->restoreDB();

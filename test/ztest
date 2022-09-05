@@ -118,6 +118,12 @@ switch($argv[1])
     case 'projectstory':
         ztfRun('model/projectstory');
         break;
+    case 'projectrelease':
+        ztfRun('model/projectrelease');
+        break;
+    case 'release':
+        ztfRun('model/release');
+        break;
     case 'productplan':
         ztfRun('model/productplan');
         break;

@@ -67,35 +67,6 @@ class projectModel extends model
     }
 
     /**
-     * Check has content for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasContent($projectID)
-    {
-        $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('project')->eq($projectID)->fetch('count');
-
-        return $count > 0;
-    }
-
-    /**
-     * Check has children project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasChildren($projectID)
-    {
-        $count = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($projectID)->fetch('count');
-        return $count > 0;
-    }
-
-    /**
      * Get budget unit list.
      *
      * @access public
