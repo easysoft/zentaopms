@@ -15,9 +15,9 @@ pid=1
 $checkPriv = new repoTest();
 $repo = new stdclass();
 $repo->acl = new stdclass();
-$repo->acl->groups = '测试';
+$repo->acl->groups = '管理员';
 $repo->acl->user   = 'admin';
 
 $result = $checkPriv->checkPrivTest($repo);
 
-r($result) && p() && e('');
+r($result) && p($result) && e('0');

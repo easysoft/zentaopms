@@ -78,6 +78,8 @@ class repoModel extends model
     {
         $currentModule = $this->app->moduleName;
         $currentMethod = $this->app->methodName;
+#        var_dump($currentModule);
+#        var_dump($currentRepo);
         if(!in_array($currentModule, $this->config->repo->switcherModuleList)) return '';
         if($currentModule == 'repo' and !in_array($currentMethod, $this->config->repo->switcherMethodList)) return '';
 

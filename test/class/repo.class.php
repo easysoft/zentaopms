@@ -25,7 +25,7 @@ class repoTest
 
     public function setMenuTest($repos, $repoID = '', $showSeleter = true)
     {
-        $objects = $this->objectModel->setMenu($repos, $repoID = '', $showSeleter = true);
+        $objects = $this->objectModel->setMenu($repos, $repoID, $showSeleter);
 
         if(dao::isError()) return dao::getError();
 
@@ -43,7 +43,7 @@ class repoTest
 
     public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null);
+        $objects = $this->objectModel->getList($projectID, $SCM, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -52,7 +52,7 @@ class repoTest
 
     public function getListBySCMTest($scm, $type = 'all')
     {
-        $objects = $this->objectModel->getListBySCM($scm, $type = 'all');
+        $objects = $this->objectModel->getListBySCM($scm, $type);
 
         if(dao::isError()) return dao::getError();
 
@@ -79,7 +79,7 @@ class repoTest
 
     public function saveStateTest($repoID = 0, $objectID = 0)
     {
-        $objects = $this->objectModel->saveState($repoID = 0, $objectID = 0);
+        $objects = $this->objectModel->saveState($repoID, $objectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -88,7 +88,7 @@ class repoTest
 
     public function getRepoPairsTest($type, $projectID = 0)
     {
-        $objects = $this->objectModel->getRepoPairs($type, $projectID = 0);
+        $objects = $this->objectModel->getRepoPairs($type, $projectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -97,7 +97,7 @@ class repoTest
 
     public function getRepoGroupTest($type, $projectID = 0)
     {
-        $objects = $this->objectModel->getRepoGroup($type, $projectID = 0);
+        $objects = $this->objectModel->getRepoGroup($type, $projectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -142,7 +142,7 @@ class repoTest
 
     public function getBranchesTest($repo, $printLabel = false)
     {
-        $objects = $this->objectModel->getBranches($repo, $printLabel = false);
+        $objects = $this->objectModel->getBranches($repo, $printLabel);
 
         if(dao::isError()) return dao::getError();
 
@@ -151,7 +151,7 @@ class repoTest
 
     public function getCommitsTest($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
     {
-        $objects = $this->objectModel->getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0);
+        $objects = $this->objectModel->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
 
         if(dao::isError()) return dao::getError();
 
@@ -259,7 +259,7 @@ class repoTest
 
     public function getPreAndNextTest($repo, $entry, $revision = 'HEAD', $fileType = 'dir', $method = 'view')
     {
-        $objects = $this->objectModel->getPreAndNext($repo, $entry, $revision = 'HEAD', $fileType = 'dir', $method = 'view');
+        $objects = $this->objectModel->getPreAndNext($repo, $entry, $revision, $fileType, $method);
 
         if(dao::isError()) return dao::getError();
 
@@ -268,7 +268,7 @@ class repoTest
 
     public function createLinkTest($method, $params = '', $viewType = '', $onlybody = false)
     {
-        $objects = $this->objectModel->createLink($method, $params = '', $viewType = '', $onlybody = false);
+        $objects = $this->objectModel->createLink($method, $params, $viewType, $onlybody);
 
         if(dao::isError()) return dao::getError();
 
@@ -277,7 +277,7 @@ class repoTest
 
     public function setBackSessionTest($type = 'list', $withOtherModule = false)
     {
-        $objects = $this->objectModel->setBackSession($type = 'list', $withOtherModule = false);
+        $objects = $this->objectModel->setBackSession($type, $withOtherModule);
 
         if(dao::isError()) return dao::getError();
 
@@ -313,7 +313,7 @@ class repoTest
 
     public function encodePathTest($path = '')
     {
-        $objects = $this->objectModel->encodePath($path = '');
+        $objects = $this->objectModel->encodePath($path);
 
         if(dao::isError()) return dao::getError();
 
@@ -322,7 +322,7 @@ class repoTest
 
     public function decodePathTest($path = '')
     {
-        $objects = $this->objectModel->decodePath($path = '');
+        $objects = $this->objectModel->decodePath($path);
 
         if(dao::isError()) return dao::getError();
 
@@ -331,7 +331,7 @@ class repoTest
 
     public function isBinaryTest($content, $suffix = '')
     {
-        $objects = $this->objectModel->isBinary($content, $suffix = '');
+        $objects = $this->objectModel->isBinary($content, $suffix);
 
         if(dao::isError()) return dao::getError();
 
@@ -412,7 +412,7 @@ class repoTest
 
     public function saveAction2PMSTest($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
     {
-        $objects = $this->objectModel->saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array());
+        $objects = $this->objectModel->saveAction2PMS($objects, $log, $repoRoot, $encodings, $scm, $gitlabAccountPairs);
 
         if(dao::isError()) return dao::getError();
 
@@ -430,7 +430,7 @@ class repoTest
 
     public function createActionChangesTest($log, $repoRoot, $scm = 'svn')
     {
-        $objects = $this->objectModel->createActionChanges($log, $repoRoot, $scm = 'svn');
+        $objects = $this->objectModel->createActionChanges($log, $repoRoot, $scm);
 
         if(dao::isError()) return dao::getError();
 
@@ -457,7 +457,7 @@ class repoTest
 
     public function buildURLTest($methodName, $url, $revision, $scm = 'svn')
     {
-        $objects = $this->objectModel->buildURL($methodName, $url, $revision, $scm = 'svn');
+        $objects = $this->objectModel->buildURL($methodName, $url, $revision, $scm);
 
         if(dao::isError()) return dao::getError();
 
@@ -475,7 +475,7 @@ class repoTest
 
     public function getRepoListByClientTest($gitlabID, $projectID = 0)
     {
-        $objects = $this->objectModel->getRepoListByClient($gitlabID, $projectID = 0);
+        $objects = $this->objectModel->getRepoListByClient($gitlabID, $projectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -511,7 +511,7 @@ class repoTest
 
     public function getExecutionPairsTest($product, $branch = 0)
     {
-        $objects = $this->objectModel->getExecutionPairs($product, $branch = 0);
+        $objects = $this->objectModel->getExecutionPairs($product, $branch);
 
         if(dao::isError()) return dao::getError();
 
