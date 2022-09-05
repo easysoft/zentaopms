@@ -598,7 +598,7 @@ class webhookModel extends model
      * @param  string $title
      * @param  string $text
      * @access public
-     * @return string
+     * @return object
      */
     public function getFeishuData($title, $text)
     {
