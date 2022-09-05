@@ -816,7 +816,7 @@ class taskModel extends model
             {
                 if(!$autoStatus) return $currentTask;
 
-                if($currentTask->consumed == 0)
+                if($currentTask->consumed == 0 and empty($efforts))
                 {
                     if(!isset($task->status)) $currentTask->status = 'wait';
                     $currentTask->finishedBy   = '';
@@ -2966,7 +2966,7 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($consumed == 0 and $task->status != 'wait')
+        if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
         {
             $data->status = 'wait';
             $data->left   = $task->estimate;
