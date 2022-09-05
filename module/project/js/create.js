@@ -149,6 +149,8 @@ function setParentProgram(parentProgram)
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
+    if(parentProgram != '0') $('#productsBox .row .input-group:first').addClass('required');
+    if(parentProgram == '0') $('#productsBox .row .input-group').removeClass('required');
 }
 
 /**
@@ -185,6 +187,9 @@ function addNewProduct(obj)
         $('#productName').removeAttr('disabled', true);
         $('#productsBox .addProduct').removeClass('hidden');
         $('#productTitle').html(productName);
+
+        if($('#parent').val() != '0') $('#productsBox .addProduct .input-group:first').addClass('required');
+        if($('#parent').val() == '0') $('#productsBox .addProduct .input-group').removeClass('required');
     }
     else
     {
@@ -246,7 +251,7 @@ function loadBranches(product)
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .row .input-group').size();
-        var $html  = $('#productsBox .row .col-sm-4:last').html();
+        var $html  = $('#productsBox .row .col-sm-4:last').html().replace('required', '');
         $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
         $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
         if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();
