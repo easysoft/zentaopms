@@ -1,1 +1,7 @@
+.table-recorded thead{background: rgb(245 245 245);}
 .form-condensed .table-form {margin-bottom: 20px;}
+.hours {display: flex; float: left; transform: translate(0, 50%); margin: 0 0 0 10px;}
+.estimateTotally, .consumedTotally {border-radius: 9px; padding: 3px 7px; margin: 0 5px 0 5px; min-width: 18px;}
+.consumedTotally {background: #EAF3FF; color: #2B80FF;}
+.estimateTotally {background: #FFEFEF; color: #FF6262;}
+.nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}

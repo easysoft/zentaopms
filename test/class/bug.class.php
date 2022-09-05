@@ -1393,13 +1393,14 @@ class bugTest
     /**
      * Test get bug pairs of a product.
      *
-     * @param  int    $productID
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return string
      */
-    public function getProductBugPairsTest($productID)
+    public function getProductBugPairsTest($productID, $branch = '')
     {
-        $array = $this->objectModel->getProductBugPairs($productID);
+        $array = $this->objectModel->getProductBugPairs($productID, $branch);
 
         $title = '';
         foreach($array as $bug) $title .= ',' . $bug;

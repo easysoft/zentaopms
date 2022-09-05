@@ -54,7 +54,7 @@ $config->execution->search['fields']['desc']           = $lang->task->desc;
 $config->execution->search['fields']['assignedTo']     = $lang->task->assignedTo;
 $config->execution->search['fields']['pri']            = $lang->task->pri;
 
-if($app->tab == 'my') $config->execution->search['fields']['project'] = $lang->task->project;
+if($app->tab == 'my' and $config->systemMode == 'new') $config->execution->search['fields']['project'] = $lang->task->project;
 $config->execution->search['fields']['execution']      = $lang->task->execution;
 $config->execution->search['fields']['module']         = $lang->task->module;
 $config->execution->search['fields']['estimate']       = $lang->task->estimate;
@@ -71,7 +71,6 @@ $config->execution->search['fields']['canceledBy']     = $lang->task->canceledBy
 $config->execution->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
 
 $config->execution->search['fields']['mailto']         = $lang->task->mailto;
-$config->execution->search['fields']['finishedList']   = $lang->task->finishedList;
 
 $config->execution->search['fields']['openedDate']     = $lang->task->openedDate;
 $config->execution->search['fields']['deadline']       = $lang->task->deadline;
@@ -90,7 +89,7 @@ $config->execution->search['params']['desc']           = array('operator' => 'in
 $config->execution->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
 
-if($app->tab == 'my') $config->execution->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
+if($app->tab == 'my' and $config->systemMode == 'new') $config->execution->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->execution->search['params']['execution']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->execution->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -107,7 +106,6 @@ $config->execution->search['params']['cancelBy']       = array('operator' => '='
 $config->execution->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-$config->execution->search['params']['finishedList']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');

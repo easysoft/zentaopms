@@ -439,9 +439,10 @@ class personnelModel extends model
             $taskIDList = array_merge($taskIDList, $taskID);
         }
 
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
+        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
-            ->andWhere('task')->in($taskIDList)
+            ->andWhere('objectID')->in($taskIDList)
+            ->andWhere('objectType')->eq('task')
             ->groupBy('account')
             ->fetchAll('account');
         return $userHours;

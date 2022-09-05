@@ -27,7 +27,7 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            parent.location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
         }
     })
 

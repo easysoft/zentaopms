@@ -23,6 +23,8 @@ class kanban extends control
      */
     public function space($browseType = 'involved', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->session->set('regionID', 'all', 'kanban');
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -394,8 +396,9 @@ class kanban extends control
      */
     public function view($kanbanID)
     {
-        $kanban = $this->kanban->getByID($kanbanID);
-        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $kanban   = $this->kanban->getByID($kanbanID);
+        $users    = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $regionID = $this->session->regionID ? $this->session->regionID : 'all';
 
         if(!$kanban)
         {
@@ -419,11 +422,15 @@ class kanban extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
+        $regions = $this->kanban->getKanbanData($kanbanID);
+        if(!isset($regions[$regionID])) $this->session->set('regionID', 'all', 'kanban');
+
         $this->view->users    = $users;
         $this->view->title    = $this->lang->kanban->view;
-        $this->view->regions  = $this->kanban->getKanbanData($kanbanID);
         $this->view->userList = $userList;
         $this->view->kanban   = $kanban;
+        $this->view->regions  = $regions;
+        $this->view->regionID = isset($regions[$regionID]) ? $regionID : 'all';
 
         $this->display();
     }
@@ -468,6 +475,7 @@ class kanban extends control
 
             $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID, $from);
 
+            $this->session->set('regionID', $regionID, 'kanban');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
@@ -1517,6 +1525,7 @@ class kanban extends control
 
             $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);
+            if($card->archived) return print(js::reload(parent));
             return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
     }
@@ -1954,5 +1963,17 @@ class kanban extends control
         $fieldName = $multiple ? $field . '[]' : $field;
 
         return print(html::select($fieldName, $users, $selectedUser, "class='form-control' $multiple"));
+    }
+
+    /**
+     * Ajax save regionID.
+     *
+     * @param  int|string $regionID
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveRegionID($regionID)
+    {
+        $this->session->set('regionID', $regionID, 'kanban');
     }
 }

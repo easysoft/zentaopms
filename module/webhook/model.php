@@ -565,7 +565,7 @@ class webhookModel extends model
     }
 
     /**
-     * Get weixin data.
+     * Get weixin send data.
      *
      * @param  string $title
      * @param  string $text
@@ -573,7 +573,7 @@ class webhookModel extends model
      * @access public
      * @return object
      */
-    public function getWeixinData($title, $text, $mobile)
+    public function getWeixinData($title, $text, $mobile = '')
     {
         $data = new stdclass();
         $data->msgtype = 'markdown';
@@ -581,13 +581,25 @@ class webhookModel extends model
         $markdown = new stdclass();
         $markdown->content = $text;
 
-        if($mobile) $markdown->mentioned_mobile_list = array($mobile);
+        if($mobile)
+        {
+            $data->msgtype = 'text';
+            $markdown->mentioned_mobile_list = array($mobile);
+        }
 
-        $data->markdown = $markdown;
+        $data->{$data->msgtype} = $markdown;
 
         return $data;
     }
 
+    /**
+     * Get feishu send data.
+     *
+     * @param  string $title
+     * @param  string $text
+     * @access public
+     * @return string
+     */
     public function getFeishuData($title, $text)
     {
         $data = new stdclass();

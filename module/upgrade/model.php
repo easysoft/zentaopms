@@ -131,7 +131,7 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open') $this->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -548,6 +548,11 @@ class upgradeModel extends model
                 $this->addURPriv();
                 $this->updateStoryStatus();
                 if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
+                break;
+            case '17_6':
+                $this->updateStoryFile();
+                $this->convertTaskteam();
+                $this->convertEstToEffort();
                 break;
         }
 
@@ -7203,5 +7208,102 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
             }
         }
+    }
+
+    /**
+     * Update story file version.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryFile()
+    {
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        /* Get story version. */
+        $storyIDList = array();
+        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
+        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
+
+        foreach($storyFileList as $file)
+        {
+            if(!is_numeric($file->extra)) continue;
+
+            $fileExtra    = '';
+            $storyVersion = $storyVersionList[$file->objectID];
+            if($file->extra != $storyVersion)
+            {
+                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
+                $fileExtra .= ',';
+            }
+            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+
+            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Convert task team to table: zt_taskteam.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertTaskteam()
+    {
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, `left`')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        foreach($oldTeamGroup as $taskID => $oldTeams)
+        {
+            $order = 0;
+            foreach($oldTeams as $oldTeam)
+            {
+                $oldTeam->order  = $order;
+                $oldTeam->status = 'wait';
+                if($oldTeam->consumed > 0 and $oldTeam->left > 0)  $oldTeam->status = 'doing';
+                if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
+
+                $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                $order ++;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
+    }
+
+    /**
+     * Convert estimate to effort.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertEstToEffort()
+    {
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+
+        $this->loadModel('action');
+        foreach($estimates as $estimate)
+        {
+            $relation = $this->action->getRelatedFields('task', $estimate->task);
+
+            $effort = new stdclass();
+            $effort->objectType = 'task';
+            $effort->objectID   = $estimate->task;
+            $effort->product    = $relation['product'];
+            $effort->project    = (int)$relation['project'];
+            $effort->account    = $estimate->account;
+            $effort->work       = empty($estimate->work) ? $this->lang->effort->handleTask : $estimate->work;
+            $effort->date       = $estimate->date;
+            $effort->left       = $estimate->left;
+            $effort->consumed   = $estimate->consumed;
+            $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
+
+            $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
+            $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
     }
 }

@@ -219,9 +219,11 @@ class projectModel extends model
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->groupBy('root')
+        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
             ->fetchAll('root');
 
         $condition = $this->config->systemMode == 'classic' ? 't2.id as project' : 't2.parent as project';
@@ -298,9 +300,11 @@ class projectModel extends model
         if(empty($projects)) return array();
         $projectIdList = array_keys($projects);
 
-        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->andWhere('type')->eq('project')
+        $teams = $this->dao->select('t1.root, count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
             ->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('t2.parent as project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
@@ -500,8 +504,8 @@ class projectModel extends model
     {
         $projects = array();
 
-        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASKESTIMATE)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->andWhere('t2.deleted')->eq(0)
@@ -1510,8 +1514,8 @@ class projectModel extends model
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = $data->ends[$projectID] != $this->lang->project->longTime ? $data->ends[$projectID] : LONG_TIME;
-            $projects[$projectID]->days           = $data->dayses[$projectID];
+            $projects[$projectID]->end            = $data->ends[$projectID] == $this->lang->project->longTime ? LONG_TIME : $data->ends[$projectID];
+            $projects[$projectID]->days           = $data->ends[$projectID] == $this->lang->project->longTime ? 0 : $data->dayses[$projectID];
             $projects[$projectID]->acl            = $data->acls[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();

@@ -85,6 +85,17 @@
               <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
             </div>
           </div>
+          <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($files)) ? false : true;?>
+          <?php if($showFile):?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->attatch;?></div>
+            <div class='form-group'>
+              <?php $canChangeFile = strpos('draft,changing', $story->status) !== false ? true : false;?>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit', 'showDelete' => $canChangeFile));?>
+              <?php echo $canChangeFile ? $this->fetch('file', 'buildform') : '';?>
+            </div>
+          </div>
+          <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
@@ -283,10 +294,12 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
+              <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
-                <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
+                <th class='w-100px'><?php echo $lang->story->duplicateStory;?></th>
                 <td><?php echo html::select('duplicateStory', array('' => '') + $productStories, $story->duplicateStory ? $story->duplicateStory : '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td>
               </tr>
+              <?php endif;?>
               <tr class='text-top'>
                 <th class='thWidth'><?php echo $story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory;?></th>
                 <td>

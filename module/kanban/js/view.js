@@ -13,8 +13,10 @@ function loadMore(type, regionID)
     var link     = createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
-        var windowHeight = $(window).height();
-        $(selector + ' .panel-body').css('height', windowHeight - 100);
+        var windowHeight  = $(window).height();
+        var affixedHeight = $('#regionTabs.affixed').height() + $('#kanbanContainer .kanban-affixed .kanban-cols').height();
+        $(selector + ' .panel-body').css('height', windowHeight - affixedHeight);
+        $(selector).css('top', affixedHeight);
         $(selector).animate({right: 0}, 500);
     });
 }
@@ -892,9 +894,9 @@ function updateRegion(regionID, regionData)
     var $region = $('#kanban'+ regionID).kanban();
 
     if(!$region.length) return false;
-    if(!regionData) regionData = regions[regionID];
+    regions[regionID] = regionData ? regionData : regions[regionID];
 
-    $region.data('zui.kanban').render(regionData.groups);
+    $region.data('zui.kanban').render(regions[regionID].groups);
     resetRegionHeight('open');
     return true;
 }
@@ -910,6 +912,9 @@ function updateRegion(regionID, regionData)
 function updateRegionName(regionID, name)
 {
     $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').attr('title', name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').find('a > span').text(name);
+    initRegionTabs();
 }
 
 /**
@@ -1430,6 +1435,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    $(document).find('main#main').css('padding-top', '16px');
+
     window.isMultiLanes = laneCount > 1;
 
     $.cookie('isFullScreen', 0);
@@ -1508,6 +1515,7 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+        if($('#regionTabs').length > 0) updateRegionTabAffixState();
     });
 
     $(document).on('click', '#splitTable .btn-plus', function()
@@ -1547,8 +1555,32 @@ $(function()
     if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
 
     setToolTip();
+
+    distance    = 0;
+    radiusWidth = 10;
+    $(window).on('resize', initRegionTabs);
+
+    $('.leftBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'left');
+    });
+
+    $('.rightBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'right');
+    });
+
+    if(Object.values(regions).length <= 1) $('#kanbanBox').removeClass('hidden');
 });
 
+/**
+ * Init sortable.
+ *
+ * @access public
+ * @return void
+ */
 function initSortable()
 {
     var sortType  = '';
@@ -1777,3 +1809,184 @@ function setToolTip()
 {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
+
+/**
+ * Update kanban affix state for all boards in page.
+ *
+ * @access public
+ * @return void
+ */
+function updateRegionTabAffixState()
+{
+    var $kanbanContainer = $('#kanbanContainer');
+    var kanbanContainer  = $kanbanContainer[0].getBoundingClientRect();
+    var $regionTabs      = $('#regionTabs');
+    var regionTabs       = $regionTabs[0].getBoundingClientRect();
+    if(regionTabs.top <= 0 && !$regionTabs.hasClass('affixed'))
+    {
+        $regionTabs.addClass('affixed');
+        $regionTabs.find('#region-tab-actions').addClass('hidden');
+    }
+    else if($regionTabs.hasClass('affixed') && kanbanContainer.top >= 0)
+    {
+        $regionTabs.removeClass('affixed');
+        $regionTabs.find('#region-tab-actions').removeClass('hidden');
+    }
+
+    initRegionTabs();
+}
+
+/**
+ * Swipe region navigation tabs.
+ *
+ * @param  object $object
+ * @param  string $direction
+ * @access public
+ * @return bool
+ */
+function swipeRegionNavTabs($object, direction)
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    var offsetWidth    = $regionNavTabs[0].offsetWidth;
+    var objectWidth    = $object[0].offsetWidth;
+
+    $object.find('li').each(function()
+    {
+        /* Get the offset of the item. */
+        var $item      = $(this);
+        var itemLeft   = $item[0].offsetLeft;
+        var itemWidth  = $item[0].offsetWidth;
+        var itemOffset = itemLeft + itemWidth;
+        var radius     = $item.hasClass('active') ? radiusWidth : 0;
+
+        /* Calculate the offset after sliding. */
+        if(direction == 'left' && (itemOffset + distance + radius) >= -5)
+        {
+            /* If you swipe left, the distance is equal to the item's left. */
+            distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
+            if($item.prev().length == 0)
+            {
+                distance = 0;
+                $('.leftBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
+
+            /* If the width of regionNavTabs plus offsetWidth is less than the width of object, change rightBtn to clickable. */
+            if(offsetWidth - distance < objectWidth) $('.rightBtn').removeClass('disabled');
+            return false;
+        }
+
+        var nextRadius = $item.next().hasClass('active') ? radiusWidth : 0;
+        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius + radiusWidth * 2))
+        {
+            /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
+            distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
+            if($item.next().length == 0)
+            {
+                distance = - objectWidth + offsetWidth - radiusWidth * 2;
+                $('.rightBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
+
+            /* If distance is less than 0, change leftBtn to clickable. */
+            if(distance < 0) $('.leftBtn').removeClass('disabled');
+            return false;
+        }
+    });
+}
+
+/**
+ * Init region tabs.
+ *
+ * @access public
+ * @return void
+ */
+function initRegionTabs()
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    if($regionNavTabs.length == 0) return;
+
+    /* Set the width of regionTab. */
+    $('#regionTabs').width($('#kanban').outerWidth());
+
+    var regionTabsWidth  = $regionNavTabs[0].offsetWidth;
+    var regionTabULWidth = $regionNavTabs.find('ul')[0].offsetWidth;
+    var $acitiveItem     = $('#regionNavTabs > ul > li.active');
+    var acitiveItemWidth = $acitiveItem[0].offsetWidth;
+    var acitiveItemLeft  = $acitiveItem[0].offsetLeft;
+
+    /* Print left and right button. */
+    if(regionTabULWidth > regionTabsWidth) $('.leftBtn, .rightBtn').removeClass('hidden');
+
+    if(acitiveItemLeft + distance < 0)
+    {
+        distance = - acitiveItemLeft;
+        if($acitiveItem.prev().length == 0)
+        {
+            distance = 0;
+            $('.leftBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+    else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
+    {
+        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft + (distance != 0 ? - radiusWidth * 2 : radiusWidth);
+        if($acitiveItem.next().length == 0)
+        {
+            distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+            $('.rightBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+
+    if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
+    if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
+    $('#kanbanBox').removeClass('hidden');
+}
+
+$('[data-tab]').on('shown.zui.tab', function(e)
+{
+    /* Init vars. */
+    var $current       = $(e.target);
+    var $prev          = $(e.relatedTarget);
+    var $regionActions = $('#region-tab-actions');
+    var $regions       = $('.region');
+    var contentID      = $current.attr('href');
+    var regionID       = $current.parent().attr('data-id');
+    var hasActions     = $regionActions.hasClass('active');
+
+    /* Highlight the currently selected tab. */
+    $current.addClass('btn-active-text');
+    $current.parent().addClass('active');
+    $prev.removeClass('btn-active-text');
+    $prev.parent().removeClass('active');
+
+    /* Dynamic display and hidden of regions. */
+    if(contentID == 'all')
+    {
+        $regions.addClass('active').removeClass('notAll');
+        if(hasActions) $regionActions.removeClass('active');
+    }
+    else
+    {
+        var $currentRegion = $(contentID);
+        $regions.removeClass('active');
+        $currentRegion.addClass('active notAll');
+        $currentRegion.find('.kanban').css('display', 'block');
+        if(!hasActions) $regionActions.addClass('active');
+
+        /* Replace the link of the region actions button with the ID of the current region. */
+        $regionActions.find('li').each(function()
+        {
+            if($(this).hasClass('editRegion')) $(this).find('a').attr('href', createLink('kanban', 'editRegion', 'regionID=' + regionID, '', true));
+            if($(this).hasClass('createLane')) $(this).find('a').attr('href', createLink('kanban', 'createLane', 'kanbanID=' + kanbanID + '&regionID=' + regionID, '', true));
+            if($(this).hasClass('deleteRegion')) $(this).find('a').attr('href', createLink('kanban', 'deleteRegion', 'regionID=' + regionID));
+            if($(this).hasClass('archivedCard')) $(this).find('a').attr('href', "javascript:loadMore(\"Card\", " + regionID + ')');
+            if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
+        });
+    }
+
+    /* To manually refresh stay under the current tab, save the ID of the current region. */
+    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);
+    $.get(url);
+});

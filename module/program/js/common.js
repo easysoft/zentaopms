@@ -314,6 +314,7 @@ function setBudgetTipsAndAclList(parentID)
 
             budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + data.availableBudget) : '';
             $('#budget').attr('placeholder', budgetNotes);
+            refreshBudgetUnit(data);
         });
         $('.aclBox').html($('#subPGMAcl').html());
     }

@@ -80,6 +80,17 @@
               <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('spec', htmlSpecialString($story->spec), "rows='5' class='form-control'") : $story->spec;?>
             </div>
           </div>
+          <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($files)) ? false : true;?>
+          <?php if($showFile):?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->attatch;?></div>
+            <div class='form-group'>
+              <?php $canChangeFile = strpos('draft,changing', $story->status) !== false ? true : false;?>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit', 'showDelete' => $canChangeFile));?>
+              <?php echo $canChangeFile ? $this->fetch('file', 'buildform') : '';?>
+            </div>
+          </div>
+          <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>

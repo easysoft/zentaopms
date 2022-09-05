@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Delayed';
 $lang->task->view                = "Task Detail";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimates";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Start";
 $lang->task->startAction         = "Start Task";
@@ -54,6 +55,7 @@ $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -221,7 +223,6 @@ $lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by 
 
 $lang->task->confirmDelete             = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
-$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = "Copy Story";
 $lang->task->afterSubmit               = "Next ";
 $lang->task->successSaved              = "Created!";
@@ -237,6 +238,8 @@ $lang->task->noticeLinkStory           = "No story has been linked. You can %s f
 $lang->task->noticeSaveRecord          = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions            = '%s. %s, commented by <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Only the %s can %s the task.';
+$lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
+$lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = 'No tasks yet. ';
 $lang->task->createDenied              = 'Create Task is denied in this project';
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';

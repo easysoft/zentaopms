@@ -1,1 +1,3 @@
 th.required:after {position: relative; right: 10px;}
+.main-form tbody > tr > th {padding: 2em;}
+.main-form tfoot > tr > td {padding-top: 0px;}

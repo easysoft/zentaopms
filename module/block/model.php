@@ -171,7 +171,7 @@ class blockModel extends model
         $tasks = $this->dao->select("count(t1.id) as tasks, count(if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t1.id and t4.type = 'task' and t4.account = '{$this->app->user->account}'")
+            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
             ->where("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}') )")
             ->andWhere('(t2.status')->ne('suspended')
             ->orWhere('t3.status')->ne('suspended')
