@@ -86,7 +86,7 @@
       <?php
       $readonly = '';
       $left     = '';
-      if($task->assignedTo != $app->user->account and !empty($task->team) and $task->mode == 'linear' and !empty($myOrders))
+      if(($task->assignedTo != $app->user->account or strpos('closed,cancel,done,pause', $task->status) !== false) and !empty($task->team) and $task->mode == 'linear' and !empty($myOrders))
       {
           $readonly      = ' readonly';
           $left          = 0;
