@@ -13,4 +13,3 @@ pid=1
 */
 
 $repo = new repoTest();
-var_dump($repo->getSwitcherTest('1'));
