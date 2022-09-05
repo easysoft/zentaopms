@@ -364,76 +364,6 @@ class executionTest
     }
 
     /**
-     * Check the workload format and total.
-     *
-     * @param int    $executionID
-     * @param string $type
-     * @param int    $percent
-     * @access public
-     * @return bool
-     */
-    public function checkWorkloadTest($executionID = 0, $type = '', $percent = 0)
-    {
-        global $tester;
-        $tester->app->loadLang('programplan');
-        $_POST['products'] = array(1, 81, 91);
-        $_POST['percent']  = $percent;
-        $_POST['parent']   = 0;
-
-        $oldExecution = $executionID ? $this->objectModel->getByID($executionID) : '';
-        if(!empty($oldExecution->parent)) $_POST['parent'] = $oldExecution->parent;
-
-        $result = $this->objectModel->checkWorkload($type, $percent, $oldExecution);
-        if(dao::isError()) return dao::getError(true);
-
-        return $result;
-    }
-
-    /**
-     * Check begin and end date.
-     *
-     * @param int    $projectID
-     * @param string $checkType empty|normal|gt|lt|eq
-     * @access public
-     * @return bool
-     */
-    public function checkBeginAndEndDateTest($projectID, $checkType)
-    {
-        if($projectID) $project = $this->objectModel->getByID($projectID);
-        switch($checkType)
-        {
-        case 'empty':
-            $_POST['begin'] = '';
-            $_POST['end']   = '';
-        break;
-        case 'normal':
-            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->begin)));
-            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->end)));
-        break;
-        case 'lt':
-            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->begin)));
-            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("-1 days",strtotime($project->end)));
-        break;
-        case 'gt':
-            $_POST['begin'] = empty($project->begin) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->begin)));
-            $_POST['end']   = empty($project->end) ? '' : date("Y-m-d",strtotime("+1 days",strtotime($project->end)));
-        break;
-        case 'eq':
-            $_POST['begin'] = empty($project->begin) ? '' : $project->begin;
-            $_POST['end']   = empty($project->end) ? '' : $project->end;
-        break;
-        }
-
-        $begin = $_POST['begin'];
-        $end   = $_POST['end'];
-
-        $this->objectModel->checkBeginAndEndDate($projectID, $begin, $end);
-        if(dao::isError()) return dao::getError(true);
-
-        return true;
-    }
-
-    /**
      * function getPairs test by execution
      *
      * @param  string $projectID
@@ -1226,6 +1156,25 @@ class executionTest
     }
 
     /**
+     * Link all stories by execution.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $planID
+     * @access public
+     * @return int
+     */
+    public function linkStoriesTest($executionID, $productID = 0, $planID = 0)
+    {
+        global $tester;
+        if($planID) $tester->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
+
+        $this->objectModel->linkStories($executionID);
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
+        return count($objects);
+    }
+
+    /**
      * function linkCases test by execution
      *
      * @param  string $executionID
@@ -1395,41 +1344,6 @@ class executionTest
         else
         {
             return $object;
-        }
-    }
-
-    /**
-     * function getTeamSkip test by execution
-     *
-     * @param  string $taskID
-     * @param  string $begin
-     * @param  string $end
-     * @access public
-     * @return array
-     */
-    public function getTeamSkipTest($taskID, $begin, $end)
-    {
-        global $tester;
-
-        $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
-
-        $object = $this->objectModel->getTeamSkip($teams, $begin, $end);
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            if(empty($object))
-            {
-                return '无跳转数据';
-            }
-            else
-            {
-                return $object;
-            }
         }
     }
 
@@ -2205,39 +2119,6 @@ class executionTest
         else
         {
             return $object;
-        }
-    }
-
-    /**
-     * Test get execution burn data.
-     *
-     * @param  array  $executionIDList
-     * @access public
-     * @return array
-     */
-    public function getBurnDataTest($executionIDList)
-    {
-        global $tester;
-
-        $executions = $this->objectModel->getByIdList($executionIDList);
-        $objects    = $this->objectModel->getBurnData($executions);
-
-        $returns = array();
-        foreach($objects as $executionID => $burnData)
-        {
-            $returns[$executionID] = '';
-            foreach($burnData as $data) $returns[$executionID] .= ",$data->value";
-            $returns[$executionID] = trim($returns[$executionID], ',');
-        }
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        else
-        {
-            return $returns;
         }
     }
 
