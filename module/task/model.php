@@ -35,6 +35,16 @@ class taskModel extends model
 
         if($this->post->selectTestStory)
         {
+            foreach($this->post->testStory as $i => $storyID)
+            {
+                if(empty($storyID)) continue;
+                if($this->post->testEstStarted[$i] > $this->post->testDeadline[$i])
+                {
+                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
+                    return false;
+                }
+            }
+
             /* Check required fields when create test task. */
             foreach($this->post->testStory as $i => $storyID)
             {

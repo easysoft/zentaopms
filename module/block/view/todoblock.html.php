@@ -153,6 +153,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
                   $block.on('click', '.todo-form-trigger', function()
                   {
                       toggleForm($(this).data('trigger'));
+                      $('.block-todoes .commitButton').removeClass('disabled');
                   });
                   $form.timeSpanControl(
                   {

@@ -166,7 +166,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
-$lang->task->selectTestStory   = 'Select Story Tested';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'Alle';
 $lang->task->noStory           = 'Keine Story';
 $lang->task->noAssigned        = 'Nicht zugeordnet';

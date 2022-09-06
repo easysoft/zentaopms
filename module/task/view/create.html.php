@@ -122,13 +122,13 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             <table class='table table-form mg-0 table-bordered'>
               <thead>
                 <tr class='text-center'>
-                  <th class='w-150px'><?php echo $lang->task->storyAB;?></th>
-                  <th class='w-60px'><?php echo $lang->task->pri;?></th>
-                  <th class='w-100px'><?php echo $lang->task->estStarted;?></th>
-                  <th class='w-100px'><?php echo $lang->task->deadline;?></th>
-                  <th class='w-60px'><?php echo $lang->task->assignedTo;?></th>
-                  <th class='w-60px'><?php echo $lang->task->estimate;?></th>
-                  <th class='w-60px'><?php echo $lang->actions;?></th>
+                  <th class='c-name'><?php echo $lang->task->storyAB;?></th>
+                  <th class='c-pri'><?php echo $lang->task->pri;?></th>
+                  <th class='c-date'><?php echo $lang->task->estStarted;?></th>
+                  <th class='c-date'><?php echo $lang->task->deadline;?></th>
+                  <th class='c-assignedTo'><?php echo $lang->task->assignedTo;?></th>
+                  <th class='c-estimate'><?php echo $lang->task->estimate;?></th>
+                  <th class='c-actions'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <tbody class="resarch">
