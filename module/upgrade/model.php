@@ -7283,7 +7283,7 @@ class upgradeModel extends model
 
     /*
      * Process feedback module
-     * 
+     *
      * @access public
      * @return void
      */
@@ -7313,7 +7313,7 @@ class upgradeModel extends model
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
                 $newPaths = join(',', $newPaths);
-                $parent   = !empty($module->parent) and isset($relation[$module->parent]) ? $relation[$module->parent] : 0;
+                $parent   = !empty($module->parent) ? $relation[$module->parent] : 0;
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
             }
         }
