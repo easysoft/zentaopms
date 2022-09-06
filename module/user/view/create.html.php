@@ -54,7 +54,7 @@ $showVisionList = count($visionList) > 1;
           <td>
             <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+              <?php echo html::password('password1', '', "class='form-control' onkeyup='checkPassword(this.value)'");?>
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
