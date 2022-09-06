@@ -212,6 +212,7 @@ class weeklyModel extends model
             ->andWhere('execution')->in($executionIdList)
             ->andWhere('date')->ge($monday)
             ->andWhere('date')->le($sunday)
+            ->andWhere('deleted')->eq(0)
             ->fetch('count');
     }
 
@@ -490,6 +491,7 @@ class weeklyModel extends model
             ->andWhere('execution')->in($executionIdList)
             ->andWhere('date')->ge($monday)
             ->andWhere('date')->lt($nextMonday)
+            ->andWhere('deleted')->eq('0')
             ->fetch('consumed');
 
         if(is_null($AC)) $AC = 0;
