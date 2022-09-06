@@ -198,6 +198,8 @@ class portModel extends model
         /* Get export rows and fields datas */
         $exportDatas = $this->getExportDatas($fieldList, $rows);
 
+        $exportDatas['rows'] = $this->$model->processExportData($exportDatas['rows']);
+
         $this->post->set('rows',   $exportDatas['rows']);
         $this->post->set('fields', $exportDatas['fields']);
         $this->post->set('kind',   $model);
@@ -215,7 +217,7 @@ class portModel extends model
         $this->commonActions($model);
         $datas = fixer::input('post')->get();
         $objectData = array();
-        foreach ($datas as $field => $data)
+        foreach($datas as $field => $data)
         {
             if(is_array($data))
             {
@@ -251,18 +253,18 @@ class portModel extends model
         if(!is_array($fields)) $fields = explode(',', $fields);
         $fieldList = array();
         /* build module fieldList. */
-        foreach ($fields as $key => $field)
+        foreach($fields as $key => $field)
         {
             $field = trim($field);
             $modelFieldList = isset($this->modelFieldList[$field]) ? $this->modelFieldList[$field] : array();
 
-            foreach ($portFieldList as $portField => $value)
+            foreach($portFieldList as $portField => $value)
             {
                 $funcName = 'init' . ucfirst($portField);
                 if((!isset($modelFieldList[$portField])) or $portField == 'title')
                 {
-                  $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
-                  if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
+                    $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
+                    if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
                 }
             }
 
@@ -368,7 +370,7 @@ class portModel extends model
         if(is_array($values) and $withKey)
         {
             unset($values['']);
-            foreach ($values as $key => $value)
+            foreach($values as $key => $value)
             {
                 $values[$key] = $value . "(#$key)";
             }
@@ -511,7 +513,7 @@ class portModel extends model
         if(!empty($pairs))
         {
             $valuePairs = array();
-            foreach ($values as $key => $value)
+            foreach($values as $key => $value)
             {
                 if(is_object($value)) $value = get_object_vars($value);
 
@@ -548,7 +550,7 @@ class portModel extends model
         $exportDatas    = array();
         $dataSourceList = array();
 
-        foreach ($fieldList as $key => $field)
+        foreach($fieldList as $key => $field)
         {
             $exportDatas['fields'][$key] = $field['title'];
             if($field['values'])
@@ -562,7 +564,7 @@ class portModel extends model
 
         $exportDatas['user'] = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
 
-        foreach ($rows as $id => $values)
+        foreach($rows as $id => $values)
         {
             foreach($values as $field => $value)
             {
