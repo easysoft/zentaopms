@@ -24,7 +24,11 @@
         <div class="col-sm-6">
           <div class="panel block-burn" style="height: 280px">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $execution->name . $lang->execution->burn;?></div>
+              <div class="panel-title"><?php echo $execution->name . $lang->execution->burn;?>
+                <?php if(isset($execution->delay)):?>
+                <span class="label label-danger label-outline"><?php echo $lang->execution->delayed;?></span>
+                <?php endif;?>
+              </div>
               <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
                 <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
@@ -38,9 +42,12 @@
                   <canvas id="burnCanvas"></canvas>
                 </div>
                 <div id="burnYUnit">(<?php echo $lang->execution->workHour;?>)</div>
-                <div id="burnLegend">
-                  <div class="line-ref"><?php echo $lang->execution->charts->burn->graph->reference;?></div>
-                  <div class="line-real"><?php echo $lang->execution->charts->burn->graph->actuality;?></div>
+                <div id="burnLegend" class='table-row'>
+                  <div class="line-ref table-col"><?php echo $lang->execution->charts->burn->graph->reference;?></div>
+                  <div class="line-real table-col"><?php echo $lang->execution->charts->burn->graph->actuality;?></div>
+                  <?php if(isset($execution->delay)):?>
+                  <div class="line-delay table-col"><?php echo $lang->execution->charts->burn->graph->delay;?></div>
+                  <?php endif;?>
                 </div>
               </div>
               <?php endif;?>
