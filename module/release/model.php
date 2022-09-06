@@ -339,7 +339,7 @@ class releaseModel extends model
                 $table    = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
                 $objectID = $notify == 'ET' ? $release->build : $release->id;
                 $members  = $this->dao->select('t2.account')->from($table)->alias('t1')
-                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root and t2.type='$type'")
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
                     ->where('t1.id')->eq($objectID)
                     ->andWhere('t2.type')->eq($type)
                     ->fetchPairs();
