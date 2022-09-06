@@ -331,7 +331,7 @@ class report extends control
         $depts        = $this->dept->getOptionMenu();
         if(!$this->app->user->admin)
         {
-            $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $this->lang->dept->noDepartment;
+            $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $noDepartment;
         }
         else
         {
