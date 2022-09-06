@@ -7324,7 +7324,7 @@ class upgradeModel extends model
             $moduleID = $feedback->module;
             $product  = $feedback->product;
             if(empty($moduleID)) continue;
-            $newModuleID = $allProductRelation[$product][$moduleID];
+            $newModuleID = isset($allProductRelation[$product][$moduleID]) ? $allProductRelation[$product][$moduleID] : 0;
             if(empty($newModuleID)) continue;
 
             $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
