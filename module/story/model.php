@@ -498,7 +498,7 @@ class storyModel extends model
             $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
             $stories->reviewer[$i] = $reviewers;
             $_POST['reviewer'][$i] = $reviewers;
-            if(empty($stories->reviewer[$i]) and $forceReview)
+            if(empty(array_filter($stories->reviewer[$i])) and $forceReview)
             {
                 dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
                 return false;

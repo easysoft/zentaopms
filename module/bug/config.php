@@ -56,7 +56,7 @@ $config->bug->custom->createFields      = $config->bug->list->customCreateFields
 $config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,severity,os,browser,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
-$config->bug->excludeCheckFileds = ',severities,oses,browsers,';
+$config->bug->excludeCheckFileds = ',severities,oses,browsers,lanes,regions,executions,projects,';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
