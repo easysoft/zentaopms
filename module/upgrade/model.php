@@ -6786,14 +6786,13 @@ class upgradeModel extends model
     public function processCreatedInfo()
     {
         $objectTypes = array('productplan', 'release', 'testtask', 'build');
-        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK, 'build' => TABLE_BUILD);
 
         $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
         foreach($actions as $objectType => $objectActions)
         {
             foreach($objectActions as $action)
             {
-                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+                $this->dao->update($this->config->objectTables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
             }
         }
 

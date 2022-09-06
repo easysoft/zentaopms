@@ -364,7 +364,7 @@ class bug extends control
 
         if(!empty($_POST))
         {
-            $response['result']  = 'success';
+            $response['result'] = 'success';
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
