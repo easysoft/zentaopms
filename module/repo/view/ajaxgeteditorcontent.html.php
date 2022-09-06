@@ -80,6 +80,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
 <script>
+var editor       = null;
 var globalCommit = '';
 var codeHeight   = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
 if(codeHeight > 0) $.cookie('codeContainerHeight', codeHeight);
@@ -170,6 +171,17 @@ function setTab(titleObj)
     };
 }
 
+/**
+ * Update diff editor inline style.
+ *
+ * @param  bool   display
+ * @access public
+ * @return void
+ */
+function updateEditorInline(display){
+    editor.updateOptions({renderSideBySide: display});
+}
+
 $(function()
 {
     $('.btn-left').click(function()  {arrowTabs('relationTabs', 1);});
@@ -196,66 +208,68 @@ $(function()
 
             if(pageType == 'diff')
             {
-                var diffContent = parent.getDiffs(file.basename);
-                var editor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
+                var diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
+                editor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
                 {
-                    tabCompletion: 'on',
-                    autoIndent: true,
-                    language: lang,
-                    contextmenu: true,
-                    EditorMinimapOptions: {
-                        enabled: false
-                    },
-                    readOnly: true,
-                    automaticLayout: true
+                    readOnly:             true,
+                    language:             lang,
+                    autoIndent:           true,
+                    inDiffEditor:         true,
+                    contextmenu:          true,
+                    automaticLayout:      true,
+                    renderSideBySide:     true,
+                    EditorMinimapOptions: {enabled: false},
+                    lineNumbers: function(number)
+                    {
+                        var newlc = diffContent.line.new;
+                        var oldlc = diffContent.line.old;
+                        return newlc[number - 1];
+                    }
                 });
 
                 editor.setModel({
-                    original: monaco.editor.createModel(diffContent.old, lang),
-                    modified: monaco.editor.createModel(diffContent.new, lang),
+                    original: monaco.editor.createModel(diffContent.code.old.trim("\n"), lang),
+                    modified: monaco.editor.createModel(diffContent.code.new.trim("\n"), lang),
                 });
             }
             else
             {
-                var editor = monaco.editor.create(document.getElementById('codeContainer'),
+                editor = monaco.editor.create(document.getElementById('codeContainer'),
                 {
-                    tabCompletion: 'on',
-                    autoIndent: true,
-                    value: codeContent.toString(),
-                    language: lang,
-                    contextmenu: true,
-                    EditorMinimapOptions: {
-                        enabled: false
-                    },
-                    readOnly: true,
-                    automaticLayout: true
+                    value:                codeContent.toString(),
+                    language:             lang,
+                    readOnly:             true,
+                    autoIndent:           true,
+                    contextmenu:          true,
+                    automaticLayout:      true,
+                    EditorMinimapOptions: {enabled: false}
                 });
-            }
 
-            editor.onMouseDown(function(obj)
-            {
-                var line = obj.target.position.lineNumber;
-
-                var blame = blames[line];
-                if(!blame) return;
-
-                var p_line = parseInt(line);
-                while(!blame.revision)
+                editor.onMouseDown(function(obj)
                 {
-                    p_line--;
-                    blame = blames[p_line];
-                }
-                if($('#log').data('line') == p_line) return;
+                    var line = obj.target.position.lineNumber;
 
-                var time    = blame.time != 'unknown' ? blame.time : '';
-                var user    = blame.committer != 'unknown' ? blame.committer : '';
-                var version = blame.revision.toString().substring(0, 10);
-                var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
-                $('.history').text(content);
-                $('#log').data('line', p_line);
-                $('#log').css('display', 'flex');
-                getRelation(blame.revision);
-            })
+                    var blame = blames[line];
+                    if(!blame) return;
+
+                    var p_line = parseInt(line);
+                    while(!blame.revision)
+                    {
+                        p_line--;
+                        blame = blames[p_line];
+                    }
+                    if($('#log').data('line') == p_line) return;
+
+                    var time    = blame.time != 'unknown' ? blame.time : '';
+                    var user    = blame.committer != 'unknown' ? blame.committer : '';
+                    var version = blame.revision.toString().substring(0, 10);
+                    var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
+                    $('.history').text(content);
+                    $('#log').data('line', p_line);
+                    $('#log').css('display', 'flex');
+                    getRelation(blame.revision);
+                })
+            }
         });
     }
 
