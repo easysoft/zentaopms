@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'md5.js');?>
-<?php $lang->user->placeholder->password1 = zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '');?>
+<?php $lang->user->placeholder->password1 = zget($lang->user->placeholder->passwordStrength, !empty($config->safe->mode) ? $config->safe->mode : 0, '');?>
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
 <?php
