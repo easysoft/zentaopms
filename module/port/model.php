@@ -281,28 +281,31 @@ class portModel extends model
             $fieldList['mailto']['values']  = $this->portConfig->sysDataList['user'];
         }
 
-        /* Set workflow fields .*/
-        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-            ->where('module')->eq($model)
-            ->andWhere('buildin')->eq(0)
-            ->fetchAll('id');
-
-        foreach($workflowFields as $field)
+        if($this->config->edition != 'open')
         {
-            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
-            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
-            if(empty($field->options)) continue;
+            /* Set workflow fields .*/
+            $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
+                ->where('module')->eq($model)
+                ->andWhere('buildin')->eq(0)
+                ->fetchAll('id');
 
-            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
-            $options = $this->workflowfield->getFieldOptions($field, true);
-            if($options)
+            foreach($workflowFields as $field)
             {
-                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
-                $fieldList[$field->field]['title']   = $field->name;
-                $fieldList[$field->field]['control'] = $control;
-                $fieldList[$field->field]['values']  = $options;
-                $fieldList[$field->field]['from']    = 'workflow';
-                $this->config->$model->listFields .=  ',' . $field->field;
+                if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
+                if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
+                if(empty($field->options)) continue;
+
+                $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
+                $options = $this->workflowfield->getFieldOptions($field, true);
+                if($options)
+                {
+                    $control = $field->control == 'multi-select' ? 'multiple' : 'select';
+                    $fieldList[$field->field]['title']   = $field->name;
+                    $fieldList[$field->field]['control'] = $control;
+                    $fieldList[$field->field]['values']  = $options;
+                    $fieldList[$field->field]['from']    = 'workflow';
+                    $this->config->$model->listFields .=  ',' . $field->field;
+                }
             }
         }
 
