@@ -150,7 +150,7 @@ function setParentProgram(parentProgram)
 
     $('#parent').attr('data-lastSelected', parentProgram);
 
-    if($('#parent').val() != '0')
+    if(parentProgram != '0')
     {
         $('#productsBox .addProduct .input-group:first').addClass('required');
         $('#productsBox .row .input-group:first').addClass('required');
