@@ -27,7 +27,7 @@
       <div>
         <ul id='infoList'>
           <li>
-            <?php echo $userID ? $annualDataLang->logins : ($dept ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
+            <?php echo $userID ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
             <strong><?php echo $userID ? $data['logins'] : $data['users'];?></strong>
           </li>
           <li>
@@ -65,7 +65,7 @@
               }
           }
           ?>
-          <?php if(!empty($dept) or !empty($userID)):?>
+          <?php if($dept !== '' or !empty($userID)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
             <strong><?php echo $contributions;?></strong>
@@ -75,7 +75,7 @@
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo ((empty($dept) and empty($userID)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
+      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($userID)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
       <div>
         <ul>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
@@ -207,7 +207,7 @@
       </div>
       <div class='table-header-fixed'>
     </section>
-    <?php if(empty($dept) and empty($userID)):?>
+    <?php if($dept === '' and empty($userID)):?>
     <section id='allTimeStatusStat'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->statusStat;?></h2></header>
       <div>
@@ -287,7 +287,7 @@ $(function()
     <?php unset($lang->story->statusList['']);?>
     <?php unset($lang->bug->statusList['']);?>
     <?php unset($lang->task->statusList['']);?>
-    <?php if(empty($dept) and empty($userID)):?>
+    <?php if($dept === ''  and empty($userID)):?>
     <?php foreach($data['statusStat'] as $objectType => $objectStatusStat):?>
     <?php
     $statusStat = array();
