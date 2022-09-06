@@ -107,7 +107,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 1; $i <= 3; $i++):?>
+          <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
