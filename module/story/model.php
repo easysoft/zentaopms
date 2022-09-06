@@ -3071,7 +3071,7 @@ class storyModel extends model
             }
             else
             {
-                $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
+                $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'changing', 'closed')";
             }
 
             if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
