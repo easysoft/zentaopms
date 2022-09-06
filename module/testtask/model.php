@@ -1726,7 +1726,6 @@ class testtaskModel extends model
      */
     public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
     {
-        var_dump($cases);die;
         if(empty($cases)) return print(js::alert($this->lang->testtask->noImportData));
 
         /* Import cases and link task and insert result. */
