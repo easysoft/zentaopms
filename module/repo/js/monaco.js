@@ -1,27 +1,27 @@
+/**
+ * Create file tab.
+ *
+ * @param  string filename
+ * @param  string filepath
+ * @access public
+ * @return object
+ */
+function createTab(filename, filepath)
+{
+    $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
+    var tabID = Base64.encode(filepath).replaceAll('=', '-');
+    return {
+        title: filename,
+        id:    tabID,
+        type:  'iframe',
+        url:   createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath))))
+    };
+}
+
 $(function()
 {
     $('.btn-left').click(function()  {arrowTabs('fileTabs', 1);});
     $('.btn-right').click(function() {arrowTabs('fileTabs', -2);});
-
-    /**
-     * Create file tab.
-     *
-     * @param  string filename
-     * @param  string filepath
-     * @access public
-     * @return object
-     */
-    function createTab(filename, filepath)
-    {
-        $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
-        var tabID = Base64.encode(filepath).replaceAll('=', '-');
-        return {
-            title: filename,
-            id:    tabID,
-            type:  'iframe',
-            url:   createLink('repo', 'ajaxGetEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath))))
-        };
-    }
     $('#fileTabs').tabs({tabs: [createTab(file['basename'], entry)]});
 
     /**
@@ -40,7 +40,7 @@ $(function()
 
     $(document).on('click', '.repoFileName', function()
     {
-        var path  = encodeURIComponent($(this).data('path'));
+        var path  = $(this).data('path');
         var name  = $(this).text();
         var $tabs = $('#fileTabs').data('zui.tabs');
         if(openedFiles.indexOf(path) == -1) openedFiles.push(path);

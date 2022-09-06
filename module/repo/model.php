@@ -2365,27 +2365,34 @@ class repoModel extends model
      *
      * @param  object $repo
      * @param  string $branch
-     * @param  string $parent
+     * @param  array  $diffs
      * @access public
      * @return string
      */
-    public function getFileTree($repo, $branch = '')
+    public function getFileTree($repo, $branch = '', $diffs = array())
     {
-        if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-        $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
-            ->where('t1.repo')->eq($repo->id)
-            ->andWhere('t1.type')->eq('file')
-            ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
-            ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->orderBy('t2.`time` asc')
-            ->fetchPairs();
-
         $allFiles = array();
-        foreach($files as $file => $action)
+        if(empty($diffs))
         {
-            if($action != 'D') $allFiles[] = $file;
+            if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+            $files = $this->dao->select('t1.path,t1.action')->from(TABLE_REPOFILES)->alias('t1')
+                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
+                ->where('t1.repo')->eq($repo->id)
+                ->andWhere('t1.type')->eq('file')
+                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+                ->orderBy('t2.`time` asc')
+                ->fetchPairs();
+
+            foreach($files as $file => $action)
+            {
+                if($action != 'D') $allFiles[] = $file;
+            }
+        }
+        else
+        {
+            foreach($diffs as $diff) $allFiles[] = $diff->fileName;
         }
 
         return $this->buildFileTree($allFiles);
