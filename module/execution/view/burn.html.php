@@ -52,7 +52,12 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <h2 class='text-center'><?php echo $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')';?></h2>
+  <h2 class='text-center'>
+    <?php echo $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')';?>
+    <?php if(isset($execution->delay)):?>
+    <span class="label label-danger label-outline"><?php echo $lang->execution->delayed;?></span>
+    <?php endif;?>
+  </h2>
   <div id="burnWrapper">
     <div id="burnChart">
       <canvas id="burnCanvas"></canvas>
