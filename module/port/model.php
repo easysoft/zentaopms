@@ -861,6 +861,7 @@ class portModel extends model
      * @param  int    $model
      * @param  int    $datas
      * @param  string $filter
+     * @param  string $fields
      * @access public
      * @return void
      */
