@@ -1726,6 +1726,7 @@ class testtaskModel extends model
      */
     public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
     {
+        var_dump($cases);die;
         if(empty($cases)) return print(js::alert($this->lang->testtask->noImportData));
 
         /* Import cases and link task and insert result. */
@@ -2114,7 +2115,7 @@ class testtaskModel extends model
             $case = new stdclass();
             if(!empty($caseResult->id)) $case->id = $caseResult->id;
             $case->product    = $productID;
-            $case->title      = $caseResult->title;
+            if(empty($caseResult->id)) $case->title = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'unit';
             $case->stage      = 'unittest';
