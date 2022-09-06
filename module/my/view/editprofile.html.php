@@ -17,7 +17,7 @@
   <div class='main-header'>
     <h2><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></h2>
   </div>
-  <form method='post' target='hiddenwin' id='dataform'>
+  <form method='post' class='form-ajax' id='dataform'>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblBasic;?></caption>
       <tr>

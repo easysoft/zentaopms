@@ -1212,9 +1212,8 @@ EOF;
             $_POST['account'] = $this->app->user->account;
             $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
-            if(dao::isError()) helper::end(js::error(dao::getError()));
-            echo js::locate($this->createLink('my', 'profile'), 'parent');
-            return;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'profile'), 'closeModal' => true));
         }
 
         $this->app->loadConfig('user');
