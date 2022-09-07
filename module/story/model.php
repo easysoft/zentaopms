@@ -709,7 +709,7 @@ class storyModel extends model
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
 
-        $story = $this->file->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
@@ -726,8 +726,6 @@ class storyModel extends model
                 $storyFiles = $oldStory->files = join(',', array_keys($oldStory->files));
                 foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
 
-                $story = $this->getById($storyID);
-
                 $data          = new stdclass();
                 $data->story   = $storyID;
                 $data->version = $story->version;
@@ -740,8 +738,9 @@ class storyModel extends model
                 /* IF is story and has changed, update its relation version to new. */
                 if($oldStory->type == 'story')
                 {
+                    $newStory = $this->getById($storyID);
                     $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
-                    $this->updateStoryVersion($story);
+                    $this->updateStoryVersion($newStory);
                 }
                 else
                 {
@@ -750,7 +749,7 @@ class storyModel extends model
                         ->where('AType')->eq('requirement')
                         ->andWhere('BType')->eq('story')
                         ->andWhere('relation')->eq('subdivideinto')
-                        ->andWhere('AID')->eq($story->id)
+                        ->andWhere('AID')->eq($storyID)
                         ->fetchPairs();
 
                     foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->eq($relationID)->exec();
