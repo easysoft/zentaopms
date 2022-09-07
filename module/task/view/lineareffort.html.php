@@ -48,6 +48,7 @@ foreach($efforts as $effort)
           </thead>
           <tbody>
             <?php foreach($allEfforts[$order] as $effort):?>
+            <?php if($effort->account != $this->app->user->account) continue;?>
             <tr class="text-center">
               <td><?php echo $effort->date;?></td>
               <td><?php echo zget($users, $effort->account);?></td>
