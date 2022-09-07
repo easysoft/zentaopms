@@ -109,7 +109,7 @@ $config->product->all->search['fields']['createdDate'] = $lang->product->created
 $config->product->all->search['fields']['createdBy']   = $lang->product->createdBy;
 
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->product->all->search['params']['code']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
 if($config->systemMode == 'new') $config->product->all->search['params']['program'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->product->all->search['params']['line']        = array('operator' => '=',       'control' => 'select', 'values' => '');
