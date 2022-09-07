@@ -2458,11 +2458,11 @@ EOD;
     {
         if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
 
-        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']))
+        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']) and $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')
         {
-            if($_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
+            return;
         }
-        else if((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
+        elseif((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
         {
             return;
         }
@@ -2911,7 +2911,7 @@ EOD;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) return print(js::locate($this->config->webRoot));
+        if($isFreepasswd) die(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));

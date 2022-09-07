@@ -50,7 +50,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -1629,12 +1629,6 @@ class actionModel extends model
                 $this->app->loadLang('doc');
                 $action->objectLabel = $this->lang->doc->menuTitle;
             }
-        }
-
-        if($action->objectType == 'reviewissue')
-        {
-            $project  = $this->dao->select('project')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch('project');
-            $action->objectLink = helper::createLink('reviewissue', 'view', "project=$project&issueID=$action->objectID");
         }
 
         if($action->objectType == 'review')

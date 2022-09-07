@@ -358,18 +358,33 @@ class reportModel extends model
             $taskGroups[$task->assignedTo][$task->id] = $task;
         }
 
-        $multiTaskTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($allTasks))
+        $stmt = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($allTasks))
             ->beginIF($dept)->andWhere('account')->in(array_keys($deptUsers))->fi()
-            ->fetchGroup('account', 'task');
-        foreach($multiTaskTeams as $assignedTo => $multiTasks)
+            ->query();
+        $multiTaskTeams = array();
+        while($taskTeam = $stmt->fetch())
         {
-            foreach($multiTasks as $task)
+            $account = $taskTeam->account;
+            if(!isset($multiTaskTeams[$account][$taskTeam->task]))
             {
-                $userTask = clone $allTasks[$task->root];
-                $userTask->estimate = $task->estimate;
-                $userTask->consumed = $task->consumed;
-                $userTask->left     = $task->left;
-                $taskGroups[$assignedTo][$task->root] = $userTask;
+                $multiTaskTeams[$account][$taskTeam->task] = $taskTeam;
+            }
+            else
+            {
+                $multiTaskTeams[$account][$taskTeam->task]->estimate += $taskTeam->estimate;
+                $multiTaskTeams[$account][$taskTeam->task]->consumed += $taskTeam->consumed;
+                $multiTaskTeams[$account][$taskTeam->task]->left     += $taskTeam->left;
+            }
+        }
+        foreach($multiTaskTeams as $assignedTo => $taskTeams)
+        {
+            foreach($taskTeams as $taskTeam)
+            {
+                $userTask = clone $allTasks[$taskTeam->task];
+                $userTask->estimate = $taskTeam->estimate;
+                $userTask->consumed = $taskTeam->consumed;
+                $userTask->left     = $taskTeam->left;
+                $taskGroups[$assignedTo][$taskTeam->task] = $userTask;
             }
         }
 

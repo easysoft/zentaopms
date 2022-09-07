@@ -1198,24 +1198,16 @@ class block extends control
         $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
 
-        $task = $this->dao->select("
-            sum(consumed) as totalConsumed,
-            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)->where('project')->eq($this->session->project)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->fetch();
-
         $this->weekly->save($this->session->project, $date);
 
-        $this->view->pv = $this->weekly->getPV($this->session->project, $today);
-        $this->view->ev = $this->weekly->getEV($this->session->project, $today);
-        $this->view->ac = $this->weekly->getAC($this->session->project, $today);
+        $this->view->pv = (float)$this->weekly->getPV($this->session->project, $today);
+        $this->view->ev = (float)$this->weekly->getEV($this->session->project, $today);
+        $this->view->ac = (float)$this->weekly->getAC($this->session->project, $today);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
         $this->view->current  = $current;
-        $this->view->progress = ($task->totalConsumed + $task->totalLeft) ? floor($task->totalConsumed / ($task->totalConsumed + $task->totalLeft) * 1000) / 1000 * 100 : 0;
+        $this->view->progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
     }
 
     /**

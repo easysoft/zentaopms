@@ -56,6 +56,9 @@ $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
 $lang->task->replace             = 'Replace';
+$lang->task->myEffort            = 'My Effort';
+$lang->task->allEffort           = 'All Effort';
+$lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -163,7 +166,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
-$lang->task->selectTestStory   = 'Select Story Tested';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
 $lang->task->noAssigned        = 'Unassigned';
@@ -223,6 +226,7 @@ $lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by 
 
 $lang->task->confirmDelete             = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = "Copy Story";
 $lang->task->afterSubmit               = "Next ";
 $lang->task->successSaved              = "Created!";

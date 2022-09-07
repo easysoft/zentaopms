@@ -263,12 +263,11 @@ class dao extends baseDAO
                 continue;
             }
 
-            if(!isset($this->sqlobj->data->{$field->field})) $this->sqlobj->data->{$field->field} = false;
-
             /* Check rules of fields. */
             foreach($field->ruleData as $rule)
             {
                 if(empty($rule)) continue;
+                if(!isset($this->sqlobj->data->{$field->field})) continue;
 
                 if($rule->type == 'system')
                 {

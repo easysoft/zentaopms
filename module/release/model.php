@@ -335,10 +335,13 @@ class releaseModel extends model
             }
             elseif(($notify == 'ET' or $notify == 'PT') and !empty($release->build))
             {
-                $type    = $notify == 'ET' ? 'execution' : 'project';
-                $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
-                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type . '=t2.root')
-                    ->where('t2.type')->eq($type)
+                $type     = $notify == 'ET' ? 'execution' : 'project';
+                $table    = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
+                $objectID = $notify == 'ET' ? $release->build : $release->id;
+                $members  = $this->dao->select('t2.account')->from($table)->alias('t1')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
+                    ->where('t1.id')->eq($objectID)
+                    ->andWhere('t2.type')->eq($type)
                     ->fetchPairs();
 
                 if(empty($members)) continue;

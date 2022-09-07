@@ -154,7 +154,7 @@ $lang->install->saved2File         = 'Die Konfigurationsdatei wurde gespeichert 
 $lang->install->errorNotSaveConfig = 'Die Konfigurationsdatei wurde nicht gespeichert.';
 
 global $app;
-$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->moduleRoot}config/config.php file.";
+$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
 
 $lang->install->getPriv            = 'Als Admin setzen';
 $lang->install->company            = 'Firmenname';

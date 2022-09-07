@@ -449,22 +449,6 @@ class personnelModel extends model
     }
 
     /**
-     * Access to data on stages and sprints.
-     *
-     * @param  object    $projects
-     * @access public
-     * @return array
-     */
-    public function getSprintAndStage($projects)
-    {
-        $teams = $this->dao->select('t1.id,t1.root,t1.type,t1.role,t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($rootIDList)
-            ->andWhere('t1.type')->in('stage,sprint')
-            ->fetchGroup('root', 'id');
-    }
-
-    /**
      * Get objects to copy.
      *
      * @param  int    $objectID

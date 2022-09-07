@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+$db->switchDB();
 su('admin');
 
 /**

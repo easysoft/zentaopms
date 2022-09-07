@@ -149,9 +149,10 @@ class releaseTest
      * @return array
      */
 
-    public function getNotifyPersonsTest($notifyList = '', $productID = 0, $buildID = 0, $releaseID = 0)
+    public function getNotifyPersonsTest($releaseID)
     {
-        $objects = $this->objectModel->getNotifyPersons($notifyList, $productID, $buildID, $releaseID);
+        $release = $this->objectModel->getById($releaseID);
+        $objects = $this->objectModel->getNotifyPersons($release);
 
         if(dao::isError()) return dao::getError();
 
@@ -315,16 +316,6 @@ class releaseTest
         return $objects;
     }
 
-    public function sendmailTest($releaseID)
-    {
-        $objects = $this->objectModel->sendmail($releaseID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-
     /**
      * Get toList and ccList.
      *
@@ -337,15 +328,6 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
 
         $objects = $this->objectModel->getToAndCcList($release);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function sendMail2FeedbackTest($release, $subject)
-    {
-        $objects = $this->objectModel->sendMail2Feedback($release, $subject);
 
         if(dao::isError()) return dao::getError();
 

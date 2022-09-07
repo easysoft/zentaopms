@@ -167,6 +167,12 @@ class bugModel extends model
         $pri       = 0;
         foreach($data->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('bug', $data, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                return false;
+            }
+
             $oses     = array_filter($data->oses[$i]);
             $browsers = array_filter($data->browsers[$i]);
 
@@ -192,16 +198,7 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title))
-            {
-                if($this->common->checkValidRow('bug', $data, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-                    return false;
-                }
-
-                continue;
-            }
+            if(empty($title)) continue;
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -790,11 +787,7 @@ class bugModel extends model
 
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
-            {
-                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
             return common::createChanges($oldBug, $bug);
         }
@@ -932,7 +925,6 @@ class bugModel extends model
                     {
                         $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                         $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                        if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
                     }
                 }
                 else
@@ -1230,11 +1222,7 @@ class bugModel extends model
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
-            {
-                $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                if(in_array($bug->status, array('resolved', 'closed'))) $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', "bug {$bug->status}");
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
             return common::createChanges($oldBug, $bug);
         }
@@ -1413,7 +1401,6 @@ class bugModel extends model
             {
                 $feedbacks[$oldBug->feedback] = $oldBug->feedback;
                 $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-                $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug resolved');
             }
         }
 
@@ -1526,11 +1513,7 @@ class bugModel extends model
             if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback)
-        {
-            $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
-            $this->loadModel('action')->create('feedback', $oldBug->feedback, 'processed', '', 'bug closed');
-        }
+        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         return common::createChanges($oldBug, $bug);
     }

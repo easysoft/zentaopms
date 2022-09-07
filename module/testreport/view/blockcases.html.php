@@ -1,5 +1,4 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<style>.c-date {width: 130px;}</style>
 <table class='table main-table' id='cases'>
   <thead>
     <tr>
@@ -46,14 +45,17 @@
     </tr>
     <?php endif;?>
   </tbody>
-  <?php if(isset($pager)):?>
-  <tfoot>
-    <tr>
-      <td class='text-right' colspan='9'><?php $pager->show('right', 'pagerjs');?></td>
-    </tr>
-  </tfoot>
-  <?php endif;?>
+</table>
+<?php if(isset($pager)):?>
+<div class='table-footer'>
+  <?php $pager->show('right', 'pagerjs');?>
+</div>
+<?php endif;?>
   <?php else:?>
   <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>
 </table>
+<style>
+.c-date {width: 130px;}
+#cases + .table-footer {margin-top: -20px;}
+</style>

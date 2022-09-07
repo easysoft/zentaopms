@@ -56,6 +56,9 @@ $lang->task->copy                = 'Aufgabe kopieren';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
 $lang->task->replace             = 'Replace';
+$lang->task->myEffort            = 'My Effort';
+$lang->task->allEffort           = 'All Effort';
+$lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Aufgabe';
 $lang->task->id                = 'ID';
@@ -163,7 +166,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
-$lang->task->selectTestStory   = 'Select Story Tested';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'Alle';
 $lang->task->noStory           = 'Keine Story';
 $lang->task->noAssigned        = 'Nicht zugeordnet';
@@ -223,6 +226,7 @@ $lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by 
 
 $lang->task->confirmDelete             = "Möchten Sie diese Aufgabe löschen?";
 $lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = "Story kopieren";
 $lang->task->afterSubmit               = "Nach der Erstellung,";
 $lang->task->successSaved              = "Erstellt!";

@@ -107,8 +107,8 @@ class company extends control
             return print(js::reload('parent.parent'));
         }
 
-        $this->view->title     = $this->lang->company->common . $this->lang->colon . $this->lang->company->create;
-        $this->view->position  = $this->lang->company->create;
+        $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->create;
+        $this->view->position = $this->lang->company->create;
 
         $this->display();
     }
@@ -136,9 +136,9 @@ class company extends control
         $this->company->setMenu();
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
         $position[] = $this->lang->company->edit;
-        $this->view->title     = $title;
-        $this->view->position  = $position;
-        $this->view->company   = $this->company->getById($this->app->company->id);
+        $this->view->title    = $title;
+        $this->view->position = $position;
+        $this->view->company  = $this->company->getById($this->app->company->id);
 
         $this->display();
     }
@@ -253,8 +253,8 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch')
         {
-            if(!$productID) $productID = 'all';
-            if(!$projectID) $projectID = 'all';
+            if(!$productID)   $productID   = 'all';
+            if(!$projectID)   $projectID   = 'all';
             if(!$executionID) $executionID = 'all';
             $actions = $this->action->getDynamic($account, $browseType, $orderBy, $pager, $productID, $projectID, $executionID, $date, $direction);
         }

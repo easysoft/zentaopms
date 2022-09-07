@@ -131,7 +131,6 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -707,6 +706,8 @@ class upgradeModel extends model
                 $this->addFlowActions('biz7.4');
                 $this->addFlowFields('biz7.4');
                 break;
+            case 'biz7_6':
+                //$this->processFeedbackModule();
         }
     }
 
@@ -6812,14 +6813,13 @@ class upgradeModel extends model
     public function processCreatedInfo()
     {
         $objectTypes = array('productplan', 'release', 'testtask', 'build');
-        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK, 'build' => TABLE_BUILD);
 
         $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
         foreach($actions as $objectType => $objectActions)
         {
             foreach($objectActions as $action)
             {
-                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+                $this->dao->update($this->config->objectTables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
             }
         }
 
@@ -7161,7 +7161,7 @@ class upgradeModel extends model
     {
         if(empty($this->config->URAndSR)) return true;
 
-        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM " . TABLE_GROUPPRIV . " WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
     }
@@ -7245,6 +7245,59 @@ class upgradeModel extends model
     }
 
     /**
+     * Process feedback module
+     *
+     * @access public
+     * @return void
+     */
+    public function processFeedbackModule()
+    {
+
+        $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
+        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
+        $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
+
+        $allProductRelation = array();
+        foreach($products as $product)
+        {
+            $productID = $product->id;
+            $relation  = array();
+            foreach($modules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $productID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $allProductRelation[$productID][$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+                $newPaths = join(',', $newPaths);
+                $parent   = !empty($module->parent) and isset($relation[$module->parent]) ? $relation[$module->parent] : 0;
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
+            }
+        }
+
+        /* Update feedback module */
+        foreach($feedbacks as $feedback)
+        {
+            $moduleID = $feedback->module;
+            $product  = $feedback->product;
+            if(empty($moduleID)) continue;
+            $newModuleID = $allProductRelation[$product][$moduleID];
+            if(empty($newModuleID)) continue;
+
+            $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
+        }
+
+        /* Delete history module */
+        $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /*
      * Convert task team to table: zt_taskteam.
      *
      * @access public
@@ -7265,7 +7318,8 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
 
-                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
                 $order ++;
             }
         }
