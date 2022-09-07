@@ -100,7 +100,7 @@ class treeModel extends model
         /* $createdVersion < 4.1 or $type == 'story'. */
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('1=1')
-            ->beginIF($type != 'feedback' and !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
+            ->beginIF($type != 'feedback' or !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
             ->andWhere('type')->eq($type)
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
