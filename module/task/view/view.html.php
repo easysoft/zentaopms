@@ -147,7 +147,7 @@
       </div>
       <?php endif;?>
       <?php
-      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));
+      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task, 'method' => 'view', 'showDelete' => false));
 
       $canBeChanged = common::canBeChanged('task', $task);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");

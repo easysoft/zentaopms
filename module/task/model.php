@@ -1075,6 +1075,7 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('realStarted', '0000-00-00 00:00:00')
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -1158,7 +1159,7 @@ class taskModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->update(TABLE_TASK)->data($task)
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
@@ -1247,11 +1248,9 @@ class taskModel extends model
                     if(!empty($changes)) $this->action->logHistory($actionID, $changes);
                 }
             }
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
 
             unset($oldTask->parent);
             unset($task->parent);
-
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
@@ -1268,6 +1267,23 @@ class taskModel extends model
                     $task->team .= "{$this->lang->task->teamMember}: " . zget($users, $account) . ", {$this->lang->task->estimateAB}: " . zget($this->post->teamEstimate, $i, 0) . ", {$this->lang->task->consumedAB}: " . zget($this->post->teamConsumed, $i, 0) . ", {$this->lang->task->leftAB}: " . zget($this->post->teamLeft, $i, 0) . "\n";
                 }
             }
+
+            $oldTaskFiles = empty($oldTask->files) ? '' : join(',', array_keys($oldTask->files));
+            if(!empty($task->deleteFiles))
+            {
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($task->deleteFiles)->exec();
+                foreach($task->deleteFiles as $fileID)
+                {
+                    @unlink($oldTask->files[$fileID]->realPath);
+                    $oldTaskFiles = empty($oldTaskFiles) ? '' : str_replace(",$fileID,", ',', ",$oldTaskFiles,");
+                }
+            }
+
+            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
+            $addedFiles     = $this->loadModel('file')->saveUpload('task', $taskID);
+            $addedFiles     = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+            $task->files    = trim($oldTaskFiles . $addedFiles, ',');
+            $oldTask->files = join(',', array_keys($oldTask->files));
 
             return common::createChanges($oldTask, $task);
         }
