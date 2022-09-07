@@ -1220,7 +1220,7 @@ class block extends control
      */
     public function printWaterfallGeneralReportBlock()
     {
-        $this->loadModel('programplan');
+        $this->app->loadLang('programplan');
         $this->loadModel('project');
         $this->loadModel('weekly');
 
