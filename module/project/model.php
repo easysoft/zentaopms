@@ -434,7 +434,7 @@ class projectModel extends model
             $PV += $task->estimate;
             if($task->status == 'done' or $task->closedReason == 'done')
             {
-                $EV += $this->estimate;
+                $EV += $task->estimate;
             }
             else
             {
