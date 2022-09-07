@@ -74,10 +74,10 @@
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
-        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-        <?php elseif(!isset($task->members[$app->user->account])):?>
+        <?php if(!isset($task->members[$app->user->account])):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+        <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
         <?php endif;?>
       </div>
     </div>
