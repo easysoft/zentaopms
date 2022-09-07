@@ -28,11 +28,10 @@ js::set('canLinkTask', $canLinkTask);
 js::set('objectID', 0);
 js::set('objectType', 'story');
 js::set('pageType', $type);
-if($showEditor)
-{
-    js::set('codeContent', $content);
-    js::set('blames', $blames);
-}
+js::set('revision', $revision);
+js::set('sourceRevision', $oldRevision);
+js::set('encodePath', $this->repo->encodePath($entry));
+if($showEditor) js::set('codeContent', $content);
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 ?>
@@ -81,6 +80,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 <?php include '../../common/view/footer.lite.html.php';?>
 <script>
 var editor       = null;
+var blames       = null;
 var globalCommit = '';
 var codeHeight   = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
 if(codeHeight > 0) $.cookie('codeContainerHeight', codeHeight);
@@ -182,6 +182,31 @@ function updateEditorInline(display){
     editor.updateOptions({renderSideBySide: display});
 }
 
+/**
+ * Show commit info.
+ *
+ * @access public
+ * @return void
+ */
+function showCommitInfo()
+{
+    var link = createLink('repo', 'ajaxGetCommitInfo');
+    var data = {
+        repoID        : repoID,
+        entry         : encodePath,
+        revision      : revision,
+        sourceRevision: sourceRevision,
+        line          : 0,
+        returnType    : 'json'
+    };
+
+    $.post(link, data, function(res)
+    {
+        res = JSON.parse(res);
+        blames = res.blames;
+    })
+}
+
 $(function()
 {
     $('.btn-left').click(function()  {arrowTabs('relationTabs', 1);});
@@ -206,10 +231,11 @@ $(function()
                 if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
             });
 
+            var diffContent  = null;
             if(pageType == 'diff')
             {
-                var diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
-                editor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
+                diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
+                var modifiedEditor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
                 {
                     readOnly:             true,
                     language:             lang,
@@ -227,10 +253,12 @@ $(function()
                     }
                 });
 
-                editor.setModel({
+                modifiedEditor.setModel({
                     original: monaco.editor.createModel(diffContent.code.old.trim("\n"), lang),
                     modified: monaco.editor.createModel(diffContent.code.new.trim("\n"), lang),
                 });
+
+                editor = modifiedEditor.getModifiedEditor();
             }
             else
             {
@@ -244,32 +272,35 @@ $(function()
                     automaticLayout:      true,
                     EditorMinimapOptions: {enabled: false}
                 });
-
-                editor.onMouseDown(function(obj)
-                {
-                    var line = obj.target.position.lineNumber;
-
-                    var blame = blames[line];
-                    if(!blame) return;
-
-                    var p_line = parseInt(line);
-                    while(!blame.revision)
-                    {
-                        p_line--;
-                        blame = blames[p_line];
-                    }
-                    if($('#log').data('line') == p_line) return;
-
-                    var time    = blame.time != 'unknown' ? blame.time : '';
-                    var user    = blame.committer != 'unknown' ? blame.committer : '';
-                    var version = blame.revision.toString().substring(0, 10);
-                    var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
-                    $('.history').text(content);
-                    $('#log').data('line', p_line);
-                    $('#log').css('display', 'flex');
-                    getRelation(blame.revision);
-                })
             }
+
+            editor.onMouseDown(function(obj)
+            {
+                if(!blames) return;
+
+                var line  = obj.target.position.lineNumber;
+                if(pageType == 'diff') line = diffContent.line.new[line -1];
+
+                var blame = blames[line];
+                if(!blame) return;
+
+                var p_line = parseInt(line);
+                while(!blame.revision)
+                {
+                    p_line--;
+                    blame = blames[p_line];
+                }
+                if($('#log').data('line') == p_line) return;
+
+                var time    = blame.time != 'unknown' ? blame.time : '';
+                var user    = blame.committer != 'unknown' ? blame.committer : '';
+                var version = blame.revision.toString().substring(0, 10);
+                var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
+                $('.history').text(content);
+                $('#log').data('line', p_line);
+                $('#log').css('display', 'flex');
+                getRelation(blame.revision);
+            })
         });
     }
 
@@ -308,5 +339,8 @@ $(function()
         var relatedHeight = codeHeight / 5 * 2 - $('#log').height() - 45;
         $('#relationTabs iframe').css('height', relatedHeight);
     });
+
+    /* Get file commits. */
+    showCommitInfo();
 });
 </script>
