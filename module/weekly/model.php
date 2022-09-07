@@ -494,7 +494,7 @@ class weeklyModel extends model
 
         $monday          = $this->getThisMonday($date);
         $nextMonday      = date('Y-m-d', strtotime($monday) + (7 * 24 * 3600));
-        $executions      = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $executions      = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($project)->fetchAll('id');
         $executionIdList = array_keys($executions);
         $taskIdList      = $this->dao->select('id')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
