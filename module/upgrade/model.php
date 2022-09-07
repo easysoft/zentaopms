@@ -131,7 +131,6 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -7247,7 +7246,7 @@ class upgradeModel extends model
 
     /**
      * Process feedback module
-     * 
+     *
      * @access public
      * @return void
      */
@@ -7297,7 +7296,7 @@ class upgradeModel extends model
         /* Delete history module */
         $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
     }
-    
+
     /*
      * Convert task team to table: zt_taskteam.
      *
@@ -7319,7 +7318,8 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
 
-                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
+                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
                 $order ++;
             }
         }
