@@ -68,7 +68,7 @@ class storiesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,spec,verify,reviewer,type,parent,plan,module,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,URS';
+        $fields = 'title,spec,verify,reviewer,type,parent,plan,module,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,URS,status';
         $this->batchSetPost($fields);
 
         /* If reviewer is not post, set needNotReview. */
@@ -76,6 +76,7 @@ class storiesEntry extends entry
         if(empty($reviewer)) $this->setPost('needNotReview', 1);
         $this->setPost('product', $productID);
         $this->setPost('type', $this->param('type', 'story'));
+        $this->setPost('status', $this->param('status', 'draft'));
 
         $control = $this->loadController('story', 'create');
         $this->requireFields('title,spec,pri,category');

@@ -1198,14 +1198,6 @@ class block extends control
         $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
         $current = zget($weeks, $date, '');
 
-        $task = $this->dao->select("
-            sum(consumed) as totalConsumed,
-            sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
-            ->from(TABLE_TASK)->where('project')->eq($this->session->project)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->fetch();
-
         $this->weekly->save($this->session->project, $date);
 
         $this->view->pv = (float)$this->weekly->getPV($this->session->project, $today);
