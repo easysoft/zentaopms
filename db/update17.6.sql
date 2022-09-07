@@ -13,3 +13,4 @@ CREATE TABLE `zt_taskteam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `zt_taskestimate` ADD `order` tinyint unsigned NULL DEFAULT '0';
 ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
+ALTER TABLE `zt_storyspec` ADD `files` text NOT NULL AFTER `verify`;

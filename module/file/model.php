@@ -46,25 +46,23 @@ class fileModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->andWhere('extra')->ne('editor')
-            ->beginIF(strpos('story,requirement', $objectType) !== false and $extra)->andWhere('extra')->like("%,$extra,%")->fi()
-            ->beginIF(strpos('story,requirement', $objectType) === false and $extra)->andWhere('extra')->eq($extra)->fi()
+            ->beginIF($extra)->andWhere('extra')->eq($extra)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');
 
         foreach($files as $file)
         {
-            if($objectType != 'traincourse' and $objectType != 'traincontents')
-            {
-                $realPathName   = $this->getRealPathName($file->pathname);
-                $file->realPath = $this->savePath . $realPathName;
-                $file->webPath  = $this->webPath . $realPathName;
-            }
-            else
+            if($objectType == 'traincourse' or  $objectType == 'traincontents')
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
                 $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
             }
+
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
         }
 
         return $files;
@@ -81,31 +79,50 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
-        {
-            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-            $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
-        }
 
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
+        if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
         {
             $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
             $file->webPath  = 'data/course/' . $file->pathname;
+
+            return $file;
         }
 
+        $realPathName   = $this->getRealPathName($file->pathname);
+        $file->realPath = $this->savePath . $realPathName;
+        $file->webPath  = $this->webPath . $realPathName;
+
         return $file;
+    }
+
+    /**
+     * Get files by ID list.
+     *
+     * @param  int    $fileIdList
+     * @access public
+     * @return array
+     */
+    public function getByIdList($fileIdList)
+    {
+        if(empty($fileIdList)) return array();
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIdList)->orderBy('id')->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
+            {
+                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+                $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
+            }
+
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
+        }
+
+        return $files;
     }
 
     /**
@@ -1118,63 +1135,5 @@ class fileModel extends model
             $fromcaseVersion += 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
         }
-    }
-
-    /**
-     * Update version of story files.
-     *
-     * @param  int    $storyID
-     * @param  int    $storyVersion
-     * @param  array  $deleteFiles
-     * @access public
-     * @return void
-     */
-    public function updateStoryFileVersion($storyID, $storyVersion, $deleteFiles = array())
-    {
-        $oldStoryVersion = $storyVersion - 1;
-        $this->dao->update(TABLE_FILE)->set("extra = CONCAT(extra, '$storyVersion,')")
-            ->where('objectType')->in('story,requirement')
-            ->andWhere('objectID')->eq($storyID)
-            ->andWhere('extra')->like("%,$oldStoryVersion,%")
-            ->beginIF(!empty($deleteFiles))->andWhere('id')->notin($deleteFiles)->fi()
-            ->exec();
-    }
-
-    /**
-     * Delete story file.
-     *
-     * @param  int    $storyID
-     * @param  int    $storyVersion
-     * @param  array  $deleteFiles
-     * @access public
-     * @return void
-     */
-    public function deleteStoryFile($storyID, $storyVersion, $deleteFiles = array())
-    {
-        $deleteFileList = $this->dao->select('*')->from(TABLE_FILE)
-            ->where('objectType')->in('story,requirement')
-            ->andWhere('objectID')->eq($storyID)
-            ->andWhere('extra')->eq(",$storyVersion,")
-            ->beginIF(!empty($deleteFiles))->andWhere('id')->in($deleteFiles)->fi()
-            ->fetchAll('id');
-
-        if(!empty($deleteFileList))
-        {
-            $this->dao->delete()->from(TABLE_FILE)->where('id')->in(array_keys($deleteFileList))->exec();
-
-            foreach($deleteFileList as $file)
-            {
-                $realPathName = $this->getRealPathName($file->pathname);
-                @unlink($realPathName);
-            }
-        }
-
-        /* When the file is in multiple story versions, 'extra' need delete the version to be deleted. */
-        $this->dao->update(TABLE_FILE)->set("extra = REPLACE(extra, '$storyVersion,', '')")
-            ->where('objectType')->in('story,requirement')
-            ->andWhere('objectID')->eq($storyID)
-            ->andWhere('extra')->like("%,$storyVersion,%")
-            ->beginIF(!empty($deleteFiles))->andWhere('id')->in($deleteFiles)->fi()
-            ->exec();
     }
 }
