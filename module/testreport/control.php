@@ -531,7 +531,7 @@ class testreport extends control
 
         $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
-        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases);
 
         list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($tasks, $report->product, $report->begin, $report->end, $builds);
 
