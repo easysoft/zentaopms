@@ -107,12 +107,12 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 1; $i <= 5; $i++):?>
+          <?php for($i = 1; $i <= 3; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
-              <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
-              <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
+                <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
+                <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
               </div>
               <?php echo html::hidden("id[$i]", $i);?>
             </td>

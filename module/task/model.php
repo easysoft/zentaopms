@@ -3631,6 +3631,7 @@ class taskModel extends model
         $effort->left       = $data->left;
         $effort->work       = isset($data->work) ? $data->work : '';
         $effort->vision     = $this->config->vision;
+        $effort->order      = isset($data->order) ? $data->order : 0;
         $this->dao->insert(TABLE_EFFORT)->data($effort)->autoCheck()->exec();
 
         return $this->dao->lastInsertID();
