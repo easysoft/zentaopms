@@ -35,6 +35,16 @@ class taskModel extends model
 
         if($this->post->selectTestStory)
         {
+            foreach($this->post->testStory as $i => $storyID)
+            {
+                if(empty($storyID)) continue;
+                if($this->post->testEstStarted[$i] > $this->post->testDeadline[$i])
+                {
+                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
+                    return false;
+                }
+            }
+
             /* Check required fields when create test task. */
             foreach($this->post->testStory as $i => $storyID)
             {
@@ -816,7 +826,7 @@ class taskModel extends model
             {
                 if(!$autoStatus) return $currentTask;
 
-                if($currentTask->consumed == 0)
+                if($currentTask->consumed == 0 and empty($efforts))
                 {
                     if(!isset($task->status)) $currentTask->status = 'wait';
                     $currentTask->finishedBy   = '';
@@ -2873,7 +2883,7 @@ class taskModel extends model
         if($estimate->consumed < 0)  return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->record, '0');
         if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
-        $task = $this->getById($oldEstimate->task);
+        $task = $this->getById($oldEstimate->objectID);
         $this->dao->update(TABLE_EFFORT)->data($estimate)
             ->autoCheck()
             ->where('id')->eq((int)$estimateID)
@@ -2946,7 +2956,7 @@ class taskModel extends model
     public function deleteEstimate($estimateID)
     {
         $estimate = $this->getEstimateById($estimateID);
-        $task     = $this->getById($estimate->task);
+        $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
         $consumed = $task->consumed - $estimate->consumed;
@@ -2954,7 +2964,7 @@ class taskModel extends model
         if($estimate->isLast)
         {
             $lastTwoEstimates = $this->dao->select('*')->from(TABLE_EFFORT)
-                ->where('objectID')->eq($estimate->task)
+                ->where('objectID')->eq($estimate->objectID)
                 ->andWhere('objectType')->eq('task')
                 ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEstimate  = isset($lastTwoEstimates[1]) ? $lastTwoEstimates[1] : '';
@@ -2966,7 +2976,7 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($consumed == 0 and $task->status != 'wait')
+        if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
         {
             $data->status = 'wait';
             $data->left   = $task->estimate;
@@ -3031,7 +3041,7 @@ class taskModel extends model
         $this->dao->update(TABLE_EFFORT)->set('deleted')->eq('1')->where('id')->eq($estimateID)->exec();
         if(!empty($task->team)) $data = $this->computeHours4Multiple($task, $data);
 
-        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
+        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->objectID)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
@@ -3621,6 +3631,7 @@ class taskModel extends model
         $effort->left       = $data->left;
         $effort->work       = isset($data->work) ? $data->work : '';
         $effort->vision     = $this->config->vision;
+        $effort->order      = isset($data->order) ? $data->order : 0;
         $this->dao->insert(TABLE_EFFORT)->data($effort)->autoCheck()->exec();
 
         return $this->dao->lastInsertID();

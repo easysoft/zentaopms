@@ -2458,11 +2458,11 @@ EOD;
     {
         if($this->app->getViewType() != 'html' or helper::isAjaxRequest() or isset($_GET['_single'])) return;
 
-        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']))
+        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']) and $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')
         {
-            if($_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
+            return;
         }
-        else if((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
+        elseif((isset($_SERVER['HTTP_REFERER']) and !empty($_SERVER['HTTP_REFERER'])) or strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false)
         {
             return;
         }

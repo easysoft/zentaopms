@@ -2112,8 +2112,9 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
+            if(!empty($caseResult->id)) $case->id = $caseResult->id;
             $case->product    = $productID;
-            $case->title      = $caseResult->title;
+            if(empty($caseResult->id)) $case->title = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'unit';
             $case->stage      = 'unittest';
@@ -2121,7 +2122,7 @@ class testtaskModel extends model
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = $now;
             $case->version    = 1;
-            $case->auto       = 'unit';
+            if(empty($caseResult->id)) $case->auto = 'unit';
             $case->frame      = $frame;
 
             $result = new stdclass();

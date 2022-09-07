@@ -120,6 +120,7 @@ $lang->project->estimate           = '预计';
 $lang->project->consume            = '消耗';
 $lang->project->surplus            = '剩余';
 $lang->project->progress           = '进度';
+$lang->project->weekProgress       = '本周进度';
 $lang->project->dateRange          = '计划起止日期';
 $lang->project->to                 = '至';
 $lang->project->realBeganAB        = '实际开始';

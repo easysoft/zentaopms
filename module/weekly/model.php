@@ -212,6 +212,7 @@ class weeklyModel extends model
             ->andWhere('execution')->in($executionIdList)
             ->andWhere('date')->ge($monday)
             ->andWhere('date')->le($sunday)
+            ->andWhere('deleted')->eq(0)
             ->fetch('count');
     }
 
@@ -239,6 +240,7 @@ class weeklyModel extends model
             ->andWhere("(status='done' or closedReason= 'done')")
             ->andWhere('finishedDate')->ge($monday)
             ->andWhere('finishedDate')->le($sunday)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll();
         return $this->loadModel('task')->processTasks($tasks);
     }
@@ -266,6 +268,7 @@ class weeklyModel extends model
             ->andWhere('status')->in('wait,doing,pause')
             ->andWhere('deadline')->ge($monday)
             ->andWhere('deadline')->le($sunday)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
         $postponed = $this->dao->select('*')
@@ -274,6 +277,7 @@ class weeklyModel extends model
             ->andWhere('finishedDate')->gt($nextMonday)
             ->andWhere('deadline')->ge($monday)
             ->andWhere('deadline')->lt($nextMonday)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
         $tasks = array_merge($unFinished, $postponed);
@@ -302,6 +306,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere("((deadline > '$nextMonday' and deadline < '$sencondMondy') or (estStarted > '$nextMonday' and  estStarted < '$sencondMondy'))")
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
         return $this->loadModel('task')->processTasks($tasks);
@@ -329,6 +334,7 @@ class weeklyModel extends model
         return $this->dao->select('type, sum(cast(estimate as decimal(10,2))) as workload')
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('type')
             ->fetchPairs();
     }
@@ -354,6 +360,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deadline')->ge($monday)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
 
@@ -384,8 +391,7 @@ class weeklyModel extends model
             ->where('execution')->in($executionIdList)
             ->andWhere("parent")->ge(0)
             ->andWhere("deleted")->eq(0)
-            ->andWhere("estStarted")->ge($monday)
-            ->andWhere("estStarted")->lt($nextMonday)
+            ->andWhere("((estStarted >= '$monday' AND estStarted < '$nextMonday') OR (deadline >= '$monday' AND deadline < '$nextMonday') OR (estStarted < '$monday' AND deadline > '$nextMonday'))")
             ->fetchAll('id');
 
         $PV = 0;
@@ -490,6 +496,7 @@ class weeklyModel extends model
             ->andWhere('execution')->in($executionIdList)
             ->andWhere('date')->ge($monday)
             ->andWhere('date')->lt($nextMonday)
+            ->andWhere('deleted')->eq('0')
             ->fetch('consumed');
 
         if(is_null($AC)) $AC = 0;

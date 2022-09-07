@@ -930,7 +930,8 @@ class productplanModel extends model
                     ->fetchPairs();
                 if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
 
-                $plansOfStory = ',' . implode(',', $branchPlanPairs);
+                $plansOfStory = implode(',', $branchPlanPairs);
+                $plansOfStory = trim($plansOfStory, ',');
 
                 $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->exec();
 

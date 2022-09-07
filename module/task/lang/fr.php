@@ -166,7 +166,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
-$lang->task->selectTestStory   = 'Select Story Testé';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'Tous Utilis.';
 $lang->task->noStory           = 'Aucune Story associée';
 $lang->task->noAssigned        = 'Non affectées';
