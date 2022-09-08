@@ -7381,6 +7381,8 @@ class upgradeModel extends model
             ->where('createdDate')->eq('0000-00-00 00:00:00')
             ->fetchPairs('gid');
 
+        if(empty($chats)) return true;
+
         $createdDateData = array();
 
         /* Try query earliest message date indexed. */
@@ -7427,6 +7429,8 @@ class upgradeModel extends model
         $queryData = array();
         foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
 
+        if(empty($queryData)) return true;
+
         $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
         $this->dao->query($query);
 
@@ -7450,6 +7454,8 @@ class upgradeModel extends model
             ->orWhere('endIndex')->eq(0)
             ->orderBy('id_asc')
             ->fetchAll();
+
+        if(empty($chatTableData)) return true;
 
         /* Sort ranges by table. */
         $tableRanges = array();
