@@ -107,7 +107,8 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 1; $i <= 3; $i++):?>
+          <?php $initNum = !empty($efforts) ? 3 : 5;?>
+          <?php for($i = 1; $i <= $initNum; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
