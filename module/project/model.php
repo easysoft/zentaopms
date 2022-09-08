@@ -422,16 +422,18 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getWaterfallPVEV($projectID)
+    public function getWaterfallPVEVAC($projectID)
     {
         $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
 
         $PV = 0;
         $EV = 0;
+        $AC = 0;
         while($task = $stmt->fetch())
         {
             $PV += $task->estimate;
+            $AC += $task->consumed;
             if($task->status == 'done' or $task->closedReason == 'done')
             {
                 $EV += $task->estimate;
@@ -443,25 +445,7 @@ class projectModel extends model
             }
         }
 
-        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV));
-    }
-
-    /**
-     * Get waterfall general AC
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function getWaterfallAC($projectID)
-    {
-        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->fetchPairs('id', 'id');
-
-        $AC = $this->dao->select('sum(consumed) as consumed')->from(TABLE_EFFORT)->where('objectType')->eq('task')->andWhere('objectID')->in($taskIdList)->andWhere('deleted')->eq('0')->fetch('consumed');
-        if(is_null($AC)) $AC = 0;
-
-        return sprintf("%.2f", $AC);
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
     }
 
     /**
