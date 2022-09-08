@@ -58,7 +58,7 @@ $lang->task->waitTask            = 'Tâche en attente';
 $lang->task->allModule           = 'Tous Modules';
 $lang->task->replace             = 'Replace';
 $lang->task->myEffort            = 'My Effort';
-$lang->task->allEffort           = 'All Effort';
+$lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Tâche';
