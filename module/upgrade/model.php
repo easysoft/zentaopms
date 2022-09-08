@@ -7430,6 +7430,8 @@ class upgradeModel extends model
         $queryData = array();
         foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
 
+        if(empty($queryData)) return true;
+
         $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
         $this->dao->query($query);
 
