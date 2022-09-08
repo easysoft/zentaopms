@@ -231,7 +231,7 @@ $(function()
                 if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
             });
 
-            var diffContent  = null;
+            var diffContent = null;
             if(pageType == 'diff')
             {
                 diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
