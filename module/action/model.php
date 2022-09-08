@@ -1687,6 +1687,7 @@ class actionModel extends model
             $fieldName = $history->field;
             $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
             if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }

@@ -69,7 +69,7 @@
         <div class="detail-title"><?php echo $lang->story->legendSpec;?></div>
         <div class="detail-content article-content"><?php echo $story->spec;?></div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('story', $story);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");
