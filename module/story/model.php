@@ -875,27 +875,27 @@ class storyModel extends model
         {
             $_POST['reviewer'] = isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']);
             $oldReviewer       = $this->getReviewerPairs($storyID, $oldStory->version);
-            if(array_diff($_POST['reviewer'], array_keys($oldReviewer)) or array_diff(array_keys($oldReviewer), $_POST['reviewer']))
+
+            /* Update story reviewer. */
+            $this->dao->delete()->from(TABLE_STORYREVIEW)
+                ->where('story')->eq($storyID)
+                ->andWhere('version')->eq($oldStory->version)
+                ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))
+                ->exec();
+
+            foreach($_POST['reviewer'] as $reviewer)
             {
-                /* Update story reviewer. */
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-                foreach($_POST['reviewer'] as $reviewer)
-                {
-                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
+                if($oldStory->status == 'reviewing' and in_array($reviewer, array_keys($oldReviewer))) continue;
 
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = $oldStory->version;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                }
-
-                if($story->status == 'reviewing')
-                {
-                    $story->reviewedBy = $oldStory->reviewedBy;
-                    $story = $this->updateStoryByReview($storyID, $oldStory, $story);
-                }
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = $oldStory->version;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
             }
+
+            if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
+            if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
 
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
             $story->reviewers    = implode(',', array_keys($this->getReviewerPairs($storyID, $oldStory->version)));
