@@ -750,11 +750,12 @@ class testtaskModel extends model
      */
     public function update($taskID)
     {
-        $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
+        $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->add('id', $taskID)
             ->setDefault('type', '')
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -762,7 +763,7 @@ class testtaskModel extends model
             ->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
-        $this->dao->update(TABLE_TESTTASK)->data($task)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
@@ -772,8 +773,7 @@ class testtaskModel extends model
 
         if(!dao::isError())
         {
-            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-            $this->file->saveUpload('testtask', $taskID);
+            $this->file->addFile4Object('testtask', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }

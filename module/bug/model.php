@@ -785,27 +785,11 @@ class bugModel extends model
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
 
-            $oldBugFiles = empty($oldBug->files) ? '' : join(',', array_keys($oldBug->files));
-            if(!empty($bug->deleteFiles))
-            {
-                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($bug->deleteFiles)->exec();
-                foreach($bug->deleteFiles as $fileID)
-                {
-                    @unlink($oldBug->files[$fileID]->realPath);
-                    $oldBugFiles = empty($oldBugFiles) ? '' : str_replace(",$fileID,", ',', ",$oldBugFiles,");
-                }
-            }
-
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
-            $addedFiles    = $this->loadModel('file')->saveUpload('bug', $bugID);
-            $addedFiles    = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
-            $bug->files    = trim($oldBugFiles . $addedFiles, ',');
-            $oldBug->files = join(',', array_keys($oldBug->files));
-
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
+            $this->file->addFile4Object('bug', $oldBug, $bug);
             return common::createChanges($oldBug, $bug);
         }
     }

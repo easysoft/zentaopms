@@ -1268,23 +1268,7 @@ class taskModel extends model
                 }
             }
 
-            $oldTaskFiles = empty($oldTask->files) ? '' : join(',', array_keys($oldTask->files));
-            if(!empty($task->deleteFiles))
-            {
-                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($task->deleteFiles)->exec();
-                foreach($task->deleteFiles as $fileID)
-                {
-                    @unlink($oldTask->files[$fileID]->realPath);
-                    $oldTaskFiles = empty($oldTaskFiles) ? '' : str_replace(",$fileID,", ',', ",$oldTaskFiles,");
-                }
-            }
-
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
-            $addedFiles     = $this->loadModel('file')->saveUpload('task', $taskID);
-            $addedFiles     = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
-            $task->files    = trim($oldTaskFiles . $addedFiles, ',');
-            $oldTask->files = join(',', array_keys($oldTask->files));
-
+            $this->file->addFile4Object('task', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }

@@ -802,6 +802,7 @@ class testcaseModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('story,branch', 0)
             ->setDefault('stage', '')
+            ->setDefault('deleteFiles', array())
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
@@ -820,7 +821,7 @@ class testcaseModel extends model
             $requiredFields    = implode(',', $requiredFieldsArr);
         }
         $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles')->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             $this->updateCase2Project($oldCase, $case, $caseID);
@@ -927,6 +928,8 @@ class testcaseModel extends model
                     }
                 }
             }
+
+            $this->file->addFile4Object('testcase', $oldCase, $case);
             return common::createChanges($oldCase, $case);
         }
     }
@@ -2390,7 +2393,6 @@ class testcaseModel extends model
 
             if(!empty($_POST['title']) and $case->title != $this->post->title)                      $stepChanged = true;
             if(!empty($_POST['precondition']) and $case->precondition != $this->post->precondition) $stepChanged = true;
-            if(!empty($_POST['labels'][0]))                                                         $stepChanged = true;
 
             return array($stepChanged, $status);
         }
