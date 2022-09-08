@@ -106,7 +106,7 @@
         <div class="detail-content article-content"><?php echo nl2br(htmlSpecialString($case->xml));?></div>
       </div>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case, 'method' => 'view', 'showDelete' => false));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>

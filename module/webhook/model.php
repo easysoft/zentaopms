@@ -487,11 +487,10 @@ class webhookModel extends model
             $tab     = $meeting->project ? '#app=project' : '#app=my';
         }
 
-        $sysUrl   = common::getSysURL();
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
-        return ltrim($viewLink, $sysUrl);
+        return $viewLink;
     }
 
     /**
@@ -598,7 +597,7 @@ class webhookModel extends model
      * @param  string $title
      * @param  string $text
      * @access public
-     * @return string
+     * @return object
      */
     public function getFeishuData($title, $text)
     {

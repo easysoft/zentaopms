@@ -79,7 +79,6 @@ $lang->saveSuccess     = 'Đã lưu';
 $lang->importSuccess   = 'Đã lưu';
 $lang->fail            = 'Thất bại';
 $lang->addFiles        = 'Tập tin đã thêm ';
-$lang->deleteFiles     = 'Tháo ảnh ';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Dán nhiều dòng';
 $lang->uploadImages    = 'Tải lên nhiều ảnh';

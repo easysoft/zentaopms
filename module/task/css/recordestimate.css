@@ -5,3 +5,12 @@
 .consumedTotally {background: #EAF3FF; color: #2B80FF;}
 .estimateTotally {background: #FFEFEF; color: #FF6262;}
 .nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}
+.table-bordered td, .table-bordered th { border: 1px solid #EEEEEE; }
+.table-recorded thead { background: #F5F6F8}
+.table>thead>tr>th{ border-bottom: 1px solid #EEEEEE}
+#linearefforts .nav li.active a{color: #0c64eb !important}
+.input-group-addon {background: #fff}
+.icon-calendar {color: rgb(22, 168, 248)}
+#recordForm .table>thead>tr>th{ border: none}
+.main-header {border-bottom: none !important}
+.body-modal .main-header>h2 { max-width: 70% !important;}

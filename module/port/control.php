@@ -159,7 +159,6 @@ class port extends control
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
 
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
-
         $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);
     }

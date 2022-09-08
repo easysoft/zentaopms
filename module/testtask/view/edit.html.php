@@ -88,7 +88,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>
-          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='3'>
+            <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+            <?php echo $this->fetch('file', 'buildform');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->mailto;?></th>

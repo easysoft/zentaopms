@@ -42,6 +42,7 @@ $lang->release->name          = 'Name';
 $lang->release->marker        = 'Milestone';
 $lang->release->date          = 'Release Date';
 $lang->release->desc          = 'Description';
+$lang->release->files         = 'Files';
 $lang->release->status        = 'Status';
 $lang->release->subStatus     = 'Sub Status';
 $lang->release->last          = 'Last Release';

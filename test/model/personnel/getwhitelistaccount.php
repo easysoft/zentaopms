@@ -9,7 +9,7 @@ title=测试 personnelModel->getWhitelistAccount();
 cid=1
 pid=1
 
-这是一个正常测试，统计关联白名单人员数量 >> 2
+这是一个正常测试，统计关联白名单人员数量 >> 3
 取出其中一个数据admin >> admin
 取出另一个数据dev10 >> dev10
 取出objectid2的白名单数量 >> 0
@@ -37,7 +37,7 @@ $result2 = $personnel->getWhitelistAccountTest($objectID[1], $objectType[2]);
 $result3 = $personnel->getWhitelistAccountTest($objectID[2], $objectType[3]);
 $result4 = $personnel->getWhitelistAccountTest($objectID[3], $objectType[0]);
 
-r(count($result1)) && p()        && e('2');     //这是一个正常测试，统计关联白名单人员数量
+r(count($result1)) && p()        && e('3');     //这是一个正常测试，统计关联白名单人员数量
 r($result1)        && p('admin') && e('admin'); //取出其中一个数据admin
 r($result1)        && p('dev10') && e('dev10'); //取出另一个数据dev10
 r(count($result2)) && p()        && e('0');     //取出objectid2的白名单数量

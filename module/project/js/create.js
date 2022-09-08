@@ -145,20 +145,21 @@ function setParentProgram(parentProgram)
         }
         budgetOverrunTips();
         outOfDateTip();
-        $('#budgetUnit').val(data.budgetUnit).trigger('chosen:updated');
-        if(typeof(data.availableBudget) == 'undefined')
-        {
-            $('#budget').removeAttr('placeholder').attr('disabled', true);
-            $('#future').prop('checked', true);
-        }
-        else
-        {
-            $('#budget').removeAttr('disabled')
-            $('#future').prop('checked', false);
-        }
+        refreshBudgetUnit(data);
     });
 
     $('#parent').attr('data-lastSelected', parentProgram);
+
+    if(parentProgram != '0')
+    {
+        $('#productsBox .addProduct .input-group:first').addClass('required');
+        $('#productsBox .row .input-group:first').addClass('required');
+    }
+    else
+    {
+        $('#productsBox .addProduct .input-group').removeClass('required');
+        $('#productsBox .row .input-group').removeClass('required');
+    }
 }
 
 /**
@@ -211,6 +212,7 @@ function addNewProduct(obj)
 
         $('#productTitle').html(manageProducts);
     }
+    $('#productsBox div + .text-danger.help-text').empty();
 }
 
 /**
@@ -256,7 +258,7 @@ function loadBranches(product)
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .row .input-group').size();
-        var $html  = $('#productsBox .row .col-sm-4:last').html();
+        var $html  = $('#productsBox .row .col-sm-4:last').html().replace('required', '');
         $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
         $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
         if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();

@@ -167,6 +167,12 @@ class bugModel extends model
         $pri       = 0;
         foreach($data->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('bug', $data, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
+                return false;
+            }
+
             $oses     = array_filter($data->oses[$i]);
             $browsers = array_filter($data->browsers[$i]);
 
@@ -192,16 +198,7 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             $title = trim($title);
-            if(empty($title))
-            {
-                if($this->common->checkValidRow('bug', $data, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->title);
-                    return false;
-                }
-
-                continue;
-            }
+            if(empty($title)) continue;
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -690,7 +687,7 @@ class bugModel extends model
      */
     public function update($bugID)
     {
-        $oldBug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq((int)$bugID)->fetch();
+        $oldBug = $this->getById($bugID);
         if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -710,6 +707,7 @@ class bugModel extends model
             ->setDefault('resolvedDate', '0000-00-00 00:00:00')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->add('lastEditedDate', $now)
             ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->join('openedBuild', ',')
@@ -739,7 +737,7 @@ class bugModel extends model
             ->get();
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)
+        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
@@ -786,12 +784,12 @@ class bugModel extends model
             }
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
+            $this->file->processFile4Object('bug', $oldBug, $bug);
             return common::createChanges($oldBug, $bug);
         }
     }

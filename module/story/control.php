@@ -753,24 +753,8 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $deleteFiles = isset($_POST['deleteFiles']) ? $this->file->getPairs($_POST['deleteFiles'], 'title') : array();
-            $changes     = $this->story->update($storyID);
+            $this->story->update($storyID);
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            $files = $this->file->saveUpload($story->type, $storyID, ",$story->version,");
-            if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
-
-            if($this->post->comment != '' or !empty($changes) or !empty($files) or !empty($deleteFiles))
-            {
-                $action      = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction  = empty($files) ? '' : $this->lang->addFiles . join(',', $files) . "\n" ;
-                $fileAction .= empty($deleteFiles) ? '' : $this->lang->deleteFiles . join(',', $deleteFiles) . "\n";
-                $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-
-                $editedStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                if(isset($_POST['reviewer']) and $story->status == 'reviewing') $this->story->recordReviewAction($editedStory);
-            }
 
             $this->executeHooks($storyID);
 
@@ -879,7 +863,6 @@ class story extends control
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
-        $this->view->files            = $this->file->getByObject($story->type, $storyID, $story->version);
 
         $this->display();
     }
@@ -1096,25 +1079,17 @@ class story extends control
         $this->loadModel('file');
         if(!empty($_POST))
         {
-            $deleteFiles = isset($_POST['deleteFiles']) ? $this->file->getPairs($_POST['deleteFiles'], 'title') : array();
-            $changes     = $this->story->change($storyID);
+            $changes = $this->story->change($storyID);
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
 
-            $story   = $this->story->getByID($storyID);
-            $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files   = $this->file->saveUpload($story->type, $storyID, ",$version,");
-            if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
-
-            if($this->post->comment != '' or !empty($changes) or !empty($files) or !empty($deleteFiles))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action      = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
-                $fileAction  = empty($files) ? '' : $this->lang->addFiles . join(',', $files) . "\n" ;
-                $fileAction .= empty($deleteFiles) ? '' : $this->lang->deleteFiles . join(',', $deleteFiles) . "\n";
-                $actionID    = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
+                $action   = !empty($changes) ? 'Changed' : 'Commented';
+                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1164,7 +1139,7 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
-        $story    = $this->story->getById($storyID);
+        $story    = $this->view->story;
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
         $product  = $this->loadModel('product')->getByID($story->product);
 
@@ -1179,7 +1154,6 @@ class story extends control
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
-        $this->view->files            = $this->file->getByObject($story->type, $storyID, $story->version);
 
         $this->display();
     }
@@ -1266,7 +1240,6 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files  = $this->loadModel('file')->getByObject($story->type, $storyID, $version);
         $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
@@ -1406,15 +1379,8 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $changes = $this->story->review($storyID);
+            $this->story->review($storyID);
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            if($changes)
-            {
-                $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                $actionID = $this->story->recordReviewAction($story, $this->post->result, $this->post->closedReason);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($storyID);
 
@@ -1480,11 +1446,11 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->lang->story->resultList = $this->lang->story->reviewResultList;
 
-        if($story->status == 'reviewing' and $story->version == 1) unset($this->lang->story->resultList['revert']);
-
-        if($story->status == 'changing') unset($this->lang->story->resultList['reject']);
-
-        if(count($reviewers) > 1) unset($this->lang->story->resultList['revert']);
+        if($story->status == 'reviewing')
+        {
+            if($story->version == 1) unset($this->lang->story->resultList['revert']);
+            if($story->version > 1)  unset($this->lang->story->resultList['reject']);
+        }
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);

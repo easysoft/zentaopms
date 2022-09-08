@@ -56,6 +56,9 @@ $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
 $lang->task->allModule           = 'Tous Modules';
 $lang->task->replace             = 'Replace';
+$lang->task->myEffort            = 'My Effort';
+$lang->task->allEffort           = 'All Effort';
+$lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
@@ -163,7 +166,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
-$lang->task->selectTestStory   = 'Select Story Testé';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'Tous Utilis.';
 $lang->task->noStory           = 'Aucune Story associée';
 $lang->task->noAssigned        = 'Non affectées';
@@ -218,6 +221,7 @@ $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
 $lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = '<span style="color:blue;">StoryModel</span>';
 $lang->task->afterSubmit               = "Suiv. ";
 $lang->task->successSaved              = "Créée !";

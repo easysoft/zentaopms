@@ -321,7 +321,8 @@ $lang->story->action->recalled              = array('main' => '$date, 由 <stron
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
 $lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>拒绝</strong>。');
-$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>有待明确</strong>，请变更后重新发起评审。');
+$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>有待明确</strong>，请编辑后重新发起评审。');
+$lang->story->action->reviewreverted        = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>撤销变更</strong>。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');

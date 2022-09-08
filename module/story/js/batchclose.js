@@ -30,6 +30,11 @@ $(function()
     $('select[id^="duplicateStoryIDList"]').picker(
     {
         disableEmptySearch : true,
-        dropWidth : 'auto'
+        dropWidth : 'auto',
+        onReady: function(event)
+        {
+            $(event.picker.$container).addClass('required');
+        }
+
     });
 });

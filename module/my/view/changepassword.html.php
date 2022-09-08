@@ -35,7 +35,7 @@
         <th><?php echo $lang->user->newPassword;?></th>
         <td>
           <span class='input-group'>
-            <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '') . "'");?>
+            <?php echo html::password('password1', '', "class='form-control' onkeyup='checkPassword(this.value)' placeholder='" . zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '') . "'");?>
             <span class='input-group-addon' id='passwordStrength'></span>
           </span>
         </td>

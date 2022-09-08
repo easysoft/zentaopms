@@ -39,8 +39,6 @@ function switchShow(result)
             $('#estimateBox').show();
         }
     }
-
-    getStatus('review', "storyID=" + storyID + ",result=" + result);
 }
 
 function setStory(reason)

@@ -860,20 +860,16 @@ class testcase extends control
         if(!empty($_POST))
         {
             $changes = array();
-            $files   = array();
             if($comment == false or $comment == 'false')
             {
                 $changes = $this->testcase->update($caseID, $testtasks);
                 if(dao::isError()) return print(js::error(dao::getError()));
-                $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
             }
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            if($this->post->comment != '' or !empty($changes))
             {
                 $this->loadModel('action');
-                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-                $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 

@@ -138,6 +138,12 @@ class testcaseModel extends model
         $pri    = 3;
         foreach($cases->title as $i => $title)
         {
+            if(empty($title) and $this->common->checkValidRow('testcase', $cases, $i))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
+                return false;
+            }
+
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
             $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
@@ -155,16 +161,7 @@ class testcaseModel extends model
         $data           = array();
         foreach($cases->title as $i => $title)
         {
-            if(empty($title))
-            {
-                if($this->common->checkValidRow('testcase', $cases, $i))
-                {
-                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->testcase->title);
-                    return false;
-                }
-
-                continue;
-            }
+            if(empty($title)) continue;
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
@@ -805,6 +802,7 @@ class testcaseModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('story,branch', 0)
             ->setDefault('stage', '')
+            ->setDefault('deleteFiles', array())
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
@@ -823,7 +821,7 @@ class testcaseModel extends model
             $requiredFields    = implode(',', $requiredFieldsArr);
         }
         $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles')->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             $this->updateCase2Project($oldCase, $case, $caseID);
@@ -930,6 +928,8 @@ class testcaseModel extends model
                     }
                 }
             }
+
+            $this->file->processFile4Object('testcase', $oldCase, $case);
             return common::createChanges($oldCase, $case);
         }
     }
@@ -2393,7 +2393,6 @@ class testcaseModel extends model
 
             if(!empty($_POST['title']) and $case->title != $this->post->title)                      $stepChanged = true;
             if(!empty($_POST['precondition']) and $case->precondition != $this->post->precondition) $stepChanged = true;
-            if(!empty($_POST['labels'][0]))                                                         $stepChanged = true;
 
             return array($stepChanged, $status);
         }

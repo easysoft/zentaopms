@@ -29,7 +29,7 @@ include '../../common/view/header.lite.html.php';
               <div class='form-group'>
                 <label for='password1'><?php echo $lang->user->password;?></label>
                 <span class='input-group'>
-                  <?php echo html::password('password1', '', "class='form-control' required placeholder='" . zget($lang->user->placeholder->loginPassword, $config->safe->mode, '') . "' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+                  <?php echo html::password('password1', '', "class='form-control' required placeholder='" . zget($lang->user->placeholder->loginPassword, $config->safe->mode, '') . "' onkeyup='checkPassword(this.value)'");?>
                   <span class='input-group-addon' id='passwordStrength'></span>
                 </span>
               </div>
