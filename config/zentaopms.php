@@ -246,6 +246,7 @@ define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testtask`');
 define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
+define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
