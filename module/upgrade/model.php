@@ -552,6 +552,7 @@ class upgradeModel extends model
                 $this->updateStoryFile();
                 $this->convertTaskteam();
                 $this->convertEstToEffort();
+                $this->fixWeeklyReport();
                 $this->xuanSetOwnedByForGroups();
                 $this->xuanRecoverCreatedDates();
                 $this->xuanSetPartitionedMessageIndex();
@@ -7494,5 +7495,37 @@ class upgradeModel extends model
             $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
             $this->dao->query($query);
         }
+    }
+
+    /**
+     * Fix weekly report.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWeeklyReport()
+    {
+        $this->loadModel('weekly');
+        $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
+
+        $today = helper::today();
+        foreach($projects as $projectID => $project)
+        {
+            if(helper::isZeroDate($project->begin) or helper::isZeroDate($project->end)) continue;
+
+            $begin = $project->begin;
+            $end   = $today > $project->end ? $project->end : $today;
+
+            $beginTimestame = strtotime($begin);
+            $endTimestame   = strtotime($end);
+            while($beginTimestame <= $endTimestame)
+            {
+                $this->weekly->save($projectID, $begin);
+
+                $beginTimestame += 7 * 24 * 3600;
+                $begin = date('Y-m-d', $beginTimestame);
+            }
+        }
+        return true;
     }
 }
