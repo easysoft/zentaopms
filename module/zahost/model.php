@@ -35,18 +35,39 @@ class zahostModel extends model
             ->setDefault('cpuNumber,cpuCores,diskSize,memory', 0)
             ->get();
 
+        $this->dao->table = 'zahost';
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('diskSize,memory', 'float');
+            ->batchCheck('cpuCores,instanceNum', 'int')
+            ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
+            ->batchCheck('diskSize,memory', 'float')
+            ->autoCheck();
         if(dao::isError()) return false;
 
         if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', $hostInfo->publicIP))
         {
-            dao::$errors['publicIP'] = sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP);
+            dao::$errors['publicIP'][] = sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP);
             return false;
         }
 
-        $this->dao->insert(TABLE_ZAHOST)->data($hostInfo, $skipFields='name,group')->autoCheck()->exec();
+        $this->dao->update(TABLE_ASSET)->data($hostInfo)->check('name', 'unique');
+        if(dao::isError())
+        {
+            return false;
+        }
+
+        $assetInfo['name']        = $hostInfo->name;
+        $assetInfo['type']        = 'zahost';
+        $assetInfo['status']      = 'normal';
+        $assetInfo['createdBy']   = $this->app->user->account;
+        $assetInfo['createdDate'] = helper::now();
+
+        $this->dao->insert(TABLE_ASSET)->data($assetInfo)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        $hostInfo->assetID = $this->dao->lastInsertID();
+
+        $this->dao->insert(TABLE_ZAHOST)->data($hostInfo, $skipFields='name')->autoCheck()->exec();
         $hostID = $this->dao->lastInsertID();
         if(!dao::isError())
         {
@@ -55,5 +76,22 @@ class zahostModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Translate field name with correct language.
+     *
+     * @param  array  $errors
+     * @access public
+     * @return array
+     */
+    public function translateField($errors)
+    {
+        foreach($errors as $fieldName => $subErrors)
+        {
+            foreach($subErrors as $index => $errMsg) $errors[$fieldName][$index] = str_replace($fieldName, $this->lang->zahost->$fieldName, $errMsg);
+        }
+
+        return $errors;
     }
 }

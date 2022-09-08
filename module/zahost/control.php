@@ -21,8 +21,12 @@ class zahost extends control
     {
         if($_POST)
         {
-            $id = $this->zahost->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->zahost->create();
+            if(dao::isError())
+            {
+                $erros = $this->zahost->translateField(dao::getError());
+                return $this->send(array('result' => 'fail', 'message' => $erros));
+            }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }

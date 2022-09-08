@@ -13,9 +13,9 @@ $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP';
 $lang->zahost->publicIP    = 'IP';
 $lang->zahost->memory      = '内存大小';
-$lang->zahost->cpuCores    = '单CPU核心数';
+$lang->zahost->cpuCores    = 'CPU核心数';
 $lang->zahost->diskSize    = '硬盘容量';
-$lang->zahost->instanceNum = '最大实列数';
+$lang->zahost->instanceNum = '最大实例数';
 
 $lang->zahost->createdBy   = '由谁创建';
 $lang->zahost->createdDate = '创建时间';
@@ -38,9 +38,4 @@ $lang->zahost->zaHostTypeList['physical'] = '实体主机';
 $lang->zahost->confirmDelete  = '是否删除该主机记录？';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->memory    = '内存大小只能为数字！';
-$lang->zahost->notice->diskSize  = '硬盘容量只能为数字！';
-$lang->zahost->notice->cpuNumber = 'CPU数量只能为数字！';
-$lang->zahost->notice->cpuCores  = 'CPU核心数只能为数字！';
-$lang->zahost->notice->int       = '『%s』应当是正整数！';
 $lang->zahost->notice->ip        = '『%s』格式不正确！';
