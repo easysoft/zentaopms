@@ -153,6 +153,7 @@ class my extends control
         $riskCount    = 0;
         $reviewCount  = 0;
         $ncCount      = 0;
+        $qaCount      = 0;
         $meetingCount = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
 
