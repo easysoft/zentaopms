@@ -130,7 +130,10 @@
           </div>
           <div class="detail">
             <div class="detail-title"><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'false', 'object' => $case, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
           <div class='text-center detail form-actions'>
             <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>

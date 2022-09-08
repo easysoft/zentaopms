@@ -1136,4 +1136,35 @@ class fileModel extends model
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
         }
     }
+
+    /**
+     * Process file info for object.
+     *
+     * @param  string    $objectType
+     * @param  object    $oldObject
+     * @param  object    $newObject
+     * @access public
+     * @return void
+     */
+    public function processFile4Object($objectType, $oldObject, $newObject)
+    {
+        $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
+        $deleteFiles = $newObject->deleteFiles;
+        if(!empty($deleteFiles))
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
+            foreach($deleteFiles as $fileID)
+            {
+                @unlink($oldObject->files[$fileID]->realPath);
+                $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+            }
+        }
+
+        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+
+        $newObject->files = trim($oldFiles . $addedFiles, ',');
+        $oldObject->files = join(',', array_keys($oldObject->files));
+    }
 }

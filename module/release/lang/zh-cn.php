@@ -42,6 +42,7 @@ $lang->release->name          = '发布名称';
 $lang->release->marker        = '里程碑';
 $lang->release->date          = '发布日期';
 $lang->release->desc          = '描述';
+$lang->release->files         = '附件';
 $lang->release->status        = '状态';
 $lang->release->subStatus     = '子状态';
 $lang->release->last          = '上次发布';
