@@ -7308,7 +7308,7 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
 
-                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
                 $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
                 $order ++;
             }

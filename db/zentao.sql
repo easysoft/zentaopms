@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `type` char(30) NOT NULL,
   `title` varchar(100) NOT NULL,
   `source` varchar(20) NOT NULL,
-  `block` varchar(20) NOT NULL,
+  `block` varchar(30) NOT NULL,
   `params` text NOT NULL,
   `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `grid` tinyint(3) unsigned NOT NULL DEFAULT '0',
