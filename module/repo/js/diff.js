@@ -91,9 +91,9 @@ function createTab(filename, filepath)
 $(document).ready(function()
 {
     var diffAppose = true;
-    $('#appose').hide();
+    $('.dropdown #appose').hide();
 
-    if(browser == 'ie')
+    if(!browser || browser == 'ie')
     {
         $("#inline").click(function(){$('#arrange').val('inline');this.form.submit();});
         $("#appose").click(function(){$('#arrange').val('appose');this.form.submit();});
@@ -163,11 +163,11 @@ $(document).ready(function()
         diffAppose = !diffAppose;
         if(diffAppose)
         {
-            $('#inline').show();
+            $('.dropdown #inline').show();
         }
         else
         {
-            $('#appose').show();
+            $('.dropdown #appose').show();
         }
         var type   = $(this).attr('id');
         var tabID  = $('.tab-nav-item.active').data('id');

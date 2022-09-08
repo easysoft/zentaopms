@@ -277,19 +277,21 @@ class repo extends control
         $info = $this->scm->info($entry, $nRevision);
         $path = $entry ? $info->path : '';
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
-        $this->view->type       = 'diff';
-        $this->view->encoding   = str_replace('-', '_', $encoding);
-        $this->view->repoID     = $repoID;
-        $this->view->objectID   = $objectID;
-        $this->view->repo       = $repo;
-        $this->view->revision   = $nRevision;
-        $this->view->file       = $file;
-        $this->view->content    = '';
-        $this->view->pathInfo   = $pathInfo;
-        $this->view->suffix     = 'c';
-        $this->view->blames     = array();
-        $this->view->showEditor = true;
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->type        = 'diff';
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $nRevision;
+        $this->view->oldRevision = $revision;
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->content     = '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->suffix      = 'c';
+        $this->view->blames      = array();
+        $this->view->showEditor  = true;
         $this->display('repo', 'ajaxGetEditorContent');
     }
 
@@ -321,7 +323,6 @@ class repo extends control
         $pathInfo = pathinfo($entry);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        $blames   = $this->scm->blame($entry, $revision);
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
@@ -336,24 +337,24 @@ class repo extends control
             $content = helper::convertEncoding($content, $encoding);
         }
 
-        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
-        $this->view->type         = 'view';
-        $this->view->showBug      = $showBug;
-        $this->view->encoding     = str_replace('-', '_', $encoding);
-        $this->view->repoID       = $repoID;
-        $this->view->branchID     = $this->cookie->repoBranch;
-        $this->view->objectID     = $objectID;
-        $this->view->repo         = $repo;
-        $this->view->revision     = $revision;
-        $this->view->file         = $file;
-        $this->view->entry        = $entry;
-        $this->view->path         = $entry;
-        $this->view->info         = $info;
-        $this->view->suffix       = $suffix;
-        $this->view->content      = $content ? $content : '';
-        $this->view->pathInfo     = $pathInfo;
-        $this->view->blames       = $blames ? $blames : array();
-        $this->view->showEditor   = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->type        = 'view';
+        $this->view->showBug     = $showBug;
+        $this->view->encoding    = str_replace('-', '_', $encoding);
+        $this->view->repoID      = $repoID;
+        $this->view->branchID    = $this->cookie->repoBranch;
+        $this->view->objectID    = $objectID;
+        $this->view->repo        = $repo;
+        $this->view->revision    = $revision;
+        $this->view->oldRevision = $revision;
+        $this->view->file        = $file;
+        $this->view->entry       = $entry;
+        $this->view->path        = $entry;
+        $this->view->info        = $info;
+        $this->view->suffix      = $suffix;
+        $this->view->content     = $content ? $content : '';
+        $this->view->pathInfo    = $pathInfo;
+        $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->display();
     }
 
@@ -1901,5 +1902,57 @@ class repo extends control
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
         $this->display();
+    }
+
+    /**
+     * Ajax get commit info.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCommitInfo()
+    {
+        $line       = $this->post->line;
+        $repo       = $this->repo->getRepoByID($this->post->repoID);
+        $entry      = $this->repo->decodePath($this->post->entry);
+        $revision   = $this->post->revision;
+        $returnType = $this->post->returnType ? $this->post->returnType : 'view';
+
+        $this->scm->setEngine($repo);
+        $blames = $this->scm->blame($entry, $this->post->revision);
+        if(!$blames) $blames =$this->scm->blame($entry, $this->post->sourceRevision);
+
+        while($line > 0)
+        {
+            if(isset($blames[$line]['revision']))
+            {
+                $revision = $blames[$line]['revision'];
+                break;
+            }
+            $line--;
+        }
+        if($returnType == 'json') return $this->send(array('result' => 'success', 'blames' => $blames));
+
+        $commits = $this->scm->getCommits($revision, 1);
+        if(!empty($commits['commits'][$revision]))
+        {
+            $commit = $commits['commits'][$revision];
+
+            $objects = $this->repo->getLinkedObjects($commit->comment);
+            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($objects['stories'])->fetchPairs();
+            $tasks   = $this->dao->select('id,name')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('id')->in($objects['tasks'])->fetchPairs();
+            $bugs    = $this->dao->select('id,title')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('id')->in($objects['bugs'])->fetchPairs();
+
+            $this->view->repoID  = $this->post->repoID;
+            $this->view->commit  = $commit;
+            $this->view->stories = $stories;
+            $this->view->tasks   = $tasks;
+            $this->view->bugs    = $bugs;
+            $this->display();
+        }
+        else
+        {
+            echo '';
+        }
     }
 }
