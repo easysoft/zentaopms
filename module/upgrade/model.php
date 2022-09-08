@@ -7381,8 +7381,6 @@ class upgradeModel extends model
             ->where('createdDate')->eq('0000-00-00 00:00:00')
             ->fetchPairs('gid');
 
-        if(empty($chats)) return true;
-
         $createdDateData = array();
 
         /* Try query earliest message date indexed. */
@@ -7454,8 +7452,6 @@ class upgradeModel extends model
             ->orWhere('endIndex')->eq(0)
             ->orderBy('id_asc')
             ->fetchAll();
-
-        if(empty($chatTableData)) return true;
 
         /* Sort ranges by table. */
         $tableRanges = array();
