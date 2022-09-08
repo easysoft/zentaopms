@@ -1591,7 +1591,7 @@ class treeModel extends model
     public function updateOrder($orders)
     {
         asort($orders);
-        $orderInfo = $this->dao->select('id,grade, parent, branch')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
+        $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
         $newOrders = array();
         foreach($orders as $moduleID => $order)
         {
@@ -1610,6 +1610,12 @@ class treeModel extends model
 
             $newOrder = $newOrders[$parent][$grade][$branch] * 10;
             $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->limit(1)->exec();
+
+            $module = $orderInfo[$moduleID];
+            if($module->type == 'story' and $this->config->global->syncProductFeedback >= $module->grade)
+            {
+                $this->loadModel('feedback')->syncTrigger($moduleID, 'update', $module);
+            }
         }
     }
 
@@ -1693,6 +1699,11 @@ class treeModel extends model
                 $createIdList[] = $moduleID;
                 $childPath      = $parentPath . "$moduleID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
+
+                if($type == 'story' and $this->config->global->syncProductFeedback >= $module->grade)
+                {
+                    $this->loadModel('feedback')->syncTrigger($moduleID, 'insert');
+                }
             }
             else
             {
@@ -1715,6 +1726,11 @@ class treeModel extends model
                 {
                     $editIdList[]             = $moduleID;
                     $moduleChanges[$moduleID] = common::createChanges($oldModule, $newModule);
+                }
+
+                if($type == 'story' and $this->config->global->syncProductFeedback >= $module->grade)
+                {
+                    $this->loadModel('feedback')->syncTrigger($moduleID, 'update', $oldModule);
                 }
             }
         }
@@ -1922,6 +1938,11 @@ class treeModel extends model
                 $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'storyModule';
+
+                if($this->config->global->syncProductFeedback >= $module->grade)
+                {
+                    $this->loadModel('feedback')->syncTrigger($moduleID, 'delete');
+                }
                 break;
         }
         if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
