@@ -47,6 +47,7 @@ $lang->task->exportAction        = "Export Task";
 $lang->task->reportChart         = "Bericht Chart";
 $lang->task->fromBug             = 'Von Bug';
 $lang->task->case                = 'Fall';
+$lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Storyäanderung bestätigen";
 $lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = 'Fortschritt';

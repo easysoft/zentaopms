@@ -432,6 +432,8 @@ class projectModel extends model
         $AC = 0;
         while($task = $stmt->fetch())
         {
+            if(empty($task->estimate)) continue;
+
             $PV += $task->estimate;
             $AC += $task->consumed;
             if($task->status == 'done' or $task->closedReason == 'done')
@@ -440,7 +442,8 @@ class projectModel extends model
             }
             else
             {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                 $EV += round($task->estimate * $task->progress / 100, 2);
             }
         }

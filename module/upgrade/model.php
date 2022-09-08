@@ -7332,6 +7332,7 @@ class upgradeModel extends model
     {
         $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
 
+        $this->app->loadLang('task');
         $this->loadModel('action');
         foreach($estimates as $estimate)
         {
@@ -7343,7 +7344,7 @@ class upgradeModel extends model
             $effort->product    = $relation['product'];
             $effort->project    = (int)$relation['project'];
             $effort->account    = $estimate->account;
-            $effort->work       = empty($estimate->work) ? $this->lang->effort->handleTask : $estimate->work;
+            $effort->work       = empty($estimate->work) ? $this->lang->task->process : $estimate->work;
             $effort->date       = $estimate->date;
             $effort->left       = $estimate->left;
             $effort->consumed   = $estimate->consumed;
@@ -7380,6 +7381,7 @@ class upgradeModel extends model
         $chats = $this->dao->select('gid, id')->from(TABLE_IM_CHAT)
             ->where('createdDate')->eq('0000-00-00 00:00:00')
             ->fetchPairs('gid');
+        if(empty($chats)) return true;
 
         $createdDateData = array();
 
@@ -7423,6 +7425,7 @@ class upgradeModel extends model
         }, $chatDates);
 
         $knownMinDates = array_merge($knownMinDates, $chatDates);
+        if(empty($knownMinDates)) return true;
 
         $queryData = array();
         foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
@@ -7450,6 +7453,7 @@ class upgradeModel extends model
             ->orWhere('endIndex')->eq(0)
             ->orderBy('id_asc')
             ->fetchAll();
+        if(empty($chatTableData)) return true;
 
         /* Sort ranges by table. */
         $tableRanges = array();

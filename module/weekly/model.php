@@ -433,7 +433,8 @@ class weeklyModel extends model
             }
             else
             {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                 $EV += round($thisPV * $task->progress / 100, 2);
             }
             $PV += $thisPV;
