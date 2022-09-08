@@ -789,7 +789,7 @@ class bugModel extends model
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-            $this->file->addFile4Object('bug', $oldBug, $bug);
+            $this->file->processFile4Object('bug', $oldBug, $bug);
             return common::createChanges($oldBug, $bug);
         }
     }

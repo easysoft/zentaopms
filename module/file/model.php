@@ -1138,7 +1138,7 @@ class fileModel extends model
     }
 
     /**
-     * Add file info for object.
+     * Process file info for object.
      *
      * @param  string    $objectType
      * @param  object    $oldObject
@@ -1146,7 +1146,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function addFile4Object($objectType, $oldObject, $newObject)
+    public function processFile4Object($objectType, $oldObject, $newObject)
     {
         $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
         $deleteFiles = $newObject->deleteFiles;

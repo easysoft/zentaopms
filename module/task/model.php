@@ -1268,7 +1268,7 @@ class taskModel extends model
                 }
             }
 
-            $this->file->addFile4Object('task', $oldTask, $task);
+            $this->file->processFile4Object('task', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }

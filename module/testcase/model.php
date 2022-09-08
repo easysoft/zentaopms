@@ -929,7 +929,7 @@ class testcaseModel extends model
                 }
             }
 
-            $this->file->addFile4Object('testcase', $oldCase, $case);
+            $this->file->processFile4Object('testcase', $oldCase, $case);
             return common::createChanges($oldCase, $case);
         }
     }

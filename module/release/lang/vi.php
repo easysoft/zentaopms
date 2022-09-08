@@ -41,6 +41,7 @@ $lang->release->name          = 'Tên';
 $lang->release->marker        = 'Cột mốc';
 $lang->release->date          = 'Ngày';
 $lang->release->desc          = 'Mô tả';
+$lang->release->files         = 'Chung';
 $lang->release->status        = 'Tình trạng';
 $lang->release->subStatus     = 'Tình trạng con';
 $lang->release->last          = 'Phát hành gần nhất';

@@ -296,7 +296,7 @@ class releaseModel extends model
             ->exec();
         if(!dao::isError())
         {
-            $this->file->addFile4Object('release', $oldRelease, $release);
+            $this->file->processFile4Object('release', $oldRelease, $release);
             return common::createChanges($oldRelease, $release);
         }
     }
