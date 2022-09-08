@@ -1504,6 +1504,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `title` varchar(255) NOT NULL,
   `spec` mediumtext NOT NULL,
   `verify` mediumtext NOT NULL,
+  `files` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storystage`;

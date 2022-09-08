@@ -7220,26 +7220,17 @@ class upgradeModel extends model
     {
         $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
 
-        /* Get story version. */
-        $storyIDList = array();
-        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
-        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
-
+        $storyFiles = array();
         foreach($storyFileList as $file)
         {
             if(!is_numeric($file->extra)) continue;
 
-            $fileExtra    = '';
-            $storyVersion = $storyVersionList[$file->objectID];
-            if($file->extra != $storyVersion)
-            {
-                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
-                $fileExtra .= ',';
-            }
-            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+            if(!isset($storyFiles[$file->objectID])) $storyFiles[$file->objectID] = '';
 
-            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+            $storyFiles[$file->objectID] .= "$file->id,";
         }
+
+        foreach($storyFiles as $storyID => $files) $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($files)->where('story')->eq($storyID)->exec();
 
         return true;
     }
@@ -7252,7 +7243,6 @@ class upgradeModel extends model
      */
     public function processFeedbackModule()
     {
-
         $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
         $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
         $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();

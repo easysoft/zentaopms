@@ -687,7 +687,7 @@ class bugModel extends model
      */
     public function update($bugID)
     {
-        $oldBug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq((int)$bugID)->fetch();
+        $oldBug = $this->getById($bugID);
         if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -707,6 +707,7 @@ class bugModel extends model
             ->setDefault('resolvedDate', '0000-00-00 00:00:00')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->add('lastEditedDate', $now)
             ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->join('openedBuild', ',')
@@ -736,7 +737,7 @@ class bugModel extends model
             ->get();
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_BUG)->data($bug)
+        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
@@ -783,7 +784,23 @@ class bugModel extends model
             }
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
+
+            $oldBugFiles = empty($oldBug->files) ? '' : join(',', array_keys($oldBug->files));
+            if(!empty($bug->deleteFiles))
+            {
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($bug->deleteFiles)->exec();
+                foreach($bug->deleteFiles as $fileID)
+                {
+                    @unlink($oldBug->files[$fileID]->realPath);
+                    $oldBugFiles = empty($oldBugFiles) ? '' : str_replace(",$fileID,", ',', ",$oldBugFiles,");
+                }
+            }
+
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+            $addedFiles    = $this->loadModel('file')->saveUpload('bug', $bugID);
+            $addedFiles    = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+            $bug->files    = trim($oldBugFiles . $addedFiles, ',');
+            $oldBug->files = join(',', array_keys($oldBug->files));
 
             if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 

@@ -85,13 +85,13 @@
               <?php echo strpos('draft,changing', $story->status) !== false ? html::textarea('verify', htmlSpecialString($story->verify), "rows='5' class='form-control'") : $story->verify;?>
             </div>
           </div>
-          <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($files)) ? false : true;?>
+          <?php $showFile = (strpos('draft,changing', $story->status) === false and empty($story->files)) ? false : true;?>
           <?php if($showFile):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->attatch;?></div>
             <div class='form-group'>
               <?php $canChangeFile = strpos('draft,changing', $story->status) !== false ? true : false;?>
-              <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit', 'showDelete' => $canChangeFile));?>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit', 'showDelete' => $canChangeFile));?>
               <?php echo $canChangeFile ? $this->fetch('file', 'buildform') : '';?>
             </div>
           </div>

@@ -30,18 +30,20 @@ class storyModel extends model
             ->fetch();
         if(!$story) return false;
 
+        $this->loadModel('file');
         if(helper::isZeroDate($story->closedDate)) $story->closedDate = '';
         if($version == 0) $version = $story->version;
-        $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $spec = $this->dao->select('title,spec,verify,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title  = isset($spec->title)  ? $spec->title  : '';
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
+        $story->files  = isset($spec->files)  ? $this->file->getByIdList($spec->files) : '';
         if(!empty($story->fromStory)) $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
 
         /* Check parent story. */
         if($story->parent > 0) $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
 
-        $story = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
+        $story = $this->file->replaceImgURL($story, 'spec,verify');
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
@@ -264,14 +266,14 @@ class storyModel extends model
                 $this->subdivide($story->parent, $stories);
             }
 
-            $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
-            $this->file->saveUpload($story->type, $storyID, ',1,');
-
             if(!empty($story->plan))
             {
                 $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
                 $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
             }
+
+            $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
+            $files = $this->file->saveUpload($story->type, $storyID, 1);
 
             $data          = new stdclass();
             $data->story   = $storyID;
@@ -279,6 +281,7 @@ class storyModel extends model
             $data->title   = $story->title;
             $data->spec    = $story->spec;
             $data->verify  = $story->verify;
+            $data->files   = join(',', array_keys($files));
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
             /* Save the story reviewer to storyreview table. */
@@ -658,11 +661,7 @@ class storyModel extends model
     public function change($storyID)
     {
         $specChanged = false;
-        $oldStory    = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
-        $oldSpec     = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->fetch();
-        $oldStory->title  = isset($oldSpec->title)  ? $oldSpec->title  : '';
-        $oldStory->spec   = isset($oldSpec->spec)   ? $oldSpec->spec   : '';
-        $oldStory->verify = isset($oldSpec->verify) ? $oldSpec->verify : '';
+        $oldStory    = $this->getById($storyID);
 
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
@@ -688,12 +687,13 @@ class storyModel extends model
         $oldStoryReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
         $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
         $reviewerHasChanged = (array_diff(array_keys($oldStoryReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStoryReviewers)));
-        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or isset($_POST['deleteFiles'])) $specChanged = true;
+        if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged or isset($story->deleteFiles)) $specChanged = true;
 
         $now   = helper::now();
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('deleteFiles', array())
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
@@ -706,11 +706,11 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
             ->setIF(!$specChanged, 'status', $oldStory->status)
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,comment,needNotReview,uid,deleteFiles')
+            ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
             ->checkFlow()
@@ -720,20 +720,27 @@ class storyModel extends model
         {
             if($specChanged)
             {
+                $this->file->updateObjectID($this->post->uid, $storyID, 'story');
+                $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
+                $addedFiles = empty($addedFiles) ? '' : join(',', array_keys($addedFiles)) . ',';
+                $storyFiles = $oldStory->files = join(',', array_keys($oldStory->files));
+                foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
+
                 $data          = new stdclass();
                 $data->story   = $storyID;
-                $data->version = $oldStory->version + 1;
+                $data->version = $story->version;
                 $data->title   = $story->title;
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
+                $data->files   = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
-                $story = $this->getById($storyID);
                 /* IF is story and has changed, update its relation version to new. */
                 if($oldStory->type == 'story')
                 {
+                    $newStory = $this->getById($storyID);
                     $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
-                    $this->updateStoryVersion($story);
+                    $this->updateStoryVersion($newStory);
                 }
                 else
                 {
@@ -742,7 +749,7 @@ class storyModel extends model
                         ->where('AType')->eq('requirement')
                         ->andWhere('BType')->eq('story')
                         ->andWhere('relation')->eq('subdivideinto')
-                        ->andWhere('AID')->eq($story->id)
+                        ->andWhere('AID')->eq($storyID)
                         ->fetchPairs();
 
                     foreach($relations as $relationID) $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->eq($relationID)->exec();
@@ -763,13 +770,8 @@ class storyModel extends model
                     $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
                     $story->reviewers    = implode(',', $_POST['reviewer']);
                 }
-
-                $deleteFiles = isset($_POST['deleteFiles']) ? $_POST['deleteFiles'] : array();
-                if(!empty($deleteFiles)) $this->file->deleteStoryFile($story->id, $story->version, $deleteFiles);
-                $this->file->updateStoryFileVersion($story->id, $story->version, $deleteFiles);
             }
 
-            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
             return common::createChanges($oldStory, $story);
         }
     }
@@ -784,7 +786,7 @@ class storyModel extends model
     public function update($storyID)
     {
         $now      = helper::now();
-        $oldStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $oldStory = $this->getById($storyID);
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -797,11 +799,6 @@ class storyModel extends model
             return false;
         }
 
-        $oldSpec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->fetch();
-        $oldStory->title  = isset($oldSpec->title)  ? $oldSpec->title  : '';
-        $oldStory->spec   = isset($oldSpec->spec)   ? $oldSpec->spec   : '';
-        $oldStory->verify = isset($oldSpec->verify) ? $oldSpec->verify : '';
-
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
             ->cleanFloat('estimate')
@@ -812,6 +809,7 @@ class storyModel extends model
             ->setDefault('spec', $oldStory->spec)
             ->setDefault('verify', $oldStory->verify)
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
             ->setDefault('plan,notifyEmail', '')
@@ -831,7 +829,7 @@ class storyModel extends model
             ->join('linkStories', ',')
             ->join('linkRequirements', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview,deleteFiles')
+            ->remove('files,labels,comment,contactListMenu,stages,reviewer,needNotReview')
             ->get();
 
         if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
@@ -904,7 +902,7 @@ class storyModel extends model
         }
 
         $this->dao->update(TABLE_STORY)
-            ->data($story, 'reviewers,spec,verify,finalResult')
+            ->data($story, 'reviewers,spec,verify,finalResult,deleteFiles')
             ->autoCheck()
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -916,12 +914,20 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title)
+            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
+            $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
+
+            if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or !empty($story->deleteFiles) or !empty($addedFiles))
             {
+                $addedFiles = empty($addedFiles) ? '' : join(',', array_keys($addedFiles)) . ',';
+                $storyFiles = $oldStory->files = join(',', array_keys($oldStory->files));
+                foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
+
                 $data = new stdclass();
                 $data->title  = $story->title;
                 $data->spec   = $story->spec;
                 $data->verify = $story->verify;
+                $data->files  = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
             }
 
@@ -1040,21 +1046,13 @@ class storyModel extends model
                 }
             }
 
-            $changes     = common::createChanges($oldStory, $story);
-            $deleteFiles = isset($_POST['deleteFiles']) ? $this->file->getPairs($_POST['deleteFiles'], 'title') : array();
-
-            if(isset($_POST['deleteFiles'])) $this->file->deleteStoryFile($storyID, $oldStory->version, $_POST['deleteFiles']);
-            $this->file->updateObjectID($this->post->uid, $storyID, 'story');
-
-            $files = $this->file->saveUpload($oldStory->type, $storyID, ",$oldStory->version,");
+            $changes = common::createChanges($oldStory, $story);
             if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
 
-            if($this->post->comment != '' or !empty($changes) or !empty($files) or !empty($deleteFiles))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action      = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction  = empty($files) ? '' : $this->lang->addFiles . join(',', $files) . "\n" ;
-                $fileAction .= empty($deleteFiles) ? '' : $this->lang->deleteFiles . join(',', $deleteFiles) . "\n";
-                $actionID    = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
+                $action   = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
 
                 if(isset($story->finalResult)) $this->recordReviewAction($story);
@@ -1609,8 +1607,6 @@ class storyModel extends model
         /* Delete versions that is after this version. */
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($story->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($story->version)->exec();
-
-        $this->loadModel('file')->deleteStoryFile($storyID, $story->version);
     }
 
     /**
@@ -5620,8 +5616,6 @@ class storyModel extends model
             /* Delete versions that is after this version. */
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->in($oldStory->version)->exec();
-
-            $this->file->deleteStoryFile($story->id, $oldStory->version);
         }
 
         if($result == 'reject')
