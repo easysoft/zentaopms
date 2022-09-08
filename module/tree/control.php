@@ -47,7 +47,7 @@ class tree extends control
         }
         else if($this->app->tab == 'feedback')
         {
-            $products = $this->product->getProducts(0, 'all', '', false);
+            $products = $this->loadModel('feedback')->getGrantProducts();
             if($viewType == 'feedback') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'feedback', '', '', '', false);
         }
 
