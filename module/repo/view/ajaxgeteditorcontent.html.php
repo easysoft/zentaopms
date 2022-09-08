@@ -202,7 +202,7 @@ function showCommitInfo()
 
     $.post(link, data, function(res)
     {
-        res = JSON.parse(res);
+        res    = JSON.parse(res);
         blames = res.blames;
     })
 }
@@ -278,7 +278,7 @@ $(function()
             {
                 if(!blames) return;
 
-                var line  = obj.target.position.lineNumber;
+                var line = obj.target.position.lineNumber;
                 if(pageType == 'diff') line = diffContent.line.new[line -1];
 
                 var blame = blames[line];
