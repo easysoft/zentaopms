@@ -13,3 +13,5 @@ CREATE TABLE `zt_taskteam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `zt_taskestimate` ADD `order` tinyint unsigned NULL DEFAULT '0';
 ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
+
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProductFeedback', '0');
