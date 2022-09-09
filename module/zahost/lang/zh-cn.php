@@ -35,7 +35,7 @@ $lang->zahost->zaHostType                 = '主机类型';
 $lang->zahost->zaHostTypeList['physical'] = '实体主机';
 #$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
 
-$lang->zahost->confirmDelete  = '是否删除该主机记录？';
+$lang->zahost->confirmDelete = '是否删除该主机记录？';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->ip        = '『%s』格式不正确！';
+$lang->zahost->notice->ip = '『%s』格式不正确！';
