@@ -7,6 +7,15 @@ $apiRoot  = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'api/v1/
 $apiFiles = scandir($apiRoot);
 $apiFiles = array_splice($apiFiles, 2);
 
+/**
+ * Get api List from the file and database.
+ *
+ * @param  string $apiRoot
+ * @param  string $apiFiles
+ * @param  boole  $info
+ * @access public
+ * @return array
+ */
 function getApi($apiRoot, $apiFiles, $info = false)
 {
     global $config, $dao;
@@ -62,6 +71,13 @@ function getApi($apiRoot, $apiFiles, $info = false)
     return $api;
 }
 
+/**
+ * Set the value of the parameter.
+ *
+ * @param  string  $values
+ * @access public
+ * @return string
+ */
 function setValue($values)
 {
     $result = "array(";
@@ -83,6 +99,14 @@ function setValue($values)
 $apiList  = getApi($apiRoot, $apiFiles);
 $caseRoot = dirname(__FILE__, 2) . '/checkapi';
 
+/**
+ * Batch create API cases.
+ *
+ * @param  string    $caseRoot
+ * @param  string    $apiList
+ * @access public
+ * @return void
+ */
 function createCase($caseRoot, $apiList)
 {
     if(!is_dir($caseRoot)) mkdir($caseRoot, 0777, true);
@@ -116,8 +140,7 @@ function createCase($caseRoot, $apiList)
                 }
                 $testData = "array('token' => \$token->token)";
             }
-
-            if($method === 'post' or $method === 'put')
+            elseif($method === 'post' or $method === 'put')
             {
                 if($methodValue['example'] !== '')
                 {
