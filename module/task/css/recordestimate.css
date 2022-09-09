@@ -1,6 +1,6 @@
 .table-recorded thead{background: rgb(245 245 245);}
 .form-condensed .table-form {margin-bottom: 20px;}
-.hours {display: flex; float: left; transform: translate(0, 50%); margin: 0 0 0 10px;}
+.hours {display: flex; float: left; transform: translate(0, 50%); margin: 0;}
 .estimateTotally, .consumedTotally {border-radius: 9px; padding: 3px 7px; margin: 0 5px 0 5px; min-width: 18px;}
 .consumedTotally {background: #EAF3FF; color: #2B80FF;}
 .estimateTotally {background: #FFEFEF; color: #FF6262;}
@@ -13,4 +13,6 @@
 .icon-calendar {color: rgb(22, 168, 248)}
 #recordForm .table>thead>tr>th{ border: none}
 .main-header {border-bottom: none !important}
-.body-modal .main-header>h2 { max-width: 70% !important;}
+.main-header ul.hours:before{content:"（"}
+.main-header ul.hours:after{content:"）"}
+.body-modal .main-header>h2 { max-width: 70% !important; margin-right:0px;}
