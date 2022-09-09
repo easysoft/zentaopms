@@ -1014,13 +1014,13 @@ class bugModel extends model
      *
      * @param  int    $bugID
      * @access public
-     * @return string
+     * @return array
      */
     public function assign($bugID)
     {
         $now = helper::now();
         $oldBug = $this->getById($bugID);
-        if($oldBug->status == 'closed') return false;
+        if($oldBug->status == 'closed') return array();
 
         $bug = fixer::input('post')
             ->add('id', $bugID)
