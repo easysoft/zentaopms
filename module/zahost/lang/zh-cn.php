@@ -33,7 +33,7 @@ $lang->zahost->unitList['TB'] = 'TB';
 
 $lang->zahost->zaHostType                 = '主机类型';
 $lang->zahost->zaHostTypeList['physical'] = '实体主机';
-#$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
+//$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
 
 $lang->zahost->confirmDelete = '是否删除该主机记录？';
 
