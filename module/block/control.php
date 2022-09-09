@@ -1208,8 +1208,9 @@ class block extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
+        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $this->view->progress = $progress > 100 ? 100 : $progress;
         $this->view->current  = $current;
-        $this->view->progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
     }
 
     /**
@@ -1231,7 +1232,8 @@ class block extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-        $this->view->progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $this->view->progress = $progress > 100 ? 100 : $progress;
     }
 
     /**
