@@ -39,7 +39,7 @@ $lang->moduleOrder[85]  = 'testtask';
 $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
 $lang->moduleOrder[100] = 'caselib';
-$lang->moduleOrder[105] = 'automation';
+$lang->moduleOrder[105] = 'zahost';
 
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[115] = 'report';
@@ -1190,6 +1190,13 @@ $lang->resource->automation = new stdclass();
 $lang->resource->automation->browse = 'browse';
 
 $lang->automation->methodOrder[0] = 'browse';
+
+$lang->resource->zahost = new stdclass();
+$lang->resource->zahost->browse = 'browse';
+$lang->resource->zahost->create = 'create';
+
+$lang->zahost->methodOrder[0] = 'browse';
+$lang->zahost->methodOrder[5] = 'create';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

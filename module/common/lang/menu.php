@@ -394,7 +394,13 @@ $lang->qa->menuOrder[25] = 'testsuite';
 $lang->qa->menuOrder[30] = 'testtask';
 $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
-$lang->qa->menuOrder[45] = 'automation';
+$lang->qa->menuOrder[45] = 'zahost';
+
+$lang->qa->menu->zahost['subMenu'] = new stdclass();
+$lang->qa->menu->zahost['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse|productID=%s", 'alias' => '');
+
+//$lang->qa->menu->automation['subMenu'] = new stdclass();
+//$lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse|productID=%s", 'alias' => '');
 
 $lang->qa->menu->automation['subMenu'] = new stdclass();
 $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse", 'alias' => 'create');
@@ -651,7 +657,8 @@ $lang->navGroup->qa         = 'qa';
 $lang->navGroup->bug        = 'qa';
 $lang->navGroup->testcase   = 'qa';
 $lang->navGroup->testtask   = 'qa';
-$lang->navGroup->automation = 'qa';
+//$lang->navGroup->automation = 'qa';
+$lang->navGroup->zahost     = 'qa';
 $lang->navGroup->testreport = 'qa';
 $lang->navGroup->testcase   = 'qa';
 $lang->navGroup->testtask   = 'qa';
