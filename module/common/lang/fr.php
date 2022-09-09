@@ -179,6 +179,7 @@ $lang->score->common      = 'Score';
 $lang->build->common      = 'Build';
 $lang->testreport->common = 'Report';
 $lang->automation->common = 'Automation';
+$lang->zahost->common     = 'ZAhost';
 $lang->team->common       = 'Team';
 $lang->user->common       = 'User';
 $lang->custom->common     = 'Custom';

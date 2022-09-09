@@ -179,6 +179,7 @@ $lang->score->common      = '我的积分';
 $lang->build->common      = '版本';
 $lang->testreport->common = '测试报告';
 $lang->automation->common = '自动化';
+$lang->zahost->common     = '宿主机';
 $lang->team->common       = '团队';
 $lang->user->common       = '用户';
 $lang->custom->common     = '自定义';
