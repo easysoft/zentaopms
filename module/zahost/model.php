@@ -123,10 +123,11 @@ class zahostModel extends model
             $query = $this->session->zahostQuery;
             $query = str_replace('`id`', 't1.`id`', $query);
             $query = str_replace('`status`', 't2.`status`', $query);
+            $query = str_replace('`type`', 't2.`type`', $query);
         }
 
         return $this->dao->select('*,t2.id as hostID,t1.id as id')->from(TABLE_ASSET)->alias('t1')
-            ->leftJoin(TABLE_HOST)->alias('t2')->on('t1.id = t2.assetID')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.id = t2.assetID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('zahost')
             ->beginIF($query)->andWhere($query)->fi()

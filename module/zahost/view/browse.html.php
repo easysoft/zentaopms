@@ -44,7 +44,7 @@
           <?php $vars = "browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>         <?php common::printOrderLink('t1.id',           $orderBy, $vars, $lang->idAB);?></th>
           <th class='c-name'>       <?php common::printOrderLink('name',            $orderBy, $vars, $lang->zahost->name);?></th>
-          <th class='c-type'>       <?php common::printOrderLink('type',            $orderBy, $vars, $lang->zahost->type);?></th>
+          <th class='c-type'>       <?php common::printOrderLink('t1.type',         $orderBy, $vars, $lang->zahost->type);?></th>
           <th class='c-ip'>         <?php common::printOrderLink('publicIP',        $orderBy, $vars, $lang->zahost->IP);?></th>
           <th class='c-cpu'>        <?php common::printOrderLink('cpuCores',        $orderBy, $vars, $lang->zahost->cpuCores);?></th>
           <th class='c-memory'>     <?php common::printOrderLink('memory',          $orderBy, $vars, $lang->zahost->memory);?></th>
@@ -60,11 +60,11 @@
         <tr class='text-left'>
           <td><?php printf('%03d', $host->id);?></td>
           <td title='<?php echo $host->name?>'><?php echo html::a($this->inlink('view', "id=$host->id", 'html', true), $host->name, '', "class='iframe'");?></td>
-          <td><?php echo zget($lang->zahost->zaHostType, $host->type);?></td>
+          <td><?php echo zget($lang->zahost->zaHostType, $host->hostType);?></td>
           <td><?php echo $host->publicIP;?></td>
           <td><?php echo $host->cpuCores;?></td>
-          <td><?php echo $host->memory;?></td>
-          <td><?php echo $host->diskSize;?></td>
+          <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
+          <td><?php echo $host->diskSize . zget($lang->zahost->unitList, $host->unit);?></td>
           <td><?php echo $host->virtualSoftware;?></td>
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo $host->instanceNum;?></td>
