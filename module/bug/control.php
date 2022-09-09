@@ -525,7 +525,7 @@ class bug extends control
             $severity    = $bug->severity;
             $type        = $bug->type;
             $assignedTo  = $bug->assignedTo;
-            $deadline    = $bug->deadline;
+            $deadline    = helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
             if($pri == 0) $pri = '3';
