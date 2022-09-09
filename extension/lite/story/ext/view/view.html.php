@@ -110,7 +110,7 @@
                   common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
                   if(strpos('draft,changing', $child->status) !== false)
                   {
-                      common::printIcon('story', 'submitReview', "storyID=$child->id", $child, 'list', 'sub-review', '', 'iframe showinonlybody', true);
+                      common::printIcon('story', 'submitReview', "storyID=$child->id", $child, 'list', 'confirm', '', 'iframe showinonlybody', true);
                   }
                   else
                   {
@@ -143,7 +143,7 @@
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
         if(strpos('draft,changing', $story->status) !== false)
         {
-            common::printIcon('story', 'submitReview', "storyID=$story->id", $story, 'button', 'sub-review', '', 'iframe showinonlybody', true);
+            common::printIcon('story', 'submitReview', "storyID=$story->id", $story, 'button', 'confirm', '', 'iframe showinonlybody', true);
         }
         else
         {

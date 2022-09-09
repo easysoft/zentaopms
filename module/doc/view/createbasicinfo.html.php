@@ -31,7 +31,7 @@
           <tr>
             <th><?php echo $lang->doc->module;?></th>
             <td>
-              <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
+              <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen' data-drop_direction='down'");?></span>
             </td><td></td>
           </tr>
           <tr>

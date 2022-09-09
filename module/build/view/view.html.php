@@ -103,7 +103,7 @@ tbody tr td:first-child input {display: none;}
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
-                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
                   if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
                   {
                       echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
