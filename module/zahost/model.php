@@ -20,7 +20,6 @@ class zahostModel extends model
     public function __construct()
     {
         parent::__construct();
-
         $this->app->lang->host = $this->lang->zahost;
     }
 
@@ -33,7 +32,7 @@ class zahostModel extends model
      */
     public function getById($hostID)
     {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID) ->fetch();
+        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
     }
 
     /**
@@ -86,5 +85,53 @@ class zahostModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Get host list.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getList($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
+    {
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            /* Concatenate the conditions for the query. */
+            if($param)
+            {
+                $query = $this->loadModel('search')->getQuery($param);
+                if($query)
+                {
+                    $this->session->set('zahostQuery', $query->sql);
+                    $this->session->set('zahostForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('zahostQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->zahostQuery == false) $this->session->set('zahostQuery', ' 1 = 1');
+            }
+            $query = $this->session->zahostQuery;
+            $query = str_replace('`id`', 't1.`id`', $query);
+            $query = str_replace('`status`', 't2.`status`', $query);
+        }
+
+        return $this->dao->select('*,t2.id as hostID,t1.id as id')->from(TABLE_ASSET)->alias('t1')
+            ->leftJoin(TABLE_HOST)->alias('t2')->on('t1.id = t2.assetID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('zahost')
+            ->beginIF($query)->andWhere($query)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 }

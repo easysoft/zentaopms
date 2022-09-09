@@ -12,6 +12,47 @@
 class zahost extends control
 {
     /**
+     * View host.
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browse($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $browseType = strtolower($browseType);
+        $param      = (int)$param;
+
+        $this->app->session->set('zahostList', $this->app->getURI(true));
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $hostList = $this->zahost->getList($browseType, $param, $orderBy, $pager);
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
+        $this->config->zahost->search['actionURL'] = $actionURL;
+        $this->config->zahost->search['queryID']   = $param;
+        $this->config->zahost->search['onMenuBar'] = 'no';
+        $this->loadModel('search')->setSearchParams($this->config->zahost->search);
+
+        $this->view->title      = $this->lang->zahost->common;
+        $this->view->hostList   = $hostList;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+
+        $this->display();
+    }
+
+    /**
      * Create host.
      *
      * @access public
@@ -31,8 +72,6 @@ class zahost extends control
         }
 
         $this->view->title = $this->lang->zahost->create;
-
         $this->display();
     }
-
 }
