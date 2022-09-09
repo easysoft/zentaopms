@@ -187,10 +187,11 @@ $lang->bug->allUsers      = '加载所有用户';
 $lang->bug->allBuilds     = '所有';
 $lang->bug->createBuild   = '创建';
 
+global $config;
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPRJExecStoryTask      = "项目/" . $lang->executionCommon . "/{$lang->SRCommon}/任务";
+$lang->bug->legendPRJExecStoryTask      = $config->systemMode == 'new' ? "项目/" . $lang->executionCommon . "/{$lang->SRCommon}/任务" : $lang->executionCommon . "/{$lang->SRCommon}/任务";
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . "/{$lang->SRCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
