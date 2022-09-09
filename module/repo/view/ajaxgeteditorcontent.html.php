@@ -79,10 +79,11 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
 <script>
-var editor       = null;
-var blames       = null;
-var globalCommit = '';
-var codeHeight   = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
+var editor         = null;
+var modifiedEditor = null;
+var blames         = null;
+var globalCommit   = '';
+var codeHeight     = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
 if(codeHeight > 0) $.cookie('codeContainerHeight', codeHeight);
 $('#codeContainer').css('height', $.cookie('codeContainerHeight'));
 
@@ -179,7 +180,7 @@ function setTab(titleObj)
  * @return void
  */
 function updateEditorInline(display){
-    editor.updateOptions({renderSideBySide: display});
+    modifiedEditor.updateOptions({renderSideBySide: display});
 }
 
 /**
@@ -235,7 +236,7 @@ $(function()
             if(pageType == 'diff')
             {
                 diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
-                var modifiedEditor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
+                modifiedEditor = monaco.editor.createDiffEditor(document.getElementById('codeContainer'),
                 {
                     readOnly:             true,
                     language:             lang,
