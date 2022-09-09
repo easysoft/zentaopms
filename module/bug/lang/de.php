@@ -187,10 +187,11 @@ $lang->bug->allUsers      = 'Alle Benutzer laden';
 $lang->bug->allBuilds     = 'Alle';
 $lang->bug->createBuild   = 'Neu';
 
-/* Legend list。*/
+global $config;
+/* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basis Info';
 $lang->bug->legendAttatch               = 'Anlagen';
-$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
+$lang->bug->legendPRJExecStoryTask      = $config->systemMode == 'new' ? 'Project/' . $lang->executionCommon . '/Story/Task' : $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Typ/Schwere';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
