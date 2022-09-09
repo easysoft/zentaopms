@@ -58,7 +58,7 @@ function getApi($apiRoot, $apiFiles, $info = false)
         }
     }
 
-    if($info === true) echo '没有数据库数据：' . PHP_EOL . $nodata . PHP_EOL . '没有API文件：' . PHP_EOL .$noApiFile . PHP_EOL;
+    if($info === true) echo '没有数据库数据：' . PHP_EOL . $nodata . PHP_EOL . '没有API文件：' . PHP_EOL . $noApiFile . PHP_EOL;
     return $api;
 }
 
@@ -76,8 +76,7 @@ function setValue($values)
             $result .= "'$field' => '$value', ";
         }
     }
-    $result = trim($result, ", ");
-    $result .= ')';
+    $result = trim($result, ", ") . ')';
     return $result;
 }
 
@@ -123,7 +122,6 @@ function createCase($caseRoot, $apiList)
                 if($methodValue['example'] !== '')
                 {
                     $testData = "array(";
-
                     $examples = json_decode(str_replace('&quot;', '"', $methodValue['example']), true);
 
                     foreach($examples as $key => $value)

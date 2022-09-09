@@ -61,7 +61,7 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 include $testPath . 'config/config.php';
 include $testPath. 'lib/db.class.php';
 include $testPath. 'lib/rest.php';
-$db = new db();
+$db   = new db();
 $rest = new rest($config->test->base);
 
 if(isset($config->test->account, $config->test->password))
