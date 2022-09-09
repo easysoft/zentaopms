@@ -212,7 +212,7 @@ function addNewProduct(obj)
 
         $('#productTitle').html(manageProducts);
     }
-    $('#productsBox div + .text-danger.help-text').empty();
+    $('#productsBox div + .text-danger.help-text').remove();
 }
 
 /**
