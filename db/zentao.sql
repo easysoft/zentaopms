@@ -7177,6 +7177,7 @@ CREATE TABLE IF NOT EXISTS `zt_asset` (
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `registerDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -7186,6 +7187,8 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `id` mediumint(8) unsigned  NOT NULL AUTO_INCREMENT,
   `assetID`      mediumint(8) UNSIGNED NOT NULL,
   `admin`        smallint(5)  UNSIGNED NOT NULL DEFAULT 0,
+  `type`         varchar(30)  NOT NULL DEFAULT 'normal',
+  `secret`       varchar(50)  NOT NULL DEFAULT '',
   `serverRoom`   mediumint(8) UNSIGNED NOT NULL,
   `cabinet`      varchar(128) NOT NULL,
   `serverModel`  varchar(256) NOT NULL,
@@ -7210,6 +7213,7 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `database`     varchar(128) NOT NULL,
   `language`     varchar(16)  NOT NULL,
   `status`       varchar(50)  NOT NULL,
+  `virtualSoftware` varchar(30) NOT NULL DEFAULT '',
   `agentPort` varchar(10) NOT NULL,
   `instanceNum` tinyint(0) NOT NULL DEFAULT 0,
   `pri` smallint(5) unsigned NOT NULL DEFAULT 0,
@@ -7523,6 +7527,7 @@ CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `hostID` int(10) unsigned NOT NULL DEFAULT 0,
+  `type` varchar(30) NOT NULL DEFAULT 'normal',
   `templateName` varchar(255) NOT NULL DEFAULT '',
   `osType` varchar(50) NOT NULL DEFAULT '',
   `osCategory` varchar(50) NOT NULL DEFAULT '',
