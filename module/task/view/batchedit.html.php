@@ -99,8 +99,8 @@ js::set('requiredFields', $config->task->edit->requiredFields);
             $taskMembers = array();
             if(isset($teams[$taskID]))
             {
-                $teamAccounts = array_keys($teams[$taskID]);
-                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount] = $users[$teamAccount];
+                $teamAccounts = $teams[$taskID];
+                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount->account] = $users[$teamAccount->account];
             }
             else
             {
