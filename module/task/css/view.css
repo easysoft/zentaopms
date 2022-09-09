@@ -19,3 +19,6 @@
 .c-actions {width: 175px;}
 
 [lang^='de'] #mainContent .main-actions .btn-toolbar .btn {padding-left: 3px; padding-right: 3px;}
+
+#childrenTable .c-id {width: 60px;}
+#childrenTable .c-lblPri {width: 50px;}

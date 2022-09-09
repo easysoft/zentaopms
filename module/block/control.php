@@ -935,8 +935,9 @@ class block extends control
                 $current = zget($weeks, $monday, '');
                 $current = substr($current, 0, -11) . substr($current, -6);
 
-                $project->pv = $this->weekly->getPV($projectID, $today);
-                $project->ev = $this->weekly->getEV($projectID, $today);
+                $PVEV = $this->weekly->getPVEV($projectID, $today);
+                $project->pv = $PVEV['PV'];
+                $project->ev = $PVEV['EV'];
                 $project->ac = $this->weekly->getAC($projectID, $today);
                 $project->sv = $this->weekly->getSV($project->ev, $project->pv);
                 $project->cv = $this->weekly->getCV($project->ev, $project->ac);
@@ -1200,14 +1201,39 @@ class block extends control
 
         $this->weekly->save($this->session->project, $date);
 
-        $this->view->pv = (float)$this->weekly->getPV($this->session->project, $today);
-        $this->view->ev = (float)$this->weekly->getEV($this->session->project, $today);
+        $PVEV = $this->weekly->getPVEV($this->session->project, $today);
+        $this->view->pv = (float)$PVEV['PV'];
+        $this->view->ev = (float)$PVEV['EV'];
         $this->view->ac = (float)$this->weekly->getAC($this->session->project, $today);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
+        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $this->view->progress = $progress > 100 ? 100 : $progress;
         $this->view->current  = $current;
-        $this->view->progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+    }
+
+    /**
+     * Print waterfall general report block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printWaterfallGeneralReportBlock()
+    {
+        $this->app->loadLang('programplan');
+        $this->loadModel('project');
+        $this->loadModel('weekly');
+
+        $data = $this->project->getWaterfallPVEVAC($this->session->project);
+        $this->view->pv = (float)$data['PV'];
+        $this->view->ev = (float)$data['EV'];
+        $this->view->ac = (float)$data['AC'];
+        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
+        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
+
+        $progress = !empty($this->view->pv) ? floor($this->view->ac / $this->view->pv * 1000) / 1000 * 100 : 0;
+        $this->view->progress = $progress > 100 ? 100 : $progress;
     }
 
     /**

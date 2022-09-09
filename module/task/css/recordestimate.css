@@ -13,3 +13,4 @@
 .icon-calendar {color: rgb(22, 168, 248)}
 #recordForm .table>thead>tr>th{ border: none}
 .main-header {border-bottom: none !important}
+.body-modal .main-header>h2 { max-width: 70% !important;}

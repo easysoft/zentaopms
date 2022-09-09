@@ -74,10 +74,10 @@
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
-        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-        <?php elseif(!isset($task->members[$app->user->account])):?>
+        <?php if(!isset($task->members[$app->user->account])):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+        <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
         <?php endif;?>
       </div>
     </div>
@@ -91,7 +91,7 @@
           $readonly      = ' readonly';
           $left          = 0;
           $reverseOrders = array_reverse($myOrders, true);
-          foreach($reverseOrders as $order) $reverseOrders[$order] = $order + 1;
+          foreach($reverseOrders as $order => $count) $reverseOrders[$order] = $order + 1;
       }
       ?>
       <table class='table table-form table-fixed table-record'>
@@ -107,7 +107,8 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 1; $i <= 3; $i++):?>
+          <?php $initNum = !empty($efforts) ? 3 : 5;?>
+          <?php for($i = 1; $i <= $initNum; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>

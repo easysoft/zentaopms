@@ -47,6 +47,7 @@ $lang->task->exportAction        = "导出任务";
 $lang->task->reportChart         = "报表统计";
 $lang->task->fromBug             = '来源Bug';
 $lang->task->case                = '相关用例';
+$lang->task->process             = '处理任务';
 $lang->task->confirmStoryChange  = "确认{$lang->SRCommon}变动";
 $lang->task->storyChange         = "{$lang->SRCommon}变更";
 $lang->task->progress            = '进度';
@@ -57,7 +58,7 @@ $lang->task->waitTask            = '未开始的任务';
 $lang->task->allModule           = '所有模块';
 $lang->task->replace             = '替换';
 $lang->task->myEffort            = '我的日志';
-$lang->task->allEffort           = '所有日志';
+$lang->task->allEffort           = '团队日志';
 $lang->task->teamOrder           = '工序';
 
 $lang->task->common            = '任务';
@@ -166,7 +167,7 @@ $lang->task->recordEstimateAction = '添加工时';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";
-$lang->task->selectTestStory   = "选择测试{$lang->SRCommon}";
+$lang->task->selectTestStory   = "选择{$lang->SRCommon}";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "无{$lang->SRCommon}";
 $lang->task->noAssigned        = '未指派';

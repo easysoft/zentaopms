@@ -42,6 +42,7 @@ $lang->release->name          = 'Nom';
 $lang->release->marker        = 'Etape Importante';
 $lang->release->date          = 'Date Release';
 $lang->release->desc          = 'Description';
+$lang->release->files         = 'Files';
 $lang->release->status        = 'Statut';
 $lang->release->subStatus     = 'Sous-statut';
 $lang->release->last          = 'Dernière Release';

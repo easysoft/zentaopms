@@ -121,8 +121,9 @@ class weeklyModel extends model
             ->exec();
 
         $report = new stdclass;
-        $report->pv        = $this->getPV($project, $date);
-        $report->ev        = $this->getEV($project, $date);
+        $PVEV   = $this->getPVEV($project, $date);
+        $report->pv        = $PVEV['PV'];
+        $report->ev        = $PVEV['EV'];
         $report->ac        = $this->getAC($project, $date);
         $report->sv        = $this->getSV($report->ev, $report->pv);
         $report->cv        = $this->getCV($report->ev, $report->ac);
@@ -369,17 +370,17 @@ class weeklyModel extends model
     }
 
     /**
-     * GetPV
+     * Get PV and EV
      *
      * @param  int    $project
      * @param  string $date
      * @access public
-     * @return int
+     * @return array
      */
-    public function getPV($projectID, $date = '')
+    public function getPVEV($projectID, $date = '')
     {
         $report = $this->getFromDB($projectID, $date);
-        if(!empty($report)) return $report->pv;
+        if(!empty($report)) return array('PV' => $report->pv, 'EV' => $report->ev);
 
         if(!$date) $date = date('Y-m-d');
         $monday     = $this->getThisMonday($date);
@@ -397,84 +398,49 @@ class weeklyModel extends model
             ->fetchAll('id');
 
         $PV = 0;
+        $EV = 0;
+        $this->loadModel('holiday');
         foreach($tasks as $task)
         {
-            if(helper::isZeroDate($task->estStarted)) $task->estStarted = date('Y-m-d', strtotime($task->openedDate));
+            $execution = $executions[$task->execution];
+            if(helper::isZeroDate($task->estStarted)) $task->estStarted = helper::isZeroDate($task->openedDate) ? $execution->begin : date('Y-m-d', strtotime($task->openedDate));
             if(helper::isZeroDate($task->deadline))
             {
-                $execution = $executions[$task->execution];
                 $task->deadline = helper::isZeroDate($execution->realEnd) ? $execution->end : $execution->realEnd;
                 if(helper::isZeroDate($task->finishedDate)) $task->deadline = date('Y-m-d', strtotime($task->finishedDate));
             }
 
-            $fullDays = $this->loadModel('holiday')->getActualWorkingDays($task->estStarted, $task->deadline);
+            $fullDays = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
             if($task->estStarted < $monday and $task->deadline >= $nextMonday)
             {
                 $weekActualDays = $workdays;
             }
             elseif($task->estStarted >= $monday and $task->estStarted < $nextMonday)
             {
-                $weekActualDays = $this->loadModel('holiday')->getActualWorkingDays($task->estStarted, $task->deadline >= $nextMonday ? $sunday : $task->deadline);
+                $weekActualDays = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline >= $nextMonday ? $sunday : $task->deadline);
             }
             elseif($task->deadline >= $monday and $task->deadline < $nextMonday)
             {
-                $weekActualDays = $this->loadModel('holiday')->getActualWorkingDays($monday, $task->deadline);
+                $weekActualDays = $this->holiday->getActualWorkingDays($monday, $task->deadline);
             }
 
             if(empty($fullDays) or empty($weekActualDays) or empty($task->estimate)) continue;
-            $PV += round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
-        }
+            $thisPV = round(count($weekActualDays) / count($fullDays) * $task->estimate, 2);
 
-        return sprintf("%.2f",$PV);
-    }
-
-    /**
-     * Get EV data.
-     *
-     * @param  int    $projectID
-     * @param  string $date
-     * @access public
-     * @return int
-     */
-    public function getEV($projectID, $date = '')
-    {
-        $report = $this->getFromDB($projectID, $date);
-        if(!empty($report)) return $report->ev;
-
-        $executions      = $this->loadModel('execution')->getList($projectID);
-        $executionIdList = array_keys($executions);
-
-        if(!$date) $date = date('Y-m-d');
-        $monday     = $this->getThisMonday($date);
-        $sunday     = $this->getThisSunday($date);
-        $lastDay    = $this->getLastDay($date);
-        $nextMonday = date('Y-m-d', strtotime($sunday) + 24 * 3600);
-
-        $tasks = $this->dao->select('*')
-            ->from(TABLE_TASK)
-            ->where('execution')->in($executionIdList)
-            ->andWhere('consumed')->gt(0)
-            ->andWhere("((estStarted >= '$monday' AND estStarted < '$nextMonday') OR (deadline >= '$monday' AND deadline < '$nextMonday') OR (estStarted < '$monday' AND deadline > '$nextMonday'))")
-            ->andWhere("parent")->ge(0)
-            ->andWhere("deleted")->eq(0)
-            ->andWhere('status')->ne('cancel')
-            ->query();
-
-        $EV = 0;
-        foreach($tasks as $task)
-        {
             if($task->status == 'done' or $task->closedReason == 'done')
             {
-                $EV += $task->estimate;
+                $EV += $thisPV;
             }
             else
             {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-                $EV += $task->estimate * $task->progress / 100;
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $EV += round($thisPV * $task->progress / 100, 2);
             }
+            $PV += $thisPV;
         }
 
-        return sprintf("%.2f", $EV);
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV));
     }
 
     /**
@@ -492,15 +458,10 @@ class weeklyModel extends model
 
         if(!$date) $date = date('Y-m-d');
 
-        $monday          = $this->getThisMonday($date);
-        $nextMonday      = date('Y-m-d', strtotime($monday) + (7 * 24 * 3600));
-        $executions      = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($project)->fetchAll('id');
-        $executionIdList = array_keys($executions);
-        $taskIdList      = $this->dao->select('id')->from(TABLE_TASK)
-            ->where('execution')->in($executionIdList)
-            ->andWhere("parent")->ge(0)
-            ->andWhere("deleted")->eq(0)
-            ->fetchPairs();
+        $monday     = $this->getThisMonday($date);
+        $nextMonday = date('Y-m-d', strtotime($monday) + (7 * 24 * 3600));
+        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($project)->fetchAll('id');
+        $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->fetchPairs();
 
         $AC = $this->dao->select('sum(consumed) as consumed')
             ->from(TABLE_EFFORT)

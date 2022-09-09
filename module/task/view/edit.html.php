@@ -88,7 +88,10 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           <?php $this->printExtendFields($task, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
           <div class='detail text-center form-actions'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>

@@ -47,6 +47,7 @@ $lang->task->exportAction        = "Export Task";
 $lang->task->reportChart         = "Report Chart";
 $lang->task->fromBug             = 'From Bug';
 $lang->task->case                = 'Linked Case';
+$lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = 'Progress';
@@ -57,7 +58,7 @@ $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
 $lang->task->replace             = 'Replace';
 $lang->task->myEffort            = 'My Effort';
-$lang->task->allEffort           = 'All Effort';
+$lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Task';

@@ -1075,6 +1075,7 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('realStarted', '0000-00-00 00:00:00')
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -1158,7 +1159,7 @@ class taskModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->update(TABLE_TASK)->data($task)
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
@@ -1247,11 +1248,9 @@ class taskModel extends model
                     if(!empty($changes)) $this->action->logHistory($actionID, $changes);
                 }
             }
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
 
             unset($oldTask->parent);
             unset($task->parent);
-
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
@@ -1269,6 +1268,7 @@ class taskModel extends model
                 }
             }
 
+            $this->file->processFile4Object('task', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }

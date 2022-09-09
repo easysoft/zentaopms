@@ -119,12 +119,10 @@ class release extends control
         {
             $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('release', $releaseID);
-            if($changes or $files)
+
+            if($changes)
             {
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
+                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 

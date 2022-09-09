@@ -537,20 +537,16 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            $files   = array();
             if($comment == false)
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
-                $files = $this->loadModel('file')->saveUpload('task', $taskID);
-                if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
 
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action     = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-                $actionID   = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
+                $action     = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID   = $this->action->create('task', $taskID, $action, $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 

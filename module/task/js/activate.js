@@ -14,7 +14,7 @@ $('#confirmButton').click(function()
         var $tr     = $(this).closest('tr');
         var account = $(this).find('option:selected').text();
 
-        estimate = parseFloat($tr.find('[name^=teamEstimate]').val());
+        var estimate = parseFloat($tr.find('[name^=teamEstimate]').val());
         if(!isNaN(estimate)) totalEstimate += estimate;
         if(isNaN(estimate) || estimate == 0)
         {
@@ -23,12 +23,13 @@ $('#confirmButton').click(function()
               return false;
         }
 
-        consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
+        var consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
         if(!isNaN(consumed)) totalConsumed += consumed;
 
-        left = parseFloat($tr.find('[name^=teamLeft]').val());
+        var $left = $tr.find('[name^=teamLeft]');
+        var left  = parseFloat($left.val());
         if(!isNaN(left)) totalLeft += left;
-        if(!$tr.hasClass('member-done') && (isNaN(left) || left == 0))
+        if(!$left.prop('readonly') && (isNaN(left) || left == 0))
         {
               bootbox.alert(account + ' ' + leftNotEmpty);
               error = true;
