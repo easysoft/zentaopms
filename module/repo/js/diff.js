@@ -36,6 +36,8 @@ function htmlspecialchars_decode(str){
  */
 function getDiffs(fileName)
 {
+    if(fileName.indexOf('./') === 0) fileName = fileName.substring(2);
+
     var result = {
         'code': {'new': '', 'old': ''},
         'line': {'new': [], 'old': []}
