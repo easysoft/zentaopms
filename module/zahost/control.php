@@ -24,18 +24,13 @@ class zahost extends control
             $this->zahost->create();
             if(dao::isError())
             {
-                $erros = $this->zahost->translateField(dao::getError());
-                return $this->send(array('result' => 'fail', 'message' => $erros));
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title      = $this->lang->zahost->create;
-        $this->view->position[] = html::a($this->createLink('zahost', 'browse'), $this->lang->zahost->common);
-        $this->view->position[] = $this->lang->zahost->create;
-
-        //$this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'zahost');
+        $this->view->title = $this->lang->zahost->create;
 
         $this->display();
     }

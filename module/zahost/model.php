@@ -12,15 +12,28 @@
 class zahostModel extends model
 {
     /**
+     * Set lang;
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->app->lang->host = $this->lang->zahost;
+    }
+
+    /**
      * Get host by id.
      *
-     * @param  int    $id
+     * @param  int    $hostID
      * @access public
      * @return object
      */
-    public function getById($id)
+    public function getById($hostID)
     {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($id) ->fetch();
+        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID) ->fetch();
     }
 
     /**
@@ -51,10 +64,7 @@ class zahostModel extends model
         }
 
         $this->dao->update(TABLE_ASSET)->data($hostInfo)->check('name', 'unique');
-        if(dao::isError())
-        {
-            return false;
-        }
+        if(dao::isError()) return false;
 
         $assetInfo['name']        = $hostInfo->name;
         $assetInfo['type']        = 'zahost';
@@ -76,22 +86,5 @@ class zahostModel extends model
         }
 
         return false;
-    }
-
-    /**
-     * Translate field name with correct language.
-     *
-     * @param  array  $errors
-     * @access public
-     * @return array
-     */
-    public function translateField($errors)
-    {
-        foreach($errors as $fieldName => $subErrors)
-        {
-            foreach($subErrors as $index => $errMsg) $errors[$fieldName][$index] = str_replace($fieldName, $this->lang->zahost->$fieldName, $errMsg);
-        }
-
-        return $errors;
     }
 }
