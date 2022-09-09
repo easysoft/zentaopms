@@ -26,7 +26,7 @@ class testcasesEntry extends entry
         $this->app->cookie->caseModule = 0;
         $this->app->cookie->caseSuite  = 0;
 
-        $type     = 'all';
+        $type     = $this->param('status', 'all');
         $param    = 0;
         $moduleID = $this->param('module', 0);
         if($moduleID)
