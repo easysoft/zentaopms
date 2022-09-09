@@ -17,6 +17,15 @@
   <div class='pull-left btn-toolbar'>
     <a href='#' class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>
   </div>
+  <?php if(common::hasPriv('zahost', 'create')):?>
+  <div class="btn-toolbar pull-right" id='createActionMenu'>
+    <?php
+    $misc = "class='btn btn-primary'";
+    $link = $this->createLink('zahost', 'create');
+    echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->zahost->create, '', $misc);
+    ?>
+  </div>
+  <?php endif;?>
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='zahost'></div>
 <div id='mainContent' class='main-row'>
