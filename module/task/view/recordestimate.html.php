@@ -91,7 +91,7 @@
           $readonly      = ' readonly';
           $left          = 0;
           $reverseOrders = array_reverse($myOrders, true);
-          foreach($reverseOrders as $order) $reverseOrders[$order] = $order + 1;
+          foreach($reverseOrders as $order => $count) $reverseOrders[$order] = $order + 1;
       }
       ?>
       <table class='table table-form table-fixed table-record'>
