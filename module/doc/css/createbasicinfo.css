@@ -1,1 +1,2 @@
 #whiteListBox .input-group:last-child {margin-top: 10px;}
+#module_chosen.chosen-container .chosen-results {max-height: 200px;}
