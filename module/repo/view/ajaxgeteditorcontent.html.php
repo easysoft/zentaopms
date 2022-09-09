@@ -81,6 +81,7 @@ js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 <script>
 var editor         = null;
 var modifiedEditor = null;
+var diffContent    = null;
 var blames         = null;
 var globalCommit   = '';
 var codeHeight     = $(window).innerHeight() - $('#mainHeader').height() - $('#appsBar').height() - $('#fileTabs .tabs-navbar').height();
@@ -208,6 +209,40 @@ function showCommitInfo()
     })
 }
 
+/**
+ * Show blame info and relations.
+ *
+ * @param  int    line
+ * @access public
+ * @return void
+ */
+function showBlameAndRelation(line)
+{
+    if(!blames) return;
+
+    if(pageType == 'diff') line = diffContent.line.new[line -1];
+
+    var blame = blames[line];
+    if(!blame) return;
+
+    var p_line = parseInt(line);
+    while(!blame.revision)
+    {
+        p_line--;
+        blame = blames[p_line];
+    }
+    if($('#log').data('line') == p_line) return;
+
+    var time    = blame.time != 'unknown' ? blame.time : '';
+    var user    = blame.committer != 'unknown' ? blame.committer : '';
+    var version = blame.revision.toString().substring(0, 10);
+    var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
+    $('.history').text(content);
+    $('#log').data('line', p_line);
+    $('#log').css('display', 'flex');
+    getRelation(blame.revision);
+}
+
 $(function()
 {
     $('.btn-left').click(function()  {arrowTabs('relationTabs', 1);});
@@ -232,7 +267,6 @@ $(function()
                 if(ext.indexOf('.' + file.extension) !== -1) lang = langName;
             });
 
-            var diffContent = null;
             if(pageType == 'diff')
             {
                 diffContent = parent.getDiffs(file.dirname + '/' + file.basename);
@@ -260,6 +294,13 @@ $(function()
                 });
 
                 editor = modifiedEditor.getModifiedEditor();
+
+                var getOriginalEditor = modifiedEditor.getOriginalEditor();
+
+                getOriginalEditor.onMouseDown(function(obj)
+                {
+                    showBlameAndRelation(obj.target.position.lineNumber);
+                })
             }
             else
             {
@@ -277,30 +318,7 @@ $(function()
 
             editor.onMouseDown(function(obj)
             {
-                if(!blames) return;
-
-                var line = obj.target.position.lineNumber;
-                if(pageType == 'diff') line = diffContent.line.new[line -1];
-
-                var blame = blames[line];
-                if(!blame) return;
-
-                var p_line = parseInt(line);
-                while(!blame.revision)
-                {
-                    p_line--;
-                    blame = blames[p_line];
-                }
-                if($('#log').data('line') == p_line) return;
-
-                var time    = blame.time != 'unknown' ? blame.time : '';
-                var user    = blame.committer != 'unknown' ? blame.committer : '';
-                var version = blame.revision.toString().substring(0, 10);
-                var content = blameTmpl.replace('%time', time).replace('%name', user).replace('%version', version).replace('%comment', blame.message);
-                $('.history').text(content);
-                $('#log').data('line', p_line);
-                $('#log').css('display', 'flex');
-                getRelation(blame.revision);
+                showBlameAndRelation(obj.target.position.lineNumber);
             })
         });
     }
