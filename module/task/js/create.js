@@ -97,7 +97,7 @@ function loadExecutionMembers(executionID)
  */
 function loadExecutionStories(executionID)
 {
-    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
+    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val() + '&number=&type=full&status=active'), function(data)
     {
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
