@@ -111,6 +111,7 @@ $lang->action->objectTypes['caselib']          = 'Library';
 $lang->action->objectTypes['testsuite']        = 'Cahier recette';
 $lang->action->objectTypes['testtask']         = 'Recette';
 $lang->action->objectTypes['testreport']       = 'Edition';
+$lang->action->objectTypes['zahost']           = 'Host';
 $lang->action->objectTypes['doc']              = 'Document';
 $lang->action->objectTypes['api']              = 'Interface';
 $lang->action->objectTypes['doclib']           = 'Répertoire Documents';
@@ -610,6 +611,8 @@ $lang->action->dynamicAction->caselib['edited']    = 'Edité CasTest Lib';
 $lang->action->dynamicAction->caselib['deleted']   = 'Supprimé CasTest Lib';
 $lang->action->dynamicAction->caselib['undeleted'] = 'Restauré CasTest Lib';
 $lang->action->dynamicAction->caselib['hidden']    = 'Masqué CasTest Lib';
+
+$lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
 $lang->action->dynamicAction->doclib['created'] = 'Créer Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Editer Doc Library';

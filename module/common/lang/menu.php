@@ -383,7 +383,7 @@ $lang->qa->menu->testsuite  = array('link' => "{$lang->testcase->testsuite}|test
 $lang->qa->menu->testtask   = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->report     = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib    = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->automation = array('link' => "{$lang->automation->common}|zahost|browse", 'subModule' => 'automation', 'alias' => '');
+$lang->qa->menu->zahost     = array('link' => "{$lang->automation->common}|zahost|browse", 'subModule' => 'zahost', 'alias' => 'browse');
 
 /* QA menu order. */
 $lang->qa->menuOrder[5]  = 'product';
@@ -397,13 +397,10 @@ $lang->qa->menuOrder[40] = 'caselib';
 $lang->qa->menuOrder[45] = 'zahost';
 
 $lang->qa->menu->zahost['subMenu'] = new stdclass();
-$lang->qa->menu->zahost['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse|productID=%s", 'alias' => '');
+$lang->qa->menu->zahost['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse", 'alias' => 'browse,create');
 
-//$lang->qa->menu->automation['subMenu'] = new stdclass();
-//$lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse|productID=%s", 'alias' => '');
-
-$lang->qa->menu->automation['subMenu'] = new stdclass();
-$lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse", 'alias' => 'create');
+// $lang->qa->menu->automation['subMenu'] = new stdclass();
+// $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
 // $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');

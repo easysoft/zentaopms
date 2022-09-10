@@ -50,7 +50,6 @@ class zahostModel extends model
         $this->dao->table = 'zahost';
         $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
-            ->batchCheck('cpuCores,instanceNum', 'int')
             ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->autoCheck();

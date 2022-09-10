@@ -15,7 +15,7 @@
   <div class='main-header'>
     <h2><?php echo $lang->zahost->create?></h2>
   </div>
-  <form method='post' target='hiddenwin' id='ajaxForm'>
+  <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
     <table class='table table-form'>
       <tr>
         <th class='w-100px'><?php echo $lang->zahost->name;?></th>

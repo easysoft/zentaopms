@@ -111,6 +111,7 @@ $lang->action->objectTypes['caselib']          = '用例库';
 $lang->action->objectTypes['testsuite']        = '套件';
 $lang->action->objectTypes['testtask']         = '测试单';
 $lang->action->objectTypes['testreport']       = '报告';
+$lang->action->objectTypes['zahost']           = '宿主机';
 $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
@@ -610,6 +611,8 @@ $lang->action->dynamicAction->caselib['edited']    = '编辑用例库';
 $lang->action->dynamicAction->caselib['deleted']   = '删除用例库';
 $lang->action->dynamicAction->caselib['undeleted'] = '还原用例库';
 $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
+
+$lang->action->dynamicAction->zahost['created'] = '创建宿主机';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';
