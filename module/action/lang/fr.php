@@ -614,6 +614,8 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Masqué CasTest Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
+$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
+
 $lang->action->dynamicAction->doclib['created'] = 'Créer Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Editer Doc Library';
 $lang->action->dynamicAction->doclib['deleted'] = 'Delete Doc Library';

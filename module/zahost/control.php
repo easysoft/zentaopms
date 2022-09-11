@@ -74,4 +74,25 @@ class zahost extends control
         $this->view->title = $this->lang->zahost->create;
         $this->display();
     }
+
+    /**
+     * Create template.
+     *
+     * @access public
+     * @return void
+     */
+    public function createTemplate()
+    {
+        if($_POST)
+        {
+            $this->zahost->createTemplate();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
+        }
+
+        $this->view->title = $this->lang->zahost->createTemplate;
+
+        $this->display();
+    }
 }

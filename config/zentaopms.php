@@ -249,6 +249,7 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
 
 if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
+if(!defined('TABLE_VMTEMPLATE'))  define('TABLE_VMTEMPLATE', '`' . $config->db->prefix . 'vmtemplate`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
