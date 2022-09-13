@@ -92,7 +92,6 @@ class zahost extends control
         }
 
         $this->view->title = $this->lang->zahost->createTemplate;
-
         $this->display();
     }
 }

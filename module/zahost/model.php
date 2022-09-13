@@ -156,7 +156,6 @@ class zahostModel extends model
         if(dao::isError()) return false;
 
         $templateID = $this->dao->lastInsertID();
-
         $this->loadModel('action')->create('vmtemplate', $templateID, 'Created');
     }
 }

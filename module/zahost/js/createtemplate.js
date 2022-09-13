@@ -6,7 +6,6 @@ $(function()
         $('#osType').empty();
         var types = zahostConfig.os.type[os];
         for(code in types) $('#osType').append('<option value="' + code + '">' + types[code] + '</option>');
-        //if(template) $('#osType').val(template.osType);
         $('#osType').chosen().trigger('chosen:updated');
         $('#osType').change();
     });
@@ -17,7 +16,6 @@ $(function()
         $('#osVersion').empty();
         var versions = zahostLang.versionList[type];
         for(code in versions) $('#osVersion').append('<option value="' + code + '">' + versions[code] + '</option>');
-        //if(template) $('#osVersion').val(template.osVersion);
         $('#osVersion').chosen().trigger('chosen:updated');
         $('#osVersion').change();
     });
