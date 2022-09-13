@@ -37,14 +37,7 @@ class apiCheckModel
         if($entries)
         {
             $results = $this->checkInput($path);
-            if($results)
-            {
-                echo 'true';
-            }
-            else
-            {
-                echo 'false';
-            }
+            echo $results ? 'true' : 'false' ;
 
             foreach($results as $result)
             {
@@ -70,14 +63,7 @@ class apiCheckModel
         {
             $results = $this->checkInput($path);
 
-            if($results)
-            {
-                echo 'true';
-            }
-            else
-            {
-                echo 'false';
-            }
+            echo $results ? 'true' : 'false' ;
 
             $strResults  = '';
             $strResults .= '<?php' . "\n" . '$result = new stdclass;' . "\n";
@@ -137,8 +123,8 @@ class apiCheckModel
     /**
      * Get files under a directory recursive.
      *
-     * @param  string    $dir
-     * @param  array     $exceptions
+     * @param  string  $dir
+     * @param  array   $exceptions
      * @access private
      * @return array
      */
@@ -174,7 +160,7 @@ class apiCheckModel
      * Matching control.
      *
      * @access public
-     * @return bool | array
+     * @return bool|array
      */
     public function checkOpen()
     {
@@ -242,7 +228,7 @@ class apiCheckModel
      * @param  string $method
      * @param  int    $length
      * @access public
-     * @return array | bool
+     * @return array|bool
      */
     public function checkParamLen($module, $method, $length)
     {
@@ -266,4 +252,5 @@ class apiCheckModel
         }
     }
 }
+
 $tester = new apiCheckModel();
