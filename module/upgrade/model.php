@@ -557,6 +557,9 @@ class upgradeModel extends model
                 $this->xuanRecoverCreatedDates();
                 $this->xuanSetPartitionedMessageIndex();
                 break;
+            case '17_6_1':
+                $this->updateProductView();
+                break;
         }
 
         $this->deletePatch();
@@ -7525,6 +7528,35 @@ class upgradeModel extends model
                 $beginTimestame += 7 * 24 * 3600;
                 $begin = date('Y-m-d', $beginTimestame);
             }
+        }
+        return true;
+    }
+
+    /**
+     * Update the owner of the program into the product view.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProductView()
+    {
+        $programs = $this->dao->select('id,PM')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('PM')->ne('')->fetchPairs('id', 'PM');
+        if(empty($programs)) return true;
+
+        $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
+        if(empty($productGroup)) return true;
+
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        foreach($programs as $programID => $programPM)
+        {
+            if(empty($productGroup[$programID])) continue;
+            $canViewProducts = zget($productGroup, $programID);
+            $view            = $userView[$programPM]->products;
+            foreach($canViewProducts as $productID => $product)
+            {
+                if(strpos(",$view,", ",$productID,") === false) $view .= ',' . $productID;
+            }
+            $this->dao->update(TABLE_USERVIEW)->set('products')->eq($view)->where('account')->eq($programPM)->exec();
         }
         return true;
     }
