@@ -49,6 +49,7 @@ foreach($efforts as $effort)
           <tbody>
             <?php foreach($myOrders as $order => $count):?>
             <?php $showOrder = false;?>
+            <?php $index     = 1;?>
             <?php foreach($allEfforts[$order] as $effort):?>
             <?php if($effort->account != $this->app->user->account) continue;?>
             <tr class="text-center">
@@ -65,10 +66,13 @@ foreach($efforts as $effort)
                 <?php
                 $canOperateEffort = $this->task->canOperateEffort($task, $effort);
                 common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editEstimate' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $effort->left > 0) ? '' : 'disabled');
+                $deleteDisable = false;
+                if(!$canOperateEffort or ($index == $count and $effort->left == 0)) $deleteDisable = true;
+                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
                 ?>
               </td>
             </tr>
+            <?php $index ++;?>
             <?php endforeach;?>
             <?php endforeach;?>
           </tbody>
@@ -91,10 +95,12 @@ foreach($efforts as $effort)
           <tbody>
             <?php foreach($recorders as $order => $accounts):?>
             <?php $showOrder = false;?>
+            <?php $index     = 1;?>
+            <?php $count     = count($allEfforts[$order]);?>
             <?php foreach($allEfforts[$order] as $effort):?>
             <tr class="text-center">
               <?php if(!$showOrder):?>
-              <td rowspan='<?php echo count($allEfforts[$order]);?>'><?php echo $order + 1;?></td>
+              <td rowspan='<?php echo $count;?>'><?php echo $order + 1;?></td>
               <?php $showOrder = true;?>
               <?php endif;?>
               <td><?php echo $effort->date;?></td>
@@ -106,10 +112,13 @@ foreach($efforts as $effort)
                 <?php
                 $canOperateEffort = $this->task->canOperateEffort($task, $effort);
                 common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editEstimate' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, ($canOperateEffort and $effort->left > 0) ? '' : 'disabled');
+                $deleteDisable = false;
+                if(!$canOperateEffort or ($index == $count and $effort->left == 0)) $deleteDisable = true;
+                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
                 ?>
               </td>
             </tr>
+            <?php $index ++;?>
             <?php endforeach;?>
             <?php endforeach;?>
           </tbody>
