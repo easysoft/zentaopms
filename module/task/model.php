@@ -2242,6 +2242,7 @@ class taskModel extends model
             ->add('id', $taskID)
             ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
+            ->setDefault('assignedTo', '')
             ->setDefault('status', 'doing')
             ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
             ->setDefault('finishedDate, canceledDate, closedDate', '0000-00-00 00:00:00')
