@@ -3,6 +3,24 @@ $config->zahost->create = new stdclass();
 $config->zahost->create->requiredFields = 'name,hostType,publicIP,cpuCores,memory,diskSize,virtualSoftware,instanceNum';
 $config->zahost->create->ipFields       = 'publicIP';
 
+$config->zahost->createTemplate = new stdclass();
+$config->zahost->createTemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang';
+
+$config->zahost->os = new stdClass();
+$config->zahost->os->list = array();
+$config->zahost->os->list['windows'] = 'Windows';
+$config->zahost->os->list['linux']   = 'Linux';
+
+$config->zahost->os->type = array();
+$config->zahost->os->type['windows']['winServer'] = 'Windows Server';
+$config->zahost->os->type['windows']['win11']     = 'Windows 11';
+$config->zahost->os->type['windows']['win10']     = 'Windows 10';
+$config->zahost->os->type['windows']['win7']      = 'Windows 7';
+$config->zahost->os->type['windows']['winxp']     = 'Windows XP';
+$config->zahost->os->type['linux']['ubuntu']      = 'Ubuntu';
+$config->zahost->os->type['linux']['centos']      = 'CentOS';
+$config->zahost->os->type['linux']['debian']      = 'Debian';
+
 global $lang;
 $config->zahost->search['module'] = 'zahost';
 $config->zahost->search['fields']['name']            = $lang->zahost->name;

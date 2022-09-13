@@ -112,6 +112,7 @@ $lang->action->objectTypes['testsuite']        = 'Suite';
 $lang->action->objectTypes['testtask']         = 'Test Build';
 $lang->action->objectTypes['testreport']       = 'Report';
 $lang->action->objectTypes['zahost']           = 'Host';
+$lang->action->objectTypes['vmtemplate']       = 'Virtual Host Template';
 $lang->action->objectTypes['doc']              = 'Document';
 $lang->action->objectTypes['api']              = 'Interface';
 $lang->action->objectTypes['doclib']           = 'Document Library';
@@ -613,6 +614,8 @@ $lang->action->dynamicAction->caselib['undeleted'] = 'Restore Case Lib';
 $lang->action->dynamicAction->caselib['hidden']    = 'Hide Case Lib';
 
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
+
+$lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
 
 $lang->action->dynamicAction->doclib['created'] = 'Create Doc Library';
 $lang->action->dynamicAction->doclib['edited']  = 'Edit Doc Library';

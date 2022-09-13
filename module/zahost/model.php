@@ -20,7 +20,8 @@ class zahostModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->app->lang->host = $this->lang->zahost;
+        $this->app->lang->host       = $this->lang->zahost;
+        $this->app->lang->vmtemplate = $this->lang->zahost;
     }
 
     /**
@@ -133,5 +134,28 @@ class zahostModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Create vm template.
+     *
+     * @access public
+     * @return void
+     */
+    public function createTemplate()
+    {
+        $template = fixer::input('post')
+            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->get();
+
+        $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
+            ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
+            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $templateID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('vmtemplate', $templateID, 'Created');
     }
 }
