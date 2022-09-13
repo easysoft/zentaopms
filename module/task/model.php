@@ -2885,7 +2885,7 @@ class taskModel extends model
         $today       = helper::today();
 
         if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->record, '0');
+        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
         if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
         $task = $this->getById($oldEstimate->objectID);
