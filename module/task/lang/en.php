@@ -236,6 +236,7 @@ $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assi
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory           = "No story has been linked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord          = 'Your Hour is not saved. Please save it first.';
+$lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
 $lang->task->commentActions            = '%s. %s, commented by <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Only the %s can %s the task.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
