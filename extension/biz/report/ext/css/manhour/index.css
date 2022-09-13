@@ -1,0 +1,26 @@
+#sidebar > .cell {
+    width: 100%
+}
+
+.cell.noDataCell {
+    /*display: none;*/
+}
+
+.cell.dataTableCell {
+    display: none;
+}
+.dataTable{
+    width: 100%;
+}
+
+.myTopTH,.myLeftTH,.myMidTH{
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: auto 0;
+}
+
+.myTD{
+    text-align: center;
+}

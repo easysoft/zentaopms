@@ -13,7 +13,6 @@ tmp/model/*
 tmp/cache/*
 tmp/extension/*
 extension/pro/*
-extension/biz/*
 extension/max/*
 extension/xuan/*
 extension/custom/*
