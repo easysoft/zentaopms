@@ -178,5 +178,6 @@
 #region-tab-actions.active {display: flex; position: relative; right: 0px; top: -2px;}
 .region {display: none;}
 .region.active {display: block;}
-.region.active.notAll {margin-top: 0px;}
-.region.active.notAll .region-header > * {display: none;}
+.region.active.notAll {margin-top: -5px;}
+.region.active.notAll .region-header {display: none;}
+.region.active.notAll .kanban {padding: 0 0 10px 0;}
