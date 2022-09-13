@@ -121,8 +121,7 @@ if(!empty($members) && $task->mode == 'linear')
           </tr>
         </thead>
         <tbody>
-          <?php $initNum = !empty($efforts) ? 3 : 5;?>
-          <?php for($i = 1; $i <= $initNum; $i++):?>
+          <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
