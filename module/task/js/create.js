@@ -603,14 +603,8 @@ $('#modalTeam tfoot .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
 
-        if(config.onlybody == 'yes' && vision == 'lite')
-        {
-            $('.close').parent().click();
-        }
-        else
-        {
-            $('.close').click();
-        }
+        if($('#modalTeam:hidden').length > 0) return ;
+        $('#modalTeam .close').click();
     }
 });
 
