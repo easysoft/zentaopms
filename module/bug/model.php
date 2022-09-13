@@ -1014,13 +1014,13 @@ class bugModel extends model
      *
      * @param  int    $bugID
      * @access public
-     * @return string
+     * @return array
      */
     public function assign($bugID)
     {
         $now = helper::now();
         $oldBug = $this->getById($bugID);
-        if($oldBug->status == 'closed') return false;
+        if($oldBug->status == 'closed') return array();
 
         $bug = fixer::input('post')
             ->add('id', $bugID)
@@ -1526,15 +1526,16 @@ class bugModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager
+     * @param  string $excludeBugs
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null, $excludeBugs = '')
     {
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugIDList = $bug->id . ',' . $bug->linkBug;
+            $bugIDList = $bug->id . ',' . $bug->linkBug . ',' . $excludeBugs;
             $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }
@@ -3279,7 +3280,7 @@ class bugModel extends model
                     $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
                     break;
                 case 'plan':
-                    $title = "title='" . zget($plans, $bug->plan) . "'";
+                    $title = "title='" . zget($plans, $bug->plan, '') . "'";
                     break;
                 case 'execution':
                     $title = "title='" . zget($executions, $bug->execution) . "'";

@@ -2,20 +2,24 @@ $(function()
 {
     $('.form-date').datetimepicker('setEndDate', today);
 
-    $("#recordForm").submit(function()
+    $("#recordForm #submit").click(function(e, confirmed)
     {
+        if(confirmed) return true;
+
+        var $this = $(this);
         $('#recordForm .left').each(function()
         {
             if($(this).val() !== '' && !$(this).prop('readonly')) left = $(this).val();
         });
+
         if(typeof(left) != 'undefined' && left == '0')
         {
-            var confirmMsg = confirm(confirmRecord);
-            if(confirmMsg == false)
+            e.preventDefault();
+            bootbox.confirm(confirmRecord, function(result)
             {
-                $('#submit').attr("disabled", false);
-                return false;
-            }
+                if(!result) $('#submit').attr("disabled", false);
+                if(result) $this.trigger('click', true);
+            });
         }
     });
 

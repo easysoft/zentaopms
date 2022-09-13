@@ -107,7 +107,7 @@
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    echo common::buildIconButton('story', 'submitReview', "$vars&storyType=requirement", $story, 'list', 'sub-review', '', 'iframe', true);
+                    echo common::buildIconButton('story', 'submitReview', "$vars&storyType=requirement", $story, 'list', 'confirm', '', 'iframe', true);
                 }
                 else
                 {
@@ -155,7 +155,7 @@
 
                     if(strpos('draft,changing', $child->status) !== false)
                     {
-                        common::printIcon('story', 'submitReview', "$vars&storyType=story", $child, 'list', 'sub-review', '', 'iframe', true);
+                        common::printIcon('story', 'submitReview', "$vars&storyType=story", $child, 'list', 'confirm', '', 'iframe', true);
                     }
                     else
                     {

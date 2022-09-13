@@ -11,9 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<style>
-#product_chosen {border-right:1px solid #dcdcdc;}
-</style>
 <?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>

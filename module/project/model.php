@@ -443,7 +443,7 @@ class projectModel extends model
             else
             {
                 $task->progress = 0;
-                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
                 $EV += round($task->estimate * $task->progress / 100, 2);
             }
         }

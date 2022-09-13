@@ -1729,7 +1729,7 @@ class taskModel extends model
             {
                 $task->status       = 'done';
                 $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = helper::now();
+                $task->finishedDate = $now;
                 $task->assignedTo   = $oldTask->openedBy;
             }
         }
@@ -1748,15 +1748,20 @@ class taskModel extends model
 
         if(!empty($oldTask->team) and $currentTeam)
         {
-            $data = new stdclass();
-            $data->consumed = $this->post->consumed;
-            $data->left     = $this->post->left;
-            $data->status   = 'doing';
+            $team = new stdclass();
+            $team->consumed = $this->post->consumed;
+            $team->left     = $this->post->left;
+            $team->status   = empty($team->left) ? 'done' : 'doing';
 
-            $this->dao->update(TABLE_TASKTEAM)->data($data)->where('id')->eq($currentTeam->id)->exec();
+            $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
             if($oldTask->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
             $task = $this->computeHours4Multiple($oldTask, $task);
+            if($team->status == 'done')
+            {
+                $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'next');
+                $task->assignedDate = $now;
+            }
 
             $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
             if(count($finishedUsers) == count($oldTask->team))
@@ -3933,7 +3938,7 @@ class taskModel extends model
 
         foreach($users as $i => $account)
         {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status  == 'done') continue;
+            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
             if($type == 'current') return $account;
             break;
         }

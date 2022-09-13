@@ -1858,10 +1858,17 @@ class story extends control
         $storyGroup = array();
         foreach($stories as $story)
         {
-            if(strpos('draft,reviewing,changing,closed', $story->status) !== false) continue;
+            if(strpos('draft,reviewing,changing,closed', $story->status) !== false)
+            {
+                unset($stories[$story->id]);
+                continue;
+            }
+
             if(isset($storyGroup[$story->module])) continue;
             $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
         }
+
+        if(empty($stories)) return print(js::error($this->lang->story->noStoryToTask) . js::locate($this->session->storyList));
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;

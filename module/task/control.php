@@ -230,7 +230,7 @@ class task extends control
             elseif($this->post->after == 'toTaskList')
             {
                 setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=all&param=0&orderBy=id_desc");
+                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 return $this->send($response);
             }
@@ -1079,7 +1079,7 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
-                if($output['from'] == 'taskkanban')
+                if(isset($output['from']) and $output['from'] == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                     $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);

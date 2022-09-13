@@ -13,7 +13,21 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php $members = $task->members;?>
-<?php js::set('confirmRecord',    (!empty($members) && $task->mode == 'linear' && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
+<?php
+$confirmRecord = $lang->task->confirmRecord;
+if(!empty($members) && $task->mode == 'linear')
+{
+    $nextAccount = '';
+    $isCurrent   = false;
+    foreach($task->team as $taskTeam)
+    {
+        if($isCurrent) $nextAccount = $taskTeam->account;
+        if($task->assignedTo == $taskTeam->account and $taskTeam->account == $app->user->account and $taskTeam->status != 'done') $isCurrent = true;
+    }
+    if($nextAccount) $confirmRecord = sprintf($lang->task->confirmTransfer, zget($users, $nextAccount));
+}
+?>
+<?php js::set('confirmRecord',    $confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
@@ -26,7 +40,7 @@
       <ul class='nav nav-default hours'>
         <li><span><?php echo $lang->task->estimate;?></span> </li>
         <li><span class='estimateTotally'><?php echo $task->estimate . 'h';?></span></li>
-        <li class='divider'></li>
+        <li>，</li>
         <li><span><?php echo $lang->task->consumed;?></span> </li>
         <li><span class='consumedTotally'><?php echo $task->consumed . 'h';?></span></li>
       </ul>
@@ -107,8 +121,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php $initNum = !empty($efforts) ? 3 : 5;?>
-          <?php for($i = 1; $i <= $initNum; $i++):?>
+          <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
               <div class='input-group'>
