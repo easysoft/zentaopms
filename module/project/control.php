@@ -1034,7 +1034,19 @@ class project extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $showToggleIcon = false;
+        foreach($executionStats as $execution)
+        {
+            if(!empty($execution->tasks) or !empty($execution->children))
+            {
+                $showToggleIcon = true;
+                continue;
+            }
+        }
+
+        $this->view->executionStats = $executionStats;
+        $this->view->showToggleIcon = $showToggleIcon;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;

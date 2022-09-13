@@ -4556,6 +4556,7 @@ class executionModel extends model
      * @param  object $execution
      * @param  bool   $isChild
      * @param  array  $users
+     * @param  int    $productID
      * @access public
      * @return void
      */
