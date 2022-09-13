@@ -8,13 +8,12 @@ class apiCheckModel
      * Eg: ztf run api.php $path $entries.
      *
      * @access public
-     * @return bool
+     * @return string
      */
     public function __construct()
     {
         global $argv;
-        var_dump($argv);
-        $path = $argv[1];
+        $path    = $argv[1];
         $entries = '';
         if($argv[2]) $entries = $argv[2];
         $this->run($argv[1], $entries);
@@ -23,16 +22,16 @@ class apiCheckModel
     public $ztPath;
 
     /**
-     * Run.
+     * Run generate report.
      *
      * @param  string $path
-     * @param  string $module
+     * @param  string $entries
      * @access public
-     * @return bool
+     * @return array
      */
     public function run($path, $entries = '')
     {
-        $independent = array();
+        $independent    = array();
         $strIndependent = '';
 
         if($entries)
@@ -80,7 +79,7 @@ class apiCheckModel
                 echo 'false';
             }
 
-            $strResults = '';
+            $strResults  = '';
             $strResults .= '<?php' . "\n" . '$result = new stdclass;' . "\n";
             foreach($results as $key => $array)
             {
@@ -102,7 +101,7 @@ class apiCheckModel
      *
      * @param  string $path
      * @access public
-     * @return bool
+     * @return array
      */
 
     public function checkInput($path = '')
@@ -113,7 +112,7 @@ class apiCheckModel
         if(!$path)  return false;
 
         $this->ztPath = $path;
-        $openRes = $this->checkOpen();
+        $openRes      = $this->checkOpen();
         return $openRes;
     }
 
@@ -122,14 +121,14 @@ class apiCheckModel
      *
      * @param  string $path
      * @access public
-     * @return string
+     * @return void
      */
     public function checkWebDir($path = '')
     {
         $configPath = $path . DS . 'config' . DS . 'config.php';
 
-        $info = new SplFileInfo($configPath);
-        $realPath   = $info->getRealPath();
+        $info     = new SplFileInfo($configPath);
+        $realPath = $info->getRealPath();
 
         if($realPath) return dirname(dirname($realPath));
         return '';
@@ -149,12 +148,12 @@ class apiCheckModel
 
         if(!is_dir($dir)) return $files;
 
-        $dir    = realpath($dir) . DS;
+        $dir     = realpath($dir) . DS;
         $entries = scandir($dir);
 
         foreach($entries as $entry)
         {
-            if($entry == '.' or $entry == '..' or $entry == '.svn') continue;
+            if(in_array($entry, array('.', '..', '.svn', '.git'))) continue;
             if(in_array($entry, $exceptions)) continue;
 
             $fullEntry = $dir . $entry;
@@ -171,6 +170,12 @@ class apiCheckModel
         return $files;
     }
 
+    /**
+     * Matching control.
+     *
+     * @access public
+     * @return bool | array
+     */
     public function checkOpen()
     {
         $apiFiles = $this->readDir($this->ztPath . DS . 'api' . DS . 'v1' . DS . 'entries' . DS);
@@ -192,12 +197,11 @@ class apiCheckModel
                 $res = preg_match_all('/(\$[a-z0-9]+[,\)])|([0-9]+[,\)])|((?<!param\()[\'\"][a-z0-9-_]*[\'\"][,\)])|((?<!this)\-\>[a-z0-9]+\()/i', $code, $execControls, PREG_PATTERN_ORDER);
                 if(!empty($execControls[0]))
                 {
-                    $params = $execControls[0];
-                    $pramsLen = count($params) - 1;
+                    $params     = $execControls[0];
+                    $pramsLen   = count($params) - 1;
                     $methodName = trim(trim($params[0], '->'), '(');
-
-                    $module = $controls[count($controls) - 1];
-                    $checkRes = $this->checkParamLen($module, $methodName, $pramsLen);
+                    $module     = $controls[count($controls) - 1];
+                    $checkRes   = $this->checkParamLen($module, $methodName, $pramsLen);
 
                     if(!is_bool($checkRes))
                     {
@@ -238,7 +242,7 @@ class apiCheckModel
      * @param  string $method
      * @param  int    $length
      * @access public
-     * @return string|bool
+     * @return array | bool
      */
     public function checkParamLen($module, $method, $length)
     {
