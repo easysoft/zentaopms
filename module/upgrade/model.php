@@ -131,7 +131,6 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open')
         {
-            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
@@ -552,6 +551,11 @@ class upgradeModel extends model
             case '17_6':
                 $this->updateStoryFile();
                 $this->convertTaskteam();
+                $this->convertEstToEffort();
+                $this->fixWeeklyReport();
+                $this->xuanSetOwnedByForGroups();
+                $this->xuanRecoverCreatedDates();
+                $this->xuanSetPartitionedMessageIndex();
                 break;
         }
 
@@ -706,6 +710,8 @@ class upgradeModel extends model
                 $this->addFlowActions('biz7.4');
                 $this->addFlowFields('biz7.4');
                 break;
+            case 'biz7_6':
+                //$this->processFeedbackModule();
         }
     }
 
@@ -1016,6 +1022,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
             case '17_5':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.5'));
+            case '17_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6'));
         }
 
         return $confirmContent;
@@ -6811,14 +6819,13 @@ class upgradeModel extends model
     public function processCreatedInfo()
     {
         $objectTypes = array('productplan', 'release', 'testtask', 'build');
-        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK, 'build' => TABLE_BUILD);
 
         $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
         foreach($actions as $objectType => $objectActions)
         {
             foreach($objectActions as $action)
             {
-                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+                $this->dao->update($this->config->objectTables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
             }
         }
 
@@ -7160,7 +7167,7 @@ class upgradeModel extends model
     {
         if(empty($this->config->URAndSR)) return true;
 
-        $sql = "REPLACE INTO zt_grouppriv SELECT `group`,'requirement' as 'module',`method` FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM " . TABLE_GROUPPRIV . " WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
         $this->dbh->exec($sql);
         return true;
     }
@@ -7219,31 +7226,74 @@ class upgradeModel extends model
     {
         $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
 
-        /* Get story version. */
-        $storyIDList = array();
-        foreach($storyFileList as $file) $storyIDList[$file->objectID] = $file->objectID;
-        $storyVersionList = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchPairs();
-
+        $storyFiles = array();
         foreach($storyFileList as $file)
         {
             if(!is_numeric($file->extra)) continue;
 
-            $fileExtra    = '';
-            $storyVersion = $storyVersionList[$file->objectID];
-            if($file->extra != $storyVersion)
-            {
-                for($i = $file->extra; $i <= $storyVersion; $i ++) $fileExtra .= ",$i";
-                $fileExtra .= ',';
-            }
-            if(empty($fileExtra)) $fileExtra = ",$file->extra,";
+            if(!isset($storyFiles[$file->objectID])) $storyFiles[$file->objectID] = '';
 
-            $this->dao->update(TABLE_FILE)->set('extra')->eq($fileExtra)->where('id')->eq($file->id)->exec();
+            $storyFiles[$file->objectID] .= "$file->id,";
         }
+
+        foreach($storyFiles as $storyID => $files) $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($files)->where('story')->eq($storyID)->exec();
 
         return true;
     }
 
     /**
+     * Process feedback module
+     *
+     * @access public
+     * @return void
+     */
+    public function processFeedbackModule()
+    {
+        $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
+        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
+        $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
+
+        $allProductRelation = array();
+        foreach($products as $product)
+        {
+            $productID = $product->id;
+            $relation  = array();
+            foreach($modules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $productID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $allProductRelation[$productID][$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+                $newPaths = join(',', $newPaths);
+                $parent   = !empty($module->parent) and isset($relation[$module->parent]) ? $relation[$module->parent] : 0;
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
+            }
+        }
+
+        /* Update feedback module */
+        foreach($feedbacks as $feedback)
+        {
+            $moduleID = $feedback->module;
+            $product  = $feedback->product;
+            if(empty($moduleID)) continue;
+            $newModuleID = $allProductRelation[$product][$moduleID];
+            if(empty($newModuleID)) continue;
+
+            $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
+        }
+
+        /* Delete history module */
+        $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /*
      * Convert task team to table: zt_taskteam.
      *
      * @access public
@@ -7264,18 +7314,218 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
 
-                if($this->config->edition == 'open')
-                {
-                    $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->exec();
-                }
-                else
-                {
-                    $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->exec();
-                }
+                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
                 $order ++;
             }
         }
 
         $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
+    }
+
+    /**
+     * Convert estimate to effort.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertEstToEffort()
+    {
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+
+        $this->app->loadLang('task');
+        $this->loadModel('action');
+        foreach($estimates as $estimate)
+        {
+            $relation = $this->action->getRelatedFields('task', $estimate->task);
+
+            $effort = new stdclass();
+            $effort->objectType = 'task';
+            $effort->objectID   = $estimate->task;
+            $effort->product    = $relation['product'];
+            $effort->project    = (int)$relation['project'];
+            $effort->account    = $estimate->account;
+            $effort->work       = empty($estimate->work) ? $this->lang->task->process : $estimate->work;
+            $effort->date       = $estimate->date;
+            $effort->left       = $estimate->left;
+            $effort->consumed   = $estimate->consumed;
+            $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
+
+            $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
+            $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Xuan: Set ownedBy for group chats without it.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetOwnedByForGroups()
+    {
+        $this->dao->update(TABLE_IM_CHAT)->set('ownedBy = createdBy')->where('ownedBy')->eq('')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Recover created date for chats.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanRecoverCreatedDates()
+    {
+        $chats = $this->dao->select('gid, id')->from(TABLE_IM_CHAT)
+            ->where('createdDate')->eq('0000-00-00 00:00:00')
+            ->fetchPairs('gid');
+        if(empty($chats)) return true;
+
+        $createdDateData = array();
+
+        /* Try query earliest message date indexed. */
+        $indexedMinDates = $this->dao->select('gid, MIN(startDate)')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('gid')->in(array_keys($chats))
+            ->groupBy('gid')
+            ->fetchPairs('gid');
+
+        /* Then try query earliest message date non-indexed from master table. */
+        $queryChats = array_diff(array_keys($chats), array_keys($indexedMinDates));
+        $minDates = $this->dao->select('cgid, MIN(date)')->from(TABLE_IM_MESSAGE)
+            ->where('cgid')->in($queryChats)
+            ->groupBy('cgid')
+            ->fetchPairs('cgid');
+
+        $knownMinDates = array_merge($indexedMinDates, $minDates);
+
+        $remainingChats = $chats;
+        foreach($chats as $cgid => $cid)
+        {
+            if(isset($knownMinDates[$cgid]))
+            {
+                $createdDateData[$cid] = $knownMinDates[$cgid];
+                unset($remainingChats[$cgid]);
+            }
+        }
+
+        /* Use other dates for chats without messages. */
+        $chatDates = $this->dao->select('id, gid, editedDate, lastActiveTime, dismissDate')->from(TABLE_IM_CHAT)
+            ->where('gid')->in(array_keys($remainingChats))
+            ->fetchAll('gid');
+        $chatDates = array_map(function($chatDate)
+        {
+            $dates = array_filter(array($chatDate->editedDate, $chatDate->lastActiveTime, $chatDate->dismissDate), function($date)
+            {
+                return $date != '0000-00-00 00:00:00';
+            });
+            $minDate = min($dates);
+            return $minDate;
+        }, $chatDates);
+
+        $knownMinDates = array_merge($knownMinDates, $chatDates);
+        if(empty($knownMinDates)) return true;
+
+        $queryData = array();
+        foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
+
+        if(empty($queryData)) return true;
+
+        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
+        $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Set index range for chats in chat partition index table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetPartitionedMessageIndex()
+    {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        /* Fetch chat and message partition table associations with message range. */
+        $chatTableData = $this->dao->select('gid, tableName, start, end')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('startIndex')->eq(0)
+            ->orWhere('endIndex')->eq(0)
+            ->orderBy('id_asc')
+            ->fetchAll();
+        if(empty($chatTableData)) return true;
+
+        /* Sort ranges by table. */
+        $tableRanges = array();
+        foreach($chatTableData as $chatTable)
+        {
+            if(isset($tableRanges[$chatTable->tableName]))
+            {
+                $tableRanges[$chatTable->tableName]->start[] = $chatTable->start;
+                $tableRanges[$chatTable->tableName]->end[]   = $chatTable->end;
+                continue;
+            }
+            $tableRanges[$chatTable->tableName] = (object)array('start' => array($chatTable->start), 'end' => array($chatTable->end));
+        }
+
+        /* Query corresponding message indice. */
+        foreach($tableRanges as $tableName => $tableRange)
+        {
+            $ids = array_merge($tableRange->start, $tableRange->end);
+            $ids = array_unique($ids);
+            $indexPairs = $this->dao->select('id, `index`')->from("`$tableName`")
+                ->where('id')->in($ids)
+                ->fetchPairs('id');
+            $tableRanges[$tableName]->indexPairs = $indexPairs;
+        }
+
+        /* Set startIndice and endIndice. */
+        foreach($tableRanges as $tableRange)
+        {
+            $queryData = array();
+            foreach($tableRange->start as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . join(' ', $queryData) . " END) WHERE `start` IN(" . join(',', $tableRange->start) . ");";
+            $this->dao->query($query);
+
+            $queryData = array();
+            foreach($tableRange->end as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
+            $this->dao->query($query);
+        }
+    }
+
+    /**
+     * Fix weekly report.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWeeklyReport()
+    {
+        $this->loadModel('weekly');
+        $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
+
+        $today = helper::today();
+        foreach($projects as $projectID => $project)
+        {
+            if(helper::isZeroDate($project->begin) or helper::isZeroDate($project->end)) continue;
+
+            $begin = $project->begin;
+            $end   = $today > $project->end ? $project->end : $today;
+
+            $beginTimestame = strtotime($begin);
+            $endTimestame   = strtotime($end);
+            while($beginTimestame <= $endTimestame)
+            {
+                $this->weekly->save($projectID, $begin);
+
+                $beginTimestame += 7 * 24 * 3600;
+                $begin = date('Y-m-d', $beginTimestame);
+            }
+        }
+        return true;
     }
 }

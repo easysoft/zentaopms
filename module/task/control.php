@@ -230,7 +230,7 @@ class task extends control
             elseif($this->post->after == 'toTaskList')
             {
                 setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=all&param=0&orderBy=id_desc");
+                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 return $this->send($response);
             }
@@ -537,20 +537,16 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = array();
-            $files   = array();
             if($comment == false)
             {
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
-                $files = $this->loadModel('file')->saveUpload('task', $taskID);
-                if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
 
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action     = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-                $actionID   = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
+                $action     = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID   = $this->action->create('task', $taskID, $action, $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
@@ -1042,12 +1038,9 @@ class task extends control
                 return print(js::error(dao::getError()));
             }
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Started';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Started';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
             $this->loadModel('common')->syncPPEStatus($taskID);
@@ -1083,7 +1076,7 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
-                if($output['from'] == 'taskkanban')
+                if(isset($output['from']) and $output['from'] == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                     $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -1181,10 +1174,10 @@ class task extends control
         $orderBy = 'date,id';
         if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
 
-        $this->view->task      = $task;
-        $this->view->estimates = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
-        $this->view->title     = $this->lang->task->record;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->title   = $this->lang->task->record;
+        $this->view->task    = $task;
+        $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
@@ -1213,7 +1206,7 @@ class task extends control
         $this->view->title      = $this->lang->task->editEstimate;
         $this->view->position[] = $this->lang->task->editEstimate;
         $this->view->estimate   = $estimate;
-        $this->view->task       = $this->task->getById($estimate->task);
+        $this->view->task       = $this->task->getById($estimate->objectID);
         $this->display();
     }
 
@@ -1227,19 +1220,30 @@ class task extends control
      */
     public function deleteEstimate($estimateID, $confirm = 'no')
     {
-        if($confirm == 'no')
+        $estimate = $this->task->getEstimateById($estimateID);
+        $taskID   = $estimate->objectID;
+        $task     = $this->task->getById($taskID);
+        if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
         {
             return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
         }
+        elseif($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
+        {
+            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+        }
         else
         {
-            $estimate = $this->task->getEstimateById($estimateID);
-            $task     = $this->task->getById($estimate->task);
-            $changes  = $this->task->deleteEstimate($estimateID);
+            $changes = $this->task->deleteEstimate($estimateID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
             $this->action->logHistory($actionID, $changes);
+
+            if($task->consumed - $estimate->consumed == 0)
+            {
+                $this->action->create('task', $taskID, 'Adjusttasktowait');
+                return print(js::reload('parent.parent'));
+            }
 
             return print(js::reload('parent'));
         }
@@ -1440,12 +1444,9 @@ class task extends control
             $changes = $this->task->start($taskID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 

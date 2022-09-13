@@ -153,6 +153,7 @@ class my extends control
         $riskCount    = 0;
         $reviewCount  = 0;
         $ncCount      = 0;
+        $qaCount      = 0;
         $meetingCount = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
 
@@ -189,6 +190,11 @@ class my extends control
             $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
             $ncCount = $pager->recTotal;
 
+            /* Get the number of nc assigned to me. */
+            $auditplanList  = $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
+            $auditplanCount = $pager->recTotal;
+            $qaCount        = $ncCount + $auditplanCount;
+
             /* Get the number of meetings assigned to me. */
             $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $meetingCount = $pager->recTotal;
@@ -215,7 +221,7 @@ if(isMax !== 0)
     var issueCount   = $issueCount;
     var riskCount    = $riskCount;
     var reviewCount  = $reviewCount;
-    var ncCount      = $ncCount;
+    var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
 }
 </script>
@@ -987,6 +993,50 @@ EOF;
     }
 
     /**
+     * My auditplans.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function auditplan($browseType = 'myChecking', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('auditplan');
+        $this->loadModel('process');
+        $this->loadModel('pssp');
+        $this->session->set('auditplanList', $this->app->getURI(true));
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+
+        $auditplans = $this->auditplan->getList(0, $browseType, $param, $orderBy, $pager);
+
+        $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->processTypeList = $this->lang->process->classify;
+        $this->view->processes       = $this->pssp->getProcesses();
+        $this->view->activities      = $this->pssp->getActivityPairs();
+        $this->view->outputs         = $this->pssp->getOutputPairs();
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->auditplan;
+        $this->view->position[] = $this->lang->my->auditplan;
+        $this->view->browseType = $browseType;
+        $this->view->auditplans = $auditplans;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
+        $this->view->mode       = 'auditplan';
+        $this->display();
+    }
+
+    /**
      * My ncs.
      *
      * @param  string $browseType
@@ -1212,9 +1262,8 @@ EOF;
             $_POST['account'] = $this->app->user->account;
             $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
-            if(dao::isError()) helper::end(js::error(dao::getError()));
-            echo js::locate($this->createLink('my', 'profile'), 'parent');
-            return;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('my', 'profile'), 'closeModal' => true));
         }
 
         $this->app->loadConfig('user');

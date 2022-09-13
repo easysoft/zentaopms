@@ -373,11 +373,11 @@
               </div>
               <div class='detail'>
                 <div class='detail-title'><?php echo $lang->files?></div>
-                <div class='detail-content article-content'>
+                <div class='detail-content'>
                   <?php
                   if($release->files)
                   {
-                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'view', 'showDelete' => false));
                   }
                   elseif($release->filePath)
                   {

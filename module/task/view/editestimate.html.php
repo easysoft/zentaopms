@@ -19,7 +19,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->task->editEstimate;?></h2>
     </div>
-    <form method='post' target='hiddenwin' <?php if($estimate->isLast) echo "onsubmit='return confirmLeft();'"?>>
+    <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->task->date;?></th>
@@ -47,4 +47,26 @@
     </form>
   </div>
 </div>
+<?php if($estimate->isLast):?>
+<script>
+$(function()
+{
+    $("#submit").click(function(e, confirmed)
+    {
+        if(confirmed) return true;
+
+        var $this = $(this);
+        var $left = $('#left');
+        if(!$left.prop('readonly') && $left.val() === '0')
+        {
+            e.preventDefault();
+            bootbox.confirm(confirmRecord, function(result)
+            {
+                if(result) $this.trigger('click', true);
+            });
+        }
+    });
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>

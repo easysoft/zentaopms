@@ -11,7 +11,7 @@
  **/
 class bugResolveEntry extends Entry
 {
-    /** 
+    /**
      * POST method.
      *
      * @param  int    $bugID
@@ -19,7 +19,7 @@ class bugResolveEntry extends Entry
      * @return void
      */
     public function post($bugID)
-    {   
+    {
         $fields = 'resolution,resolvedBuild,resolvedDate,duplicateBug,assignedTo,uid,comment';
         $this->batchSetPost($fields);
 
@@ -33,6 +33,6 @@ class bugResolveEntry extends Entry
         $bug = $this->loadModel('bug')->getByID($bugID);
 
         $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,resolvedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
-    }   
+    }
 }
 

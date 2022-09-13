@@ -35,6 +35,16 @@ class taskModel extends model
 
         if($this->post->selectTestStory)
         {
+            foreach($this->post->testStory as $i => $storyID)
+            {
+                if(empty($storyID)) continue;
+                if($this->post->testEstStarted[$i] > $this->post->testDeadline[$i])
+                {
+                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
+                    return false;
+                }
+            }
+
             /* Check required fields when create test task. */
             foreach($this->post->testStory as $i => $storyID)
             {
@@ -486,17 +496,10 @@ class taskModel extends model
 
                 $clonedTaskID = $this->dao->lastInsertID();
 
-                /* Update the table by judging the beginning of the version number. */
-                if($this->config->edition == 'open')
-                {
-                    /* ZenTao Pms update TABLE_TASKESTIMATE. */
-                    $this->dao->update(TABLE_TASKESTIMATE)->set('task')->eq($clonedTaskID)->where('task')->eq($oldParentTask->id)->exec();
-                }
-                else
-                {
-                    /* ZenTao Pro and ZenTao Biz update TABLE_EFFORT. */
-                    $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)->where('objectID')->eq($oldParentTask->id)->exec();
-                }
+                $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($clonedTaskID)
+                    ->where('objectID')->eq($oldParentTask->id)
+                    ->andWhere('objectType')->eq('task')
+                    ->exec();
             }
 
             $this->updateParentStatus($taskID);
@@ -752,11 +755,7 @@ class taskModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback)
-                {
-                    $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
-                    if(in_array($newParentTask->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldParentTask->feedback, 'processed', '', "task {$newParentTask->status}");
-                }
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
             }
         }
         else
@@ -827,7 +826,7 @@ class taskModel extends model
             {
                 if(!$autoStatus) return $currentTask;
 
-                if($currentTask->consumed == 0)
+                if($currentTask->consumed == 0 and empty($efforts))
                 {
                     if(!isset($task->status)) $currentTask->status = 'wait';
                     $currentTask->finishedBy   = '';
@@ -1076,6 +1075,7 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('realStarted', '0000-00-00 00:00:00')
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
@@ -1159,7 +1159,7 @@ class taskModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->update(TABLE_TASK)->data($task)
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
@@ -1248,16 +1248,12 @@ class taskModel extends model
                     if(!empty($changes)) $this->action->logHistory($actionID, $changes);
                 }
             }
-            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
 
             unset($oldTask->parent);
             unset($task->parent);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
-            {
-                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task {$task->status}");
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+
             if(isset($oldTask->team))
             {
                 $users = $this->loadModel('user')->getPairs('noletter|noempty');
@@ -1272,6 +1268,7 @@ class taskModel extends model
                 }
             }
 
+            $this->file->processFile4Object('task', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }
@@ -1548,7 +1545,6 @@ class taskModel extends model
                 {
                     $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                     $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                    if(in_array($task->status, array('done', 'closed'))) $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task {$task->status}");
                 }
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
@@ -1733,14 +1729,14 @@ class taskModel extends model
             {
                 $task->status       = 'done';
                 $task->finishedBy   = $this->app->user->account;
-                $task->finishedDate = helper::now();
+                $task->finishedDate = $now;
                 $task->assignedTo   = $oldTask->openedBy;
             }
         }
 
         /* Record consumed and left. */
         $estimate = new stdclass();
-        $estimate->date     = helper::isZeroDate($task->realStarted) ? helper::today() : substr($task->realStarted, 0, 10);
+        $estimate->date     = helper::today();
         $estimate->task     = $taskID;
         $estimate->consumed = zget($_POST, 'consumed', 0);
         $estimate->left     = zget($_POST, 'left', 0);
@@ -1748,19 +1744,24 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = (!empty($oldTask->team) and $currentTeam) ? $estimate->consumed - $currentTeam->consumed : $estimate->consumed - $oldTask->consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        $estimateID = $this->addTaskEstimate($estimate);
+        if($estimate->consumed > 0) $estimateID = $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team) and $currentTeam)
         {
-            $data = new stdclass();
-            $data->consumed = $this->post->consumed;
-            $data->left     = $this->post->left;
-            $data->status   = 'doing';
+            $team = new stdclass();
+            $team->consumed = $this->post->consumed;
+            $team->left     = $this->post->left;
+            $team->status   = empty($team->left) ? 'done' : 'doing';
 
-            $this->dao->update(TABLE_TASKTEAM)->data($data)->where('id')->eq($currentTeam->id)->exec();
-            if($oldTask->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
+            $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
+            if($oldTask->mode == 'linear' and !empty($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
             $task = $this->computeHours4Multiple($oldTask, $task);
+            if($team->status == 'done')
+            {
+                $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'next');
+                $task->assignedDate = $now;
+            }
 
             $finishedUsers = $this->getFinishedUsers($oldTask->id, array_keys($oldTask->members));
             if(count($finishedUsers) == count($oldTask->team))
@@ -1837,7 +1838,7 @@ class taskModel extends model
                 $estimates[$id]->left     = $record->left[$id];
                 $estimates[$id]->work     = $record->work[$id];
                 $estimates[$id]->account  = $this->app->user->account;
-                $estimates[$id]->order    = !empty($record->order[$id]) ? $record->order[$id] : 0;
+                if(isset($record->order[$id])) $estimates[$id]->order = $record->order[$id];
             }
         }
 
@@ -1849,7 +1850,7 @@ class taskModel extends model
         $left       = $task->left;
         $now        = helper::now();
         $oldStatus  = $task->status;
-        $lastDate   = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
+        $lastDate   = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
 
         foreach($estimates as $estimate)
         {
@@ -1870,7 +1871,14 @@ class taskModel extends model
                 $lastDate      = $estimate->date;
             }
 
-            if($newTask->left == 0 and strpos('done,cancel,closed', $task->status) === false)
+            if(!empty($task->team))
+            {
+                $extra = array('filter' => 'done');
+                if(isset($estimate->order)) $extra['order'] = $estimate->order;
+                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
+            }
+
+            if($newTask->left == 0 and ((empty($currentTeam) and strpos('done,cancel,closed', $task->status) === false) or (!empty($currentTeam) and $currentTeam->status != 'done')))
             {
                 $newTask->status         = 'done';
                 $newTask->assignedTo     = $task->openedBy;
@@ -1907,14 +1915,11 @@ class taskModel extends model
             /* Process multi-person task. Update consumed on team table. */
             if(!empty($task->team))
             {
-                $extra = array('filter' => 'done');
-                if(!empty($estimate->order)) $extra['order'] = $estimate->order;
-                $currentTeam = $this->getTeamByAccount($task->team, $this->app->user->account, $extra);
-                if($currentTeam)
+                if(!empty($currentTeam))
                 {
                     $teamStatus = $estimate->left == 0 ? 'done' : 'doing';
                     $this->dao->update(TABLE_TASKTEAM)->set('left')->eq($estimate->left)->set("consumed = consumed + {$estimate->consumed}")->set('status')->eq($teamStatus)->where('id')->eq($currentTeam->id)->exec();
-                    if($task->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
+                    if($task->mode == 'linear' and empty($estimate->order)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
                     $currentTeam->consumed += $estimate->consumed;
                     $currentTeam->left      = $estimate->left;
                     $currentTeam->status    = $teamStatus;
@@ -1952,12 +1957,12 @@ class taskModel extends model
      */
     public function resetEffortLeft($taskID, $members)
     {
-        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
         foreach($members as $account)
         {
-            $this->dao->update($table)->set('`left`')->eq(0)->where('account')->eq($account)
-                ->beginIF($this->config->edition == 'open')->andWhere('task')->eq($taskID)->fi()
-                ->beginIF($this->config->edition != 'open')->andWhere('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fi()
+            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)
+                ->where('account')->eq($account)
+                ->andWhere('objectID')->eq($taskID)
+                ->andWhere('objectType')->eq('task')
                 ->orderBy('date_desc,id_desc')
                 ->limit('1')
                 ->exec();
@@ -2059,11 +2064,7 @@ class taskModel extends model
                 if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
             }
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
-            {
-                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task done");
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
             return common::createChanges($oldTask, $task);
         }
@@ -2149,11 +2150,7 @@ class taskModel extends model
             if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
             if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
-            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback)
-            {
-                $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-                $this->loadModel('action')->create('feedback', $oldTask->feedback, 'processed', '', "task closed");
-            }
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
             return common::createChanges($oldTask, $task);
         }
@@ -2789,15 +2786,14 @@ class taskModel extends model
     /**
      * Update estimate order for linear task team.
      *
-     * @param  int    $estimateID
+     * @param  int    $effortID
      * @param  int    $order
      * @access public
      * @return void
      */
-    public function updateEstimateOrder($estimateID, $order)
+    public function updateEstimateOrder($effortID, $order)
     {
-        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
-        $this->dao->update($table)->set('`order`')->eq((int)$order)->where('id')->eq($estimateID)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('`order`')->eq((int)$order)->where('id')->eq($effortID)->exec();
     }
 
     /**
@@ -2812,15 +2808,6 @@ class taskModel extends model
      */
     public function getTaskEstimate($taskID, $account = '', $append = '', $orderBy = 'date,id')
     {
-        if($this->config->edition == 'open')
-        {
-            return $this->dao->select('*')->from(TABLE_TASKESTIMATE)
-                ->where('task')->eq($taskID)
-                ->beginIF($account)->andWhere('account')->eq($account)->fi()
-                ->beginIF($append)->orWhere('id')->eq($append)->fi()
-                ->orderBy($orderBy)
-                ->fetchAll();
-        }
         return $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
             ->andWhere('objectType')->eq('task')
             ->andWhere('deleted')->eq('0')
@@ -2833,18 +2820,22 @@ class taskModel extends model
     /**
      * Get estimate by id.
      *
-     * @param  int    $estimateID
+     * @param  int    $effortID
      * @access public
      * @return object.
      */
-    public function getEstimateById($estimateID)
+    public function getEstimateById($effortID)
     {
-        $estimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)
-            ->where('id')->eq($estimateID)
+        $estimate = $this->dao->select('*')->from(TABLE_EFFORT)
+            ->where('id')->eq($effortID)
             ->fetch();
 
         /* If the estimate is the last of its task, status of task will be checked. */
-        $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date_desc,id_desc')->limit(1)->fetch('id');
+        $lastID = $this->dao->select('id')->from(TABLE_EFFORT)
+            ->where('objectID')->eq($estimate->objectID)
+            ->andWhere('objectType')->eq('task')
+            ->orderBy('date_desc,id_desc')->limit(1)->fetch('id');
+
         $estimate->isLast = $lastID == $estimate->id;
         return $estimate;
     }
@@ -2894,18 +2885,21 @@ class taskModel extends model
         $today       = helper::today();
 
         if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed < 0)  return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->record, '0');
+        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
         if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
-        $task = $this->getById($oldEstimate->task);
-        $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
+        $task = $this->getById($oldEstimate->objectID);
+        $this->dao->update(TABLE_EFFORT)->data($estimate)
             ->autoCheck()
             ->where('id')->eq((int)$estimateID)
             ->exec();
 
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
-        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('date_desc,id_desc')->limit(1)->fetch();
         $left         = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
+        $lastEstimate = $this->dao->select('*')->from(TABLE_EFFORT)
+            ->where('objectID')->eq($task->id)
+            ->andWhere('objectType')->eq('task')
+            ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
         $now  = helper::now();
         $data = new stdClass();
@@ -2967,14 +2961,17 @@ class taskModel extends model
     public function deleteEstimate($estimateID)
     {
         $estimate = $this->getEstimateById($estimateID);
-        $task     = $this->getById($estimate->task);
+        $task     = $this->getById($estimate->objectID);
         $now      = helper::now();
 
         $consumed = $task->consumed - $estimate->consumed;
         $left     = $task->left;
         if($estimate->isLast)
         {
-            $lastTwoEstimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(2)->fetchAll();
+            $lastTwoEstimates = $this->dao->select('*')->from(TABLE_EFFORT)
+                ->where('objectID')->eq($estimate->objectID)
+                ->andWhere('objectType')->eq('task')
+                ->orderBy('date desc,id desc')->limit(2)->fetchAll();
             $lastTwoEstimate  = isset($lastTwoEstimates[1]) ? $lastTwoEstimates[1] : '';
             if($lastTwoEstimate) $left = $lastTwoEstimate->left;
             if(empty($lastTwoEstimate) and $left == 0) $left = $task->estimate;
@@ -2984,7 +2981,12 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-        if($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
+        if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
+        {
+            $data->status = 'wait';
+            $data->left   = $task->estimate;
+        }
+        elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
         {
             $data->status         = 'done';
             $data->assignedTo     = $task->openedBy;
@@ -3041,10 +3043,10 @@ class taskModel extends model
             }
         }
 
-        $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('deleted')->eq('1')->where('id')->eq($estimateID)->exec();
         if(!empty($task->team)) $data = $this->computeHours4Multiple($task, $data);
 
-        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
+        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->objectID)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
@@ -3618,7 +3620,25 @@ class taskModel extends model
      */
     public function addTaskEstimate($data)
     {
-        $this->dao->insert(TABLE_TASKESTIMATE)->data($data)->autoCheck()->exec();
+        $oldTask = $this->getById($data->task);
+
+        $relation = $this->loadModel('action')->getRelatedFields('task', $data->task);
+
+        $effort = new stdclass();
+        $effort->objectType = 'task';
+        $effort->objectID   = $data->task;
+        $effort->execution  = $oldTask->execution;
+        $effort->product    = $relation['product'];
+        $effort->project    = (int)$relation['project'];
+        $effort->account    = $data->account;
+        $effort->date       = $data->date;
+        $effort->consumed   = $data->consumed;
+        $effort->left       = $data->left;
+        $effort->work       = isset($data->work) ? $data->work : '';
+        $effort->vision     = $this->config->vision;
+        $effort->order      = isset($data->order) ? $data->order : 0;
+        $this->dao->insert(TABLE_EFFORT)->data($effort)->autoCheck()->exec();
+
         return $this->dao->lastInsertID();
     }
 
@@ -3918,7 +3938,7 @@ class taskModel extends model
 
         foreach($users as $i => $account)
         {
-            if(isset($teamHours[$i]) and $teamHours[$i]->status  == 'done') continue;
+            if(isset($teamHours[$i]) and $teamHours[$i]->status == 'done') continue;
             if($type == 'current') return $account;
             break;
         }

@@ -656,9 +656,20 @@ class blockModel extends model
      * Get waterfall project report pararms.
      *
      * @access public
-     * @return string
+     * @return bool
      */
     public function getWaterfallReportParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get waterfall general report params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getWaterfallGeneralReportParams()
     {
         return false;
     }
@@ -667,7 +678,7 @@ class blockModel extends model
      * Get project estimate pararms.
      *
      * @access public
-     * @return string
+     * @return bool
      */
     public function getWaterfallEstimateParams()
     {

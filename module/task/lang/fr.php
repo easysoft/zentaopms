@@ -47,6 +47,7 @@ $lang->task->exportAction        = "Exporter Tâche";
 $lang->task->reportChart         = "Rapport Graphique";
 $lang->task->fromBug             = 'à partir Bug';
 $lang->task->case                = 'Associée CasTest';
+$lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Confirmer Changement";
 $lang->task->storyChange         = "Story Changée";
 $lang->task->progress            = 'Progression';
@@ -56,6 +57,9 @@ $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
 $lang->task->allModule           = 'Tous Modules';
 $lang->task->replace             = 'Replace';
+$lang->task->myEffort            = 'My Effort';
+$lang->task->allEffort           = 'Team Effort';
+$lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
@@ -163,7 +167,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
-$lang->task->selectTestStory   = 'Select Story Testé';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'Tous Utilis.';
 $lang->task->noStory           = 'Aucune Story associée';
 $lang->task->noAssigned        = 'Non affectées';
@@ -218,6 +222,7 @@ $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
 $lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
 $lang->task->copyStoryTitle            = '<span style="color:blue;">StoryModel</span>';
 $lang->task->afterSubmit               = "Suiv. ";
 $lang->task->successSaved              = "Créée !";
@@ -227,10 +232,11 @@ $lang->task->remindIssue               = "This task is converted from a issue. D
 $lang->task->confirmChangeExecution    = "Si vous changez {$lang->executionCommon}, Module, Story et AssignedTo seront également changés. Voulez-vous le faire ?";
 $lang->task->confirmFinish             = '"Heures Restantes" à 0. Voulez-vous passer le statut à "Terminée" ?';
 $lang->task->confirmRecord             = '"Heures Restantes" à 0. Voulez-vous passer le statut de la tâche à "Finie" ?';
-$lang->task->confirmTransfer           = '"Heures Restantes" à 0. Voulez-vous transférer la tâche ?';
+$lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
 $lang->task->noticeLinkStory           = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
 $lang->task->noticeSaveRecord          = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
+$lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
 $lang->task->commentActions            = '%s. %s, commenté par <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Seulement le %s peut %s la tâche.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';

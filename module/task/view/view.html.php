@@ -24,8 +24,8 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->multipleAB . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
+        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->childrenAB . '</span>';?>
         <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
@@ -147,7 +147,7 @@
       </div>
       <?php endif;?>
       <?php
-      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));
+      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task, 'method' => 'view', 'showDelete' => false));
 
       $canBeChanged = common::canBeChanged('task', $task);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");
@@ -354,10 +354,7 @@
               </thead>
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
-                  <td class='text-left'>
-                    <?php echo zget($users, $member->account);?>
-                    <?php if($member->transfer) echo "({$lang->task->replace})";?>
-                 </td>
+                  <td class='text-left'><?php echo zget($users, $member->account);?></td>
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>

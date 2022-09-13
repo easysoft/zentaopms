@@ -20,7 +20,7 @@ pid=1
 
 */
 $releaseID = array(1, 10);
-$storyID = array(2, 100, '');
+$storyID = array(2, 100, 0);
 
 $projectrelease = new projectreleaseTest();
 

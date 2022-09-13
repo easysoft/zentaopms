@@ -50,7 +50,7 @@ class actionModel extends model
         $action->extra      = $extra;
         if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
-        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
+        if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
         $action->comment = fixer::stripDataTags($comment);
@@ -330,12 +330,20 @@ class actionModel extends model
             ->where("objectType IN('project', 'testtask', 'build')")
             ->andWhere('project')->eq((int)$objectID)
             ->fi()
+            ->beginIF($objectType == 'story')
+            ->where('objectType')->in('story,requirement')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
+            ->beginIF($objectType == 'case')
+            ->where('objectType')->in('case,testcase')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
             ->beginIF($objectType == 'module')
             ->where('objectType')->eq($objectType)
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF($objectType != 'project' and $objectType != 'module')
+            ->beginIF(strpos('project,case,story,module', $objectType) === false)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->fi()
@@ -1620,12 +1628,6 @@ class actionModel extends model
             }
         }
 
-        if($action->objectType == 'reviewissue')
-        {
-            $project  = $this->dao->select('project')->from(TABLE_REVIEWISSUE)->where('id')->eq($action->objectID)->fetch('project');
-            $action->objectLink = helper::createLink('reviewissue', 'view', "project=$project&issueID=$action->objectID");
-        }
-
         if($action->objectType == 'review')
         {
             $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
@@ -1693,6 +1695,7 @@ class actionModel extends model
             $fieldName = $history->field;
             $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
             if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }

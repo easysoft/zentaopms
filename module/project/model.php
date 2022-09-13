@@ -67,35 +67,6 @@ class projectModel extends model
     }
 
     /**
-     * Check has content for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasContent($projectID)
-    {
-        $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('project')->eq($projectID)->fetch('count');
-
-        return $count > 0;
-    }
-
-    /**
-     * Check has children project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasChildren($projectID)
-    {
-        $count = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($projectID)->fetch('count');
-        return $count > 0;
-    }
-
-    /**
      * Get budget unit list.
      *
      * @access public
@@ -445,6 +416,42 @@ class projectModel extends model
     }
 
     /**
+     * Get waterfall general PV and EV.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getWaterfallPVEVAC($projectID)
+    {
+        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
+
+        $PV = 0;
+        $EV = 0;
+        $AC = 0;
+        while($task = $stmt->fetch())
+        {
+            if(empty($task->estimate)) continue;
+
+            $PV += $task->estimate;
+            $AC += $task->consumed;
+            if($task->status == 'done' or $task->closedReason == 'done')
+            {
+                $EV += $task->estimate;
+            }
+            else
+            {
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
+                $EV += round($task->estimate * $task->progress / 100, 2);
+            }
+        }
+
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
+    }
+
+    /**
      * Get project workhour info.
      *
      * @param  int    $projectID
@@ -504,8 +511,8 @@ class projectModel extends model
     {
         $projects = array();
 
-        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASKESTIMATE)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->andWhere('t2.deleted')->eq(0)

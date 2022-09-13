@@ -23,6 +23,8 @@ class kanban extends control
      */
     public function space($browseType = 'involved', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->session->set('regionID', 'all', 'kanban');
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -421,6 +423,7 @@ class kanban extends control
         }
 
         $regions = $this->kanban->getKanbanData($kanbanID);
+        if(!isset($regions[$regionID])) $this->session->set('regionID', 'all', 'kanban');
 
         $this->view->users    = $users;
         $this->view->title    = $this->lang->kanban->view;
