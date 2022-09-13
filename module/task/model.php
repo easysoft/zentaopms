@@ -1751,7 +1751,7 @@ class taskModel extends model
             $team = new stdclass();
             $team->consumed = $this->post->consumed;
             $team->left     = $this->post->left;
-            $team->status   = empty($data->left) ? 'done' : 'doing';
+            $team->status   = empty($team->left) ? 'done' : 'doing';
 
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
             if($oldTask->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
