@@ -46,9 +46,15 @@ class weeklyModel extends model
 
         $weeks = $this->getWeekPairs($begin, $end);
         $current = zget($weeks, $date, current($weeks));
-        $selectHtml  = "<div class='btn-group angle-btn'>";
-        $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->colon . $project->name, '', "class='btn'");
-        $selectHtml .= '</div>';
+
+        $selectHtml = '';
+
+        if(!empty($project->hasProduct))
+        {
+            $selectHtml .= "<div class='btn-group angle-btn'>";
+            $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->colon . $project->name, '', "class='btn'");
+            $selectHtml .= '</div>';
+        }
 
         $selectHtml .= "<div class='btn-group angle-btn'>";
         $selectHtml .= "<div class='btn-group'>";
