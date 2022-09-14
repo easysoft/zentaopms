@@ -87,6 +87,7 @@
             <?php
               echo html::hidden('model', $model);
               echo html::hidden('vision', 'lite');
+              echo html::hidden('hasProduct', 1);
               echo html::hidden('parent', 0);
               echo html::submitButton();
               echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();

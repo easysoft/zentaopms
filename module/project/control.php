@@ -46,12 +46,15 @@ class project extends control
 
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $projectConfig->list->exportFields);
+
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = zget($projectLang, $fieldName);
                 unset($fields[$key]);
             }
+
+            if(isset($fields['hasProduct'])) $fields['hasProduct'] = $projectLang->type;
 
             $involved = $this->cookie->involved ? $this->cookie->involved : 0;
             $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
@@ -60,15 +63,19 @@ class project extends control
             $this->loadModel('product');
             foreach($projects as $i => $project)
             {
-                $project->PM       = zget($users, $project->PM);
-                $project->status   = $this->processStatus('project', $project);
-                $project->model    = zget($projectLang->modelList, $project->model);
-                $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
-                $project->parent   = $project->parentName;
+                $hasProduct = $project->hasProduct;
+
+                $project->PM         = zget($users, $project->PM);
+                $project->status     = $this->processStatus('project', $project);
+                $project->model      = zget($projectLang->modelList, $project->model);
+                $project->budget     = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
+                $project->parent     = $project->parentName;
+                $project->hasProduct = zget($projectLang->projectTypeList, $project->hasProduct);
 
                 $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
                 $project->linkedProducts = implode('，', $linkedProducts);
 
+                if(!$hasProduct) $project->linkedProducts = '';
                 if($this->post->exportType == 'selected')
                 {
                     $checkedItem = $this->cookie->checkedItem;
