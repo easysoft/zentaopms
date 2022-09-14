@@ -198,19 +198,19 @@ class zahostModel extends model
                 $query = $this->loadModel('search')->getQuery($param);
                 if($query)
                 {
-                    $this->session->set('zaTemplateQuery', $query->sql);
-                    $this->session->set('zaTemplateForm', $query->form);
+                    $this->session->set('vmTemplateQuery', $query->sql);
+                    $this->session->set('vmTemplateForm', $query->form);
                 }
                 else
                 {
-                    $this->session->set('zaTemplateQuery', ' 1 = 1');
+                    $this->session->set('vmTemplateQuery', ' 1 = 1');
                 }
             }
             else
             {
-                if($this->session->zaTemplateQuery == false) $this->session->set('zaTemplateQuery', ' 1 = 1');
+                if($this->session->vmTemplateQuery == false) $this->session->set('vmTemplateQuery', ' 1 = 1');
             }
-            $query = $this->session->zaTemplateQuery;
+            $query = $this->session->vmTemplateQuery;
         }
 
         return $this->dao->select('*')->from(TABLE_VMTEMPLATE)

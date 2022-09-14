@@ -1,14 +1,17 @@
 <?php
-$lang->zahost->common       = 'ZAhost';
-$lang->zahost->browse       = 'Host List';
-$lang->zahost->create       = 'Add Host';
-$lang->zahost->view         = 'Host View';
-$lang->zahost->edit         = 'Edit';
-$lang->zahost->editAction   = 'Edit Host';
-$lang->zahost->delete       = 'Delete';
-$lang->zahost->deleteAction = 'Delete Host';
-$lang->zahost->byQuery      = 'Search';
-$lang->zahost->all          = 'All';
+$lang->zahost->id             = 'ID';
+$lang->zahost->common         = 'ZAhost';
+$lang->zahost->browse         = 'Host List';
+$lang->zahost->create         = 'Add Host';
+$lang->zahost->view           = 'Host View';
+$lang->zahost->edit           = 'Edit';
+$lang->zahost->editAction     = 'Edit Host';
+$lang->zahost->delete         = 'Delete';
+$lang->zahost->deleteAction   = 'Delete Host';
+$lang->zahost->byQuery        = 'Search';
+$lang->zahost->all            = 'All';
+$lang->zahost->browseTemplate = 'Template Browse';
+$lang->zahost->createTemplate = 'Create Template';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'IP';
