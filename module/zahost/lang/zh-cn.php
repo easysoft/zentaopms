@@ -98,3 +98,4 @@ $lang->zahost->versionList['centos']['8']           = '8';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip = '『%s』格式不正确！';
+$lang->zahost->notice->pingError = '无法连接！请检查IP地址、服务器进程和端口状态。';

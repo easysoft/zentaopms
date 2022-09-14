@@ -94,4 +94,21 @@ class zahost extends control
         $this->view->title = $this->lang->zahost->createTemplate;
         $this->display();
     }
+
+    /**
+     * Ping publicIP by http.
+     *
+     * @param  string $IP
+     * @access public
+     * @return void
+     */
+    public function ajaxPingPublicIP($IP)
+    {
+        /* Try to get VM template list, if success, it means ping success. */
+        $result = commonModel::http('http://' . $IP .":8086/api/v1/kvm/listTmpl?", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'));
+
+        if($result) return $this->send(array('result' => 'success', 'message' => ''));
+
+        return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array($this->lang->zahost->notice->pingError))));
+    }
 }
