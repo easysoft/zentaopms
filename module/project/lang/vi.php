@@ -60,6 +60,7 @@ $lang->project->name               = 'Name';
 $lang->project->category           = 'Category';
 $lang->project->desc               = 'Description';
 $lang->project->code               = 'Code';
+$lang->project->hasProduct         = 'Has Product';
 $lang->project->copy               = 'Copy';
 $lang->project->begin              = 'Begin';
 $lang->project->end                = 'End';
@@ -108,6 +109,11 @@ $lang->project->longTime           = 'Long-Term Program';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
 $lang->project->days               = 'Available Days';
+
+/* Project Kanban. */
+$lang->project->projectTypeList = array();
+$lang->project->projectTypeList[1] = 'Has Product';
+$lang->project->projectTypeList[0] = 'No Product';
 
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';

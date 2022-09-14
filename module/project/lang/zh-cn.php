@@ -79,6 +79,7 @@ $lang->project->name               = '项目名称';
 $lang->project->category           = '项目类型';
 $lang->project->desc               = '项目描述';
 $lang->project->code               = '项目代号';
+$lang->project->hasProduct         = '是否关联产品';
 $lang->project->copy               = '复制项目';
 $lang->project->begin              = '计划开始';
 $lang->project->end                = '计划完成';
@@ -171,6 +172,11 @@ $lang->project->branch             = '所属分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '看板';
+
+/* Project Kanban. */
+$lang->project->projectTypeList = array();
+$lang->project->projectTypeList[1] = '产品型项目';
+$lang->project->projectTypeList[0] = '无产品项目';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
