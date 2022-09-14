@@ -847,7 +847,7 @@ class programModel extends model
 	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
 	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
             foreach($children as $id => $type) $this->user->updateUserView($id, $type);
-            if($program->PM != $oldProgram->PM)
+            if(isset($program->PM) and $program->PM != $oldProgram->PM)
             {
                 $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs('id');
                 foreach($productIdList as $productID) $this->user->updateUserView($productID, 'product');
