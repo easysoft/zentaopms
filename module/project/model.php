@@ -1263,7 +1263,7 @@ class projectModel extends model
             $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->updateProducts($projectID);
+            if($project->hasProduct) $this->updateProducts($projectID);
 
             if(!$project->hasProduct or isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
             {
