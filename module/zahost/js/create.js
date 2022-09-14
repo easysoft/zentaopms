@@ -5,13 +5,11 @@ $(document).ready(function()
         var url = createLink('zahost', 'ajaxPingPublicIP', "IP=" + $('#publicIP').val());
         $.get(url, function(response)
         {
+            $('#publicIPLabel').remove();
+            $('#publicIP').removeClass('has-error');
+
             let resultData= JSON.parse(response);
-            if(resultData.result == 'success')
-            {
-              $('#publicIP').removeClass('has-error');
-              $('#publicIPLabel').remove();
-              return;
-            }
+            if(resultData.result == 'success') return;
 
             $('#publicIP').addClass('has-error');
 
