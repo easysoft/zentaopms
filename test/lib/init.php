@@ -65,7 +65,7 @@ $db   = new db();
 
 if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
 {
-    $rest = new rest($config->test->base);
+    $rest  = new rest($config->test->base);
     $token = $rest->post('/tokens', array('account' => $config->test->account, 'password' => $config->test->password));
     $token = $token->body;
 }
