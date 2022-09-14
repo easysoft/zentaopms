@@ -2051,6 +2051,9 @@ class projectModel extends model
                 case 'status':
                     echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
+                case 'hasProduct':
+                    echo zget($this->lang->project->projectTypeList, $project->hasProduct);
+                    break;
                 case 'budget':
                     echo $budgetTitle;
                     break;
