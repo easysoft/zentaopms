@@ -29,6 +29,26 @@ $lang->zahost->editedBy     = 'EditedBy';
 $lang->zahost->editedDate   = 'EditedDate';
 $lang->zahost->registerDate = 'RegisterDate';
 
+$lang->zahost->memorySize = $lang->zahost->memory;
+$lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->osType     = 'Os Version';
+$lang->zahost->osCategory = 'System';
+$lang->zahost->osVersion  = 'Os Version No';
+$lang->zahost->osLang     = 'Language';
+$lang->zahost->imageFile  = 'Image File';
+
+$lang->zahost->vmTemplate = new stdclass;
+$lang->zahost->vmTemplate->name       = 'Name';
+$lang->zahost->vmTemplate->common     = 'VM Template';
+$lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
+$lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
+$lang->zahost->vmTemplate->diskSize   = $lang->zahost->diskSize;
+$lang->zahost->vmTemplate->osType     = $lang->zahost->osType;
+$lang->zahost->vmTemplate->osCategory = $lang->zahost->osCategory;
+$lang->zahost->vmTemplate->osVersion  = $lang->zahost->osVersion;
+$lang->zahost->vmTemplate->osLang     = $lang->zahost->osLang;
+$lang->zahost->vmTemplate->imageFile  = $lang->zahost->imageFile;
+
 $lang->zahost->empty         = 'No Host';
 $lang->zahost->templateEmpty = 'No Template';
 

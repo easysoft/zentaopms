@@ -29,8 +29,6 @@ $lang->zahost->editedBy     = '由谁修改';
 $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
-$lang->zahost->createTemplate = '创建虚拟机模板';
-
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->osType     = '操作系统版本';
