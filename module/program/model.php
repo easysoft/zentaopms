@@ -86,6 +86,7 @@ class programModel extends model
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
