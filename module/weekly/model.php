@@ -49,7 +49,7 @@ class weeklyModel extends model
 
         $selectHtml = '';
 
-        if($project->hasProduct === '1')
+        if($project->model !== 'waterfall')
         {
             $selectHtml .= "<div class='btn-group angle-btn'>";
             $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->colon . $project->name, '', "class='btn'");
