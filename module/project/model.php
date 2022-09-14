@@ -1112,7 +1112,7 @@ class projectModel extends model
         if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         $linkedProductsCount = 0;
-        if(isset($_POST['products']))
+        if($project->hasProduct && isset($_POST['products']))
         {
             foreach($_POST['products'] as $product)
             {
@@ -1126,7 +1126,7 @@ class projectModel extends model
             $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
 
             /* Judge products not empty. */
-            if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
+            if($project->hasProduct && empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
                 dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
@@ -1160,7 +1160,7 @@ class projectModel extends model
         }
 
         /* When select create new product, product name cannot be empty and duplicate. */
-        if(isset($_POST['newProduct']))
+        if($project->hasProduct && isset($_POST['newProduct']))
         {
             if(empty($_POST['productName']))
             {
@@ -1265,11 +1265,12 @@ class projectModel extends model
 
             $this->updateProducts($projectID);
 
-            if(isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
+            if(!$project->hasProduct or isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = $this->post->productName ? $this->post->productName : $project->name;
+                $product->name           = !$project->hasProduct ? "{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
+                $product->shadow         = (int)empty($project->hasProduct);
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
                 $product->acl            = $project->acl == 'open' ? 'open' : 'private';
@@ -1292,15 +1293,18 @@ class projectModel extends model
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
 
-                /* Create doc lib. */
-                $this->app->loadLang('doc');
-                $lib = new stdclass();
-                $lib->product = $productID;
-                $lib->name    = $this->lang->doclib->main['product'];
-                $lib->type    = 'product';
-                $lib->main    = '1';
-                $lib->acl     = 'default';
-                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+                if($project->hasProduct)
+                {
+                    /* Create doc lib. */
+                    $this->app->loadLang('doc');
+                    $lib = new stdclass();
+                    $lib->product = $productID;
+                    $lib->name    = $this->lang->doclib->main['product'];
+                    $lib->type    = 'product';
+                    $lib->main    = '1';
+                    $lib->acl     = 'default';
+                    $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+                }
             }
 
             /* Save order. */

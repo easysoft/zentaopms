@@ -73,6 +73,10 @@
         </tr>
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->project->type;?></th>
+          <td><?php echo html::radio('hasProduct', $lang->project->projectTypeList, 1);?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
