@@ -93,8 +93,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>选择历史{$lang->projectCommon}作为迭代升级后，用户可以选择这个执行所属的项目集、项目或新建项目集、项目。</p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = '经典管理模式';
-$lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
+$lang->upgrade->to15Mode['lite'] = '迅捷模式';
+$lang->upgrade->to15Mode['new']  = '综合模式';
 
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';

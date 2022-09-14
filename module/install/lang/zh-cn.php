@@ -46,7 +46,7 @@ $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/program0716
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>尊敬的用户您好，欢迎您使用禅道项目管理系统。</h4>
-  <p> 禅道自15系列开始提供了两种使用模式，一种是经典管理模式，功能较为精简，主要提供了产品和项目两个核心功能；另一种是全新项目集管理模式，增加了项目集和执行的概念。下面是全新项目集管理模式的介绍：</p>
+  <p> 禅道自15系列开始提供了两种使用模式，一种是迅捷模式，功能较为精简，主要提供了产品和项目两个核心功能；另一种是综合模式，增加了项目集和执行的概念。下面是综合模式的介绍：</p>
   <div class='block-content'>
     <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
     <div class='block-details block-right'>
@@ -292,8 +292,8 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->modeList['classic'] = '经典管理模式';
-$lang->install->modeList['new']     = '全新项目集管理模式';
+$lang->install->modeList['lite'] = '迅捷模式';
+$lang->install->modeList['new']  = '综合模式';
 
 $lang->install->promotion = "为您推荐易软天创旗下其他产品：";
 
