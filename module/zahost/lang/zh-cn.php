@@ -1,14 +1,17 @@
 <?php
-$lang->zahost->common       = '宿主机';
-$lang->zahost->browse       = '主机列表';
-$lang->zahost->create       = '添加宿主机';
-$lang->zahost->view         = '主机详情';
-$lang->zahost->edit         = '编辑';
-$lang->zahost->editAction   = '编辑主机';
-$lang->zahost->delete       = '删除';
-$lang->zahost->deleteAction = '删除主机';
-$lang->zahost->byQuery      = '搜索';
-$lang->zahost->all          = '所有主机';
+$lang->zahost->id             = 'ID';
+$lang->zahost->common         = '宿主机';
+$lang->zahost->browse         = '主机列表';
+$lang->zahost->create         = '添加宿主机';
+$lang->zahost->view           = '主机详情';
+$lang->zahost->edit           = '编辑';
+$lang->zahost->editAction     = '编辑主机';
+$lang->zahost->delete         = '删除';
+$lang->zahost->deleteAction   = '删除主机';
+$lang->zahost->byQuery        = '搜索';
+$lang->zahost->all            = '所有主机';
+$lang->zahost->browseTemplate = '虚拟机模板列表';
+$lang->zahost->createTemplate = '创建虚拟机模板';
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP';
@@ -26,8 +29,6 @@ $lang->zahost->editedBy     = '由谁修改';
 $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
-$lang->zahost->createTemplate         = '创建虚拟机模板';
-
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->osType     = '操作系统版本';
@@ -38,6 +39,7 @@ $lang->zahost->imageFile  = '镜像文件';
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';
+$lang->zahost->vmTemplate->common     = '虚拟机模板';
 $lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
 $lang->zahost->vmTemplate->diskSize   = $lang->zahost->diskSize;
@@ -52,7 +54,8 @@ $lang->zahost->langList['zh_cn'] = '简体中文';
 $lang->zahost->langList['zh_tw'] = '繁体中文';
 $lang->zahost->langList['en_us'] = '美式英语';
 
-$lang->zahost->empty = '暂时没有主机';
+$lang->zahost->empty         = '暂时没有主机';
+$lang->zahost->templateEmpty = '暂时没有模板';
 
 $lang->zahost->statusList['online'] = '已上架';
 
