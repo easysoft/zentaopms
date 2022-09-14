@@ -1041,7 +1041,7 @@ class project extends control
             if(!empty($execution->tasks) or !empty($execution->children))
             {
                 $showToggleIcon = true;
-                continue;
+                break;
             }
         }
 
