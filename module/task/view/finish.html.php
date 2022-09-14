@@ -47,7 +47,7 @@
         </tr>
         <?php if(!empty($task->team)):?>
         <tr>
-          <th class='thWidth'><?php echo $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo $lang->task->my . $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>
@@ -83,11 +83,11 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->realStarted;?></th>
+          <th><?php echo empty($task->team) ? $lang->task->realStarted : $lang->task->my . $lang->task->realStarted;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('realStarted', $task->realStarted != '0000-00-00 00:00:00' ? $task->realStarted : '', "class='form-control form-datetime'");?></div></td><td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->finishedDate;?></th>
+          <th><?php echo empty($task->team) ? $lang->task->finishedDate : $lang->task->my . $lang->task->finishedDate;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::now(), "class='form-control form-datetime'");?></div></td><td></td>
         </tr>
         <tr class='hide'>

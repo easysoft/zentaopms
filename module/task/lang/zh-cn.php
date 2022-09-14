@@ -143,6 +143,7 @@ $lang->task->v2                = '版本2';
 $lang->task->vision            = '所属界面';
 $lang->task->colorTag          = '颜色标签';
 $lang->task->files             = '附件';
+$lang->task->my                = '我的';
 $lang->task->hasConsumed       = '之前消耗';
 $lang->task->multiple          = '多人任务';
 $lang->task->multipleAB        = '多人';
