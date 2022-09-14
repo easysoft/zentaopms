@@ -1,5 +1,12 @@
 $(function()
 {
+    $('[name=hasProduct]').change(function()
+    {
+        const hasProduct = $('[name=hasProduct]:checked').val();
+
+        $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
+    });
+
     $('#copyProjects a').click(function()
     {
         setCopyProject($(this).data('id'));

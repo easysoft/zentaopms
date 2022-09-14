@@ -79,6 +79,7 @@ $lang->project->name               = 'Name';
 $lang->project->category           = 'Category';
 $lang->project->desc               = 'Description';
 $lang->project->code               = 'Code';
+$lang->project->hasProduct         = 'Has Product';
 $lang->project->copy               = 'Copy';
 $lang->project->begin              = 'Begin';
 $lang->project->end                = 'End';
@@ -171,6 +172,11 @@ $lang->project->branch             = 'Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
+
+/* Project Kanban. */
+$lang->project->projectTypeList = array();
+$lang->project->projectTypeList[1] = 'Has Product';
+$lang->project->projectTypeList[0] = 'No Product';
 
 /* Project Kanban. */
 $lang->project->typeList = array();

@@ -102,6 +102,7 @@ $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
 $lang->product->name           = "{$lang->productCommon}名称";
 $lang->product->code           = "{$lang->productCommon}代号";
+$lang->product->shadow         = "是否影子{$lang->productCommon}";
 $lang->product->line           = "{$lang->productCommon}线";
 $lang->product->lineName       = "{$lang->productCommon}线名称";
 $lang->product->order          = '排序';

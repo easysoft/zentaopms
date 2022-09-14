@@ -102,6 +102,7 @@ $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = 'Name';
 $lang->product->code           = 'Alias';
+$lang->product->shadow         = "Shadow {$lang->productCommon}";
 $lang->product->line           = "{$lang->productCommon} Line";
 $lang->product->lineName       = "{$lang->productCommon} Line Name";
 $lang->product->order          = 'Sortierung';
