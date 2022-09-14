@@ -26,7 +26,7 @@ $lang->zahost->editedBy     = '由谁修改';
 $lang->zahost->editedDate   = '最后修改时间';
 $lang->zahost->registerDate = '最后注册时间';
 
-$lang->zahost->createTemplate         = '创建虚拟机模板';
+$lang->zahost->createTemplate = '创建虚拟机模板';
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
@@ -38,6 +38,7 @@ $lang->zahost->imageFile  = '镜像文件';
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';
+$lang->zahost->vmTemplate->common     = '虚拟机模板';
 $lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
 $lang->zahost->vmTemplate->diskSize   = $lang->zahost->diskSize;
@@ -52,7 +53,8 @@ $lang->zahost->langList['zh_cn'] = '简体中文';
 $lang->zahost->langList['zh_tw'] = '繁体中文';
 $lang->zahost->langList['en_us'] = '美式英语';
 
-$lang->zahost->empty = '暂时没有主机';
+$lang->zahost->empty         = '暂时没有主机';
+$lang->zahost->templateEmpty = '暂时没有模板';
 
 $lang->zahost->statusList['online'] = '已上架';
 

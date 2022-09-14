@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->zahost->confirmDelete)?>
 <?php js::set('browseType', $browseType)?>
 <div id='mainMenu' class='clearfix'>
@@ -59,7 +59,7 @@
         <?php foreach($hostList as $host):?>
         <tr class='text-left'>
           <td><?php printf('%03d', $host->id);?></td>
-          <td title='<?php echo $host->name?>'><?php echo html::a($this->inlink('view', "id=$host->id", 'html', true), $host->name, '', "class='iframe'");?></td>
+          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->id"), $host->name) : $host->name;?></td>
           <td><?php echo zget($lang->zahost->zaHostType, $host->hostType);?></td>
           <td><?php echo $host->publicIP;?></td>
           <td><?php echo $host->cpuCores;?></td>

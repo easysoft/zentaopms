@@ -94,4 +94,45 @@ class zahost extends control
         $this->view->title = $this->lang->zahost->createTemplate;
         $this->display();
     }
+
+    /*
+     * Browse VM template.
+     *
+     * @param  int      $hostID
+     * @param  string   $browseType
+     * @param  string   $param
+     * @param  string   $orderBy
+     * @param  int      $recTotal
+     * @param  int      $recPerPage
+     * @param  int      $pageID
+     * @access public
+     * @return void
+     */
+    public function browseTemplate($hostID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $browseType = strtolower($browseType);
+        $this->app->loadClass('pager', true);
+
+        $queryID      = ($browseType == 'bysearch')  ? (int)$param : 0;
+        $pager        = pager::init($recTotal, $recPerPage, $pageID);
+        $templateList = $this->zahost->getVMTemplateList($hostID, $browseType, $queryID, $orderBy, $pager);
+
+        /* Build the search form. */
+        //$actionURL = $this->createLink('zahost', 'browseVM', "browseType=bySearch&queryID=myQueryID");
+        //$this->config->zaTemplate->search['actionURL'] = $actionURL;
+        //$this->config->zaTemplate->search['queryID']   = $queryID;
+        //$this->config->zaTemplate->search['onMenuBar'] = 'no';
+        //$this->loadModel('search')->setSearchParams($this->config->zaTemplate->search);
+
+        $this->view->title        = $this->lang->zahost->vmTemplate->common;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->templateList = $templateList;
+        $this->view->hostID       = $hostID;
+        $this->view->pager        = $pager;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->browseType   = $browseType;
+
+        $this->display();
+    }
 }

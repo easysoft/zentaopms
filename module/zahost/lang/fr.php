@@ -26,7 +26,8 @@ $lang->zahost->editedBy     = 'EditedBy';
 $lang->zahost->editedDate   = 'EditedDate';
 $lang->zahost->registerDate = 'RegisterDate';
 
-$lang->zahost->empty = 'No Host';
+$lang->zahost->empty         = 'No Host';
+$lang->zahost->templateEmpty = 'No Template';
 
 $lang->zahost->statusList['online'] = 'Online';
 

@@ -25,18 +25,6 @@ class zahostModel extends model
     }
 
     /**
-     * Get host by id.
-     *
-     * @param  int    $hostID
-     * @access public
-     * @return object
-     */
-    public function getById($hostID)
-    {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
-    }
-
-    /**
      * Create a host.
      *
      * @access public
@@ -85,6 +73,58 @@ class zahostModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Create vm template.
+     *
+     * @access public
+     * @return void
+     */
+    public function createTemplate()
+    {
+        $template = fixer::input('post')
+            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->get();
+
+        $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
+            ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
+            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $templateID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('vmtemplate', $templateID, 'Created');
+    }
+
+    /**
+     * Get host by id.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return object
+     */
+    public function getById($hostID)
+    {
+        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
+    }
+
+    /**
+     * Get pairs.
+     *
+     * @param  string  $idFrom
+     * @access public
+     * @return array
+     */
+    public function getPairs($idForm = 'asset')
+    {
+        $field = $idForm == 'asset' ? 't1.id' : 't2.id';
+        return $this->dao->select("$field,t1.name")->from(TABLE_ASSET)->alias('t1')
+            ->leftJoin(TABLE_HOST)->alias('t2')->on('t1.id = t2.assetID')
+            ->where('t1.deleted')->eq('0')
+            ->orderBy('`group`')
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -137,25 +177,47 @@ class zahostModel extends model
     }
 
     /**
-     * Create vm template.
+     * Get VM template list.
      *
+     * @param  int    $hostID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
-     * @return void
+     * @return array
      */
-    public function createTemplate()
+    public function getVmTemplateList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $template = fixer::input('post')
-            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
-            ->get();
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            /* Concatenate the conditions for the query. */
+            if($param)
+            {
+                $query = $this->loadModel('search')->getQuery($param);
+                if($query)
+                {
+                    $this->session->set('zaTemplateQuery', $query->sql);
+                    $this->session->set('zaTemplateForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('zaTemplateQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->zaTemplateQuery == false) $this->session->set('zaTemplateQuery', ' 1 = 1');
+            }
+            $query = $this->session->zaTemplateQuery;
+        }
 
-        $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
-            ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
-            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
-            ->autoCheck()
-            ->exec();
-        if(dao::isError()) return false;
-
-        $templateID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('vmtemplate', $templateID, 'Created');
+        return $this->dao->select('*')->from(TABLE_VMTEMPLATE)
+            ->where('hostID')->eq($hostID)
+            ->beginIF($query)->andWhere($query)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 }
