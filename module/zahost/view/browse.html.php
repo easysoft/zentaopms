@@ -53,6 +53,7 @@
           <th class='c-status'>     <?php common::printOrderLink('t2.status',       $orderBy, $vars, $lang->zahost->status);?></th>
           <th class='c-instanceNum'><?php common::printOrderLink('instanceNum',     $orderBy, $vars, $lang->zahost->instanceNum);?></th>
           <th class='c-datetime'>   <?php common::printOrderLink('registerDate',    $orderBy, $vars, $lang->zahost->registerDate);?></th>
+          <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -69,6 +70,10 @@
           <td><?php echo zget($lang->host->statusList, $host->status);?></td>
           <td><?php echo $host->instanceNum;?></td>
           <td><?php echo $host->registerDate;?></td>
+          <td class='c-actions'>
+            <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
+            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->hostID}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+          </td>
         </tr>
         <?php endforeach;?>
       </tbody>

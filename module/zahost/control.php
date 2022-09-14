@@ -76,6 +76,36 @@ class zahost extends control
     }
 
     /**
+     * Create host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function edit($hostID)
+    {
+        if($_POST)
+        {
+            $changes = $this->zahost->update($hostID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('zahost', $hostID, 'Edited');
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->title = $this->lang->zahost->edit;
+        $this->view->host  = $this->zahost->getById($hostID);
+        $this->display();
+    }
+
+    /**
      * Create template.
      *
      * @access public

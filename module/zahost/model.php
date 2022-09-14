@@ -76,6 +76,38 @@ class zahostModel extends model
     }
 
     /**
+     * Update a host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array|bool
+     */
+    public function update($hostID)
+    {
+        $oldHost  = $this->getById($hostID);
+        $hostInfo = fixer::input('post')->get();
+
+        $this->dao->update(TABLE_HOST)->data($hostInfo)
+            ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
+            ->batchCheck('diskSize,memory', 'float');
+        if(dao::isError()) return false;
+
+        $assetInfo['name']       = $hostInfo->name;
+        $assetInfo['group']      = $hostInfo->group;
+        $assetInfo['editedBy']   = $this->app->user->account;
+        $assetInfo['editedDate'] = helper::now();
+
+        $this->dao->update(TABLE_ASSET)->data($assetInfo)->autoCheck()
+            ->batchCheck($this->config->zahost->edit->requiredFields, 'notempty')
+            ->where('id')->eq($oldHost->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $this->dao->update(TABLE_HOST)->data($hostInfo, 'name')->autoCheck()->where('id')->eq($hostID)->exec();
+        return common::createChanges($oldHost, $hostInfo);
+    }
+
+    /**
      * Create vm template.
      *
      * @access public
@@ -107,7 +139,10 @@ class zahostModel extends model
      */
     public function getById($hostID)
     {
-        return $this->dao->select('*')->from(TABLE_ZAHOST)->where('id')->eq($hostID)->fetch();
+        return $this->dao->select('*,t1.id as hostID,t2.id as id')->from(TABLE_ZAHOST)->alias('t1')
+            ->leftJoin(TABLE_ASSET)->alias('t2')->on('t1.assetID = t2.id')
+            ->where('t1.id')->eq($hostID)
+            ->fetch();
     }
 
     /**
