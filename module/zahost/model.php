@@ -53,6 +53,15 @@ class zahostModel extends model
         $this->dao->update(TABLE_ASSET)->data($hostInfo)->check('name', 'unique');
         if(dao::isError()) return false;
 
+        $hostInfo->secret = md5(time());
+        /* Register on ZAgent server. */
+        $result = json_decode(commonModel::http("http://{$hostInfo->publicIP}:8086/api/v1/refreshSecret", array('Secret' => $hostInfo->secret), array(CURLOPT_CUSTOMREQUEST => 'POST'), array(), 'json'));
+        if(empty($result) || $result->code != 200)
+        {
+            dao::$errors['publicIP'][] = $this->lang->zahost->notice->registerHostError;
+            return false;
+        }
+
         $assetInfo['name']        = $hostInfo->name;
         $assetInfo['type']        = 'zahost';
         $assetInfo['status']      = 'normal';
