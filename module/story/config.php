@@ -56,6 +56,10 @@ global $lang, $app;
 $config->story->datatable = new stdclass();
 if($app->tab == 'execution')
 {
+    $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+}
+else if($app->tab == 'product')
+{
     $config->story->datatable->defaultField = array('id', 'title', 'plan', 'pri', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 }
 else

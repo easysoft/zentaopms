@@ -41,6 +41,12 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 .btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+#productStoryForm #storyList .c-title { border-right: 1px solid #F2F4F7;}
+#productStoryForm #storyList .c-pri,
+#productStoryForm #storyList .c-openedBy,
+#productStoryForm #storyList .c-stage,
+#productStoryForm #storyList .c-taskCount,
+#productStoryForm #storyList .c-actions  { border-left: 1px solid #F2F4F7;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
