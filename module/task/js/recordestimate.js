@@ -1,18 +1,5 @@
 $(function()
 {
-    var parentLink = parent.location.href;
-    if(parentLink.indexOf('view') > 0)
-    {
-        $.get(parentLink, function(data)
-        {
-            $data = $(data);
-            parent.$('#actionbox ol.histories-list').html($data.find('#actionbox ol.histories-list').html());
-            parent.$('.side-col').html($data.find('.side-col').html());
-
-            if(parent.$('#actionbox ol.histories-list #lastComment').length > 0) $(initKindeditor);
-        });
-    }
-
     $('.form-date').datetimepicker('setEndDate', today);
 
     $("#recordForm #submit").click(function(e, confirmed)
