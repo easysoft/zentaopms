@@ -74,6 +74,13 @@ $config->project->datatable->fieldList['status']['required'] = 'no';
 $config->project->datatable->fieldList['status']['sort']     = 'yes';
 $config->project->datatable->fieldList['status']['pri']      = '2';
 
+$config->project->datatable->fieldList['hasProduct']['title']    = 'type';
+$config->project->datatable->fieldList['hasProduct']['fixed']    = 'left';
+$config->project->datatable->fieldList['hasProduct']['width']    = '100';
+$config->project->datatable->fieldList['hasProduct']['required'] = 'no';
+$config->project->datatable->fieldList['hasProduct']['sort']     = 'yes';
+$config->project->datatable->fieldList['hasProduct']['pri']      = '2';
+
 $config->project->datatable->fieldList['begin']['title']    = 'begin';
 $config->project->datatable->fieldList['begin']['fixed']    = 'no';
 $config->project->datatable->fieldList['begin']['width']    = '115';
