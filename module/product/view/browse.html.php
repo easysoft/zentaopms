@@ -208,7 +208,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $buttonTitle = $lang->execution->linkStoryByPlan;
             $dataToggle  = 'data-toggle="modal"';
         }
-        if(common::hasPriv('projectstory', 'linkStory'))
+        if(!empty($project->hasProduct) && common::hasPriv('projectstory', 'linkStory'))
         {
             $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
             $buttonTitle = $lang->execution->linkStory;

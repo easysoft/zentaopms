@@ -347,6 +347,7 @@ class product extends control
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+        $this->view->project         = $this->loadModel('project')->getByID($projectID);
         $this->display();
     }
 
