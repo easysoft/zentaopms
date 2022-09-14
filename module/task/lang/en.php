@@ -143,6 +143,7 @@ $lang->task->v2                = 'Version B';
 $lang->task->vision            = 'Vision';
 $lang->task->colorTag          = 'Color';
 $lang->task->files             = 'Files';
+$lang->task->my                = 'My ';
 $lang->task->hasConsumed       = 'Already Cost';
 $lang->task->multiple          = 'Multiple Users';
 $lang->task->multipleAB        = 'M';
