@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class hostHeartbeatEntry extends Entry
+class hostHeartbeatEntry extends baseEntry
 {
     /**
      * Listen host heartbeat.
@@ -20,16 +20,39 @@ class hostHeartbeatEntry extends Entry
      */
     public function post()
     {
-        $secret = $this->requestBody->secret;
+        /* Check authorize. */
+        $secret = isset($this->requestBody->secret) ? $this->requestBody->secret : '';
+        $token  = isset($_SERVER['HTTP_TOKEN']) ? $_SERVER['HTTP_TOKEN'] : '';
+        if(!$secret and !$token) return $this->sendError(401, 'Unauthorized');
+
+        /* Check param. */
         $status = $this->requestBody->status;
         $now    = helper::now();
-        if(!$secret or !$status) return $this->sendError(400, 'Params error.');
+        if(!$status) return $this->sendError(400, 'Params error.');
 
-        $this->dao->update(TABLE_HOST)->set('status')->eq($status)->where('secret')->eq($secret)->exec();
+        $conditionField = $secret ? 'secret' : 'token';
+        $conditionValue = $secret ? $secret  : $token;
+        $host = new stdclass();
+        $host->status = $status;
+        if($secret)
+        {
+            $host->token       = md5($secret . $now);
+            $host->expiredDate = date('Y-m-d H:i:s', time() + 7200);
+        }
 
-        $assetID = $this->dao->select('assetID')->from(TABLE_HOST)->where('secret')->eq($secret)->fetch('assetID');
+        $this->dao = $this->loadModel('common')->dao;
+        $assetID = $this->dao->select('assetID')->from(TABLE_HOST)
+            ->beginIF($secret)->where('secret')->eq($secret)->fi()
+            ->beginIF(!$secret)->where('token')->eq($token)
+            ->andWhere('expiredDate')->gt($now)->fi()
+            ->fetch('assetID');
+        if(!$assetID) return $this->sendError(400, 'Secret error.');
+
+        $this->dao->update(TABLE_HOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
         $this->dao->update(TABLE_ASSET)->set('registerDate')->eq($now)->where('id')->eq($assetID)->exec();
 
-        $this->sendSuccess(200, 'success');
+        if(!$secret) return $this->send(200, 'success');
+        unset($host->status);
+        return $this->send(200, $host);
     }
 }

@@ -118,11 +118,11 @@ class zahost extends control
         $templateList = $this->zahost->getVMTemplateList($hostID, $browseType, $queryID, $orderBy, $pager);
 
         /* Build the search form. */
-        //$actionURL = $this->createLink('zahost', 'browseVM', "browseType=bySearch&queryID=myQueryID");
-        //$this->config->zaTemplate->search['actionURL'] = $actionURL;
-        //$this->config->zaTemplate->search['queryID']   = $queryID;
-        //$this->config->zaTemplate->search['onMenuBar'] = 'no';
-        //$this->loadModel('search')->setSearchParams($this->config->zaTemplate->search);
+        $actionURL = $this->createLink('zahost', 'browseTemplate', "hostID=$hostID&browseType=bySearch&queryID=myQueryID");
+        $this->config->vmTemplate->search['actionURL'] = $actionURL;
+        $this->config->vmTemplate->search['queryID']   = $queryID;
+        $this->config->vmTemplate->search['onMenuBar'] = 'no';
+        $this->loadModel('search')->setSearchParams($this->config->vmTemplate->search);
 
         $this->view->title        = $this->lang->zahost->vmTemplate->common;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');

@@ -25,7 +25,7 @@
   </div>
   <?php endif;?>
 </div>
-<div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='zahost'></div>
+<div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
 <div id='mainContent' class='main-table'>
   <?php $vars = "hostID=$hostID&browseType=all&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
   <?php if(empty($templateList)):?>
@@ -41,12 +41,12 @@
       <tr>
         <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->zahost->name);?></th>
-        <th class='c-number w-100px'><?php common::printOrderLink('cpuCoreNum', $orderBy, $vars, $lang->zahost->cpuCoreNum);?></th>
-        <th class='c-number w-100px'><?php common::printOrderLink('memorySize', $orderBy, $vars, $lang->zahost->memory);?></th>
-        <th class='c-number w-100px'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zahost->diskSize);?></th>
-        <th class='c-type w-150px'><?php common::printOrderLink('osCategory', $orderBy, $vars, $lang->zahost->osCategory);?></th>
-        <th class='c-type w-150px'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->zahost->osType);?></th>
-        <th class='c-type w-150px'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->zahost->osVersion);?></th>
+        <th class='c-number'><?php common::printOrderLink('cpuCoreNum', $orderBy, $vars, $lang->zahost->cpuCoreNum);?></th>
+        <th class='c-number'><?php common::printOrderLink('memorySize', $orderBy, $vars, $lang->zahost->memory);?></th>
+        <th class='c-number'><?php common::printOrderLink('diskSize', $orderBy, $vars, $lang->zahost->diskSize);?></th>
+        <th class='c-os'><?php common::printOrderLink('osCategory', $orderBy, $vars, $lang->zahost->osCategory);?></th>
+        <th class='c-os'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->zahost->osType);?></th>
+        <th class='c-os'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->zahost->osVersion);?></th>
         <th class='c-lang'><?php common::printOrderLink('osLang', $orderBy, $vars, $lang->zahost->osLang);?></th>
       </tr>
     </thead>
