@@ -132,6 +132,7 @@
           <td></td>
           <td></td>
         </tr>
+        <?php if($project->hasProduct):?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -182,6 +183,7 @@
             </div>
           </td>
         </tr>
+        <?php endif;?>
         <?php if($project->model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
