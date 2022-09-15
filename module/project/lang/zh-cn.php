@@ -341,5 +341,3 @@ $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户�
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-
-$lang->project->moduleMenu = array('link' => '模块|tree|browse|product=%s&view=story');

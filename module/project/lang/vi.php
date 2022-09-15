@@ -241,5 +241,3 @@ $lang->project->childLongTime     = "There are long-term projects in the child p
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
-
-$lang->project->moduleMenu = array('link' => 'Module|tree|browse|product=%s&view=story');

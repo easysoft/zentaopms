@@ -851,14 +851,6 @@ class project extends control
 
         $this->executeHooks($projectID);
 
-        if(empty($project->hasProduct))
-        {
-            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch()->product;
-            $this->lang->project->moduleMenu['link'] = sprintf($this->lang->project->moduleMenu['link'], $projectProduct);
-            $this->lang->project->menu->settings['subMenu']->tree = $this->lang->project->moduleMenu;
-            unset($this->lang->project->menu->settings['subMenu']->products);
-        }
-
         $this->view->title        = $this->lang->project->view;
         $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
@@ -1992,6 +1984,7 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
+
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
