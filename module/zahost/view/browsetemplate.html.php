@@ -27,7 +27,7 @@
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
 <div id='mainContent' class='main-table'>
-  <?php $vars = "hostID=$hostID&browseType=all&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+  <?php $vars = "hostID=$hostID&browseType=all&param=0&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
   <?php if(empty($templateList)):?>
   <div class="table-empty-tip">
     <p>
