@@ -137,7 +137,7 @@ class zahostModel extends model
             }
         }
 
-        $template->createdBy = $this->app->user->account;
+        $template->createdBy   = $this->app->user->account;
         $template->createdDate = helper::now();
 
         $this->dao->insert(TABLE_VMTEMPLATE)->data($template) ->autoCheck()->exec();
