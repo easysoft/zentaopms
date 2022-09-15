@@ -4,7 +4,7 @@ $config->zahost->create->requiredFields = 'name,hostType,publicIP,cpuCores,memor
 $config->zahost->create->ipFields       = 'publicIP';
 
 $config->zahost->createtemplate = new stdclass();
-$config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageFile';
+$config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
 
 $config->zahost->os = new stdClass();
 $config->zahost->os->list = array();

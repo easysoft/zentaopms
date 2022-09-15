@@ -7537,7 +7537,7 @@ CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `memorySize` int NOT NULL DEFAULT 0,
   `diskSize` int NOT NULL DEFAULT 0,
   `osArch` varchar(50) NOT NULL,
-  `imageFile` varchar(300) NOT NULL,
+  `imageName` varchar(50) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,

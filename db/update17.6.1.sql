@@ -5,7 +5,7 @@ ALTER TABLE `zt_host` ADD `expiredDate` datetime NOT NULL AFTER `type`;
 ALTER TABLE `zt_host` ADD `virtualSoftware` varchar(30) NOT NULL DEFAULT '' AFTER `secret`;
 ALTER TABLE `zt_asset` ADD `registerDate`  datetime NOT NULL AFTER `editedDate`;
 ALTER TABLE `zt_vmtemplate` ADD `type` varchar(30) NOT NULL DEFAULT 'normal' AFTER `hostID`;
-ALTER TABLE `zt_vmtemplate` ADD `imageFile` varchar(300) NOT NULL;
+ALTER TABLE `zt_vmtemplate` ADD `imageName` varchar(50) NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `createdBy` varchar(30) NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `createdDate` datetime NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `editedBy` varchar(30) NOT NULL;
