@@ -205,14 +205,6 @@ class install extends control
         if(!empty($_POST))
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
-
-            if($this->post->mode == 'lite')
-            {
-                /* lite mode create default program. */
-                $programID = $this->loadModel('project')->createDefaultProgram();
-                /* set default program config. */
-                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
-            }
             return print(js::locate(inlink('step5'), 'parent'));
         }
 
@@ -246,6 +238,15 @@ class install extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
+
+            if($this->config->systemMode == 'lite')
+            {
+                /* lite mode create default program. */
+                $programID = $this->loadModel('project')->createDefaultProgram();
+                /* set default program config. */
+                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+            }
+
             if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData));
 
             $this->loadModel('setting');
