@@ -335,3 +335,5 @@ $lang->project->confirmUnlinkMember = "Do you want to remove this user from proj
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+
+$lang->project->defaultProgram = 'Default program';

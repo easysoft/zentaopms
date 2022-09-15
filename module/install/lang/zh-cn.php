@@ -40,6 +40,7 @@ $lang->install->links = <<<EOT
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+$lang->install->selectMode          = "请选择使用模式";
 $lang->install->introduction        = "禅道15系列功能介绍";
 $lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/program0716.mp4';

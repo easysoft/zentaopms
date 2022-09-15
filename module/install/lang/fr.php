@@ -40,6 +40,7 @@ Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
+$lang->install->selectMode          = "Select mode";
 $lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
