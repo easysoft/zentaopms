@@ -87,13 +87,12 @@ class zahostModel extends model
         $oldHost  = $this->getById($hostID);
         $hostInfo = fixer::input('post')->get();
 
-        $this->dao->update(TABLE_HOST)->data($hostInfo)
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('diskSize,memory', 'float');
         if(dao::isError()) return false;
 
         $assetInfo['name']       = $hostInfo->name;
-        $assetInfo['group']      = $hostInfo->group;
         $assetInfo['editedBy']   = $this->app->user->account;
         $assetInfo['editedDate'] = helper::now();
 
@@ -103,7 +102,10 @@ class zahostModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->dao->update(TABLE_HOST)->data($hostInfo, 'name')->autoCheck()->where('id')->eq($hostID)->exec();
+        $this->dao->update(TABLE_HOST)->data($hostInfo, 'name')->autoCheck()
+            ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
+            ->batchCheck('diskSize,memory', 'float')
+            ->where('id')->eq($hostID)->exec();
         return common::createChanges($oldHost, $hostInfo);
     }
 
