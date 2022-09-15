@@ -110,7 +110,7 @@ class zahostModel extends model
     /**
      * Create vm template.
      *
-     * @param Object  $host
+     * @param  object  $host
      * @access public
      * @return void
      */
