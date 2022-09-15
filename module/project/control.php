@@ -1984,7 +1984,6 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
-
         if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
