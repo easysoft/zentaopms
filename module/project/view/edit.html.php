@@ -75,7 +75,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->type;?></th>
+          <th id='projectType'><?php echo $lang->project->type;?></th>
           <td>
             <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
             <?php echo html::hidden('hasProduct', $project->hasProduct);?>
