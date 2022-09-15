@@ -285,6 +285,12 @@ class tree extends control
             }
         }
 
+        if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            if(empty($project->hasProduct)) $this->view->root->name = $project->name;
+        }
+
         $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
         $this->view->position        = $position;
