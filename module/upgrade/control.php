@@ -632,6 +632,28 @@ class upgrade extends control
     }
 
     /**
+     * Select the merge mode when upgrading to zentaopms 18.0.
+     *
+     * @param  string  $fromVersion
+     * @access public
+     * @return void
+     */
+    public function selectMergeMode($fromVersion)
+    {
+        if($_POST)
+        {
+            $mode = $this->post->mode;
+            if($mode == 'project')   echo 'execute mergeData method';
+            if($mode == 'execution') echo 'execute mergeData method';
+            if($mode == 'manual')    $this->locate(inlink('mergeProgram'));
+
+            $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+        }
+        $this->view->title = $this->lang->upgrade->selectMergeMode;
+        $this->display();
+    }
+
+    /**
      * Rename object in upgrade.
      *
      * @param  string $type  project|product|execution
