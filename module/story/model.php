@@ -4266,7 +4266,12 @@ class storyModel extends model
                 // $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                $menu .= "<div class='dividing-line'></div>";
+                if((common::hasPriv('story', 'processStoryChange') || common::hasPriv('story', 'change') || common::hasPriv('story', 'submitReview') || common::hasPriv('story', 'review') || common::hasPriv('story', 'recall')) &&
+                    (common::hasPriv('story', 'edit') || common::hasPriv('story', 'createCase') || common::hasPriv('story', 'batchCreate') || common::hasPriv('projectstory', 'unlinkStory')))
+                {
+                    $menu .= "<div class='dividing-line'></div>";
+                }
+                
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';
