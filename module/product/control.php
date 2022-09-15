@@ -295,6 +295,9 @@ class product extends control
             unset($this->config->product->search['fields']['stage']);
         }
 
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
+
         /* Build search form. */
         $rawModule = $this->app->rawModule;
         $rawMethod = $this->app->rawMethod;
@@ -347,7 +350,7 @@ class product extends control
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
-        $this->view->project         = $this->loadModel('project')->getByID($projectID);
+        $this->view->project         = $project;
         $this->display();
     }
 
