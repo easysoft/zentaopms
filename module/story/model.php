@@ -4254,9 +4254,16 @@ class storyModel extends model
                 $isClick = $this->isClickable($story, 'recall');
                 $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
                 $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
+                $menu .= "<div class='btn-group dropup' style='margin-left:-5px;'>";
+                $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
+                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu' style='min-width:auto; padding: 5px;'>";
                 $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+                $menu .= "</ul>";
+                $menu .= "</div>";
+                // $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
+                $menu .= "<div class='dividing-line'></div>";
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';
