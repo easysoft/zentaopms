@@ -165,4 +165,22 @@ class zahost extends control
 
         $this->display();
     }
+
+    /**
+     * Check IP format and generate secret.
+     *
+     * @param  string $IP
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckPublicIP($IP)
+    {
+        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP)))));
+
+        $secret = md5(time());
+        $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
+
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => array( 'registerCommand' => $registerCommand, 'secret' => $secret)));
+
+    }
 }

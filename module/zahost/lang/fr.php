@@ -67,4 +67,5 @@ $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 $lang->zahost->confirmDelete = 'Do you want to delete this host?';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->ip = '『%s』incorrect format!';
+$lang->zahost->notice->ip              = '『%s』incorrect format!';
+$lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
