@@ -397,7 +397,8 @@ $lang->qa->menuOrder[40] = 'caselib';
 $lang->qa->menuOrder[45] = 'zahost';
 
 $lang->qa->menu->zahost['subMenu'] = new stdclass();
-$lang->qa->menu->zahost['subMenu']->browse = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
+$lang->qa->menu->zahost['subMenu']->browse        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
+$lang->qa->menu->zahost['subMenu']->executionnode = array('link' => "{$lang->executionnode->common}|executionnode|browse", 'subModule' => 'executionnode');
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
 // $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');

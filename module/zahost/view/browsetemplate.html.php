@@ -27,7 +27,7 @@
 </div>
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>' data-module='vmTemplate'></div>
 <div id='mainContent' class='main-table'>
-  <?php $vars = "hostID=$hostID&browseType=all&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+  <?php $vars = "hostID=$hostID&browseType=all&param=0&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
   <?php if(empty($templateList)):?>
   <div class="table-empty-tip">
     <p>
@@ -56,8 +56,8 @@
         <td><?php echo $template->id;?></td>
         <td title="<?php echo $template->name;?>"><?php echo $template->name;?></td>
         <td><?php echo $template->cpuCoreNum;?></td>
-        <td><?php echo $template->memorySize;?></td>
-        <td><?php echo $template->diskSize;?></td>
+        <td><?php echo $template->memorySize . zget($this->lang->zahost->unitList, 'GB');?></td>
+        <td><?php echo $template->diskSize . $template->unit;?></td>
         <td><?php echo zget($config->zahost->os->list, $template->osCategory);?></td>
         <td><?php echo zget($config->zahost->os->type[$template->osCategory], $template->osType);?></td>
         <td><?php echo zget($lang->zahost->versionList[$template->osType], $template->osVersion);?></td>

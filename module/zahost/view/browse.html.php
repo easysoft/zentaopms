@@ -34,7 +34,7 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->zahost->empty;?></span>
-        <?php if(common::hasPriv('host', 'create')) common::printLink('host', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->zahost->create, '', 'class="btn btn-info"');?>
+        <?php if(common::hasPriv('zahost', 'create')) common::printLink('zahost', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->zahost->create, '', 'class="btn btn-info"');?>
       </p>
     </div>
     <?php else:?>
@@ -59,9 +59,9 @@
       <tbody>
         <?php foreach($hostList as $host):?>
         <tr class='text-left'>
-          <td><?php printf('%03d', $host->id);?></td>
-          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->id"), $host->name) : $host->name;?></td>
-          <td><?php echo zget($lang->zahost->zaHostType, $host->hostType);?></td>
+          <td><?php printf('%03d', $host->hostID);?></td>
+          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->hostID"), $host->name) : $host->name;?></td>
+          <td><?php echo zget($lang->zahost->zaHostTypeList, $host->hostType);?></td>
           <td><?php echo $host->publicIP;?></td>
           <td><?php echo $host->cpuCores;?></td>
           <td><?php echo $host->memory . $lang->zahost->unitList['GB'];?></td>
@@ -82,13 +82,4 @@
     <?php endif;?>
   </div>
 </div>
-<script>
-$(function()
-{
-    <?php if($browseType == 'bymodule'):?>
-    $('#module<?php echo $param?>').closest('li').addClass('active');
-    <?php endif;?>
-    if(browseType == 'bysearch') $.toggleQueryBox(true);
-})
-</script>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
