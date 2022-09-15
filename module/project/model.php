@@ -1269,7 +1269,7 @@ class projectModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = !$project->hasProduct ? "{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
+                $product->name           = !$project->hasProduct ? "SHADOW_{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
                 $product->shadow         = (int)empty($project->hasProduct);
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;

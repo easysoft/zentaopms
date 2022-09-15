@@ -1096,7 +1096,7 @@ CREATE TABLE IF NOT EXISTS `zt_planstory` (
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `program` mediumint(8) unsigned NOT NULL,
-  `name` varchar(90) NOT NULL,
+  `name` varchar(110) NOT NULL,
   `code` varchar(45) NOT NULL,
   `shadow` tinyint(1) unsigned NOT NULL,
   `bind` enum('0','1') NOT NULL DEFAULT '0',
