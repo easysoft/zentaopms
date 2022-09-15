@@ -13,7 +13,6 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('zahostConfig', $config->zahost);?>
 <?php js::set('zahostLang',   $lang->zahost);?>
-<?php js::set('templateID', '');?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->zahost->createTemplate;?></h2>
@@ -21,7 +20,7 @@
   <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
     <table class='table table-form'>
       <tr>
-        <th class='w-120px'><?php echo $lang->zahost->name;?></th>
+        <th class='w-200px'><?php echo $lang->zahost->name;?></th>
         <td><?php echo html::input('name', '', "class='form-control'");?></td>
         <td></td>
       </tr>
@@ -34,7 +33,7 @@
         <td>
           <div class='input-group'>
             <?php echo html::input('memorySize', '', "class='form-control'");?>
-            <span class="input-group-addon">MB</span>
+            <span class='input-group-addon'>MB</span>
           </div>
         </td>
       </tr>
@@ -43,7 +42,7 @@
         <td>
           <div class='input-group'>
             <?php echo html::input('diskSize', '', "class='form-control'");?>
-            <span class='input-group-addon id='unit'>GB</span>
+            <span class='input-group-addon' id='unit'>GB</span>
           </div>
         </td>
       </tr>
@@ -64,8 +63,7 @@
         <td><?php echo html::select('osLang', $lang->zahost->langList, '', "class='form-control chosen'")?></td>
       <tr>
         <th><?php echo $lang->zahost->vmTemplate->imageFile;?></th>
-        <td><?php echo html::select('imageFile', '', '', "class='form-control chosen'")?></td>
-      </tr>
+        <td><?php echo html::select('macAddress', $imageFiles, '', "class='form-control chosen'")?></td>
       </tr>
       <tr>
         <td colspan='2' class='text-center form-actions'>

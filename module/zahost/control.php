@@ -150,17 +150,22 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function createTemplate()
+    public function createTemplate($hostID)
     {
+        $host = $this->zahost->getById($hostID);
         if($_POST)
         {
-            $this->zahost->createTemplate();
+            $this->zahost->createTemplate($host);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
         }
 
-        $this->view->title = $this->lang->zahost->createTemplate;
+        $imageFiles        = $this->zahost->imageFiles($host);
+        $imageFilesOptions = array_combine(array_column($imageFiles, 'macAddress'), array_column($imageFiles, 'name'));
+
+        $this->view->title      = $this->lang->zahost->createTemplate;
+        $this->view->imageFiles = $imageFilesOptions;
         $this->display();
     }
 

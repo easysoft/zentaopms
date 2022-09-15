@@ -112,10 +112,11 @@ class zahostModel extends model
     /**
      * Create vm template.
      *
+     * @param  object  $host
      * @access public
      * @return void
      */
-    public function createTemplate()
+    public function createTemplate($host)
     {
         $template = fixer::input('post')
             ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
@@ -124,12 +125,43 @@ class zahostModel extends model
         $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
             ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
             ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
-            ->autoCheck()
-            ->exec();
+            ->autoCheck();
+        if(dao::isError()) return false;
+
+        $vmTemplateList = $this->imageFiles($host);
+        foreach($vmTemplateList as $vmTemp)
+        {
+            if($vmTemp->macAddress == $template->macAddress)
+            {
+                $template->imageFile = $vmTemp->diskFile;
+                unset($template->macAddress);
+                break;
+            }
+        }
+
+        $template->createdBy   = $this->app->user->account;
+        $template->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_VMTEMPLATE)->data($template) ->autoCheck()->exec();
         if(dao::isError()) return false;
 
         $templateID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('vmtemplate', $templateID, 'Created');
+    }
+
+    /**
+     * Get image files from ZAgent server.
+     *
+     * @param  object $host
+     * @access public
+     * @return array
+     */
+    public function imageFiles($host)
+    {
+        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
+        if(empty($result) || $result->code != 200) return array();
+
+        return $result->data;
     }
 
     /**
