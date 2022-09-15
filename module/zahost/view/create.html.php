@@ -13,7 +13,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->zahost->create?></h2>
+    <h2><?php echo $lang->zahost->create;?></h2>
   </div>
   <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
     <table class='table table-form'>

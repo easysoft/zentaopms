@@ -110,7 +110,7 @@ class zahostModel extends model
     /**
      * Create vm template.
      *
-     * @param  object  $host
+     * @param  object $host
      * @access public
      * @return void
      */
@@ -121,7 +121,7 @@ class zahostModel extends model
             ->get();
 
         $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
-            ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
+            ->batchCheck($this->config->zahost->createtemplate->requiredFields, 'notempty')
             ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
             ->autoCheck();
         if(dao::isError()) return false;
@@ -129,14 +129,14 @@ class zahostModel extends model
         $vmTemplateList = $this->imageFiles($host);
         foreach($vmTemplateList as $vmTemp)
         {
-            if($vmTemp->macAddress == $template->macAddress)
+            if($vmTemp->macAddress == $template->imageFile)
             {
                 $template->imageFile = $vmTemp->diskFile;
-                unset($template->macAddress);
                 break;
             }
         }
 
+        $template->hostID      = $host->id;
         $template->createdBy   = $this->app->user->account;
         $template->createdDate = helper::now();
 

@@ -3,8 +3,8 @@ $config->zahost->create = new stdclass();
 $config->zahost->create->requiredFields = 'name,hostType,publicIP,cpuCores,memory,diskSize,virtualSoftware,instanceNum';
 $config->zahost->create->ipFields       = 'publicIP';
 
-$config->zahost->createTemplate = new stdclass();
-$config->zahost->createTemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang';
+$config->zahost->createtemplate = new stdclass();
+$config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageFile';
 
 $config->zahost->os = new stdClass();
 $config->zahost->os->list = array();
