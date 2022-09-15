@@ -154,12 +154,12 @@ class dtable
     }
 
     /**
-     * Get final js code.
+     * Show dtable codes.
      *
      * @access public
      * @return string
      */
-    public function exportJS()
+    public function show()
     {
 
     }

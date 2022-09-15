@@ -111,8 +111,7 @@ class productModel extends model
         }
         $this->session->set('currentProductType', $currentProduct->type);
 
-        $executionID = ($isQaModule and $this->app->tab == 'execution') ? $extra : 0;
-        $output      = '';
+        $output = '';
         if(!empty($products))
         {
             $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
@@ -127,8 +126,8 @@ class productModel extends model
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
 
-                $branches   = $this->loadModel('branch')->getPairs($productID, 'all', $executionID);
-                $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+                $branches   = $this->loadModel('branch')->getPairs($productID, 'all');
+                $branchName = $branches[$branch];
                 if(!$isMobile)
                 {
                     $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");

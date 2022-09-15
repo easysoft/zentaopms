@@ -1038,12 +1038,9 @@ class task extends control
                 return print(js::error(dao::getError()));
             }
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Started';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Started';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
             $this->loadModel('common')->syncPPEStatus($taskID);
@@ -1447,12 +1444,9 @@ class task extends control
             $changes = $this->task->start($taskID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 
