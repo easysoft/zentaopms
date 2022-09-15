@@ -309,6 +309,11 @@ class product extends control
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
+        $project = $this->loadModel('project')->getByID($projectID);
+
+        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
+        var_dump(empty($project->hasProduct));
+
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
         $this->view->position[]      = $productName;
@@ -347,7 +352,7 @@ class product extends control
         $this->view->storyType       = $storyType;
         $this->view->from            = $this->app->tab;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
-        $this->view->project         = $this->loadModel('project')->getByID($projectID);
+        $this->view->project         = $project;
         $this->display();
     }
 
