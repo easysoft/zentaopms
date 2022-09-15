@@ -1269,7 +1269,7 @@ class projectModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = !$project->hasProduct ? "{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
+                $product->name           = !$project->hasProduct ? "SHADOW_{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
                 $product->shadow         = (int)empty($project->hasProduct);
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
@@ -2436,6 +2436,7 @@ class projectModel extends model
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->getByID($objectID);
+
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2449,6 +2450,17 @@ class projectModel extends model
             $lang->project->menu        = $lang->{$model}->menu;
             $lang->project->menuOrder   = $lang->{$model}->menuOrder;
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
+        }
+
+        if(empty($project->hasProduct))
+        {
+            unset($this->lang->project->menu->settings['subMenu']->products);
+            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
+            $this->lang->project->menu->settings['subMenu']->module['link'] = sprintf($this->lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+        }
+        else
+        {
+            unset($this->lang->project->menu->settings['subMenu']->module);
         }
 
         /* Reset project priv. */
