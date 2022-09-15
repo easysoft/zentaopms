@@ -2436,6 +2436,7 @@ class projectModel extends model
         $model    = 'scrum';
         $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
         $project  = $this->getByID($objectID);
+
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2449,6 +2450,17 @@ class projectModel extends model
             $lang->project->menu        = $lang->{$model}->menu;
             $lang->project->menuOrder   = $lang->{$model}->menuOrder;
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
+        }
+
+        if(empty($project->hasProduct))
+        {
+            unset($this->lang->project->menu->settings['subMenu']->products);
+            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
+            $this->lang->project->menu->settings['subMenu']->module['link'] = sprintf($this->lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+        }
+        else
+        {
+            unset($this->lang->project->menu->settings['subMenu']->module);
         }
 
         /* Reset project priv. */
