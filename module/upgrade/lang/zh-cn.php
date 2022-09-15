@@ -161,3 +161,26 @@ include dirname(__FILE__) . '/version.php';
 $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = '取消';
 $lang->upgrade->recoveryActions->review = '评审';
+
+$lang->upgrade->mode             = '模式';
+$lang->upgrade->usage            = '使用场景';
+$lang->upgrade->leanUsage        = '概念更简单，功能也更简洁，适用于小型研发团队';
+$lang->upgrade->newUsage         = '概念较多，功能也更丰富，适用于中大型研发团队';
+$lang->upgrade->program          = '项目集';
+$lang->upgrade->productRR        = '产品-研发需求';
+$lang->upgrade->productUR        = '产品-用户需求';
+$lang->upgrade->productLine      = '产品-产品线';
+$lang->upgrade->projectScrum     = '项目-敏捷模型中的问题、风险、机会、过程、QA、会议';
+$lang->upgrade->projectWaterfull = '项目-瀑布模型';
+$lang->upgrade->projectKanban    = '项目-看板模型';
+$lang->upgrade->execution        = '执行、测试DevOps、看板、文档、统计、组织';
+$lang->upgrade->assetlib         = '资产库';
+$lang->upgrade->oa               = '办公、运维、反馈、学堂、工作流、后台';
+$lang->upgrade->selectUsage      = '请选择使用场景';
+$lang->upgrade->useLean          = '使用迅捷模式';
+$lang->upgrade->useNew           = '使用综合模式';
+$lang->upgrade->remark           = '备注';
+$lang->upgrade->remarkDesc       = '后续您还可以在系统的后台自定义中进行切换';
+
+$lang->upgrade->to18Mode['lite'] = '迅捷模式';
+$lang->upgrade->to18Mode['new']  = '综合模式';

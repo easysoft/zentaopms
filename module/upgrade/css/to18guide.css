@@ -1,0 +1,9 @@
+#mainContent tr td .icon-close {font-weight: bold; color: brown;}
+#mainContent tr td .icon-check {font-weight: bold; color: green;}
+
+#mainContent tr th {background-color: rgb(241, 241, 241);}
+#mainContent tr td {background-color: rgb(255, 255, 255); border-bottom: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238);}
+
+
+#useLean {background-color: #BDBBBE!important;}
+#useNew {background-color: #BDBBBE!important;}

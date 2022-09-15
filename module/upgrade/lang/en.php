@@ -161,3 +161,26 @@ include dirname(__FILE__) . '/version.php';
 $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = 'Cancel';
 $lang->upgrade->recoveryActions->review = 'Review';
+
+$lang->upgrade->mode             = 'Mode';
+$lang->upgrade->usage            = 'Usage scenarios';
+$lang->upgrade->leanUsage        = 'The concept is simpler, the functionality is simpler, and it is suitable for small R&D teams';
+$lang->upgrade->newUsage         = 'More concepts, more rich functions, suitable for large and medium R & D teams';
+$lang->upgrade->program          = 'Program';
+$lang->upgrade->productRR        = 'Product - R&D requirements';
+$lang->upgrade->productUR        = 'Product - User requirements';
+$lang->upgrade->productLine      = 'Product - Product Line';
+$lang->upgrade->projectScrum     = 'Project - Issues, risks, opportunities, processes, QA, meetings in Scrum model';
+$lang->upgrade->projectWaterfull = 'Project - Waterfall model';
+$lang->upgrade->projectKanban    = 'Project - Kanban model';
+$lang->upgrade->execution        = 'Execute, test, DevOps, Kanban, document, statistics, organize';
+$lang->upgrade->assetlib         = 'Assetlib';
+$lang->upgrade->oa               = 'OA, operation and maintenance, feedback, school, workflow, background';
+$lang->upgrade->selectUsage      = 'Select a scenario';
+$lang->upgrade->useLean          = 'Use Lean mode';
+$lang->upgrade->useNew           = 'User New mode';
+$lang->upgrade->remark           = 'Remark';
+$lang->upgrade->remarkDesc       = 'You can also switch between the background customization of the system later';
+
+$lang->upgrade->to18Mode['Lean'] = 'Lean';
+$lang->upgrade->to18Mode['new']  = 'New';
