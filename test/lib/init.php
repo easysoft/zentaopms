@@ -62,10 +62,10 @@ include $testPath . 'config/config.php';
 include $testPath. 'lib/db.class.php';
 include $testPath. 'lib/rest.php';
 $db   = new db();
-$rest = new rest($config->test->base);
 
-if(isset($config->test->account, $config->test->password))
+if(!empty($config->test->account) and !empty($config->test->password) and !empty($config->test->base))
 {
+    $rest  = new rest($config->test->base);
     $token = $rest->post('/tokens', array('account' => $config->test->account, 'password' => $config->test->password));
     $token = $token->body;
 }
