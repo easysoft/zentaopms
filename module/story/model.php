@@ -4256,11 +4256,7 @@ class storyModel extends model
                 $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
 
                 $storyPriv      = array(common::hasPriv('story', 'processStoryChange'), common::hasPriv('story', 'change'), common::hasPriv('story', 'submitReview'), common::hasPriv('story', 'review'), common::hasPriv('story', 'close'));
-                $storyPrivCount = 0;
-                foreach($storyPriv as $value)
-                {
-                    if($value == 1) $storyPrivCount ++;
-                }
+                $storyPrivCount = array_sum($storyPriv);
                 if(common::hasPriv('story', 'recall') && ($storyPrivCount > 1))
                 {
                     $menu .= "<div class='btn-group dropup' style='margin-left:-5px;'>";
