@@ -99,26 +99,29 @@ $lang->upgrade->to15Mode['new']     = 'Use the program mode';
 $lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the Program mode in the Admin-Custom-Custom later.';
 $lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
-$lang->upgrade->line           = 'Product Line';
-$lang->upgrade->allLines       = "All Product Lines";
-$lang->upgrade->program        = 'Merge Project';
-$lang->upgrade->existProgram   = 'Existing programs';
-$lang->upgrade->existProject   = 'Existing projects';
-$lang->upgrade->existLine      = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product        = $lang->productCommon;
-$lang->upgrade->project        = 'Iteration';
-$lang->upgrade->repo           = 'Repo';
-$lang->upgrade->mergeRepo      = 'Merge Repo';
-$lang->upgrade->setProgram     = 'Set the project to which the program belongs';
-$lang->upgrade->dataMethod     = 'Data migration method';
-$lang->upgrade->begin          = 'Begin Date';
-$lang->upgrade->end            = 'End Date';
-$lang->upgrade->selectProject  = 'The target project';
-$lang->upgrade->programName    = 'Program Name';
-$lang->upgrade->projectName    = 'Project Name';
-$lang->upgrade->compatibleEXT  = 'Extension mechanism compatible';
-$lang->upgrade->fileName       = 'File Name';
-$lang->upgrade->next           = 'Next';
+$lang->upgrade->line            = 'Product Line';
+$lang->upgrade->allLines        = "All Product Lines";
+$lang->upgrade->program         = 'Merge Project';
+$lang->upgrade->existProgram    = 'Existing programs';
+$lang->upgrade->existProject    = 'Existing projects';
+$lang->upgrade->existLine       = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product         = $lang->productCommon;
+$lang->upgrade->project         = 'Iteration';
+$lang->upgrade->repo            = 'Repo';
+$lang->upgrade->mergeRepo       = 'Merge Repo';
+$lang->upgrade->setProgram      = 'Set the project to which the program belongs';
+$lang->upgrade->dataMethod      = 'Data migration method';
+$lang->upgrade->selectMergeMode = 'Please select the data merging method';
+$lang->upgrade->mergeMode       = 'Data consolidation method : ';
+$lang->upgrade->begin           = 'Begin Date';
+$lang->upgrade->end             = 'End Date';
+$lang->upgrade->selectProject   = 'The target project';
+$lang->upgrade->programName     = 'Program Name';
+$lang->upgrade->projectName     = 'Project Name';
+$lang->upgrade->compatibleEXT   = 'Extension mechanism compatible';
+$lang->upgrade->fileName        = 'File Name';
+$lang->upgrade->next            = 'Next';
+$lang->upgrade->back            = 'Back';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->editedName         = 'New Name';
@@ -155,6 +158,15 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
 <p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
+
+$lang->upgrade->mergeModes = array();
+$lang->upgrade->mergeModes['project']   = 'Automatically merge data and upgrade historical projects as projects';
+$lang->upgrade->mergeModes['execution'] = 'Automatically merge data and upgrade historical projects as executions';
+$lang->upgrade->mergeModes['manually']  = 'Manually merge data';
+
+$lang->upgrade->mergeProjectTip   = 'The historical project will be synchronized directly to the new version of the project. At the same time, the system will create an iteration with the same name as the project according to the historical project, and migrate the tasks, requirements, bugs and other data under the previous project to the iteration.';
+$lang->upgrade->mergeExecutionTip = 'The system will automatically create projects by year, and merge the historical iteration data into the corresponding projects by year.';
+$lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
 
 include dirname(__FILE__) . '/version.php';
 

@@ -645,7 +645,7 @@ class upgrade extends control
             $mode = $this->post->mode;
             if($mode == 'project')   echo 'execute mergeData method';
             if($mode == 'execution') echo 'execute mergeData method';
-            if($mode == 'manual')    $this->locate(inlink('mergeProgram'));
+            if($mode == 'manually')  $this->locate(inlink('mergeProgram'));
 
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }

@@ -40,7 +40,7 @@
           </table>
         </div>
         <div class='panel-footer text-center'>
-          <?php echo html::commonButton($lang->upgrade->back, '','btn btn-wide btn-secondary');?>
+          <?php echo html::commonButton($lang->upgrade->back, '', 'btn btn-wide btn-secondary');?>
           <?php echo html::submitButton($lang->upgrade->next);?>
         </div>
       </form>

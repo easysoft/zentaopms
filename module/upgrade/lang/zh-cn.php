@@ -149,7 +149,6 @@ EOT;
 $lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
 $lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为执行升级";
 
-
 $lang->upgrade->createProjectTip = <<<EOT
 <p>升级后历史的{$lang->projectCommon}一一对应新版本中的项目。</p>
 <p>系统会根据历史{$lang->projectCommon}分别创建一个与该{$lang->projectCommon}同名的执行，并将之前{$lang->projectCommon}的任务、需求、Bug等数据迁移至执行中。</p>
@@ -163,11 +162,11 @@ EOT;
 $lang->upgrade->mergeModes = array();
 $lang->upgrade->mergeModes['project']   = '自动归并数据，将历史的项目作为项目升级';
 $lang->upgrade->mergeModes['execution'] = '自动归并数据，将历史的项目作为迭代升级';
-$lang->upgrade->mergeModes['manual']    = '手工归并数据';
+$lang->upgrade->mergeModes['manually']    = '手工归并数据';
 
 $lang->upgrade->mergeProjectTip   = '历史的项目将直接同步到新版本的项目中，同时系统将会根据历史项目分别创建一个与该项目同名的迭代，并将之前项目下的任务、需求、Bug等数据迁移至迭代中。';
 $lang->upgrade->mergeExecutionTip = '系统将自动按年创建项目，将历史的迭代数据按照年份归并到对应的项目下。';
-$lang->upgrade->mergeManualTip    = '可以手工选择数据归并的方式';
+$lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
 include dirname(__FILE__) . '/version.php';
 
