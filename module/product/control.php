@@ -295,6 +295,9 @@ class product extends control
             unset($this->config->product->search['fields']['stage']);
         }
 
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
+
         /* Build search form. */
         $rawModule = $this->app->rawModule;
         $rawMethod = $this->app->rawMethod;
@@ -308,11 +311,6 @@ class product extends control
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
 
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
-
-        $project = $this->loadModel('project')->getByID($projectID);
-
-        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
-        var_dump(empty($project->hasProduct));
 
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
