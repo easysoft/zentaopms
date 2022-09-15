@@ -75,6 +75,13 @@
         </tr>
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->project->type;?></th>
+          <td>
+            <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
+            <?php echo html::hidden('hasProduct', $project->hasProduct);?>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
