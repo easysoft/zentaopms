@@ -49,6 +49,11 @@ $lang->zahost->vmTemplate->osVersion  = $lang->zahost->osVersion;
 $lang->zahost->vmTemplate->osLang     = $lang->zahost->osLang;
 $lang->zahost->vmTemplate->imageFile  = $lang->zahost->imageFile;
 
+$lang->vm->langList = array();
+$lang->vm->langList['zh_cn'] = 'Simplified Chinese';
+$lang->vm->langList['zh_tw'] = 'Traditional Chinese';
+$lang->vm->langList['en_us'] = 'American English';
+
 $lang->zahost->empty         = 'No Host';
 $lang->zahost->templateEmpty = 'No Template';
 
@@ -65,6 +70,34 @@ $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 //$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
 
 $lang->zahost->confirmDelete = 'Do you want to delete this host?';
+
+$lang->vm->versionList = array();
+$lang->vm->versionList['winxp']['all']          = 'Windows XP';
+$lang->vm->versionList['win7']['home']          = 'Home Basic';
+$lang->vm->versionList['win7']['professional']  = 'Professional';
+$lang->vm->versionList['win7']['enterprise']    = 'Enterprise';
+$lang->vm->versionList['win7']['ultimate']      = 'Ultimate';
+$lang->vm->versionList['win10']['home']         = 'Home Basic';
+$lang->vm->versionList['win10']['professional'] = 'Professional';
+$lang->vm->versionList['win10']['enterprise']   = 'Enterprise';
+$lang->vm->versionList['win10']['ultimate']     = 'Ultimate';
+$lang->vm->versionList['win11']['home']         = 'Home Basic';
+$lang->vm->versionList['win11']['professional'] = 'Professional';
+$lang->vm->versionList['win11']['enterprise']   = 'Enterprise';
+$lang->vm->versionList['win11']['ultimate']     = 'Ultimate';
+$lang->vm->versionList['winServer']['2008']     = '2008';
+$lang->vm->versionList['winServer']['2012']     = '2012';
+$lang->vm->versionList['winServer']['2016']     = '2016';
+$lang->vm->versionList['winServer']['2019']     = '2019';
+$lang->vm->versionList['debian']['9']           = '9';
+$lang->vm->versionList['debian']['10']          = '10';
+$lang->vm->versionList['debian']['11']          = '11';
+$lang->vm->versionList['ubuntu']['16']          = '16';
+$lang->vm->versionList['ubuntu']['18']          = '18';
+$lang->vm->versionList['ubuntu']['20']          = '20';
+$lang->vm->versionList['centos']['6']           = '6';
+$lang->vm->versionList['centos']['7']           = '7';
+$lang->vm->versionList['centos']['8']           = '8';
 
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』incorrect format!';
