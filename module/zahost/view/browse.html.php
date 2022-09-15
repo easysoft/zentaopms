@@ -72,7 +72,7 @@
           <td><?php echo $host->registerDate;?></td>
           <td class='c-actions'>
             <?php common::printIcon('zahost', 'edit', "hostID={$host->hostID}", $host, 'list');?>
-            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->hostID}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+            <?php if(common::hasPriv('zahost', 'delete')) echo html::a($this->createLink('zahost', 'delete', "hostID={$host->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
           </td>
         </tr>
         <?php endforeach;?>

@@ -105,6 +105,45 @@ class zahost extends control
         $this->display();
     }
 
+
+    /**
+     * Delete host.
+     *
+     * @param  int    $assetID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function delete($assetID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
+        }
+
+        $this->dao->update(TABLE_ASSET)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
+        $this->loadModel('action')->create('zahost', $assetID, 'deleted');
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
+        }
+
+        if(isonlybody())die(js::reload('parent.parent'));
+        die(js::locate($this->createLink('zahost', 'browse'), 'parent'));
+    }
+
     /**
      * Create template.
      *
