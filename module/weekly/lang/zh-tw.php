@@ -37,3 +37,5 @@ $lang->weekly->ev = '實際完成的工作(EV)';
 $lang->weekly->ac = '實際花費的成本(AC)';
 $lang->weekly->sv = '進度偏差率(SV%)';
 $lang->weekly->cv = '成本偏差率（CV%）';
+
+$lang->weekly->totalCount = '總計 : %u 個任務';

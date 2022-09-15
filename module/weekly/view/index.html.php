@@ -74,10 +74,11 @@
         </tr>
       </thead>
       <tbody>
+        <?php $totalCount = 0;?>
         <?php foreach($finished as $task):?>
         <tr data-id='<?php echo $task->id ?>'>
           <td class='c-id'>
-            <?php printf('%03d', $task->id);?>
+            <?php printf('%03d', $task->id); $totalCount++;?>
           </td>
           <td class='text-left' title='<?php echo $task->name?>'>
             <?php echo html::a($this->createLink('task', 'view', 'id=' . $task->id), $task->name); ?>
@@ -90,6 +91,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, $totalCount);?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->postponed;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -105,10 +107,11 @@
         </tr>
       </thead>
       <tbody>
+        <?php $totalCount = 0;?>
         <?php foreach($postponed as $task):?>
         <tr data-id='<?php echo $task->id ?>'>
           <td class='c-id'>
-            <?php printf('%03d', $task->id);?>
+            <?php printf('%03d', $task->id); $totalCount++;?>
           </td>
           <td class='text-left' title='<?php echo $task->name?>'>
             <?php echo html::a($this->createLink('task', 'view', 'id=' . $task->id), $task->name); ?>
@@ -122,6 +125,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, $totalCount);?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->nextWeek;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -135,10 +139,11 @@
         </tr>
       </thead>
       <tbody>
+        <?php $totalCount = 0;?>
         <?php foreach($nextWeek as $task):?>
         <tr data-id='<?php echo $task->id ?>'>
           <td class='c-id'>
-            <?php printf('%03d', $task->id);?>
+            <?php printf('%03d', $task->id); $totalCount++;?>
           </td>
           <td class='text-left' title='<?php echo $task->name?>'>
             <?php echo html::a($this->createLink('task', 'view', 'id=' . $task->id), $task->name); ?>
@@ -150,6 +155,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, $totalCount);?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->workloadByType;?></h4></div>
     <table class='table has-sort-head table-fixed'>
