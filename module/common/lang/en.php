@@ -170,6 +170,7 @@ $lang->report->common     = 'Statistic';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
+$lang->story->story       = 'Story'
 $lang->task->common       = 'Task';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = 'Testcase';
