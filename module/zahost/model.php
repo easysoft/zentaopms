@@ -282,11 +282,22 @@ class zahostModel extends model
             $query = $this->session->vmTemplateQuery;
         }
 
-        return $this->dao->select('*')->from(TABLE_VMTEMPLATE)
+        $templateList = $this->dao->select('*')->from(TABLE_VMTEMPLATE)
             ->where('hostID')->eq($hostID)
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+
+        foreach($templateList as $template)
+        {
+            $template->unit = zget($this->lang->zahost->unitList, 'MB');
+            if($template->diskSize > 1024)
+            {
+                $template->diskSize = round($template->diskSize / 1024);
+                $template->unit     = zget($this->lang->zahost->unitList, 'GB');
+            }
+        }
+        return $templateList;
     }
 }

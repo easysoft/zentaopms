@@ -59,8 +59,8 @@
       <tbody>
         <?php foreach($hostList as $host):?>
         <tr class='text-left'>
-          <td><?php printf('%03d', $host->id);?></td>
-          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->id"), $host->name) : $host->name;?></td>
+          <td><?php printf('%03d', $host->hostID);?></td>
+          <td title='<?php echo $host->name?>'><?php echo common::hasPriv('zahost', 'browsetemplate') ? html::a($this->inlink('browsetemplate', "id=$host->hostID"), $host->name) : $host->name;?></td>
           <td><?php echo zget($lang->zahost->zaHostTypeList, $host->hostType);?></td>
           <td><?php echo $host->publicIP;?></td>
           <td><?php echo $host->cpuCores;?></td>
