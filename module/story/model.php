@@ -4255,28 +4255,26 @@ class storyModel extends model
                 $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
                 $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
 
-                $storyPriv = array(common::hasPriv('story', 'processStoryChange'), common::hasPriv('story', 'change'), common::hasPriv('story', 'submitReview'), common::hasPriv('story', 'review'), common::hasPriv('story', 'close'));
+                $storyPriv      = array(common::hasPriv('story', 'processStoryChange'), common::hasPriv('story', 'change'), common::hasPriv('story', 'submitReview'), common::hasPriv('story', 'review'), common::hasPriv('story', 'close'));
                 $storyPrivCount = 0;
-                foreach($storyPriv as $value){
-                    if($value == 1){
-                        $storyPrivCount ++;
-                    }
+                foreach($storyPriv as $value)
+                {
+                    if($value == 1) $storyPrivCount ++;
                 }
                 if(common::hasPriv('story', 'recall') && ($storyPrivCount > 1))
                 {
                     $menu .= "<div class='btn-group dropup' style='margin-left:-5px;'>";
                     $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
                     $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu' style='min-width:auto; padding: 5px;'>";
-                    $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+                    $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
                     $menu .= "</ul>";
                     $menu .= "</div>";
                 } else {
-                    $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
+                    $menu .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
                 }
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                if((common::hasPriv('story', 'processStoryChange') || common::hasPriv('story', 'change') || common::hasPriv('story', 'submitReview') || common::hasPriv('story', 'review') || common::hasPriv('story', 'close')) &&
-                    (common::hasPriv('story', 'edit') || common::hasPriv('story', 'createCase') || common::hasPriv('story', 'batchCreate') || common::hasPriv('projectstory', 'unlinkStory')))
+                if((common::hasPriv('story', 'recall') or $storyPrivCount > 0) and (common::hasPriv('story', 'edit') or common::hasPriv('story', 'createCase') or common::hasPriv('story', 'batchCreate') or common::hasPriv('projectstory', 'unlinkStory')))
                 {
                     $menu .= "<div class='dividing-line'></div>";
                 }
