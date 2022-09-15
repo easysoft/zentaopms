@@ -100,6 +100,5 @@ $lang->zahost->versionList['centos']['7']           = '7';
 $lang->zahost->versionList['centos']['8']           = '8';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->ip                = '『%s』格式不正确！';
-$lang->zahost->notice->pingError         = '无法连接！请检查IP地址、服务器进程和端口状态。';
-$lang->zahost->notice->registerHostError = '向ZAgenteb服务器注册宿主机失败！';
+$lang->zahost->notice->ip              = '『%s』格式不正确！';
+$lang->zahost->notice->registerCommand = '宿主机注册命令：./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';

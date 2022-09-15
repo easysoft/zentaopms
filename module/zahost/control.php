@@ -137,19 +137,20 @@ class zahost extends control
     }
 
     /**
-     * Ping publicIP by http.
+     * Check IP format and generate secret.
      *
      * @param  string $IP
      * @access public
      * @return void
      */
-    public function ajaxPingPublicIP($IP)
+    public function ajaxCheckPublicIP($IP)
     {
-        /* Try to get VM template list, if success, it means ping success. */
-        $result = commonModel::http('http://' . $IP .":8086/api/v1/kvm/listTmpl?", array(), array(CURLOPT_CUSTOMREQUEST => 'GET'));
+        if(!validater::checkIP($IP)) return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array(sprintf($this->lang->zahost->notice->ip, $this->lang->zahost->publicIP)))));
 
-        if($result) return $this->send(array('result' => 'success', 'message' => ''));
+        $secret = md5(time());
+        $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
 
-        return $this->send(array('result' => 'fail', 'message' => array('publicIP' => array($this->lang->zahost->notice->pingError))));
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => array( 'registerCommand' => $registerCommand, 'secret' => $secret)));
+
     }
 }
