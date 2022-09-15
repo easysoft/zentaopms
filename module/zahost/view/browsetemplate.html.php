@@ -19,7 +19,7 @@
   <div class="btn-toolbar pull-right" id='createActionMenu'>
     <?php
     $misc = "class='btn btn-primary'";
-    $link = $this->createLink('zahost', 'createTemplate');
+    $link = $this->createLink('zahost', 'createTemplate', "hostID={$hostID}");
     echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->zahost->createTemplate, '', $misc);
     ?>
   </div>
@@ -32,7 +32,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->zahost->templateEmpty;?></span>
-      <?php if(common::hasPriv('zahost', 'createTemplate')) common::printLink('zahost', 'createTemplate', '', '<i class="icon icon-plus"></i> ' . $lang->zahost->createTemplate, '', 'class="btn btn-info"');?>
+      <?php if(common::hasPriv('zahost', 'createTemplate')) common::printLink('zahost', 'createTemplate', "hostID={$hostID}", '<i class="icon icon-plus"></i> ' . $lang->zahost->createTemplate, '', 'class="btn btn-info"');?>
     </p>
   </div>
   <?php else:?>
