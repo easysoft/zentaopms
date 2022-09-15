@@ -37,9 +37,11 @@ class programplan extends control
     {
         $products  = $this->loadModel('product')->getProductPairsByProject($projectID);
         $productID = $this->product->saveState($productID, $products);
+        $project   = $this->loadModel('project')->getByID($projectID);
 
+        $this->session->set('hasProduct', $project->hasProduct);
         $this->productID = $productID;
-        $this->loadModel('project')->setMenu($projectID);
+        $this->project->setMenu($projectID);
     }
 
     /**
@@ -62,7 +64,7 @@ class programplan extends control
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
 
         $products = $this->loadModel('product')->getProducts($projectID);
-        $this->lang->modulePageNav = $this->product->select($products, $this->productID, 'programplan', 'browse', $type, 0, 0, '', false);
+        if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $this->productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
         $this->lang->TRActions  = "<button class='btn btn-link' data-toggle='dropdown'><i class='icon icon-export muted'></i> <span class='text'>" . $this->lang->export . "</span> <span class='caret'></span></button>";
         $this->lang->TRActions .= "<ul class='dropdown-menu' id='exportActionMenu'>";
@@ -151,9 +153,10 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $productList = array();
         $this->app->loadLang('stage');
         $project = $this->loadModel('project')->getById($projectID);
-        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
+        if($this->session->hasProduct) $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
