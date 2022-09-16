@@ -23,7 +23,7 @@
     </div>
     <form class='load-indicator main-form form-ajax' method='post' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'>
-        <tr>
+      <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->build->product;?></th>
           <td>
             <?php

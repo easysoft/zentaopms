@@ -29,7 +29,9 @@
         echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
+    <?php if($project->hasProduct):?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
+    <?php endif;?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -48,7 +50,9 @@
       <thead>
         <tr>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
+          <?php if($project->hasProduct):?>
           <th class="c-name w-200px text-left"><?php echo $lang->build->product;?></th>
+          <?php endif;?>
           <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <th class="c-name text-left"><?php echo $lang->executionCommon;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
@@ -63,7 +67,9 @@
         <?php foreach($builds as $index => $build):?>
         <tr data-id="<?php echo $productID;?>">
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
+          <?php if($project->hasProduct):?>
           <td class="c-name text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
+          <?php endif;?>
           <td class="c-name" title='<?php echo $build->name;?>'>
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name, '', "data-app='project'");?>

@@ -25,7 +25,7 @@
           <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
         </tr>
         <?php endif;?>
-        <tr>
+        <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->build->product;?></th>
           <?php if(!empty($products)):?>
           <td>

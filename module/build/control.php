@@ -12,6 +12,25 @@
 class build extends control
 {
     /**
+     * Common actions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function commonActions($projectID = 0)
+    {
+        $hidden  = '';
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->hasProduct) $hidden = 'hide';
+        }
+
+        $this->view->hidden = $hidden;
+    }
+
+    /**
      * Create a build.
      *
      * @param  int    $executionID
@@ -59,6 +78,7 @@ class build extends control
         {
             $execution  = $this->execution->getByID($executionID);
             $executions = $this->execution->getPairs($execution->project);
+            $projectID  = $execution->project;
             $this->execution->setMenu($executionID);
             $this->session->set('project', $execution->project);
         }
@@ -69,6 +89,7 @@ class build extends control
             $executions = $this->execution->getPairs($projectID);
         }
 
+        $this->commonActions($projectID);
         $executionList = empty($executions) ? array() : $this->execution->getByIdList(array_keys($executions));
         foreach($executionList as $execution)
         {
@@ -185,6 +206,8 @@ class build extends control
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
+        $this->commonActions($build->project);
+
         $this->view->title           = $execution->name . $this->lang->colon . $this->lang->build->edit;
         $this->view->position[]      = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
         $this->view->position[]      = $this->lang->build->edit;
@@ -272,6 +295,8 @@ class build extends control
         }
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
+
+        $this->commonActions($build->project);
 
         $this->view->title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
         $this->view->stories    = $stories;
@@ -544,6 +569,12 @@ class build extends control
         $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0, $build->branch);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct and $project->model != 'scrum') unset($this->config->product->search['fields']['plan']);
+        }
+
         if($product->type == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -654,6 +685,13 @@ class build extends control
         unset($this->config->bug->search['params']['product']);
         unset($this->config->bug->search['fields']['project']);
         unset($this->config->bug->search['params']['project']);
+
+        if($build->project)
+        {
+            $project = $this->loadModel('project')->getByID($build->project);
+            if(!$project->hasProduct and $project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
+
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
