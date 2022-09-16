@@ -47,7 +47,7 @@ $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconce
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>Dear users,</h4>
-  <p>Welcome to ZenTao project management system. ZenTao has two managment modes in version 15.0 and up. One is the lite management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
+  <p>Welcome to ZenTao project management system. ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
   <div class='block-content'>
     <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
     <div class='block-details block-right'>

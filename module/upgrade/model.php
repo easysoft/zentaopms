@@ -1009,7 +1009,7 @@ class upgradeModel extends model
             case '17_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta2'));
             case '17_0': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0'));
             case '17_1':
-                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '17_2':
@@ -7532,6 +7532,7 @@ class upgradeModel extends model
     /**
      * Relation default program.
      *
+     * @param  int $programID
      * @access public
      * @return bool
      */
