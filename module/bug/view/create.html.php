@@ -51,8 +51,8 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-110px'><?php echo $lang->bug->product;?></th>
-            <td>
+            <th class='w-110px'><?php echo $hiddenProduct ? $lang->bug->module : $lang->bug->product;?></th>
+            <td class="<?php if($hiddenProduct) echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
                 <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
@@ -62,7 +62,9 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
             <td>
               <div class='input-group' id='moduleIdBox'>
+              <?php if(!$hiddenProduct):?>
               <span class="input-group-addon"><?php echo $lang->bug->module?></span>
+              <?php endif;?>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)

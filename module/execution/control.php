@@ -677,7 +677,11 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
-        if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+        if(empty($project->hasProduct))
+        {
+            unset($this->config->bug->search['fields']['product']);
+            if($project->model !== 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
 
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
@@ -2439,6 +2443,8 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        $projectID = $this->loadModel('task')->getProjectID($execution->id);
+
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;
         $this->view->regions          = $kanbanData;
@@ -2452,7 +2458,8 @@ class execution extends control
         $this->view->productNames     = $productNames;
         $this->view->productNum       = count($products);
         $this->view->branchID         = $branchID;
-        $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
+        $this->view->projectID        = $projectID;
+        $this->view->project          = $this->loadModel('project')->getByID($projectID);
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;

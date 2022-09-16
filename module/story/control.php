@@ -388,6 +388,9 @@ class story extends control
         $reviewers = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
+        /* Hidden some fields of projects without products. */
+        list($this->view->hiddenProduct, $this->view->hiddenPlan, $this->view->hiddenURS) = $this->story->getHiddenNoProduct($this->app->tab, $objectID);
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -480,6 +483,8 @@ class story extends control
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
+            /* Hidden some fields of projects without products. */
+            list($this->view->hiddenProduct, $this->view->hiddenPlan, $this->view->hiddenURS) = $this->story->getHiddenNoProduct($execution->type == 'project' ? 'project' : 'execution', $executionID);
         }
         else
         {

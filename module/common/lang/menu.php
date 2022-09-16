@@ -213,8 +213,8 @@ $lang->scrum->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic
 $lang->scrum->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
 $lang->scrum->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
-$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
+$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s", 'subModule' => 'projectstory,tree');
+$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement", 'subModule' => 'projectstory,tree');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
