@@ -2,21 +2,22 @@ $(function()
 {
     $.get(createLink('zahost', 'ajaxImageList', 'hostID=' + hostID), function(response)
     {
-        var resultData= JSON.parse(response);
+        var resultData = JSON.parse(response);
+        var options    = '';
         if(resultData.result == 'success')
         {
-            var options = '';
             resultData.data.forEach(function(item)
             {
                 options += "<option value='" + item.name + "'>" + item.name + "</option>";
             });
-
-            $('#imageName').replaceWith("<select name='imageName' id='imageName' class='form-control'>" + options + "</select>");
-            $("#imageName_chosen").remove();
-            $("#imageName").next('.picker').remove();
-            $('#imageName').chosen();
         }
-        else
+
+        $('#imageName').replaceWith("<select name='imageName' id='imageName' class='form-control'>" + options + "</select>");
+        $("#imageName_chosen").remove();
+        $("#imageName").next('.picker').remove();
+        $('#imageName').chosen();
+
+        if(resultData.result == 'fail')
         {
             $('#imageName_chosen a:first-child').addClass('has-error');
             if(resultData.message.imageName)
