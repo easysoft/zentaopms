@@ -202,7 +202,7 @@ if($config->systemMode == 'new') $lang->project->homeMenu->kanban = array('link'
 $lang->scrum->menu             = new stdclass();
 $lang->scrum->menu->index      = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->scrum->menu->execution  = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
-$lang->scrum->menu->storyGroup = array('link' => "{$lang->story->story}|projectstory|story|projectID=%s&productID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'projectstory,story');
+$lang->scrum->menu->storyGroup = array('link' => "{$lang->story->story}|projectstory|story|projectID=%s&productID=%s",'class' => 'dropdown dropdown-hover');
 $lang->scrum->menu->story      = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s|story", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport,execution', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
