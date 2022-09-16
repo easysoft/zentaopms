@@ -73,7 +73,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->type;?></th>
+          <th id='projectType'><?php echo $lang->project->type;?></th>
           <td><?php echo html::radio('hasProduct', $lang->project->projectTypeList, 1);?></td>
         </tr>
         <tr>

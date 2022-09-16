@@ -333,18 +333,20 @@
                 <div class='detail-title'><?php echo $lang->release->basicInfo?></div>
                 <div class='detail-content'>
                   <table class='table table-data'>
+                    <?php if($project->hasProduct):?>
                     <tr>
                       <th class='w-90px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
-                      <?php if($release->productType != 'normal'):?>
-                        <tr>
-                          <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
-                          <td><?php echo $branchName;?></td>
-                        </tr>
-                      <?php endif;?>
+                    <?php if($release->productType != 'normal'):?>
                     <tr>
-                      <th><?php echo $lang->release->name;?></th>
+                      <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
+                      <td><?php echo $branchName;?></td>
+                    </tr>
+                    <?php endif;?>
+                    <?php endif;?>
+                    <tr>
+                      <th class='w-90px'><?php echo $lang->release->name;?></th>
                       <td><?php echo $release->name;?></td>
                     </tr>
                     <tr>

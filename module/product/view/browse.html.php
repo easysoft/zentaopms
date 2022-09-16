@@ -59,6 +59,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if($isProjectStory): ?>
+    <?php if(!empty($project->hasProduct)):?>
     <div class='btn-group'>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $productName;?>'><?php echo $productName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -71,6 +72,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         ?>
       </ul>
     </div>
+    <?php endif;?>
     <div class="btn-group">
       <a href="javascript:;" class="btn btn-link" style="padding-right: 0;"> <?php echo $moduleName;?> </a>
       <?php

@@ -37,7 +37,7 @@
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo html::select('build', $builds, '', "onchange='showProducts(this.value)' class='form-control chosen'");?></td><td></td>
           </tr>
-          <tr id='productBox'>
+          <tr id='productBox' <?php if(!$project->hasProduct) echo "class='hide'";?> >
             <th><?php echo $lang->release->product;?></th>
             <td>
               <div class='input-group'>

@@ -847,6 +847,10 @@ class execution extends control
                 $branchOption[$branchID] = $name;
             }
         }
+
+        $projectID = $execution->project;
+        $project   = $this->loadModel('project')->getByID($projectID);
+        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']); 
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
