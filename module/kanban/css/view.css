@@ -165,7 +165,7 @@
 .leftBtn.hidden + #regionNavTabs {padding-left: 10px;}
 #regionNavTabs > ul {display: inline-flex; border-bottom: none; margin-bottom: -3px;}
 #regionNavTabs > ul > li {padding: 0; text-align: center;}
-#regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -1.5rem; background: none; outline: 0;}
+#regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -20px; background: none; outline: 0;}
 #regionNavTabs > ul > li:first-child > a {margin-left: 0;}
 #regionNavTabs > ul > li.active > a {z-index: 1;}
 #regionNavTabs > ul > li.active > a::before {background-color: #fff;}

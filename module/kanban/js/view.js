@@ -1865,6 +1865,8 @@ function swipeRegionNavTabs($object, direction)
         {
             /* If you swipe left, the distance is equal to the item's left. */
             distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
+            /* tab overlap width */
+            distance += 20;
             if($item.prev().length == 0)
             {
                 distance = 0;
@@ -1882,6 +1884,7 @@ function swipeRegionNavTabs($object, direction)
         {
             /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
             distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
+            distance += 20;
             if($item.next().length == 0)
             {
                 distance = - objectWidth + offsetWidth - radiusWidth * 2;
@@ -1922,6 +1925,7 @@ function initRegionTabs()
     if(acitiveItemLeft + distance < 0)
     {
         distance = - acitiveItemLeft;
+        distance += 20;
         if($acitiveItem.prev().length == 0)
         {
             distance = 0;
@@ -1932,6 +1936,7 @@ function initRegionTabs()
     else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
     {
         distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft + (distance != 0 ? - radiusWidth * 2 : radiusWidth);
+        distance += 20;
         if($acitiveItem.next().length == 0)
         {
             distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
