@@ -1177,10 +1177,8 @@ class commonModel extends model
                             if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                             /* Parse drop menu link. */
-                            $dropMenuLink = $dropMenuItem;
-                            if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
 
-                            $dropMenuLinks = explode('|', $dropMenuLink);
                             list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
                             if(!common::hasPriv($subModule, $subMethod)) continue;
 
