@@ -235,7 +235,7 @@ $lang->custom->weekendList[2] = '2-Jour';
 $lang->custom->weekendList[1] = '1-Jour';
 
 global $config;
-if($config->systemMode == 'classic')
+if($config->systemMode == 'lean')
 {
     $lang->custom->sprintConceptList[0] = 'Product - Project';
     $lang->custom->sprintConceptList[1] = 'Product - Iteration';

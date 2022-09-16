@@ -235,7 +235,7 @@ $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
 global $config;
-if($config->systemMode == 'classic')
+if($config->systemMode == 'lean')
 {
     $lang->custom->sprintConceptList[0] = '产品 - 项目';
     $lang->custom->sprintConceptList[1] = '产品 - 迭代';

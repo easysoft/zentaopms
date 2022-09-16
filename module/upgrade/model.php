@@ -7767,4 +7767,29 @@ class upgradeModel extends model
             ->andWhere('grade')->eq('2')
             ->exec();
     }
+
+    /**
+     * Relation default program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return bool
+     */
+    public function relationDefaultProgram($programID)
+    {
+        /* product */
+        $this->dao->update(TABLE_PRODUCT)
+            ->set('program')->eq($programID)
+            ->where('program')->eq(0)
+            ->exec();
+
+        /* project */
+        $this->dao->update(TABLE_PROJECT)
+            ->set("path = CONCAT(',{$programID}', path)")
+            ->set('grade = grade+1')
+            ->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)
+            ->exec();
+
+        return true;
+    }
 }

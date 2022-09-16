@@ -95,8 +95,7 @@ $lang->my->form->lblAccount = '帐号信息';
 $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = '产品默认着陆页';
 $lang->my->projectLink   = '项目默认着陆页';
-if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '默认着陆页';
-if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆页';
+$lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';
@@ -124,7 +123,7 @@ if($config->systemMode == 'new')
     $lang->my->executionLinkList['execution-task']            = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
     $lang->my->executionLinkList['execution-executionkanban'] = '默认进入执行看板，可以查看进行中项目的执行情况';
 }
-if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";
+if($config->systemMode == 'lean') $lang->my->executionLinkList['execution-task'] = "默认进入最近一个{$lang->executionCommon}的任务列表，可以查看当前{$lang->executionCommon}下的任务信息";
 
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
