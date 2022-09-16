@@ -147,7 +147,7 @@ class zahostModel extends model
      * @access public
      * @return array
      */
-    public function imageList($host)
+    public function getImageList($host)
     {
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
         if(empty($result) || $result->code != 200) return array();
@@ -300,5 +300,29 @@ class zahostModel extends model
             }
         }
         return $templateList;
+    }
+
+    /**
+     * Get template pairs by host.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getTemplatePairs($hostID)
+    {
+        return $this->dao->select('id,name')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($hostID)->fetchPairs();
+    }
+
+    /**
+     * Get template by id.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return object
+     */
+    public function getTemplateByID($templateID)
+    {
+        return $this->dao->select('*')->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->fetch();
     }
 }

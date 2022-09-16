@@ -161,7 +161,6 @@ class zahost extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
         }
 
-        $this->view->title        = $this->lang->zahost->createTemplate;
         $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
         $this->view->host         = $host;
         $this->display();
