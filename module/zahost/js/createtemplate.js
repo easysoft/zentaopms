@@ -1,5 +1,32 @@
 $(function()
 {
+    $.get(createLink('zahost', 'ajaxImageList', 'hostID=' + hostID), function(response)
+    {
+        var resultData= JSON.parse(response);
+        if(resultData.result == 'success')
+        {
+            var options = '';
+            resultData.data.forEach(function(item)
+            {
+                options += "<option value='" + item.name + "'>" + item.name + "</option>";
+            });
+
+            $('#imageName').replaceWith("<select name='imageName' id='imageName' class='form-control'>" + options + "</select>");
+            $("#imageName_chosen").remove();
+            $("#imageName").next('.picker').remove();
+            $('#imageName').chosen();
+        }
+        else
+        {
+            $('#imageName_chosen a:first-child').addClass('has-error');
+            if(resultData.message.imageName)
+            {
+                var errors = resultData.message.imageName.join('');
+                $('#imageName_chosen').after("<div id='imageNameLabel' class='text-danger helper-text'>" + errors + "</div>");
+            }
+        }
+    });
+
     $('#osCategory').change(function()
     {
         var os = $('#osCategory').val();
