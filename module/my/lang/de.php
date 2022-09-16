@@ -96,7 +96,6 @@ $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = 'Product Default Page';
 $lang->my->projectLink   = 'Project Default Page';
 $lang->my->executionLink = 'Execution Default Page';
-$lang->my->executionLink = $lang->executionCommon . ' Default Page';
 if(isset($config->projectMode) && $config->projectMode == 'noExecution') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
 
 $lang->my->programLinkList = array();
