@@ -13,7 +13,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('zahostConfig', $config->zahost);?>
 <?php js::set('zahostLang', $lang->zahost);?>
-<?php js::set('hostID', $host->id);?>
+<?php js::set('hostID', $host->hostID);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->zahost->createTemplate;?></h2>

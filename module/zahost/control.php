@@ -234,7 +234,7 @@ class zahost extends control
     public function ajaxImageList($hostID)
     {
         $host      = $this->zahost->getById($hostID);
-        $imageList = $this->zahost->imageList($host);
+        $imageList = $this->zahost->getImageList($host);
 
         if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => array($imageList)));
 
