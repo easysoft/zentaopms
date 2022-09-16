@@ -7528,4 +7528,46 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /*
+     * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
+     *
+     * @access public
+     * @return bool
+     */
+    public function classic2Lite()
+    {
+        /* Set mode as lite. */
+        $this->loadModel('setting')->setItem('system.common.global.mode', 'lite');
+        /* Set project mode as noExecution. */
+        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
+
+        $defaultProgram = $this->config->global->defaultProgram;
+
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->fetchAll('id');
+
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($defaultProgram)->exec();
+
+        /* Add default execution for project. */
+        foreach($projects as $project)
+        {
+            $this->dao->update(TABLE_PROJECT)->set('noExecution')->eq('1')->set('type')->eq('project')->set('parent')->eq($defaultProgram)->set('path')->eq(",{$defaultProgram},{$project->id},")->where('id')->eq($project->id)->exec();
+
+            $execution = clone $project;
+            $execution->project = $project->id;
+            $execution->parent  = $project->id;
+            $execution->grade   = 1;
+            unset($execution->id);
+
+            $this->dao->insert(TABLE_PROJECT)->data($execution)->autoCheck()->exec();
+            if(dao::isError()) return false;
+
+            $executionID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_PROJECT)->set('path')->eq(",{$project->id},{$executionID},")->where('id')->eq($executionID)->exec();
+
+            $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('project')->eq($project->id)->exec();
+        }
+
+        return !dao::isError();
+    }
 }

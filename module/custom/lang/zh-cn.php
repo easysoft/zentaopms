@@ -56,9 +56,7 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
-
-if($config->systemMode == 'new') $lang->custom->execution = '执行';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = '执行';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';

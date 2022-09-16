@@ -284,14 +284,11 @@ $lang->block->default['full']['my']['4']['grid']            = 4;
 $lang->block->default['full']['my']['4']['source']          = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['5']['title']           = '项目统计';
-    $lang->block->default['full']['my']['5']['block']           = 'statistic';
-    $lang->block->default['full']['my']['5']['source']          = 'project';
-    $lang->block->default['full']['my']['5']['grid']            = 8;
-    $lang->block->default['full']['my']['5']['params']['count'] = '20';
-}
+$lang->block->default['full']['my']['5']['title']           = '项目统计';
+$lang->block->default['full']['my']['5']['block']           = 'statistic';
+$lang->block->default['full']['my']['5']['source']          = 'project';
+$lang->block->default['full']['my']['5']['grid']            = 8;
+$lang->block->default['full']['my']['5']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['6']['title']  = '我的贡献';
 $lang->block->default['full']['my']['6']['block']  = 'contribute';
@@ -316,19 +313,16 @@ $lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['9']['title']  = '项目人力投入';
-    $lang->block->default['full']['my']['9']['block']  = 'projectteam';
-    $lang->block->default['full']['my']['9']['source'] = 'project';
-    $lang->block->default['full']['my']['9']['grid']   = 8;
-}
+$lang->block->default['full']['my']['9']['title']  = '项目人力投入';
+$lang->block->default['full']['my']['9']['block']  = 'projectteam';
+$lang->block->default['full']['my']['9']['source'] = 'project';
+$lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['title']  = '项目列表';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-if($config->systemMode == 'classic')
+if(!isset($config->projectMode) || $config->projectMode != 'noExecution')
 {
     $lang->block->default['full']['my']['10']['block']  = 'execution';
     $lang->block->default['full']['my']['10']['source'] = 'execution';
@@ -359,18 +353,18 @@ $lang->block->availableBlocks->issue       = '问题';
 $lang->block->availableBlocks->meeting     = '会议';
 $lang->block->availableBlocks->feedback    = '反馈';
 
-if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->execution->common;
-$lang->block->moduleList['qa']        = '测试';
-$lang->block->moduleList['todo']      = '待办';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = '项目';
+if(!isset($config->projectMode) || $config->projectMode != 'noExecution') $lang->block->moduleList['execution'] = $lang->execution->common;
+$lang->block->moduleList['qa']      = '测试';
+$lang->block->moduleList['todo']    = '待办';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = '项目列表';
 $lang->block->modules['project']->availableBlocks->recentproject = '近期项目';
 $lang->block->modules['project']->availableBlocks->statistic     = '项目统计';
-if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = '项目人力投入';
+$lang->block->modules['project']->availableBlocks->projectteam   = '项目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -527,7 +521,7 @@ $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = $config->systemMode == 'new' ? 'project|browse|' : 'execution|all|';
+$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
@@ -573,7 +567,7 @@ $lang->block->flowchart['admin']   = array('管理员', '维护公司', '添加�
 if($config->systemMode == 'new') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', '关联产品', "创建项目", "制定预算和规划", '添加干系人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护需求", '创建发布');
 $lang->block->flowchart['project'] = array('项目经理', '创建' . $lang->executionCommon, '维护团队', "关联需求", '分解任务', '跟踪进度');
-if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->executionCommon, '维护团队', "关联需求", '分解任务', '跟踪进度');
+$lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->executionCommon, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 

@@ -171,7 +171,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'projectMode')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -187,12 +187,14 @@ class router extends baseRouter
 
         foreach($commonSettings as $setting)
         {
-            if($setting->key == 'sprintConcept') $projectKey = $setting->value;
-            if($setting->key == 'hourPoint')     $hourKey    = $setting->value;
-            if($setting->key == 'URSR')          $URSR       = $setting->value;
-            if($setting->key == 'URAndSR')       $URAndSR    = $setting->value;
-            if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
-            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score = $setting->value;
+            if($setting->key == 'sprintConcept')                                 $projectKey  = $setting->value;
+            if($setting->key == 'hourPoint')                                     $hourKey     = $setting->value;
+            if($setting->key == 'URSR')                                          $URSR        = $setting->value;
+            if($setting->key == 'URAndSR')                                       $URAndSR     = $setting->value;
+            if($setting->key == 'mode' and $setting->section == 'global')        $mode        = $setting->value;
+            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score       = $setting->value;
+
+            if($setting->key == 'projectMode' && $setting->section == 'global')  $config->projectMode = $setting->value;
         }
 
         /* Lite Version is compatible with classic modes */
@@ -200,7 +202,6 @@ class router extends baseRouter
 
         /* Record system mode. */
         $config->systemMode = $mode;
-        if($config->systemMode == 'classic') $this->config->executionCommonList = $this->config->projectCommonList;
 
         /* Record system score.*/
         $config->systemScore = $score;
