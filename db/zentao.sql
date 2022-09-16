@@ -7189,6 +7189,8 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `admin`        smallint(5)  UNSIGNED NOT NULL DEFAULT 0,
   `type`         varchar(30)  NOT NULL DEFAULT 'normal',
   `secret`       varchar(50)  NOT NULL DEFAULT '',
+  `token`        varchar(50) NOT NULL DEFAULT '',
+  `expiredDate`  datetime NOT NULL,
   `serverRoom`   mediumint(8) UNSIGNED NOT NULL,
   `cabinet`      varchar(128) NOT NULL,
   `serverModel`  varchar(256) NOT NULL,
@@ -9567,6 +9569,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `registerDate`  datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET=utf8;
