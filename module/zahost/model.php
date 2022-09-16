@@ -159,7 +159,7 @@ class zahostModel extends model
         {
             if(array_key_exists($image->name, $usedImageList)) continue;
 
-            $imageList[$image->name] = $image->name;
+            $imageList['name'] = $image->name;
         }
 
         return $imageList;

@@ -102,3 +102,5 @@ $lang->zahost->versionList['centos']['8']           = '8';
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』incorrect format!';
 $lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
+$lang->zahost->notice->loading         = 'loading...';
+$lang->zahost->notice->noImage         = 'No available image';

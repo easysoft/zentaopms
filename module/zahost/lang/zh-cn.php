@@ -102,3 +102,5 @@ $lang->zahost->versionList['centos']['8']           = '8';
 $lang->zahost->notice = new stdclass();
 $lang->zahost->notice->ip              = '『%s』格式不正确！';
 $lang->zahost->notice->registerCommand = '宿主机注册命令：./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
+$lang->zahost->notice->loading         = '加载中...';
+$lang->zahost->notice->noImage         = '无可用的镜像文件';

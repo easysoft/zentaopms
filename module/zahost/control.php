@@ -162,7 +162,8 @@ class zahost extends control
         }
 
         $this->view->title        = $this->lang->zahost->createTemplate;
-        $this->view->imageOptions = $this->zahost->imageList($host);
+        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
+        $this->view->host         = $host;
         $this->display();
     }
 
@@ -222,6 +223,22 @@ class zahost extends control
         $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => array( 'registerCommand' => $registerCommand, 'secret' => $secret)));
+    }
 
+    /**
+     * Get image list by ajax.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function ajaxImageList($hostID)
+    {
+        $host      = $this->zahost->getById($hostID);
+        $imageList = $this->zahost->imageList($host);
+
+        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => array($imageList)));
+
+        return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage)),));
     }
 }
