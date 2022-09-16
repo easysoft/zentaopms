@@ -5009,12 +5009,12 @@ class upgradeModel extends model
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
-            $data->project  = $projectID;
-            $data->parent   = $projectID;
-            $data->grade    = 1;
-            $data->path     = ",{$projectID},{$sprint->id},";
-            $data->type     = 'sprint';
-            $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
+            $data->project = $projectID;
+            $data->parent  = $projectID;
+            $data->grade   = 1;
+            $data->path    = ",{$projectID},{$sprint->id},";
+            $data->type    = 'sprint';
+            $data->acl     = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 
@@ -7535,38 +7535,13 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function classic2Lite()
+    public function classic2Lean()
     {
-        /* Set mode as lite. */
-        $this->loadModel('setting')->setItem('system.common.global.mode', 'lite');
         /* Set project mode as noExecution. */
         $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
 
-        $defaultProgram = $this->config->global->defaultProgram;
-
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->fetchAll('id');
-
-        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($defaultProgram)->exec();
-
-        /* Add default execution for project. */
-        foreach($projects as $project)
-        {
-            $this->dao->update(TABLE_PROJECT)->set('noExecution')->eq('1')->set('type')->eq('project')->set('parent')->eq($defaultProgram)->set('path')->eq(",{$defaultProgram},{$project->id},")->where('id')->eq($project->id)->exec();
-
-            $execution = clone $project;
-            $execution->project = $project->id;
-            $execution->parent  = $project->id;
-            $execution->grade   = 1;
-            unset($execution->id);
-
-            $this->dao->insert(TABLE_PROJECT)->data($execution)->autoCheck()->exec();
-            if(dao::isError()) return false;
-
-            $executionID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_PROJECT)->set('path')->eq(",{$project->id},{$executionID},")->where('id')->eq($executionID)->exec();
-
-            $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('project')->eq($project->id)->exec();
-        }
+        $programID = $this->createDefaultProgram();
+        $this->upgradeInProjectMode($programID);
 
         return !dao::isError();
     }
@@ -7649,6 +7624,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
+            if($this->config->global->mode == 'classic') $project->noExecution = '1';
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
             if(dao::isError()) return false;
