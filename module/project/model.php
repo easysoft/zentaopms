@@ -893,6 +893,10 @@ class projectModel extends model
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
+
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
+        if($this->config->systemMode == 'lite') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
+
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }
 
@@ -1961,7 +1965,7 @@ class projectModel extends model
         $canBatchEdit = common::hasPriv('project', 'batchEdit');
         $account      = $this->app->user->account;
         $id           = $col->id;
-        $projectLink  = $this->config->systemMode == 'new' ? helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id) : helper::createLink('execution', 'task', "projectID=$project->id");
+        $projectLink  = helper::createLink('project', 'index', "projectID=$project->id", '', '', $project->id);
 
         if($col->show)
         {

@@ -128,7 +128,7 @@
               </p>
             </div>
           </div>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if(empty($globalDisableProgram)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->parent;?></strong>

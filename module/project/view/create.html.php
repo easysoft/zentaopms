@@ -52,7 +52,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <tr>
+        <tr class='<?php echo !empty($globalDisableProgram) ? 'hidden' : '';?>'>
           <th class='w-130px'><?php echo $lang->project->parent;?></th>
           <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' data-lastSelected=$programID onchange='setParentProgram(this.value)' $disabled");?></td>
@@ -63,8 +63,9 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-130px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
+          <td></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>

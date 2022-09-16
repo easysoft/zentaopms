@@ -11,6 +11,21 @@
 class project extends control
 {
     /**
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->view->globalDisableProgram = $this->config->systemMode != 'new';
+    }
+
+    /**
      * Project create guide.
      *
      * @param  int    $programID
@@ -737,12 +752,10 @@ class project extends control
     /**
      * Batch edit projects.
      *
-     * @param  string $from
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function batchEdit($from = 'browse', $projectID = 0)
+    public function batchEdit()
     {
         $this->loadModel('action');
         $this->loadModel('execution');

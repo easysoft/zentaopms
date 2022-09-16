@@ -49,16 +49,13 @@ $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
 
-if(!isset($config->setCode) or $config->setCode == 1)
-{
-    $config->project->datatable->fieldList['code']['title']    = 'code';
-    $config->project->datatable->fieldList['code']['fixed']    = 'left';
-    $config->project->datatable->fieldList['code']['width']    = '100';
-    $config->project->datatable->fieldList['code']['minWidth'] = '180';
-    $config->project->datatable->fieldList['code']['required'] = 'no';
-    $config->project->datatable->fieldList['code']['sort']     = 'no';
-    $config->project->datatable->fieldList['code']['pri']      = '1';
-}
+$config->project->datatable->fieldList['code']['title']    = 'code';
+$config->project->datatable->fieldList['code']['fixed']    = 'left';
+$config->project->datatable->fieldList['code']['width']    = '100';
+$config->project->datatable->fieldList['code']['minWidth'] = '180';
+$config->project->datatable->fieldList['code']['required'] = 'no';
+$config->project->datatable->fieldList['code']['sort']     = 'no';
+$config->project->datatable->fieldList['code']['pri']      = '1';
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -128,6 +125,8 @@ $config->project->datatable->fieldList['actions']['width']    = '180';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
+if(isset($config->setCode) and $config->setCode == 0) unset($config->project->datatable->fieldList['code']);
+
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask');
@@ -137,7 +136,7 @@ $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
-if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['fields']['code'] = $lang->project->code;
+$config->project->search['fields']['code']           = $lang->project->code;
 $config->project->search['fields']['id']             = $lang->project->id;
 $config->project->search['fields']['model']          = $lang->project->model;
 $config->project->search['fields']['parent']         = $lang->project->parent;
@@ -155,7 +154,7 @@ $config->project->search['fields']['lastEditedDate'] = $lang->project->lastEdite
 $config->project->search['fields']['closedDate']     = $lang->project->closedDate;
 
 $config->project->search['params']['name']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
-if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['params']['code'] = array('operator' => '=', 'control' => 'input' , 'values' => '');
+$config->project->search['params']['code']           = array('operator' => '=', 'control' => 'input' , 'values' => '');
 $config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
 $config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');

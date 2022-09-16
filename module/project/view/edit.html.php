@@ -50,6 +50,7 @@
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>
+        <?php if(empty($globalDisableProgram)):?>
         <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
           <?php
@@ -64,9 +65,11 @@
           <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-120px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
+          <td colspan='2'></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>

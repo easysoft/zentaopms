@@ -623,8 +623,8 @@ class commonModel extends model
         if($config->systemMode != 'new') unset($lang->createIcons['program']);
         if(!isset($config->projectMode) || $config->projectMode == 'noExecution') unset($lang->createIcons['execution']);
 
-
         /* Check whether the creation permission is available, and print create buttons. */
+
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
             $createMethod = 'create';
