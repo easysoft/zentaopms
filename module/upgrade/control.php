@@ -635,18 +635,22 @@ class upgrade extends control
      * Select the merge mode when upgrading to zentaopms 18.0.
      *
      * @param  string  $fromVersion
+     * @param  string  $mode   lean | new
      * @access public
      * @return void
      */
-    public function selectMergeMode($fromVersion)
+    public function selectMergeMode($fromVersion, $mode = 'lean')
     {
         if($_POST)
         {
-            $mode = $this->post->mode;
-            if($mode == 'project')   echo 'execute mergeData method';
-            if($mode == 'execution') echo 'execute mergeData method';
-            if($mode == 'manually')  $this->locate(inlink('mergeProgram'));
+            $mergeMode = $this->post->projectType;
+            if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
+            $program = $this->upgrade->createDefaultProgram();
+            if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($program->id);
+            if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($program->id);
+
+            if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
         $this->view->title = $this->lang->upgrade->selectMergeMode;
