@@ -21,15 +21,15 @@
                     <thead>
                         <tr>
                             <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
-                            <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lite'];?></th>
+                            <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lean'];?></th>
                             <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td colspan='2'><?php echo $this->lang->upgrade->mode;?></td>
-                            <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->leanUsage;?></td>
-                            <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->newUsage;?></td>
+                            <td colspan='2'><?php echo $this->lang->upgrade->leanUsage;?></td>
+                            <td colspan='2'><?php echo $this->lang->upgrade->newUsage;?></td>
                         </tr>
                         <tr>
                             <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
@@ -93,9 +93,9 @@
                     </tbody>
                     <?php echo html::hidden('mode','')?>
                     </table>
-                </div>    
-            </div> 
-        </form> 
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
