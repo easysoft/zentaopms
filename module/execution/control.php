@@ -80,11 +80,13 @@ class execution extends control
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
         $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
+        $project         = $this->loadModel('project')->getByID($execution->project);
 
         /* Set menu. */
         $this->execution->setMenu($executionID, $buildID = 0, $extra);
 
         /* Assign. */
+        $this->view->hidden          = !empty($project->hasProduct) ? "" : 'hide';
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
         $this->view->childExecutions = $childExecutions;
