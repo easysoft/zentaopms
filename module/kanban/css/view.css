@@ -157,11 +157,12 @@
 .executionName .delayed {margin-right: 10px;}
 
 #kanbanBox {position: relative;}
-#regionTabs {background-color: #efefef; z-index: 100; display: flex; align-items: center; gap: 1.5rem;}
+#regionTabs {background-color: #efefef; z-index: 100; display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;}
 #regionTabs .leftBtn.disabled  i, #regionTabs .rightBtn.disabled i{color: #c2c2c2;}
 #regionTabs .leftBtn  i, #regionTabs .rightBtn i{vertical-align: 1px;}
 #regionTabs .icon-angle-left, #regionTabs .icon-angle-right {font-size: 20px; vertical-align: -webkit-baseline-middle;}
-#regionNavTabs {display: inline-flex; overflow: hidden; padding-left: 10px;}
+#regionNavTabs {display: inline-flex; overflow: hidden;}
+.leftBtn.hidden + #regionNavTabs {padding-left: 10px;}
 #regionNavTabs > ul {display: inline-flex; border-bottom: none; margin-bottom: -3px;}
 #regionNavTabs > ul > li {padding: 0; text-align: center;}
 #regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -1.5rem; background: none; outline: 0;}
