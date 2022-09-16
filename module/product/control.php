@@ -204,8 +204,10 @@ class product extends control
             $branch = $this->cookie->treeBranch;
         }
 
+        $isProjectStory = $this->app->rawModule == 'projectstory';
+
         /* If in project story and not chose product, get project story mdoules. */
-        if($this->app->rawModule == 'projectstory' and empty($productID))
+        if($isProjectStory and empty($productID))
         {
             $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
         }
@@ -234,7 +236,7 @@ class product extends control
         $showBranch = $this->loadModel('branch')->showBranch($productID);
 
         /* Get stories. */
-        if($this->app->rawModule == 'projectstory')
+        if($isProjectStory)
         {
             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
@@ -267,7 +269,7 @@ class product extends control
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and $this->app->rawModule != 'projectstory'));
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and !$isProjectStory));
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
@@ -296,21 +298,22 @@ class product extends control
         }
 
         $project = $this->loadModel('project')->getByID($projectID);
-        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
+        if(empty($project->hasProduct))
+        {
+            if($isProjectStory && !$productID && !empty($this->products)) $productID = key($this->products);   // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
+            unset($this->config->product->search['fields']['product']);     // The none-product project don't need display the product in the search form.
+        }
 
         /* Build search form. */
-        $rawModule = $this->app->rawModule;
-        $rawMethod = $this->app->rawMethod;
-
-        $params    = $rawModule == 'projectstory' ? "projectID=$projectID&" : '';
-        $actionURL = $this->createLink($rawModule, $rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+        $params    = $isProjectStory ? "projectID=$projectID&" : '';
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
 
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch, $projectID);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
 
-        $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
+        $productName = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;

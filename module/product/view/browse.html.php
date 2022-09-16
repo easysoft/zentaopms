@@ -25,6 +25,7 @@ body {margin-bottom: 25px;}
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
+<?php js::set('projectHasProduct', !empty($project->hasProduct));?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
@@ -191,8 +192,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       </ul>
       <?php endif;?>
     </div>
-    <?php $isShow = $isProjectStory ? '' : "style='display: none;'";?>
-    <div class='btn-group dropdown' <?php echo $isShow;?>>
+    <?php if($isProjectStory && !empty($project->hasProduct)):?>
+    <div class='btn-group dropdown'>
     <?php
     if(commonModel::isTutorialMode())
     {
@@ -210,7 +211,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             $buttonTitle = $lang->execution->linkStoryByPlan;
             $dataToggle  = 'data-toggle="modal"';
         }
-        if(!empty($project->hasProduct) && common::hasPriv('projectstory', 'linkStory'))
+        if(common::hasPriv('projectstory', 'linkStory'))
         {
             $buttonLink  = $this->createLink('projectstory', 'linkStory', "project=$projectID");
             $buttonTitle = $lang->execution->linkStory;
@@ -231,6 +232,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     }
     ?>
     </div>
+    <?php endif;?>
     <?php endif;?>
   </div>
   <?php endif;?>

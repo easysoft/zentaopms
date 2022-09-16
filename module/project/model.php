@@ -2454,23 +2454,24 @@ class projectModel extends model
 
         if(empty($project->hasProduct))
         {
-            unset($lang->project->menu->story);
-            unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-            if($model !== 'kanbanProject')
+            if($project->model !== 'kanban')
             {
-                $lang->project->menu->storyGroup['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-                $lang->project->menu->storyGroup['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-                $lang->project->menu->storyGroup['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
+                $lang->project->menu->story = $lang->project->menu->storyGroup;
+                $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+                $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
             }
+
+            unset($lang->project->menu->settings['subMenu']->products);
         }
         else
         {
             unset($lang->project->menu->settings['subMenu']->module);
-            unset($lang->project->menu->storyGroup);
         }
+        unset($lang->project->menu->storyGroup);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;

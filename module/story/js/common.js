@@ -7,9 +7,10 @@ $(function()
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
     if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa')
     {
-        if(app != 'my') $('#navbar .nav li').removeClass('active');
+        if(app != 'my') $('#navbar .nav li[data-id!=story]').removeClass('active');
         $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
         $('#subNavbar li[data-id="' + storyType + '"]').addClass('active');
+        $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
     $('#saveButton').on('click', function()
