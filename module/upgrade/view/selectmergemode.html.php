@@ -25,9 +25,9 @@
                 <th class='w-100px' valign='top'><?php echo $lang->upgrade->mergeMode;?></th>
                 <td>
                   <?php foreach($lang->upgrade->mergeModes as $mode => $label):?>
-                  <div class="radio">
+                  <div class='radio'>
                     <label>
-                      <input type="radio" name="mode" value="<?php echo $mode;?>" checked="checked">
+                      <input type='radio' name='projectType' value='<?php echo $mode;?>' <?php if($mode == 'project') echo "checked='checked'";?>>
                       <?php echo $label;?>
                       <?php $tipLang = 'merge' . ucfirst($mode) . 'Tip';?>
                       <div class='tips text-gray'><?php echo $lang->upgrade->{$tipLang};?></div>

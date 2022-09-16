@@ -99,6 +99,7 @@ $lang->upgrade->selectedModeTips['new']     = 'Switching to the program manageme
 $lang->upgrade->line            = 'Product Line';
 $lang->upgrade->allLines        = "All Product Lines";
 $lang->upgrade->program         = 'Merge Project';
+$lang->upgrade->defaultProgram  = 'Default Program';
 $lang->upgrade->existProgram    = 'Existing programs';
 $lang->upgrade->existProject    = 'Existing projects';
 $lang->upgrade->existLine       = 'Existing' . $lang->productCommon . ' lines';
