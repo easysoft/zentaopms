@@ -57,8 +57,7 @@ $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
 
-if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'lean' || !$config->systemMode) $lang->custom->execution = 'Execution';
+$lang->custom->execution = 'Execution';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
