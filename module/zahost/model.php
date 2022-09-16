@@ -112,7 +112,7 @@ class zahostModel extends model
     /**
      * Create vm template.
      *
-     * @param  object  $host
+     * @param  object $host
      * @access public
      * @return void
      */
@@ -120,25 +120,16 @@ class zahostModel extends model
     {
         $template = fixer::input('post')
             ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->setDefault('imageName', '')
             ->get();
 
         $this->dao->insert(TABLE_VMTEMPLATE)->data($template)
-            ->batchCheck($this->config->zahost->createTemplate->requiredFields, 'notempty')
+            ->batchCheck($this->config->zahost->createtemplate->requiredFields, 'notempty')
             ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
             ->autoCheck();
         if(dao::isError()) return false;
 
-        $vmTemplateList = $this->imageFiles($host);
-        foreach($vmTemplateList as $vmTemp)
-        {
-            if($vmTemp->macAddress == $template->macAddress)
-            {
-                $template->imageFile = $vmTemp->diskFile;
-                unset($template->macAddress);
-                break;
-            }
-        }
-
+        $template->hostID      = $host->id;
         $template->createdBy   = $this->app->user->account;
         $template->createdDate = helper::now();
 
@@ -156,12 +147,22 @@ class zahostModel extends model
      * @access public
      * @return array
      */
-    public function imageFiles($host)
+    public function imageList($host)
     {
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
         if(empty($result) || $result->code != 200) return array();
 
-        return $result->data;
+        $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->id)->fetchAll('imageName');
+
+        $imageList = array();
+        foreach($result->data as $image)
+        {
+            if(array_key_exists($image->name, $usedImageList)) continue;
+
+            $imageList[$image->name] = $image->name;
+        }
+
+        return $imageList;
     }
 
     /**

@@ -20,7 +20,7 @@
   <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
     <table class='table table-form'>
       <tr>
-        <th class='w-200px'><?php echo $lang->zahost->name;?></th>
+        <th class='w-100px'><?php echo $lang->zahost->name;?></th>
         <td><?php echo html::input('name', '', "class='form-control'");?></td>
         <td></td>
       </tr>
@@ -62,8 +62,8 @@
         <th><?php echo $lang->zahost->vmTemplate->osLang;?></th>
         <td><?php echo html::select('osLang', $lang->zahost->langList, '', "class='form-control chosen'")?></td>
       <tr>
-        <th><?php echo $lang->zahost->vmTemplate->imageFile;?></th>
-        <td><?php echo html::select('macAddress', $imageFiles, '', "class='form-control chosen'")?></td>
+        <th><?php echo $lang->zahost->vmTemplate->imageName;?></th>
+        <td><?php echo html::select('imageName', $imageOptions, '', "class='form-control chosen'")?></td>
       </tr>
       <tr>
         <td colspan='2' class='text-center form-actions'>

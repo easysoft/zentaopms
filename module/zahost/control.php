@@ -161,11 +161,8 @@ class zahost extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browseTemplate', "id={$hostID}")));
         }
 
-        $imageFiles        = $this->zahost->imageFiles($host);
-        $imageFilesOptions = array_combine(array_column($imageFiles, 'macAddress'), array_column($imageFiles, 'name'));
-
-        $this->view->title      = $this->lang->zahost->createTemplate;
-        $this->view->imageFiles = $imageFilesOptions;
+        $this->view->title        = $this->lang->zahost->createTemplate;
+        $this->view->imageOptions = $this->zahost->imageList($host);
         $this->display();
     }
 

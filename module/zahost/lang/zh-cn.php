@@ -35,7 +35,7 @@ $lang->zahost->osType     = '操作系统版本';
 $lang->zahost->osCategory = '操作系统平台';
 $lang->zahost->osVersion  = '操作系统版本号';
 $lang->zahost->osLang     = '系统语言';
-$lang->zahost->imageFile  = '镜像文件';
+$lang->zahost->imageName  = '镜像文件';
 
 $lang->zahost->vmTemplate = new stdclass;
 $lang->zahost->vmTemplate->name       = '名称';
@@ -47,7 +47,7 @@ $lang->zahost->vmTemplate->osType     = $lang->zahost->osType;
 $lang->zahost->vmTemplate->osCategory = $lang->zahost->osCategory;
 $lang->zahost->vmTemplate->osVersion  = $lang->zahost->osVersion;
 $lang->zahost->vmTemplate->osLang     = $lang->zahost->osLang;
-$lang->zahost->vmTemplate->imageFile  = $lang->zahost->imageFile;
+$lang->zahost->vmTemplate->imageName  = $lang->zahost->imageName;
 
 $lang->zahost->langList = array();
 $lang->zahost->langList['zh_cn'] = '简体中文';
