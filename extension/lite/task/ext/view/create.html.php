@@ -90,6 +90,10 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <tr class='hidden modeBox'>
+          <th><?php echo $lang->task->mode;?></th>
+          <td><?php echo html::select('mode', $lang->task->modeList, '', "class='form-control chosen'");?></td>
+        </tr>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -283,24 +287,11 @@
             <div class='modal-body'>
               <table class="table table-form" id='taskTeamEditor'>
                 <tbody class='sortable'>
-                  <tr class='template'>
-                    <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                    <td>
-                      <div class='input-group'>
-                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                        <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                      </div>
-                    </td>
-                    <td class='w-130px sort-handler'>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                      <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                      <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                    </td>
-                  </tr>
+                  <?php include $app->getModuleRoot() . 'task/view/taskteam.html.php';?>
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>
@@ -351,6 +342,7 @@ $(function()
 })
 </script>
 <?php endif;?>
+<?php js::set('newRowCount', 5);?>
 <script>
 $(function()
 {

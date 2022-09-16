@@ -120,6 +120,7 @@ $lang->task->editEstimate     = 'Sửa dự tính';
 $lang->task->deleteEstimate   = 'Xóa dự tính';
 $lang->task->colorTag         = 'Màu';
 $lang->task->files            = 'Files';
+$lang->task->my               = 'My ';
 $lang->task->hasConsumed      = 'Đã làm';
 $lang->task->multiple         = 'Nhiều người dùng';
 $lang->task->multipleAB       = 'M';

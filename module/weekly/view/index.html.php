@@ -90,6 +90,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($finished));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->postponed;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -122,6 +123,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($postponed));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->nextWeek;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -150,6 +152,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($nextWeek));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->workloadByType;?></h4></div>
     <table class='table has-sort-head table-fixed'>
