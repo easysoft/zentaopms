@@ -24,8 +24,8 @@
         <td>
           <p>
             <?php $isDisabled = $changedMode == 'yes' ? ' disabled' : '';?>
-            <label class="radio-inline"><input type="radio" name="mode" value="lite" <?php echo $mode == 'lite'? "checked='checked'" : ''; echo $isDisabled;?> id="modelite"><?php echo $lang->upgrade->to15Mode['lite'];?></label>
-            <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : ''; echo $isDisabled;?> id="modenew"><?php echo $lang->upgrade->to15Mode['new'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : ''; echo $isDisabled;?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : ''; echo $isDisabled;?> id="modenew"><?php echo $lang->upgrade->to18Mode['new'];?></label>
           </p>
           <p class='text-info' id='modeTips'><?php echo $lang->upgrade->selectedModeTips['new'];?></p>
         </td>

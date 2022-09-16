@@ -2644,9 +2644,9 @@ class projectModel extends model
         $program->type       = 'program';
         $program->name       = $this->lang->project->defaultProgram;
         $program->budgetUnit = 'CNY';
-        $program->openedBy   = $this->app->user->account;
         $program->whitelist  = '';
         $program->status     = 'doing';
+        $program->grade      = 1;
         $program->openedDate = helper::now();
         $program->begin      = helper::today();
         $program->end        = LONG_TIME;

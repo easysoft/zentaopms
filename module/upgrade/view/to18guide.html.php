@@ -14,7 +14,7 @@
 <div class='container'>
     <div class='panel' style='padding:50px 280px'>
         <form method='post'>
-            <h1 class='text-center'><?php echo '请选择使用模式';?></h1>
+            <h1 class='text-center'><?php echo $title;?></h1>
             <div class='main-row' id='mainContent'>
                 <div class='main-col main-table'>
                     <table class="table datatable">
@@ -82,9 +82,9 @@
                             <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
                         </tr>
                         <tr>
-                            <td colspan='2'><?php echo $this->lang->upgrade->selectUsage;?></td>
-                            <td colspan='2' class="text-center" id='useLean'><?php echo $this->lang->upgrade->useLean;?></td>
-                            <td colspan='2' class="text-center" id='useNew'><?php echo $this->lang->upgrade->useNew;?></td>
+                            <td colspan='2' style="font-weight:bold;"><?php echo $this->lang->upgrade->selectUsage;?></td>
+                            <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useLean;?></button></td>
+                            <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useNew;?></button></td>
                         </tr>
                         <tr>
                             <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>

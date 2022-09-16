@@ -1009,7 +1009,7 @@ class upgradeModel extends model
             case '17_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta2'));
             case '17_0': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0'));
             case '17_1':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
+                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '17_2':
@@ -7526,6 +7526,49 @@ class upgradeModel extends model
                 $begin = date('Y-m-d', $beginTimestame);
             }
         }
+        return true;
+    }
+
+    /**
+     * Relation default program.
+     *
+     * @access public
+     * @return bool
+     */
+    public function relationDefaultProgram($programID)
+    {
+        /* product */
+        $noRelationProduct = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchPairs('id');
+        if(!empty($noRelationProduct))
+        {
+            foreach($noRelationProduct as $productID)
+            {
+                $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->eq($productID)->exec();
+            }
+        }
+
+        /* project */
+        $noRelationProject = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)->fetchAll();
+        if(!empty($noRelationProject))
+        {
+            foreach($noRelationProject as $project)
+            {
+                $path = ",{$programID}" . $project->path;
+                $this->dao->update(TABLE_PROJECT)
+                    ->set('parent')->eq($programID)
+                    ->set('path')->eq($path)
+                    ->set('grade = grade+1')
+                    ->where('id')->eq($project->id)->exec();
+
+                /* Update children. */
+                $this->dao->update(TABLE_PROJECT)
+                    ->set("path = CONCAT(',{$programID}', path)")
+                    ->set('grade = grade+1')
+                    ->where('path')->like(",$project->id,%")
+                    ->exec();
+            }
+        }
+
         return true;
     }
 }

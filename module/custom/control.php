@@ -627,7 +627,7 @@ class custom extends control
      */
     public function mode()
     {
-        $mode = zget($this->config->global, 'mode', 'lite');
+        $mode = zget($this->config->global, 'mode', 'lean');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
             $mode = fixer::input('post')->get('mode');

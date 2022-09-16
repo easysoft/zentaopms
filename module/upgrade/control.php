@@ -157,11 +157,16 @@ class upgrade extends control
             /* Delete all patch actions if upgrade success. */
             $this->loadModel('action')->deleteByType('patch');
 
-            if((empty($systemMode) && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) or
-               ($systemMode != 'new' && strpos($fromVersion, 'max') === false && strpos($this->config->version, 'max') !== false))
+            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
+            $selectMode = true;
+            if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<=') and $systemMode == 'classic') $selectMode = false;
+            if(version_compare($openVersion, '18_0', '>')) $selectMode = false;
+
+            if($selectMode)
             {
-                $this->locate(inlink('to15Guide', "fromVersion=$fromVersion"));
+                $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
             }
+
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
 
@@ -215,6 +220,55 @@ class upgrade extends control
         }
 
         $this->view->title = $title;
+        $this->display();
+    }
+
+    /**
+     * Guide to 18 version.
+     *
+     * @param  string    $fromVersion
+     * @access public
+     * @return void
+     */
+    public function to18Guide($fromVersion)
+    {
+        if($_POST)
+        {
+            $mode = fixer::input('post')->get('mode');
+            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+
+            /* Update sprint concept. */
+            $sprintConcept = 0;
+            if(isset($this->config->custom->sprintConcept))
+            {
+                if($this->config->custom->sprintConcept == 2 and $mode == 'new') $sprintConcept = 1;
+            }
+            elseif(isset($this->config->custom->productProject))
+            {
+                list($productConcept, $projectConcept) = explode('_', $this->config->custom->productProject);
+                if($mode == 'classic') $sprintConcept = $projectConcept;
+                if($mode == 'new' and $projectConcept == 2) $sprintConcept = 1;
+            }
+            $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
+
+            if($mode == 'lean')
+            {
+                /* lite mode create default program. */
+                $programID = $this->loadModel('project')->createDefaultProgram();
+                /* set default program config. */
+                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+
+                /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
+                $this->upgrade->relationDefaultProgram($programID);
+
+                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            }
+            if($mode == 'new')  $this->locate(inlink('mergeTips'));
+        }
+
+        $title = $this->lang->upgrade->selectMode;
+
+        $this->view->title       = $title;
         $this->display();
     }
 

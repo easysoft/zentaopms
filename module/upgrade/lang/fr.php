@@ -162,6 +162,7 @@ $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = 'Cancel';
 $lang->upgrade->recoveryActions->review = 'Review';
 
+$lang->upgrade->selectMode       = 'Select Mode';
 $lang->upgrade->mode             = 'Mode';
 $lang->upgrade->usage            = 'Usage scenarios';
 $lang->upgrade->leanUsage        = 'The concept is simpler, the functionality is simpler, and it is suitable for small R&D teams';

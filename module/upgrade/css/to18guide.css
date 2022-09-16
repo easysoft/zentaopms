@@ -1,9 +1,10 @@
-#mainContent tr td .icon-close {font-weight: bold; color: brown;}
-#mainContent tr td .icon-check {font-weight: bold; color: green;}
+#mainContent tr td .icon-close {font-weight: bold; color: #ea644a;}
+#mainContent tr td .icon-check {font-weight: bold; color: #329d38;}
 
 #mainContent tr th {background-color: rgb(241, 241, 241);}
 #mainContent tr td {background-color: rgb(255, 255, 255); border-bottom: 1px solid rgb(238, 238, 238); border-right: 1px solid rgb(238, 238, 238);}
 
+#useLean {background-color: #ddd!important; padding: 6px 85px;}
+#useNew {background-color: #ddd!important; padding: 6px 85px;}
 
-#useLean {background-color: #BDBBBE!important;}
-#useNew {background-color: #BDBBBE!important;}
+#mainContent .datatable {cursor: default;}

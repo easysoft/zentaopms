@@ -93,8 +93,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <p>选择历史{$lang->projectCommon}作为迭代升级后，用户可以选择这个执行所属的项目集、项目或新建项目集、项目。</p>
 EOD;
 
-$lang->upgrade->to15Mode['lite'] = '迅捷模式';
-$lang->upgrade->to15Mode['new']  = '综合模式';
+$lang->upgrade->to15Mode['classic'] = '经典管理模式';
+$lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
@@ -162,6 +162,7 @@ $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = '取消';
 $lang->upgrade->recoveryActions->review = '评审';
 
+$lang->upgrade->selectMode       = '请选择使用模式';
 $lang->upgrade->mode             = '模式';
 $lang->upgrade->usage            = '使用场景';
 $lang->upgrade->leanUsage        = '概念更简单，功能也更简洁，适用于小型研发团队';
@@ -182,5 +183,5 @@ $lang->upgrade->useNew           = '使用综合模式';
 $lang->upgrade->remark           = '备注';
 $lang->upgrade->remarkDesc       = '后续您还可以在系统的后台自定义中进行切换';
 
-$lang->upgrade->to18Mode['lite'] = '迅捷模式';
+$lang->upgrade->to18Mode['lean'] = '迅捷模式';
 $lang->upgrade->to18Mode['new']  = '综合模式';

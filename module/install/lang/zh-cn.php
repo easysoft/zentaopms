@@ -293,7 +293,7 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->modeList['lite'] = '迅捷模式';
+$lang->install->modeList['lean'] = '迅捷模式';
 $lang->install->modeList['new']  = '综合模式';
 
 $lang->install->promotion = "为您推荐易软天创旗下其他产品：";
