@@ -58,7 +58,7 @@ class story extends control
         if($this->config->vision == 'lite' and $productID == 0)
         {
             $product = $this->loadModel('product')->getProductPairsByProject($objectID);
-            if(!empty($project)) $productID = key($product);
+            if(!empty($product)) $productID = key($product);
         }
 
         $this->story->replaceURLang($storyType);
