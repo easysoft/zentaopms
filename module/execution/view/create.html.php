@@ -132,7 +132,9 @@
           <td></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <tr>
+        <?php $hidden = 'hide'?>
+        <?php if(!empty($project->hasProduct)) $hidden = ''?>
+        <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
@@ -159,7 +161,8 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <?php if(isset($project->model) and $project->model == 'scrum') $hidden = '';?>
+        <tr class="<?php echo $hidden?>">
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td colspan="3" id="plansBox">
             <div class='row'>
