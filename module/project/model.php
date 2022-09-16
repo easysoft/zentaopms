@@ -2454,22 +2454,22 @@ class projectModel extends model
 
         if(empty($project->hasProduct))
         {
-            unset($this->lang->project->menu->story);
-            unset($this->lang->project->menu->settings['subMenu']->products);
+            unset($lang->project->menu->story);
+            unset($lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
-            $this->lang->project->menu->settings['subMenu']->module['link'] = sprintf($this->lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+            $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
             if($model !== 'kanbanProject')
             {
-                $this->lang->project->menu->storyGroup['link'] = sprintf($this->lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-                $this->lang->project->menu->storyGroup['dropMenu']->story['link']       = sprintf($this->lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-                $this->lang->project->menu->storyGroup['dropMenu']->requirement['link'] = sprintf($this->lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
+                $lang->project->menu->storyGroup['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                $lang->project->menu->storyGroup['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
+                $lang->project->menu->storyGroup['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
             }
         }
         else
         {
-            unset($this->lang->project->menu->settings['subMenu']->module);
-            unset($this->lang->project->menu->storyGroup);
+            unset($lang->project->menu->settings['subMenu']->module);
+            unset($lang->project->menu->storyGroup);
         }
 
         /* Reset project priv. */
@@ -2480,9 +2480,8 @@ class projectModel extends model
 
         if(isset($project->model) and $project->model == 'waterfall')
         {
-            global $lang;
-            $lang->project->createExecution = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
-            $lang->project->lastIteration   = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+            $lang->project->createExecution = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
 
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
@@ -2490,11 +2489,11 @@ class projectModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
+        $lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
 
-        if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
+        if(isset($project->acl) and $project->acl == 'open') unset($lang->project->menu->settings['subMenu']->whitelist);
 
         common::setMenuVars('project', $objectID);
         return $objectID;
