@@ -630,12 +630,10 @@ class custom extends control
         $mode = zget($this->config->global, 'mode', 'classic');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
-            $mode = fixer::input('post')->get('mode');
-            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->setting->setItem('system.common.global.changedMode', 'yes');
+            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode);
 
             $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-            if($mode == 'new')
+            if($this->post->mode == 'new')
             {
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
@@ -658,11 +656,10 @@ class custom extends control
 
         $this->app->loadLang('upgrade');
 
-        $this->view->title       = $this->lang->custom->mode;
-        $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->view->title;
-        $this->view->mode        = $mode;
-        $this->view->changedMode = zget($this->config->global, 'changedMode', 'no');
+        $this->view->title      = $this->lang->custom->mode;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->mode       = $mode;
 
         $this->display();
     }
