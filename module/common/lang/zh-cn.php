@@ -156,6 +156,7 @@ $lang->pri     = '优先级';
 $lang->delayed = '已延期';
 
 $lang->common->common     = '公有模块';
+$lang->common->story      = '需求';
 $lang->my->common         = '地盘';
 $lang->program->common    = '项目集';
 $lang->product->common    = '产品';
@@ -170,7 +171,6 @@ $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
-$lang->story->story       = '需求';
 $lang->task->common       = '任务';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = '用例';

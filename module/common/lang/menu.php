@@ -202,7 +202,7 @@ if($config->systemMode == 'new') $lang->project->homeMenu->kanban = array('link'
 $lang->scrum->menu             = new stdclass();
 $lang->scrum->menu->index      = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->scrum->menu->execution  = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
-$lang->scrum->menu->storyGroup = array('link' => "{$lang->story->story}|projectstory|story|projectID=%s&productID=%s",'class' => 'dropdown dropdown-hover');
+$lang->scrum->menu->storyGroup = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s&product=%s",'class' => 'dropdown dropdown-hover');
 $lang->scrum->menu->story      = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s|story", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport,execution', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
@@ -253,7 +253,7 @@ $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->execution  = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s", 'subModule' => 'programplan,task');
-$lang->waterfall->menu->storyGroup = array('link' => "{$lang->story->story}|projectstory|story|projectID=%s&productID=%s",'class' => 'dropdown dropdown-hover');
+$lang->waterfall->menu->storyGroup = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s",'class' => 'dropdown dropdown-hover');
 $lang->waterfall->menu->story      = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');

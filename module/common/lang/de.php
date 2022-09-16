@@ -156,6 +156,7 @@ $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
 
 $lang->common->common     = 'Standard Module';
+$lang->common->story      = 'Story'
 $lang->my->common         = 'My';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
@@ -170,7 +171,6 @@ $lang->report->common     = 'Statistic';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
-$lang->story->story       = 'Story'
 $lang->task->common       = 'Task';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = 'Testcase';

@@ -327,7 +327,7 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+            <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
@@ -347,6 +347,7 @@
               </div>
             </div>
             <?php endif; ?>
+            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -367,6 +368,7 @@
                 </div>
               </div>
             </div>
+            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
               <div class="detail-content">

@@ -139,7 +139,9 @@
         </tr>
         <?php endif;?>
         <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
-        <tr>
+        <?php $hidden = 'hide'?>
+        <?php if(!empty($project->hasProduct)) $hidden = ''?>
+        <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">
           <?php $class = $execution->grade == 2 ? "readonly='readonly'" : '';?>
@@ -174,7 +176,8 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <?php if(isset($project->model) and $project->model == 'scrum') $hidden = '';?>
+        <tr class="<?php echo $hidden?>">
           <th><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox" colspan="2">
             <div class='row'>

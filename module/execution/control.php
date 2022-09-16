@@ -850,7 +850,10 @@ class execution extends control
 
         $projectID = $execution->project;
         $project   = $this->loadModel('project')->getByID($projectID);
-        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']); 
+
+        if(empty($project->hasProduct)) unset($this->config->product->search['fields']['product']);
+        if(empty($project->hasProduct) and $project->model != 'scrum') unset($this->config->product->search['fields']['plan']);
+
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
@@ -1659,7 +1662,8 @@ class execution extends control
             $this->execution->updateProducts($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', join(',', $_POST['products']));
+            $comment = $project->hasProduct ? join(',', $_POST['products']) : '';
+            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $comment);
 
             $message = $this->executeHooks($executionID);
             if($message) $this->lang->saveSuccess = $message;
@@ -1726,12 +1730,15 @@ class execution extends control
         $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '');
         $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
+        if(!empty($project->hasProduct)) $allProducts = array(0 => '') + $allProducts;
+        if(isset($project->hasProduct) and $project->hasProduct == 0) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
+
         $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]          = $this->view->title;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->executions          = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups              = $this->loadModel('group')->getPairs();
-        $this->view->allProducts         = array(0 => '') + $allProducts;
+        $this->view->allProducts         = $allProducts;
         $this->view->acl                 = $acl;
         $this->view->plan                = $plan;
         $this->view->name                = $name;
@@ -1923,6 +1930,7 @@ class execution extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $project = $this->project->getById($execution->project);
+        if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title                = $title;
         $this->view->position             = $position;
@@ -2349,6 +2357,7 @@ class execution extends control
         $pager = new pager(0, 30, 1);
 
         $this->executeHooks($executionID);
+        if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->view->title      = $this->lang->execution->view;
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
