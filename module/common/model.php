@@ -49,40 +49,32 @@ class commonModel extends model
         global $app;
         $rawModule = $app->rawModule;
 
-        if($this->config->systemMode == 'classic')
+        if($rawModule == 'task' or $rawModule == 'effort')
         {
-            if($rawModule == 'task') $this->syncExecutionStatus($objectID);
+            $taskID    = $objectID;
+            $execution = $this->syncExecutionStatus($taskID);
+            $project   = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
         }
-
-        if($this->config->systemMode == 'new')
+        if($rawModule == 'execution')
         {
-            if($rawModule == 'task' or $rawModule == 'effort')
-            {
-                $taskID    = $objectID;
-                $execution = $this->syncExecutionStatus($taskID);
-                $project   = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'execution')
-            {
-                $executionID = $objectID;
-                $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
-                $this->syncExecutionByChild($execution);
-                $project     = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'project')
-            {
-                $projectID = $objectID;
-                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'program')
-            {
-                $programID = $objectID;
-                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-                $this->syncProgramStatus($program);
-            }
+            $executionID = $objectID;
+            $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+            $this->syncExecutionByChild($execution);
+            $project     = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'project')
+        {
+            $projectID = $objectID;
+            $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'program' and $this->config->systemMode == 'new')
+        {
+            $programID = $objectID;
+            $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+            $this->syncProgramStatus($program);
         }
     }
 
@@ -938,7 +930,6 @@ class commonModel extends model
             if($tab == 'product') $currentMethod = 'all';
         }
 
-        if($config->systemMode == 'classic' and $tab == 'execution') $icon = zget($lang->navIcons, 'project', '');
         $link = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
         $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
@@ -1248,9 +1239,10 @@ class commonModel extends model
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
 
         $searchObjects = $lang->searchObjects;
-        if($config->systemMode != 'new') unset($searchObjects['program'], $searchObjects['project']);
+        if($config->systemMode != 'new') unset($searchObjects['program']);
+        if(!isset($config->projectMode) || $config->projectMode == 'noExecution') unset($searchObjects['execution']);
 
-        foreach ($searchObjects as $key => $value)
+        foreach($searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
@@ -1691,7 +1683,6 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
         if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);

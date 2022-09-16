@@ -78,9 +78,9 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
+          <?php $noExecution   = (isset($config->projectMode) and $config->projectMode == 'noExecution');?>
           <tr>
             <th>
-              <?php if($config->systemMode == 'classic') $lang->bug->project = $lang->bug->execution;?>
               <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
             </th>
 
@@ -111,7 +111,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <?php endif;?>
             <?php if($showExecution):?>
             <td>
-              <?php if($config->systemMode == 'new'):?>
+              <?php if(!$noExecution):?>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>

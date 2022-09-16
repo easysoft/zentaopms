@@ -38,18 +38,10 @@ $config->bug->exportFields = 'id, product, branch, module, project, execution, s
     lastEditedBy,
     lastEditedDate, files ,feedbackBy, notifyEmail';
 
-if($config->systemMode == 'classic') $config->bug->exportFields = str_replace(' project,', '', $config->bug->exportFields);
 
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
-if($config->systemMode == 'new')
-{
-    $config->bug->list->customBatchCreateFields = 'project,execution,steps,type,pri,deadline,severity,os,browser,keywords';
-}
-else
-{
-    $config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
-}
+$config->bug->list->customBatchCreateFields = 'project,execution,steps,type,pri,deadline,severity,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
@@ -83,7 +75,7 @@ $config->bug->search['fields']['status']         = $lang->bug->status;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 $config->bug->search['fields']['story']          = $lang->bug->story;
 
-if($config->systemMode == 'new') $config->bug->search['fields']['project'] = $lang->bug->project;
+$config->bug->search['fields']['project']        = $lang->bug->project;
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
@@ -129,7 +121,7 @@ $config->bug->search['params']['status']        = array('operator' => '=',      
 $config->bug->search['params']['confirmed']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmedList);
 $config->bug->search['params']['story']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 
-if($config->systemMode == 'new') $config->bug->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
+$config->bug->search['params']['project']       = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->bug->search['params']['product']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['branch']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->bug->search['params']['plan']          = array('operator' => '=',       'control' => 'select', 'values' => '');
@@ -209,15 +201,12 @@ $config->bug->datatable->fieldList['type']['fixed']    = 'no';
 $config->bug->datatable->fieldList['type']['width']    = '90';
 $config->bug->datatable->fieldList['type']['required'] = 'no';
 
-if($config->systemMode == 'new')
-{
-    $config->bug->datatable->fieldList['project']['title']      = 'project';
-    $config->bug->datatable->fieldList['project']['fixed']      = 'no';
-    $config->bug->datatable->fieldList['project']['width']      = '120';
-    $config->bug->datatable->fieldList['project']['required']   = 'no';
-    $config->bug->datatable->fieldList['project']['control']    = 'hidden';
-    $config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
-}
+$config->bug->datatable->fieldList['project']['title']      = 'project';
+$config->bug->datatable->fieldList['project']['fixed']      = 'no';
+$config->bug->datatable->fieldList['project']['width']      = '120';
+$config->bug->datatable->fieldList['project']['required']   = 'no';
+$config->bug->datatable->fieldList['project']['control']    = 'hidden';
+$config->bug->datatable->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
 
 $config->bug->datatable->fieldList['execution']['title']      = 'execution';
 $config->bug->datatable->fieldList['execution']['fixed']      = 'no';
