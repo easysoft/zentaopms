@@ -7747,18 +7747,12 @@ class upgradeModel extends model
      */
     public function getNoMergedSprints()
     {
-        $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+        return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('project')->eq(0)
             ->andWhere('vision')->eq('rnd')
             ->andWhere('type')->eq('sprint')
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-
-        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
-        foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
-
-        if(empty($noMergedSprints)) return false;
-        return $noMergedSprints;
     }
 
     /**
