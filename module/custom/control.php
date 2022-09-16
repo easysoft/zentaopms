@@ -630,10 +630,11 @@ class custom extends control
         $mode = zget($this->config->global, 'mode', 'classic');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
-            $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode);
+            $mode = fixer::input('post')->get('mode');
+            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
 
             $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-            if($this->post->mode == 'new')
+            if($mode == 'new')
             {
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
