@@ -41,7 +41,7 @@
                 <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
               </tr>
             </thead>
-          <tbody>
+            <tbody>
             <tr>
               <td colspan='2'><?php echo $this->lang->upgrade->mode;?></td>
               <td colspan='2'><?php echo $this->lang->upgrade->leanUsage;?></td>
@@ -106,7 +106,7 @@
               <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>
               <td colspan='4' class="text-center"><?php echo $this->lang->upgrade->remarkDesc;?></td>
             </tr>
-          </tbody>
+            </tbody>
           <?php echo html::hidden('mode','')?>
           </table>
         </div>

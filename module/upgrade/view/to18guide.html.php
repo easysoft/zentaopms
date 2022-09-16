@@ -20,9 +20,9 @@
           <table class="table datatable">
             <thead>
               <tr>
-                  <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
-                  <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lean'];?></th>
-                  <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
+                <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lean'];?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
               </tr>
             </thead>
             <tbody>

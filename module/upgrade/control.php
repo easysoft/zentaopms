@@ -272,9 +272,7 @@ class upgrade extends control
             if($mode == 'new')  $this->locate(inlink('mergeTips'));
         }
 
-        $title = $this->lang->upgrade->selectMode;
-
-        $this->view->title       = $title;
+        $this->view->title = $this->lang->upgrade->selectMode;
         $this->display();
     }
 

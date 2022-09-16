@@ -1609,8 +1609,8 @@ class programModel extends model
         $program->status     = 'doing';
         $program->grade      = 1;
         $program->auth       = 'extend';
-        $program->openedDate = $minBegin;
-        $program->begin      = helper::today();
+        $program->openedDate = helper::today();
+        $program->begin      = $minBegin;
         $program->end        = LONG_TIME;
 
         $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
