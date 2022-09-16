@@ -245,7 +245,7 @@ class product extends control
             $productPlans    = $this->execution->getPlans($projectProducts, 'skipParent');
 
             if($browseType == 'bybranch') $param = $branchID;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, 'story', '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, $storyType, '', $pager);
         }
         else
         {

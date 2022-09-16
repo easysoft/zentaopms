@@ -170,6 +170,7 @@ $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
+$lang->story->story       = '需求';
 $lang->task->common       = '任务';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = '用例';

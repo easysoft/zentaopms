@@ -2454,13 +2454,22 @@ class projectModel extends model
 
         if(empty($project->hasProduct))
         {
+            if(isset($this->lang->project->menu->story)) unset($this->lang->project->menu->story);
             unset($this->lang->project->menu->settings['subMenu']->products);
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
             $this->lang->project->menu->settings['subMenu']->module['link'] = sprintf($this->lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+
+            if($model !== 'kanbanProject')
+            {
+                $this->lang->project->menu->storyGroup['link'] = sprintf($this->lang->project->menu->storyGroup['link'], '%s', $projectProduct);
+                $this->lang->project->menu->storyGroup['dropMenu']->SRStory['link'] = sprintf($this->lang->project->menu->storyGroup['dropMenu']->SRStory['link'], '%s', $projectProduct);
+                $this->lang->project->menu->storyGroup['dropMenu']->URStory['link'] = sprintf($this->lang->project->menu->storyGroup['dropMenu']->URStory['link'], '%s', $projectProduct);
+            }
         }
         else
         {
             unset($this->lang->project->menu->settings['subMenu']->module);
+            if(isset($this->lang->project->menu->storyGroup)) unset($this->lang->project->menu->storyGroup);
         }
 
         /* Reset project priv. */
