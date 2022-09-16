@@ -58,7 +58,7 @@ $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = 'Execution';
+if($config->systemMode == 'lean' || !$config->systemMode) $lang->custom->execution = 'Execution';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -237,7 +237,7 @@ $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
 global $config;
-if($config->systemMode == 'classic')
+if($config->systemMode == 'lean')
 {
     $lang->custom->sprintConceptList[0] = 'Product - Project';
     $lang->custom->sprintConceptList[1] = 'Product - Iteration';

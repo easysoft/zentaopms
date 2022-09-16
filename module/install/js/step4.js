@@ -1,23 +1,14 @@
-/**
- * Show guide video.
- *
- * @access public
- * @return void
- */
-function showVideo()
-{
-    $('video').removeClass('hidden');
-}
-
 $(function()
 {
-    $('#modeclassic').click(function()
+    $("#useLean").click(function()
     {
-        $('#selectedModeTips').show();
-    });
+        $('#mode').val('lean');
+        $('form').submit();
+    })
 
-    $('#modenew').click(function()
+    $("#useNew").click(function()
     {
-        $('#selectedModeTips').hide();
-    });
-})
+        $('#mode').val('new');
+        $('form').submit();
+    })
+});

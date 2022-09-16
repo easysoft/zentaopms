@@ -95,7 +95,7 @@ $lang->my->form->lblAccount = 'Account Info';
 $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = 'Product Default Page';
 $lang->my->projectLink   = 'Project Default Page';
-if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
+if($config->systemMode == 'lean') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
 if($config->systemMode == 'new') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
 
 $lang->my->programLinkList = array();
@@ -124,7 +124,7 @@ if($config->systemMode == 'new')
     $lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
     $lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
 }
-if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
+if($config->systemMode == 'lean') $lang->my->executionLinkList['execution-task'] = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
 
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
