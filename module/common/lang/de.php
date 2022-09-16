@@ -156,7 +156,7 @@ $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
 
 $lang->common->common     = 'Standard Module';
-$lang->common->story      = 'Story'
+$lang->common->story      = 'Story';
 $lang->my->common         = 'My';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
