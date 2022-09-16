@@ -87,7 +87,7 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
+$lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -102,7 +102,7 @@ $lang->custom->object['block']     = '区块';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
