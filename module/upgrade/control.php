@@ -161,12 +161,18 @@ class upgrade extends control
             if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<=') and $systemMode != 'new')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
+
                 /* Lean mode create default program. */
                 $programID = $this->loadModel('program')->createDefaultProgram();
+
                 /* Set default program config. */
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+
                 /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
                 $this->upgrade->relationDefaultProgram($programID);
+
+                $this->upgrade->classic2Lean($programID);
+
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>')) $selectMode = false;

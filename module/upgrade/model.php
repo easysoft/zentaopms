@@ -7532,15 +7532,15 @@ class upgradeModel extends model
     /*
      * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
      *
+     * @param  int    $programID
      * @access public
      * @return bool
      */
-    public function classic2Lean()
+    public function classic2Lean($programID)
     {
         /* Set project mode as noExecution. */
         $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
 
-        $programID = $this->createDefaultProgram();
         $this->upgradeInProjectMode($programID);
 
         return !dao::isError();
