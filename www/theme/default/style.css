@@ -113,7 +113,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #downloadMobile .dropdown-menu .mobile-version {text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
 
-#mainMenu > .btn-toolBar > .btn-link > .label-light,
-#mainMenu > .btn-toolbar > .btn-link > .label-light {color: #203362; background: #fff;}
-#mainMenu > .btn-toolBar > .btn-active-text,
-#mainMenu > .btn-toolbar > .btn-active-text {background: #E6EAF1;}
+#mainMenu > .btn-toolBar .btn-link .label-light,
+#mainMenu > .btn-toolbar .btn-link .label-light {color: #203362; background: #fff;}
+#mainMenu > .btn-toolBar .btn-active-text,
+#mainMenu > .btn-toolbar .btn-active-text {background: #E6EAF1;}

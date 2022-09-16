@@ -48,8 +48,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 #productStoryForm #storyList .c-taskCount,
 #productStoryForm #storyList .c-actions  { border-left: 1px solid #F2F4F7;}
 
-#productStoryForm #storyList .c-actions {overflow: visible;}
-#productStoryForm #storyList .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #E4E4E4; margin: 0 4px 0 0;}
+#productStoryForm table tbody tr td.c-actions {overflow: visible;}
+#productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #E4E4E4; margin: 0 4px 0 0;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
