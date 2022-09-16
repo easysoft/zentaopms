@@ -630,7 +630,10 @@ class execution extends control
             $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
         }
 
-       /* Build the search form. */
+        $execution = $this->execution->getByID($executionID);
+        $project   = $this->loadModel('project')->getByID($execution->project);
+
+        /* Build the search form. */
         $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$executionID&browseType=bySearch&param=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;
         if(!empty($products))
@@ -674,6 +677,8 @@ class execution extends control
         unset($this->config->bug->search['fields']['resolvedDate']);
         unset($this->config->bug->search['fields']['closedDate']);
         unset($this->config->bug->search['fields']['branch']);
+        if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+
         unset($this->config->bug->search['params']['resolvedBy']);
         unset($this->config->bug->search['params']['closedBy']);
         unset($this->config->bug->search['params']['status']);
@@ -697,7 +702,7 @@ class execution extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->users          = $users;
-        $this->view->execution      = $this->execution->getByID($executionID);
+        $this->view->execution      = $execution;
         $this->view->executionID    = $executionID;
         $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
