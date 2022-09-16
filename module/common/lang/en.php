@@ -160,7 +160,7 @@ $lang->my->common         = 'My';
 $lang->program->common    = 'Program';
 $lang->product->common    = 'Product';
 $lang->project->common    = 'Project';
-$lang->execution->common  = $config->systemMode == 'new' ? 'Execution' : $lang->executionCommon;
+$lang->execution->common  = 'Execution';
 $lang->kanban->common     = 'Kanban';
 $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';

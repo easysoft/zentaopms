@@ -284,14 +284,11 @@ $lang->block->default['full']['my']['4']['grid']            = 8;
 $lang->block->default['full']['my']['4']['source']          = 'project';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['5']['title']           = 'Personal Contribution';
-    $lang->block->default['full']['my']['5']['block']           = 'contribute';
-    $lang->block->default['full']['my']['5']['source']          = '';
-    $lang->block->default['full']['my']['5']['grid']            = 4;
-    $lang->block->default['full']['my']['5']['params']['count'] = '20';
-}
+$lang->block->default['full']['my']['5']['title']           = 'Personal Contribution';
+$lang->block->default['full']['my']['5']['block']           = 'contribute';
+$lang->block->default['full']['my']['5']['source']          = '';
+$lang->block->default['full']['my']['5']['grid']            = 4;
+$lang->block->default['full']['my']['5']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['6']['title']  = 'Recent Project';
 $lang->block->default['full']['my']['6']['block']  = 'recentproject';
@@ -316,19 +313,16 @@ $lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['9']['title']  = 'Project List';
-    $lang->block->default['full']['my']['9']['block']  = 'project';
-    $lang->block->default['full']['my']['9']['source'] = 'project';
-    $lang->block->default['full']['my']['9']['grid']   = 8;
-}
+$lang->block->default['full']['my']['9']['title']  = 'Project List';
+$lang->block->default['full']['my']['9']['block']  = 'project';
+$lang->block->default['full']['my']['9']['source'] = 'project';
+$lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['title']  = 'Project List';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-if($config->systemMode == 'classic')
+if(!isset($config->projectMode) || $config->projectMode != 'noExecution')
 {
     $lang->block->default['full']['my']['10']['block']  = 'project';
     $lang->block->default['full']['my']['10']['source'] = 'project';
@@ -359,18 +353,18 @@ $lang->block->availableBlocks->issue       = 'My Issues';
 $lang->block->availableBlocks->meeting     = 'My Meetings';
 $lang->block->availableBlocks->feedback    = 'My Feedbacks';
 
-if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
-$lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['execution'] = $lang->execution->common;
-$lang->block->moduleList['qa']        = 'QA';
-$lang->block->moduleList['todo']      = 'Todos';
+$lang->block->moduleList['product'] = $lang->productCommon;
+$lang->block->moduleList['project'] = 'Project';
+if(!isset($config->projectMode) || $config->projectMode != 'noExecution') $lang->block->moduleList['execution'] = $lang->execution->common;
+$lang->block->moduleList['qa']      = 'QA';
+$lang->block->moduleList['todo']    = 'Todos';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = 'Project List';
 $lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = 'Project Human Input';
+$lang->block->modules['project']->availableBlocks->projectteam = 'Project Human Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -573,7 +567,7 @@ $lang->block->flowchart['admin']   = array('Administrator', 'Abteilung erstellen
 if($config->systemMode == 'new') $lang->block->flowchart['program'] = array('Program Owner', 'Create Program', 'Link Product', "Create Project", "Budgeting and planning", 'Add Stakeholder');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Besitzer', $lang->productCommon . ' erstellen', 'Module pflegen', 'Pläne pflegen', 'Storys pflegen', 'Release erstellen');
 $lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
-if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
+$lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
 $lang->block->flowchart['dev']     = array('Entwickler', 'Aufgabe/Bugs anfordern', 'Update Status', 'Aufgaben/Bugs abschließen');
 $lang->block->flowchart['tester']  = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');
 
