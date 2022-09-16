@@ -165,6 +165,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 <?php $i++;?>
                 <?php if($i > 30) break;?>
                 <?php endforeach;?>
+                <?php unset($members['ditto']);?>
               </tbody>
             </table>
           </td>
