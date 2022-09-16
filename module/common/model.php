@@ -1181,10 +1181,8 @@ class commonModel extends model
                             if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
 
                             $dropMenuLinks = explode('|', $dropMenuLink);
-                            list($subLabel, $subModule, $subMethod, $subParams) = $dropMenuLinks;
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
                             if(!common::hasPriv($subModule, $subMethod)) continue;
-                            $labelID = $subLabel;
-                            if(isset($dropMenuLinks[4])) $labelID = $dropMenuLinks[4];
 
                             $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
@@ -1207,7 +1205,7 @@ class commonModel extends model
                                 $subActive  = 'active';
                                 $label      = $subLabel;
                             }
-                            $dropMenu .= "<li class='$subActive' data-id='$labelID'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
+                            $dropMenu .= "<li class='$subActive' data-id='$dropMenuName'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
                         }
 
                         if(empty($dropMenu)) continue;

@@ -213,8 +213,8 @@ $lang->scrum->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic
 $lang->scrum->menu->settings   = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
 $lang->scrum->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->scrum->menu->storyGroup['dropMenu']->SRStory = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s|story", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
-$lang->scrum->menu->storyGroup['dropMenu']->URStory = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement|requirement", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
+$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s|story", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
+$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement|requirement", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
@@ -273,7 +273,7 @@ $lang->waterfall->menuOrder[5]  = 'index';
 $lang->waterfall->menuOrder[15] = 'programplan';
 $lang->waterfall->menuOrder[20] = 'execution';
 $lang->waterfall->menuOrder[25] = 'story';
-$lang->waterfall->menuOrder[26] = 'storyGoup';
+$lang->waterfall->menuOrder[26] = 'storyGroup';
 $lang->waterfall->menuOrder[30] = 'design';
 $lang->waterfall->menuOrder[35] = 'devops';
 $lang->waterfall->menuOrder[55] = 'qa';
