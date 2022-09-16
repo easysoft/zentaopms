@@ -95,8 +95,7 @@ $lang->my->form->lblAccount = '帐号信息';
 $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = '产品默认着陆页';
 $lang->my->projectLink   = '项目默认着陆页';
-if($config->systemMode == 'lean') $lang->my->executionLink = $lang->executionCommon . '默认着陆页';
-if($config->systemMode == 'new') $lang->my->executionLink = '执行默认着陆页';
+$lang->my->executionLink = '执行默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '默认进入项目集列表，可以查看所有的项目集';

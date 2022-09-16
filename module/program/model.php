@@ -1590,4 +1590,35 @@ class programModel extends model
         }
         return $menu;
     }
+
+    /**
+     * Create default program.
+     *
+     * @access public
+     * @return int
+     */
+    public function createDefaultProgram()
+    {
+        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+        $program = new stdClass();
+
+        $program->type       = 'program';
+        $program->name       = $this->lang->program->defaultProgram;
+        $program->budgetUnit = 'CNY';
+        $program->whitelist  = '';
+        $program->status     = 'doing';
+        $program->grade      = 1;
+        $program->auth       = 'extend';
+        $program->openedDate = $minBegin;
+        $program->begin      = helper::today();
+        $program->end        = LONG_TIME;
+
+        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+
+        $insertID = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",$insertID,")->where('id')->eq($insertID)->exec();
+
+        return $insertID;
+    }
 }

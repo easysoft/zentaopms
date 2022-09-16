@@ -2630,29 +2630,4 @@ class projectModel extends model
 
         return $menu;
     }
-
-    /**
-     * Create default program.
-     *
-     * @access public
-     * @return int
-     */
-    public function createDefaultProgram()
-    {
-        $program = new stdClass();
-
-        $program->type       = 'program';
-        $program->name       = $this->lang->project->defaultProgram;
-        $program->budgetUnit = 'CNY';
-        $program->whitelist  = '';
-        $program->status     = 'doing';
-        $program->grade      = 1;
-        $program->openedDate = helper::now();
-        $program->begin      = helper::today();
-        $program->end        = LONG_TIME;
-
-        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
-
-        return $this->dao->lastInsertId();
-    }
 }

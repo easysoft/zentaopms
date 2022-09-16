@@ -95,8 +95,7 @@ $lang->my->form->lblAccount = 'Account Info';
 $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = 'Product Default Page';
 $lang->my->projectLink   = 'Project Default Page';
-if($config->systemMode == 'lean') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
-if($config->systemMode == 'new') $lang->my->executionLink = $lang->executionCommon . ' Default Page';
+$lang->my->executionLink = 'Execution Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'By default, you go to the program list, where you can view all of the programs';

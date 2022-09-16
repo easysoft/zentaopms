@@ -237,13 +237,14 @@ class install extends control
             $this->install->updateLang();
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->importDemoData) $this->install->importDemoData();
+            // if($this->post->importDemoData) $this->install->importDemoData();
 
-            if($this->config->systemMode == 'lite')
+            if($this->config->systemMode == 'lean')
             {
-                /* lite mode create default program. */
-                $programID = $this->loadModel('project')->createDefaultProgram();
-                /* set default program config. */
+                /* Lean mode create default program. */
+                $programID = $this->loadModel('program')->createDefaultProgram();
+                echo $programID;exit;
+                /* Set default program config. */
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
             }
 

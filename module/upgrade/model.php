@@ -7539,36 +7539,17 @@ class upgradeModel extends model
     public function relationDefaultProgram($programID)
     {
         /* product */
-        $noRelationProduct = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchPairs('id');
-        if(!empty($noRelationProduct))
-        {
-            foreach($noRelationProduct as $productID)
-            {
-                $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('id')->eq($productID)->exec();
-            }
-        }
+        $this->dao->update(TABLE_PRODUCT)
+            ->set('program')->eq($programID)
+            ->where('program')->eq(0)
+            ->exec();
 
         /* project */
-        $noRelationProject = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)->fetchAll();
-        if(!empty($noRelationProject))
-        {
-            foreach($noRelationProject as $project)
-            {
-                $path = ",{$programID}" . $project->path;
-                $this->dao->update(TABLE_PROJECT)
-                    ->set('parent')->eq($programID)
-                    ->set('path')->eq($path)
-                    ->set('grade = grade+1')
-                    ->where('id')->eq($project->id)->exec();
-
-                /* Update children. */
-                $this->dao->update(TABLE_PROJECT)
-                    ->set("path = CONCAT(',{$programID}', path)")
-                    ->set('grade = grade+1')
-                    ->where('path')->like(",$project->id,%")
-                    ->exec();
-            }
-        }
+        $this->dao->update(TABLE_PROJECT)
+            ->set("path = CONCAT(',{$programID}', path)")
+            ->set('grade = grade+1')
+            ->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)
+            ->exec();
 
         return true;
     }
