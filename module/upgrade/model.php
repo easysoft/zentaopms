@@ -4941,7 +4941,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function processMergedData($programID, $projectID, $lineID, $productIdList = array(), $sprintIdList = array())
+    public function processMergedData($programID, $projectID, $lineID = 0, $productIdList = array(), $sprintIdList = array())
     {
         /* Product linked objects. */
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
@@ -5009,12 +5009,12 @@ class upgradeModel extends model
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
-            $data->project  = $projectID;
-            $data->parent   = $projectID;
-            $data->grade    = 1;
-            $data->path     = ",{$projectID},{$sprint->id},";
-            $data->type     = 'sprint';
-            $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
+            $data->project = $projectID;
+            $data->parent  = $projectID;
+            $data->grade   = 1;
+            $data->path    = ",{$projectID},{$sprint->id},";
+            $data->type    = 'sprint';
+            $data->acl     = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 
@@ -7527,5 +7527,244 @@ class upgradeModel extends model
             }
         }
         return true;
+    }
+
+    /*
+     * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
+     *
+     * @access public
+     * @return bool
+     */
+    public function classic2Lean()
+    {
+        /* Set project mode as noExecution. */
+        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
+
+        $programID = $this->createDefaultProgram();
+        $this->upgradeInProjectMode($programID);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Create a default program.
+     *
+     * @access public
+     * @return object
+     */
+    public function createDefaultProgram()
+    {
+        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->upgrade->defaultProgram)->fetch();
+        if($program) return $program;
+
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+        $program = new stdclass();
+        $program->name          = $this->lang->upgrade->defaultProgram;
+        $program->type          = 'program';
+        $program->status        = 'doing';
+        $program->begin         = helper::now();
+        $program->end           = LONG_TIME;
+        $program->openedBy      = $account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = 'open';
+        $program->days          = $this->computeDaysDelta($program->begin, $program->end);
+        $program->grade         = 1;
+        $program->vision        = 'rnd';
+
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+        $this->lang->project->name = $this->lang->program->name;
+
+        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+        if(dao::isError()) return false;
+
+        $programID = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+
+        return $this->loadModel('program')->getByID($programID);
+    }
+
+    /**
+     * Historical projects are upgraded by project.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function upgradeInProjectMode($programID)
+    {
+        $this->loadModel('action');
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+        $noMergedSprints = $this->getNoMergedSprints();
+        if(!$noMergedSprints) return true;
+
+        foreach($noMergedSprints as $sprint)
+        {
+            $project = new stdclass();
+            $project->name           = $sprint->name;
+            $project->type           = 'project';
+            $project->model          = 'scrum';
+            $project->parent         = $programID;
+            $project->status         = $sprint->status;
+            $project->begin          = $sprint->begin;
+            $project->end            = isset($sprint->end) ? $sprint->end : LONG_TIME;
+            $project->days           = $this->computeDaysDelta($project->begin, $project->end);
+            $project->PM             = $sprint->PM;
+            $project->auth           = 'extend';
+            $project->openedBy       = $account;
+            $project->openedDate     = $now;
+            $project->openedVersion  = $this->config->version;
+            $project->lastEditedBy   = $account;
+            $project->lastEditedDate = $now;
+            $project->grade          = 2;
+            $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
+            if($this->config->global->mode == 'classic') $project->noExecution = '1';
+
+            $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
+            if(dao::isError()) return false;
+
+            $projectID = $this->dao->lastInsertId();
+
+            $this->action->create('project', $projectID, 'openedbysystem');
+            if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
+
+            $project->id = $projectID;
+            $this->createProjectDocLib($project);
+            $this->processMergedData($programID, $projectID, '', array(), array($sprint->id));
+        }
+
+        $this->fixProjectPath($programID);
+
+        if(dao::isError()) return false;
+        return true;
+    }
+
+    /**
+     * Historical projects are upgraded by execution.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function upgradeInExecutionMode($programID)
+    {
+        $this->loadModel('action');
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+        $noMergedSprints = $this->getNoMergedSprints();
+        if(!$noMergedSprints) return true;
+
+        $projects = array();
+        foreach($noMergedSprints as $sprint)
+        {
+            $year = date('Y', strtotime($sprint->openedDate));
+            $projects[$year][$sprint->id] = $sprint;
+        }
+
+        foreach($projects as $year => $sprints)
+        {
+            $project = new stdclass();
+            $project->name           = $year;
+            $project->type           = 'project';
+            $project->model          = 'scrum';
+            $project->parent         = $programID;
+            $project->auth           = 'extend';
+            $project->begin          = '';
+            $project->end            = '';
+            $project->openedBy       = $account;
+            $project->openedDate     = $now;
+            $project->openedVersion  = $this->config->version;
+            $project->lastEditedBy   = $account;
+            $project->lastEditedDate = $now;
+            $project->grade          = 2;
+            $project->acl            = 'open';
+
+            $projectStatus = 'closed';
+            foreach($sprints as $sprint)
+            {
+                if(!$project->begin || $sprint->begin < $project->begin) $project->begin = $sprint->begin;
+                if(!$project->end   || $sprint->end   > $project->end)   $project->end   = $sprint->end;
+                if($sprint->status != 'closed') $projectStatus = 'doing';
+            }
+            $project->status = $projectStatus;
+            $project->days   = $this->computeDaysDelta($project->begin, $project->end);
+
+            $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
+            if(dao::isError()) return false;
+
+            $projectID = $this->dao->lastInsertId();
+
+            $this->action->create('project', $projectID, 'openedbysystem');
+            if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
+
+            $project->id = $projectID;
+            $this->createProjectDocLib($project);
+            $this->processMergedData($programID, $projectID, '', array(), array_keys($sprints));
+        }
+
+        $this->fixProjectPath($programID);
+
+        if(dao::isError()) return false;
+        return true;
+    }
+
+    /**
+     * Get sprints has not been merged.
+     *
+     * @access public
+     * @return array
+     */
+    public function getNoMergedSprints()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('type')->eq('sprint')
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Create doc lib for project.
+     *
+     * @param  object  $project
+     * @access public
+     * @return void
+     */
+    public function createProjectDocLib($project)
+    {
+        $this->app->loadLang('doc');
+
+        $lib = new stdclass();
+        $lib->project = $project->id;
+        $lib->name    = $this->lang->doclib->main['project'];
+        $lib->type    = 'project';
+        $lib->main    = '1';
+        $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+    }
+
+    /**
+     * Fix the project path under the program.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function fixProjectPath($programID)
+    {
+        $this->dao->update(TABLE_PROJECT)
+            ->set("path = CONCAT(',{$programID},', id, ',')")->set("`order` = `id` * 5")
+            ->where('type')->eq('project')
+            ->andWhere('parent')->eq($programID)
+            ->andWhere('grade')->eq('2')
+            ->exec();
     }
 }

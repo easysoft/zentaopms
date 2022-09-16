@@ -56,9 +56,7 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
-
-if($config->systemMode == 'new') $lang->custom->execution = '执行';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = '执行';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -89,7 +87,7 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
+$lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -104,7 +102,7 @@ $lang->custom->object['block']     = '区块';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
