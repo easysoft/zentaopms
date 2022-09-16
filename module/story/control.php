@@ -46,6 +46,8 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $storyType = 'story')
     {
+        $originProduct = $productID;    // Log the origin product id and use it to create the redirect url.
+
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -56,7 +58,7 @@ class story extends control
         if($this->config->vision == 'lite' and $productID == 0)
         {
             $product = $this->loadModel('product')->getProductPairsByProject($objectID);
-            if(!empty($project)) $productID = key($product);
+            if(!empty($product)) $productID = key($product);
         }
 
         $this->story->replaceURLang($storyType);
@@ -143,7 +145,7 @@ class story extends control
                 {
                     $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                     $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                    $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID";
+                    $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$originProduct" : "executionID=$objectID";
                     $response['locate'] = $this->createLink($moduleName, 'story', $param);
                 }
                 return $this->send($response);
@@ -258,7 +260,7 @@ class story extends control
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
                 $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                 $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "projectID=$objectID" : "executionID=$objectID&orderBy=order_desc&browseType=unclosed";
+                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$originProduct" : "executionID=$objectID&orderBy=order_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID", 'html');
