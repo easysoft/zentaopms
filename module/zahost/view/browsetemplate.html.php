@@ -48,6 +48,7 @@
         <th class='c-os'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->zahost->osType);?></th>
         <th class='c-os'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->zahost->osVersion);?></th>
         <th class='c-lang'><?php common::printOrderLink('osLang', $orderBy, $vars, $lang->zahost->osLang);?></th>
+        <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -62,6 +63,10 @@
         <td><?php echo zget($config->zahost->os->type[$template->osCategory], $template->osType);?></td>
         <td><?php echo zget($lang->zahost->versionList[$template->osType], $template->osVersion);?></td>
         <td><?php echo zget($lang->zahost->langList, $template->osLang);?></td>
+        <td class='c-actions'>
+          <?php common::printIcon('zahost', 'editTemplate', "id={$template->id}", $template, 'list', 'edit');?>
+          <?php if(common::hasPriv('zahost', 'deleteTemplate')) echo html::a($this->createLink('zahost', 'delete', "id={$template->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

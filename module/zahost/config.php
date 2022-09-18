@@ -9,6 +9,9 @@ $config->zahost->edit->requiredFields = 'name,hostType,cpuCores,memory,diskSize,
 $config->zahost->createtemplate = new stdclass();
 $config->zahost->createtemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
 
+$config->zahost->edittemplate = new stdclass();
+$config->zahost->edittemplate->requiredFields = 'name,cpuCoreNum,memorySize,diskSize,osCategory,osType,osVersion,osLang,imageName';
+
 $config->zahost->os = new stdClass();
 $config->zahost->os->list = array();
 $config->zahost->os->list['windows'] = 'Windows';
