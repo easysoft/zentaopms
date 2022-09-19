@@ -152,6 +152,18 @@
             </div>
           </div>
           <?php endif;?>
+          <div class="detail">
+            <div class="detail-title">
+              <strong><?php echo $lang->project->type;?></strong>
+            </div>
+            <div class="detail-content">
+              <div class="row row-grid">
+                <div class="col-xs-12">
+                <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
+                </div>
+              </div>
+            </div>
+          </div>
           <?php if(!empty($project->hasProduct)):?>
           <div class="detail">
             <div class="detail-title">
