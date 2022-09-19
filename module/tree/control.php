@@ -405,6 +405,13 @@ class tree extends control
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
+        $this->view->hiddenProduct = false;
+        if($this->app->tab == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            $this->view->hiddenProduct = empty($project->hasProduct);
+        }
+
         $this->display();
     }
 
