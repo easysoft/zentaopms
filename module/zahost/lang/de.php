@@ -13,6 +13,7 @@ $lang->zahost->all            = 'All';
 $lang->zahost->browseTemplate = 'Template Browse';
 $lang->zahost->createTemplate = 'Create Template';
 $lang->zahost->editTemplate   = 'Edit Template';
+$lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'IP';
@@ -69,7 +70,8 @@ $lang->zahost->unitList['TB'] = 'TB';
 $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
 
-$lang->zahost->confirmDelete = 'Do you want to delete this host?';
+$lang->zahost->confirmDelete           = 'Do you want to delete this host?';
+$lang->zahost->confirmDeleteVMTemplate = 'Do you want to delete this VM template？';
 
 $lang->zahost->versionList = array();
 $lang->zahost->versionList['winxp']['all']          = 'Windows XP';

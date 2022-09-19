@@ -13,6 +13,7 @@ $lang->zahost->all            = '所有主机';
 $lang->zahost->browseTemplate = '虚拟机模板列表';
 $lang->zahost->createTemplate = '创建虚拟机模板';
 $lang->zahost->editTemplate   = '编辑虚拟机模板';
+$lang->zahost->deleteTemplate = '删除虚拟机模板';
 
 $lang->zahost->name        = '名称';
 $lang->zahost->IP          = 'IP';
@@ -69,7 +70,8 @@ $lang->zahost->unitList['TB'] = 'TB';
 $lang->zahost->zaHostType                 = '主机类型';
 $lang->zahost->zaHostTypeList['physical'] = '实体主机';
 
-$lang->zahost->confirmDelete = '是否删除该主机记录？';
+$lang->zahost->confirmDelete           = '是否删除该主机记录？';
+$lang->zahost->confirmDeleteVMTemplate = '是否删除该虚拟机模板？';
 
 $lang->zahost->versionList = array();
 $lang->zahost->versionList['winxp']['all']          = 'Windows XP';

@@ -118,7 +118,7 @@ class zahost extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
         }
 
         $this->dao->update(TABLE_ASSET)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
@@ -140,8 +140,8 @@ class zahost extends control
             $this->send($response);
         }
 
-        if(isonlybody())die(js::reload('parent.parent'));
-        die(js::locate($this->createLink('zahost', 'browse'), 'parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
     }
 
     /**
@@ -196,6 +196,45 @@ class zahost extends control
         $this->view->template     = $template;
         $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
         $this->display();
+    }
+
+    /**
+     * Delete host.
+     *
+     * @param  int    $templateID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate($templateID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            return print(js::confirm($this->lang->zahost->confirmDeleteVMTemplate, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
+        }
+
+        $template = $this->zahost->getTemplateById($templateID);
+        $this->dao->delete()->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->exec();
+        $this->loadModel('action')->create('vmtemplate', $templateID, 'deleted');
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
+        }
+
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
     }
 
     /*
