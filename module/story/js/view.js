@@ -1,5 +1,11 @@
 $(function()
 {
+    if($('#navbar .nav>li[data-id=story] .dropdown-menu').length)
+    {
+        $("#navbar>ul>li[data-id='story']>ul>li[data-id!='" + storyType + "']").removeClass('active');
+        $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
+    }
+
     if(canCreate)
     {
         link = createLink('story', 'create', 'productID=' + productID + "&branch=" + branch + '&moduleID=' + moduleID);
