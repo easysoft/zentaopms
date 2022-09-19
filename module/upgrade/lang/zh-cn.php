@@ -194,7 +194,7 @@ $lang->upgrade->selectUsage      = '请选择使用场景';
 $lang->upgrade->useLean          = '使用迅捷模式';
 $lang->upgrade->useNew           = '使用综合模式';
 $lang->upgrade->remark           = '备注';
-$lang->upgrade->remarkDesc       = '后续您还可以在系统的后台自定义中进行切换';
+$lang->upgrade->remarkDesc       = '后续您还可以在系统的后台自定义中进行切换。';
 
 $lang->upgrade->to18Mode['lean'] = '迅捷模式';
 $lang->upgrade->to18Mode['new']  = '综合模式';
