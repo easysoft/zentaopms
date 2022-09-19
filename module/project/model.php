@@ -1114,6 +1114,9 @@ class projectModel extends model
             ->get();
         if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
+        /* Lean mode relation defaultProgram. */
+        if($this->config->systemMode == 'lean') $project->parent = $this->config->global->defaultProgram;
+
         $linkedProductsCount = 0;
         if(isset($_POST['products']))
         {

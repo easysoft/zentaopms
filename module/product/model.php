@@ -661,6 +661,12 @@ class productModel extends model
         $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : 0;
+        /* Lean mode relation defaultProgram. */
+        if($this->config->systemMode == 'lean')
+        {
+            $programID = $this->config->global->defaultProgram;
+            $product->program = $this->config->global->defaultProgram;
+        }
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $programID and `deleted` = '0'")

@@ -630,37 +630,23 @@ class custom extends control
         $mode = zget($this->config->global, 'mode', 'lean');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
-            $mode = fixer::input('post')->get('mode');
+            $mode    = fixer::input('post')->get('mode');
+            $program = fixer::input('post')->get('program');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $program);
+            /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
+            $this->loadModel('upgrade')->relationDefaultProgram($program);
 
-            $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-            if($mode == 'new')
-            {
-                if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
-                return print(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
-            }
-            else
-            {
-                if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
-                return print(js::reload('top'));
-            }
-        }
-
-        if($mode == 'new')
-        {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') return print(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
-
-            unset($_SESSION['upgrading']);
+            return print(js::reload());
         }
 
         $this->app->loadLang('upgrade');
 
-        $this->view->title      = $this->lang->custom->mode;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
-        $this->view->mode       = $mode;
+        $this->view->title       = $this->lang->custom->mode;
+        $this->view->position[]  = $this->lang->custom->common;
+        $this->view->position[]  = $this->view->title;
+        $this->view->mode        = $mode;
+        $this->view->program     = $this->loadModel('program')->getTopPairs('', '', true);
 
         $this->display();
     }
