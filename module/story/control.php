@@ -472,6 +472,8 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $storyType = 'story', $extra = '')
     {
+        $this->view->hiddenProduct = false;
+        $this->view->hiddenPlan    = false;
         /* Set menu. */
         if($executionID)
         {
@@ -508,8 +510,6 @@ class story extends control
             }
             $this->view->execution = $execution;
             /* Hidden some fields of projects without products. */
-            $this->view->hiddenProduct = false;
-            $this->view->hiddenPlan    = false;
 
             if($execution->type === 'project' || $execution->type === 'kanban')
             {
