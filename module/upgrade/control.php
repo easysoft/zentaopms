@@ -710,9 +710,11 @@ class upgrade extends control
             $mergeMode = $this->post->projectType;
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
-            $program = $this->upgrade->createDefaultProgram();
-            if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($program->id);
-            if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($program->id);
+            if($mode == 'lean') $programID = $this->config->defaultProgram;
+            if($mode == 'new')  $programID = $this->loadModel('program')->createDefaultProgram();
+
+            if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
+            if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($programID);
 
             if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
