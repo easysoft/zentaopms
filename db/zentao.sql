@@ -7483,6 +7483,7 @@ CREATE TABLE IF NOT EXISTS `zt_vm` (
   `hostID` int(10) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
   `osCategory` varchar(50) NOT NULL DEFAULT '',
+  `osVersion` varchar(50) NOT NULL DEFAULT '',
   `osType` varchar(50) NOT NULL DEFAULT '',
   `osArch` varchar(50) NOT NULL DEFAULT '',
   `osLang` varchar(50) NOT NULL DEFAULT '',

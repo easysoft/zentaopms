@@ -651,17 +651,17 @@ $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->report = 'report';
 
-$lang->navGroup->qa         = 'qa';
-$lang->navGroup->bug        = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-//$lang->navGroup->automation = 'qa';
-$lang->navGroup->zahost     = 'qa';
-$lang->navGroup->testreport = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-$lang->navGroup->testsuite  = 'qa';
-$lang->navGroup->caselib    = 'qa';
+$lang->navGroup->qa            = 'qa';
+$lang->navGroup->bug           = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->zahost        = 'qa';
+$lang->navGroup->executionnode = 'qa';
+$lang->navGroup->testreport    = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->testsuite     = 'qa';
+$lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
