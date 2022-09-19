@@ -18,7 +18,7 @@
         <strong><?php echo $lang->custom->mode?></strong>
       </div>
     </div>
-    <table class='table table-form mw-300px'>
+    <table class='table table-form' style='max-width: 336px;'>
       <tr>
         <th class='text-top'><?php echo $lang->custom->mode;?></th>
         <td>
