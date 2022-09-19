@@ -40,6 +40,7 @@ $lang->install->links = <<<EOT
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+$lang->install->selectMode          = "请选择使用模式";
 $lang->install->introduction        = "禅道15系列功能介绍";
 $lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/program0716.mp4';
@@ -292,8 +293,8 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->modeList['classic'] = '经典管理模式';
-$lang->install->modeList['new']     = '全新项目集管理模式';
+$lang->install->modeList['lean'] = '迅捷模式';
+$lang->install->modeList['new']  = '综合模式';
 
 $lang->install->promotion = "为您推荐易软天创旗下其他产品：";
 

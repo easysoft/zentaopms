@@ -22,7 +22,7 @@
       <tr>
         <th class='text-top'><?php echo $lang->custom->mode;?></th>
         <td>
-          <p><?php echo html::radio('mode', $lang->upgrade->to15Mode, $mode);?></p>
+          <p><?php echo html::radio('mode', $lang->upgrade->to18Mode, $mode);?></p>
           <p class='text-info' id='modeTips'><?php echo $lang->upgrade->selectedModeTips['new'];?></p>
         </td>
       </tr>

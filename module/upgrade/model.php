@@ -5009,12 +5009,12 @@ class upgradeModel extends model
         foreach($sprints as $sprint)
         {
             $data = new stdclass();
-            $data->project  = $projectID;
-            $data->parent   = $projectID;
-            $data->grade    = 1;
-            $data->path     = ",{$projectID},{$sprint->id},";
-            $data->type     = 'sprint';
-            $data->acl      = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
+            $data->project = $projectID;
+            $data->parent  = $projectID;
+            $data->grade   = 1;
+            $data->path    = ",{$projectID},{$sprint->id},";
+            $data->type    = 'sprint';
+            $data->acl     = $sprint->acl == 'custom' ? 'private' : $sprint->acl;
 
             $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($sprint->id)->exec();
 
@@ -7532,41 +7532,16 @@ class upgradeModel extends model
     /*
      * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
      *
+     * @param  int    $programID
      * @access public
      * @return bool
      */
-    public function classic2Lite()
+    public function classic2Lean($programID)
     {
-        /* Set mode as lite. */
-        $this->loadModel('setting')->setItem('system.common.global.mode', 'lite');
         /* Set project mode as noExecution. */
         $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
 
-        $defaultProgram = $this->config->global->defaultProgram;
-
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->fetchAll('id');
-
-        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($defaultProgram)->exec();
-
-        /* Add default execution for project. */
-        foreach($projects as $project)
-        {
-            $this->dao->update(TABLE_PROJECT)->set('noExecution')->eq('1')->set('type')->eq('project')->set('parent')->eq($defaultProgram)->set('path')->eq(",{$defaultProgram},{$project->id},")->where('id')->eq($project->id)->exec();
-
-            $execution = clone $project;
-            $execution->project = $project->id;
-            $execution->parent  = $project->id;
-            $execution->grade   = 1;
-            unset($execution->id);
-
-            $this->dao->insert(TABLE_PROJECT)->data($execution)->autoCheck()->exec();
-            if(dao::isError()) return false;
-
-            $executionID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_PROJECT)->set('path')->eq(",{$project->id},{$executionID},")->where('id')->eq($executionID)->exec();
-
-            $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('project')->eq($project->id)->exec();
-        }
+        $this->upgradeInProjectMode($programID);
 
         return !dao::isError();
     }
@@ -7623,8 +7598,9 @@ class upgradeModel extends model
     public function upgradeInProjectMode($programID)
     {
         $this->loadModel('action');
-        $now     = helper::now();
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
+        $now         = helper::now();
+        $account     = isset($this->app->user->account) ? $this->app->user->account : '';
+        $projectMode = $this->setting->getItem('owner=system&module=common&section=global&key=projectMode');
 
         $noMergedSprints = $this->getNoMergedSprints();
         if(!$noMergedSprints) return true;
@@ -7649,6 +7625,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
+            if($projectMode == 'noExecution') $project->noExecution = '1';
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
             if(dao::isError()) return false;
@@ -7747,18 +7724,12 @@ class upgradeModel extends model
      */
     public function getNoMergedSprints()
     {
-        $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+        return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('project')->eq(0)
             ->andWhere('vision')->eq('rnd')
             ->andWhere('type')->eq('sprint')
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-
-        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
-        foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
-
-        if(empty($noMergedSprints)) return false;
-        return $noMergedSprints;
     }
 
     /**
@@ -7796,5 +7767,30 @@ class upgradeModel extends model
             ->andWhere('parent')->eq($programID)
             ->andWhere('grade')->eq('2')
             ->exec();
+    }
+
+    /**
+     * Relation default program.
+     *
+     * @param  int $programID
+     * @access public
+     * @return bool
+     */
+    public function relationDefaultProgram($programID)
+    {
+        /* product */
+        $this->dao->update(TABLE_PRODUCT)
+            ->set('program')->eq($programID)
+            ->where('program')->eq(0)
+            ->exec();
+
+        /* project */
+        $this->dao->update(TABLE_PROJECT)
+            ->set("path = CONCAT(',{$programID}', path)")
+            ->set('grade = grade+1')
+            ->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)
+            ->exec();
+
+        return true;
     }
 }

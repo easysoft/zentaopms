@@ -1079,9 +1079,8 @@ class reportModel extends model
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root")
-            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage,kanban' : 'project')
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
+            ->where('t1.type')->in('project')
+            ->andWhere('t2.type')->eq('project')
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
@@ -1201,10 +1200,7 @@ class reportModel extends model
             ->fetchAll();
 
         $pairs = array();
-        foreach($executions as $execution)
-        {
-            $pairs[$execution->id] = $this->config->systemMode == 'new' ? $execution->projectname . '/' .$execution->name : $execution->name;
-        }
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->projectname . '/' .$execution->name;
 
         return $pairs;
     }

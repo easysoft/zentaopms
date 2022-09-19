@@ -32,7 +32,7 @@
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <?php if(common::hasPriv('product', 'manageLine') and ($config->systemMode == 'classic' or $programID)):?>
+            <?php if(common::hasPriv('product', 'manageLine') and $programID):?>
             <td>
               <div class='input-group'>
                 <?php $checkedNewLine = count($lines) > 1 ? '' : 'checked';?>

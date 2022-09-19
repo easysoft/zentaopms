@@ -572,8 +572,8 @@ class programModel extends model
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
@@ -581,8 +581,7 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
@@ -1589,5 +1588,36 @@ class programModel extends model
             }
         }
         return $menu;
+    }
+
+    /**
+     * Create default program.
+     *
+     * @access public
+     * @return int
+     */
+    public function createDefaultProgram()
+    {
+        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+        $program = new stdClass();
+
+        $program->type       = 'program';
+        $program->name       = $this->lang->program->defaultProgram;
+        $program->budgetUnit = 'CNY';
+        $program->whitelist  = '';
+        $program->status     = 'doing';
+        $program->grade      = 1;
+        $program->auth       = 'extend';
+        $program->openedDate = helper::today();
+        $program->begin      = $minBegin;
+        $program->end        = LONG_TIME;
+
+        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+
+        $insertID = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",$insertID,")->where('id')->eq($insertID)->exec();
+
+        return $insertID;
     }
 }
