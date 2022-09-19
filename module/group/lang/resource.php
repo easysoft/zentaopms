@@ -1192,19 +1192,23 @@ $lang->resource->automation->browse = 'browse';
 $lang->automation->methodOrder[0] = 'browse';
 
 $lang->resource->zahost = new stdclass();
-$lang->resource->zahost->browse = 'browse';
-$lang->resource->zahost->create = 'create';
-$lang->resource->zahost->edit   = 'editAction';
-$lang->resource->zahost->delete = 'deleteAction';
+$lang->resource->zahost->browse         = 'browse';
+$lang->resource->zahost->create         = 'create';
+$lang->resource->zahost->edit           = 'editAction';
+$lang->resource->zahost->delete         = 'deleteAction';
 $lang->resource->zahost->browseTemplate = 'browseTemplate';
 $lang->resource->zahost->createTemplate = 'createTemplate';
+$lang->resource->zahost->editTemplate   = 'editTemplate';
+$lang->resource->zahost->editTemplate   = 'deleteTemplate';
 
 $lang->zahost->methodOrder[0]  = 'browse';
 $lang->zahost->methodOrder[5]  = 'create';
 $lang->zahost->methodOrder[10] = 'edit';
 $lang->zahost->methodOrder[15] = 'delete';
-$lang->zahost->methodOrder[10] = 'browseTemplate';
-$lang->zahost->methodOrder[15] = 'createTemplate';
+$lang->zahost->methodOrder[20] = 'browseTemplate';
+$lang->zahost->methodOrder[25] = 'createTemplate';
+$lang->zahost->methodOrder[30] = 'editTemplate';
+$lang->zahost->methodOrder[35] = 'deleteTemplate';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

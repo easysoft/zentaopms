@@ -37,7 +37,7 @@ class zahostModel extends model
             ->get();
 
         $this->dao->table = 'zahost';
-        $this->dao-> update(TABLE_ZAHOST)->data($hostInfo)
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo)
             ->batchCheck($this->config->zahost->create->requiredFields, 'notempty')
             ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
