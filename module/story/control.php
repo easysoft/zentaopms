@@ -515,7 +515,7 @@ class story extends control
             {
                 if($execution->type === 'project')
                 {
-                    $project = $this->dao->findById((int)$excutionID)->from(TABLE_PROJECT)->fetch();
+                    $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
                 }
                 else
                 {
@@ -689,6 +689,8 @@ class story extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->story->$field;
         }
+
+        if($this->view->hiddenPlan) unset($customFields['plan']);
 
         if($product->type != 'normal')
         {
