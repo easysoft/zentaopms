@@ -15,7 +15,7 @@ class apiCheckModel
         global $argv;
         $path    = $argv[1];
         $entries = '';
-        if($argv[2]) $entries = $argv[2];
+        if(isset($argv[2])) $entries = $argv[2];
         $this->run($argv[1], $entries);
     }
 
