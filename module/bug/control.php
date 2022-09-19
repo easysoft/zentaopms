@@ -341,9 +341,8 @@ class bug extends control
                 $this->view->lanePairs     = $lanePairs;
             }
             $projectID = $execution->project;
-            $project   = $this->project->getByID($projectID);
+            $project   = $this->loadModel('project')->getByID($projectID);
             $this->view->hiddenProduct = empty($project->hasProduct);
-
         }
         else if($this->app->tab == 'project')
         {
