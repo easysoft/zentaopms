@@ -116,6 +116,7 @@
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
+                <span class="label label-primary label-outline"><?php echo zget($lang->project->projectTypeList, $project->hasProduct);?></span>
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
@@ -152,18 +153,6 @@
             </div>
           </div>
           <?php endif;?>
-          <div class="detail">
-            <div class="detail-title">
-              <strong><?php echo $lang->project->type;?></strong>
-            </div>
-            <div class="detail-content">
-              <div class="row row-grid">
-                <div class="col-xs-12">
-                <?php echo zget($lang->project->projectTypeList, $project->hasProduct);?>
-                </div>
-              </div>
-            </div>
-          </div>
           <?php if(!empty($project->hasProduct)):?>
           <div class="detail">
             <div class="detail-title">
