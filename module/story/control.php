@@ -606,7 +606,7 @@ class story extends control
 
         /* Init vars. */
         $planID   = $plan;
-        $pri      = 0;
+        $pri      = 3;
         $estimate = '';
         $title    = '';
         $spec     = '';
