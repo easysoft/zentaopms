@@ -79,41 +79,6 @@
   </div>
 </div>
 <script>
-$("#dataForm").submit(function(e)
-{
-    var postDept = new Array();
-    var Depts    = new Array();
-
-    $.each($('input[name*="depts[]"]'), function(index, value)
-    {
-        if($(this).val()) postDept.push($(this).val());
-    });
-
-    $.each($('input[name*="depts[id"]'), function(index, value)
-    {
-        if($(this).val()) Depts.push($(this).val());
-    })
-
-    for(var i=0; i<postDept.length; i++)
-    {
-        if(Depts.indexOf(postDept[i]) > -1 || postDept[i]==postDept[i+1])
-        {
-            if(confirm(repeatDepart))
-            {
-                var link = createLink('dept', 'manageChild');
-                break;
-            }
-            else
-            {
-                setTimeout(function()
-                {
-                    $('#submit').removeAttr('disabled');
-                },10)
-                return false;
-            }
-        }
-    }
-});
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
@@ -207,6 +172,42 @@ $(function()
         $('#deptTree').find('li.hover').removeClass('hover');
         $(this).addClass('hover');
         e.stopPropagation();
+    });
+
+    $("#dataForm").submit(function(e)
+    {
+        var postDept = new Array();
+        var Depts    = new Array();
+
+        $.each($('input[name*="depts[]"]'), function(index, value)
+        {
+            if($(this).val()) postDept.push($(this).val());
+        });
+
+        $.each($('input[name*="depts[id"]'), function(index, value)
+        {
+            if($(this).val()) Depts.push($(this).val());
+        });
+
+        for(var i=0; i<postDept.length; i++)
+        {
+            if(Depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i+1])
+            {
+                if(confirm(repeatDepart))
+                {
+                    var link = createLink('dept', 'manageChild');
+                    break;
+                }
+                else
+                {
+                    setTimeout(function()
+                    {
+                        $('#submit').removeAttr('disabled');
+                    },10)
+                    return false;
+                }
+            }
+        }
     });
 });
 </script>
