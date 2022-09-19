@@ -344,35 +344,19 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
-        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        if($this->config->systemMode == 'new')
-        {
-            /* Order by program. */
-            return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                ->where(1)
-                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
-                ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
-                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
-                ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->orderBy('isClosed, t2.order_asc, t1.line_desc, t1.order_asc')
-                ->fetchPairs('id', 'name');
-        }
-        else
-        {
-            $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-            return $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
-                ->from(TABLE_PRODUCT)
-                ->where(1)
-                ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
-                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
-                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-                ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($views)->fi()
-                ->andWhere('vision')->eq($this->config->vision)
-                ->orderBy($orderBy)
-                ->fetchPairs('id', 'name');
-        }
+        $views   = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
+        $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
+        /* Order by program. */
+        return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where(1)
+            ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->orderBy("$orderBy, t2.order_asc, t1.line_desc, t1.order_asc")
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -1167,10 +1151,8 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t2.type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy('order_asc')
@@ -1196,12 +1178,10 @@ class productModel extends model
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('sprint')->fi()
+            ->andWhere('t2.type')->eq('project')
             ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
             ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t2.PM')->eq($this->app->user->account)
@@ -1245,24 +1225,13 @@ class productModel extends model
         $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        if($this->config->systemMode == 'new')
-        {
-            $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-                ->from(TABLE_TASK)
-                ->where('project')->in($projectKeys)
-                ->andWhere('parent')->lt(1)
-                ->andWhere('deleted')->eq(0)
-                ->fetchGroup('project', 'id');
-        }
-        else
-        {
-            $tasks = $this->dao->select('id, execution, estimate, consumed, `left`, status, closedReason')
-                ->from(TABLE_TASK)
-                ->where('execution')->in($projectKeys)
-                ->andWhere('parent')->lt(1)
-                ->andWhere('deleted')->eq(0)
-                ->fetchGroup('execution', 'id');
-        }
+        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
+            ->from(TABLE_TASK)
+            ->where('project')->in($projectKeys)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $projectID => $projectTasks)
         {
@@ -1332,7 +1301,6 @@ class productModel extends model
     public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
-        if(empty($projectID) or $this->config->systemMode == 'classic') return $this->getAllExecutionPairsByProduct($productID, $branch);
 
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
@@ -1426,8 +1394,7 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
-           if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
+           if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
         }
 
         return $executionPairs;
@@ -1683,7 +1650,7 @@ class productModel extends model
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
-        if($orderBy == 'program_asc' and $this->config->systemMode == 'new')
+        if($orderBy == 'program_asc')
         {
             $products = $this->dao->select('t1.id as id, t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
@@ -1881,38 +1848,26 @@ class productModel extends model
             ->orderBy('begin desc')
             ->fetchGroup('product', 'id');
 
-        $executionListKey = $this->config->systemMode == 'new' ? 'project' : 'productID';
         $executionList    = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('type')->in('stage,sprint,kanban')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.project')->in(array_keys($projectList))->fi()
+            ->andWhere('t2.project')->in(array_keys($projectList))
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.product')->in(array_keys($productList))
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchGroup($executionListKey, 'id');
+            ->fetchGroup('project', 'id');
 
         $projectLatestExecutions = array();
         $latestExecutionList     = array();
-        if($this->config->systemMode == 'new')
+        foreach($executionList as $projectID => $executions)
         {
-            foreach($executionList as $projectID => $executions)
-            {
-                /* Used to computer execution progress. */
-                $latestExecutionList[key($executions)] = current($executions);
+            /* Used to computer execution progress. */
+            $latestExecutionList[key($executions)] = current($executions);
 
-                /* Used for display in page. */
-                $projectLatestExecutions[$projectID] = current($executions);
-            }
-        }
-
-        if($this->config->systemMode == 'classic')
-        {
-            foreach($executionList as $productID => $executions)
-            {
-                foreach($executions as $executionID => $execution) $latestExecutionList[$executionID] = $execution;
-            }
+            /* Used for display in page. */
+            $projectLatestExecutions[$projectID] = current($executions);
         }
 
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);

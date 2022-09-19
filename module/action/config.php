@@ -70,7 +70,7 @@ $config->action->preferredTypeNum = 10;
 
 $config->action->preferredType = new stdclass();
 $config->action->preferredType->new     = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
-$config->action->preferredType->classic = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'execution', 'productplan', 'build');
+$config->action->preferredType->lite    = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'project', 'execution');
 
 global $app, $lang;
 $app->loadLang('action');

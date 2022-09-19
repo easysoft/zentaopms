@@ -619,15 +619,14 @@ class commonModel extends model
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
-        if($config->edition == 'open') unset($lang->createIcons['effort']);
-        if($config->systemMode == 'classic') unset($lang->createIcons['project'], $lang->createIcons['program']);
+        if($config->edition == 'open')   unset($lang->createIcons['effort']);
+        if($config->systemMode != 'new') unset($lang->createIcons['program']);
+        if(!isset($config->projectMode) || $config->projectMode == 'noExecution') unset($lang->createIcons['execution']);
 
         /* Check whether the creation permission is available, and print create buttons. */
+
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            /* Change icon when object type is execution and mode is classic. */
-            if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
-
             $createMethod = 'create';
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';

@@ -56,8 +56,7 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
-
-$lang->custom->execution = 'Execution';
+$lang->custom->execution            = 'Execution';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -88,7 +87,7 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
+$lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -103,7 +102,7 @@ $lang->custom->object['block']     = 'ClosedBlock';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';

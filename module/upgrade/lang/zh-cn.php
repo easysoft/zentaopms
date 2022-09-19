@@ -99,26 +99,30 @@ $lang->upgrade->to15Mode['new']     = '全新项目集管理模式';
 $lang->upgrade->selectedModeTips['classic'] = '后续您还可以在后台-自定义里面切换为全新项目集管理的模式。';
 $lang->upgrade->selectedModeTips['new']     = '切换为项目集管理模式需要对之前的数据进行归并处理，系统会引导您完成这个操作。';
 
-$lang->upgrade->line           = '产品线';
-$lang->upgrade->allLines       = "所有{$lang->productCommon}线";
-$lang->upgrade->program        = '目标项目集和项目';
-$lang->upgrade->existProgram   = '已有项目集';
-$lang->upgrade->existProject   = '已有项目';
-$lang->upgrade->existLine      = '已有' . $lang->productCommon . '线';
-$lang->upgrade->product        = $lang->productCommon;
-$lang->upgrade->project        = '迭代';
-$lang->upgrade->repo           = '版本库';
-$lang->upgrade->mergeRepo      = '归并版本库';
-$lang->upgrade->setProgram     = '设置项目所属项目集';
-$lang->upgrade->dataMethod     = '数据迁移方式';
-$lang->upgrade->begin          = '开始日期';
-$lang->upgrade->end            = '结束日期';
-$lang->upgrade->selectProject  = '目标项目';
-$lang->upgrade->programName    = '项目集名称';
-$lang->upgrade->projectName    = '项目名称';
-$lang->upgrade->compatibleEXT  = '扩展机制兼容';
-$lang->upgrade->fileName       = '文件名称';
-$lang->upgrade->next           = '下一步';
+$lang->upgrade->line            = '产品线';
+$lang->upgrade->allLines        = "所有{$lang->productCommon}线";
+$lang->upgrade->program         = '目标项目集和项目';
+$lang->upgrade->defaultProgram  = '默认项目集';
+$lang->upgrade->existProgram    = '已有项目集';
+$lang->upgrade->existProject    = '已有项目';
+$lang->upgrade->existLine       = '已有' . $lang->productCommon . '线';
+$lang->upgrade->product         = $lang->productCommon;
+$lang->upgrade->project         = '迭代';
+$lang->upgrade->repo            = '版本库';
+$lang->upgrade->mergeRepo       = '归并版本库';
+$lang->upgrade->setProgram      = '设置项目所属项目集';
+$lang->upgrade->dataMethod      = '数据迁移方式';
+$lang->upgrade->selectMergeMode = '请选择数据归并方式';
+$lang->upgrade->mergeMode       = '数据归并方式：';
+$lang->upgrade->begin           = '开始日期';
+$lang->upgrade->end             = '结束日期';
+$lang->upgrade->selectProject   = '目标项目';
+$lang->upgrade->programName     = '项目集名称';
+$lang->upgrade->projectName     = '项目名称';
+$lang->upgrade->compatibleEXT   = '扩展机制兼容';
+$lang->upgrade->fileName        = '文件名称';
+$lang->upgrade->next            = '下一步';
+$lang->upgrade->back            = '上一步';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->editedName         = '调整后名称';
@@ -155,6 +159,15 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>系统会把历史的{$lang->projectCommon}作为执行进行升级。</p>
 <p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的执行。</p>
 EOT;
+
+$lang->upgrade->mergeModes = array();
+$lang->upgrade->mergeModes['project']   = '自动归并数据，将历史的项目作为项目升级';
+$lang->upgrade->mergeModes['execution'] = '自动归并数据，将历史的项目作为迭代升级';
+$lang->upgrade->mergeModes['manually']    = '手工归并数据';
+
+$lang->upgrade->mergeProjectTip   = '历史的项目将直接同步到新版本的项目中，同时系统将会根据历史项目分别创建一个与该项目同名的迭代，并将之前项目下的任务、需求、Bug等数据迁移至迭代中。';
+$lang->upgrade->mergeExecutionTip = '系统将自动按年创建项目，将历史的迭代数据按照年份归并到对应的项目下。';
+$lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
 include dirname(__FILE__) . '/version.php';
 
