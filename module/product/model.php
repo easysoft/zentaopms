@@ -260,7 +260,7 @@ class productModel extends model
      * @param  int    $line
      * @param  string $type all|normal|shadow
      * @access public
-     * @return void
+     * @return array
      */
     public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $type = 'normal')
     {
@@ -512,12 +512,12 @@ class productModel extends model
     /**
      * Get ordered products.
      *
-     * @param  int    $status
+     * @param  string $status
      * @param  int    $num
      * @param  int    $projectID
      * @param  string $type all|normal|shadow
      * @access public
-     * @return void
+     * @return array
      */
     public function getOrderedProducts($status, $num = 0, $projectID = 0, $type = 'normal')
     {
