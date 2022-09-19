@@ -269,7 +269,7 @@ class zahost extends control
         $host      = $this->zahost->getById($hostID);
         $imageList = $this->zahost->getImageList($host, $templateID);
 
-        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => array($imageList)));
+        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
 
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
     }

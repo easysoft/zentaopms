@@ -181,18 +181,24 @@ class zahostModel extends model
     public function getImageList($host, $templateID = null)
     {
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
-        if(empty($result) || $result->code != 200) return array();
+        if(empty($result) || $result->code != 200)
+        {
+            $result = new stdclass;
+            $result->data = array();
+        }
 
-        $usedImageList = array();
-        if(empty($templateID)) $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->hostID)->fetchAll('imageName');
+        $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->hostID)->fetchAll('imageName');
 
         $imageList = array();
         foreach($result->data as $image)
         {
             if(array_key_exists($image->name, $usedImageList)) continue;
 
-            $imageList['name'] = $image->name;
+            $imageList[] = array('name' => $image->name);
         }
+
+        /* templateID is not empty means editing template. */
+        if($templateID) foreach($usedImageList as $usedImage) $imageList[] = array('name' => $usedImage->imageName);
 
         return $imageList;
     }
