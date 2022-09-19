@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <div class='panel' style='padding:50px 280px'>
+  <div class='panel'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
       <div class='main-row' id='mainContent'>
@@ -33,53 +33,53 @@
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->productRR;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->productUR;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->productLine;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->projectScrum;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfull;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->projectKanban;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->execution;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->assetlib;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->oa;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
-                <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
                 <td colspan='2' style="font-weight:bold;"><?php echo $this->lang->upgrade->selectUsage;?></td>
@@ -88,7 +88,7 @@
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>
-                <td colspan='4' class="text-center"><?php echo $this->lang->upgrade->remarkDesc;?></td>
+                <td colspan='4'><?php echo $this->lang->upgrade->remarkDesc;?></td>
               </tr>
             </tbody>
             <?php echo html::hidden('mode','')?>
