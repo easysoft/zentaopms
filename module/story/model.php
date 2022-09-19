@@ -5978,43 +5978,4 @@ class storyModel extends model
         $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
-
-    /**
-     * Judge whether to hide some fields when it is an project without product.
-     * 
-     * @param  int    $objectType 
-     * @param  int    $objectID 
-     * @access public
-     * @return void
-     */
-    public function getHiddenNoProduct($objectType, $objectID)
-    {
-        $hiddenProduct = false;
-        $hiddenPlan    = false;
-        $hiddenURS     = false;
-
-        if($objectType == 'project' || $objectType == 'execution')
-        {
-            if($objectType == 'project')
-            {
-                $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
-            }
-            else
-            {
-                $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-                $projectID = $execution->project;
-                $project   = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-            }
-
-            if(empty($project->hasProduct))
-            {
-                $hiddenProduct = true;
-
-                if($project->model !== 'scrum')  $hiddenPlan = true;
-                if($project->model === 'kanban') $hiddenURS  = true;
-            }
-        }
-
-        return array($hiddenProduct, $hiddenPlan, $hiddenURS);
-    }
 }

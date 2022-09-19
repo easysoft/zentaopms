@@ -389,7 +389,31 @@ class story extends control
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Hidden some fields of projects without products. */
-        list($this->view->hiddenProduct, $this->view->hiddenPlan, $this->view->hiddenURS) = $this->story->getHiddenNoProduct($this->app->tab, $objectID);
+        $this->view->hiddenProduct = false;
+        $this->view->hiddenPlan    = false;
+        $this->view->hiddenURS     = false;
+
+        if($this->app->tab === 'project' || $this->app->tab === 'execution')
+        {
+            if($this->app->tab === 'project')
+            {
+                $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+            }
+            else
+            {
+                $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
+                $projectID = $execution->project;
+                $project   = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+            }
+
+            if(empty($project->hasProduct))
+            {
+                $this->view->hiddenProduct = true;
+
+                if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+                if($project->model === 'kanban') $this->view->hiddenURS  = true;
+            }
+        }
 
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -484,7 +508,28 @@ class story extends control
             }
             $this->view->execution = $execution;
             /* Hidden some fields of projects without products. */
-            list($this->view->hiddenProduct, $this->view->hiddenPlan, $this->view->hiddenURS) = $this->story->getHiddenNoProduct($execution->type == 'project' ? 'project' : 'execution', $executionID);
+            $this->view->hiddenProduct = false;
+            $this->view->hiddenPlan    = false;
+
+            if($execution->type === 'project' || $execution->type === 'kanban')
+            {
+                if($execution->type === 'project')
+                {
+                    $project = $this->dao->findById((int)$excutionID)->from(TABLE_PROJECT)->fetch();
+                }
+                else
+                {
+                    $projectID = $execution->project;
+                    $project   = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+                }
+
+                if(empty($project->hasProduct))
+                {
+                    $this->view->hiddenProduct = true;
+
+                    if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+                }
+            }
         }
         else
         {
