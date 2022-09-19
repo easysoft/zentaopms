@@ -196,5 +196,5 @@ $lang->upgrade->useNew           = 'User New mode';
 $lang->upgrade->remark           = 'Remark';
 $lang->upgrade->remarkDesc       = 'You can also switch between the background customization of the system later';
 
-$lang->upgrade->to18Mode['Lean'] = 'Lean';
-$lang->upgrade->to18Mode['new']  = 'New';
+$lang->upgrade->to18Mode['lean'] = 'Lean Mode';
+$lang->upgrade->to18Mode['new']  = 'Program Mode';

@@ -235,17 +235,8 @@ $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
 global $config;
-if($config->systemMode == 'lean')
-{
-    $lang->custom->sprintConceptList[0] = 'Product - Project';
-    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
-    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
-}
+$lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
+$lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
