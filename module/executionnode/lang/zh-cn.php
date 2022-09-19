@@ -20,6 +20,7 @@ $lang->executionnode->vmTemplate      = '虚拟机模板';
 $lang->executionnode->name            = '执行节点名称';
 $lang->executionnode->start           = '创建后自动开启';
 $lang->executionnode->hostName        = '所属宿主机';
+$lang->executionnode->hostID          = $lang->executionnode->hostName;
 $lang->executionnode->ip              = 'IP';
 $lang->executionnode->osArch          = '架构';
 $lang->executionnode->osLang          = '系统语言';
@@ -59,6 +60,7 @@ $lang->executionnode->statusList['launch']       = '启动中';
 $lang->executionnode->statusList['ready']        = '运行中';
 $lang->executionnode->statusList['running']      = '运行中';
 $lang->executionnode->statusList['suspend']      = '暂停';
+$lang->executionnode->statusList['offline']      = '下线';
 $lang->executionnode->statusList['destroy']      = '已销毁';
 $lang->executionnode->statusList['destroy_fail'] = '销毁失败';
 

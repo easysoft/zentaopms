@@ -21,8 +21,9 @@ class hostHeartbeatEntry extends baseEntry
     public function post()
     {
         /* Check authorize. */
+        $header = getallheaders();
+        $token  = isset($header['Authorization']) ? substr($header['Authorization'], 7) : '';
         $secret = isset($this->requestBody->secret) ? $this->requestBody->secret : '';
-        $token  = isset($_SERVER['HTTP_TOKEN']) ? $_SERVER['HTTP_TOKEN'] : '';
         if(!$secret and !$token) return $this->sendError(401, 'Unauthorized');
 
         /* Check param. */
@@ -51,8 +52,11 @@ class hostHeartbeatEntry extends baseEntry
         $this->dao->update(TABLE_HOST)->data($host)->where($conditionField)->eq($conditionValue)->exec();
         $this->dao->update(TABLE_ASSET)->set('registerDate')->eq($now)->where('id')->eq($assetID)->exec();
 
-        if(!$secret) return $this->send(200, 'success');
+        if(!$secret) return $this->sendSuccess(200, 'success');
+
+        $host->expiredTimeUnix = strtotime($host->expiredDate);
         unset($host->status);
+        unset($host->expiredDate);
         return $this->send(200, $host);
     }
 }

@@ -20,6 +20,7 @@ $lang->executionnode->vmTemplate      = 'VM Template';
 $lang->executionnode->name            = 'Name';
 $lang->executionnode->start           = 'Start After Created';
 $lang->executionnode->hostName        = 'Host Name';
+$lang->executionnode->hostID          = $lang->executionnode->hostName;
 $lang->executionnode->ip              = 'IP';
 $lang->executionnode->osArch          = 'Arch';
 $lang->executionnode->osLang          = 'Language';

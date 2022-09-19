@@ -72,7 +72,7 @@ class executionnode extends control
         }
 
         $this->view->title     = $this->lang->executionnode->create;
-        $this->view->hostPairs = $this->loadModel('zahost')->getPairs('host');
+        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
 
         return $this->display();
     }

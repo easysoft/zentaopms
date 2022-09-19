@@ -181,7 +181,7 @@ class zahostModel extends model
      */
     public function getImageList($host, $templateID = 0)
     {
-        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
+        $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl"));
         if(empty($result) || $result->code != 200)
         {
             $result = new stdclass;
