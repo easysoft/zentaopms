@@ -76,7 +76,7 @@ class zahost extends control
     }
 
     /**
-     * Create host.
+     * Edit host.
      *
      * @param  int    $hostID
      * @access public
@@ -166,6 +166,38 @@ class zahost extends control
         $this->display();
     }
 
+    /**
+     * Edit template
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function editTemplate($templateID)
+    {
+        $template = $this->zahost->getTemplateById($templateID);
+        if($_POST)
+        {
+            $changes = $this->zahost->updateTemplate($templateID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('vmtemplate', $templateID, 'Edited');
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browsetemplate', "hostID={$template->hostID}")));
+        }
+
+        $this->view->title        = $this->lang->zahost->edit;
+        $this->view->template     = $template;
+        $this->view->imageOptions = array('' => $this->lang->zahost->notice->loading);
+        $this->display();
+    }
+
     /*
      * Browse VM template.
      *
@@ -228,15 +260,16 @@ class zahost extends control
      * Get image list by ajax.
      *
      * @param  int    $hostID
+     * @param  int    $templateID
      * @access public
      * @return void
      */
-    public function ajaxImageList($hostID)
+    public function ajaxImageList($hostID, $templateID = 0)
     {
         $host      = $this->zahost->getById($hostID);
-        $imageList = $this->zahost->getImageList($host);
+        $imageList = $this->zahost->getImageList($host, $templateID);
 
-        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => array($imageList)));
+        if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => $imageList));
 
         return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
     }

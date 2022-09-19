@@ -141,16 +141,52 @@ class zahostModel extends model
     }
 
     /**
+     * Edit template
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return bool|object
+     */
+    public function updateTemplate($templateID)
+    {
+        $oldHost      = $this->getTemplateById($templateID);
+        $templateInfo = fixer::input('post')
+            ->setIF($this->post->diskSize > 0, 'diskSize', $this->post->diskSize * 1024)
+            ->get();
+
+        $this->dao->update(TABLE_VMTEMPLATE)->data($templateInfo)
+            ->batchCheck($this->config->zahost->edittemplate->requiredFields, 'notempty')
+            ->batchCheck('cpuCoreNum,diskSize,memorySize', 'gt', 0)
+            ->autoCheck();
+        if(dao::isError()) return false;
+
+        $templateInfo->editedBy   = $this->app->user->account;
+        $templateInfo->editedDate = helper::now();
+
+        $this->dao->update(TABLE_VMTEMPLATE)->data($templateInfo)->autoCheck()
+            ->where('id')->eq($oldHost->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldHost, $templateInfo);
+    }
+
+    /**
      * Get image files from ZAgent server.
      *
      * @param  object $host
+     * @param  int    $templateID
      * @access public
      * @return array
      */
-    public function getImageList($host)
+    public function getImageList($host, $templateID = 0)
     {
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
-        if(empty($result) || $result->code != 200) return array();
+        if(empty($result) || $result->code != 200)
+        {
+            $result = new stdclass;
+            $result->data = array();
+        }
 
         $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->hostID)->fetchAll('imageName');
 
@@ -159,8 +195,11 @@ class zahostModel extends model
         {
             if(array_key_exists($image->name, $usedImageList)) continue;
 
-            $imageList['name'] = $image->name;
+            $imageList[] = array('name' => $image->name);
         }
+
+        /* Template ID is not empty means editing template. */
+        if($templateID) foreach($usedImageList as $usedImage) $imageList[] = array('name' => $usedImage->imageName);
 
         return $imageList;
     }
