@@ -515,7 +515,7 @@ class story extends control
             {
                 if($execution->type === 'project')
                 {
-                    $project = $this->dao->findById((int)$excutionID)->from(TABLE_PROJECT)->fetch();
+                    $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
                 }
                 else
                 {
@@ -2588,8 +2588,26 @@ class story extends control
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         if($executionID)
         {
-            $executionName = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch('name');
-            $fileName      = $executionName . $this->lang->dash . $fileName;
+            $execution     = $this->loadModel('execution')->getByID($executionID);
+            $executionName = $execution->name;
+            $hasProduct    = true;
+            if($execution->type == 'project')
+            {
+                $hasProduct = $execution->hasProduct;
+            }
+            else
+            {
+                $project = $this->loadModel('project')->getById($execution->project);
+                $hasProduct = $project->hasProduct;
+            }
+
+            /* Unset product field when in single project.  */
+            if(!$hasProduct)
+            {
+                $this->config->story->exportFields = str_replace(array('product,', 'branch,'), array('', ''), $this->config->story->exportFields);
+            }
+
+            $fileName = $executionName . $this->lang->dash . $fileName;
         }
         else
         {
@@ -2605,6 +2623,8 @@ class story extends control
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
         }
+
+        $product = $this->product->getById($productID);
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;

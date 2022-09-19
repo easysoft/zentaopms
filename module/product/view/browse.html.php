@@ -143,7 +143,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         $tab   = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv($storyType, 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv($storyType, 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$tab'" : "class=disabled";
-        $link  = common::hasPriv($storyType, 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=0&browseType=$browseType&storyType=$storyType") : '#';
+        $link  = common::hasPriv($storyType, 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
