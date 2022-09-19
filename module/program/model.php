@@ -581,8 +581,7 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
@@ -1599,26 +1598,36 @@ class programModel extends model
      */
     public function createDefaultProgram()
     {
+        $account  = isset($this->app->user->account) ? $this->app->user->account : '';
         $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
-        $program = new stdClass();
 
-        $program->type       = 'program';
-        $program->name       = $this->lang->program->defaultProgram;
-        $program->budgetUnit = 'CNY';
-        $program->whitelist  = '';
-        $program->status     = 'doing';
-        $program->grade      = 1;
-        $program->auth       = 'extend';
-        $program->openedDate = helper::today();
-        $program->begin      = $minBegin;
-        $program->end        = LONG_TIME;
+        $program = new stdclass();
+        $program->name          = $this->lang->program->defaultProgram;
+        $program->type          = 'program';
+        $program->budgetUnit    = 'CNY';
+        $program->status        = 'doing';
+        $program->auth          = 'extend';
+        $program->begin         = $minBegin;
+        $program->end           = LONG_TIME;
+        $program->openedBy      = $account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = 'open';
+        $program->grade         = 1;
+        $program->vision        = 'rnd';
+
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+        $this->lang->project->name = $this->lang->program->name;
 
         $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+        if(dao::isError()) return false;
 
-        $insertID = $this->dao->lastInsertId();
+        $programID = $this->dao->lastInsertId();
 
-        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",$insertID,")->where('id')->eq($insertID)->exec();
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
 
-        return $insertID;
+        return $programID;
     }
 }

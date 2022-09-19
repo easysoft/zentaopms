@@ -53,7 +53,7 @@
           <?php endforeach;?>
         </div>
       </div>
-      <?php if($this->config->systemMode == 'classic' or $execution->grade == 1):?>
+      <?php if($execution->grade == 1):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->execution->unlinkedProducts;?></div>
         <div class='detail-content row'>

@@ -648,7 +648,6 @@ class custom extends control
         $this->view->mode        = $mode;
         $this->view->program     = $this->loadModel('program')->getTopPairs('', '', true);
 
-
         $this->display();
     }
 

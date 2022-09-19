@@ -89,13 +89,12 @@ $lang->my->form->lblAccount = '帳號信息';
 $lang->my->programLink   = '項目集預設着陸頁';
 $lang->my->productLink   = '產品預設着陸頁';
 $lang->my->projectLink   = '項目預設着陸頁';
-if($config->systemMode == 'classic') $lang->my->executionLink = $lang->executionCommon . '預設着陸頁';
-if($config->systemMode == 'new') $lang->my->executionLink = '執行預設着陸頁';
+$lang->my->executionLink = '執行預設着陸頁';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '預設進入項目集列表，可以查看所有的項目集';
 $lang->my->programLinkList['program-project'] = '預設進入最近一個項目集的項目列表，可以查看當前項目集下所有項目';
-if($config->systemMode == 'new') $lang->my->programLinkList['program-kanban'] = '預設進入項目集看板，可以可視化的查看到所有項目集的進展情況';
+$lang->my->programLinkList['program-kanban'] = '預設進入項目集看板，可以可視化的查看到所有項目集的進展情況';
 
 $lang->my->productLinkList = array();
 $lang->my->productLinkList['product-index']     = '預設進入產品主頁，可以瞭解公司整體的產品狀況';
@@ -109,16 +108,12 @@ $lang->my->projectLinkList = array();
 $lang->my->projectLinkList['project-browse']    = '預設進入項目列表，可以查看所有的項目';
 $lang->my->projectLinkList['project-execution'] = '預設進入項目下所有執行列表，查看所有執行信息';
 $lang->my->projectLinkList['project-index']     = '預設進入最近一個項目儀表盤，可以查看當前項目概況';
-if($config->systemMode == 'new') $lang->my->projectLinkList['project-kanban'] = '預設進入項目看板，可以可視化的查看到所有項目的進展情況';
+$lang->my->projectLinkList['project-kanban'] = '預設進入項目看板，可以可視化的查看到所有項目的進展情況';
 
 $lang->my->executionLinkList = array();
-if($config->systemMode == 'new')
-{
-    $lang->my->executionLinkList['execution-all']             = '預設進入執行列表，可以查看所有的執行';
-    $lang->my->executionLinkList['execution-task']            = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
-    $lang->my->executionLinkList['execution-executionkanban'] = '預設進入執行看板，可以查看進行中項目的執行情況';
-}
-if($config->systemMode == 'classic') $lang->my->executionLinkList['execution-task'] = "預設進入最近一個{$lang->executionCommon}的任務列表，可以查看當前{$lang->executionCommon}下的任務信息";
+$lang->my->executionLinkList['execution-all']             = '預設進入執行列表，可以查看所有的執行';
+$lang->my->executionLinkList['execution-task']            = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
+$lang->my->executionLinkList['execution-executionkanban'] = '預設進入執行看板，可以查看進行中項目的執行情況';
 
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春藍”</span>主題上線了！</p>

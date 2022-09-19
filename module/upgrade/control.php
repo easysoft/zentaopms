@@ -161,12 +161,18 @@ class upgrade extends control
             if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<=') and $systemMode != 'new')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
+
                 /* Lean mode create default program. */
                 $programID = $this->loadModel('program')->createDefaultProgram();
+
                 /* Set default program config. */
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+
                 /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
                 $this->upgrade->relationDefaultProgram($programID);
+
+                $this->upgrade->classic2Lean($programID);
+
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>')) $selectMode = false;
@@ -704,9 +710,11 @@ class upgrade extends control
             $mergeMode = $this->post->projectType;
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
-            $program = $this->upgrade->createDefaultProgram();
-            if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($program->id);
-            if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($program->id);
+            if($mode == 'lean') $programID = $this->config->defaultProgram;
+            if($mode == 'new')  $programID = $this->loadModel('program')->createDefaultProgram();
+
+            if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
+            if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($programID);
 
             if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
