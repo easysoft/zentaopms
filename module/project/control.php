@@ -1482,8 +1482,18 @@ class project extends control
             }
             else
             {
-                $this->lang->productplan->common = $this->lang->productplan->plan;
+                $this->lang->productplan->common  = $this->lang->productplan->plan;
+                $this->lang->projectstory->common = $this->lang->projectstory->storyCommon;
+                $this->lang->projectstory->story  = $this->lang->projectstory->storyList;
+                $this->lang->projectstory->view   = $this->lang->projectstory->storyView;
                 unset($this->lang->resource->project->manageProducts);
+                unset($this->lang->resource->projectstory->linkStory);
+                unset($this->lang->resource->projectstory->importplanstories);
+                unset($this->lang->resource->projectstory->unlinkStory);
+                unset($this->lang->resource->projectstory->batchUnlinkStory);
+                unset($this->lang->resource->story->view);
+                unset($this->lang->resource->requirement->view);
+                unset($this->lang->resource->requirement->batchChangeBranch);
                 unset($this->lang->resource->tree->browseTask);
                 unset($this->lang->resource->tree->browsehost);
                 unset($this->lang->resource->tree->editHost);
