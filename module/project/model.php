@@ -2452,12 +2452,12 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        if(empty($project->hasProduct))
+        if(empty($project->hasProduct) && !empty($this->config->URAndSR))
         {
             $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-            if($project->model !== 'kanban')
+            if($project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
             {
                 $lang->project->menu->story = $lang->project->menu->storyGroup;
                 $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
@@ -2471,7 +2471,7 @@ class projectModel extends model
         {
             unset($lang->project->menu->settings['subMenu']->module);
         }
-        unset($lang->project->menu->storyGroup);
+        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
 
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
