@@ -147,6 +147,10 @@ class port extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
+        if($model == 'story')
+        {
+            if($this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
+        }
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
@@ -156,9 +160,9 @@ class port extends control
 
         if($model == 'story')
         {
-            if($this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
             $product = $this->loadModel('product')->getByID($this->session->storyPortParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
+            if($this->session->storyType == 'requirement') unset($fields['plan']);
         }
 
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
