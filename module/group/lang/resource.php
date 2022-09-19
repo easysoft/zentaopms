@@ -40,6 +40,7 @@ $lang->moduleOrder[90]  = 'testsuite';
 $lang->moduleOrder[95]  = 'testreport';
 $lang->moduleOrder[100] = 'caselib';
 $lang->moduleOrder[105] = 'zahost';
+$lang->moduleOrder[108] = 'executionnode';
 
 $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[115] = 'report';
@@ -1205,6 +1206,23 @@ $lang->zahost->methodOrder[10] = 'edit';
 $lang->zahost->methodOrder[15] = 'delete';
 $lang->zahost->methodOrder[10] = 'browseTemplate';
 $lang->zahost->methodOrder[15] = 'createTemplate';
+
+$lang->resource->executionnode = new stdclass();
+$lang->resource->executionnode->browse  = 'browse';
+$lang->resource->executionnode->create  = 'create';
+$lang->resource->executionnode->destroy = 'destroy';
+$lang->resource->executionnode->reboot  = 'reboot';
+$lang->resource->executionnode->suspend = 'suspend';
+$lang->resource->executionnode->resume  = 'resume';
+$lang->resource->executionnode->getVNC  = 'getVNC';
+
+$lang->executionnode->methodOrder[5]  = 'browse';
+$lang->executionnode->methodOrder[10] = 'create';
+$lang->executionnode->methodOrder[15] = 'destroy';
+$lang->executionnode->methodOrder[20] = 'reboot';
+$lang->executionnode->methodOrder[35] = 'suspend';
+$lang->executionnode->methodOrder[30] = 'resume';
+$lang->executionnode->methodOrder[35] = 'getVNC';
 
 $lang->resource->repo                  = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
