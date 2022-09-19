@@ -2162,7 +2162,7 @@ class executionModel extends model
         $productNum   = count($products);
         $productPairs = array(0 => '');
         $branches     = $this->loadModel('project')->getBranchesByProject($objectID);
-        $execution    = $this->loadModel('execution')->getByID($objectID);
+        $hasProduct   = $this->dao->select('hasProduct')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('hasProduct');
 
         foreach($products as $product)
         {
@@ -2214,7 +2214,7 @@ class executionModel extends model
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
-        if(empty($execution->hasProduct)) unset($this->config->product->search['fields']['product']);
+        if(empty($hasProduct)) unset($this->config->product->search['fields']['product']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
