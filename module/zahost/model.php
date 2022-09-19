@@ -175,10 +175,11 @@ class zahostModel extends model
      * Get image files from ZAgent server.
      *
      * @param  object $host
+     * @param  int    $templateID
      * @access public
      * @return array
      */
-    public function getImageList($host, $templateID = null)
+    public function getImageList($host, $templateID = 0)
     {
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
         if(empty($result) || $result->code != 200)
@@ -197,7 +198,7 @@ class zahostModel extends model
             $imageList[] = array('name' => $image->name);
         }
 
-        /* templateID is not empty means editing template. */
+        /* Template ID is not empty means editing template. */
         if($templateID) foreach($usedImageList as $usedImage) $imageList[] = array('name' => $usedImage->imageName);
 
         return $imageList;

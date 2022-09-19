@@ -264,7 +264,7 @@ class zahost extends control
      * @access public
      * @return void
      */
-    public function ajaxImageList($hostID, $templateID = null)
+    public function ajaxImageList($hostID, $templateID = 0)
     {
         $host      = $this->zahost->getById($hostID);
         $imageList = $this->zahost->getImageList($host, $templateID);
