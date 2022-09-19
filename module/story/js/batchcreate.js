@@ -8,6 +8,8 @@ $(function()
         hiddenRequireFields();
     });
 
+    $("#navbar>ul>li[data-id='story']>ul>li[data-id!='" + storyType + "']").removeClass('active');
+
     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
