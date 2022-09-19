@@ -158,6 +158,13 @@ class port extends control
         $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
 
+        if($model == 'story')
+        {
+            $product = $this->loadModel('product')->getByID($this->session->storyPortParams['productID']);
+            if($product->type == 'normal') unset($fields['branch']);
+            if($this->session->storyType == 'requirement') unset($fields['plan']);
+        }
+
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
         $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);
