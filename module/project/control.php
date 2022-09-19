@@ -1474,6 +1474,22 @@ class project extends control
 
             /* Unset not project privs. */
             $project = $this->project->getByID($group->project);
+            if($project->hasProduct)
+            {
+                unset($this->lang->resource->requirement);
+                unset($this->lang->resource->productplan);
+                unset($this->lang->resource->tree);
+            }
+            else
+            {
+                $this->lang->productplan->common = $this->lang->productplan->plan;
+                unset($this->lang->resource->project->manageProducts);
+                unset($this->lang->resource->tree->browseTask);
+                unset($this->lang->resource->tree->browsehost);
+                unset($this->lang->resource->tree->editHost);
+                unset($this->lang->resource->tree->fix);
+            }
+            if($project->model == 'waterfall') unset($this->lang->resource->productplan);
             foreach($this->lang->resource as $module => $methods)
             {
                 if(!in_array($module, $this->config->programPriv->{$project->model}))
