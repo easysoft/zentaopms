@@ -4280,7 +4280,7 @@ class storyModel extends model
                     }
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
-                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite' and $execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
 
             }
             else
@@ -4869,7 +4869,6 @@ class storyModel extends model
                 else
                 {
                     $menuType = 'browse';
-                    $execution = '';
                 }
                 echo $this->buildOperateMenu($story, $menuType, $execution);
                 break;

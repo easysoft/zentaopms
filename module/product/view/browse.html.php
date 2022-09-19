@@ -299,7 +299,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
       $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story');
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
-      $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and common::hasPriv('projectstory', 'batchUnlinkStory'));
+      $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and !empty($project->hasProduct) and common::hasPriv('projectstory', 'batchUnlinkStory'));
       $canBatchImportToLib  = ($canBeChanged and $this->app->tab == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
@@ -349,11 +349,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);?>
             <?php endif;?>
           </tr>
           <?php if(!empty($story->children)):?>
@@ -369,11 +369,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
+                  $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $project);?>
             <?php endif;?>
           </tr>
           <?php $i ++;?>
