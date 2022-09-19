@@ -4273,7 +4273,7 @@ class storyModel extends model
                 {
                     $menu .= "<div class='dividing-line'></div>";
                 }
-                
+
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';
