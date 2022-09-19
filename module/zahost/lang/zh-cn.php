@@ -70,7 +70,8 @@ $lang->zahost->unitList['TB'] = 'TB';
 $lang->zahost->zaHostType                 = '主机类型';
 $lang->zahost->zaHostTypeList['physical'] = '实体主机';
 
-$lang->zahost->confirmDelete = '是否删除该主机记录？';
+$lang->zahost->confirmDelete           = '是否删除该主机记录？';
+$lang->zahost->confirmDeleteVMTemplate = '是否删除该虚拟机模板？';
 
 $lang->zahost->versionList = array();
 $lang->zahost->versionList['winxp']['all']          = 'Windows XP';

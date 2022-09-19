@@ -118,7 +118,7 @@ class zahost extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->confirmDelete, inlink('delete', "assetID=$assetID&confirm=yes")));
         }
 
         $this->dao->update(TABLE_ASSET)->set('deleted')->eq(1)->where('id')->eq($assetID)->exec();
@@ -140,8 +140,8 @@ class zahost extends control
             $this->send($response);
         }
 
-        if(isonlybody())die(js::reload('parent.parent'));
-        die(js::locate($this->createLink('zahost', 'browse'), 'parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
     }
 
     /**
@@ -210,7 +210,7 @@ class zahost extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->zahost->confirmDelete, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
+            return print(js::confirm($this->lang->zahost->confirmDeleteVMTemplate, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
         }
 
         $template = $this->zahost->getTemplateById($templateID);
@@ -233,8 +233,8 @@ class zahost extends control
             $this->send($response);
         }
 
-        if(isonlybody())die(js::reload('parent.parent'));
-        die(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        return print(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
     }
 
     /*
