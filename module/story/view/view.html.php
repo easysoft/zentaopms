@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->storyList ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php js::set('storyType', $story->type);?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
