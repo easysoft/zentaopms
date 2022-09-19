@@ -1,33 +1,34 @@
 <?php
 $lang->zahost->id             = 'ID';
 $lang->zahost->common         = 'ZAhost';
-$lang->zahost->browse         = 'Host List';
-$lang->zahost->create         = 'Add Host';
-$lang->zahost->view           = 'Host View';
-$lang->zahost->edit           = 'Edit';
-$lang->zahost->editAction     = 'Edit Host';
-$lang->zahost->delete         = 'Delete';
-$lang->zahost->deleteAction   = 'Delete Host';
-$lang->zahost->byQuery        = 'Search';
-$lang->zahost->all            = 'All';
+$lang->zahost->browse         = 'Hôte Liste';
+$lang->zahost->create         = 'Ajouter Hôte';
+$lang->zahost->view           = 'Hôte Détail';
+$lang->zahost->edit           = 'Éditer';
+$lang->zahost->editAction     = 'Éditer Hôte';
+$lang->zahost->delete         = 'Supprimer';
+$lang->zahost->deleteAction   = 'Supprimer Hôte';
+$lang->zahost->byQuery        = 'Recherche';
+$lang->zahost->all            = 'Tous les hôtes';
 $lang->zahost->browseTemplate = 'Template Browse';
 $lang->zahost->createTemplate = 'Create Template';
+$lang->zahost->editTemplate   = 'Edit Template';
 
-$lang->zahost->name        = 'Name';
+$lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP';
 $lang->zahost->publicIP    = 'IP';
 $lang->zahost->cpuCores    = 'CPU Cores';
-$lang->zahost->memory      = 'Memory Size';
-$lang->zahost->diskSize    = 'Disk Size';
-$lang->zahost->instanceNum = 'Instance Number';
+$lang->zahost->memory      = 'Mémoire Espace';
+$lang->zahost->diskSize    = 'Disque Espace';
+$lang->zahost->instanceNum = 'Max instances';
 $lang->zahost->type        = 'Type';
 $lang->zahost->status      = 'Status';
 
-$lang->zahost->createdBy    = 'CreatedBy';
-$lang->zahost->createdDate  = 'CreatedDate';
-$lang->zahost->editedBy     = 'EditedBy';
-$lang->zahost->editedDate   = 'EditedDate';
-$lang->zahost->registerDate = 'RegisterDate';
+$lang->zahost->createdBy    = 'Créé par';
+$lang->zahost->createdDate  = 'Date de création';
+$lang->zahost->editedBy     = 'Édité par';
+$lang->zahost->editedDate   = "Date d'édition";
+$lang->zahost->registerDate = "RegisterDate";
 
 $lang->zahost->memorySize = $lang->zahost->memory;
 $lang->zahost->cpuCoreNum = $lang->zahost->cpuCores;
@@ -38,7 +39,7 @@ $lang->zahost->osLang     = 'Language';
 $lang->zahost->imageName  = 'Image File';
 
 $lang->zahost->vmTemplate = new stdclass;
-$lang->zahost->vmTemplate->name       = 'Name';
+$lang->zahost->vmTemplate->name       = 'Nom';
 $lang->zahost->vmTemplate->common     = 'VM Template';
 $lang->zahost->vmTemplate->cpuCoreNum = $lang->zahost->cpuCores;
 $lang->zahost->vmTemplate->memorySize = $lang->zahost->memory;
@@ -65,11 +66,10 @@ $lang->zahost->softwareList['kvm'] = 'KVM';
 $lang->zahost->unitList['GB'] = 'GB';
 $lang->zahost->unitList['TB'] = 'TB';
 
-$lang->zahost->zaHostType                 = 'Type';
-$lang->zahost->zaHostTypeList['physical'] = 'Physical';
-//$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
+$lang->zahost->zaHostType                 = 'Type Hôte';
+$lang->zahost->zaHostTypeList['physical'] = 'Physique';
 
-$lang->zahost->confirmDelete = 'Do you want to delete this host?';
+$lang->zahost->confirmDelete = 'Voulez-vous supprimer cet hôte?';
 
 $lang->zahost->versionList = array();
 $lang->zahost->versionList['winxp']['all']          = 'Windows XP';
@@ -100,7 +100,7 @@ $lang->zahost->versionList['centos']['7']           = '7';
 $lang->zahost->versionList['centos']['8']           = '8';
 
 $lang->zahost->notice = new stdclass();
-$lang->zahost->notice->ip              = '『%s』incorrect format!';
+$lang->zahost->notice->ip              = '『%s』format incorrect!';
 $lang->zahost->notice->registerCommand = 'Register command: ./zagent-host -t host -s http://%s:%s -i %s -p 8086 -secret %s';
 $lang->zahost->notice->loading         = 'loading...';
 $lang->zahost->notice->noImage         = 'No available image';

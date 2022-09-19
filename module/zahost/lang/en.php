@@ -12,6 +12,7 @@ $lang->zahost->byQuery        = 'Search';
 $lang->zahost->all            = 'All';
 $lang->zahost->browseTemplate = 'Template Browse';
 $lang->zahost->createTemplate = 'Create Template';
+$lang->zahost->editTemplate   = 'Edit Template';
 
 $lang->zahost->name        = 'Name';
 $lang->zahost->IP          = 'IP';
@@ -67,7 +68,6 @@ $lang->zahost->unitList['TB'] = 'TB';
 
 $lang->zahost->zaHostType                 = 'Type';
 $lang->zahost->zaHostTypeList['physical'] = 'Physical';
-//$lang->zahost->zaHostTypeList['virtual']  = '虚拟主机';
 
 $lang->zahost->confirmDelete = 'Do you want to delete this host?';
 
