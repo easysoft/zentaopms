@@ -200,8 +200,8 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $lang->execution->aclList['private'] = "私有（团队成员和{$lang->executionCommon}负责人可访问）";
-    $lang->execution->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
+    $lang->execution->aclList['private'] = "私有（团队成员和项目负责人可访问）";
+    $lang->execution->aclList['open']    = "公开（有项目视图权限即可访问）";
 }
 
 $lang->execution->kanbanAclList['private'] = '私有';
