@@ -27,7 +27,7 @@
             </thead>
             <tbody>
               <tr>
-                <td colspan='2'><?php echo $this->lang->upgrade->mode;?></td>
+                <td colspan='2'><?php echo $this->lang->upgrade->usage;?></td>
                 <td colspan='2'><?php echo $this->lang->upgrade->leanUsage;?></td>
                 <td colspan='2'><?php echo $this->lang->upgrade->newUsage;?></td>
               </tr>
