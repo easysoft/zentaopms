@@ -714,7 +714,8 @@ class block extends control
         $this->session->set('buildList',    $uri, 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
-        $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
+        $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
+        $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
@@ -1534,7 +1535,7 @@ class block extends control
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
 
         $projectID  = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
-        $products   = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID);
+        $products   = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID, 'all');
         $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
         if(empty($products))
         {
