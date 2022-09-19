@@ -258,16 +258,17 @@ class productModel extends model
      * @param  string $status
      * @param  int    $limit
      * @param  int    $line
-     * @param  string $orderBy
+     * @param  string $type all|normal|shadow
      * @access public
-     * @return array
+     * @return void
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0)
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $type = 'normal')
     {
         return $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.shadow')->eq(0)
+            ->beginIF($type == 'normal')->andWhere('t1.shadow')->eq(0)->fi()
+            ->beginIF($type == 'shadow')->andWhere('t1.shadow')->eq(1)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
@@ -511,12 +512,14 @@ class productModel extends model
     /**
      * Get ordered products.
      *
-     * @param  string $status
+     * @param  int    $status
      * @param  int    $num
+     * @param  int    $projectID
+     * @param  string $type all|normal|shadow
      * @access public
-     * @return array
+     * @return void
      */
-    public function getOrderedProducts($status, $num = 0, $projectID = 0)
+    public function getOrderedProducts($status, $num = 0, $projectID = 0, $type = 'normal')
     {
         $products = array();
         if($projectID)
@@ -526,13 +529,21 @@ class productModel extends model
         }
         else
         {
-            $products = $this->getList('', $status, $num);
+            $products = $this->getList('', $status, $num, 0, $type);
         }
 
         if(empty($products)) return $products;
 
-        $lines = $this->getLinePairs();
-        $productList = array();
+        $lines          = $this->getLinePairs();
+        $productList    = array();
+        $productProject = $this->dao->select('t1.product,t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t3.shadow')->eq('1')
+            ->fetchAll('product');
+
         foreach($lines as $id => $name)
         {
             foreach($products as $key => $product)
@@ -543,11 +554,13 @@ class productModel extends model
                     $productList[] = $product;
                     unset($products[$key]);
                 }
+
+                if($product->shadow) $product->name = !empty($productProject[$product->id]->name) ? $productProject[$product->id]->name : $product->name;
             }
         }
-        $productList = array_merge($productList, $products);
 
-        $products = $mineProducts = $otherProducts = $closedProducts = array();
+        $productList = array_merge($productList, $products);
+        $products    = $mineProducts = $otherProducts = $closedProducts = array();
         foreach($productList as $product)
         {
             if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
