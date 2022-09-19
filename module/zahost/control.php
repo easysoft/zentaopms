@@ -221,7 +221,7 @@ class zahost extends control
         $secret = md5(time());
         $registerCommand = sprintf($this->lang->zahost->notice->registerCommand, $this->server->server_addr, $this->server->server_port, $IP, $secret);
 
-        return $this->send(array('result' => 'success', 'message' => '', 'data' => array( 'registerCommand' => $registerCommand, 'secret' => $secret)));
+        return $this->send(array('result' => 'success', 'message' => '', 'data' => array('registerCommand' => $registerCommand, 'secret' => $secret)));
     }
 
     /**
@@ -238,6 +238,6 @@ class zahost extends control
 
         if($imageList) return $this->send(array('result' => 'success', 'message' => '', 'data' => array($imageList)));
 
-        return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage)),));
+        return $this->send(array('result' => 'fail', 'message' => array('imageName' => array($this->lang->zahost->notice->noImage))));
     }
 }

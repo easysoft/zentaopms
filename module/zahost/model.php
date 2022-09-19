@@ -129,7 +129,7 @@ class zahostModel extends model
             ->autoCheck();
         if(dao::isError()) return false;
 
-        $template->hostID      = $host->id;
+        $template->hostID      = $host->hostID;
         $template->createdBy   = $this->app->user->account;
         $template->createdDate = helper::now();
 
@@ -152,7 +152,7 @@ class zahostModel extends model
         $result = json_decode(commonModel::http("http://{$host->publicIP}:8086/api/v1/kvm/listTmpl?token={$host->secret}"));
         if(empty($result) || $result->code != 200) return array();
 
-        $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->id)->fetchAll('imageName');
+        $usedImageList = $this->dao->select('imageName')->from(TABLE_VMTEMPLATE)->where('hostID')->eq($host->hostID)->fetchAll('imageName');
 
         $imageList = array();
         foreach($result->data as $image)
