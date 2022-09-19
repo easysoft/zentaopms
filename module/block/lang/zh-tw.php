@@ -260,14 +260,11 @@ $lang->block->default['full']['my']['4']['grid']            = 4;
 $lang->block->default['full']['my']['4']['source']          = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['5']['title']           = '項目統計';
-    $lang->block->default['full']['my']['5']['block']           = 'statistic';
-    $lang->block->default['full']['my']['5']['source']          = 'project';
-    $lang->block->default['full']['my']['5']['grid']            = 8;
-    $lang->block->default['full']['my']['5']['params']['count'] = '20';
-}
+$lang->block->default['full']['my']['5']['title']           = '項目統計';
+$lang->block->default['full']['my']['5']['block']           = 'statistic';
+$lang->block->default['full']['my']['5']['source']          = 'project';
+$lang->block->default['full']['my']['5']['grid']            = 8;
+$lang->block->default['full']['my']['5']['params']['count'] = '20';
 
 $lang->block->default['full']['my']['6']['title']  = '我的貢獻';
 $lang->block->default['full']['my']['6']['block']  = 'contribute';
@@ -292,23 +289,15 @@ $lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
-if($config->systemMode == 'new')
-{
-    $lang->block->default['full']['my']['9']['title']  = '項目人力投入';
-    $lang->block->default['full']['my']['9']['block']  = 'projectteam';
-    $lang->block->default['full']['my']['9']['source'] = 'project';
-    $lang->block->default['full']['my']['9']['grid']   = 8;
-}
+$lang->block->default['full']['my']['9']['title']  = '項目人力投入';
+$lang->block->default['full']['my']['9']['block']  = 'projectteam';
+$lang->block->default['full']['my']['9']['source'] = 'project';
+$lang->block->default['full']['my']['9']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['title']  = '項目列表';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-if($config->systemMode == 'classic')
-{
-    $lang->block->default['full']['my']['10']['block']  = 'execution';
-    $lang->block->default['full']['my']['10']['source'] = 'execution';
-}
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
@@ -334,7 +323,7 @@ $lang->block->availableBlocks->issue     = '我的問題';
 $lang->block->availableBlocks->meeting   = '我的會議';
 $lang->block->availableBlocks->feedback  = '我的反饋';
 
-if($config->systemMode == 'new') $lang->block->moduleList['project'] = '項目';
+$lang->block->moduleList['project']   = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '測試';
@@ -345,7 +334,7 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = '項目列表';
 $lang->block->modules['project']->availableBlocks->recentproject = '近期項目';
 $lang->block->modules['project']->availableBlocks->statistic     = '項目統計';
-if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = '項目人力投入';
+$lang->block->modules['project']->availableBlocks->projectteam   = '項目人力投入';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -502,7 +491,7 @@ $lang->block->typeList->testtask['done']    = '已測版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = $config->systemMode == 'new' ? 'project|browse|' : 'execution|all|';
+$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
