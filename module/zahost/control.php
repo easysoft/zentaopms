@@ -198,6 +198,45 @@ class zahost extends control
         $this->display();
     }
 
+    /**
+     * Delete host.
+     *
+     * @param  int    $templateID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate($templateID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->zahost->confirmDelete, inlink('deleteTemplate', "templateID=$templateID&confirm=yes")));
+        }
+
+        $template = $this->zahost->getTemplateById($templateID);
+        $this->dao->delete()->from(TABLE_VMTEMPLATE)->where('id')->eq($templateID)->exec();
+        $this->loadModel('action')->create('vmtemplate', $templateID, 'deleted');
+
+        /* if ajax request, send result. */
+        if($this->server->ajax)
+        {
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+            else
+            {
+                $response['result']  = 'success';
+                $response['message'] = '';
+            }
+            $this->send($response);
+        }
+
+        if(isonlybody())die(js::reload('parent.parent'));
+        die(js::locate($this->createLink('zahost', 'browsetemplate', "hostID={$template->hostID}"), 'parent'));
+    }
+
     /*
      * Browse VM template.
      *

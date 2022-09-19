@@ -65,7 +65,7 @@
         <td><?php echo zget($lang->zahost->langList, $template->osLang);?></td>
         <td class='c-actions'>
           <?php common::printIcon('zahost', 'editTemplate', "id={$template->id}", $template, 'list', 'edit');?>
-          <?php if(common::hasPriv('zahost', 'deleteTemplate')) echo html::a($this->createLink('zahost', 'delete', "id={$template->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");;?>
+          <?php if(common::hasPriv('zahost', 'deleteTemplate')) echo html::a($this->createLink('zahost', 'deleteTemplate', "id={$template->id}"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->zahost->delete}' class='btn'");?>
         </td>
       </tr>
       <?php endforeach;?>

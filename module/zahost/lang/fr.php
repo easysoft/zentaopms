@@ -13,6 +13,7 @@ $lang->zahost->all            = 'Tous les hôtes';
 $lang->zahost->browseTemplate = 'Template Browse';
 $lang->zahost->createTemplate = 'Create Template';
 $lang->zahost->editTemplate   = 'Edit Template';
+$lang->zahost->deleteTemplate = 'Delete Template';
 
 $lang->zahost->name        = 'Nom';
 $lang->zahost->IP          = 'IP';
