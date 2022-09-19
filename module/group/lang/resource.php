@@ -152,40 +152,6 @@ $lang->personnel->methodOrder[10] = 'invest';
 $lang->personnel->methodOrder[15] = 'whitelist';
 $lang->personnel->methodOrder[20] = 'addWhitelist';
 
-/* Design. */
-$lang->resource->design = new stdclass();
-$lang->resource->design->browse       = 'browse';
-$lang->resource->design->view         = 'view';
-$lang->resource->design->create       = 'create';
-$lang->resource->design->batchCreate  = 'batchCreate';
-$lang->resource->design->edit         = 'edit';
-$lang->resource->design->assignTo     = 'assignTo';
-$lang->resource->design->delete       = 'delete';
-$lang->resource->design->linkCommit   = 'linkCommit';
-$lang->resource->design->viewCommit   = 'viewCommit';
-$lang->resource->design->unlinkCommit = 'unlinkCommit';
-$lang->resource->design->revision     = 'revision';
-
-$lang->design->methodOrder[5]  = 'browse';
-$lang->design->methodOrder[10] = 'view';
-$lang->design->methodOrder[15] = 'create';
-$lang->design->methodOrder[20] = 'batchCreate';
-$lang->design->methodOrder[25] = 'edit';
-$lang->design->methodOrder[30] = 'assignTo';
-$lang->design->methodOrder[35] = 'delete';
-$lang->design->methodOrder[40] = 'linkCommit';
-$lang->design->methodOrder[45] = 'viewCommit';
-$lang->design->methodOrder[50] = 'unlinkCommit';
-$lang->design->methodOrder[55] = 'revision';
-
-/* Program plan. */
-$lang->resource->programplan = new stdclass();
-$lang->resource->programplan->create = 'create';
-$lang->resource->programplan->edit   = 'edit';
-
-$lang->programplan->methodOrder[0] = 'create';
-$lang->programplan->methodOrder[5] = 'edit';
-
 /* Project. */
 $lang->resource->project = new stdclass();
 $lang->resource->project->index               = 'index';
@@ -317,22 +283,6 @@ $lang->projectrelease->methodOrder[65] = 'batchUnlinkBug';
 $lang->projectrelease->methodOrder[70] = 'changeStatus';
 $lang->projectrelease->methodOrder[75] = 'notify';
 
-/* Stage. */
-$lang->resource->stage = new stdclass();
-$lang->resource->stage->browse      = 'browse';
-$lang->resource->stage->create      = 'create';
-$lang->resource->stage->batchCreate = 'batchCreate';
-$lang->resource->stage->edit        = 'edit';
-$lang->resource->stage->setType     = 'setType';
-$lang->resource->stage->delete      = 'delete';
-
-$lang->stage->methodOrder[5]  = 'browse';
-$lang->stage->methodOrder[10] = 'create';
-$lang->stage->methodOrder[15] = 'batchCreate';
-$lang->stage->methodOrder[20] = 'edit';
-$lang->stage->methodOrder[25] = 'setType';
-$lang->stage->methodOrder[30] = 'delete';
-
 /* Stakeholer. */
 $lang->resource->stakeholder = new stdclass();
 $lang->resource->stakeholder->browse       = 'browse';
@@ -372,6 +322,31 @@ $lang->stakeholder->methodOrder[80] = 'userIssue';
 global $config;
 if($config->systemMode == 'new')
 {
+    /* Design. */
+    $lang->resource->design = new stdclass();
+    $lang->resource->design->browse       = 'browse';
+    $lang->resource->design->view         = 'view';
+    $lang->resource->design->create       = 'create';
+    $lang->resource->design->batchCreate  = 'batchCreate';
+    $lang->resource->design->edit         = 'edit';
+    $lang->resource->design->assignTo     = 'assignTo';
+    $lang->resource->design->delete       = 'delete';
+    $lang->resource->design->linkCommit   = 'linkCommit';
+    $lang->resource->design->viewCommit   = 'viewCommit';
+    $lang->resource->design->unlinkCommit = 'unlinkCommit';
+    $lang->resource->design->revision     = 'revision';
+
+    $lang->design->methodOrder[5]  = 'browse';
+    $lang->design->methodOrder[10] = 'view';
+    $lang->design->methodOrder[15] = 'create';
+    $lang->design->methodOrder[20] = 'batchCreate';
+    $lang->design->methodOrder[25] = 'edit';
+    $lang->design->methodOrder[30] = 'assignTo';
+    $lang->design->methodOrder[35] = 'delete';
+    $lang->design->methodOrder[40] = 'linkCommit';
+    $lang->design->methodOrder[45] = 'viewCommit';
+    $lang->design->methodOrder[50] = 'unlinkCommit';
+    $lang->design->methodOrder[55] = 'revision';
 
     /* Program. */
     $lang->resource->program = new stdclass();
@@ -414,7 +389,31 @@ if($config->systemMode == 'new')
     $lang->program->methodOrder[90] = 'unbindWhitelist';
     $lang->program->methodOrder[95] = 'updateOrder';
 
+    /* Program plan. */
+    $lang->resource->programplan = new stdclass();
+    $lang->resource->programplan->create = 'create';
+    $lang->resource->programplan->edit   = 'edit';
+
+    $lang->programplan->methodOrder[0] = 'create';
+    $lang->programplan->methodOrder[5] = 'edit';
+
     $lang->resource->project->programTitle = 'moduleOpen';
+
+    /* Stage. */
+    $lang->resource->stage = new stdclass();
+    $lang->resource->stage->browse      = 'browse';
+    $lang->resource->stage->create      = 'create';
+    $lang->resource->stage->batchCreate = 'batchCreate';
+    $lang->resource->stage->edit        = 'edit';
+    $lang->resource->stage->setType     = 'setType';
+    $lang->resource->stage->delete      = 'delete';
+
+    $lang->stage->methodOrder[5]  = 'browse';
+    $lang->stage->methodOrder[10] = 'create';
+    $lang->stage->methodOrder[15] = 'batchCreate';
+    $lang->stage->methodOrder[20] = 'edit';
+    $lang->stage->methodOrder[25] = 'setType';
+    $lang->stage->methodOrder[30] = 'delete';
 }
 
 /* Product. */
@@ -821,7 +820,7 @@ $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->storyView         = 'storyView';
-if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
+$lang->resource->execution->executionkanban   = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
 $lang->resource->execution->setKanban         = 'setKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';

@@ -648,7 +648,7 @@ class myModel extends model
             unset($this->config->bug->search['fields']['closedBy']);
         }
 
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs();
         $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
@@ -682,13 +682,12 @@ class myModel extends model
         $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
 
         $this->app->loadConfig('risk');
-        $this->config->risk->search['module']            = $queryName;
-        $this->config->risk->search['actionURL']         = $actionURL;
-        $this->config->risk->search['queryID']           = $queryID;
+        $this->config->risk->search['module']    = $queryName;
+        $this->config->risk->search['actionURL'] = $actionURL;
+        $this->config->risk->search['queryID']   = $queryID;
 
         $this->config->risk->search['params']['project']['values'] = array('') + $projects;
 
-        if($this->config->systemMode == 'classic') unset($this->config->risk->search['fields']['project']);
         unset($this->config->risk->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->risk->search);

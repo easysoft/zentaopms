@@ -84,7 +84,7 @@ $lang->kanban->importRelease       = '发布';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = '版本';
 $lang->kanban->allKanban           = '所有看板';
-$lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
+$lang->kanban->allProjects         = '所有项目';
 $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '列标题对齐方式';
@@ -124,7 +124,7 @@ $lang->kanban->cardCountTip        = '请输入卡片数量';
 
 $lang->kanban->selectedKanban  = '请选择看板';
 $lang->kanban->selectedProduct = '请选择产品';
-$lang->kanban->selectedProject = '请选择' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
+$lang->kanban->selectedProject = '请选择项目';
 $lang->kanban->selectedLane    = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';

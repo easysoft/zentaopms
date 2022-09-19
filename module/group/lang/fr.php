@@ -47,10 +47,7 @@ $lang->group->more               = 'More';
 $lang->group->allCheck           = 'All';
 $lang->group->noGroup            = 'Aucun groupe';
 $lang->group->repeat             = "『%s』『%s』exists.Please adjust it and try again.";
-
-global $config;
-if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
-if($config->systemMode == 'classic') $lang->group->noneProject = 'No Project';
+$lang->group->noneProject        = 'No Project';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Groupe';
