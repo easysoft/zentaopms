@@ -321,6 +321,7 @@ class bug extends control
 
         $project = new stdclass();
 
+        $this->view->hiddenProduct = false;
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
@@ -339,6 +340,10 @@ class bug extends control
                 $this->view->regionPairs   = $regionPairs;
                 $this->view->lanePairs     = $lanePairs;
             }
+            $projectID = $execution->project;
+            $project   = $this->project->getByID($projectID);
+            $this->view->hiddenProduct = empty($project->hasProduct);
+
         }
         else if($this->app->tab == 'project')
         {
@@ -352,6 +357,7 @@ class bug extends control
                 {
                     $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
                 }
+                $this->view->hiddenProduct = empty($project->hasProduct);
             }
         }
         else

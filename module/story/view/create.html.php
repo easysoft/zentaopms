@@ -48,8 +48,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
       <table class="table table-form">
         <tbody>
           <tr>
-            <th><?php echo $lang->story->product;?></th>
-            <td colspan="2">
+            <th><?php echo $hiddenProduct ? $lang->story->module : $lang->story->product;?></th>
+            <td colspan="2" class="<?php if($hiddenProduct) echo 'hidden';?>">
               <div class='input-group'>
               <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
               <span class='input-group-addon fix-border fix-padding'></span>
@@ -58,7 +58,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td colspan="2">
               <div class='input-group' id='moduleIdBox'>
+                <?php if(!$hiddenProduct):?>
                 <div class="input-group-addon"><?php echo $lang->story->module;?></div>
+                <?php endif;?>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)
@@ -76,8 +78,8 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
           <tr>
-            <th class='planTh'><?php echo $lang->story->planAB;?></th>
-            <td colspan="2">
+            <th class="planTh"><?php echo $hiddenPlan ? $lang->story->assignedTo : $lang->story->planAB;?></th>
+            <td colspan="2" class="<?php if($hiddenPlan) echo 'hidden';?>">
               <div class='input-group' id='planIdBox'>
                 <?php
                 echo html::select('plan', $plans, $planID, "class='form-control chosen'");
@@ -95,7 +97,9 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
+                <?php if(!$hiddenPlan):?>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
+                <?php endif;?>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
@@ -155,11 +159,13 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php if($type == 'story'):?>
           <?php if($this->config->URAndSR):?>
           <tr>
-            <th><?php echo $lang->story->requirement;?></th>
-            <td colspan="2"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <th><?php echo $hiddenURS ? $lang->story->parent : $lang->story->requirement;?></th>
+            <td colspan="2" class="<?php if($hiddenURS) echo 'hidden';?>"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
             <td colspan="2">
               <div class='input-group' id='moduleIdBox'>
+                <?php if(!$hiddenURS):?>
                 <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
+                <?php endif;?>
                 <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
               </div>
             </td>

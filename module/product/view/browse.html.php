@@ -26,6 +26,7 @@ body {margin-bottom: 25px;}
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
 <?php js::set('projectHasProduct', !empty($project->hasProduct));?>
+<?php js::set('URAndSR', $this->config->URAndSR);?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
