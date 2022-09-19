@@ -69,13 +69,13 @@
             </tr>
             <tr>
               <td colspan='2'><?php echo $this->lang->upgrade->projectScrum;?></td>
-              <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
-              <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
+              <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
             </tr>
             <tr>
               <td colspan='2'><?php echo $this->lang->upgrade->scrumDetail;?></td>
-              <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
-              <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              <td colspan='2' class="text-center"><i class="icon icon-2x icon-close"></i></td>
+              <td colspan='2' class="text-center"><i class="icon icon-2x icon-check"></i></td>
             </tr>
             <tr>
               <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfull;?></td>
