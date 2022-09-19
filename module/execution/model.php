@@ -356,6 +356,12 @@ class executionModel extends model
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
+        if($this->config->systemMode == 'new' && !empty($sprint->parent))
+        {
+            $project = $this->loadModel('project')->getByID($sprint->parent);
+            $sprint->hasProduct = $project->hasProduct;
+        }
+
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
             if(!$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
@@ -2156,6 +2162,8 @@ class executionModel extends model
         $productNum   = count($products);
         $productPairs = array(0 => '');
         $branches     = $this->loadModel('project')->getBranchesByProject($objectID);
+        $hasProduct   = $this->dao->select('hasProduct')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('hasProduct');
+
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
@@ -2205,6 +2213,8 @@ class executionModel extends model
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+
+        if(empty($hasProduct)) unset($this->config->product->search['fields']['product']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
