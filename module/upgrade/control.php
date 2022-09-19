@@ -265,11 +265,11 @@ class upgrade extends control
                 /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
                 $this->upgrade->relationDefaultProgram($programID);
                 $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
-                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('mergeTips'));
+                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=lean"));
 
                 $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
-            if($mode == 'new')  $this->locate(inlink('mergeTips'));
+            if($mode == 'new')  $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=new"));
         }
 
         $this->view->title = $this->lang->upgrade->selectMode;
