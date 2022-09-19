@@ -1199,7 +1199,7 @@ $lang->resource->zahost->delete         = 'deleteAction';
 $lang->resource->zahost->browseTemplate = 'browseTemplate';
 $lang->resource->zahost->createTemplate = 'createTemplate';
 $lang->resource->zahost->editTemplate   = 'editTemplate';
-$lang->resource->zahost->editTemplate   = 'deleteTemplate';
+$lang->resource->zahost->deleteTemplate = 'deleteTemplate';
 
 $lang->zahost->methodOrder[0]  = 'browse';
 $lang->zahost->methodOrder[5]  = 'create';
