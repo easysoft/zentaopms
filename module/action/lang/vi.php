@@ -90,6 +90,7 @@ $lang->action->objectTypes['testtask']         = 'Test bản dựng';
 $lang->action->objectTypes['testreport']       = 'Báo cáo';
 $lang->action->objectTypes['zahost']           = 'Host';
 $lang->action->objectTypes['vmtemplate']       = 'Virtual Host Template';
+$lang->action->objectTypes['executionnode']    = 'Execution Node';
 $lang->action->objectTypes['doc']              = 'Tài liệu';
 $lang->action->objectTypes['doclib']           = 'Thư viện tài liệu';
 $lang->action->objectTypes['todo']             = 'Việc làm';
@@ -186,6 +187,10 @@ $lang->action->desc->syncexecution   = '$date, starting the task sets the execut
 $lang->action->desc->reopen          = '$date, reopened by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->merged          = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview    = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->suspend         = '$date, the execution node is suspended by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->resume          = '$date, the execution node is resumed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->reboot          = '$date, the execution node is reboot by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->destroy         = '$date, the execution node is destroyed by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -308,6 +313,10 @@ $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->submitreview          = 'submitted';
+$lang->action->label->suspend               = 'suspended';
+$lang->action->label->resume                = 'resumed';
+$lang->action->label->reboot                = 'reboot';
+$lang->action->label->destroy               = 'destroyed';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -477,6 +486,12 @@ $lang->action->dynamicAction->caselib['hidden']    = 'Ẩn Case Lib';
 $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 
 $lang->action->dynamicAction->vmtemplate['created'] = 'Create Virtual Host Template';
+
+$lang->action->dynamicAction->executionnode['created'] = 'Create Execution Node';
+$lang->action->dynamicAction->executionnode['suspend'] = 'Suspend Execution Node';
+$lang->action->dynamicAction->executionnode['resume']  = 'Resume Execution Node';
+$lang->action->dynamicAction->executionnode['reboot']  = 'Reboot Execution Node';
+$lang->action->dynamicAction->executionnode['destroy'] = 'Destory Execution Node';
 
 $lang->action->dynamicAction->doclib['created'] = 'Tạo Doc thư viện';
 $lang->action->dynamicAction->doclib['edited']  = 'Sửa Doc thư viện';

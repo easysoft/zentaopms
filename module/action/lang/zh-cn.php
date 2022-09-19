@@ -113,6 +113,7 @@ $lang->action->objectTypes['testtask']         = '测试单';
 $lang->action->objectTypes['testreport']       = '报告';
 $lang->action->objectTypes['zahost']           = '宿主机';
 $lang->action->objectTypes['vmtemplate']       = '虚拟机模板';
+$lang->action->objectTypes['executionnode']    = '执行节点';
 $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
@@ -225,6 +226,10 @@ $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
+$lang->action->desc->suspend              = '$date, 由 <strong>$actor</strong> 暂停。' . "\n";
+$lang->action->desc->resume               = '$date, 由 <strong>$actor</strong> 恢复。' . "\n";
+$lang->action->desc->reboot               = '$date, 由 <strong>$actor</strong> 重启。' . "\n";
+$lang->action->desc->destroy              = '$date, 由 <strong>$actor</strong> 销毁。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -392,6 +397,10 @@ $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
+$lang->action->label->suspend               = '暂停了';
+$lang->action->label->resume                = '恢复了';
+$lang->action->label->reboot                = '重启了';
+$lang->action->label->destroy               = '销毁了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -616,6 +625,12 @@ $lang->action->dynamicAction->caselib['hidden']    = '隐藏用例库';
 $lang->action->dynamicAction->zahost['created'] = '创建宿主机';
 
 $lang->action->dynamicAction->vmtemplate['created'] = '创建虚拟机模板';
+
+$lang->action->dynamicAction->executionnode['created'] = '创建执行节点';
+$lang->action->dynamicAction->executionnode['suspend'] = '暂停执行节点';
+$lang->action->dynamicAction->executionnode['resume']  = '恢复执行节点';
+$lang->action->dynamicAction->executionnode['reboot']  = '重启执行节点';
+$lang->action->dynamicAction->executionnode['destroy'] = '销毁执行节点';
 
 $lang->action->dynamicAction->doclib['created'] = '创建文档库';
 $lang->action->dynamicAction->doclib['edited']  = '编辑文档库';

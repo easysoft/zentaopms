@@ -10,3 +10,4 @@ ALTER TABLE `zt_vmtemplate` ADD `createdBy` varchar(30) NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `createdDate` datetime NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `editedBy` varchar(30) NOT NULL;
 ALTER TABLE `zt_vmtemplate` ADD `editedDate` datetime NOT NULL;
+ALTER TABLE `zt_vm` ADD `osVersion` varchar(50) NOT NULL DEFAULT '' AFTER `osCategory`;
