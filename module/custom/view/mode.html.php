@@ -28,8 +28,7 @@
           </p>
         </td>
       </tr>
-      <?php
-      $class = ''; if($mode == 'new') $class="class='hidden'";?>
+      <?php $class = $mode == 'new' ? "class='hidden'" : "";?>
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
         <td><?php echo html::select('program', $program, '', "class='form-control chosen'");?></td>
