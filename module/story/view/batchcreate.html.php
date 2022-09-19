@@ -14,7 +14,7 @@
 <?php if($forceReview) $config->story->create->requiredFields .= ',review';?>
 <?php js::set('showFields', $showFields);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
-<?php js::set('storyType', $type);?>
+<?php js::set('storyType', in_array($type, array('story', 'requirement'))) ? $type : 'story';?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
