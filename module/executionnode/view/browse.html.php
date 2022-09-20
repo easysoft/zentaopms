@@ -56,7 +56,7 @@
           <th class='w-60px'><?php common::printOrderLink('osDisk', $orderBy, $vars, $lang->executionnode->disk);?></th>
           <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->executionnode->status);?></th>
           <th class='w-80px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->executionnode->creater);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions?></th>
+          <th class='c-actions-4'><?php echo $lang->actions?></th>
         </tr>
       </thead>
       <tbody>
@@ -74,13 +74,17 @@
           <td><?php echo zget($users, $node->createdBy);?></td>
           <td class='c-actions'>
             <?php
-            $startClass = $node->status == 'running' ? 'disabled' : '';
-            $stopClass  = $node->status == 'suspend' ? 'disabled' : '';
-            common::printLink('executionnode', 'suspend', "executionnodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', "title='{$lang->executionnode->suspend}' class='btn btn-primary' {$stopClass} target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmSuspend}\")==false) return false;'");
-            common::printLink('executionnode', 'resume', "executionnodeID={$node->id}", "<i class='icon icon-back'></i> ", '', "title='{$lang->executionnode->resume}' class='btn btn-primary' {$startClass} target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmResume}\")==false) return false;'");
-            common::printLink('executionnode', 'reboot', "executionnodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', "title='{$lang->executionnode->reboot}' class='btn btn-primary' {$stopClass} target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmReboot}\")==false) return false;'");
+            $suspendAttr  = "title='{$lang->executionnode->suspend}' class='btn btn-primary' target='hiddenwin'";
+            $suspendAttr .= $node->status == 'suspend' ? ' disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmSuspend}\")==false) return false;'";
+
+            $resumeAttr  = "title='{$lang->executionnode->resume}' class='btn btn-primary' target='hiddenwin'";
+            $resumeAttr .= $node->status == 'running' ? 'disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmResume}\")==false) return false;'";
+            $rebootAttr  = "title='{$lang->executionnode->reboot}' class='btn btn-primary' target='hiddenwin'";
+            $rebootAttr .= $node->status == 'suspend' ? ' disabled' : " target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmReboot}\")==false) return false;'";
+            common::printLink('executionnode', 'suspend', "executionnodeID={$node->id}", "<i class='icon icon-pause'></i> ", '', $suspendAttr);
+            common::printLink('executionnode', 'resume', "executionnodeID={$node->id}", "<i class='icon icon-back'></i> ", '', $resumeAttr);
+            common::printLink('executionnode', 'reboot', "executionnodeID={$node->id}", "<i class='icon icon-restart'></i> ", '', $rebootAttr);
             common::printLink('executionnode', 'destroy', "executionnodeID={$node->id}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->executionnode->destroy}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->executionnode->confirmDelete}\")==false) return false;'");
-            common::printIcon('executionnode', 'getVNC', "executionnodeID={$node->id}", '', 'list', 'link', 'hiddenwin', $stopClass);
             ?>
           </td>
         </tr>
