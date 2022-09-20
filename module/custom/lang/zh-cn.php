@@ -235,8 +235,8 @@ $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
 global $config;
-$lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
-$lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
+$lang->custom->sprintConceptList[0] = '项目 产品 迭代';
+$lang->custom->sprintConceptList[1] = '项目 产品 冲刺';
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
