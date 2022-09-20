@@ -192,8 +192,8 @@ $lang->upgrade->execution        = 'Execute, test, DevOps, Kanban, document, sta
 $lang->upgrade->assetlib         = 'Assetlib';
 $lang->upgrade->oa               = 'OA, operation and maintenance, feedback, school, workflow';
 $lang->upgrade->selectUsage      = 'Select a scenario';
-$lang->upgrade->useLean          = 'Use Lean mode';
-$lang->upgrade->useNew           = 'User New mode';
+$lang->upgrade->useLean          = 'Use lean mode';
+$lang->upgrade->useNew           = 'User program mode';
 $lang->upgrade->remark           = 'Remark';
 $lang->upgrade->remarkDesc       = 'You can also switch the mode in the background customization of the system.';
 
