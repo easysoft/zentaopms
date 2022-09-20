@@ -19,6 +19,7 @@
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
 <?php js::set('linkStoriesProjectIDList', array_keys($linkStoriesProjects));?>
 <?php js::set('projectPathList', $projectPathList);?>
+<?php js::set('programID', $product->program);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
 #changeProgram .modal-body {padding-top: 10px;}
