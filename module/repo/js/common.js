@@ -61,6 +61,48 @@ $("input:checkbox[name='revision[]']").click(function(){
     }
 });
 
+var distance = 0;
+
+/**
+ * Aarrow tabs area.
+ *
+ * @param  string domID
+ * @param  number shift 1|-1
+ * @param  bool   hideRightBtn
+ * @access public
+ * @return void
+ */
+function arrowTabs(domID, shift, hideRightBtn)
+{
+    if($('#' + domID).html() == '') return;
+
+    $('.btn-right, .btn-left').show();
+    if(hideRightBtn) $('.btn-right').hide();
+
+    var tabItemWidth = $('#' + domID + ' > .tabs-navbar > .nav-tabs')[0].clientWidth;
+    var tabsWidth    = $('#' + domID + '')[0].clientWidth;
+    if(tabItemWidth < tabsWidth)
+    {
+        $('.btn-right, .btn-left').hide();
+        return;
+    }
+
+    distance += tabsWidth * shift * 0.2;
+    if(distance > 0) distance = 0;
+    if(distance == 0)
+    {
+        $('.btn-left').hide();
+    }
+
+    if((tabItemWidth + distance) < tabsWidth * 0.75)
+    {
+        $('.btn-right').hide();
+        return arrowTabs(domID, 1, true);
+    }
+
+    $('#' + domID + ' > .tabs-navbar > .tabs-nav')[0].style.transform = 'translateX('+ distance +'px)';
+}
+
 $(function()
 {
     $(document).on('click', '.ajaxPager', function()

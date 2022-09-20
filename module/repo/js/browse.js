@@ -109,4 +109,11 @@ $(function()
         var link = createLink('repo', 'downloadCode', 'repoID=' + repoID + '&branch=' + branch);
         window.open(link);
     })
+
+    /* Sync rename record. */
+    if(!syncedRF)
+    {
+        var link = createLink('repo', 'ajaxSyncRenameRecord', 'repoID=' + repoID);
+        $.get(link);
+    }
 })

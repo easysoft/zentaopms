@@ -26,6 +26,8 @@ $lang->repo->branch          = 'Branch';
 $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
+$lang->repo->blamTmpl        = '%time %name commited %version %comment';
+$lang->repo->notRelated      = 'There is currently no related ZenTao object';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Créer Ref';
@@ -40,6 +42,8 @@ $lang->repo->downloadZip     = 'Download compressed package';
 $lang->repo->sshClone        = 'Clone with SSH';
 $lang->repo->httpClone       = 'Clone with HTTP';
 $lang->repo->cloneUrl        = 'Clone URL';
+$lang->repo->linkTask        = 'Link Task';
+$lang->repo->unlinkedTasks   = 'Unlinked Tasks';
 
 $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';
@@ -103,6 +107,10 @@ $lang->repo->job                = 'Job';
 $lang->repo->fileServerUrl      = 'File Server Url';
 $lang->repo->fileServerAccount  = 'File Server Account';
 $lang->repo->fileServerPassword = 'File Server Password';
+$lang->repo->linkStory          = 'Link ' . $lang->SRCommon;
+$lang->repo->linkBug            = 'Link Bug';
+$lang->repo->linkTask           = 'Link Task';
+$lang->repo->unlink             = 'Unlink';
 
 $lang->repo->title      = 'Titre';
 $lang->repo->status     = 'Statut';

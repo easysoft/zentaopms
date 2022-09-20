@@ -253,6 +253,8 @@ class actionModel extends model
                 case 'task':
                     $fields = 'project, execution, story';
                     $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if(empty($result)) break;
+
                     if($result->story != 0)
                     {
                         $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($result->story)->fetchPairs('product');
@@ -413,6 +415,15 @@ class actionModel extends model
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
+            }
+            elseif($actionName == 'linked2revision' or $actionName == 'unlinkedfromrevision')
+            {
+                $commit = $this->dao->select('repo,revision')->from(TABLE_REPOHISTORY)->where('id')->eq($action->extra)->fetch();
+                if($commit)
+                {
+                    $revision = substr($commit->revision, 0, 10);
+                    $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID=$commit->repo&objectID=0&revision=$commit->revision"), $revision) : $revision;
+                }
             }
             elseif($actionName == 'moved' and $action->objectType != 'module')
             {

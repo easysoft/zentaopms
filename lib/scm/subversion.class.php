@@ -306,10 +306,14 @@ class Subversion
                     $blame = array();
                     $blame['revision']  = (int)$line->commit['revision'];
                     $blame['committer'] = (string)$line->commit->author;
-                    $blame['time']      = substr($line->commit->date, 0, 10);
+                    $blame['time']      = date('Y-m-d H:i:s', strtotime($line->commit->date));
                     $blame['line']      = (int)$line['line-number'];
                     $blame['lines']     = 1;
                     $blame['content']   = $content[$blame['line'] - 1];
+
+                    $log = $this->log('', $blame['revision'], 'HEAD', 1);
+                    $blame['message'] = $log[0]->comment;
+
                     $revision         = $blame['revision'];
                     $revLine          = $blame['line'];
                     $blames[$revLine] = $blame;
@@ -318,7 +322,7 @@ class Subversion
                 {
                     $blame            = array();
                     $blame['line']    = (int)$line['line-number'];
-                    $blame['content'] = $content[$blame['line'] - 1];
+                    $blame['content'] = zget($content, $blame['line'] - 1, '');
 
                     $blames[$blame['line']] = $blame;
                     $blames[$revLine]['lines'] ++;
@@ -711,5 +715,56 @@ class Subversion
         $zfile = $app->loadClass('zfile');
         $zfile->removeDir($repoDir);
         return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . $this->repo->name . '.zip';
+    }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+
+        $resourcePath = $path;
+        $path         = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
+        $cmd          = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
+        $list         = execCmd($cmd, 'string', $result);
+        if($result)
+        {
+            $path = '"' . $this->root . '/' . $resourcePath . '"';
+            $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
+            $list = execCmd($cmd, 'string', $result);
+            if($result) $list = '';
+        }
+        $listObject = simplexml_load_string($list);
+        if(!empty($list) and empty($listObject))
+        {
+            $list = helper::convertEncoding($list, $this->encoding, 'utf-8');
+            $listObject = simplexml_load_string($list);
+        }
+        if(!empty($listObject->list->entry)) $listObject = $listObject->list->entry;
+        $infos = array();
+        if(empty($listObject)) return $infos;
+
+        foreach($listObject as $list)
+        {
+            $kind     = (string)$list['kind'];
+            $pathName = ltrim($path . DIRECTORY_SEPARATOR . (string)$list->name, DIRECTORY_SEPARATOR);
+            if($kind == 'dir')
+            {
+                $this->getAllFiles($pathName, $revision, $lists);
+            }
+            else
+            {
+                $lists[] = rtrim($pathName, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $lists;
     }
 }

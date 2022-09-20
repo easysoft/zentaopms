@@ -176,6 +176,7 @@ $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
 $lang->bug->linkMR         = 'Related MRs';
+$lang->bug->linkCommit     = 'Related Commits';
 $lang->bug->duplicateTip   = 'Please enter keyword search';
 
 /* Page tags. */
@@ -396,18 +397,20 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Bearbeitungsschri
 
 /* Operating record. */
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, gelöst von <strong>$actor</strong> und die Lösung ist <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, konvertiert von <strong>$actor</strong> zu <strong>Story</strong> mit ID <strong>$extra</strong>.');
-$lang->bug->action->totask              = array('main' => '$date, importiert von <strong>$actor</strong> als <strong>Aufgabe</strong> mit ID <strong>$extra</strong>.');
-$lang->bug->action->converttotask       = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
-$lang->bug->action->linked2plan         = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromplan    = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Plan <strong>$extra</strong>.');
-$lang->bug->action->linked2build        = array('main' => '$date, verknüpft von <strong>$actor</strong> zum Build <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Build <strong>$extra</strong>.');
-$lang->bug->action->linked2release      = array('main' => '$date, verknüpft von <strong>$actor</strong> zu Release <strong>$extra</strong>.');
-$lang->bug->action->unlinkedfromrelease = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> vom Release <strong>$extra</strong>.');
-$lang->bug->action->linkrelatedbug      = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Bug <strong>$extra</strong>.');
-$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> zum Bug <strong>$extra</strong>.');
+$lang->bug->action->resolved             = array('main' => '$date, gelöst von <strong>$actor</strong> und die Lösung ist <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->tostory              = array('main' => '$date, konvertiert von <strong>$actor</strong> zu <strong>Story</strong> mit ID <strong>$extra</strong>.');
+$lang->bug->action->totask               = array('main' => '$date, importiert von <strong>$actor</strong> als <strong>Aufgabe</strong> mit ID <strong>$extra</strong>.');
+$lang->bug->action->converttotask        = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
+$lang->bug->action->linked2plan          = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Plan <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromplan     = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Plan <strong>$extra</strong>.');
+$lang->bug->action->linked2build         = array('main' => '$date, verknüpft von <strong>$actor</strong> zum Build <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfrombuild    = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> von Build <strong>$extra</strong>.');
+$lang->bug->action->linked2release       = array('main' => '$date, verknüpft von <strong>$actor</strong> zu Release <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrelease  = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> vom Release <strong>$extra</strong>.');
+$lang->bug->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->bug->action->linkrelatedbug       = array('main' => '$date, verknüpft von <strong>$actor</strong> mit Bug <strong>$extra</strong>.');
+$lang->bug->action->unlinkrelatedbug     = array('main' => '$date, verknüpfung aufgehoben von <strong>$actor</strong> zum Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Build wählen...';
