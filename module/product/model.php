@@ -375,7 +375,7 @@ class productModel extends model
             if($dealShadow) $select = 't1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed';
             $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
             return $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
-                ->from(TABLE_PRODUCT)
+                ->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
                 ->where(1)
