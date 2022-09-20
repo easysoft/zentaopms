@@ -31,6 +31,9 @@ $config->project->sortFields->end    = 'end';
 $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
+$config->project->noSprint['project']   = ',qa,devops,doc,build,dynamic,settings,';
+$config->project->noSprint['execution'] = ',task,kanban,burn,view,story,';
+
 global $lang;
 $config->project->datatable = new stdclass();
 $config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'progress', 'actions');

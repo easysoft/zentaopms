@@ -3402,7 +3402,7 @@ EOD;
      * @param  int     $objectID
      * @param  array   $params
      */
-    static private function setMenuVarsEx($menu, $objectID, $params = array())
+    static public function setMenuVarsEx($menu, $objectID, $params = array())
     {
         if(is_array($menu))
         {

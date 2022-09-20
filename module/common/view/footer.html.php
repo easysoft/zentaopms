@@ -9,6 +9,9 @@ $.initSidebar();
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id="noticeBox"><?php if($config->vision != 'lite') echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
+<?php if(isset($this->config->executionNavGroup)):?>
+parent.navGroup.execution = '<?php echo $this->config->executionNavGroup?>';
+<?php endif;?>
 <?php $this->app->loadConfig('message');?>
 <?php if($config->message->browser->turnon):?>
 /* Alert got messages. */

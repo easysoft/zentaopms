@@ -122,6 +122,8 @@ class executionModel extends model
 
         $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
+
+        $this->loadModel('project')->setNoSprintMenu($executionID);
     }
 
     /**
