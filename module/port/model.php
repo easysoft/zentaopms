@@ -191,6 +191,17 @@ class portModel extends model
         $fieldList = $this->initFieldList($model, $fields);
 
         $rows = $this->getRows($model, $fieldList);
+        if($model == 'story')
+        {
+            $product = $this->loadModel('product')->getByID((int)$this->session->storyPortParams['productID']);
+            if($product and $product->shadow)
+            {
+                foreach($rows as $id => $row)
+                {
+                    $rows[$id]->product = '';
+                }
+            }
+        }
 
         $list = $this->setListValue($model, $fieldList);
         if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
