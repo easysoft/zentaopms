@@ -384,9 +384,9 @@ class story extends control
                 ->fetch('id');
         }
 
-        /* Get reviewers. */
-        $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        /* Get users in team. */
+        $teamUsers = $product->reviewer;
+        if(!$teamUsers and $product->acl != 'open') $teamUsers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
@@ -395,16 +395,7 @@ class story extends control
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
-            if($this->app->tab === 'project')
-            {
-                $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
-            }
-            else
-            {
-                $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-                $projectID = $execution->project;
-                $project   = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-            }
+            $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
 
             if(empty($project->hasProduct))
             {
@@ -440,7 +431,7 @@ class story extends control
         $this->view->stories          = $this->story->getParentStoryPairs($productID);
         $this->view->productID        = $productID;
         $this->view->product          = $product;
-        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->teamUsers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $teamUsers);
         $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
@@ -877,6 +868,24 @@ class story extends control
             $this->view->objectID = $objectID;
         }
 
+        /* Hidden some fields of projects without products. */
+        $this->view->hiddenProduct = false;
+        $this->view->hiddenPlan    = false;
+        $this->view->hiddenURS     = false;
+
+        if($this->app->tab === 'project' || $this->app->tab === 'execution')
+        {
+            $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+
+            if(empty($project->hasProduct))
+            {
+                $this->view->hiddenProduct = true;
+
+                if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+                if($project->model === 'kanban') $this->view->hiddenURS  = true;
+            }
+        }
+
         /* Display status of branch. */
         $branches = $this->loadModel('branch')->getList($product->id, isset($objectID) ? $objectID : 0, 'all');
         $branchOption    = array();
@@ -893,9 +902,9 @@ class story extends control
         $reviewedBy       = explode(',', trim($story->reviewedBy, ','));
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
-        /* Get product reviewers. */
-        $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        /* Get users in team. */
+        $teamUsers = $product->reviewer;
+        if(!$teamUsers and $product->acl != 'open') $teamUsers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
@@ -916,7 +925,7 @@ class story extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
-        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
+        $this->view->teamUsers        = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $teamUsers);
 
         $this->display();
     }
@@ -1197,9 +1206,9 @@ class story extends control
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
         $product  = $this->loadModel('product')->getByID($story->product);
 
-        /* Get product reviewers. */
-        $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        /* Get users in team. */
+        $teamUsers = $product->reviewer;
+        if(!$teamUsers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
