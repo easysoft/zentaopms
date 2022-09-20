@@ -340,9 +340,10 @@ class productModel extends model
      * @param  string       $mode
      * @param  string       $programID
      * @param  string|array $append
+     * @param  number|bool  $shadow
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0, $append = '')
+    public function getPairs($mode = '', $programID = 0, $append = '', $shadow = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
@@ -359,6 +360,7 @@ class productModel extends model
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
+                ->beginIF(is_numeric($shadow))->andWHere('t1.shadow')->eq($shadow)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy('isClosed, t2.order_asc, t1.line_desc, t1.order_asc')
                 ->fetchPairs('id', 'name');
@@ -373,6 +375,7 @@ class productModel extends model
                 ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($views)->fi()
+                ->beginIF(is_numeric($shadow))->andWHere('t1.shadow')->eq($shadow)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->fetchPairs('id', 'name');
