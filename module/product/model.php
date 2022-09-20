@@ -264,7 +264,7 @@ class productModel extends model
      */
     public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $type = 'normal')
     {
-        return $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'normal')->andWhere('t1.shadow')->eq(0)->fi()
