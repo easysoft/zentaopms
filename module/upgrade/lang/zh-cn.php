@@ -167,6 +167,7 @@ $lang->upgrade->mergeModes['manually']    = '手工归并数据';
 
 $lang->upgrade->mergeProjectTip   = '历史的项目将直接同步到新版本的项目中，同时系统将会根据历史项目分别创建一个与该项目同名的迭代，并将之前项目下的任务、需求、Bug等数据迁移至迭代中。';
 $lang->upgrade->mergeExecutionTip = '系统将自动按年创建项目，将历史的迭代数据按照年份归并到对应的项目下。';
+$lang->upgrade->createProgramTip  = '同时系统将自动创建一个默认的项目集，将所有的项目都放在默认的项目集下。';
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
 include dirname(__FILE__) . '/version.php';
