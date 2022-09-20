@@ -502,17 +502,9 @@ class story extends control
             $this->view->execution = $execution;
             /* Hidden some fields of projects without products. */
 
-            if($execution->type === 'project' || $execution->type === 'kanban')
+            if(in_array($execution->type, array('project', 'kanban', 'stage'), true))
             {
-                if($execution->type === 'project')
-                {
-                    $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
-                }
-                else
-                {
-                    $projectID = $execution->project;
-                    $project   = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
-                }
+                $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
 
                 if(empty($project->hasProduct))
                 {

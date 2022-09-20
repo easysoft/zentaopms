@@ -683,32 +683,34 @@ class programplanModel extends model
             return false;
         }
 
+        $project = $this->loadModel('project')->getByID($projectID);
+
         $datas = array();
         foreach($names as $key => $name)
         {
             if(empty($name)) continue;
 
             $plan = new stdclass();
-            $plan->id        = isset($planIDList[$key]) ? $planIDList[$key] : '';
-            $plan->type      = 'stage';
-            $plan->project   = $projectID;
-            $plan->parent    = $parentID ? $parentID : $projectID;
-            $plan->name      = $names[$key];
-            $plan->percent   = $percents[$key];
-            $plan->attribute = empty($parentID) ? $attributes[$key] : $parentAttribute;
-            $plan->milestone = $milestone[$key];
-            $plan->begin     = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
-            $plan->end       = empty($end[$key]) ? '0000-00-00' : $end[$key];
-            $plan->realBegan = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
-            $plan->realEnd   = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
-            $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
-            $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
-            $plan->PM        = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->id         = isset($planIDList[$key]) ? $planIDList[$key] : '';
+            $plan->type       = 'stage';
+            $plan->project    = $projectID;
+            $plan->parent     = $parentID ? $parentID : $projectID;
+            $plan->name       = $names[$key];
+            $plan->percent    = $percents[$key];
+            $plan->attribute  = empty($parentID) ? $attributes[$key] : $parentAttribute;
+            $plan->milestone  = $milestone[$key];
+            $plan->begin      = empty($begin[$key]) ? '0000-00-00' : $begin[$key];
+            $plan->end        = empty($end[$key]) ? '0000-00-00' : $end[$key];
+            $plan->realBegan  = empty($realBegan[$key]) ? '0000-00-00' : $realBegan[$key];
+            $plan->realEnd    = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
+            $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
+            $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
+            $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->hasProduct = $project->hasProduct;
 
             $datas[] = $plan;
         }
 
-        $project = $this->loadModel('project')->getByID($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
