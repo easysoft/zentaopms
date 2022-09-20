@@ -1143,7 +1143,7 @@ class product extends control
 
         $programProducts = array();
 
-        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
+        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList(0, 'all', 0, 0, 'all');
 
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
