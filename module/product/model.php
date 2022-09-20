@@ -557,15 +557,8 @@ class productModel extends model
 
         if(empty($products)) return $products;
 
-        $lines          = $this->getLinePairs();
-        $productList    = array();
-        $productProject = $this->dao->select('t1.product,t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t3.shadow')->eq('1')
-            ->fetchAll('product');
+        $lines       = $this->getLinePairs();
+        $productList = array();
 
         foreach($lines as $id => $name)
         {
@@ -577,8 +570,6 @@ class productModel extends model
                     $productList[] = $product;
                     unset($products[$key]);
                 }
-
-                if($product->shadow) $product->name = !empty($productProject[$product->id]->name) ? $productProject[$product->id]->name : $product->name;
             }
         }
 
