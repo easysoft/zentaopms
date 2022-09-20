@@ -149,7 +149,7 @@ class port extends control
         if($model == 'task') $filter = 'estimate';
         if($model == 'story')
         {
-            if($this->session->storyType) $this->loadModel('story')->replaceUserRequirementLang();
+            if($this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
         }
 
         $this->loadModel($model);
