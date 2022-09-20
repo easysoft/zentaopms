@@ -710,7 +710,7 @@ class upgrade extends control
             $mergeMode = $this->post->projectType;
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
-            if($mode == 'lean') $programID = $this->config->defaultProgram;
+            if($mode == 'lean') $programID = $this->config->global->defaultProgram;
             if($mode == 'new')  $programID = $this->loadModel('program')->createDefaultProgram();
 
             if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
