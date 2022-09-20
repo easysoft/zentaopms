@@ -188,54 +188,6 @@ class upgrade extends control
     }
 
     /**
-     * Guide to 15 version.
-     *
-     * @param  string    $fromVersion
-     * @access public
-     * @return void
-     */
-    public function to15Guide($fromVersion)
-    {
-        if($_POST)
-        {
-            $mode = fixer::input('post')->get('mode');
-            $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-
-            /* Update sprint concept. */
-            $sprintConcept = 0;
-            if(isset($this->config->custom->sprintConcept))
-            {
-                if($this->config->custom->sprintConcept == 2 and $mode == 'new') $sprintConcept = 1;
-            }
-            elseif(isset($this->config->custom->productProject))
-            {
-                list($productConcept, $projectConcept) = explode('_', $this->config->custom->productProject);
-                if($mode == 'classic') $sprintConcept = $projectConcept;
-                if($mode == 'new' and $projectConcept == 2) $sprintConcept = 1;
-            }
-            $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
-
-            if($mode == 'classic') $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
-            if($mode == 'new')     $this->locate(inlink('mergeTips'));
-        }
-
-        $title = $this->lang->upgrade->toPMS15Guide;
-        if($this->config->edition == 'max')
-        {
-            $this->lang->upgrade->to15Desc = str_replace('15.0', $this->lang->maxName, $this->lang->upgrade->to15Desc);
-            $title = $this->lang->upgrade->toMAXGuide;
-        }
-        elseif($this->config->edition == 'biz')
-        {
-            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->bizName . '5', $this->lang->upgrade->to15Desc);
-            $title = $this->lang->upgrade->toBIZ5Guide;
-        }
-
-        $this->view->title = $title;
-        $this->display();
-    }
-
-    /**
      * Guide to 18 version.
      *
      * @param  string    $fromVersion
@@ -278,7 +230,14 @@ class upgrade extends control
             if($mode == 'new')  $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=new"));
         }
 
-        $this->view->title = $this->lang->upgrade->selectMode;
+        $checkHistoryResult = $this->upgrade->checkHistoryDataForLeanMode();
+
+        $this->view->ur        = $checkHistoryResult['ur'];
+        $this->view->cmmi      = $checkHistoryResult['cmmi'];
+        $this->view->waterfall = $checkHistoryResult['waterfall'];
+        $this->view->assetlib  = $checkHistoryResult['assetlib'];
+        $this->view->title     = $this->lang->upgrade->selectMode;
+        $this->view->edition   = $this->config->edition;
         $this->display();
     }
 

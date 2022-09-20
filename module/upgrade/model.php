@@ -7793,4 +7793,112 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * Check history data form lean mode.
+     * 简要迅捷模式历史数据是否存在
+     *
+     * @access public
+     * @return array
+     */
+    public function checkHistoryDataForLeanMode()
+    {
+        $returnData = array(
+            'ur' => false,
+            'cmmi' => false,
+            'waterfall' => false,
+            'assetlib' => false,
+        );
+
+        if($this->config->systemMode == 'new')
+        {
+            /* User requriement */
+            $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');
+            if($requirementStory > 0) $returnData['ur'] = true;
+            if($this->config->edition == 'max')
+            {
+                /* issue,risk,opportunity,process,QA,meeting */
+                $issue = $this->dao->select('count(1) as total')->from(TABLE_ISSUE)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.deleted')->eq(0)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch('total');
+                if($issue > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+
+                $risk = $this->dao->select('count(1) as total')->from(TABLE_RISK)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.deleted')->eq(0)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch('total');
+                if($risk > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+
+                $opportunity = $this->dao->select('count(1) as total')->from(TABLE_OPPORTUNITY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.deleted')->eq(0)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch('total');
+                if($opportunity > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+
+                $process = $this->dao->select('count(1) as total')->from(TABLE_PROCESS)
+                    ->where('deleted')->eq(0)
+                    ->fetch('total');
+                if($process > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+
+                $auditplans = $this->dao->select('count(1) as total')->from(TABLE_AUDITPLAN)
+                    ->where('deleted')->eq(0)
+                    ->fetch('total');
+                if($auditplans > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+
+                $meeting = $this->dao->select('count(1) as total')->from(TABLE_MEETING)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.deleted')->eq(0)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch('total');
+                if($meeting > 0)
+                {
+                    $returnData['cmmi'] = true;
+                    goto next;
+                }
+            }
+
+            next:
+            /* Waterfull mode */
+            $waterfull = $this->dao->select('count(1) as total')->from(TABLE_PROJECT)
+                ->where('model')->eq('waterfall')
+                ->andWhere('deleted')->eq(0)
+                ->fetch('total');
+            if($waterfull > 0) $returnData['waterfall'] = true;
+
+            if($this->config->edition == 'max')
+            {
+                /* assetlib */
+                $assetlib = $this->dao->select('count(1) as total')->from(TABLE_ASSETLIB)
+                    ->where('deleted')->eq(0)
+                    ->fetch('total');
+                if($assetlib > 0) $returnData['assetlib'] = true;
+            }
+        }
+
+        return $returnData;
+    }
 }

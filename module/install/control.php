@@ -216,7 +216,8 @@ class install extends control
         else
         {
             $this->app->loadLang('upgrade');
-            $this->view->title = $this->lang->install->selectMode;
+            $this->view->edition = $this->config->edition;
+            $this->view->title   = $this->lang->install->selectMode;
             $this->display();
         }
     }

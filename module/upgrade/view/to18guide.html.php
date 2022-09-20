@@ -28,8 +28,8 @@
             <tbody>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->usage;?></td>
-                <td colspan='2'><?php echo $this->lang->upgrade->leanUsage;?></td>
-                <td colspan='2'><?php echo $this->lang->upgrade->newUsage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->leanUsage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->newUsage;?></td>
               </tr>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
@@ -41,9 +41,10 @@
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php $icon = $ur ? 'icon-check' : 'icon-close'?>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->productUR;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
@@ -56,14 +57,18 @@
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php if($edition == 'max'):?>
+              <?php $icon = $cmmi ? 'icon-check' : 'icon-close'?>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->scrumDetail;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php endif;?>
+              <?php $icon = $waterfall ? 'icon-check' : 'icon-close'?>
               <tr>
-                <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfull;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfall;?></td>
+                <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
               <tr>
@@ -76,18 +81,23 @@
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php if($edition == 'max'):?>
+              <?php $icon = $assetlib ? 'icon-check' : 'icon-close'?>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->assetlib;?></td>
-                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon <?php echo $icon?>"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php endif;?>
+              <?php if($edition == 'biz' or $edition == 'max'):?>
               <tr>
                 <td colspan='2'><?php echo $this->lang->upgrade->oa;?></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
                 <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
               </tr>
+              <?php endif;?>
               <tr>
-                <td colspan='2' style="font-weight:bold;"><?php echo $this->lang->upgrade->selectUsage;?></td>
+                <td colspan='2' style="font-weight:bold;font-size:14px;"><?php echo $this->lang->upgrade->selectUsage;?></td>
                 <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useLean;?></button></td>
                 <td colspan='2' class="text-center"><button class="btn" type="button" id='useNew'><?php echo $this->lang->upgrade->useNew;?></button></td>
               </tr>
