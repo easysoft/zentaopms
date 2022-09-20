@@ -102,7 +102,7 @@ class zahostModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->dao->update(TABLE_HOST)->data($hostInfo, 'name')->autoCheck()
+        $this->dao->update(TABLE_ZAHOST)->data($hostInfo, 'name')->autoCheck()
             ->batchCheck('cpuCores,diskSize,instanceNum', 'gt', 0)
             ->batchCheck('diskSize,memory', 'float')
             ->where('id')->eq($hostID)->exec();
@@ -230,7 +230,7 @@ class zahostModel extends model
     {
         $field = $idForm == 'asset' ? 't1.id' : 't2.id';
         return $this->dao->select("$field,t1.name")->from(TABLE_ASSET)->alias('t1')
-            ->leftJoin(TABLE_HOST)->alias('t2')->on('t1.id = t2.assetID')
+            ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.id = t2.assetID')
             ->where('t1.deleted')->eq('0')
             ->orderBy('`group`')
             ->fetchPairs('id', 'name');
