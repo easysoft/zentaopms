@@ -43,7 +43,7 @@
           </table>
         </div>
         <div class='panel-footer text-center'>
-          <?php echo html::commonButton($lang->upgrade->back, '', 'btn btn-wide btn-secondary');?>
+          <?php echo html::a($this->createLink('upgrade', 'to18guide', "fromVersion=$fromVersion"), $lang->upgrade->back, '', "class='btn btn-wide btn-secondary'");?>
           <?php echo html::submitButton($lang->upgrade->next);?>
         </div>
       </form>
