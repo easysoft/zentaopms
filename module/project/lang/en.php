@@ -257,6 +257,9 @@ $lang->project->featureBar['build']['all'] = 'Build List';
 $lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 
+$lang->project->noSprintList['0'] = "Disable";
+$lang->project->noSprintList['1'] = "Enable";
+
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
 
@@ -335,3 +338,5 @@ $lang->project->confirmUnlinkMember = "Do you want to remove this user from proj
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+
+$lang->project->noSprint = 'No sprint';

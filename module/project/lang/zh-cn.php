@@ -257,6 +257,9 @@ $lang->project->featureBar['build']['all'] = '所有版本';
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
 
+$lang->project->noSprintList['0'] = "不启用";
+$lang->project->noSprintList['1'] = "启用";
+
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
 
@@ -335,3 +338,5 @@ $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户�
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+
+$lang->project->noSprint = '是否启用迭代';

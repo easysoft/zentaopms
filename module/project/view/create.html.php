@@ -73,6 +73,12 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
+        <?php if($model == 'scrum' or $model == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->project->noSprint;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, 1));?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
