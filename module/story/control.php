@@ -393,6 +393,7 @@ class story extends control
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
             $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
             if(empty($project->hasProduct))
             {
@@ -502,6 +503,7 @@ class story extends control
             if(in_array($execution->type, array('project', 'kanban', 'stage'), true))
             {
                 $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
+                if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
                 if(empty($project->hasProduct))
                 {
@@ -862,6 +864,7 @@ class story extends control
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
             $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
+            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 
             if(empty($project->hasProduct))
             {

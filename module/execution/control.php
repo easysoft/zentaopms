@@ -2552,21 +2552,26 @@ class execution extends control
         $userList['closed']->realname = 'Closed';
         $userList['closed']->avatar   = '';
 
-        $this->view->title            = $this->lang->execution->kanban;
-        $this->view->realnames        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyOrder       = $orderBy;
-        $this->view->orderBy          = 'id_asc';
-        $this->view->executionID      = $executionID;
-        $this->view->productID        = $productID;
-        $this->view->productNames     = $productNames;
-        $this->view->productNum       = count($products);
-        $this->view->allPlans         = $allPlans;
-        $this->view->browseType       = $browseType;
-        $this->view->kanbanGroup      = $kanbanGroup;
-        $this->view->execution        = $execution;
-        $this->view->groupBy          = $groupBy;
-        $this->view->canBeChanged     = $canBeChanged;
-        $this->view->userList         = $userList;
+        $projectID  = $execution->project;
+        $project    = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
+        $hiddenPlan = $project->model !== 'scrum';
+
+        $this->view->title        = $this->lang->execution->kanban;
+        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyOrder   = $orderBy;
+        $this->view->orderBy      = 'id_asc';
+        $this->view->executionID  = $executionID;
+        $this->view->productID    = $productID;
+        $this->view->productNames = $productNames;
+        $this->view->productNum   = count($products);
+        $this->view->allPlans     = $allPlans;
+        $this->view->browseType   = $browseType;
+        $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->execution    = $execution;
+        $this->view->groupBy      = $groupBy;
+        $this->view->canBeChanged = $canBeChanged;
+        $this->view->userList     = $userList;
+        $this->view->hiddenPlan   = $hiddenPlan;
 
         $this->display();
     }
