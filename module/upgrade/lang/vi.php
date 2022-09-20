@@ -154,6 +154,7 @@ $lang->upgrade->mergeModes['manually']  = 'Manually merge data';
 
 $lang->upgrade->mergeProjectTip   = 'The historical project will be synchronized directly to the new version of the project. At the same time, the system will create an iteration with the same name as the project according to the historical project, and migrate the tasks, requirements, bugs and other data under the previous project to the iteration.';
 $lang->upgrade->mergeExecutionTip = 'The system will automatically create projects by year, and merge the historical iteration data into the corresponding projects by year.';
+$lang->upgrade->createProgramTip  = 'At the same time, the system will automatically create a default project set and place all projects under the default project set.';
 $lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
 
 include dirname(__FILE__) . '/version.php';
