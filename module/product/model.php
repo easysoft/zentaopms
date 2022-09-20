@@ -264,7 +264,7 @@ class productModel extends model
      */
     public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $type = 'normal')
     {
-        return $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'normal')->andWhere('t1.shadow')->eq(0)->fi()
@@ -289,6 +289,26 @@ class productModel extends model
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
+
+        if($type == 'all')
+        {
+            $shadowProducts = array();
+            foreach($products as $product)
+            {
+                if($product->shadow) $shadowProducts[] = $product->id;
+            }
+            if($shadowProducts)
+            {
+                $shadowProducts = $this->dao->select('t1.id,t3.name')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+                    ->where('t1.id')->in($shadowProducts)
+                    ->fetchPairs();
+                foreach($shadowProducts as $id => $name) $products[$id]->name = $name;
+            }
+        }
+
+        return $products;
     }
 
     /**
