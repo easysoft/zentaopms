@@ -28,7 +28,7 @@
     </div>
   </div>
   <?php else:?>
-  <div class='panel' style='padding:50px 280px'>
+  <div class='panel'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
       <div class='main-row' id='mainContent'>
