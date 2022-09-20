@@ -258,10 +258,7 @@ class story extends control
             else
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-                $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-                $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$originProduct" : "executionID=$objectID&orderBy=order_desc&browseType=unclosed";
-                $response['locate'] = $this->createLink($moduleName, 'story', $param);
+                $response['locate'] = $this->session->storyList;
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID", 'html');
             return $this->send($response);
@@ -603,10 +600,7 @@ class story extends control
             elseif($executionID)
             {
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $moduleName = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param      = $execution->type == 'project' ? "projectID=$executionID&productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
-                $link       = $this->createLink($moduleName, 'story', $param);
-                return print(js::locate($link, 'parent'));
+                return print(js::locate($this->session->storyList, 'parent'));
             }
             else
             {
