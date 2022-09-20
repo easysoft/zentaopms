@@ -7545,7 +7545,7 @@ CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
-  `editedDate` datetime NOT NULL
+  `editedDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_browser`;
