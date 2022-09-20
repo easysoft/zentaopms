@@ -816,4 +816,19 @@ class customModel extends model
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
     }
+
+    /**
+     * Check for waterfall, assetLib, URStory data in new mode.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasMoreData()
+    {
+        $waterfallCount = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->ne('0')->fetch('waterfallCount');
+        $assetLibCount  = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->ne('0')->fetch('assetLibCount');
+        $URStoryCount   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->ne('0')->fetch('URStoryCount');
+
+        return $waterfallCount || $assetLibCount || $URStoryCount;
+    }
 }
