@@ -21,6 +21,9 @@
     </div>
   </div>
 </div>
+<style>
+#importNoticeModal .modal-dialog {top: 15% !important; max-height: 450px; overflow-y: auto;}
+</style>
 <script>
 function submitForm(type)
 {
@@ -28,4 +31,9 @@ function submitForm(type)
     $('#importNoticeModal .form-actions .btn').addClass('disabled');
     $("button[data-target='#importNoticeModal']").closest('form').submit();
 }
+
+$('#importNoticeModal .close').click(function()
+{
+    $('#importNoticeModal .form-actions .btn').removeClass('disabled');
+})
 </script>

@@ -100,7 +100,6 @@ $lang->saveSuccess     = 'Sauvegardé';
 $lang->importSuccess   = 'Sauvé';
 $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
-$lang->deleteFiles     = 'Pièce jointe supprimée ';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
 $lang->uploadImages    = 'Upload Multi-images';

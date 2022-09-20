@@ -62,7 +62,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td colspan='2'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </td>
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>

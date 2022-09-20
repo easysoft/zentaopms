@@ -97,7 +97,7 @@ function loadExecutionMembers(executionID)
  */
 function loadExecutionStories(executionID)
 {
-    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
+    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val() + '&number=&type=full&status=active'), function(data)
     {
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
@@ -603,14 +603,8 @@ $('#modalTeam tfoot .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
 
-        if(config.onlybody == 'yes' && vision == 'lite')
-        {
-            $('.close').parent().click();
-        }
-        else
-        {
-            $('.close').click();
-        }
+        if($('#modalTeam:hidden').length > 0) return ;
+        $('#modalTeam .close').click();
     }
 });
 

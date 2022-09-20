@@ -196,6 +196,8 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
                     $this->config->openMethods[] = 'my.task';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -212,6 +214,8 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
                     $this->config->openMethods[] = 'my.bug';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'bug');
                     $control->bug($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -269,6 +273,8 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
                     $this->config->openMethods[] = 'my.story';
 
+                    global $app;
+                    $app->rawMethod = 'work';
                     $control = $this->loadController('my', 'story');
                     $control->story($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
@@ -293,6 +299,8 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
                         $this->config->openMethods[] = 'my.issue';
                         $control = $this->loadController('my', 'issue');
                         $control->issue('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
@@ -311,6 +319,8 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
                         $this->config->openMethods[] = 'my.risk';
                         $control = $this->loadController('my', 'risk');
                         $control->risk('assignedTo', 0, 'id_desc', 0, $this->param('limit', 5), 1);
@@ -329,6 +339,8 @@ class userEntry extends Entry
 
                     if($this->config->edition == 'max')
                     {
+                        global $app;
+                        $app->rawMethod = 'work';
                         $this->config->openMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
                         $control->myMeeting('futureMeeting', '', 'id_desc', 0, $this->param('limit', 5), 1);

@@ -100,7 +100,6 @@ $lang->saveSuccess     = '保存成功';
 $lang->importSuccess   = '导入成功';
 $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
-$lang->deleteFiles     = '删除了附件 ';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
 $lang->uploadImages    = '多图上传 ';

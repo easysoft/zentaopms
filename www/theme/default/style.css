@@ -74,9 +74,10 @@ a.showMoreImage:hover {opacity: 1;}
 #userNav>li.open>a:before, #userNav>li>a:hover:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
 #userNav .dropdown-menu {z-index: 2000;}
 #userNav .dropdown-menu:hover + .dropdown-toggle:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
-#userNav .dropdown-menu .dropdown-menu:hover:before {content: none;}
 #userNav .dropdown-menu, #userNav .create-list {margin-right: -15px !important; border-top: 0px;}
 #userNav .dropdown-menu .dropdown-submenu>ul {margin-right: 0px !important;}
+#userNav .dropdown-menu .dropdown-submenu>ul::before {position: absolute; content: ''; top: -60px; bottom: -40px; left: -40px; right: 0;}
+#userNav .dropdown-menu>li>a::before {position: absolute; content: ''; top: -4px; bottom: -4px; left: -10px; right: -10px;}
 #userNav .create-list:hover:before {right: 21.5% !important;}
 #modules li>a, #modules ul>li>a {overflow: hidden; white-space: nowrap;}
 
@@ -111,3 +112,8 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #downloadMobile .dropdown-menu .mobile-qrcode iframe {width: 110px; height: 120px; text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version {text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
+
+#mainMenu > .btn-toolBar .btn-link .label-light,
+#mainMenu > .btn-toolbar .btn-link .label-light {color: #203362; background: #fff;}
+#mainMenu > .btn-toolBar .btn-active-text,
+#mainMenu > .btn-toolbar .btn-active-text {background: #E6EAF1;}

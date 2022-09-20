@@ -13,7 +13,25 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php $members = $task->members;?>
-<?php js::set('confirmRecord',    (!empty($members) && $task->mode == 'linear' && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
+<?php
+$confirmRecord = $lang->task->confirmRecord;
+if(!empty($members) && $task->mode == 'linear')
+{
+    $nextAccount = '';
+    $isCurrent   = false;
+    foreach($task->team as $taskTeam)
+    {
+        if($isCurrent)
+        {
+            $nextAccount = $taskTeam->account;
+            break;
+        }
+        if($task->assignedTo == $taskTeam->account and $taskTeam->account == $app->user->account and $taskTeam->status != 'done') $isCurrent = true;
+    }
+    if($nextAccount) $confirmRecord = sprintf($lang->task->confirmTransfer, zget($users, $nextAccount));
+}
+?>
+<?php js::set('confirmRecord',    $confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
@@ -26,7 +44,7 @@
       <ul class='nav nav-default hours'>
         <li><span><?php echo $lang->task->estimate;?></span> </li>
         <li><span class='estimateTotally'><?php echo $task->estimate . 'h';?></span></li>
-        <li class='divider'></li>
+        <li>，</li>
         <li><span><?php echo $lang->task->consumed;?></span> </li>
         <li><span class='consumedTotally'><?php echo $task->consumed . 'h';?></span></li>
       </ul>
@@ -74,10 +92,10 @@
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
-        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-        <?php elseif(!isset($task->members[$app->user->account])):?>
+        <?php if(!isset($task->members[$app->user->account])):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+        <?php elseif($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
         <?php endif;?>
       </div>
     </div>
@@ -91,7 +109,7 @@
           $readonly      = ' readonly';
           $left          = 0;
           $reverseOrders = array_reverse($myOrders, true);
-          foreach($reverseOrders as $order) $reverseOrders[$order] = $order + 1;
+          foreach($reverseOrders as $order => $count) $reverseOrders[$order] = $order + 1;
       }
       ?>
       <table class='table table-form table-fixed table-record'>
@@ -111,8 +129,8 @@
           <tr class="text-center">
             <td>
               <div class='input-group'>
-              <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
-              <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
+                <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
+                <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
               </div>
               <?php echo html::hidden("id[$i]", $i);?>
             </td>

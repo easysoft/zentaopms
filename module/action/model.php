@@ -330,12 +330,20 @@ class actionModel extends model
             ->where("objectType IN('project', 'testtask', 'build')")
             ->andWhere('project')->eq((int)$objectID)
             ->fi()
+            ->beginIF($objectType == 'story')
+            ->where('objectType')->in('story,requirement')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
+            ->beginIF($objectType == 'case')
+            ->where('objectType')->in('case,testcase')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
             ->beginIF($objectType == 'module')
             ->where('objectType')->eq($objectType)
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF($objectType != 'project' and $objectType != 'module')
+            ->beginIF(strpos('project,case,story,module', $objectType) === false)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->fi()
@@ -1687,6 +1695,7 @@ class actionModel extends model
             $fieldName = $history->field;
             $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
             if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }

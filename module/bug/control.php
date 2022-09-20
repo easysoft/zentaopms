@@ -525,7 +525,7 @@ class bug extends control
             $severity    = $bug->severity;
             $type        = $bug->type;
             $assignedTo  = $bug->assignedTo;
-            $deadline    = $bug->deadline;
+            $deadline    = helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
             if($pri == 0) $pri = '3';
@@ -969,17 +969,15 @@ class bug extends control
                         return print(js::error(dao::getError()));
                     }
                 }
-                $files = $this->loadModel('file')->saveUpload('bug', $bugID);
-                if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
+
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
+                $action = !empty($changes) ? 'Edited' : 'Commented';
+                $actionID = $this->action->create('bug', $bugID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
 
@@ -2005,11 +2003,15 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $browseType
+     * @param  string $excludeBugs
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkBugs($bugID, $browseType = '', $excludeBugs = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2024,11 +2026,11 @@ class bug extends control
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&excludeBugs=$excludeBugs&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
 
         /* Get bugs to link. */
-        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager);
+        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager, $excludeBugs);
 
         /* Assign. */
         $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];

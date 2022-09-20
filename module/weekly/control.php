@@ -54,8 +54,9 @@ class weekly extends control
 
         $this->view->title = $this->lang->weekly->common;
 
-        $this->view->pv = $this->weekly->getPV($projectID, $date);
-        $this->view->ev = $this->weekly->getEV($projectID, $date);
+        $PVEV = $this->weekly->getPVEV($projectID, $date);
+        $this->view->pv = $PVEV['PV'];
+        $this->view->ev = $PVEV['EV'];
         $this->view->ac = $this->weekly->getAC($projectID, $date);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);

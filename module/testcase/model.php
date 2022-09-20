@@ -802,6 +802,7 @@ class testcaseModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('story,branch', 0)
             ->setDefault('stage', '')
+            ->setDefault('deleteFiles', array())
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
@@ -814,13 +815,10 @@ class testcaseModel extends model
         if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/
-            $requiredFieldsArr = explode(',', $requiredFields);
-            $fieldIndex        = array_search('story', $requiredFieldsArr);
-            array_splice($requiredFieldsArr, $fieldIndex, 1);
-            $requiredFields    = implode(',', $requiredFieldsArr);
+            $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
         }
         $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles')->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             $this->updateCase2Project($oldCase, $case, $caseID);
@@ -927,6 +925,8 @@ class testcaseModel extends model
                     }
                 }
             }
+
+            $this->file->processFile4Object('testcase', $oldCase, $case);
             return common::createChanges($oldCase, $case);
         }
     }
@@ -2390,7 +2390,6 @@ class testcaseModel extends model
 
             if(!empty($_POST['title']) and $case->title != $this->post->title)                      $stepChanged = true;
             if(!empty($_POST['precondition']) and $case->precondition != $this->post->precondition) $stepChanged = true;
-            if(!empty($_POST['labels'][0]))                                                         $stepChanged = true;
 
             return array($stepChanged, $status);
         }

@@ -81,6 +81,13 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php if(isset($task->status)):?>
 <?php js::set('taskStatus', $task->status);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
+<?php if($newRowCount == 0 and $app->rawMethod == 'edit'):?>
+<tr>
+  <td colspan='3'>
+    <div class='alert alert-info'><?php printf($lang->task->noticeManageTeam, zget($lang->task->statusList, $task->status));?></div>
+  </td>
+</tr>
+<?php endif;?>
 <?php endif;?>
 <script>
 $(document).ready(function()

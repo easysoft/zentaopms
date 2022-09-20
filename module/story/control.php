@@ -606,7 +606,7 @@ class story extends control
 
         /* Init vars. */
         $planID   = $plan;
-        $pri      = 0;
+        $pri      = 3;
         $estimate = '';
         $title    = '';
         $spec     = '';
@@ -750,6 +750,7 @@ class story extends control
         $this->loadModel('file');
         $this->app->loadLang('bug');
         $story = $this->story->getById($storyID, 0, true);
+        $this->commonAction($storyID);
 
         if(!empty($_POST))
         {
@@ -792,8 +793,6 @@ class story extends control
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
             return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
-
-        $this->commonAction($storyID);
 
         /* Sort products. */
         $myProducts     = array();
@@ -847,7 +846,7 @@ class story extends control
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
@@ -863,7 +862,6 @@ class story extends control
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
-        $this->view->files            = $this->file->getByObject($story->type, $storyID, $story->version);
 
         $this->display();
     }
@@ -1080,25 +1078,17 @@ class story extends control
         $this->loadModel('file');
         if(!empty($_POST))
         {
-            $deleteFiles = isset($_POST['deleteFiles']) ? $this->file->getPairs($_POST['deleteFiles'], 'title') : array();
-            $changes     = $this->story->change($storyID);
+            $changes = $this->story->change($storyID);
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
 
-            $story   = $this->story->getByID($storyID);
-            $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files   = $this->file->saveUpload($story->type, $storyID, ",$version,");
-            if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
-
-            if($this->post->comment != '' or !empty($changes) or !empty($files) or !empty($deleteFiles))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action      = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
-                $fileAction  = empty($files) ? '' : $this->lang->addFiles . join(',', $files) . "\n" ;
-                $fileAction .= empty($deleteFiles) ? '' : $this->lang->deleteFiles . join(',', $deleteFiles) . "\n";
-                $actionID    = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
+                $action   = !empty($changes) ? 'Changed' : 'Commented';
+                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1148,7 +1138,7 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
-        $story    = $this->story->getById($storyID);
+        $story    = $this->view->story;
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
         $product  = $this->loadModel('product')->getByID($story->product);
 
@@ -1163,7 +1153,6 @@ class story extends control
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
-        $this->view->files            = $this->file->getByObject($story->type, $storyID, $story->version);
 
         $this->display();
     }
@@ -1250,7 +1239,6 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files  = $this->loadModel('file')->getByObject($story->type, $storyID, $version);
         $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
@@ -1869,10 +1857,17 @@ class story extends control
         $storyGroup = array();
         foreach($stories as $story)
         {
-            if(strpos('draft,reviewing,changing,closed', $story->status) !== false) continue;
+            if(strpos('draft,reviewing,changing,closed', $story->status) !== false)
+            {
+                unset($stories[$story->id]);
+                continue;
+            }
+
             if(isset($storyGroup[$story->module])) continue;
             $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
         }
+
+        if(empty($stories)) return print(js::error($this->lang->story->noStoryToTask) . js::locate($this->session->storyList));
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;

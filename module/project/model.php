@@ -416,6 +416,42 @@ class projectModel extends model
     }
 
     /**
+     * Get waterfall general PV and EV.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getWaterfallPVEVAC($projectID)
+    {
+        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
+
+        $PV = 0;
+        $EV = 0;
+        $AC = 0;
+        while($task = $stmt->fetch())
+        {
+            if(empty($task->estimate)) continue;
+
+            $PV += $task->estimate;
+            $AC += $task->consumed;
+            if($task->status == 'done' or $task->closedReason == 'done')
+            {
+                $EV += $task->estimate;
+            }
+            else
+            {
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
+                $EV += round($task->estimate * $task->progress / 100, 2);
+            }
+        }
+
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
+    }
+
+    /**
      * Get project workhour info.
      *
      * @param  int    $projectID

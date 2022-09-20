@@ -100,7 +100,6 @@ $lang->saveSuccess     = 'Gespeichert';
 $lang->importSuccess   = 'Gespeichert';
 $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
-$lang->deleteFiles     = 'Anhang gelöscht ';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
 $lang->uploadImages    = 'Hochladen';

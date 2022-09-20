@@ -2000,11 +2000,10 @@ EOD;
             $oldStatus    = zget($old, 'status', '');
             $newStatus    = zget($new, 'status', '');
             $newSubStatus = zget($new, 'subStatus', '');
+            if(empty($moduleName)) $moduleName = $app->getModuleName();
 
             if($oldID and $oldStatus and $newStatus and !$newSubStatus and $oldStatus != $newStatus)
             {
-                if(empty($moduleName)) $moduleName = $app->getModuleName();
-
                 $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
 
@@ -2018,6 +2017,11 @@ EOD;
                     $new->subStatus = $default;
                 }
             }
+
+            $dateFields = array();
+            $sql        = "SELECT `field` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `control` in ('date', 'datetime')";
+            $stmt       = $app->dbh->query($sql);
+            while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
         }
 
         $changes = array();
@@ -2030,24 +2034,29 @@ EOD;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
             if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate' and $value == '')     continue;
-            if(strtolower($key) == 'canceleddate' and $value == '')     continue;
-            if(strtolower($key) == 'hangupeddate' and $value == '')     continue;
-            if(strtolower($key) == 'lastcheckeddate' and $value == '')  continue;
-            if(strtolower($key) == 'activateddate' and $value == '')    continue;
-            if(strtolower($key) == 'closeddate'   and $value == '')     continue;
+            if(strtolower($key) == 'finisheddate'     and $value == '') continue;
+            if(strtolower($key) == 'canceleddate'     and $value == '') continue;
+            if(strtolower($key) == 'hangupeddate'     and $value == '') continue;
+            if(strtolower($key) == 'lastcheckeddate'  and $value == '') continue;
+            if(strtolower($key) == 'activateddate'    and $value == '') continue;
+            if(strtolower($key) == 'closeddate'       and $value == '') continue;
             if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
 
-            if(isset($old->$key) and $value != stripslashes($old->$key))
+            if(isset($old->$key))
             {
-                $diff = '';
-                if(substr_count($value, "\n") > 1     or
-                    substr_count($old->$key, "\n") > 1 or
-                    strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
+                if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
+
+                if($value != stripslashes($old->$key))
                 {
-                    $diff = commonModel::diff($old->$key, $value);
+                    $diff = '';
+                    if(substr_count($value, "\n") > 1     or
+                        substr_count($old->$key, "\n") > 1 or
+                        strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
+                    {
+                        $diff = commonModel::diff($old->$key, $value);
+                    }
+                    $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
                 }
-                $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
             }
         }
         return $changes;
@@ -2911,7 +2920,7 @@ EOD;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) return print(js::locate($this->config->webRoot));
+        if($isFreepasswd) die(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));

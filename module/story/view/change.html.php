@@ -68,7 +68,7 @@
         <tr>
           <th><?php echo $lang->attatch;?></th>
           <td>
-          <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit'));?>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'false', 'object' => $story, 'method' => 'edit'));?>
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>

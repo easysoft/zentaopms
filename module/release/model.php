@@ -263,13 +263,14 @@ class releaseModel extends model
     {
         /* Init vars. */
         $releaseID  = (int)$releaseID;
-        $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
+        $oldRelease = $this->getById($releaseID);
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $releaseID)
             ->add('branch',  (int)$branch)
             ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
@@ -286,7 +287,7 @@ class releaseModel extends model
             $release->project = $buildInfo->project;
         }
 
-        $this->dao->update(TABLE_RELEASE)->data($release)
+        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
@@ -295,7 +296,7 @@ class releaseModel extends model
             ->exec();
         if(!dao::isError())
         {
-            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
+            $this->file->processFile4Object('release', $oldRelease, $release);
             return common::createChanges($oldRelease, $release);
         }
     }
@@ -335,10 +336,13 @@ class releaseModel extends model
             }
             elseif(($notify == 'ET' or $notify == 'PT') and !empty($release->build))
             {
-                $type    = $notify == 'ET' ? 'execution' : 'project';
-                $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
-                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.' . $type . '=t2.root')
-                    ->where('t2.type')->eq($type)
+                $type     = $notify == 'ET' ? 'execution' : 'project';
+                $table    = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
+                $objectID = $notify == 'ET' ? $release->build : $release->id;
+                $members  = $this->dao->select('t2.account')->from($table)->alias('t1')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
+                    ->where('t1.id')->eq($objectID)
+                    ->andWhere('t2.type')->eq($type)
                     ->fetchPairs();
 
                 if(empty($members)) continue;

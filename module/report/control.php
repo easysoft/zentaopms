@@ -289,6 +289,8 @@ class report extends control
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
+        $this->loadModel('dept');
+        $this->loadModel('user');
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
@@ -311,38 +313,32 @@ class report extends control
         }
 
         /* Get users and depts. */
-        $users     = $this->loadModel('user')->getPairs('noletter|useid|noclosed');
-        $users[''] = $this->lang->report->annualData->allUser;
-
-        $depts = $this->loadModel('dept')->getOptionMenu();
-        if($this->app->tab == 'report')
-        {
-            $noDepartment = $depts[0];
-            unset($depts[0]);
-            $depts += array('0' => $noDepartment);
-        }
-
         $accounts = array();
         if($userID)
         {
-            $user     = $this->loadModel('user')->getById($userID, 'id');
+            $user     = $this->user->getById($userID, 'id');
             $dept     = $user->dept;
-            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
+            $users    = array('' => $this->lang->report->annualData->allUser) + $this->dept->getDeptUserPairs($dept, 'id');
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
         else
         {
-            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
-            $users    = array('' => $this->lang->report->annualData->allUser) + $users;
-            $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
+            $users    = array('' => $this->lang->report->annualData->allUser) + $this->dept->getDeptUserPairs($dept, 'id');
+            $accounts = $this->dept->getDeptUserPairs($dept);
         }
+
+        $noDepartment = array('0' => '/' . $this->lang->dept->noDepartment);
+        $depts        = $this->dept->getOptionMenu();
         if(!$this->app->user->admin)
         {
-            foreach($depts as $id => $name) if($id != $this->app->user->dept) unset($depts[$id]);
+            $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $noDepartment;
         }
         else
         {
             $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
+
+            unset($depts[0]);
+            $depts += $noDepartment;
         }
 
         if($accounts) $accounts = array_keys($accounts);
@@ -357,6 +353,7 @@ class report extends control
         {
             $data['logins'] = $this->report->getUserYearLogins($accounts, $year);
         }
+
         $data['actions']       = $this->report->getUserYearActions($accounts, $year);
         $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
         $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
@@ -372,7 +369,7 @@ class report extends control
 
         if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : ($dept ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
         $this->view->data   = $data;
         $this->view->year   = $year;
         $this->view->users  = $users;

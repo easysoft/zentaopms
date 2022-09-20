@@ -69,7 +69,7 @@
         <div class="detail-title"><?php echo $lang->story->legendSpec;?></div>
         <div class="detail-content article-content"><?php echo $story->spec;?></div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('story', $story);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");
@@ -110,7 +110,7 @@
                   common::printIcon('story', 'change', "storyID=$child->id", $child, 'list', 'alter');
                   if(strpos('draft,changing', $child->status) !== false)
                   {
-                      common::printIcon('story', 'submitReview', "storyID=$child->id", $child, 'list', 'sub-review', '', 'iframe showinonlybody', true);
+                      common::printIcon('story', 'submitReview', "storyID=$child->id", $child, 'list', 'confirm', '', 'iframe showinonlybody', true);
                   }
                   else
                   {
@@ -143,7 +143,7 @@
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
         if(strpos('draft,changing', $story->status) !== false)
         {
-            common::printIcon('story', 'submitReview', "storyID=$story->id", $story, 'button', 'sub-review', '', 'iframe showinonlybody', true);
+            common::printIcon('story', 'submitReview', "storyID=$story->id", $story, 'button', 'confirm', '', 'iframe showinonlybody', true);
         }
         else
         {
