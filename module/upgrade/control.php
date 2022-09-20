@@ -511,6 +511,8 @@ class upgrade extends control
         $this->view->noMergedProductCount = $noMergedProductCount;
         $this->view->noMergedSprintCount  = $noMergedSprintCount;
 
+        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+
         $this->loadModel('project');
         $this->view->type = $type;
 
@@ -636,6 +638,7 @@ class upgrade extends control
             if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
 
             $this->view->noMergedSprints = $noMergedSprints;
+            if(!$programID && $systemMode == 'lean') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
         }
 
         /* Get no merged projects that link more then two products. */
@@ -691,6 +694,7 @@ class upgrade extends control
         $this->view->lines       = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->systemMode  = $systemMode;
         $this->view->projectType = $projectType;
         $this->display();
     }
@@ -710,7 +714,7 @@ class upgrade extends control
             $mergeMode = $this->post->projectType;
             if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
-            if($mode == 'lean') $programID = $this->config->global->defaultProgram;
+            if($mode == 'lean') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
             if($mode == 'new')  $programID = $this->loadModel('program')->createDefaultProgram();
 
             if($mergeMode == 'project')   $this->upgrade->upgradeInProjectMode($programID);
@@ -719,7 +723,8 @@ class upgrade extends control
             if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
-        $this->view->title = $this->lang->upgrade->selectMergeMode;
+        $this->view->title      = $this->lang->upgrade->selectMergeMode;
+        $this->view->systemMode = $mode;
         $this->display();
     }
 

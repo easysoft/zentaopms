@@ -32,8 +32,9 @@ div.divider {vertical-align: middle;}
 #lineList .checkbox-primary {display: inline-block;}
 .main-row .side-col .check-allLine > label {font-weight: 700}
 .sprintGroup {margin-left: 6px;}
-.programParams td > label:first-child {margin-right: 10px;}
+.programParams td > label:first-child {margin-right: 30px;}
 .programParams td > label:last-child {margin-left: 0px;}
+.programParams > tbody > tr > td {padding: 7px 30px;}
 
 .projectList .scroll-handle .checkbox-primary {display: inline-block;}
 .sprintGroup .sprintItem .checkbox-primary {display: inline-block;}
