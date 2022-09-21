@@ -2495,32 +2495,29 @@ class projectModel extends model
         $this->config->resetNavGroup['execution'] = 'execution';
         $this->config->resetNavGroup[$moduleName] = $navGroup;
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq(1)->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
         if(empty($project)) return;
+
         if($project->type != 'project' and $project->type != 'sprint') return;
 
         if($project->type == 'project')
         {
             $projectID   = $project->id;
-            $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)
+            $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
                 ->andWhere('noSprint')->eq(1)
                 ->andWhere('type')->eq('sprint')
-                ->andWhere('deleted')->eq(0)
+                ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }
         elseif($project->type == 'sprint')
         {
             $executionID = $project->id;
-            $projectID   = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('id')->eq($project->project)
-                ->andWhere('noSprint')->eq(1)
-                ->andWhere('type')->eq('project')
-                ->andWhere('deleted')->eq(0)
-                ->fetch('id');
+            $projectID   = $project->project;
         }
         if(empty($projectID) or empty($executionID)) return;
 
+        $this->session->set('project', $projectID, $this->app->tab);
         $this->app->tab = 'project';
         $_COOKIE['tab'] = 'project';
 
@@ -2554,7 +2551,9 @@ class projectModel extends model
             }
         }
 
+        $this->config->resetNavGroup['execution'] = 'project';
         $this->config->resetNavGroup[$moduleName] = 'project';
+        $this->config->projectMode                = 'noSprint';
 
         /* If objectID is set, cannot use homeMenu. */
         unset($this->lang->$navGroup->homeMenu);

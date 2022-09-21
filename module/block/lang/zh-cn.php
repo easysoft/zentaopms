@@ -322,7 +322,7 @@ $lang->block->default['full']['my']['10']['title']  = '项目列表';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-if(!isset($config->projectMode) || $config->projectMode != 'noExecution')
+if(!isset($config->projectMode) || $config->projectMode != 'noSprint')
 {
     $lang->block->default['full']['my']['10']['block']  = 'execution';
     $lang->block->default['full']['my']['10']['source'] = 'execution';
@@ -355,7 +355,7 @@ $lang->block->availableBlocks->feedback    = '反馈';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = '项目';
-if(!isset($config->projectMode) || $config->projectMode != 'noExecution') $lang->block->moduleList['execution'] = $lang->execution->common;
+if(!isset($config->projectMode) || $config->projectMode != 'noSprint') $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']      = '测试';
 $lang->block->moduleList['todo']    = '待办';
 

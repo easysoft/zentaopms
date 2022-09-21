@@ -632,15 +632,17 @@ class custom extends control
         {
             $mode    = fixer::input('post')->get('mode');
             $program = isset($_POST['program']) ? $_POST['program'] : 0;
-            if($mode == 'lean' and empty($program)) return $this->send(array('result' => 'fail', 'message' => array('program'=>array($this->lang->custom->switchModeHelper))));
+            if($mode == 'lean' and empty($program)) return $this->send(array('result' => 'fail', 'message' => array('program' => $this->lang->custom->switchModeHelper)));
+
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $program);
+
             /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
             $this->loadModel('upgrade')->relationDefaultProgram($program);
 
             if($this->post->mode == 'new') $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=projectMode');
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('mode')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
         $this->app->loadLang('upgrade');

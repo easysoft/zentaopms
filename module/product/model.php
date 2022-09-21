@@ -1309,7 +1309,7 @@ class productModel extends model
         if(empty($productID)) return array();
 
         $project = $this->loadModel('project')->getByID($projectID);
-        $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+        $orderBy = $project && $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1324,7 +1324,7 @@ class productModel extends model
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
         $executionList = array('0' => '');
-        if($project->model == 'waterfall')
+        if($project && $project->model == 'waterfall')
         {
             foreach($executions as $id => $execution)
             {

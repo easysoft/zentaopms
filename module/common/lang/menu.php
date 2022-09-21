@@ -62,7 +62,7 @@ $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
 if($config->systemMode == 'lean') unset($lang->mainNav->program, $lang->mainNav->menuOrder[10]);
-if(isset($config->projectMode) and $config->projectMode == 'noExecution') unset($lang->mainNav->execution, $lang->mainNav->menuOrder[25]);
+if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->mainNav->execution, $lang->mainNav->menuOrder[25]);
 
 /* My menu. */
 $lang->my->menu             = new stdclass();
@@ -89,7 +89,7 @@ $lang->my->menuOrder[45] = 'score';
 $lang->my->menuOrder[50] = 'contacts';
 
 if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]);
-if(isset($config->projectMode) and $config->projectMode == 'noExecution') unset($lang->my->menu->execution, $lang->my->menuOrder[30]);
+if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->my->menu->execution, $lang->my->menuOrder[30]);
 
 $lang->my->menu->work['subMenu']              = new stdclass();
 $lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task');
@@ -488,13 +488,13 @@ $lang->doc->menuOrder[30] = 'project';
 $lang->doc->menuOrder[35] = 'execution';
 $lang->doc->menuOrder[36] = 'api';
 $lang->doc->menuOrder[40] = 'custom';
-if(isset($config->projectMode) and $config->projectMode == 'noExecution') unset($lang->doc->menu->execution, $lang->doc->menuOrder[35]);
+if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->doc->menu->execution, $lang->doc->menuOrder[35]);
 
 $lang->doc->menu->product['subMenu']   = new stdclass();
 $lang->doc->menu->project['subMenu']   = new stdclass();
 $lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']    = new stdclass();
-if(isset($config->projectMode) and $config->projectMode == 'noExecution') unset($lang->doc->menu->execution['subMenu']);
+if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->doc->menu->execution['subMenu']);
 
 $lang->doc->menu->api['subMenu'] = new stdclass();
 $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');

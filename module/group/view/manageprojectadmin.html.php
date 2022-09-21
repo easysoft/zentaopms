@@ -43,7 +43,7 @@
           </tr>
           <?php $hiddenProgram = $config->systemMode == 'new' ? '' : 'hidden';?>
           <?php $rowspan       = $config->systemMode == 'new' ? 4 : 3;?>
-          <?php $noExecution   = (isset($config->projectMode) and $config->projectMode == 'noExecution');?>
+          <?php $noSprint      = (isset($config->projectMode) and $config->projectMode == 'noSprint');?>
           <?php if($projectAdmins):?>
           <?php foreach($projectAdmins as $account => $group):?>
           <tr class="line<?php echo $group->group;?>">
@@ -104,7 +104,7 @@
               <?php echo html::checkbox("productAll[$group->group]", array(1 => ''), $group->products == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
             </td>
           </tr>
-          <?php if(!$noExecution):?>
+          <?php if(!$noSprint):?>
           <tr class="line<?php echo $group->group;?>">
             <td>
               <div class='input-group'>
@@ -173,7 +173,7 @@
               <?php echo html::checkbox('productAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
             </td>
           </tr>
-          <?php if(!$noExecution):?>
+          <?php if(!$noSprint):?>
           <tr class='line1'>
             <td>
               <div class='input-group'>
