@@ -2,7 +2,8 @@ $(function()
 {
     $('[name=mode]').change(function(){$("#selectDefaultProgram").toggle($(this).val() == 'lean'); });
 
-    $("#program_chosen").css('max-width','170px')
+    $("#program_chosen").css('max-width','170px');
+    $("#program_chosen").addClass('required');
 
     $(document).on('click', '#submit', function()
     {
