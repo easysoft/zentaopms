@@ -64,5 +64,4 @@ $(function()
     });
 
     $('#osCategory').change();
-
 })
