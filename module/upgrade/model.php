@@ -7538,8 +7538,8 @@ class upgradeModel extends model
      */
     public function classic2Lean($programID)
     {
-        /* Set project mode as noExecution. */
-        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noExecution');
+        /* Set project mode as noSprint. */
+        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noSprint');
 
         $this->upgradeInProjectMode($programID);
 
@@ -7625,7 +7625,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($projectMode == 'noExecution') $project->noExecution = '1';
+            if($projectMode == 'noSprint') $project->noSprint = '1';
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
             if(dao::isError()) return false;
