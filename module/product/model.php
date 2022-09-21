@@ -309,9 +309,11 @@ class productModel extends model
             {
                 $shadowProducts = $this->dao->select('t1.id, t3.name')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id AND t3.type = 'project'")
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
                     ->where('t1.id')->in($shadowProducts)
+                    ->andWhere("t3.type = 'project'")
                     ->fetchPairs();
+
                 foreach($shadowProducts as $id => $name)
                 {
                     if(isset($products[$id])) $products[$id]->name = $name;
@@ -412,15 +414,15 @@ class productModel extends model
             {
                 $this->dao->select('t1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id AND t3.type = 'project'");
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
+                    ->where('t3.type')->eq('project');
             }
             else
             {
-                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1');
+                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')->where(1);
             }
             $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-            return $this->dao->where(1)
-                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            return $this->dao->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
