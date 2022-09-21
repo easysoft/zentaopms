@@ -3123,11 +3123,11 @@ class execution extends control
         }
 
         /* Get projects, executions and products. */
-        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
+        $object     = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
         $browseLink = $this->session->executionStoryList;
-        if($this->app->tab == 'project') $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+        if($this->app->tab == 'project' and empty($object->noSprint)) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 

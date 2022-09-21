@@ -2519,6 +2519,7 @@ class projectModel extends model
         }
         if(empty($projectID) or empty($executionID)) return;
 
+        $this->session->set('project', $projectID, $this->app->tab);
         $this->app->tab = 'project';
         $_COOKIE['tab'] = 'project';
 
@@ -2552,7 +2553,9 @@ class projectModel extends model
             }
         }
 
+        $this->config->resetNavGroup['execution'] = 'project';
         $this->config->resetNavGroup[$moduleName] = 'project';
+        $this->config->projectMode                = 'noSprint';
 
         /* If objectID is set, cannot use homeMenu. */
         unset($this->lang->$navGroup->homeMenu);
