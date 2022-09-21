@@ -209,13 +209,15 @@
           <div class='tab-pane active' id='legendBasicInfo'>
             <table class="table table-data">
               <tbody>
+                <?php if(empty($product->shadow)):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->story->product;?></th>
                   <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
                 </tr>
+                <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
-                  <th><?php echo $lang->product->branch;?></th>
+                  <th class='w-90px'><?php echo $lang->product->branch;?></th>
                   <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
                 </tr>
                 <?php endif;?>
