@@ -54,7 +54,7 @@
               <div class="table-row">
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $teamUsers, $reviewers, 'class="form-control picker-select" multiple')?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?>
                 </div>
                 <div class="table-col needNotReviewBox">
                   <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
@@ -66,7 +66,7 @@
                 </div>
                 <?php else:?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $teamUsers, $reviewers, 'class="form-control picker-select" multiple required')?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple required')?>
                 </div>
                 <?php endif;?>
               </div>
@@ -273,7 +273,7 @@
               <?php if($story->status == 'reviewing'):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $teamUsers, $reviewers, 'class="form-control picker-select" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

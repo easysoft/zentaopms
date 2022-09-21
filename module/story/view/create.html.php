@@ -130,7 +130,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <tr>
             <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
             <td colspan='2' id='assignedToBox'>
-              <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
+              <?php echo html::select('assignedTo', $hiddenProduct ? $teamUsers : $users, '', "class='form-control picker-select'");?>
             </td>
             <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
               <div class="input-group">
@@ -151,7 +151,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
                 <?php echo $this->story->checkForceReview() ? '' : html::hidden('needNotReview', 1);?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $teamUsers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
+                  <?php echo html::select('reviewer[]', $hiddenProduct ? $teamUsers : $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
                 </div>
               </div>
             </td>
