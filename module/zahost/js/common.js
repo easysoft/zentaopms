@@ -56,4 +56,8 @@ $(function()
     });
 
     $('#osCategory').change();
+
+    /* Remove close icon to forbid clearning content of select list. */
+    $('#osType_chosen a .search-choice-close').remove();
+    $('#osVersion_chosen a .search-choice-close').remove();
 })

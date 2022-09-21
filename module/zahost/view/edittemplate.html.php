@@ -22,7 +22,7 @@
   <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
     <table class='table table-form'>
       <tr>
-        <th class='w-100px'><?php echo $lang->zahost->name;?></th>
+        <th class='w-120px'><?php echo $lang->zahost->name;?></th>
         <td><?php echo html::input('name', $template->name, "class='form-control'");?></td>
         <td></td>
       </tr>
