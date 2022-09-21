@@ -2365,10 +2365,10 @@ class execution extends control
     /**
      * Kanban.
      *
-     * @param int     $executionID
-     * @param string  $browseType
-     * @param string  $orderBy
-     * @param string  $groupBy
+     * @param  int     $executionID
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  string  $groupBy
      * @access public
      * @return void
      */
@@ -2421,7 +2421,6 @@ class execution extends control
             if($branches) $branchID = key($branches);
         }
         foreach($products as $product) $productNames[$product->id] = $product->name;
-
 
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');

@@ -304,4 +304,34 @@ js::set('priv',
     </div>
   </div>
 </div>
+<script>
+$(function() {
+    /* Open the task details popup from dynamic. */
+    var taskID = $.cookie('taskID');
+    if(taskID)
+    {
+        $.cookie('taskID', null, { path: '/'});
+
+        var kanban = document.querySelector('#kanban');
+        var observer = new MutationObserver(function (mutationsList, observer)
+        {
+            for(var mutation of mutationsList)
+            {
+                var target = mutation.target;
+                if (mutation.type == 'childList' && target.tagName.toLowerCase() == 'a' && target.classList.contains('title') && target.parentElement.parentElement.dataset.id == taskID  && target.parentElement.className.includes('kanban-item-task'))
+                {
+                    var a = document.querySelector('[data-id="' + taskID +'"] a.title');
+                    if (a)
+                    {
+                        observer.disconnect();
+                        a.click();
+                        break;
+                    }
+                }
+            }
+        });
+        observer.observe(kanban, {subtree: true, childList: true});
+    }
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>
