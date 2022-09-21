@@ -35,7 +35,7 @@
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
         <td class='required'>
-          <?php echo html::select('program', $program, '', "class='form-control chosen'");?>
+          <?php echo html::select('program', $program, $this->config->global->defaultProgram, "class='form-control chosen'");?>
         </td>
       </tr>
       <tr>
