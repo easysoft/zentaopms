@@ -317,12 +317,12 @@ $lang->execution->groups['finishedBy'] = '完成者分组';
 $lang->execution->groups['closedBy']   = '关闭者分组';
 $lang->execution->groups['type']       = '类型分组';
 
-$lang->execution->groupFilter['story']['all']         = '所有';
+$lang->execution->groupFilter['story']['all']         = '全部';
 $lang->execution->groupFilter['story']['linked']      = "已关联{$lang->SRCommon}的任务";
-$lang->execution->groupFilter['pri']['all']           = '所有';
+$lang->execution->groupFilter['pri']['all']           = '全部';
 $lang->execution->groupFilter['pri']['noset']         = '未设置';
 $lang->execution->groupFilter['assignedTo']['undone'] = '未完成';
-$lang->execution->groupFilter['assignedTo']['all']    = '所有';
+$lang->execution->groupFilter['assignedTo']['all']    = '全部';
 
 $lang->execution->byQuery = '搜索';
 
@@ -501,7 +501,7 @@ $lang->execution->typeList['stage']  = '阶段';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = '看板';
 
-$lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
+$lang->execution->featureBar['task']['all']          = '全部';
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
@@ -509,17 +509,17 @@ $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
-$lang->execution->featureBar['all']['all']       = $lang->execution->all;
+$lang->execution->featureBar['all']['all']       = '全部';
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
 $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList['wait'];
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = '所有';
+$lang->execution->featureBar['bug']['all']        = '全部';
 $lang->execution->featureBar['bug']['unresolved'] = '未解决';
 
-$lang->execution->featureBar['build']['all'] = '所有版本';
+$lang->execution->featureBar['build']['all'] = '全部版本';
 
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';
