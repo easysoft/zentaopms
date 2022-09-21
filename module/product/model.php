@@ -661,7 +661,7 @@ class productModel extends model
             $this->session->set('currentProductType', $currentProduct->type);
         }
 
-        $fromModule   = $this->lang->navGroup->qa == 'qa' ? 'qa' : '';
+        $fromModule   = $this->app->tab == 'qa' ? 'qa' : '';
         $dropMenuLink = helper::createLink($this->app->tab == 'qa' ? 'product' : $this->app->tab, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra&from=$fromModule");
 
         if($this->app->viewType == 'mhtml' and $productID) return $this->getModuleNav(array($productID => $currentProductName), $productID, $extra, $branch);
