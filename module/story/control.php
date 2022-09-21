@@ -2229,6 +2229,7 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', true);
         $queryID  = 0;
+        $product  = $this->product->getByID($story->product);
 
         /* Change for requirement story title. */
         if($story->type == 'story')
@@ -2243,6 +2244,8 @@ class story extends control
         {
             $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
+
+        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
