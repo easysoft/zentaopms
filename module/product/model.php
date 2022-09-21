@@ -263,11 +263,11 @@ class productModel extends model
     /**
      * Get products.
      *
-     * @param  int    $programID
-     * @param  string $status
-     * @param  int    $limit
-     * @param  int    $line
-     * @param  string $shadow       all | 0 | 1
+     * @param  int        $programID
+     * @param  string     $status
+     * @param  int        $limit
+     * @param  int        $line
+     * @param  string|int $shadow       all | 0 | 1
      * @access public
      * @return array
      */
@@ -298,7 +298,7 @@ class productModel extends model
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if($shadow == 'all')
+        if($shadow)
         {
             $shadowProducts = array();
             foreach($products as $product)
@@ -311,8 +311,6 @@ class productModel extends model
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                     ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id AND t3.type = 'project'")
                     ->where('t1.id')->in($shadowProducts)
-                    ->andWhere('t3.deleted')->eq('0')
-                    ->andWhere('t3.type')->eq('project')
                     ->fetchPairs();
                 foreach($shadowProducts as $id => $name)
                 {
@@ -373,10 +371,10 @@ class productModel extends model
      * @param  string       $mode
      * @param  string       $programID
      * @param  string|array $append
-     * @param  bool         $dealShadow: If it is true, the name of the shadow product will be displayed as the name of the project. If it is false, the shadow product will be hidden.
+     * @param  string|int   $shadow         all | 0 | 1
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0, $append = '', $dealShadow = false)
+    public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
@@ -385,38 +383,48 @@ class productModel extends model
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         if($this->config->systemMode == 'new')
         {
-            $select = 't1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed';
-            if($dealShadow) $select = 't1.*,  IF(t1.shadow = 1, t4.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed';
+            if($shadow)
+            {
+                $this->dao->select('t1.*,  IF(t1.shadow = 1, t4.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id = t3.product')
+                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t3.project = t4.id AND t4.type = 'project'");
+            }
+            else
+            {
+                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id');
+            }
             /* Order by program. */
-            return $this->dao->select($select)->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id = t3.product')
-                ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
-                ->where(1)
+            return $this->dao->where(1)
                 ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-                ->beginIF(!$dealShadow)->andWhere('t1.shadow')->eq(0)->fi()
+                ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy('isClosed, t2.order_asc, t1.line_desc, t1.order_asc')
                 ->fetchPairs('id', 'name');
         }
         else
         {
-            $select = 't1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed';
-            if($dealShadow) $select = 't1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed';
+            if($shadow)
+            {
+                $this->dao->select('t1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id AND t3.type = 'project'");
+            }
+            else
+            {
+                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1');
+            }
             $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-            return $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
-                ->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-                ->where(1)
+            return $this->dao->where(1)
                 ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-                ->beginIF(!$dealShadow)->andWhere('t1.shadow')->eq(0)->fi()
+                ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->fetchPairs('id', 'name');
@@ -556,10 +564,10 @@ class productModel extends model
     /**
      * Get ordered products.
      *
-     * @param  string $status
-     * @param  int    $num
-     * @param  int    $projectID
-     * @param  mixed  $shadow       all | 0 | 1
+     * @param  string     $status
+     * @param  int        $num
+     * @param  int        $projectID
+     * @param  string|int $shadow       all | 0 | 1
      * @access public
      * @return array
      */

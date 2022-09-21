@@ -102,8 +102,7 @@ class tree extends control
         if($viewType == 'story')
         {
             /* Set menu.*/
-            $lib      = $this->product->getById($rootID);
-            $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', !empty($lib->shadow));
+            $products = $this->product->getPairs($mode = '', $programID = 0, $append = '', 'all');
             $this->product->saveState($rootID, $products);
 
             unset($products[$rootID]);

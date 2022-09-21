@@ -1135,15 +1135,15 @@ class product extends control
      */
     public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
     {
-        $queryType = 'normal';
+        $shadow = 0;
         if($from == 'qa')
         {
-            $queryType = 'all';
+            $shadow = 'all';
             $this->app->loadConfig('qa');
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList(0, 'all', 0, 0, $queryType);
+        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList(0, 'all', 0, 0, $shadow);
 
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
