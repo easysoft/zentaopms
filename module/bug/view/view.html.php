@@ -112,10 +112,12 @@
           <div class='tab-pane active' id='legendBasicInfo'>
             <table class="table table-data">
               <tbody>
+                <?php if(empty($product->shadow)):?>
                 <tr valign='middle'>
                   <th class='thWidth'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('product', 'view', "productID=$bug->product", $product->name, '', "data-app='product'")) echo $product->name;?></td>
                 </tr>
+                <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
@@ -123,7 +125,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->bug->module;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->module;?></th>
                   <?php
                   $moduleTitle = '';
                   ob_start();

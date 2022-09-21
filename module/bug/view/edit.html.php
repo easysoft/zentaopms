@@ -96,6 +96,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tbody>
+                <?php if(empty($product->shadow)):?>
                 <tr>
                   <th class='w-80px'><?php echo $lang->bug->product;?></th>
                   <td>
@@ -105,6 +106,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     </div>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->bug->module;?></th>
                   <td>
