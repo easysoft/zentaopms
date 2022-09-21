@@ -308,6 +308,8 @@ class productModel extends model
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
                     ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
                     ->where('t1.id')->in($shadowProducts)
+                    ->andWhere('t3.deleted')->eq('0')
+                    ->andWhere('t3.type')->eq('project')
                     ->fetchPairs();
                 foreach($shadowProducts as $id => $name) $products[$id]->name = $name;
             }
