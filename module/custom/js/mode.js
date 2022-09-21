@@ -1,8 +1,8 @@
 $(function()
 {
-    $('#modeTab').addClass('btn-active-text');
-
     $('[name=mode]').change(function(){$("#selectDefaultProgram").toggle($(this).val() == 'lean'); });
+
+    $("#program_chosen").css('max-width','170px')
 
     $(document).on('click', '#submit', function()
     {
@@ -11,6 +11,7 @@ $(function()
         if($(this).hasClass('canSubmit'))
         {
             $(this).removeClass('canSubmit');
+            $('#confirmModal').modal('hide');
             return true;
         }
 
@@ -22,7 +23,7 @@ $(function()
 
         $('#confirmModal .modal-title').html(confirmTitle);
         $('#confirmModal .modal-body').html(confirmContent);
-        
+
         $('#confirmModal').modal('show');
 
         return false;
@@ -36,5 +37,5 @@ $(function()
     $('#confirmModal').on('hide.zui.modal', function()
     {
         $('#submit').removeClass('canSubmit');
-    })
+    });
 })

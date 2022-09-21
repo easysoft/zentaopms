@@ -825,8 +825,10 @@ class customModel extends model
      */
     public function hasMoreData()
     {
+        $assetLibCount = 0;
+        if($this->config->edition == 'max') $assetLibCount = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->ne('0')->fetch('assetLibCount');
+
         $waterfallCount = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->ne('0')->fetch('waterfallCount');
-        $assetLibCount  = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->ne('0')->fetch('assetLibCount');
         $URStoryCount   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->ne('0')->fetch('URStoryCount');
 
         return $waterfallCount || $assetLibCount || $URStoryCount;

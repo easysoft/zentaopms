@@ -631,7 +631,8 @@ class custom extends control
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
             $mode    = fixer::input('post')->get('mode');
-            $program = fixer::input('post')->get('program');
+            $program = isset($this->post->program) ? $this->post->program : 0;
+            if($mode == 'lean' and empty($program)) return $this->send(array('result' => 'fail', 'message' => array('program'=>array($this->lang->custom->switchModeHelper))));
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $program);
             /* 只有没有关联项目集的产品和项目关联到默认项目集下. */

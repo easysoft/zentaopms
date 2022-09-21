@@ -291,3 +291,5 @@ $lang->custom->scrum->setConcept = 'Set concept';
 
 $lang->custom->reviewRules['allpass']  = 'All passed';
 $lang->custom->reviewRules['halfpass'] = 'More than half passed';
+
+$lang->custom->switchModeHelper = 'Select a default item set. Subsequent data added in the system will be associated with the default item set';
