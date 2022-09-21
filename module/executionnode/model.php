@@ -97,7 +97,7 @@ class executionnodemodel extends model
         $data->templateID  = $data->templateID;
         $data->hostID      = $host->id;
         $data->macAddress  = $macAddress;
-        $data->status      = static::STATUS_LAUNCH;
+        $data->status      = static::STATUS_RUNNING;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $data->osCategory  = $vmTemplate->osCategory;
@@ -113,7 +113,6 @@ class executionnodemodel extends model
 
         /* update action log. */
         $this->loadModel('action')->create('executionnode', $nodeID, 'Created');
-
         return true;
     }
 

@@ -65,7 +65,7 @@
         <?php foreach($nodeList as $node):?>
         <tr>
           <td><?php echo $node->id;?></td>
-          <td title="<?php echo $node->name;?>"><?php echo html::a($this->inlink('view', "id=$node->id", 'html', true), $node->name, '',"class='iframe'");?></td>
+          <td title="<?php echo $node->name;?>"><?php echo $node->name;?></td>
           <td><?php echo $node->hostIP;?></td>
           <td><?php echo zget($config->executionnode->os->cpu, $node->osCpu);?></td>
           <td><?php echo zget($config->executionnode->os->memory, $node->osMemory);?></td>
