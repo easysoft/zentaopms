@@ -7644,6 +7644,9 @@ class upgradeModel extends model
 
         $this->fixProjectPath($programID);
 
+        $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
+        $this->computeProductAcl($productIdList, $programID, 0);
+
         if(dao::isError()) return false;
         return true;
     }
@@ -7715,6 +7718,9 @@ class upgradeModel extends model
         }
 
         $this->fixProjectPath($programID);
+
+        $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq('0')->fetchPairs();
+        $this->computeProductAcl($productIdList, $programID, 0);
 
         if(dao::isError()) return false;
         return true;
