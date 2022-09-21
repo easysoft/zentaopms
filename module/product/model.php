@@ -236,10 +236,14 @@ class productModel extends model
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
-        if($product->shadow) $product->name = $this->dao->select('t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->eq($productID)
-            ->fetch('name');
+        if($product->shadow)
+        {
+            $projectName = $this->dao->select('t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id AND t2.type = 'project'")
+                ->where('t1.product')->eq($productID)
+                ->fetch('name');
+            if($projectName) $product->name = $projectName;
+        }
 
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
@@ -263,17 +267,16 @@ class productModel extends model
      * @param  string $status
      * @param  int    $limit
      * @param  int    $line
-     * @param  string $type all|normal|shadow
+     * @param  string $shadow       all | 0 | 1
      * @access public
      * @return array
      */
-    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $type = 'normal')
+    public function getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 0)
     {
         $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'normal')->andWhere('t1.shadow')->eq(0)->fi()
-            ->beginIF($type == 'shadow')->andWhere('t1.shadow')->eq(1)->fi()
+            ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
@@ -295,7 +298,7 @@ class productModel extends model
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
 
-        if($type == 'all')
+        if($shadow == 'all')
         {
             $shadowProducts = array();
             foreach($products as $product)
@@ -304,14 +307,17 @@ class productModel extends model
             }
             if($shadowProducts)
             {
-                $shadowProducts = $this->dao->select('t1.id,t3.name')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+                $shadowProducts = $this->dao->select('t1.id, t3.name')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id AND t3.type = 'project'")
                     ->where('t1.id')->in($shadowProducts)
                     ->andWhere('t3.deleted')->eq('0')
                     ->andWhere('t3.type')->eq('project')
                     ->fetchPairs();
-                foreach($shadowProducts as $id => $name) $products[$id]->name = $name;
+                foreach($shadowProducts as $id => $name)
+                {
+                    if(isset($products[$id])) $products[$id]->name = $name;
+                }
             }
         }
 
@@ -553,11 +559,11 @@ class productModel extends model
      * @param  string $status
      * @param  int    $num
      * @param  int    $projectID
-     * @param  string $type all|normal|shadow
+     * @param  mixed  $shadow       all | 0 | 1
      * @access public
      * @return array
      */
-    public function getOrderedProducts($status, $num = 0, $projectID = 0, $type = 'normal')
+    public function getOrderedProducts($status, $num = 0, $projectID = 0, $shadow = 0)
     {
         $products = array();
         if($projectID)
@@ -567,7 +573,7 @@ class productModel extends model
         }
         else
         {
-            $products = $this->getList('', $status, $num, 0, $type);
+            $products = $this->getList('', $status, $num, 0, $shadow);
         }
 
         if(empty($products)) return $products;
