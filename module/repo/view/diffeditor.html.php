@@ -1,8 +1,10 @@
 <?php
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot . 'misc/base64.js');
-$entry   = count($diffs) ? $diffs[0]->fileName : '';
-$file    = $entry ? pathinfo($entry) : array();
+$entry    = count($diffs) ? $diffs[0]->fileName : '';
+$file     = $entry ? pathinfo($entry) : array();
+$showBug  = isset($showBug) ? $showBug : true;
+$objectID = isset($objectID) ? $objectID : 0;
 
 js::set('diffs', $diffs);
 js::set('file', $file);
