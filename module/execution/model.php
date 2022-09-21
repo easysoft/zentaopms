@@ -4937,4 +4937,49 @@ class executionModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->execution->all->search);
     }
+
+    /*
+     * Create default sprint.
+     *
+     * @param  int     $projectID
+     * @return bool
+     * */
+    public function createDefaultSprint($projectID)
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        $execution = new stdClass();
+
+        $execution->project        = $projectID;
+        $execution->auth           = 'extend';
+        $execution->type           = $project->type == 'scrum' ? 'sprint' : 'kanban';
+        $execution->parent         = $projectID;
+        $execution->grade          = 1;
+        $execution->path           = ',' . $projectID . ',';
+        $execution->name           = $project->name;
+        $execution->code           = $project->code;
+        $execution->begin          = $project->begin;
+        $execution->end            = $project->end;
+        $execution->days           = $project->days;
+        $execution->status         = $project->status;
+        $execution->pri            = $project->pri;
+        $execution->openedBy       = $project->openedBy;
+        $execution->openedDate     = $project->openedDate;
+        $execution->openedVersion  = $this->config->version;
+        $execution->lastEditedBy   = $project->lastEditedBy;
+        $execution->lastEditedDate = $project->lastEditedDate;
+        $execution->acl            = 'open';
+        $execution->team           = $project->team;
+        $execution->whitelist      = $project->whitelist;
+        $execution->order          = intval($project->order) + 5;
+        $execution->vision         = $project->vision;
+
+        $this->dao->insert(TABLE_EXECUTION)->data($execution)->exec();
+
+        $lastInsertId = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_EXECUTION)->set('path')->eq(",$projectID,$lastInsertId,")->where('id')->eq($lastInsertId)->exec();
+
+        return true;
+    }
 }

@@ -345,6 +345,7 @@ $config->delete['17_0_beta1'][] = 'extension/max/group/ext/lang/zh-cn/zflow.php'
 $config->delete['17_0_beta1'][] = 'extension/max/group/ext/model/flow.php';
 $config->delete['17_0_beta1'][] = 'extension/max/user/ext/model/bizext.php';
 $config->delete['17_0_beta1'][] = 'extension/max/sso/ext/model/bizext.php';
+$config->delete['18_0'][]       = 'extension/max/custom/ext/view/mode.zentaomax.html.hook.php';
 
 $config->delete['17_2'][] = 'extension/biz/my/ext/view/todo.calendar.html.hook.php';
 $config->delete['17_2'][] = 'extension/max/my/ext/view/todo.calendar.html.hook.php';
