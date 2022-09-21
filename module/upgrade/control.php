@@ -158,7 +158,7 @@ class upgrade extends control
 
             $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
             $selectMode = true;
-            if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<') and $systemMode != 'new')
+            if($systemMode == 'classic')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
 

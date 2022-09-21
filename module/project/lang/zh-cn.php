@@ -257,8 +257,8 @@ $lang->project->featureBar['build']['all'] = '所有版本';
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
 
-$lang->project->noSprintList['1'] = "启用";
-$lang->project->noSprintList['0'] = "不启用";
+$lang->project->noSprintList['0'] = "启用";
+$lang->project->noSprintList['1'] = "不启用";
 
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
