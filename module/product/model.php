@@ -239,8 +239,9 @@ class productModel extends model
         if($product->shadow)
         {
             $projectName = $this->dao->select('t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id AND t2.type = 'project'")
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.product')->eq($productID)
+                ->andWhere('t2.type')->eq('project')
                 ->fetch('name');
             if($projectName) $product->name = $projectName;
         }
@@ -309,9 +310,9 @@ class productModel extends model
             {
                 $shadowProducts = $this->dao->select('t1.id, t3.name')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
                     ->where('t1.id')->in($shadowProducts)
-                    ->andWhere("t3.type = 'project'")
+                    ->andWhere('t3.type')->eq('project')
                     ->fetchPairs();
 
                 foreach($shadowProducts as $id => $name)
@@ -390,16 +391,17 @@ class productModel extends model
                 $this->dao->select('t1.*,  IF(t1.shadow = 1, t4.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id = t3.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t3.project = t4.id AND t4.type = 'project'");
+                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
+                    ->where('t4.type')->eq('project');
             }
             else
             {
                 $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id');
+                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                    ->where(1);
             }
             /* Order by program. */
-            return $this->dao->where(1)
-                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            return $this->dao->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
@@ -414,7 +416,7 @@ class productModel extends model
             {
                 $this->dao->select('t1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
+                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
                     ->where('t3.type')->eq('project');
             }
             else
