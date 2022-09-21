@@ -196,7 +196,8 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['onMenuBar'] = 'yes';
-        $this->bug->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch);
+        $searchProducts = $this->product->getPairs('', 0, '', true);
+        $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
@@ -321,7 +322,8 @@ class bug extends control
 
         $project = new stdclass();
 
-        $this->view->hiddenProduct = false;
+        $productInfo   = $this->product->getById($productID);
+        $hiddenProduct = false;
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
@@ -340,9 +342,10 @@ class bug extends control
                 $this->view->regionPairs   = $regionPairs;
                 $this->view->lanePairs     = $lanePairs;
             }
-            $projectID = $execution->project;
-            $project   = $this->loadModel('project')->getByID($projectID);
-            $this->view->hiddenProduct = empty($project->hasProduct);
+
+            $projectID     = $execution->project;
+            $project       = $this->loadModel('project')->getByID($projectID);
+            $hiddenProduct = empty($project->hasProduct);
         }
         else if($this->app->tab == 'project')
         {
@@ -356,12 +359,13 @@ class bug extends control
                 {
                     $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
                 }
-                $this->view->hiddenProduct = empty($project->hasProduct);
+                $hiddenProduct = empty($project->hasProduct);
             }
         }
         else
         {
             $this->qa->setMenu($this->products, $productID, $branch);
+            $hiddenProduct = $productInfo->shadow;
         }
 
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
@@ -480,8 +484,7 @@ class bug extends control
         }
 
         /* Get product, then set menu. */
-        $productID   = $this->product->saveState($productID, $this->products);
-        $productInfo = $this->product->getById($productID);
+        $productID = $this->product->saveState($productID, $this->products);
 
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
@@ -686,6 +689,7 @@ class bug extends control
         $this->view->severity         = $severity;
         $this->view->type             = $type;
         $this->view->productInfo      = $productInfo;
+        $this->view->hiddenProduct    = $hiddenProduct;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->blockID          = $blockID;

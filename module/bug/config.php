@@ -168,7 +168,7 @@ $config->bug->datatable->fieldList['id']['required'] = 'yes';
 
 $config->bug->datatable->fieldList['product']['title']      = 'product';
 $config->bug->datatable->fieldList['product']['control']    = 'hidden';
-$config->bug->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs');
+$config->bug->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&true');
 
 $config->bug->datatable->fieldList['module']['control']    = 'select';
 $config->bug->datatable->fieldList['module']['title']      = 'module';

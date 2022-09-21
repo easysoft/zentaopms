@@ -209,7 +209,7 @@
           <div class='tab-pane active' id='legendBasicInfo'>
             <table class="table table-data">
               <tbody>
-                <?php if(empty($product->shadow)):?>
+                <?php if(!$product->shadow):?>
                 <tr>
                   <th class='w-90px'><?php echo $lang->story->product;?></th>
                   <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
@@ -242,7 +242,14 @@
                       foreach($modulePath as $key => $module)
                       {
                           $moduleTitle .= $module->name;
-                          if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'")) echo $module->name;
+                          if($product->shadow)
+                          {
+                              echo $module->name;
+                          }
+                          else
+                          {
+                              common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'");
+                          }
                           if(isset($modulePath[$key + 1]))
                           {
                               $moduleTitle .= '/';
@@ -463,6 +470,7 @@
           <div class="tab-pane" id='legendRelated'>
             <table class="table table-data">
               <tbody>
+                <?php if($story->type == 'story'):?>
                 <?php if(!empty($fromBug)):?>
                 <tr>
                   <th><?php echo $lang->story->legendFromBug;?></th>
@@ -532,6 +540,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -556,6 +565,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php if($story->type == 'story'):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>
@@ -577,6 +587,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>
