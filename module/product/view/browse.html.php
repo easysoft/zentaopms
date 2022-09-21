@@ -346,11 +346,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
             <?php endif;?>
           </tr>
           <?php if(!empty($story->children)):?>
