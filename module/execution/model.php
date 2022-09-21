@@ -120,6 +120,8 @@ class executionModel extends model
             $this->cookie->executionMode = 'all';
         }
 
+        if(empty($execution->hasProduct)) unset($this->lang->execution->menu->settings['subMenu']->products);
+
         $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
     }
