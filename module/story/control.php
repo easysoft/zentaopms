@@ -2227,7 +2227,7 @@ class story extends control
 
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', 0, '', true);
         $queryID  = 0;
 
         /* Change for requirement story title. */
@@ -2238,6 +2238,10 @@ class story extends control
             $this->config->product->search['fields']['title'] = $this->lang->story->title;
             unset($this->config->product->search['fields']['plan']);
             unset($this->config->product->search['fields']['stage']);
+        }
+        else
+        {
+            $this->lang->story->title = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
         }
 
         /* Build search form. */
