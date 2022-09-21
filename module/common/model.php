@@ -613,7 +613,7 @@ class commonModel extends model
 
         if($config->edition == 'open')   unset($lang->createIcons['effort']);
         if($config->systemMode != 'new') unset($lang->createIcons['program']);
-        if(!isset($config->projectMode) || $config->projectMode == 'noExecution') unset($lang->createIcons['execution']);
+        if(!isset($config->projectMode) || $config->projectMode == 'noSprint') unset($lang->createIcons['execution']);
 
         /* Check whether the creation permission is available, and print create buttons. */
 
@@ -1240,7 +1240,7 @@ class commonModel extends model
 
         $searchObjects = $lang->searchObjects;
         if($config->systemMode != 'new') unset($searchObjects['program']);
-        if(!isset($config->projectMode) || $config->projectMode == 'noExecution') unset($searchObjects['execution']);
+        if(!isset($config->projectMode) || $config->projectMode == 'noSprint') unset($searchObjects['execution']);
 
         foreach($searchObjects as $key => $value)
         {
