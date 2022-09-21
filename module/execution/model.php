@@ -4941,45 +4941,32 @@ class executionModel extends model
     /*
      * Create default sprint.
      *
-     * @param  int     $projectID
-     * @return bool
+     * @param  int $projectID
+     * @return int
      * */
     public function createDefaultSprint($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $_POST = array();
+        $_POST['project']     = $projectID;
+        $_POST['parent']      = $projectID;
+        $_POST['name']        = $project->name;
+        $_POST['code']        = $project->code;
+        $_POST['begin']       = $project->begin;
+        $_POST['end']         = $project->end;
+        $_POST['status']      = 'wait';
+        $_POST['days']        = $project->days;
+        $_POST['products']    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $_POST['team']        = $project->team;
+        $_POST['teamMembers'] = array($this->app->user->account);
+        $_POST['acl']         = 'open';
+        $_POST['PO']          = '';
+        $_POST['QD']          = '';
+        $_POST['PM']          = '';
+        $_POST['RD']          = '';
 
-        $execution = new stdClass();
+        $executionID = $this->create();
 
-        $execution->project        = $projectID;
-        $execution->auth           = 'extend';
-        $execution->type           = $project->type == 'scrum' ? 'sprint' : 'kanban';
-        $execution->parent         = $projectID;
-        $execution->grade          = 1;
-        $execution->path           = ',' . $projectID . ',';
-        $execution->name           = $project->name;
-        $execution->code           = $project->code;
-        $execution->begin          = $project->begin;
-        $execution->end            = $project->end;
-        $execution->days           = $project->days;
-        $execution->status         = $project->status;
-        $execution->pri            = $project->pri;
-        $execution->openedBy       = $project->openedBy;
-        $execution->openedDate     = $project->openedDate;
-        $execution->openedVersion  = $this->config->version;
-        $execution->lastEditedBy   = $project->lastEditedBy;
-        $execution->lastEditedDate = $project->lastEditedDate;
-        $execution->acl            = 'open';
-        $execution->team           = $project->team;
-        $execution->whitelist      = $project->whitelist;
-        $execution->order          = intval($project->order) + 5;
-        $execution->vision         = $project->vision;
-
-        $this->dao->insert(TABLE_EXECUTION)->data($execution)->exec();
-
-        $lastInsertId = $this->dao->lastInsertId();
-
-        $this->dao->update(TABLE_EXECUTION)->set('path')->eq(",$projectID,$lastInsertId,")->where('id')->eq($lastInsertId)->exec();
-
-        return true;
+        return $executionID;
     }
 }
