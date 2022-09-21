@@ -177,7 +177,7 @@ $(function()
     $("#dataForm").submit(function(e)
     {
         var postDept = new Array();
-        var Depts    = new Array();
+        var depts    = new Array();
 
         $.each($('input[name*="depts[]"]'), function(index, value)
         {
@@ -186,12 +186,12 @@ $(function()
 
         $.each($('input[name*="depts[id"]'), function(index, value)
         {
-            if($(this).val()) Depts.push($(this).val());
+            if($(this).val()) depts.push($(this).val());
         });
 
         for(var i = 0; i < postDept.length; i++)
         {
-            if(Depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i + 1])
+            if(depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i + 1])
             {
                 if(confirm(repeatDepart))
                 {
