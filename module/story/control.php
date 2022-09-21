@@ -381,14 +381,15 @@ class story extends control
                 ->fetch('id');
         }
 
-        /* Get users in team. */
-        $teamUsers = $product->reviewer;
-        if(!$teamUsers and $product->acl != 'open') $teamUsers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Hidden some fields of projects without products. */
         $this->view->hiddenProduct = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
+        $this->view->teamUsers     = array();
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
@@ -397,6 +398,7 @@ class story extends control
 
             if(empty($project->hasProduct))
             {
+                $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
@@ -429,7 +431,7 @@ class story extends control
         $this->view->stories          = $this->story->getParentStoryPairs($productID);
         $this->view->productID        = $productID;
         $this->view->product          = $product;
-        $this->view->teamUsers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $teamUsers);
+        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
@@ -860,6 +862,7 @@ class story extends control
         $this->view->hiddenProduct = false;
         $this->view->hiddenPlan    = false;
         $this->view->hiddenURS     = false;
+        $this->view->teamUsers     = array();
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
@@ -868,6 +871,7 @@ class story extends control
 
             if(empty($project->hasProduct))
             {
+                $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
                 $this->view->hiddenProduct = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
@@ -891,9 +895,9 @@ class story extends control
         $reviewedBy       = explode(',', trim($story->reviewedBy, ','));
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
-        /* Get users in team. */
-        $teamUsers = $product->reviewer;
-        if(!$teamUsers and $product->acl != 'open') $teamUsers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        /* Get product reviewers. */
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
@@ -914,7 +918,7 @@ class story extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
-        $this->view->teamUsers        = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $teamUsers);
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
 
         $this->display();
     }
@@ -2105,6 +2109,7 @@ class story extends control
         /* Get story and product. */
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs();
+        $product  = $this->product->getById($story->product);
 
         /* Set menu. */
         $this->product->setMenu($story->product, $story->branch);
@@ -2114,7 +2119,7 @@ class story extends control
         $this->view->story      = $story;
         $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = ($this->config->vision == 'lite') ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->view->users      = ($this->config->vision == 'lite' || !empty($product->shadow)) ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
         $this->display();
     }
 
