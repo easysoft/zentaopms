@@ -685,6 +685,19 @@ class upgrade extends control
             if($mergeMode == 'execution') $this->upgrade->upgradeInExecutionMode($programID);
 
             if(dao::isError()) return print(js::error(dao::getError()));
+
+            $this->upgrade->computeObjectMembers();
+            $this->upgrade->initUserView();
+            $this->upgrade->setDefaultPriv();
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq('0_0')->where('`key`')->eq('productProject')->exec();
+
+            $hourPoint = $this->loadModel('setting')->getItem('owner=system&module=custom&key=hourPoint');
+            if(empty($hourPoint)) $this->setting->setItem('system.custom.hourPoint', 0);
+
+            $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
+            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
+
+            if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
         $this->view->title       = $this->lang->upgrade->selectMergeMode;
