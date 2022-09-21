@@ -64,9 +64,11 @@ class story extends control
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->tab == 'project' and !$this->session->noSprint)
+        else if($this->app->tab == 'project')
         {
             $objectID = empty($objectID) ? $this->session->project : $objectID;
+            if($this->session->noSprint) $objectID = $this->session->project;
+
             $objects  = $this->project->getPairsByProgram();
             $objectID = $this->project->saveState($objectID, $objects);
             $this->project->setMenu($objectID);
