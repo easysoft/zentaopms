@@ -30,6 +30,7 @@ $lang->dept->noDepartment = "No Department";
 
 $lang->dept->confirmDelete = " Möchten Sie diese Abteilung löschen?";
 $lang->dept->successSave   = " Gespeichert!";
+$lang->dept->repeatDepart  = " Es gibt einen doppelten Abteilungsnamen, möchten Sie ihn wirklich hinzufügen?";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = 'Diese Abteilung hat Unterabteilungen und kann daher nicht gelöscht werden!';

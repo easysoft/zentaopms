@@ -29,6 +29,7 @@ $lang->dept->dragAndSort = "拖動排序";
 
 $lang->dept->confirmDelete = " 您確定刪除該部門嗎？";
 $lang->dept->successSave   = " 修改成功。";
+$lang->dept->repeatDepart  = " 存在部門名稱重複，您確認添加嗎？";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = '該部門有子部門，不能刪除！';
