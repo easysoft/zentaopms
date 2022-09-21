@@ -533,6 +533,8 @@ class project extends control
         }
 
         if($this->app->tab == 'program' and $programID) $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         $this->session->set('projectModel', $model);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -571,9 +573,7 @@ class project extends control
             }
         }
 
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
-        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
-
+        if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);
 
         if($model == 'kanban')
@@ -582,8 +582,7 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $this->view->title      = $this->lang->project->create;
-        $this->view->position[] = $this->lang->project->create;
+        $this->view->title = $this->lang->project->create;
 
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
