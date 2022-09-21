@@ -261,6 +261,7 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->create;
 
         $this->view->productID   = $productID;
+        $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->executions  = $executions;
