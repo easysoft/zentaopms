@@ -189,9 +189,9 @@ $(function()
             if($(this).val()) Depts.push($(this).val());
         });
 
-        for(var i=0; i<postDept.length; i++)
+        for(var i = 0; i < postDept.length; i++)
         {
-            if(Depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i+1])
+            if(Depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i + 1])
             {
                 if(confirm(repeatDepart))
                 {
