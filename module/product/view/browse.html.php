@@ -387,8 +387,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
+            foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
+            $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
+            $disabled       = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink     = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>
