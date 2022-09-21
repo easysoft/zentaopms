@@ -146,10 +146,12 @@
               <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
             </tr>
             <?php else:?>
+            <?php if(!$product->shadow):?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
               <td><?php echo (common::hasPriv('product', 'browse') and $productName) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
+            <?php endif;?>
             <?php if($product->type != 'normal'):?>
             <tr>
               <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>

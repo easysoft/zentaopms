@@ -163,7 +163,8 @@ class testcase extends control
         $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL, $projectID);
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
+        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
 
@@ -570,6 +571,7 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
+        $this->view->hiddenProduct    = !empty($product->shadow);
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
         $this->view->product          = $product;
@@ -1591,7 +1593,8 @@ class testcase extends control
             $orderBy = '`' . $field . '`_' . $sort;
         }
 
-        $product = $this->loadModel('product')->getById($productID);
+        $product  = $this->loadModel('product')->getById($productID);
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
         if($_POST)
         {
@@ -1654,7 +1657,6 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs();
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */
@@ -1794,12 +1796,11 @@ class testcase extends control
         }
 
         $fileName    = $this->lang->testcase->common;
-        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
         $browseType  = isset($this->lang->testcase->featureBar['browse'][$browseType]) ? $this->lang->testcase->featureBar['browse'][$browseType] : '';
 
         if($taskID) $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
 
-        $this->view->fileName        = $productName . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
+        $this->view->fileName        = zget($products, $productID, '') . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
         $this->view->allExportFields = $this->config->testcase->exportFields;
         $this->view->customExport    = true;
         $this->display();
