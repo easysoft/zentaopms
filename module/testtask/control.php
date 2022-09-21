@@ -57,13 +57,13 @@ class testtask extends control
             }
             else
             {
-                $products = $this->product->getPairs('', 0, '', true);
+                $products = $this->product->getPairs('', 0, '', 'all');
             }
             if(empty($products) and !helper::isAjaxRequest()) helper::end($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
         }
         else
         {
-            $products = $this->product->getPairs('', 0, '', true);
+            $products = $this->product->getPairs('', 0, '', 'all');
         }
         $this->view->products = $this->products = $products;
     }
