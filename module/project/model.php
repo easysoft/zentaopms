@@ -1339,6 +1339,8 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
+            if($this->config->systemMode == 'lean' and $project->noSprint == 1 and $project->model != 'kanban') $this->loadModel('execution')->createDefaultSprint($projectID);
+
             return $projectID;
         }
     }

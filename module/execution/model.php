@@ -4937,4 +4937,37 @@ class executionModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->execution->all->search);
     }
+
+    /*
+     * Create default sprint.
+     *
+     * @param  int $projectID
+     * @return int
+     * */
+    public function createDefaultSprint($projectID)
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $_POST = array();
+        $_POST['project']     = $projectID;
+        $_POST['parent']      = $projectID;
+        $_POST['name']        = $project->name;
+        $_POST['code']        = $project->code;
+        $_POST['begin']       = $project->begin;
+        $_POST['end']         = $project->end;
+        $_POST['status']      = 'wait';
+        $_POST['days']        = $project->days;
+        $_POST['products']    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $_POST['team']        = $project->team;
+        $_POST['teamMembers'] = array($this->app->user->account);
+        $_POST['acl']         = 'open';
+        $_POST['PO']          = '';
+        $_POST['QD']          = '';
+        $_POST['PM']          = '';
+        $_POST['RD']          = '';
+        $_POST['noSprint']    = 1;
+
+        $executionID = $this->create();
+
+        return $executionID;
+    }
 }
