@@ -2313,6 +2313,15 @@ class bug extends control
         {
             $this->loadModel('port');
             $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            if(!$productID)
+            {
+                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+            }
+
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
