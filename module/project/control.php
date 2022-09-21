@@ -304,6 +304,17 @@ class project extends control
         $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
+
+        /* Locate to task when set no execution. */
+        if($project->noSprint)
+        {
+            $executions = $this->loadModel('execution')->getList($project->id);
+            foreach($executions as $execution)
+            {
+                if($execution->noSprint) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
+            }
+        }
+
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));

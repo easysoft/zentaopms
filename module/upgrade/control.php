@@ -687,8 +687,9 @@ class upgrade extends control
             if(dao::isError()) return print(js::error(dao::getError()));
             $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
         }
-        $this->view->title      = $this->lang->upgrade->selectMergeMode;
-        $this->view->systemMode = $mode;
+        $this->view->title       = $this->lang->upgrade->selectMergeMode;
+        $this->view->fromVersion = $fromVersion;
+        $this->view->systemMode  = $mode;
         $this->display();
     }
 

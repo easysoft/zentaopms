@@ -2472,7 +2472,94 @@ class projectModel extends model
         if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         common::setMenuVars('project', $objectID);
+
+        $this->setNoSprintMenu($objectID);
         return $objectID;
+    }
+
+    /**
+     * Set noSprint menu.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function setNoSprintMenu($objectID)
+    {
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+
+        $navGroup = zget($this->lang->navGroup, $moduleName);
+        $this->config->resetNavGroup['execution'] = 'execution';
+        $this->config->resetNavGroup[$moduleName] = $navGroup;
+
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq(1)->fetch();
+        if(empty($project)) return;
+        if($project->type != 'project' and $project->type != 'sprint') return;
+
+        if($project->type == 'project')
+        {
+            $projectID   = $project->id;
+            $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)
+                ->where('project')->eq($projectID)
+                ->andWhere('noSprint')->eq(1)
+                ->andWhere('type')->eq('sprint')
+                ->andWhere('deleted')->eq(0)
+                ->fetch('id');
+        }
+        elseif($project->type == 'sprint')
+        {
+            $executionID = $project->id;
+            $projectID   = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('id')->eq($project->project)
+                ->andWhere('noSprint')->eq(1)
+                ->andWhere('type')->eq('project')
+                ->andWhere('deleted')->eq(0)
+                ->fetch('id');
+        }
+        if(empty($projectID) or empty($executionID)) return;
+
+        $this->app->tab = 'project';
+        $_COOKIE['tab'] = 'project';
+
+        $this->lang->navGroup->$moduleName   = 'project';
+        $this->lang->$navGroup->menu         = $this->lang->noSprint->menu;
+        $this->lang->$navGroup->menuOrder    = $this->lang->noSprint->menuOrder;
+        $this->lang->$navGroup->dividerMenu  = $this->lang->noSprint->dividerMenu;
+
+        foreach($this->lang->$navGroup->menu as $label => $menu)
+        {
+            $objectID = 0;
+            if(strpos($this->config->project->noSprint['project'], ",{$label},") !== false) $objectID = $projectID;
+            if(strpos($this->config->project->noSprint['execution'], ",{$label},") !== false)
+            {
+                $objectID = $executionID;
+                $this->lang->$navGroup->menu->$label['subModule'] = 'project';
+            }
+            $this->lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
+            if(isset($menu['subMenu']))
+            {
+                foreach($menu['subMenu'] as $key1 => $subMenu) $this->lang->$navGroup->menu->{$label}['subMenu']->$key1 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+
+            if(!isset($menu['dropMenu'])) continue;
+            foreach($menu['dropMenu'] as $key2 => $dropMenu)
+            {
+                $this->lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
+
+                if(!isset($dropMenu['subMenu'])) continue;
+                foreach($dropMenu['subMenu'] as $key3 => $subMenu) $this->lang->$navGroup->menu->{$label}['dropMenu']->$key3 = common::setMenuVarsEx($subMenu, $objectID);
+            }
+        }
+
+        $this->config->resetNavGroup[$moduleName] = 'project';
+
+        /* If objectID is set, cannot use homeMenu. */
+        unset($this->lang->$navGroup->homeMenu);
+        $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
+        $this->lang->project->menu        = $this->lang->$navGroup->menu;
+        $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
+        $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
     }
 
     /**

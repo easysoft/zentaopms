@@ -207,7 +207,7 @@ $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|inde
 $lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
-$lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport,execution', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
+$lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
 $lang->scrum->menu->devops    = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->scrum->menu->build     = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->scrum->menu->release   = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
@@ -376,6 +376,34 @@ $lang->execution->menu->settings['subMenu']->team      = array('link' => "{$lang
 $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang->whitelist|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
 $lang->execution->dividerMenu = ',story,build,';
+
+$lang->noSprint                 = new stdclass();
+$lang->noSprint->menu           = new stdclass();
+$lang->noSprint->menu->task     = $lang->execution->menu->task;
+$lang->noSprint->menu->kanban   = $lang->execution->menu->kanban;
+$lang->noSprint->menu->burn     = $lang->execution->menu->burn;
+$lang->noSprint->menu->view     = $lang->execution->menu->view;
+$lang->noSprint->menu->story    = $lang->execution->menu->story;
+$lang->noSprint->menu->qa       = $lang->scrum->menu->qa;
+$lang->noSprint->menu->devops   = $lang->scrum->menu->devops;
+$lang->noSprint->menu->doc      = $lang->scrum->menu->doc;
+$lang->noSprint->menu->build    = $lang->scrum->menu->build;
+$lang->noSprint->menu->dynamic  = $lang->scrum->menu->dynamic;
+$lang->noSprint->menu->settings = $lang->scrum->menu->settings;
+
+$lang->noSprint->dividerMenu = ',story,build,';
+
+$lang->noSprint->menuOrder[5]  = 'task';
+$lang->noSprint->menuOrder[10] = 'kanban';
+$lang->noSprint->menuOrder[15] = 'burn';
+$lang->noSprint->menuOrder[20] = 'view';
+$lang->noSprint->menuOrder[25] = 'story';
+$lang->noSprint->menuOrder[30] = 'qa';
+$lang->noSprint->menuOrder[35] = 'devops';
+$lang->noSprint->menuOrder[40] = 'doc';
+$lang->noSprint->menuOrder[45] = 'build';
+$lang->noSprint->menuOrder[50] = 'dynamic';
+$lang->noSprint->menuOrder[55] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();

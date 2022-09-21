@@ -642,11 +642,14 @@ class custom extends control
 
         $this->app->loadLang('upgrade');
 
-        $this->view->title       = $this->lang->custom->mode;
-        $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->view->title;
-        $this->view->mode        = $mode;
-        $this->view->program     = $this->loadModel('program')->getTopPairs('', '', true);
+        $hasMoreData = $this->custom->hasMoreData() ? 'yes' : 'no';
+        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData[$hasMoreData];
+
+        $this->view->title      = $this->lang->custom->mode;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->mode       = $mode;
+        $this->view->program    = $this->loadModel('program')->getTopPairs('', '', true);
 
         $this->display();
     }

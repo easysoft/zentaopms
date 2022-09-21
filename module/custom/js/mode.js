@@ -1,15 +1,40 @@
 $(function()
 {
     $('#modeTab').addClass('btn-active-text');
-    $('[name=mode]').change(function()
+
+    $('[name=mode]').change(function(){$("#selectDefaultProgram").toggle($(this).val() == 'lean'); });
+
+    $(document).on('click', '#submit', function()
     {
-        if($(this).val() == 'lean')
+        if(mode == $('[name=mode]:checked').val()) return false;
+
+        if($(this).hasClass('canSubmit'))
         {
-            $("#selectDefaultProgram").removeClass('hidden');
+            $(this).removeClass('canSubmit');
+            return true;
         }
-        else
-        {
-            $("#selectDefaultProgram").addClass('hidden');
-        }
+
+        $(this).addClass('canSubmit');
+
+        var $mode = $('[name=mode]:checked').val();
+        var confirmTitle   = changeModeTitleTips[$mode];
+        var confirmContent = changeModeContentTips[$mode]
+
+        $('#confirmModal .modal-title').html(confirmTitle);
+        $('#confirmModal .modal-body').html(confirmContent);
+        
+        $('#confirmModal').modal('show');
+
+        return false;
     });
+
+    $(document).on('click', '.btn-confirm', function()
+    {
+        $('#submit').click();
+    });
+
+    $('#confirmModal').on('hide.zui.modal', function()
+    {
+        $('#submit').removeClass('canSubmit');
+    })
 })

@@ -11,8 +11,11 @@
  */
 ?>
 <?php include 'header.html.php';?>
+<?php js::set('changeModeTitleTips', $lang->custom->changeModeTitleTips);?>
+<?php js::set('changeModeContentTips', $lang->custom->changeModeContentTips);?>
+<?php js::set('mode', $mode);?>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form" method='post'>
+  <form id='modeForm' class="load-indicator main-form" method='post'>
     <div class='main-header'>
       <div class='heading'>
         <strong><?php echo $lang->custom->mode?></strong>
@@ -28,18 +31,37 @@
           </p>
         </td>
       </tr>
-      <?php $class = $mode == 'new' ? "class='hidden'" : "";?>
+      <?php $class = $mode == 'new' ? "class='hide'" : "";?>
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
         <td><?php echo html::select('program', $program, '', "class='form-control chosen'");?></td>
       </tr>
       <tr>
         <td></td>
-        <td>
-          <?php echo html::submitButton($lang->custom->switch);?>
-        </td>
+        <td><?php echo html::submitButton($lang->custom->switch);?></td>
       </tr>
     </table>
   </form>
 </div>
+
+<div class='modal fade' id='confirmModal'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
+        <h4 class='modal-title'></h4>
+      </div>
+      <div class='modal-body'></div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-primary btn-wide btn-confirm'><?php echo $lang->confirm;?></button>
+        <button type='button' class='btn btn-default btn-wide' data-dismiss='modal'><?php echo $this->lang->cancel;?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+#confirmModal .modal-header {border-bottom: 0px}
+#confirmModal .modal-header h4.modal-title{font-weight: 700}
+#confirmModal .modal-footer {border-top: 0px; text-align: center}
+</style>
 <?php include '../../common/view/footer.html.php';?>
