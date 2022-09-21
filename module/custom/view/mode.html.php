@@ -15,13 +15,13 @@
 <?php js::set('changeModeContentTips', $lang->custom->changeModeContentTips);?>
 <?php js::set('mode', $mode);?>
 <div id='mainContent' class='main-content'>
-  <form id='modeForm' class="load-indicator main-form" method='post'>
+  <form id='modeForm' class="load-indicator main-form form-ajax"  method='post'>
     <div class='main-header'>
       <div class='heading'>
         <strong><?php echo $lang->custom->mode?></strong>
       </div>
     </div>
-    <table class='table table-form' style='max-width: 336px;'>
+    <table class='table table-form'>
       <tr>
         <th class='text-top'><?php echo $lang->custom->mode;?></th>
         <td>
@@ -34,7 +34,9 @@
       <?php $class = $mode == 'new' ? "class='hide'" : "";?>
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
-        <td><?php echo html::select('program', $program, '', "class='form-control chosen'");?></td>
+        <td class='required'>
+          <?php echo html::select('program', $program, '', "class='form-control chosen'");?>
+        </td>
       </tr>
       <tr>
         <td></td>
