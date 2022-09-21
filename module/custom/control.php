@@ -654,7 +654,7 @@ class custom extends control
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
         $this->view->mode       = $mode;
-        $this->view->program    = $this->loadModel('program')->getTopPairs('', '', true);
+        $this->view->program    = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
 
         $this->display();
     }
