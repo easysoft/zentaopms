@@ -320,7 +320,7 @@ $lang->stakeholder->methodOrder[75] = 'viewExpect';
 $lang->stakeholder->methodOrder[80] = 'userIssue';
 
 global $config;
-if($config->systemMode == 'new')
+if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
 {
     /* Design. */
     $lang->resource->design = new stdclass();
