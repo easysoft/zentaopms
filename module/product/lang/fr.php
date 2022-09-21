@@ -186,7 +186,7 @@ $lang->product->statusList['closed'] = 'Fermé';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Stakeholders and owner of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {
