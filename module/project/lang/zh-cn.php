@@ -274,6 +274,13 @@ $lang->project->kanbanSubAclList['private'] = "私有 (只有项目负责人、�
 $lang->project->kanbanSubAclList['open']    = "公开 (有项目视图权限即可访问)";
 $lang->project->kanbanSubAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、项目负责人、团队成员可访问）';
 
+global $config;
+if($config->systemMode != 'new')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
+
 $lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
 $lang->project->authList['reset']  = '重新定义 (只取项目权限)';
 
