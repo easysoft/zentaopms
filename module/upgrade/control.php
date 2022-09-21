@@ -158,7 +158,7 @@ class upgrade extends control
 
             $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
             $selectMode = true;
-            if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<=') and $systemMode != 'new')
+            if(version_compare($openVersion, '15_0', '>=') and version_compare($openVersion, '18_0', '<') and $systemMode != 'new')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
 
@@ -175,7 +175,7 @@ class upgrade extends control
 
                 $selectMode = false;
             }
-            if(version_compare($openVersion, '18_0', '>')) $selectMode = false;
+            if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
@@ -214,6 +214,7 @@ class upgrade extends control
             }
             $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
 
+            $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
             if($mode == 'lean')
             {
                 /* Lean mode create default program. */
@@ -222,12 +223,16 @@ class upgrade extends control
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
                 /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
                 $this->upgrade->relationDefaultProgram($programID);
-                $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
                 if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=lean"));
 
                 $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
             }
-            if($mode == 'new')  $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=new"));
+            if($mode == 'new')
+            {
+                if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=new"));
+
+                $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+            }
         }
 
         $checkHistoryResult = $this->upgrade->checkHistoryDataForLeanMode();
