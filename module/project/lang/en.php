@@ -257,8 +257,8 @@ $lang->project->featureBar['build']['all'] = 'Build List';
 $lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 
-$lang->project->noSprintList['1'] = "Enable";
-$lang->project->noSprintList['0'] = "Disable";
+$lang->project->noSprintList['0'] = "Enable";
+$lang->project->noSprintList['1'] = "Disable";
 
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
