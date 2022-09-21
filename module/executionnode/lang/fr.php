@@ -54,6 +54,8 @@ $lang->executionnode->nameValid     = "The name can only be letters, numbers, '-
 $lang->executionnode->empty         = 'No Execution Node';
 $lang->executionnode->templateEmpty = 'No Template';
 
+$lang->executionnode->apiError['-10100'] = 'Execution node not found.';
+
 $lang->executionnode->publicList[0] = 'Private';
 $lang->executionnode->publicList[1] = 'Public';
 

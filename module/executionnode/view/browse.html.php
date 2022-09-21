@@ -47,15 +47,17 @@
     <table class='table has-sort-head table-fixed' id='nodeList'>
       <thead>
         <tr>
-          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-200px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->executionnode->name);?></th>
-          <th class='w-100px'><?php common::printOrderLink('hostID', $orderBy, $vars, $lang->executionnode->hostName);?>
-          <th class='w-120px'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->executionnode->osType);?></th>
-          <th class='w-100px'><?php common::printOrderLink('osCpu', $orderBy, $vars, $lang->executionnode->cpu);?></th>
-          <th class='w-60px'><?php common::printOrderLink('osMemory', $orderBy, $vars, $lang->executionnode->memory);?></th>
-          <th class='w-60px'><?php common::printOrderLink('osDisk', $orderBy, $vars, $lang->executionnode->disk);?></th>
-          <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->executionnode->status);?></th>
-          <th class='w-80px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->executionnode->creater);?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->executionnode->name);?></th>
+          <th class='c-ip'><?php common::printOrderLink('publicIP', $orderBy, $vars, $lang->executionnode->ip);?></th>
+          <th class='c-cpu'><?php common::printOrderLink('osCpu', $orderBy, $vars, $lang->executionnode->cpu);?></th>
+          <th class='c-number'><?php common::printOrderLink('osMemory', $orderBy, $vars, $lang->executionnode->memory);?></th>
+          <th class='c-number'><?php common::printOrderLink('osDisk', $orderBy, $vars, $lang->executionnode->disk);?></th>
+          <th class='c-os'><?php common::printOrderLink('osCategory', $orderBy, $vars, $lang->executionnode->osCategory);?></th>
+          <th class='c-os'><?php common::printOrderLink('osType', $orderBy, $vars, $lang->executionnode->osType);?></th>
+          <th class='c-os'><?php common::printOrderLink('osVersion', $orderBy, $vars, $lang->executionnode->osVersion);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->executionnode->status);?></th>
+          <th class='c-host'><?php common::printOrderLink('hostID', $orderBy, $vars, $lang->executionnode->hostName);?>
           <th class='c-actions-4'><?php echo $lang->actions?></th>
         </tr>
       </thead>
@@ -64,14 +66,16 @@
         <tr>
           <td><?php echo $node->id;?></td>
           <td title="<?php echo $node->name;?>"><?php echo html::a($this->inlink('view', "id=$node->id", 'html', true), $node->name, '',"class='iframe'");?></td>
-          <td title="<?php echo $node->hostName;?>"><?php echo $node->hostName;?></td>
-          <?php $osType = $config->executionnode->os->type[$node->osCategory][$node->osType] . ' ' . $lang->executionnode->versionList[$node->osType][$node->osVersion];?>
-          <td title="<?php echo $osType;?>"><?php echo $osType;?></td>
+          <td><?php echo $node->hostIP;?></td>
           <td><?php echo zget($config->executionnode->os->cpu, $node->osCpu);?></td>
           <td><?php echo zget($config->executionnode->os->memory, $node->osMemory);?></td>
           <td><?php echo zget($config->executionnode->os->disk, $node->osDisk);?></td>
+          <?php $osType = $config->executionnode->os->type[$node->osCategory][$node->osType] . ' ' . $lang->executionnode->versionList[$node->osType][$node->osVersion];?>
+          <td><?php echo zget($config->executionnode->os->list, $node->osCategory);?></td>
+          <td><?php echo zget($config->executionnode->os->type[$node->osCategory], $node->osType);?></td>
+          <td><?php echo zget($lang->executionnode->versionList[$node->osType], $node->osVersion);?></td>
           <td><?php echo zget($lang->executionnode->statusList, $node->status);?></td>
-          <td><?php echo zget($users, $node->createdBy);?></td>
+          <td title="<?php echo $node->hostName;?>"><?php echo $node->hostName;?></td>
           <td class='c-actions'>
             <?php
             $suspendAttr  = "title='{$lang->executionnode->suspend}' class='btn btn-primary' target='hiddenwin'";

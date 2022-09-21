@@ -87,7 +87,7 @@ class executionnodemodel extends model
             dao::$errors[] = $this->lang->executionnode->notFoundAgent;
             return false;
         }
-        if($result->code != 200)
+        if($result->code != 1)
         {
             dao::$errors[] = $this->lang->executionnode->createVmFail;
             return false;
@@ -97,7 +97,7 @@ class executionnodemodel extends model
         $data->templateID  = $data->templateID;
         $data->hostID      = $host->id;
         $data->macAddress  = $macAddress;
-        $data->status      = static::STATUS_RUNNING;
+        $data->status      = static::STATUS_LAUNCH;
         $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $data->osCategory  = $vmTemplate->osCategory;
@@ -138,7 +138,7 @@ class executionnodemodel extends model
         $data   = json_decode($result, true);
         if(empty($data)) return $this->lang->executionnode->notFoundAgent;
 
-        if($data['code'] != 200) return $data['message'];
+        if($data['code'] != 1) return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
 
         if($type != 'reboot')
         {
@@ -173,7 +173,7 @@ class executionnodemodel extends model
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->executionnode->notFoundAgent;
 
-            if($data['code'] != 200) return $data['message'];
+            if($data['code'] != 1) return zget($this->lang->executionnode->apiError, $data['code'], $data['msg']);
         }
 
         /* delete execution node. */
@@ -298,6 +298,8 @@ class executionnodemodel extends model
             $query = str_replace('`hostID`', 't1.`hostID`', $query);
             $query = str_replace('`osVersion`', 't4.`osVersion`', $query);
         }
+
+        $orderBy = str_replace('osVersion', 't4.osVersion', $orderBy);
 
         return $this->dao->select('t1.*, t3.name as hostName, t2.publicIP as hostIP,t4.osVersion')->from(TABLE_VM)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.hostID = t2.id')
@@ -510,7 +512,7 @@ class executionnodemodel extends model
         $agnetUrl = 'http://' . $host->publicIP . ':' . $host->agentPort . static::KVM_TOKEN_PATH;
         $result   = json_decode(commonModel::http("$agnetUrl?port={$vm->vncPort}"));
 
-        if(empty($result) or $result->code != 200) return false;
+        if(empty($result) or $result->code != 1) return false;
 
         $returnData = new stdClass();
         $returnData->hostIP    = $host->publicIP;

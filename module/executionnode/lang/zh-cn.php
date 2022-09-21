@@ -52,6 +52,8 @@ $lang->executionnode->nameValid     = "名称只能是字母、数字，'-'，'_
 $lang->executionnode->empty         = '暂时没有执行节点';
 $lang->executionnode->templateEmpty = '暂时没有模板';
 
+$lang->executionnode->apiError['-10100'] = '执行节点不存在';
+
 $lang->executionnode->publicList[0] = '不共享';
 $lang->executionnode->publicList[1] = '共享';
 
