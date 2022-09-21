@@ -236,6 +236,11 @@ class productModel extends model
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
+        if($product->shadow) $product->name = $this->dao->select('t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->eq($productID)
+            ->fetch('name');
+
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
 

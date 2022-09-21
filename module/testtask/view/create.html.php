@@ -22,6 +22,7 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
+        <?php if(empty($product->shadow)):?>
         <?php if(isset($executionID)):?>
         <tr>
           <th class='w-100px'><?php echo $lang->testtask->product;?></th>
@@ -29,17 +30,18 @@
         </tr>
         <?php else:?>
         <tr class='hide'>
-          <th class='w-80px'><?php echo $lang->testtask->product;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->product;?></th>
           <td class='w-p35-f'><?php echo html::input('product', $productID, "class='form-control' onchange='loadTestReports(this.value)'");?></td><td></td>
         </tr>
         <?php endif;?>
+        <?php endif;?>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->execution;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'><?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></td><td></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->testtask->build;?></th>
-          <td class='w-p35-f'>
+          <th><?php echo $lang->testtask->build;?></th>
+          <td>
             <div class='input-group' id='buildBox'>
             <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen'");?>
             <?php if(isset($executionID) and $executionID and empty($builds)):?>
