@@ -4964,6 +4964,7 @@ class executionModel extends model
         $_POST['QD']          = '';
         $_POST['PM']          = '';
         $_POST['RD']          = '';
+        $_POST['noSprint']    = 1;
 
         $executionID = $this->create();
 
