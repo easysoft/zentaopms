@@ -277,7 +277,7 @@ class productModel extends model
         $products = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
@@ -405,7 +405,7 @@ class productModel extends model
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-                ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+                ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy('isClosed, t2.order_asc, t1.line_desc, t1.order_asc')
                 ->fetchPairs('id', 'name');
@@ -428,7 +428,7 @@ class productModel extends model
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
-                ->beginIF($shadow != 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+                ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->fetchPairs('id', 'name');
@@ -446,7 +446,7 @@ class productModel extends model
      */
     public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '')
     {
-        $products = empty($projectID) ? $this->getList() : $this->getProducts($projectID, $status, '', true, $append);
+        $products = empty($projectID) ? $this->getList(0, 'all', 0, 0, 'all') : $this->getProducts($projectID, $status, '', true, $append);
         $pairs    = array();
         if(!empty($products))
         {
@@ -479,7 +479,7 @@ class productModel extends model
      * Get products by project.
      *
      * @param  int          $projectID
-     * @param  string       $status   all|noclosed
+     * @param  string       $status         all|noclosed
      * @param  string       $orderBy
      * @param  bool         $withBranch
      * @param  string|array $append
@@ -496,11 +496,25 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
+        $field = '';
+        if($projectID)
+        {
+            $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+            if($project)
+            {
+                if($project->type == 'project') $field = ", IF(t2.shadow = 1, '$project->name', t2.name) AS name";
+                if($project->type == 'execution')
+                {
+                    $projectName = $this->dao->findById($project->project)->from(TABLE_PROJECT)->fetch('name');
+                    $field       = ", IF(t2.shadow = 1, '$projectName', t2.name) AS name";
+                }
+            }
+        }
+
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
+        $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*{$field}")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()

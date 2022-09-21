@@ -278,7 +278,7 @@ class story extends control
         else
         {
             $products = array();
-            $productList = $this->product->getOrderedProducts('noclosed');
+            $productList = $this->product->getOrderedProducts('noclosed', 0, 0, 'all');
             foreach($productList as $product) $products[$product->id] = $product->name;
             $product = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
@@ -1296,7 +1296,7 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, shadow, status')->fetch();
+        $product       = $this->product->getByID($story->product);
         $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
