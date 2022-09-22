@@ -11,6 +11,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php if($this->config->systemMode != 'new'):?>
+<style> .kanban-lane-name span.text{display:none;} </style>
+<?php endif;?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip cell">
@@ -36,6 +39,7 @@ $kanbanColumns['waitProject']    = array('name' => $lang->project->waitProjects,
 $kanbanColumns['doingProject']   = array('name' => $lang->project->doingProjects, 'type' => 'doingProject');
 $kanbanColumns['doingExecution'] = array('name' => $lang->project->doingExecutions, 'type' => 'doingExecution');
 $kanbanColumns['closedProject']  = array('name' => $lang->project->closedProjects, 'type' => 'closedProject');
+if(!empty($config->projectMode) and $config->projectMode == 'noSprint') unset($kanbanColumns['doingExecution']);
 $userPrivs = array();
 $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
