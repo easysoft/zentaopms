@@ -14,10 +14,10 @@ pid=1
 
 */
 
-global $tester;
 $test = new programTest();
 
 $result = $test->createDefaultProgramTest();
 
 r($result) && p('') && e('751'); // 创建默认项目集并返回ID
+
 $db->restoreDB();
