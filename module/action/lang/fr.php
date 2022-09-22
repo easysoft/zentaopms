@@ -223,6 +223,7 @@ $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->switchtolean         = '$date, Switch from new mode to lean mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -390,6 +391,7 @@ $lang->action->label->tolib                 = 'Importé';
 $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
+$lang->action->label->switchtolean          = 'switch from new mode to lean mode';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -409,12 +411,13 @@ $lang->action->dynamicAction->program['activated'] = 'Activate Program';
 $lang->action->dynamicAction->program['deleted']   = 'Delete Program';
 $lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['opened']    = 'Créer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['edited']    = 'Editer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['started']   = 'Commencer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['suspended'] = 'Suspendre ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['activated'] = 'Activer ' . $lang->executionCommon;
-$lang->action->dynamicAction->project['closed']    = 'Fermer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['opened']       = 'Créer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['edited']       = 'Editer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['started']      = 'Commencer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['suspended']    = 'Suspendre ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['activated']    = 'Activer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['closed']       = 'Fermer ' . $lang->executionCommon;
+$lang->action->dynamicAction->project['switchtolean'] = 'Switch Mode';
 
 $lang->action->dynamicAction->product['opened']    = 'Créer ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Editer ' . $lang->productCommon;
