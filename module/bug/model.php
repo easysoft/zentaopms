@@ -2950,7 +2950,7 @@ class bugModel extends model
         }
         else
         {
-            $productParis  = $this->loadModel('product')->getPairs('', 0, '', true);
+            $productParis  = $this->loadModel('product')->getPairs('', 0, '', 'all');
             $productIDList = array_keys($productParis);
 
             if(!empty($productIDList))
