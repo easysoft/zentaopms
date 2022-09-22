@@ -2286,10 +2286,13 @@ class story extends control
 
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs();
+        $products = $this->product->getPairs('', 0, '', 'all');
+        $product  = $this->product->getByID($story->product);
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
         $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
         $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
+
+        if(!empty($product->shadow)) unset($this->config->product->search['fields']['product']);
 
         /* Build search form. */
         $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
