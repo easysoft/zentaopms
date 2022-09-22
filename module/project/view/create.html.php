@@ -76,7 +76,7 @@
         <?php if($model == 'scrum' or $model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->project->noSprint;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, 1));?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, 0));?></td>
         </tr>
         <?php endif;?>
         <tr>
