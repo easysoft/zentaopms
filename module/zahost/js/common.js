@@ -53,11 +53,15 @@ $(function()
         if(typeof(template) == 'object') $('#osVersion').val(template.osVersion);
         $('#osVersion').chosen().trigger('chosen:updated');
         $('#osVersion').change();
+        /* Remove close icon to forbid clearning content of select list. */
+        $('#osType_chosen a .search-choice-close').remove();
+        $('#osVersion_chosen a .search-choice-close').remove();
+    });
+
+    $('#osVersion').change(function()
+    {
+        $('#osVersion_chosen a .search-choice-close').remove();
     });
 
     $('#osCategory').change();
-
-    /* Remove close icon to forbid clearning content of select list. */
-    $('#osType_chosen a .search-choice-close').remove();
-    $('#osVersion_chosen a .search-choice-close').remove();
 })
