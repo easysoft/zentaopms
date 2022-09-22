@@ -1476,7 +1476,7 @@ class project extends control
             $project = $this->project->getByID($group->project);
             if($project->hasProduct)
             {
-                unset($this->lang->resource->requirement);
+                if($this->config->URAndSR) unset($this->lang->resource->requirement);
                 unset($this->lang->resource->productplan);
                 unset($this->lang->resource->tree);
             }
@@ -1492,8 +1492,8 @@ class project extends control
                 unset($this->lang->resource->projectstory->unlinkStory);
                 unset($this->lang->resource->projectstory->batchUnlinkStory);
                 unset($this->lang->resource->story->view);
-                unset($this->lang->resource->requirement->view);
-                unset($this->lang->resource->requirement->batchChangeBranch);
+                if($this->config->URAndSR) unset($this->lang->resource->requirement->view);
+                if($this->config->URAndSR) unset($this->lang->resource->requirement->batchChangeBranch);
                 unset($this->lang->resource->tree->browseTask);
                 unset($this->lang->resource->tree->browsehost);
                 unset($this->lang->resource->tree->editHost);
