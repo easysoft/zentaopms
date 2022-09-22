@@ -413,7 +413,7 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
 $lang->bug->placeholder->newBuildName = '新版本名称';
 
-$lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;
+$lang->bug->featureBar['browse']['all']          = '全部';
 $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;

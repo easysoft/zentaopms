@@ -56,19 +56,23 @@
           <td>
             <div class='input-group'><?php echo html::input('currentConsumed', 0, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
-          <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
-          <?php
-          echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
-          js::set('consumed', $consumed);
-          ?>
+            <div class='table-row'>
+              <div class='table-col strong w-80px text-right' style='padding-right:10px'><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?> </div>
+              <div class='table-col'>
+                <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
+                <?php
+                echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
+                js::set('consumed', $consumed);
+                ?>
+              </div>
+            </div>
           </td>
         </tr>
+        <tr>
+        </tr>
         <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
-          <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
+          <th><?php echo $lang->task->assign;?></th>
           <td>
             <?php
             if(!empty($task->team) and $task->mode == 'linear')
@@ -83,11 +87,25 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo empty($task->team) ? $lang->task->realStarted : $lang->task->my . $lang->task->realStarted;?></th>
-          <td><div class='datepicker-wrapper'><?php echo html::input('realStarted', $task->realStarted != '0000-00-00 00:00:00' ? $task->realStarted : '', "class='form-control form-datetime'");?></div></td><td></td>
+          <th><?php echo $lang->task->realStarted;?></th>
+          <td>
+            <div class='datepicker-wrapper'>
+            <?php
+            $realStarted = $task->realStarted;
+            $readonly    = 'readonly';
+            if(helper::isZeroDate($realStarted))
+            {
+                $realStarted = '';
+                $readonly    = '';
+            }
+            ?>
+            <?php echo html::input('realStarted', $realStarted, "class='form-control" . ($readonly ? '' : ' form-datetime') . "' $readonly");?>
+            </div>
+          </td>
+          <td></td>
         </tr>
         <tr>
-          <th><?php echo empty($task->team) ? $lang->task->finishedDate : $lang->task->my . $lang->task->finishedDate;?></th>
+          <th><?php echo $lang->task->finishedDate;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::now(), "class='form-control form-datetime'");?></div></td><td></td>
         </tr>
         <tr class='hide'>

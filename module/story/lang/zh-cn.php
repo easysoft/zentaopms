@@ -460,7 +460,7 @@ $lang->story->subDivideTip['subStory']  = '子需求无法细分';
 $lang->story->subDivideTip['notWait']   = '该需求%s，无法进行细分操作';
 $lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';
 
-$lang->story->featureBar['browse']['all']       = $lang->all;
+$lang->story->featureBar['browse']['all']       = '全部';
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];

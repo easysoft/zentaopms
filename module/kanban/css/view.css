@@ -157,24 +157,28 @@
 .executionName .delayed {margin-right: 10px;}
 
 #kanbanBox {position: relative;}
-#regionTabs {background-color: #efefef; z-index: 100; display: flex;}
+#regionTabs {background-color: #efefef; z-index: 100; display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;}
 #regionTabs .leftBtn.disabled  i, #regionTabs .rightBtn.disabled i{color: #c2c2c2;}
+#regionTabs .leftBtn  i, #regionTabs .rightBtn i{vertical-align: 1px;}
 #regionTabs .icon-angle-left, #regionTabs .icon-angle-right {font-size: 20px; vertical-align: -webkit-baseline-middle;}
-#regionNavTabs {display: inline-flex; overflow: hidden; width: 100%; padding-left: 10px;}
-#regionNavTabs > ul {display: inline-flex; border-bottom: unset;}
-#regionNavTabs > ul > li {padding: 6px 15px; margin-bottom: 6px; border-radius: 4px 4px 0px 0px;}
-#regionNavTabs > ul > li.active {background-color: #fff;}
-#regionNavTabs > ul > li.active::before {content: ''; width: 10px; height: 10px; position: absolute; left: -10px; top: 21px; background: radial-gradient(circle at 0% 0%,transparent 10px,#fff 0);}
-#regionNavTabs > ul > li.active::after {content: ''; width: 10px; height: 10px; position: absolute; left: calc(100%); top: 21px; background: radial-gradient(circle at 100% 0%,transparent 10px,#fff 0);}
-#regionNavTabs > ul > li > a {max-width: 195px; overflow: hidden; white-space: nowrap; padding: 0; background-color: transparent;}
-#regionNavTabs > ul > li.active > a:before {background: unset;}
+#regionNavTabs {display: inline-flex; overflow: hidden;}
+.leftBtn.hidden + #regionNavTabs {padding-left: 10px;}
+#regionNavTabs > ul {display: inline-flex; border-bottom: none; margin-bottom: -3px;}
+#regionNavTabs > ul > li {padding: 0; text-align: center;}
+#regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -20px; background: none; outline: 0;}
+#regionNavTabs > ul > li:first-child > a {margin-left: 0;}
+#regionNavTabs > ul > li.active > a {z-index: 1;}
+#regionNavTabs > ul > li.active > a::before {background-color: #fff;}
+#regionNavTabs > ul > li > a:before {content: ""; position: absolute; top: -1rem; left: 0; background: #f8f8f8; height: 100%; width: 100%; z-index: -1; border-top-left-radius: 1rem; border-top-right-radius: 1rem; transform: perspective(0.5rem) rotateX(2deg); transform-origin: bottom;}
+#regionNavTabs > ul > li > a > span {vertical-align: bottom; overflow: hidden; max-width: 6em; white-space: nowrap; display: inline-block;}
+#regionNavTabs > ul > li.active > a > span {color: #2b80ff!important;}
 #regionTabs.affixed {margin-bottom: 5px; position: fixed; top: 0px;}
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header {margin-top: 30px;}
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header + .kanban-lane {margin-top: 38px;}
 #regionTabs.affixed ul > li {margin-bottom: 0px !important;}
 #regionTabs .region-actions .dropdown-menu {top: 25px;}
 #region-tab-actions {display: none;}
-#region-tab-actions.active {display: flex; position: relative; right: 0px; top: -2px;}
+#region-tab-actions.active {display: flex;}
 .region {display: none;}
 .region.active {display: block;}
 .region.active.notAll {margin-top: -5px;}

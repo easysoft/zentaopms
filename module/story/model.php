@@ -497,11 +497,12 @@ class storyModel extends model
         {
             if(empty($title)) continue;
 
+            $stories->reviewer[$i] = array_filter($stories->reviewer[$i]);
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
             $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
             $stories->reviewer[$i] = $reviewers;
             $_POST['reviewer'][$i] = $reviewers;
-            if(empty(array_filter($stories->reviewer[$i])) and $forceReview)
+            if(empty($stories->reviewer[$i]) and $forceReview)
             {
                 dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
                 return false;
@@ -4273,7 +4274,7 @@ class storyModel extends model
                 {
                     $menu .= "<div class='dividing-line'></div>";
                 }
-                
+
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';

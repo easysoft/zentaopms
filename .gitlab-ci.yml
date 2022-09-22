@@ -2,6 +2,7 @@ stages:
   - sonar
   - unit_test
   - uitest
+  - notify
   - cleanup_packages
   - package
 sonarqube:
@@ -31,7 +32,7 @@ unit_test:
   - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
   allow_failure: true
   only:
-  - master 
+  - master
   - merge_requests
 uitest:
   stage: uitest
@@ -39,14 +40,16 @@ uitest:
   - "/home/gitlab-runner/bin/zentao-uitest.sh ${CI_PROJECT_DIR}"
   allow_failure: true
   only:
-  - master 
+  - master
   - merge_requests
-#notify:
-#  script:
-#    - 'curl --location --request POST ''http://api.lf.oop.cc/api/v1/xuan/chatMessage'' --header ''Content-Type: application/json'' --data-raw ''{"gid": "84be4c6e-02e3-4fdc-b081-318c0c1eca02", "title": "开源包下载地址", "content": "点击查看详情链接", "url": "http://10.0.7.242:8080/allpacks/"}'''
-#  when: on_success
-#  only:
-#   - master
+notify:
+  stage: notify
+  script:
+  - "/home/gitlab-runner/bin/ci-notify.php"
+  when: on_success
+  only:
+  - master
+  - merge_requests
 cleanup_packages:
   stage: cleanup_packages
   script:

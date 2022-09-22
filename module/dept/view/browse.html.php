@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('repeatDepart', $lang->dept->repeatDepart);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->dept->common;?></span></span>
@@ -33,7 +34,7 @@
         <div class='panel-title'><?php echo $lang->dept->manageChild;?></div>
       </div>
       <div class='panel-body'>
-        <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>'>
+        <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>' id="dataForm">
           <table class='table table-form'>
             <tr>
               <td>
@@ -49,7 +50,7 @@
                 ?>
                 </nobr>
               </td>
-              <td class='w-300px'> 
+              <td class='w-300px'>
                 <?php
                 $maxOrder = 0;
                 foreach($sons as $sonDept)
@@ -85,7 +86,7 @@ $(function()
         name: 'deptTree',
         initialState: 'preserve',
         data: data,
-        sortable: 
+        sortable:
         {
             lazy: true,
             nested: true,
@@ -105,7 +106,7 @@ $(function()
             $li.append($toggle);
             return true;
         },
-        actions: 
+        actions:
         {
             sort:
             {
@@ -171,6 +172,42 @@ $(function()
         $('#deptTree').find('li.hover').removeClass('hover');
         $(this).addClass('hover');
         e.stopPropagation();
+    });
+
+    $("#dataForm").submit(function(e)
+    {
+        var postDept = new Array();
+        var depts    = new Array();
+
+        $.each($('input[name*="depts[]"]'), function(index, value)
+        {
+            if($(this).val()) postDept.push($(this).val());
+        });
+
+        $.each($('input[name*="depts[id"]'), function(index, value)
+        {
+            if($(this).val()) depts.push($(this).val());
+        });
+
+        for(var i = 0; i < postDept.length; i++)
+        {
+            if(depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i + 1])
+            {
+                if(confirm(repeatDepart))
+                {
+                    var link = createLink('dept', 'manageChild');
+                    break;
+                }
+                else
+                {
+                    setTimeout(function()
+                    {
+                        $('#submit').removeAttr('disabled');
+                    },10)
+                    return false;
+                }
+            }
+        }
     });
 });
 </script>

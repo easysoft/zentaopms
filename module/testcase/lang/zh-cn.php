@@ -250,7 +250,7 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <st
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
-$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['all']         = '全部';
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';

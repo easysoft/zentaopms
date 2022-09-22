@@ -335,7 +335,8 @@ function loadProductExecutions(productID, projectID = 0)
     branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch);
+    var execution = $('#execution').val();
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution);
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();

@@ -606,7 +606,7 @@ class story extends control
 
         /* Init vars. */
         $planID   = $plan;
-        $pri      = 0;
+        $pri      = 3;
         $estimate = '';
         $title    = '';
         $spec     = '';
@@ -750,6 +750,7 @@ class story extends control
         $this->loadModel('file');
         $this->app->loadLang('bug');
         $story = $this->story->getById($storyID, 0, true);
+        $this->commonAction($storyID);
 
         if(!empty($_POST))
         {
@@ -792,8 +793,6 @@ class story extends control
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
             return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
-
-        $this->commonAction($storyID);
 
         /* Sort products. */
         $myProducts     = array();
@@ -847,7 +846,7 @@ class story extends control
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;

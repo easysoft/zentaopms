@@ -116,7 +116,7 @@
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "execution=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php endif;?>
-        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe' data-width='80%'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
     </div>
