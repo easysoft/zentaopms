@@ -2996,7 +2996,7 @@ class storyModel extends model
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = empty($executionID) ? $this->product->getList() : $this->product->getProducts($executionID);
+        $products    = empty($executionID) ? $this->product->getList($programID = 0, $status = 'all', $limit = 0, $line = 0, $shadow = 'all') : $this->product->getProducts($executionID);
 
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
