@@ -1579,7 +1579,7 @@ class programModel extends model
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', '', '', "data-app='project'");
 

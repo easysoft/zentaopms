@@ -108,6 +108,7 @@
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
+#programList .c-actions .btn-group:last-child {margin-left: -4px;}
 #programList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
