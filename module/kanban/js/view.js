@@ -1991,6 +1991,7 @@ $('[data-tab]').on('shown.zui.tab', function(e)
             if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
         });
     }
+     window.scrollTo(0, 0);
 
     /* To manually refresh stay under the current tab, save the ID of the current region. */
     var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);
