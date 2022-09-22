@@ -2491,10 +2491,14 @@ class projectModel extends model
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
 
+        $this->session->set('noSprint', false);
+
         $navGroup = zget($this->lang->navGroup, $moduleName);
         $this->config->resetNavGroup['execution'] = 'execution';
+        $this->config->resetNavGroup['task']      = zget($this->lang->navGroup, 'task');
+        $this->config->resetNavGroup['story']     = zget($this->lang->navGroup, 'story');
         $this->config->resetNavGroup[$moduleName] = $navGroup;
-        $this->session->set('noSprint', false, 'project');
+
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
         if(empty($project)) return;
@@ -2519,7 +2523,7 @@ class projectModel extends model
         if(empty($projectID) or empty($executionID)) return;
 
         $this->session->set('project', $projectID, 'project');
-        $this->session->set('noSprint', true, 'project');
+        $this->session->set('noSprint', true);
 
         $this->app->tab = 'project';
         $_COOKIE['tab'] = 'project';
@@ -2555,6 +2559,8 @@ class projectModel extends model
         }
 
         $this->config->resetNavGroup['execution'] = 'project';
+        $this->config->resetNavGroup['task']      = 'project';
+        $this->config->resetNavGroup['story']     = 'project';
         $this->config->resetNavGroup[$moduleName] = 'project';
 
         /* If objectID is set, cannot use homeMenu. */

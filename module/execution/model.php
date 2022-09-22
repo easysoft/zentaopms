@@ -1269,6 +1269,7 @@ class executionModel extends model
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($this->session->noSprint and $this->app->tab == 'execution')->andWhere('noSprint')->eq('0')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
