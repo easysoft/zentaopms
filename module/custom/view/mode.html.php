@@ -35,9 +35,10 @@
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
         <td>
-        <?php
-        $disabled = $mode == 'lean' ? "disabled" : '';
-        echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );?>
+          <?php
+          $disabled = $mode == 'lean' ? "disabled" : '';
+          echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
+          ?>
         </td>
       </tr>
       <tr>
