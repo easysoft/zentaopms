@@ -64,7 +64,7 @@ class story extends control
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
             $objects = $this->project->getPairsByProgram();
 

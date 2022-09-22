@@ -3,7 +3,7 @@
 <div class='alert alert-info'>
   <?php
   printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
-  echo '<br />' . $lang->upgrade->mergeByProductLine;
+  echo '<br />' . $lang->upgrade->mergeByProject;
   ?>
 </div>
 <div class='main-row mergeByLine'>

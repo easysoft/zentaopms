@@ -640,15 +640,22 @@ class custom extends control
             /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
             $this->loadModel('upgrade')->relationDefaultProgram($program);
 
-            if($this->post->mode == 'new') $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=projectMode');
+            if($mode == 'new')  $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=projectMode');
+            if($mode == 'lean') $this->custom->processProjectAcl();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
         $this->app->loadLang('upgrade');
 
-        $hasMoreData = $this->custom->hasMoreData() ? 'yes' : 'no';
-        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData[$hasMoreData];
+        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData['yes'];
+
+        $counts = $this->custom->getCounts();
+        foreach($counts as $function => $count)
+        {
+            if($count) unset($this->lang->custom->needClosedFunctions[$function]);
+        }
+        if(!empty($this->lang->custom->needClosedFunctions)) $this->lang->custom->changeModeContentTips['lean'] = sprintf($this->lang->custom->hasMoreData['no'], implode($this->lang->comma, $this->lang->custom->needClosedFunctions));
 
         $this->view->title      = $this->lang->custom->mode;
         $this->view->position[] = $this->lang->custom->common;

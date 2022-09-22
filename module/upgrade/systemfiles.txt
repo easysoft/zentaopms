@@ -5530,7 +5530,6 @@
 ,upgrade/view/mergebysprint.html.php,
 ,upgrade/view/mergeprogram.html.php,
 ,upgrade/view/mergerepo.html.php,
-,upgrade/view/mergetips.html.php,
 ,upgrade/view/renameobject.html.php,
 ,upgrade/view/selectversion.html.php,
 ,user/config.php,

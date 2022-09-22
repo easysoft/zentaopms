@@ -245,12 +245,16 @@ $lang->custom->saveFail       = 'Failed to save!';
 $lang->custom->page           = ' Page';
 $lang->custom->changeModeTips = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
 
-$lang->custom->changeModeTitleTips['new']   = 'Are you sure you want to switch to the new mode?';
-$lang->custom->changeModeTitleTips['lean']  = 'Are you sure you want to switch to the lean mode?';
+$lang->custom->changeModeTitleTips['new']   = 'Please double confirm to switch to New mode.';
+$lang->custom->changeModeTitleTips['lean']  = 'Please double confirm to switch to Lean mode.';
 $lang->custom->changeModeContentTips['new'] = 'The new mode is suitable for medium and large R&D teams. After switching the new mode, the system will enable functions such as program sets.';
 
 $lang->custom->hasMoreData['yes'] = 'After switching to lean mode, the system will close the program function, and the related functions of the program will be hidden.';
-$lang->custom->hasMoreData['no']  = 'After switching to lean mode, the system will close functions such as program sets, waterfall projects, asset libraries and user requirements.';
+$lang->custom->hasMoreData['no']  = 'After switching to lean mode, the system will close functions such as program sets, %s.';
+
+$lang->custom->needClosedFunctions['waterfall'] = 'Waterfall';
+$lang->custom->needClosedFunctions['URStory']   = 'User Story';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = 'Assetlib';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
