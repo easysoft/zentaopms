@@ -22,9 +22,8 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
-        <?php if(empty($product->shadow)):?>
         <?php if(isset($executionID)):?>
-        <tr>
+        <tr <?php if(!empty($product->shadow)) echo "class='hide'";?>>
           <th class='w-100px'><?php echo $lang->testtask->product;?></th>
           <td class='w-p35-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen' onchange='loadProductRelated()'");?></td><td></td>
         </tr>
@@ -33,7 +32,6 @@
           <th class='w-100px'><?php echo $lang->testtask->product;?></th>
           <td class='w-p35-f'><?php echo html::input('product', $productID, "class='form-control' onchange='loadTestReports(this.value)'");?></td><td></td>
         </tr>
-        <?php endif;?>
         <?php endif;?>
         <tr>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
