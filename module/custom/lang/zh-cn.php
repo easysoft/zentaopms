@@ -250,7 +250,11 @@ $lang->custom->changeModeTitleTips['lean']  = '您确定要切换到迅捷模式
 $lang->custom->changeModeContentTips['new'] = '综合模式适用于中大型研发团队，切换综合模式后，系统将启用项目集等功能。';
 
 $lang->custom->hasMoreData['yes'] = '切换到迅捷模式后，系统将关闭项目集功能，项目集的相关功能将会被隐藏。';
-$lang->custom->hasMoreData['no']  = '切换到迅捷模式后，系统将关闭项目集、瀑布项目、资产库、用户需求等功能。';
+$lang->custom->hasMoreData['no']  = '切换到迅捷模式后，系统将关闭项目集，%s等功能。';
+
+$lang->custom->needClosedFunctions['waterfall'] = '瀑布项目';
+$lang->custom->needClosedFunctions['URStory']   = '用户需求';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';

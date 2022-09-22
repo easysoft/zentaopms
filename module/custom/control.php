@@ -647,8 +647,14 @@ class custom extends control
 
         $this->app->loadLang('upgrade');
 
-        $hasMoreData = $this->custom->hasMoreData() ? 'yes' : 'no';
-        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData[$hasMoreData];
+        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData['yes'];
+
+        $counts = $this->custom->getCounts();
+        foreach($counts as $function => $count)
+        {
+            if($count) unset($this->lang->custom->needClosedFunctions[$function]);
+        }
+        if(!empty($this->lang->custom->needClosedFunctions)) $this->lang->custom->changeModeContentTips['lean'] = sprintf($this->lang->custom->hasMoreData['no'], implode($this->lang->comma, $this->lang->custom->needClosedFunctions));
 
         $this->view->title      = $this->lang->custom->mode;
         $this->view->position[] = $this->lang->custom->common;
