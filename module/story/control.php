@@ -2227,7 +2227,7 @@ class story extends control
 
         /* Get story, product, products, and queryID. */
         $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs('', 0, '', true);
+        $products = $this->product->getPairs('', 0, '', 'all');
         $queryID  = 0;
         $product  = $this->product->getByID($story->product);
 
