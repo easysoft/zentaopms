@@ -56,7 +56,7 @@ class programTest
      * @access public
      * @return void
      */
-    public function createDefaultProgram()
+    public function createDefaultProgramTest()
     {
         $programID = $this->program->createDefaultProgram();
 
