@@ -1,8 +1,7 @@
 <div class='alert alert-info'>
   <?php
   printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
-  if($type == 'sprint') echo '<br />' . $lang->upgrade->mergeByProject;
-  if($type == 'moreLink') echo '<br />' . $lang->upgrade->mergeByMoreLink;
+  echo '<br />' . $lang->upgrade->mergeByProject;
   ?>
 </div>
 <div class='main-row'>
