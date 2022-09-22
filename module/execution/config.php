@@ -102,7 +102,7 @@ $config->execution->search['params']['closedReason']   = array('operator' => '='
 $config->execution->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['finishedBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->execution->search['params']['cancelBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->execution->search['params']['canceledBy']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
