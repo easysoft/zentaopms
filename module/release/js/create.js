@@ -10,3 +10,5 @@ $('#submit').click(function()
         $('#sync').val(result);
     }
 });
+
+$('[data-toggle="popover"]').popover();

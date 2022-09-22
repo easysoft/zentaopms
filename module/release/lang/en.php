@@ -30,6 +30,7 @@ $lang->release->confirmUnlinkBug   = "Do you want to remove this bug?";
 $lang->release->existBuild         = '『Build』『%s』existed. You could change『name』or choose a『build』.';
 $lang->release->noRelease          = 'No releases yet.';
 $lang->release->errorDate          = 'The release date should not be greater than today.';
+$lang->release->tips               = 'If no build is selected for a release, a build with the same name as the release is created by default.';
 
 $lang->release->basicInfo = 'Basic Info';
 
