@@ -1136,12 +1136,14 @@ class productModel extends model
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
         $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
+        $productInfo   = $this->getById($productID);
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
 
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productInfo->name);
+
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
         /* Get modules. */
@@ -1186,7 +1188,6 @@ class productModel extends model
         }
         $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
-        $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -1197,6 +1198,8 @@ class productModel extends model
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
             $this->config->product->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
+
+        if(!empty($productInfo->shadow)) unset($this->config->product->search['fields']['product']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
