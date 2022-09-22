@@ -392,7 +392,10 @@ class productModel extends model
                     ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id = t3.product')
                     ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
-                    ->where('t4.type')->eq('project');
+                    ->where(1)
+                    ->andWhere('t4.type', true)->eq('project')
+                    ->orWhere('t4.type IS NULL')
+                    ->markRight(1);
             }
             else
             {
@@ -417,7 +420,10 @@ class productModel extends model
                 $this->dao->select('t1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                     ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-                    ->where('t3.type')->eq('project');
+                    ->where(1)
+                    ->andWhere('t3.type', true)->eq('project')
+                    ->orWhere('t3.type IS NULL')
+                    ->markRight(1);
             }
             else
             {
@@ -503,7 +509,7 @@ class productModel extends model
             if($project)
             {
                 if($project->type == 'project') $field = ", IF(t2.shadow = 1, '$project->name', t2.name) AS name";
-                if($project->type == 'execution')
+                if($project->type == 'sprint')
                 {
                     $projectName = $this->dao->findById($project->project)->from(TABLE_PROJECT)->fetch('name');
                     $field       = ", IF(t2.shadow = 1, '$projectName', t2.name) AS name";
