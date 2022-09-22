@@ -445,7 +445,7 @@ class treeModel extends model
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
-            elseif(isset($executionModules[$module->id]))
+            elseif(isset($executionModules[$module->id]) || !empty($product->shadow))
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
