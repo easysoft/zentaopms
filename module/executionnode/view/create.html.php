@@ -44,19 +44,19 @@
       </tr>
       <tr>
         <th><?php echo $lang->executionnode->osCategory;?></th>
-        <td><?php echo html::input('osCategory', '', "class='form-control' readonly")?></td>
+        <td><?php echo html::input('osCategory', '', "class='form-control' disabled")?></td>
       </tr>
       <tr>
         <th><?php echo $lang->executionnode->osType;?></th>
-        <td><?php echo html::input('osType', '', "class='form-control' readonly")?></td>
+        <td><?php echo html::input('osType', '', "class='form-control' disabled")?></td>
       </tr>
       <tr>
         <th><?php echo $lang->executionnode->osVersion;?></th>
-        <td><?php echo html::input('osVersion', '', "class='form-control' readonly")?></td>
+        <td><?php echo html::input('osVersion', '', "class='form-control' disabled")?></td>
       </tr>
       <tr>
         <th><?php echo $lang->executionnode->osLang;?></th>
-        <td><?php echo html::input('osLang', '', "class='form-control' readonly")?></td>
+        <td><?php echo html::input('osLang', '', "class='form-control' disabled")?></td>
       </tr>
       <tr>
         <td colspan="2" class='text-center form-actions'>
