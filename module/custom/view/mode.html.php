@@ -34,7 +34,11 @@
       <?php $class = $mode == 'new' ? "class='hide'" : "";?>
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
-        <td><?php echo html::select('program', $program, $programID, "class='form-control chosen'");?></td>
+        <td>
+        <?php
+        $disabled = $mode == 'lean' ? "disabled" : '';
+        echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );?>
+        </td>
       </tr>
       <tr>
         <td></td>
