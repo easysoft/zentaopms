@@ -4862,7 +4862,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution')
+                if($tab == 'execution' || $this->session->noSprint)
                 {
                     $menuType = 'execution';
                 }
