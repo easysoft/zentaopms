@@ -34,7 +34,7 @@
       <?php $class = $mode == 'new' ? "class='hide'" : "";?>
       <tr id="selectDefaultProgram" <?php echo $class;?>>
         <td></td>
-        <td><?php echo html::select('program', $program, $this->config->global->defaultProgram, "class='form-control chosen'");?></td>
+        <td><?php echo html::select('program', $program, $programID, "class='form-control chosen'");?></td>
       </tr>
       <tr>
         <td></td>

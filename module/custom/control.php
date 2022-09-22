@@ -655,6 +655,7 @@ class custom extends control
         $this->view->position[] = $this->view->title;
         $this->view->mode       = $mode;
         $this->view->program    = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID  = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
 
         $this->display();
     }
