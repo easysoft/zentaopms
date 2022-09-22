@@ -736,7 +736,7 @@ class project extends control
 
         if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
-        if($project->model == 'kanban') $this->lang->project->noSprint   = $this->lang->project->kanban;
+        if($project->model == 'kanban') $this->lang->project->noSprint = $this->lang->project->kanban;
 
         if($project->model == 'scrum')
         {
