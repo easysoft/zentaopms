@@ -4580,7 +4580,7 @@ class storyModel extends model
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
-        if($tab == 'project' and empty($this->config->projectMode))
+        if($tab == 'project' and !$this->session->noSprint)
         {
             $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
             $canView   = common::hasPriv('projectstory', 'view');

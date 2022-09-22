@@ -109,6 +109,19 @@ class settingTest
     }
 
     /**
+     * Parse item path test.
+     *
+     * @param  string    $path
+     * @access public
+     * @return object
+     */
+    public function parseItemPathTest($path)
+    {
+        $object = $this->objectModel->parseItemPath($path);
+        return $object;
+    }
+
+    /**
      * Parse the param string for select or delete items.
      *
      * @param  string    $paramString     owner=xxx&key=sn and so on.
