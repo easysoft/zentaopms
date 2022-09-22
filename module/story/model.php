@@ -4907,23 +4907,24 @@ class storyModel extends model
     public function printAssignedHtml($story, $users)
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = zget($users, $story->assignedTo);
 
         if(empty($story->assignedTo))
         {
-            $btnTextClass   = 'assigned';
+            $btnClass       = $btnTextClass = 'assigned-none';
             $assignedToText = $this->lang->task->noAssigned;
         }
 
-        if($story->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
-        if(!empty($story->assignedTo) and $story->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
+        if($story->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($story->assignedTo) and $story->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $story->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= $story->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
         $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id&kanbanGroup=default&from=&storyType=$story->type", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv($story->type, 'assignTo', $story) ? "<span style='padding-left: 21px' class='$btnTextClass'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**
