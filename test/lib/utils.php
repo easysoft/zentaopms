@@ -219,7 +219,7 @@ function copyDB()
 {
     global $config, $dao;
     $sqlFile = TEST_BASEHPATH . DS . 'tmp/raw.sql';
-    if($config->db->host = 'localhost' and  $config->db->port = '3306')
+    if($config->db->host = 'localhost' and $config->db->port = '3306')
     {
         $dumpCommand = "mysqldump -u%s -p%s %s --add-drop-table=false > %s";
         $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
@@ -245,7 +245,7 @@ function copyDB()
     {
         if($currentDBNum->num > 0) $dao->query('DROP DATABASE IF EXISTS ' . $db);
         $dao->query('CREATE DATABASE ' . $db);
-        if($config->db->host = 'localhost' and  $config->db->port = '3306')
+        if($config->db->host = 'localhost' and $config->db->port = '3306')
         {
             shell_exec("mysql -u{$config->db->user} -p{$config->db->password} $db < $sqlFile");
         }
