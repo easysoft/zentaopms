@@ -119,6 +119,7 @@
 #programTableList .is-top-level {font-weight: bold;}
 #programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
 #programTableList .is-nest-child > .c-name > a {color: #2463C7!important;}
+#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
