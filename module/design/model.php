@@ -471,10 +471,11 @@ class designModel extends model
 
         if(empty($design->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnTextClass   = 'assigned';
             $assignedToText = $this->lang->design->noAssigned;
         }
-        if($design->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if($design->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+        if(empty($design->assignedTo) and $design->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
 
         $btnClass     = $design->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";

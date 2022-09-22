@@ -3867,10 +3867,11 @@ class taskModel extends model
         }
         elseif(empty($task->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnTextClass   = 'assigned';
             $assignedToText = $this->lang->task->noAssigned;
         }
-        if($task->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if($task->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+        if(empty($task->assignedTo) and $task->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
 
         $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";

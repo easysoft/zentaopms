@@ -3486,8 +3486,9 @@ class bugModel extends model
     {
         $btnTextClass   = '';
         $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
-        $btnTextClass   = 'text-primary';
-        if($bug->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if(empty($bug->assignedTo)) $btnTextClass = 'assigned';
+        if($bug->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+        if(empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
 
         $btnClass     = $bug->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";

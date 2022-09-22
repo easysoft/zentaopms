@@ -4911,10 +4911,12 @@ class storyModel extends model
 
         if(empty($story->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnTextClass   = 'assigned';
             $assignedToText = $this->lang->task->noAssigned;
         }
-        if($story->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+
+        if($story->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+        if(!empty($story->assignedTo) and $story->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
 
         $btnClass     = $story->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
