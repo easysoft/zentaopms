@@ -2429,6 +2429,9 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        $taskToOpen = !empty($_COOKIE['taskToOpen']) ? $_COOKIE['taskToOpen'] : 0;
+        setcookie('taskToOpen', 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;
         $this->view->regions          = $kanbanData;
@@ -2447,6 +2450,7 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
+        $this->view->taskToOpen       = $taskToOpen;
         $this->display();
     }
 
