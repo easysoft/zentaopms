@@ -832,4 +832,62 @@ class customModel extends model
 
         return $counts;
     }
+
+    /**
+     * process project priv within a program set.
+     *
+     * @access public
+     * @return void
+     */
+    public function processProjectAcl()
+    {
+        $projectGroup = $this->dao->select('id,parent,whitelist,acl')->from(TABLE_PROJECT)
+            ->where('parent')->ne('0')
+            ->andwhere('type')->eq('project')
+            ->andWhere('acl')->eq('program')
+            ->fetchGroup('parent', 'id');
+
+        $programs = $this->dao->select("id,CONCAT(PM,',',openedBy)")->from(TABLE_PROGRAM)
+            ->where('id')->in(array_keys($projectGroup))
+            ->andWhere('type')->eq('program')
+            ->fetchPairs();
+
+        $projectIDList = array();
+        foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));
+        $executionGroup = $this->dao->select('project,id')->from(TABLE_EXECUTION)->where('project')->in($projectIDList)->fetchGroup('project', 'id');
+
+        $this->loadModel('user');
+        $this->loadModel('action');
+        $this->loadModel('personnel');
+        foreach($projectGroup as $projects)
+        {
+            foreach($projects as $project)
+            {
+                $whitelist = rtrim($project->whitelist . ',' . zget($programs, $project->parent, ''));
+                $whitelist = explode(',', $whitelist);
+                $whitelist = array_filter(array_unique($whitelist));
+                $whitelist = join(',', $whitelist);
+
+                $data = new stdclass();
+                $data->acl       = 'private';
+                $data->whitelist = $whitelist;
+                $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($project->id)->exec();
+
+                $whitelist = explode(',', $whitelist);
+                $this->personnel->updateWhitelist($whitelist, 'project', $project->id);
+
+                $this->user->updateUserView($project->id, 'project');
+                if(zget($executionGroup, $project->id, ''))
+                {
+                    $executions = zget($executionGroup, $project->id);
+                    $executionPairs = array();
+                    foreach($executions as $executionID => $execution) $executionPairs[$executionID] = $executionID;
+                    $this->user->updateUserView($executionPairs, 'sprint');
+                }
+                $changes = common::createChanges($project, $data);
+                $actionID = $this->action->create('project', $project->id, 'SwitchToLean');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+    }
 }

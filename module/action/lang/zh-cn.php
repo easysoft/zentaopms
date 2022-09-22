@@ -223,6 +223,7 @@ $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
+$lang->action->desc->switchtolean         = '$date, 由 <strong>'. $lang->admin->system .'</strong> 从综合模式切换为迅捷模式。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -390,6 +391,7 @@ $lang->action->label->tolib                 = '导入了';
 $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
+$lang->action->label->switchtolean          = '从综合模式切换为迅捷模式';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -409,12 +411,13 @@ $lang->action->dynamicAction->program['activated'] = '激活项目集';
 $lang->action->dynamicAction->program['deleted']   = '删除项目集';
 $lang->action->dynamicAction->program['closed']    = '关闭项目集';
 
-$lang->action->dynamicAction->project['opened']    = '创建项目';
-$lang->action->dynamicAction->project['edited']    = '编辑项目';
-$lang->action->dynamicAction->project['started']   = '开始项目';
-$lang->action->dynamicAction->project['suspended'] = '延期项目';
-$lang->action->dynamicAction->project['activated'] = '激活项目';
-$lang->action->dynamicAction->project['closed']    = '关闭项目';
+$lang->action->dynamicAction->project['opened']       = '创建项目';
+$lang->action->dynamicAction->project['edited']       = '编辑项目';
+$lang->action->dynamicAction->project['started']      = '开始项目';
+$lang->action->dynamicAction->project['suspended']    = '延期项目';
+$lang->action->dynamicAction->project['activated']    = '激活项目';
+$lang->action->dynamicAction->project['closed']       = '关闭项目';
+$lang->action->dynamicAction->project['switchtolean'] = '切换模式';
 
 $lang->action->dynamicAction->product['opened']    = '创建' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = '编辑' . $lang->productCommon;

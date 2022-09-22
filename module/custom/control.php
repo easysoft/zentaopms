@@ -640,7 +640,8 @@ class custom extends control
             /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
             $this->loadModel('upgrade')->relationDefaultProgram($program);
 
-            if($this->post->mode == 'new') $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=projectMode');
+            if($mode == 'new')  $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=projectMode');
+            if($mode == 'lean') $this->custom->processProjectAcl();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
