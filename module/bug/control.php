@@ -60,14 +60,14 @@ class bug extends control
             else
             {
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
-                $products = $this->product->getPairs($mode, 0, 'program_asc');
+                $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
             $mode     = (empty($this->config->CRProduct)) ? 'noclosed' : '';
-            $products = $this->product->getPairs($mode, 0, 'program_asc');
+            $products = $this->product->getPairs($mode, 0, 'program_asc', 'all');
         }
         $this->view->products = $this->products = $products;
     }
