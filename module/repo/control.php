@@ -287,6 +287,7 @@ class repo extends control
         $this->view->oldRevision = $revision;
         $this->view->file        = $file;
         $this->view->entry       = $entry;
+        $this->view->info        = $info;
         $this->view->content     = '';
         $this->view->pathInfo    = $pathInfo;
         $this->view->suffix      = 'c';

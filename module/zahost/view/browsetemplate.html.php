@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
+    <?php echo html::a($this->createLink('zahost', 'browse'), "<span class='text'>{$lang->zahost->browseTemplate}</span>", '', "class='btn btn-link btn-active-text'");?>
     <a href='#' class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon-search icon'></i> <?php echo $lang->zahost->byQuery;?></a>
   </div>
   <?php if(common::hasPriv('zahost', 'createTemplate')):?>

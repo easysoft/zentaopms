@@ -59,6 +59,7 @@ $lang->zahost->langList['zh_cn'] = 'Simplified Chinese';
 $lang->zahost->langList['zh_tw'] = 'Traditional Chinese';
 $lang->zahost->langList['en_us'] = 'American English';
 
+$lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
 
 $lang->zahost->virtualSoftware = 'VM Software';

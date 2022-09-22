@@ -59,6 +59,7 @@ $lang->zahost->langList['en_us'] = 'American English';
 $lang->zahost->empty         = 'No Host';
 $lang->zahost->templateEmpty = 'No Template';
 
+$lang->zahost->statusList['ready']  = 'Ready';
 $lang->zahost->statusList['online'] = 'Online';
 
 $lang->zahost->virtualSoftware = 'VM Software';

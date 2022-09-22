@@ -59,6 +59,7 @@ $lang->zahost->langList['en_us'] = '美式英语';
 $lang->zahost->empty         = '暂时没有主机';
 $lang->zahost->templateEmpty = '暂时没有模板';
 
+$lang->zahost->statusList['ready']  = '准备中';
 $lang->zahost->statusList['online'] = '已上架';
 
 $lang->zahost->virtualSoftware = '虚拟化软件';
