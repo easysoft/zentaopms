@@ -190,7 +190,7 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->executionCommon} team members only)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
 }
 $lang->product->aclList['open']    = "Default (Users with privileges to {$lang->productCommon} can access it.)";
 //$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
