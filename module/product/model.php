@@ -1136,13 +1136,12 @@ class productModel extends model
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
         $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
-        $productInfo   = $this->getById($productID);
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
 
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productInfo->name);
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
 
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
@@ -1187,6 +1186,8 @@ class productModel extends model
             $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         }
         $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
+
+        $productInfo   = $this->getById($productID);
 
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
         {
