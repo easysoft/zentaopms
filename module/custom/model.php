@@ -818,19 +818,18 @@ class customModel extends model
     }
 
     /**
-     * Check for waterfall, assetLib, URStory data in new mode.
+     * Get waterfall, assetLib, URStory counts.
      *
      * @access public
-     * @return bool
+     * @return array
      */
-    public function hasMoreData()
+    public function getCounts()
     {
-        $assetLibCount = 0;
-        if($this->config->edition == 'max') $assetLibCount = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->ne('0')->fetch('assetLibCount');
+        $counts = array();
+        $counts['waterfall'] = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->fetch('waterfallCount');
+        $counts['URStory']   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('URStoryCount');
+        if($this->config->edition == 'max') $count['assetLib'] = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->eq('0')->fetch('assetLibCount');
 
-        $waterfallCount = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->ne('0')->fetch('waterfallCount');
-        $URStoryCount   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->ne('0')->fetch('URStoryCount');
-
-        return $waterfallCount || $assetLibCount || $URStoryCount;
+        return $counts;
     }
 }
