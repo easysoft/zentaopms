@@ -1,8 +1,9 @@
 $(function()
 {
+    $('#modeTab').addClass('btn-active-text');
+
     $('[name=mode]').change(function(){$("#selectDefaultProgram").toggle($(this).val() == 'lean'); });
 
-    $("#program_chosen").css('max-width','170px')
 
     $(document).on('click', '#submit', function()
     {
