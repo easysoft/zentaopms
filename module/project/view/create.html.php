@@ -73,11 +73,15 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model == 'scrum' or $model == 'kanban'):?>
+        <?php if(!isset($this->config->projectMode) and $model != 'waterfall'):?>
         <tr>
           <th><?php echo $lang->project->noSprint;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, 0));?></td>
         </tr>
+        <?php elseif($model == 'waterfall'):?>
+        <?php echo html::hidden('noSprint', 0);?>
+        <?php else:?>
+        <?php echo html::hidden('noSprint', 1);?>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
