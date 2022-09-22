@@ -1,9 +1,12 @@
 <?php if(!empty($task) and !empty($task->team) and $task->mode == 'linear'):?>
 <style>
 #mainContent {min-height: 500px;}
-#linearefforts .nav-tabs{margin-bottom:20px;}
-#linearefforts div.caption {height:25px; margin:10px 0px;}
+#mainContent .main-header {padding-bottom: 5px;}
+#linearefforts {margin-top: -18px;}
+#linearefforts .nav-tabs{margin-bottom: 10px;}
+#linearefforts div.caption {height:25px; margin: 10px 0px;}
 #linearefforts div.caption .account{font-weight: bolder;}
+#linearefforts .tabs ul > li > a { padding-top: 6px; padding-bottom: 4px;}
 </style>
 <?php
 $this->app->loadLang('execution');
@@ -42,7 +45,7 @@ foreach($efforts as $effort)
               <th class="w-120px"><?php echo $lang->task->date;?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
-              <th class="thWidth"><?php echo $lang->task->consumed;?></th>
+              <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
               <th class='c-actions-2'><?php echo $lang->actions;?></th>
             </tr>
