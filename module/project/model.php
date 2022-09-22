@@ -2499,14 +2499,14 @@ class projectModel extends model
         $this->config->resetNavGroup['story']     = zget($this->lang->navGroup, 'story');
         $this->config->resetNavGroup[$moduleName] = $navGroup;
 
-
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
         if(empty($project)) return;
 
-        if($project->type != 'project' and $project->type != 'sprint') return;
+        if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return;
 
         if($project->type == 'project')
         {
+            $modal       = $project->model;
             $projectID   = $project->id;
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
@@ -2515,8 +2515,9 @@ class projectModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }
-        elseif($project->type == 'sprint')
+        else
         {
+            $modal       = $project->type == 'kanban' ? 'kanban' : 'scrum';
             $executionID = $project->id;
             $projectID   = $project->project;
         }
@@ -2529,9 +2530,9 @@ class projectModel extends model
         $_COOKIE['tab'] = 'project';
 
         $this->lang->navGroup->$moduleName   = 'project';
-        $this->lang->$navGroup->menu         = $this->lang->noSprint->menu;
-        $this->lang->$navGroup->menuOrder    = $this->lang->noSprint->menuOrder;
-        $this->lang->$navGroup->dividerMenu  = $this->lang->noSprint->dividerMenu;
+        $this->lang->$navGroup->menu         = $this->lang->noSprint->{$modal}->menu;
+        $this->lang->$navGroup->menuOrder    = $this->lang->noSprint->{$modal}->menuOrder;
+        $this->lang->$navGroup->dividerMenu  = $this->lang->noSprint->{$modal}->dividerMenu;
 
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
@@ -2564,6 +2565,7 @@ class projectModel extends model
         $this->config->resetNavGroup[$moduleName] = 'project';
 
         /* If objectID is set, cannot use homeMenu. */
+        unset($this->lang->project->homeMenu);
         unset($this->lang->$navGroup->homeMenu);
         $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
         $this->lang->project->menu        = $this->lang->$navGroup->menu;
