@@ -116,6 +116,9 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
+#programTableList .is-top-level {font-weight: bold;}
+#programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
+#programTableList .is-nest-child > .c-name > a {color: #2463C7!important;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
