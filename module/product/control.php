@@ -316,7 +316,7 @@ class product extends control
         $productName = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
         /* Assign. */
-        $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
+        $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->position[]      = $productName;
         $this->view->position[]      = $this->lang->product->browse;
         $this->view->productID       = $productID;
