@@ -1184,7 +1184,7 @@ class programModel extends model
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
-            ->where('path')->like("%{$parentProgram->id}%")
+            ->where('path')->like("%,{$parentProgram->id},%")
             ->andWhere('grade')->eq($childGrade)
             ->andWhere('deleted')->eq('0')
             ->fetch('sumBudget');

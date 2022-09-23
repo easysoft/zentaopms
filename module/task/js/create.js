@@ -583,7 +583,7 @@ $('#modalTeam tfoot .btn').click(function()
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
         if(!isNaN(estimate) && estimate > 0) time += estimate;
-        if(account != '' && (isNaN(estimate) || estimate == 0))
+        if(account != '' && (isNaN(estimate) || estimate <= 0))
         {
               bootbox.alert(account + ' ' + estimateNotEmpty);
               error = true;
