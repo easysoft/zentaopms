@@ -88,9 +88,11 @@ $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
 $config->testcase->datatable->fieldList['product']['title']      = 'priAB';
 $config->testcase->datatable->fieldList['product']['control']    = 'hidden';
+$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
 
 $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';
+$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&case');
 
 $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';
@@ -107,6 +109,7 @@ $config->testcase->datatable->fieldList['branch']['title']      = 'branch';
 $config->testcase->datatable->fieldList['branch']['fixed']      = 'left';
 $config->testcase->datatable->fieldList['branch']['width']      = '100';
 $config->testcase->datatable->fieldList['branch']['required']   = 'no';
+$config->testcase->datatable->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
 
 $config->testcase->datatable->fieldList['type']['title']    = 'type';
 $config->testcase->datatable->fieldList['type']['fixed']    = 'no';
@@ -202,6 +205,7 @@ $config->testcase->datatable->fieldList['story']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['story']['width']    = '90';
 $config->testcase->datatable->fieldList['story']['required'] = 'no';
 $config->testcase->datatable->fieldList['story']['control']    = 'select';
+$config->testcase->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => '$productID&$branch');
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
@@ -216,6 +220,7 @@ $config->testcase->datatable->fieldList['results']['width']    = '32';
 $config->testcase->datatable->fieldList['results']['required'] = 'no';
 $config->testcase->datatable->fieldList['results']['sort']     = 'no';
 $config->testcase->datatable->fieldList['results']['name']     = $lang->testcase->results;
+$config->testcase->datatable->fieldList['results']['dataSource'] = array('lang' => 'resultList');
 
 $config->testcase->datatable->fieldList['stepNumber']['title']    = 'S';
 $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';

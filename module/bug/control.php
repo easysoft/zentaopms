@@ -2325,6 +2325,8 @@ class bug extends control
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
+        $product = $this->loadModel('product')->getByID($productID);
+        if($product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
 
         $fileName = $this->lang->bug->common;
         if($executionID)
@@ -2334,7 +2336,7 @@ class bug extends control
         }
         else
         {
-            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $productName = !empty($product->name) ? $product->name : '';
             $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
