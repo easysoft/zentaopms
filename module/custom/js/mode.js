@@ -2,7 +2,19 @@ $(function()
 {
     $('#modeTab').addClass('btn-active-text');
 
-    $('[name=mode]').change(function(){$("#selectDefaultProgram").toggle($(this).val() == 'lean'); });
+    $('[name=mode]').change(function()
+    {
+        if($(this).val() != mode)
+        {
+            $('#submit').removeAttr('disabled');
+        }
+        else
+        {
+            $('#submit').attr('disabled',true);
+        }
+        if(mode == 'lean') return;
+        $("#selectDefaultProgram").toggle($(this).val() == 'lean');
+    });
 
 
     $(document).on('click', '#submit', function()

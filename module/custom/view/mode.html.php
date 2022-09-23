@@ -31,19 +31,19 @@
           </p>
         </td>
       </tr>
-      <?php $class = $mode == 'new' ? "class='hide'" : "";?>
-      <tr id="selectDefaultProgram" <?php echo $class;?>>
+      <tr id="selectDefaultProgram" class='hide'>
         <td></td>
         <td>
           <?php
           $disabled = $mode == 'lean' ? "disabled" : '';
           echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
           ?>
+          <div class="text-danger help-text"><?php echo $lang->custom->switchModeHelper ?></div>
         </td>
       </tr>
       <tr>
-        <td></td>
-        <td><?php echo html::submitButton($lang->custom->switch);?></td>
+        <th class='text-top'><?php echo $lang->custom->selectDefaultProgram;?></th>
+        <td><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
     </table>
   </form>
