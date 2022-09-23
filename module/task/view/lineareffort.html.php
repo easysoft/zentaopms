@@ -91,7 +91,7 @@ foreach($efforts as $effort)
               <th class="w-120px"><?php echo $lang->task->date;?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
-              <th class="thWidth"><?php echo $lang->task->consumed;?></th>
+              <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
             </tr>
           </thead>
