@@ -10,7 +10,7 @@ $lang->port->reservedWord['code']      = '代号';
 $lang->port->reservedWord['name']      = '名称';
 $lang->port->reservedWord['title']     = '标题';
 
-$lang->port->importCase     = '导入EXCEL';
+$lang->port->importCase     = '导入Excel';
 $lang->port->importNotice   = '请先导出模板，按照模板格式填写数据后再导入。';
 $lang->port->noRequire      = '%s行的“ %s” 是必填字段，不能为空。';
 $lang->port->exportTemplate = '导出模板';
