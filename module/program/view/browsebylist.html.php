@@ -48,7 +48,7 @@
       $originOrders[] = $program->order;
       ?>
 
-      <tr <?php echo $trAttrs;?>>
+      <tr <?php echo $trAttrs;?> data-type="<?php echo $program->type;?>">
         <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix has-suffix' title='<?php echo $program->name?>'>
           <?php
           $icon = '';
