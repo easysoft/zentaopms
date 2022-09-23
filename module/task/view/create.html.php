@@ -19,7 +19,7 @@
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
 <?php

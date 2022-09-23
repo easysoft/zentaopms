@@ -93,7 +93,6 @@ foreach($efforts as $effort)
               <th><?php echo $lang->task->work;?></th>
               <th class="thWidth"><?php echo $lang->task->consumed;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
-              <th class='c-actions-2'><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -112,15 +111,6 @@ foreach($efforts as $effort)
               <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
               <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
               <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
-              <td align='center' class='c-actions'>
-                <?php
-                $canOperateEffort = $this->task->canOperateEffort($task, $effort);
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editEstimate' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
-                $deleteDisable = false;
-                if(!$canOperateEffort or ($index == $count and $effort->left == 0)) $deleteDisable = true;
-                common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
-                ?>
-              </td>
             </tr>
             <?php $index ++;?>
             <?php endforeach;?>

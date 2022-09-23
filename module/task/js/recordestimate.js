@@ -51,4 +51,9 @@ $(function()
             }
         });
     });
+
+    $('#recordForm .input-group-addon').on('click', function()
+    {
+        $(this).prev().datetimepicker('show');
+    });
 })

@@ -75,6 +75,10 @@
               $lblConsumed = $lang->task->myConsumed;
               $readonly    = 'readonly';
           }
+          elseif($app->rawMethod == 'start' and $task->mode == 'linear')
+          {
+              $lblConsumed = $lang->task->myConsumed;
+          }
           ?>
           <th><?php echo $lblConsumed;?></th>
           <td>
