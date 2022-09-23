@@ -187,6 +187,7 @@ class webhookModel extends model
             ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
             ->get();
+        $webhook->domain = trim($webhook->domain, '/');
         $webhook->params = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
 
         if($webhook->type == 'dinguser')
@@ -260,7 +261,8 @@ class webhookModel extends model
             ->trim('agentId,appKey,appSecret,wechatAgentId,wechatCorpId,wechatCorpSecret,feishuAppId,feishuAppSecret')
             ->remove('allParams, allActions')
             ->get();
-        $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        $webhook->domain = trim($webhook->domain, '/');
+        $webhook->params = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
 
         if($webhook->type == 'dinguser')
         {
