@@ -2975,7 +2975,7 @@ class userModel extends model
      */
     public function processAccountSort($users = array())
     {
-        if(isset($users[$this->app->user->account]))
+        if(isset($this->app->user->account) && isset($users[$this->app->user->account]))
         {
             $currentUser = array();
             $currentUser[$this->app->user->account] = $users[$this->app->user->account];
