@@ -266,7 +266,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($story->type != 'requirement' and $story->parent != -1):?>
+                <?php if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
@@ -414,16 +414,16 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($this->config->URAndSR):?>
+          <?php if($this->config->URAndSR && !$hiddenURS):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
           <?php if($story->type == 'story'):?>
-          <li class="<?php if(!$this->config->URAndSR) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
+          <li class="<?php if(!$this->config->URAndSR || $hiddenURS) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
-          <?php if($this->config->URAndSR):?>
+          <?php if($this->config->URAndSR && !$hiddenURS):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -445,7 +445,7 @@
           <?php endif;?>
 
           <?php if($story->type == 'story'):?>
-          <div class="tab-pane <?php if(!$this->config->URAndSR) echo 'active';?>" id='legendProjectAndTask'>
+          <div class="tab-pane <?php if(!$this->config->URAndSR || $hiddenURS) echo 'active';?>" id='legendProjectAndTask'>
             <ul class="list-unstyled">
               <?php
               foreach($story->tasks as $executionTasks)

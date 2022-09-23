@@ -1327,6 +1327,24 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        $this->view->hiddenPlan = false;
+        $this->view->hiddenURS  = false;
+        if(!empty($product->shadow))
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product->id)->fetch('project');
+            $project   = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+
+            if($project->model === 'waterfall')
+            {
+                $this->view->hiddenPlan = true;
+            }
+            elseif($project->model === 'kanban')
+            {
+                $this->view->hiddenPlan = true;
+                $this->view->hiddenURS  = true;
+            }
+        }
+
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $reviewers  = $this->story->getReviewerPairs($storyID, $story->version);
@@ -1339,32 +1357,35 @@ class story extends control
         $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
-        $this->view->title              = $title;
-        $this->view->position           = $position;
-        $this->view->product            = $product;
-        $this->view->branches           = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan               = $plan;
-        $this->view->bugs               = $bugs;
-        $this->view->fromBug            = $fromBug;
-        $this->view->cases              = $cases;
-        $this->view->story              = $story;
-        $this->view->linkedMRs          = $linkedMRs;
-        $this->view->track              = $this->story->getTrackByID($story->id);
-        $this->view->users              = $this->user->getPairs('noletter');
-        $this->view->reviewers          = $reviewers;
-        $this->view->relations          = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->executions         = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution          = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
-        $this->view->actions            = $this->action->getList('story', $storyID);
-        $this->view->storyModule        = $storyModule;
-        $this->view->modulePath         = $modulePath;
-        $this->view->storyProducts      = $storyProducts;
-        $this->view->version            = $version;
-        $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->from               = $from;
-        $this->view->param              = $param;
-        $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
-        $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
+        $execution = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
+        $project   = empty($execution->project) ? $execution : $this->dao->findById($execution->project)->from(TABLE_PROJECT)->fetch();
+
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->product       = $product;
+        $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan          = $plan;
+        $this->view->bugs          = $bugs;
+        $this->view->fromBug       = $fromBug;
+        $this->view->cases         = $cases;
+        $this->view->story         = $story;
+        $this->view->linkedMRs     = $linkedMRs;
+        $this->view->track         = $this->story->getTrackByID($story->id);
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->reviewers     = $reviewers;
+        $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
+        $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->execution     = $execution;
+        $this->view->actions       = $this->action->getList('story', $storyID);
+        $this->view->storyModule   = $storyModule;
+        $this->view->modulePath    = $modulePath;
+        $this->view->storyProducts = $storyProducts;
+        $this->view->version       = $version;
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->from          = $from;
+        $this->view->param         = $param;
+        $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
 
         $this->display();
     }
