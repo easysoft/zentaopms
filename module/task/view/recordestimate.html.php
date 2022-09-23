@@ -128,7 +128,7 @@ if(!empty($members) && $task->mode == 'linear')
           <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
-              <div class='input-group'>
+              <div class='input-group date-group'>
                 <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
                 <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
               </div>
