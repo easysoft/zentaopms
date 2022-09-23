@@ -38,7 +38,7 @@
           <th class='c-title'><?php echo $lang->story->title;?></th>
           <th class='c-status'><?php echo $lang->story->statusAB;?></th>
           <th class='c-user'><?php echo $lang->story->openedByAB;?></th>
-          <th class='c-user'><?php echo $lang->story->assignedToAB;?></th>
+          <th class='c-user'><?php echo $lang->story->assignedTo;?></th>
         </tr>
       </thead>
       <tbody>
