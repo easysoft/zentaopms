@@ -1237,8 +1237,16 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
+        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+
         foreach($actions as $i => $action)
         {
+            if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
+            {
+                unset($actions[$i]);
+                continue;
+            }
+
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
