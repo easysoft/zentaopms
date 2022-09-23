@@ -1,5 +1,4 @@
 body {padding-left: 96px;}
-/* background-color: #415A72; */
 #menu {position: fixed; left: 0; top: 0; bottom: 0; width: 96px; z-index: 1015;}
 .menu-show .menu-tip {display: none!important;}
 #menuNav {position: absolute; top: 5px; bottom: 40px; width: 100%;}
