@@ -52,7 +52,7 @@ $(function()
         });
     });
 
-    $('#recordForm .input-group-addon').on('click', function()
+    $('#recordForm .date-group .input-group-addon').on('click', function()
     {
         $(this).prev().datetimepicker('show');
     });

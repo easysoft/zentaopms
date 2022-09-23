@@ -3847,6 +3847,7 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
         if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
         {
@@ -3868,15 +3869,16 @@ class taskModel extends model
         }
         elseif(empty($task->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnClass       = $btnTextClass = 'assigned-none';
             $assignedToText = $this->lang->task->noAssigned;
         }
-        if($task->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if($task->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($task->assignedTo) and $task->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= $task->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
