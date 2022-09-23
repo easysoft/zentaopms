@@ -17,7 +17,7 @@
 .project-name {position: relative; display: flex; align-items: center;}
 .project-name > span,
 .project-name > span {flex: none;}
-.project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.project-name > a {display: inline-block; max-width: calc(100% - 50px);}
 .project-name.has-prefix > a,
 .project-name.has-suffix > a {max-width: calc(100% - 100px);}
 .project-name.has-prefix > a {padding-left: 5px;}
