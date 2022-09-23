@@ -115,13 +115,13 @@ if(!empty($members) && $task->mode == 'linear')
       <table class='table table-form table-fixed table-record'>
         <thead>
           <tr class='text-center'>
-            <th class="w-150px"><?php echo $lang->task->date;?></th>
+            <th class="w-150px required"><?php echo $lang->task->date;?></th>
             <?php if($readonly):?>
             <th class="w-60px <?php if(count($reverseOrders) == 1) echo "hidden"?>"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
             <th><?php echo $lang->task->work;?></th>
-            <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
-            <th class="w-100px"><?php echo $lang->task->leftAB;?></th>
+            <th class="w-100px required"><?php echo $lang->task->consumedAB;?></th>
+            <th class="w-100px <?php if(empty($readonly)) echo 'required'?>"><?php echo $lang->task->leftAB;?></th>
           </tr>
         </thead>
         <tbody>

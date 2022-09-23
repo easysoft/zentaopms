@@ -88,7 +88,7 @@
             <?php common::printIcon('project', 'group', "projectID=$project->id", $project, 'list', 'lock', '',  '', false, "data-group='project'", '', $project->id);?>
             <?php if(common::hasPriv('project','manageProducts') || common::hasPriv('project','whitelist') || common::hasPriv('project','delete')):?>
             <div class='btn-group'>
-              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
+              <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-ellipsis-v'></i></button>
               <ul class='dropdown-menu pull-right text-center' role='menu'>
                 <?php common::printIcon('project', 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', '', false, "data-group='project'", '', $project->id);?>
                 <?php common::printIcon('project', 'whitelist', "projectID=$project->id&module=project", $project, 'list', 'shield-check', '', '', false, "data-group='project'", '', $project->id);?>

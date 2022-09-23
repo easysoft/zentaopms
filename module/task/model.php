@@ -1828,8 +1828,9 @@ class taskModel extends model
 
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
-                if(!$record->consumed[$id])   helper::end(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '') helper::end(js::alert($this->lang->task->error->left));
+                if(helper::isZeroDate($record->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
+                if(!$record->consumed[$id])                 helper::end(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '')               helper::end(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];

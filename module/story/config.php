@@ -58,6 +58,10 @@ if($app->tab == 'execution')
 {
     $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
 }
+else if($app->tab == 'product')
+{
+    $config->story->datatable->defaultField = array('id', 'title', 'plan', 'pri', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
+}
 else
 {
     $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
@@ -168,7 +172,7 @@ $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
 $config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
-$config->story->datatable->fieldList['reviewedBy']['width']      = '80';
+$config->story->datatable->fieldList['reviewedBy']['width']      = '100';
 $config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
