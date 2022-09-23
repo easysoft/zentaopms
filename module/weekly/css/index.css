@@ -1,3 +1,3 @@
 #mainContent td.projectName {white-space: nowrap; overflow-x: hidden;}
 #pageNav .angle-btn:first-child a.btn {max-width: 300px; overflow: hidden;}
-.totalCount {margin-top: 15px !important; font-weight: bold; text-align: right; padding: 8px 50px 8px 8px;}
+.totalCount {font-weight: bold; text-align: right !important; padding: 8px 50px 8px 8px !important; width: 100%;}
