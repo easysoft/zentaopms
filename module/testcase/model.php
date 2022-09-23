@@ -2501,7 +2501,7 @@ class testcaseModel extends model
 
         if($case->needconfirm || $case->browseType == 'needconfirm')
         {
-            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'ok', 'hiddenwin', '', '', '', $this->lang->confirm);
         }
 
         $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");

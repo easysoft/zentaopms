@@ -503,6 +503,8 @@ class bug extends control
         $type        = 'codeerror';
         $pri         = 3;
         $color       = '';
+        $feedbackBy  = '';
+        $notifyEmail = '';
 
         /* Parse the extras. extract fix php7.2. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -528,6 +530,8 @@ class bug extends control
             $deadline    = helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
+            $feedbackBy  = $bug->feedbackBy;
+            $notifyEmail = $bug->notifyEmail;
             if($pri == 0) $pri = '3';
         }
 
@@ -688,6 +692,8 @@ class bug extends control
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
         $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+        $this->view->feedbackBy       = $feedbackBy;
+        $this->view->notifyEmail      = $notifyEmail;
 
         $this->display();
     }
