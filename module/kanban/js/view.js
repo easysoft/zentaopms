@@ -1972,6 +1972,11 @@ $('[data-tab]').on('shown.zui.tab', function(e)
     {
         $regions.addClass('active').removeClass('notAll');
         if(hasActions) $regionActions.removeClass('active');
+        $regions.each(function()
+        {
+            var isFold = $(this).find('.region-header i').hasClass('icon-angle-down');
+            if(isFold) $(this).find('.kanban').css('display', 'none');
+        });
     }
     else
     {
