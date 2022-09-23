@@ -246,6 +246,8 @@
                     <td><?php echo $statData->taskCount;?></td>
                     <th><?php echo $lang->bug->common;?></th>
                     <td><?php echo $statData->bugCount;?></td>
+                    <th><?php echo $lang->project->budget;?></th>
+                    <td><?php echo $project->budget;?></td>
                   </tr>
                 </tbody>
               </table>

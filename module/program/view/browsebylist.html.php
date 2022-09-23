@@ -108,6 +108,7 @@
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
+#programList .c-actions .btn-group:last-child {margin-left: -4px;}
 #programList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
@@ -116,6 +117,10 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
+#programTableList .is-top-level {font-weight: bold;}
+#programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
+#programTableList .is-nest-child > .c-name > a {color: #2463C7!important;}
+#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>

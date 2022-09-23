@@ -143,6 +143,16 @@ function setParentProgram(parentProgram)
             $('#plansBox .col-sm-4').prepend(planSelect);
             $('#plansBox .col-sm-4 select').chosen();
         }
+
+        if(parentProgram != 0)
+        {
+            $('.aclBox').html($('#programAcl').html());
+        }
+        else
+        {
+            $('.aclBox').html($('#projectAcl').html());
+        }
+
         budgetOverrunTips();
         outOfDateTip();
         refreshBudgetUnit(data);

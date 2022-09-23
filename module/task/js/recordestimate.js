@@ -1,5 +1,13 @@
 $(function()
 {
+    /* Hide creation logs when displaying team logs. */
+    $('#linearefforts .tabs ul > li').click(function()
+    {
+        var tab = $(this).find('a').attr('href');
+        $('#recordForm').toggleClass('hidden', tab == '#legendAllEffort');
+    });
+
+
     $('.form-date').datetimepicker('setEndDate', today);
 
     $("#recordForm #submit").click(function(e, confirmed)
@@ -42,5 +50,10 @@ $(function()
                 return false;
             }
         });
+    });
+
+    $('#recordForm .date-group .input-group-addon').on('click', function()
+    {
+        $(this).prev().datetimepicker('show');
     });
 })

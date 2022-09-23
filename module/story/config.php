@@ -54,14 +54,8 @@ $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto
 
 global $lang, $app;
 $config->story->datatable = new stdclass();
-if($app->tab == 'execution')
-{
-    $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
-}
-else
-{
-    $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
-}
+
+$config->story->datatable->defaultField = array('id', 'title', 'plan', 'pri', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
@@ -156,7 +150,7 @@ $config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['openedDate']['width']    = '90';
 $config->story->datatable->fieldList['openedDate']['required'] = 'no';
 
-$config->story->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
+$config->story->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->story->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->story->datatable->fieldList['assignedTo']['width']    = '90';
 $config->story->datatable->fieldList['assignedTo']['required'] = 'no';
@@ -168,7 +162,7 @@ $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
 $config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
-$config->story->datatable->fieldList['reviewedBy']['width']      = '80';
+$config->story->datatable->fieldList['reviewedBy']['width']      = '100';
 $config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
 $config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
 $config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');

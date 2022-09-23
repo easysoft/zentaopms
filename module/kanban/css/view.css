@@ -165,7 +165,7 @@
 .leftBtn.hidden + #regionNavTabs {padding-left: 10px;}
 #regionNavTabs > ul {display: inline-flex; border-bottom: none; margin-bottom: -3px;}
 #regionNavTabs > ul > li {padding: 0; text-align: center;}
-#regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -20px; background: none; outline: 0;}
+#regionNavTabs > ul > li > a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 1.7rem; margin-left: -20px; background: none; outline: 0; cursor: pointer !important;}
 #regionNavTabs > ul > li:first-child > a {margin-left: 0;}
 #regionNavTabs > ul > li.active > a {z-index: 1;}
 #regionNavTabs > ul > li.active > a::before {background-color: #fff;}
@@ -173,8 +173,9 @@
 #regionNavTabs > ul > li > a > span {vertical-align: bottom; overflow: hidden; max-width: 6em; white-space: nowrap; display: inline-block;}
 #regionNavTabs > ul > li.active > a > span {color: #2b80ff!important;}
 #regionTabs.affixed {margin-bottom: 5px; position: fixed; top: 0px;}
-#regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header {margin-top: 30px;}
+#regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header {margin-top: 43px;}
 #regionTabs.affixed + #kanbanContainer .kanban-board.kanban-affixed > .kanban-header + .kanban-lane {margin-top: 38px;}
+#regionTabs.affixed ul {margin-bottom: -10px;}
 #regionTabs.affixed ul > li {margin-bottom: 0px !important;}
 #regionTabs .region-actions .dropdown-menu {top: 25px;}
 #region-tab-actions {display: none;}
