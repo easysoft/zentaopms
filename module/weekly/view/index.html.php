@@ -88,9 +88,9 @@
           <td class='text-left'><?php echo zget($users, $task->finishedBy);?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='6' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($finished));?></tr>
       </tbody>
     </table>
-    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($finished));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->postponed;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -121,9 +121,9 @@
           <td class='text-left'><?php echo $task->progress;?>%</td>
         </tr>
         <?php endforeach;?>
+        <td colspan='7' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($postponed));?></tr>
       </tbody>
     </table>
-    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($postponed));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->nextWeek;?></h4></div>
     <table class='table has-sort-head table-fixed'>
@@ -150,9 +150,9 @@
           <td class='text-left'><?php echo $task->deadline;?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='5' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($nextWeek));?></tr>
       </tbody>
     </table>
-    <div class='table totalCount'><?php echo sprintf($lang->weekly->totalCount, count($nextWeek));?></div>
 
     <div class='page-title'><h4><?php echo $lang->weekly->workloadByType;?></h4></div>
     <table class='table has-sort-head table-fixed'>
