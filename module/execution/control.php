@@ -2365,10 +2365,10 @@ class execution extends control
     /**
      * Kanban.
      *
-     * @param int     $executionID
-     * @param string  $browseType
-     * @param string  $orderBy
-     * @param string  $groupBy
+     * @param  int     $executionID
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  string  $groupBy
      * @access public
      * @return void
      */
@@ -2422,13 +2422,15 @@ class execution extends control
         }
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
-
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
         }
+
+        $taskToOpen = !empty($_COOKIE['taskToOpen']) ? $_COOKIE['taskToOpen'] : 0;
+        setcookie('taskToOpen', 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;
@@ -2448,6 +2450,7 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
+        $this->view->taskToOpen       = $taskToOpen;
         $this->display();
     }
 
