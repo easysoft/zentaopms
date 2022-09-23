@@ -1574,7 +1574,7 @@ class commonModel extends model
         $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }
