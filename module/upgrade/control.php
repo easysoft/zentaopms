@@ -176,6 +176,7 @@ class upgrade extends control
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
+            if(version_compare($openVersion, '15_0', '>=') and $systemMode == 'new') $selectMode = false;
 
             if($selectMode) $this->locate(inlink('to18Guide', "fromVersion=$fromVersion"));
 
