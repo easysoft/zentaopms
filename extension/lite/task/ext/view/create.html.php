@@ -19,6 +19,7 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
