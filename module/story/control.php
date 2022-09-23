@@ -1331,8 +1331,13 @@ class story extends control
         $this->view->hiddenURS  = false;
         if(!empty($product->shadow))
         {
-            $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product->id)->fetch('project');
-            $project   = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+            $projectID = $this->dao->select('t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                    ->where('t1.product')->eq($product->id)
+                    ->andWhere('t2.type')->eq('project')
+                    ->fetch('project'); 
+
+            $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
 
             if($project->model === 'waterfall')
             {
