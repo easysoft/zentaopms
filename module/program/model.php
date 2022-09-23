@@ -1607,7 +1607,7 @@ class programModel extends model
         $program->budgetUnit    = 'CNY';
         $program->status        = 'doing';
         $program->auth          = 'extend';
-        $program->begin         = $minBegin;
+        $program->begin         = !empty($minBegin) ? $minBegin : helper::today();
         $program->end           = LONG_TIME;
         $program->openedBy      = $account;
         $program->openedDate    = helper::now();
