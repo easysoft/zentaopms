@@ -2455,7 +2455,7 @@ class projectModel extends model
         if(empty($project->hasProduct))
         {
             unset($lang->project->menu->settings['subMenu']->products);
-            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch()->product;
+            $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
             $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
             if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))
