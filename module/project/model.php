@@ -2493,12 +2493,6 @@ class projectModel extends model
 
         $this->session->set('noSprint', false);
 
-        $navGroup = zget($this->lang->navGroup, $moduleName);
-        $this->config->resetNavGroup['execution'] = 'execution';
-        $this->config->resetNavGroup['task']      = zget($this->lang->navGroup, 'task');
-        $this->config->resetNavGroup['story']     = zget($this->lang->navGroup, 'story');
-        $this->config->resetNavGroup[$moduleName] = $navGroup;
-
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
         if(empty($project)) return;
 
@@ -2529,10 +2523,10 @@ class projectModel extends model
         $this->app->tab = 'project';
         $_COOKIE['tab'] = 'project';
 
-        $this->lang->navGroup->$moduleName   = 'project';
-        $this->lang->$navGroup->menu         = $this->lang->noSprint->{$modal}->menu;
-        $this->lang->$navGroup->menuOrder    = $this->lang->noSprint->{$modal}->menuOrder;
-        $this->lang->$navGroup->dividerMenu  = $this->lang->noSprint->{$modal}->dividerMenu;
+        $navGroup = zget($this->lang->navGroup, $moduleName);
+        $this->lang->$navGroup->menu        = $this->lang->noSprint->{$modal}->menu;
+        $this->lang->$navGroup->menuOrder   = $this->lang->noSprint->{$modal}->menuOrder;
+        $this->lang->$navGroup->dividerMenu = $this->lang->noSprint->{$modal}->dividerMenu;
 
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
