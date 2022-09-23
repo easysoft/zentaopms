@@ -2528,6 +2528,20 @@ class story extends control
         {
             $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
+            if(!$productID)
+            {
+                $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = 'story';
+
+                $this->config->story->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->story->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+
+                $productIdList = implode(',', array_flip($this->session->exportProductList));
+
+                $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
+            }
+
             $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
             $this->fetch('port', 'export', 'model=story');
         }

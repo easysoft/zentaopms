@@ -554,6 +554,10 @@ class portModel extends model
                 if(!empty($pairs[0])) $valuePairs[$value[$pairs[0]]] = $value[$pairs[1]];
             }
             $values = $valuePairs;
+            if(reset($values))
+            {
+                if(current($values) or (current($values) == 0)) $values[0] = '';
+            }
         }
 
         return $values;
@@ -624,7 +628,7 @@ class portModel extends model
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''*/
-                if(helper::isZeroDate($value))
+                if(helper::isZeroDate($rows[$id]->$field))
                 {
                     $rows[$id]->$field = '';
                 }
