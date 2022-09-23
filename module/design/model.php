@@ -479,7 +479,7 @@ class designModel extends model
         if(!empty($design->assignedTo) and $design->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
         $btnClass    .= $design->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = helper::createLink('design', 'assignTo', "designID=$design->id", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $design->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
