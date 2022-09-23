@@ -2416,7 +2416,11 @@ EOD;
 
             if(isset($this->app->user))
             {
-                if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
+                if($this->app->tab == 'project')
+                {
+                    $projectPrivs = $this->loadModel('project')->processProjectPrivs();
+                    if(isset($projectPrivs->$module->$method)) return true;
+                }
 
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
@@ -2615,13 +2619,14 @@ EOD;
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
-            $recomputedRights = $this->loadModel('user')->authorize($this->app->user->account);
-            $recomputedRights = $recomputedRights['rights'];
-
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            foreach($rights as $moduleKey => $methods)
+            $projectPrivs = $this->loadModel('project')->processProjectPrivs();
+            foreach($rights as $module => $methods)
             {
-                if(in_array($moduleKey, $this->config->programPriv->waterfall)) unset($rights[$moduleKey]);
+                foreach($methods as $method)
+                {
+                    if(isset($projectPrivs->$module->$method)) unset($rights[$module][$method]);
+                }
             }
 
             $recomputedRights = array_merge($rights, $programRightGroup);

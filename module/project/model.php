@@ -873,6 +873,35 @@ class projectModel extends model
             ->fetchGroup('productID', 'branchID');
     }
 
+    /**
+     * Process the project privs according to the project model.
+     *
+     * @param  string $model    sprint | waterfall
+     * @access public
+     * @return object
+     */
+    public function processProjectPrivs($model = 'waterfall')
+    {
+        $this->app->loadLang('group');
+
+        $privs = clone $this->lang->resource;
+        foreach($privs as $module => $methods)
+        {
+            if(!in_array($module, $this->config->programPriv->$model))
+            {
+                unset($privs->$module);
+            }
+            else
+            {
+                foreach($methods as $method => $label)
+                {
+                    if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) unset($privs->$module->$method);
+                }
+            }
+        }
+        return $privs;
+    }
+
     /*
      * Build search form
      *

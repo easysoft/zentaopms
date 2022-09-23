@@ -1500,22 +1500,9 @@ class project extends control
                 unset($this->lang->resource->tree->fix);
             }
             if($project->model == 'waterfall') unset($this->lang->resource->productplan);
-            foreach($this->lang->resource as $module => $methods)
-            {
-                if(!in_array($module, $this->config->programPriv->{$project->model}))
-                {
-                    unset($this->lang->resource->$module);
-                }
-                else
-                {
-                    if($project->model == 'scrum' and $module == 'projectstory') unset($this->lang->resource->projectstory->track);
+            if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
-                    foreach($methods as $method => $label)
-                    {
-                        if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) unset($this->lang->resource->$module->$method);
-                    }
-                }
-            }
+            $this->lang->resource = $this->project->processProjectPrivs($project->model);
         }
 
         $this->display();
