@@ -306,20 +306,21 @@ js::set('priv',
 </div>
 <?php js::set('taskToOpen', $taskToOpen);?>
 <script>
-$(function() {
+$(function()
+{
     /* Open the task details popup from dynamic. */
     if(taskToOpen)
     {
-        var kanban = document.querySelector('#kanban');
+        var kanban   = document.querySelector('#kanban');
         var observer = new MutationObserver(function (mutationsList, observer)
         {
             for(var mutation of mutationsList)
             {
                 var target = mutation.target;
-                if (mutation.type == 'childList' && target.tagName.toLowerCase() == 'a' && target.classList.contains('title') && target.parentElement.parentElement.dataset.id == taskToOpen  && target.parentElement.className.includes('kanban-item-task'))
+                if(mutation.type == 'childList' && target.tagName.toLowerCase() == 'a' && target.classList.contains('title') && target.parentElement.parentElement.dataset.id == taskToOpen && target.parentElement.className.includes('kanban-item-task'))
                 {
                     var a = document.querySelector('[data-id="' + taskToOpen +'"] a.title');
-                    if (a)
+                    if(a)
                     {
                         observer.disconnect();
                         a.click();
