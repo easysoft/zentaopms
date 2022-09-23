@@ -1,8 +1,12 @@
 <?php if(!empty($task) and !empty($task->team) and $task->mode == 'linear'):?>
 <style>
-#linearefforts .nav-tabs{margin-bottom:20px;}
-#linearefforts div.caption {height:25px; margin:10px 0px;}
+#mainContent {min-height: 500px;}
+#mainContent .main-header {padding-bottom: 5px;}
+#linearefforts {margin-top: -18px;}
+#linearefforts .nav-tabs{margin-bottom: 10px;}
+#linearefforts div.caption {height:25px; margin: 10px 0px;}
 #linearefforts div.caption .account{font-weight: bolder;}
+#linearefforts .tabs ul > li > a { padding-top: 6px; padding-bottom: 4px;}
 </style>
 <?php
 $this->app->loadLang('execution');
@@ -11,7 +15,7 @@ foreach($task->team as $team) $teamOrders[$team->order] = $team->account;
 
 $myOrders   = array();
 $allEfforts = array();
-$recorders   = array();
+$recorders  = array();
 foreach($efforts as $effort)
 {
     $order   = $effort->order;
@@ -26,7 +30,6 @@ foreach($efforts as $effort)
 }
 ?>
 <div id='linearefforts'>
-  <?php if($myOrders):?>
   <div class='tabs'>
     <ul class='nav nav-tabs'>
       <li class='active'><a href='#legendMyEffort' data-toggle='tab'><?php echo $lang->task->myEffort;?></a></li>
@@ -34,6 +37,7 @@ foreach($efforts as $effort)
     </ul>
     <div class='tab-content'>
       <div class='tab-pane active' id='legendMyEffort'>
+        <?php if(!empty($myOrders)):?>
         <table class='table table-bordered table-fixed table-recorded'>
           <thead>
             <tr class='text-center'>
@@ -41,7 +45,7 @@ foreach($efforts as $effort)
               <th class="w-120px"><?php echo $lang->task->date;?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
-              <th class="thWidth"><?php echo $lang->task->consumed;?></th>
+              <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
               <th class='c-actions-2'><?php echo $lang->actions;?></th>
             </tr>
@@ -77,9 +81,9 @@ foreach($efforts as $effort)
             <?php endforeach;?>
           </tbody>
         </table>
+        <?php endif;?>
       </div>
       <div class='tab-pane' id='legendAllEffort'>
-  <?php endif;?>
         <table class='table table-bordered table-fixed table-recorded'>
           <thead>
             <tr class='text-center'>
@@ -87,7 +91,7 @@ foreach($efforts as $effort)
               <th class="w-120px"><?php echo $lang->task->date;?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
-              <th class="thWidth"><?php echo $lang->task->consumed;?></th>
+              <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
               <th class="thWidth"><?php echo $lang->task->left;?></th>
             </tr>
           </thead>
@@ -113,10 +117,10 @@ foreach($efforts as $effort)
             <?php endforeach;?>
           </tbody>
         </table>
-  <?php if($myOrders):?>
+      <?php if(!empty($myOrders)):?>
       </div>
     </div>
+    <?php endif;?>
   </div>
-  <?php endif;?>
 </div>
 <?php endif;?>
