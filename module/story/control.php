@@ -2650,7 +2650,12 @@ class story extends control
         }
         else
         {
-            $productName = $productID ? $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
+            $productName = $this->lang->product->all;
+            if($productID)
+            {
+                $product = $this->product->getById($productID);
+                $productName = $product->name;
+            }
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
                 $browseType = $this->lang->product->featureBar['browse'][$browseType];
@@ -2662,8 +2667,6 @@ class story extends control
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
         }
-
-        $product = $this->product->getById($productID);
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
