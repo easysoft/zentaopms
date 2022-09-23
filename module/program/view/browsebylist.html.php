@@ -48,7 +48,7 @@
       $originOrders[] = $program->order;
       ?>
 
-      <tr <?php echo $trAttrs;?>>
+      <tr <?php echo $trAttrs;?> data-type="<?php echo $program->type;?>">
         <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix has-suffix' title='<?php echo $program->name?>'>
           <?php
           $icon = '';
@@ -58,6 +58,7 @@
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
+          &nbsp;<span class="icon icon-cards-view" style="color: #888fa1;"></span>
           <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
@@ -117,9 +118,8 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-#programTableList .is-top-level {font-weight: bold;}
-#programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
-/* #programTableList .is-nest-child > .c-name > a {color: #2463C7!important;} */
+/* #programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
+#programTableList .is-nest-child > .c-name > a {color: #2463c7!important;} */
 #programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
