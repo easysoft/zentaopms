@@ -999,8 +999,11 @@ class projectModel extends model
             {
                 $projectName = $project->name;
 
-                $programID = zget($projectProgram, $project->id, '');
-                if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                if($this->config->systemMode == 'new')
+                {
+                    $programID = zget($projectProgram, $project->id, '');
+                    if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                }
 
                 $pairs[$project->id] = $projectName;
             }
@@ -2553,14 +2556,8 @@ class projectModel extends model
             }
         }
 
-        $this->config->resetNavGroup['execution'] = 'project';
-        $this->config->resetNavGroup['task']      = 'project';
-        $this->config->resetNavGroup['story']     = 'project';
-        $this->config->resetNavGroup[$moduleName] = 'project';
-
         /* If objectID is set, cannot use homeMenu. */
         unset($this->lang->project->homeMenu);
-        unset($this->lang->$navGroup->homeMenu);
         $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
         $this->lang->project->menu        = $this->lang->$navGroup->menu;
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;

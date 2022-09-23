@@ -93,10 +93,3 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') !== false) $bodyClass .= ' xx
     .main-actions-holder {display: none !important;}
   </style>
 <?php endif;?>
-<?php if(isset($this->config->resetNavGroup)):?>
-<script>
-<?php foreach($this->config->resetNavGroup as $key => $value):?>
-if(typeof(parent.navGroup.<?php echo $key?>) != 'undefined') parent.navGroup.<?php echo $key?> = '<?php echo $value?>';
-<?php endforeach;?>
-</script>
-<?php endif;?>
