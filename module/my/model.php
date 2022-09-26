@@ -350,7 +350,7 @@ class myModel extends model
         {
             $orderBy    = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
             $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
-            $select     = "t1.*, t2.name AS {$nameField}, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
+            $select     = "t1.*, t2.name AS {$nameField}, t2.shadow, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
             $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
                 ->where('t1.deleted')->eq(0)
@@ -625,7 +625,7 @@ class myModel extends model
         $this->loadModel('bug');
         $this->app->loadConfig('bug');
 
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->config->bug->search['module']    = $rawMethod . 'Bug';
         $this->config->bug->search['actionURL'] = $actionURL;

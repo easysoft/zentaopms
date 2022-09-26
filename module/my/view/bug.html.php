@@ -122,11 +122,18 @@
             <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title='{$bug->title}'");?>
             <?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), "[" . $this->lang->testcase->common . "#$bug->case]", '', "class='bug' title='$bug->case'");?>
           </td>
-          <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
           <td class='text-left nobr'>
             <?php
-            $productLink = explode('-', $config->productLink);
-            echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            if(isset($bug->shadow))
+            {
+                echo html::a($this->createLink('project', 'browse'), $bug->productName, null, "title={$bug->productName}");
+            }
+            else
+            {
+                $productLink = explode('-', $config->productLink);
+                $param       = $config->productLink == 'product-all' ? '' : "productID=$bug->product";
+                echo html::a($this->createLink('product', $productLink[1], $param), $bug->productName, null, "title={$bug->productName}");
+            }
             ?>
           </td>
           <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
