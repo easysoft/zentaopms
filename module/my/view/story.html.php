@@ -116,9 +116,19 @@
                 }
 
                 echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
-                echo common::buildIconButton('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+
+                if((common::hasPriv('story', 'change') or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('story', 'edit')) and (common::hasPriv('testcase', 'create') or common::hasPriv('story', 'close')))
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+
+                echo common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+                if(common::hasPriv('testcase', 'create') and common::hasPriv('story', 'close') )
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>
@@ -165,9 +175,17 @@
                     common::printIcon('story', 'review', $vars, $child, 'list', 'search', '', 'iframe', true);
                 }
                 common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+                if((common::hasPriv('story', 'change') or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('story', 'edit')) and (common::hasPriv('testcase', 'create') or common::hasPriv('story', 'close')))
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+                common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+                if(common::hasPriv('testcase', 'create') and common::hasPriv('story', 'close') )
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>

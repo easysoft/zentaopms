@@ -4193,7 +4193,6 @@ class storyModel extends model
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
-        if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
@@ -4260,9 +4259,10 @@ class storyModel extends model
                 $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
 
                 $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+                $vars  = "storyType={$story->type}";
                 if(in_array($this->app->tab, array('product', 'project')))
                 {
-                    if((common::hasPriv('story', 'change') or common::hasPriv('story', 'recall') or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'edit')) and ($storyType == 'story' and common::hasPriv('story', 'batchCreate') or common::hasPriv('testcase', 'create') or ($storyType == 'requirement' and common::hasPriv('story', 'close'))))
+                    if((common::hasPriv('story', 'change', '', $vars) or common::hasPriv('story', 'recall', '', $vars) or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $vars)) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review', '', $vars)) or common::hasPriv('story', 'edit', '', $vars)) and ($this->app->tab == 'product' and (common::hasPriv('story', 'batchCreate', '', 'storyType=story')) or ($story->type == 'story' and common::hasPriv('testcase', 'create')) or common::hasPriv('story', 'close', '', $vars) or ($this->app->tab == 'project' and common::hasPriv('projectstory', 'unlinkStory'))))
                     {
                         $menu .= "<div class='dividing-line'></div>";
                     }
@@ -4271,7 +4271,7 @@ class storyModel extends model
                 if($this->app->tab == 'product' and $storyType == 'requirement')
                 {
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    if(common::hasPriv('story', 'close') and (common::hasPriv('testcase', 'create') or common::hasPriv('story', 'createCase')))
+                    if(common::hasPriv('story', 'close', '', $vars) and (common::hasPriv('story', 'batchCreate', '', 'storyType=story') or ($story->type == 'story' and common::hasPriv('testcase', 'create'))))
                     {
                         $menu .= "<div class='dividing-line'></div>";
                     }
@@ -4432,26 +4432,32 @@ class storyModel extends model
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
                 if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
-                if(((strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('task', 'create') or common::hasPriv('task', 'batchCreate')) and (($hasDBPriv and common::hasPriv('testcase', 'create')) or common::hasPriv('execution', 'storyEstimate', $execution) or common::hasPriv('execution', 'unlinkStory', $execution)))
+                if(((strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('task', 'create') or common::hasPriv('task', 'batchCreate')) and (($hasDBPriv and common::hasPriv('testcase', 'create')) or common::hasPriv('execution', 'storyEstimate', $execution) or common::hasPriv('execution', 'unlinkStory', $execution) or common::hasPriv('execution', 'unlinkStory', $execution)))
                 {
                         $menu .= "<div class='dividing-line'></div>";
                 }
 
                 if(common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= $this->buildMenu('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", $story, $type, 'estimate', '', 'iframe', true, "data-width='470px'");
-                }
-
-                if(common::hasPriv('execution', 'unlinkStory', $execution))
-                {
-                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                    $menu .= common::buildIconButton('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
                 }
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
                 if($hasDBPriv and common::hasPriv('testcase', 'create'))
                 {
-                    $menu .= html::a(helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "class='btn' title='{$this->lang->testcase->create}' data-app='qa'");
+                    $menu .= common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id", '', 'list', 'sitemap', '', '', '', "data-app='qa'");
                 }
+
+                if((common::hasPriv('execution', 'storyEstimate', $execution) or ($hasDBPriv and common::hasPriv('testcase', 'create'))) and common::hasPriv('execution', 'unlinkStory', $execution))
+                {
+                    $menu .= "<div class='dividing-line'></div>";
+                }
+
+                if(common::hasPriv('execution', 'unlinkStory', $execution))
+                {
+                    $menu .= common::buildIconButton('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                }
+
             }
         }
 

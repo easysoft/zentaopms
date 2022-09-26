@@ -114,8 +114,15 @@
                     echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
                 }
                 echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+
+                $storyType = 'storyType=requirement';
+                if((common::hasPriv('story', 'change', '', $storyType) or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType)) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review', '', $storyType)) or common::hasPriv('story', 'recall', '', $storyType) or common::hasPriv('story', 'edit', '', $storyType)) and common::hasPriv('story', 'close', '', $storyType))
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+
+                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>
@@ -163,8 +170,13 @@
                     }
 
                     common::printIcon('story', 'recall', "$vars&from=list&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                    common::printIcon('story', 'close',  "$vars&from=&storyType=story", $child, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit',   "$vars&from=default&storyType=story", $child, 'list');
+                    $storyType = 'storyType=story';
+                    if((common::hasPriv('story', 'change', '', $storyType) or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType)) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review', '', $storyType)) or common::hasPriv('story', 'recall', '', $storyType) or common::hasPriv('story', 'edit', '', $storyType)) and common::hasPriv('story', 'close', '', $storyType))
+                    {
+                        echo "<div class='dividing-line'></div>";
+                    }
+                    common::printIcon('story', 'close',  "$vars&from=&storyType=story", $child, 'list', '', '', 'iframe', true);
                 }
             }
             ?>
