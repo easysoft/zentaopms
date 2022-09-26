@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php if(!$this->task->canOperateEffort($task) and empty($myOrders)):?>
+<style>#mainContent {min-height: unset;}</style>
+<?php endif;?>
 <?php $members = $task->members;?>
 <?php
 $confirmRecord = $lang->task->confirmRecord;
