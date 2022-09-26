@@ -527,10 +527,11 @@ class story extends control
         $this->story->replaceURLang($storyType);
 
         /* Check can subdivide or not. */
+        $product = $this->product->getById($productID);
         if($storyID)
         {
             $story = $this->story->getById($storyID);
-            if(($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) and $this->config->vision != 'lite') return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(($story->status != 'active' or (empty($product->shadow) && $story->stage != 'wait') or (!empty($product->shadow) && $story->stage != 'projected') or $story->parent > 0) and $this->config->vision != 'lite') return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))
@@ -615,7 +616,6 @@ class story extends control
         }
 
         /* Set branch and module. */
-        $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
