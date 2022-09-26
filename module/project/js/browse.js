@@ -1,5 +1,6 @@
 $(function()
 {
+    $('#projectForm .checkbox-primary').hide();
     $('input[name^="involved"]').click(function()
     {
         var involved = $(this).is(':checked') ? 1 : 0;
@@ -12,6 +13,13 @@ $(function()
         var projectType = $(this).attr('data-type');
         $.cookie('projectType', projectType, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
+    });
+
+    $('input[name^="showEdit"]').click(function()
+    {
+        $('#projectForm .checkbox-primary').hide();
+        var showEdit = $(this).is(':checked') ? 1 : 0;
+        if(showEdit) $('#projectForm .checkbox-primary').show();
     });
 
     if(!useDatatable) resetNameWidth();
