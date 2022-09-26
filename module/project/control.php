@@ -1499,7 +1499,12 @@ class project extends control
                 unset($this->lang->resource->tree->editHost);
                 unset($this->lang->resource->tree->fix);
             }
-            if($project->model == 'waterfall') unset($this->lang->resource->productplan);
+
+            if($project->model == 'waterfall')
+            {
+                unset($this->lang->resource->productplan);
+                unset($this->lang->resource->projectplan);
+            }
             if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
             $this->lang->resource = $this->project->processProjectPrivs($project->model);
