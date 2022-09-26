@@ -611,6 +611,16 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        $executionList = $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $project       = $this->loadModel('project')->getByID($task->project);
+        $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+        $execution     = array();
+        foreach($executionList as $val)
+        {
+           $values      = str_replace($replace, $project->name, $val);
+           $execution[] = $values;
+        }
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -619,7 +629,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $execution;
         $this->display();
     }
 
