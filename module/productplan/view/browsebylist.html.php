@@ -46,8 +46,16 @@
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
       <?php if(common::canModify('product', $product) and empty($productPlansNum)):?>
-      <?php if(common::hasPriv('projectplan', 'create') and $isProjectplan) echo html::a($this->createLink('projectplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
-      <?php if(common::hasPriv('productplan', 'create')) echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
+      <?php
+      if(common::hasPriv('projectplan', 'create') and $isProjectplan) 
+      {
+          echo html::a($this->createLink('projectplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");
+      }
+      elseif(common::hasPriv('productplan', 'create'))
+      {
+          echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");
+      }
+      ?>
       <?php endif;?>
     </p>
   </div>
