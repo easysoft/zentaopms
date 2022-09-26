@@ -591,7 +591,6 @@ EOF;
         $bugs = $this->bug->checkDelayedBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
-
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
@@ -608,7 +607,7 @@ EOF;
         $this->view->pageID      = $pageID;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->mode       = 'bug';
+        $this->view->mode        = 'bug';
 
         $this->display();
     }
