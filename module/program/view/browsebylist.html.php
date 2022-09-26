@@ -119,8 +119,8 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-/* #programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
-#programTableList .is-nest-child > .c-name > a {color: #2463c7!important;} */
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
+#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
 #programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 </style>
 <?php js::set('originOrders', $originOrders);?>

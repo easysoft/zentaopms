@@ -122,3 +122,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #mainMenu > .btn-toolbar .btn-link .label-light {color: #203362; background: #fff;}
 #mainMenu > .btn-toolBar .btn-active-text,
 #mainMenu > .btn-toolbar .btn-active-text {background: #E6EAF1;} */
+
+#programTableList > tr:hover {background: #E6F0FF; opacity: 0.8;}
+#programTableList > tr[data-type="project"] > .c-name:hover > a {color: #1E6AEB !important;}
+#programTableList > tr[data-type="project"] > .c-name > a {color: #2463c7 !important;}
