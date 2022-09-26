@@ -1298,7 +1298,7 @@ class projectModel extends model
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
-                $product->name           = !$project->hasProduct ? "SHADOW_{$project->name}_{$projectID}" : ($this->post->productName ? $this->post->productName : $project->name);
+                $product->name           = $project->hasProduct && $this->post->productName ? $this->post->productName : $project->name;
                 $product->shadow         = (int)empty($project->hasProduct);
                 $product->bind           = $this->post->parent ? 0 : 1;
                 $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
@@ -1459,6 +1459,8 @@ class projectModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+
         /* Get team and language item. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($projectID, 'project');
@@ -1603,6 +1605,8 @@ class projectModel extends model
 
             if(!dao::isError())
             {
+                if(!$oldProject->hasProduct && $oldProject->name != $project->name) $this->updateProductName($project->name, $projectID);
+
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
                 $this->updateProductProgram($oldProject->parent, $project->parent, $linkedProducts);
 
@@ -1840,6 +1844,21 @@ class projectModel extends model
             $this->loadModel('score')->create('project', 'close', $oldProject);
             return common::createChanges($oldProject, $project);
         }
+    }
+
+    /**
+     * Update a product's name as its project.
+     *
+     * @param  string $projectName
+     * @param  int    $projectID
+     * @access public
+     * @return bool
+     */
+    public function updateProductName($projectName, $projectID)
+    {
+        $product = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
+        $this->dao->update(TABLE_PRODUCT)->set('name')->eq($projectName)->where('id')->eq($product)->exec();
+        return !dao::isError();
     }
 
     /**
