@@ -348,8 +348,9 @@ class myModel extends model
         }
         elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
         {
-            $orderBy = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
-            $select  = strpos($orderBy, 'severity') !== false ? "t1.*,IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder" : "t1.*,IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
+            $orderBy    = (strpos($orderBy, 'priOrder') !== false or strpos($orderBy, 'severityOrder') !== false) ? $orderBy : "t1.$orderBy";
+            $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
+            $select     = "t1.*, t2.name AS {$nameField}, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
             $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
                 ->where('t1.deleted')->eq(0)
@@ -387,21 +388,8 @@ class myModel extends model
             return $objectList;
         }
 
-        if($objectType == 'bug')
-        {
-            $productList = array();
-            foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
-            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product, '');
-        }
-
         if($objectType == 'requirement' or $objectType == 'story')
         {
-            $productList = array();
-            foreach($objectList as $story) $productList[$story->product] = $story->product;
-            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product, '');
-
             $planList = array();
             foreach($objectList as $story) $planList[$story->plan] = $story->plan;
             $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
