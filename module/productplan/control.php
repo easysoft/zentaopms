@@ -40,7 +40,14 @@ class productplan extends control
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
+        if($product->shadow)
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetch('project');
+            $this->loadModel('project')->setMenu($projectID);
+        }
+
         $this->view->product         = $product;
+        $this->view->projectID       = isset($projectID) ? $projectID : 0;
         $this->view->branch          = $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -52,6 +59,7 @@ class productplan extends control
      *
      * @param string $productID
      * @param int    $branchID
+     * @param int    $parent
      *
      * @access public
      * @return void
@@ -72,7 +80,7 @@ class productplan extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$productID&branch=$branchID&browseType=all")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=all")));
         }
 
         $this->commonAction($productID, $branchID);
@@ -139,7 +147,7 @@ class productplan extends control
             }
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "planID=$planID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->app->rawModule, 'view', "planID=$planID")));
         }
 
         $plan = $this->productplan->getByID($planID);
@@ -292,7 +300,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -316,7 +324,7 @@ class productplan extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink('productplan', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
         if($viewType == 'kanban')

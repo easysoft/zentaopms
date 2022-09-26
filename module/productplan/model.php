@@ -1176,7 +1176,7 @@ class productplanModel extends model
 
             if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
             }
             else
             {
@@ -1185,17 +1185,17 @@ class productplanModel extends model
 
             if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0)
             {
-                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+                $menu .= $this->buildMenu($this->app->rawModule, 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
             }
             else
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
             }
 
-            $menu .= $this->buildMenu('productplan', 'edit', $params, $plan, $type);
+            $menu .= $this->buildMenu($this->app->rawModule, 'edit', $params, $plan, $type);
         }
 
-        $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+        $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
         if($type == 'browse') $menu .= $this->buildMenu('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
 
@@ -1205,9 +1205,9 @@ class productplanModel extends model
             $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $editClickable   = $this->buildMenu($this->app->rawModule, 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
-            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink($this->app->rawModule, 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
             if(common::hasPriv('productplan', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 

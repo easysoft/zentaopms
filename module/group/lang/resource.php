@@ -24,6 +24,7 @@ $lang->moduleOrder[35]  = 'productplan';
 $lang->moduleOrder[40]  = 'release';
 
 $lang->moduleOrder[45]  = 'project';
+$lang->moduleOrder[48]  = 'projectplan';
 $lang->moduleOrder[50]  = 'projectstory';
 $lang->moduleOrder[55]  = 'execution';
 $lang->moduleOrder[56]  = 'kanban';
@@ -313,6 +314,17 @@ if($config->systemMode == 'new')
     $lang->resource->projectbuild->browse = 'browse';
 
     $lang->projectbuild->methodOrder[5] = 'browse';
+
+    $lang->resource->projectplan = new stdclass();
+    $lang->resource->projectplan->browse = 'browse';
+    $lang->resource->projectplan->create = 'create';
+    $lang->resource->projectplan->edit   = 'edit';
+    $lang->resource->projectplan->view   = 'view';
+
+    $lang->projectbuild->methodOrder[5]  = 'browse';
+    $lang->projectbuild->methodOrder[10] = 'create';
+    $lang->projectbuild->methodOrder[15] = 'edit';
+    $lang->projectbuild->methodOrder[20] = 'view';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();

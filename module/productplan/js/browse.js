@@ -47,7 +47,7 @@ $(function()
     $('#branch').change(function()
     {
         var branchID = $(this).val();
-        var link = createLink('productplan', 'browse', "productID=" + productID + '&branch=' + branchID);
+        var link = createLink(rawModule, 'browse', "productID=" + productID + '&branch=' + branchID);
         location.href = link;
     });
 
@@ -148,9 +148,9 @@ function createCardMenu(options)
         }
     }
 
-    if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink('productplan', 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
-    if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink('productplan', 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
-    if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
+    if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink(rawModule, 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
+    if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink(rawModule, 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
+    if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink(rawModule, 'edit', "planID=" + card.id)});
     if(privs.includes('start')) items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
@@ -346,7 +346,7 @@ function renderKanbanItem(item, $item)
     var $title = $titleBox.children('.title');
     if(!$title.length)
     {
-        if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink('productplan', 'view', 'cardID=' + item.id));
+        if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink(rawModule, 'view', 'cardID=' + item.id));
         if(!privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox);
     }
     $title.text(item.title).attr('title', item.title);
