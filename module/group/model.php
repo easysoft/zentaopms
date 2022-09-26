@@ -250,6 +250,7 @@ class groupModel extends model
         $productList = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->fetchAll('id');
 
         /* Get the list of program sets under administrator permission. */
@@ -573,18 +574,36 @@ class groupModel extends model
         $allUsers = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->fetchPairs();
         $this->dao->delete()->from(TABLE_PROJECTADMIN)->exec();
 
-        $members      = $this->post->members      ? $this->post->members      : array();
-        $programs     = $this->post->program      ? $this->post->program      : array();
-        $projects     = $this->post->project      ? $this->post->project      : array();
-        $products     = $this->post->product      ? $this->post->product      : array();
-        $executions   = $this->post->execution    ? $this->post->execution    : array();
-        $programAll   = $this->post->programAll   ? $this->post->programAll   : '';
-        $projectAll   = $this->post->projectAll   ? $this->post->projectAll   : '';
-        $productAll   = $this->post->productAll   ? $this->post->productAll   : '';
-        $executionAll = $this->post->executionAll ? $this->post->executionAll : '';
+        $members       = $this->post->members      ? $this->post->members      : array();
+        $programs      = $this->post->program      ? $this->post->program      : array();
+        $projects      = $this->post->project      ? $this->post->project      : array();
+        $products      = $this->post->product      ? $this->post->product      : array();
+        $executions    = $this->post->execution    ? $this->post->execution    : array();
+        $programAll    = $this->post->programAll   ? $this->post->programAll   : '';
+        $projectAll    = $this->post->projectAll   ? $this->post->projectAll   : '';
+        $productAll    = $this->post->productAll   ? $this->post->productAll   : '';
+        $executionAll  = $this->post->executionAll ? $this->post->executionAll : '';
+        $noProductList = $this->loadModel('project')->getNoProductList();
+        $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
 
         foreach($members as $lineID => $accounts)
         {
+            $programs[$lineID]   = isset($programs[$lineID])   ? $programs[$lineID]   : array();
+            $projects[$lineID]   = isset($projects[$lineID])   ? $projects[$lineID]   : array();
+            $products[$lineID]   = isset($products[$lineID])   ? $products[$lineID]   : array();
+            $executions[$lineID] = isset($executions[$lineID]) ? $executions[$lineID] : array();
+
+            if($projects[$lineID] or $executions[$lineID])
+            {
+                $objects = array_merge($projects[$lineID], $executions[$lineID]);
+                foreach($objects as $objectID)
+                {
+                    if(isset($noProductList[$objectID])) $products[$lineID][] = $noProductList[$objectID]->product;
+                }
+            }
+
+            if($executionAll[$lineID] or $projectAll[$lineID]) $products[$lineID] = array_merge($products[$lineID], $shadowProductIDList);
+
             if(empty($accounts)) continue;
             foreach($accounts as $account)
             {
