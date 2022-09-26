@@ -236,16 +236,6 @@ class productModel extends model
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         if(!$product) return false;
 
-        if($product->shadow)
-        {
-            $projectName = $this->dao->select('t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.product')->eq($productID)
-                ->andWhere('t2.type')->eq('project')
-                ->fetch('name');
-            if($projectName) $product->name = $projectName;
-        }
-
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
 
@@ -298,29 +288,6 @@ class productModel extends model
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
-
-        if($shadow)
-        {
-            $shadowProducts = array();
-            foreach($products as $product)
-            {
-                if($product->shadow) $shadowProducts[] = $product->id;
-            }
-            if($shadowProducts)
-            {
-                $shadowProducts = $this->dao->select('t1.id, t3.name')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-                    ->where('t1.id')->in($shadowProducts)
-                    ->andWhere('t3.type')->eq('project')
-                    ->fetchPairs();
-
-                foreach($shadowProducts as $id => $name)
-                {
-                    if(isset($products[$id])) $products[$id]->name = $name;
-                }
-            }
-        }
 
         return $products;
     }
@@ -386,25 +353,11 @@ class productModel extends model
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         if($this->config->systemMode == 'new')
         {
-            if($shadow)
-            {
-                $this->dao->select('t1.*,  IF(t1.shadow = 1, t4.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id = t3.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project = t4.id')
-                    ->where(1)
-                    ->andWhere('t4.type', true)->eq('project')
-                    ->orWhere('t4.type IS NULL')
-                    ->markRight(1);
-            }
-            else
-            {
-                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-                    ->where(1);
-            }
             /* Order by program. */
-            return $this->dao->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                ->where(1)
+                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
@@ -415,22 +368,10 @@ class productModel extends model
         }
         else
         {
-            if($shadow)
-            {
-                $this->dao->select('t1.*,  IF(t1.shadow = 1, t3.name, t1.name) AS name, IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                    ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-                    ->where(1)
-                    ->andWhere('t3.type', true)->eq('project')
-                    ->orWhere('t3.type IS NULL')
-                    ->markRight(1);
-            }
-            else
-            {
-                $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')->where(1);
-            }
             $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-            return $this->dao->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+            return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                ->where(1)
+                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
                 ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
                 ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
@@ -502,23 +443,8 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
-        $field = '';
-        if($projectID)
-        {
-            $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
-            if($project)
-            {
-                if($project->type == 'project') $field = ", IF(t2.shadow = 1, '$project->name', t2.name) AS name";
-                if($project->type == 'sprint')
-                {
-                    $projectName = $this->dao->findById($project->project)->from(TABLE_PROJECT)->fetch('name');
-                    $field       = ", IF(t2.shadow = 1, '$projectName', t2.name) AS name";
-                }
-            }
-        }
-
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*{$field}")
+        $projectProducts = $this->dao->select("t1.branch, t1.plan, t2.*")
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
