@@ -509,7 +509,6 @@ class task extends control
 
         /* Set menu. */
         $this->execution->setMenu($this->view->execution->id);
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "execution={$this->view->task->execution}"), $this->view->execution->name);
     }
 
@@ -920,6 +919,7 @@ class task extends control
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
         $this->commonAction($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);

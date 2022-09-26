@@ -111,6 +111,7 @@ class baseHTML
         if(strlen(trim($title)) == 0) $title = $href;
         $newline = $newline ? "\n" : '';
 
+        /* Make sure href is opened in the same tab. */
         if(strpos($misc, 'data-app=') === false)
         {
             global $app, $lang;
@@ -509,6 +510,7 @@ class baseHTML
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
+        /* Make sure href is opened in the same tab. */
         if(strpos($misc, 'data-app=') === false)
         {
             $module  = $app->rawModule;

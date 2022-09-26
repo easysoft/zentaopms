@@ -299,7 +299,6 @@ class executionModel extends model
      */
     public function create($copyExecutionID = '')
     {
-        $type = 'sprint';
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         if(empty($_POST['project']))
@@ -4949,9 +4948,10 @@ class executionModel extends model
     public function createDefaultSprint($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $post    = $_POST;
+
         $_POST = array();
         $_POST['project']     = $projectID;
-        $_POST['parent']      = $projectID;
         $_POST['name']        = $project->name;
         $_POST['code']        = $project->code;
         $_POST['begin']       = $project->begin;
@@ -4969,6 +4969,13 @@ class executionModel extends model
         $_POST['noSprint']    = 1;
 
         $executionID = $this->create();
+        if($project->model == 'kanban')
+        {
+            $execution = $this->getById($executionID);
+            $this->loadModel('kanban')->createRDKanban($execution);
+        }
+
+        $_POST = $post;
 
         return $executionID;
     }
