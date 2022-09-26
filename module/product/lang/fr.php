@@ -37,6 +37,8 @@ $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'Consulter Stories Matrice';
 $lang->product->checkedProducts  = '%s produits s électionnés';
+$lang->product->pageProducts     = 'Total products: %s.';
+$lang->product->pageLines        = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Fermer {$lang->productCommon}";

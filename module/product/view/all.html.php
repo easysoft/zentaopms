@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('productLines', $productLines); ?>
 <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
@@ -251,13 +252,17 @@
         <?php echo $pager->show('left', 'pagerjs');?>
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php
+        $content = empty($productLines) ? sprintf($lang->product->pageProducts, count($productStats)) : sprintf($lang->product->pageLines, count($lineNames),  count($productStats));
+        echo "<div id='productsCount' class='statistic'>$content</div>";
+        ?>
         <div class="table-actions btn-toolbar">
           <?php
           $actionLink = $this->createLink('product', 'batchEdit');
           echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
           ?>
-        <?php endif;?>
         </div>
+        <?php endif;?>
       </div>
     </form>
   </div>
