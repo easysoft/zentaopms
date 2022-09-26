@@ -137,7 +137,6 @@ class blockModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('hidden')->eq(0)
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
-            ->beginIF(isset($this->config->projectMode) && $this->config->projectMode == 'noSprint')->andWhere('source')->ne('execution')->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
     }

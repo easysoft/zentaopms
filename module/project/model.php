@@ -1342,7 +1342,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if($project->noSprint == 1 and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(!$project->multiple and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -2478,25 +2478,25 @@ class projectModel extends model
 
         common::setMenuVars('project', $objectID);
 
-        $this->setNoSprintMenu($objectID);
+        $this->setNomultipleMenu($objectID);
         return $objectID;
     }
 
     /**
-     * Set noSprint menu.
+     * Set multi-scrum menu.
      *
      * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function setNoSprintMenu($objectID)
+    public function setNoMultipleMenu($objectID)
     {
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
 
-        $this->session->set('noSprint', false);
+        $this->session->set('multiple', true);
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('multiple')->eq('0')->fetch();
         if(empty($project)) return;
 
         if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return;
@@ -2507,7 +2507,7 @@ class projectModel extends model
             $projectID   = $project->id;
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
-                ->andWhere('noSprint')->eq(1)
+                ->andWhere('multiple')->eq('0')
                 ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
@@ -2521,18 +2521,18 @@ class projectModel extends model
         if(empty($projectID) or empty($executionID)) return;
 
         $this->session->set('project', $projectID, 'project');
-        $this->session->set('noSprint', true);
+        $this->session->set('multiple', false);
 
         $navGroup = zget($this->lang->navGroup, $moduleName);
-        $this->lang->$navGroup->menu        = $this->lang->noSprint->{$model}->menu;
-        $this->lang->$navGroup->menuOrder   = $this->lang->noSprint->{$model}->menuOrder;
-        $this->lang->$navGroup->dividerMenu = $this->lang->noSprint->{$model}->dividerMenu;
+        $this->lang->$navGroup->menu        = $this->lang->project->noMultiple->{$model}->menu;
+        $this->lang->$navGroup->menuOrder   = $this->lang->project->noMultiple->{$model}->menuOrder;
+        $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
 
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
             $objectID = 0;
-            if(strpos($this->config->project->noSprint['project'], ",{$label},") !== false) $objectID = $projectID;
-            if(strpos($this->config->project->noSprint['execution'], ",{$label},") !== false)
+            if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $projectID;
+            if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
             {
                 $objectID = $executionID;
                 $this->lang->$navGroup->menu->$label['subModule'] = 'project';

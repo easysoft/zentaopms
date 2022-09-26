@@ -157,13 +157,13 @@ js::set('priv',
     echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     if(common::hasPriv('execution', 'setKanban')) echo html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link text-left' data-width='$width'");
-    if($execution->noSprint && common::hasPriv('project', 'edit'))    $editURL = helper::createLink('project',   'edit', "projectID=$execution->project", '', true);
-    if(!$execution->noSprint && common::hasPriv('execution', 'edit')) $editURL = helper::createLink('execution', 'edit', "executionID=$execution->id", '', true);
+    if(!$execution->multiple and common::hasPriv('project', 'edit'))  $editURL = helper::createLink('project',   'edit', "projectID=$execution->project", '', true);
+    if($execution->multiple and common::hasPriv('execution', 'edit')) $editURL = helper::createLink('execution', 'edit', "executionID=$execution->id", '', true);
     if(!empty($editURL)) echo html::a($editURL, '<i class="icon icon-edit"></i> ' . $lang->edit, '', "class='iframe btn btn-link text-left' data-width='80%'");
     $actions           = '';
     $printSettingBtn   = (common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
-    if($printSettingBtn && !$execution->noSprint)
+    if($printSettingBtn and $execution->multiple)
     {
         $actions .= "<div class='btn-group menu-actions'>";
         $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");

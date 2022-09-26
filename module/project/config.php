@@ -31,8 +31,8 @@ $config->project->sortFields->end    = 'end';
 $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
-$config->project->noSprint['project']   = ',qa,devops,doc,build,dynamic,settings,';
-$config->project->noSprint['execution'] = ',task,kanban,burn,view,story,';
+$config->project->multiple['project']   = ',qa,devops,doc,build,dynamic,settings,';
+$config->project->multiple['execution'] = ',task,kanban,burn,view,story,';
 
 global $lang;
 $config->project->datatable = new stdclass();
