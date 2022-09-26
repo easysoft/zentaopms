@@ -2503,7 +2503,7 @@ class projectModel extends model
 
         if($project->type == 'project')
         {
-            $modal       = $project->model;
+            $model       = $project->model;
             $projectID   = $project->id;
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
@@ -2514,7 +2514,7 @@ class projectModel extends model
         }
         else
         {
-            $modal       = $project->type == 'kanban' ? 'kanban' : 'scrum';
+            $model       = $project->type == 'kanban' ? 'kanban' : 'scrum';
             $executionID = $project->id;
             $projectID   = $project->project;
         }
@@ -2527,9 +2527,9 @@ class projectModel extends model
         $_COOKIE['tab'] = 'project';
 
         $navGroup = zget($this->lang->navGroup, $moduleName);
-        $this->lang->$navGroup->menu        = $this->lang->noSprint->{$modal}->menu;
-        $this->lang->$navGroup->menuOrder   = $this->lang->noSprint->{$modal}->menuOrder;
-        $this->lang->$navGroup->dividerMenu = $this->lang->noSprint->{$modal}->dividerMenu;
+        $this->lang->$navGroup->menu        = $this->lang->noSprint->{$model}->menu;
+        $this->lang->$navGroup->menuOrder   = $this->lang->noSprint->{$model}->menuOrder;
+        $this->lang->$navGroup->dividerMenu = $this->lang->noSprint->{$model}->dividerMenu;
 
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
