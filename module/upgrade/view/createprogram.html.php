@@ -5,7 +5,7 @@
   <tr><td class='createExecutionTip text-gray <?php echo $projectType == 'execution' ? '' : 'hidden';?>'><?php echo $lang->upgrade->createExecutionTip?></td></tr>
 </table>
 <table class='table table-form programForm'>
-  <caption class='strong'><?php echo $lang->upgrade->setProgram;?></caption>
+  <caption class='strong'><?php echo $systemMode == 'lean' ? $lang->upgrade->setProject : $lang->upgrade->setProgram;?></caption>
   <tr class="<?php echo $systemMode == 'lean' ? 'hide' : '';?>">
     <th>
       <span class="pgm-exist hidden"><?php echo $lang->upgrade->existProgram;?></span>
