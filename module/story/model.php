@@ -4175,6 +4175,14 @@ class storyModel extends model
      */
     public static function isClickable($story, $action)
     {
+        static $shadowProducts = array();
+        if(empty($shadowProducts[$story->product]))
+        {
+            global $dbh;
+            $stmt = $dbh->query('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
+        }
+
         $action = strtolower($action);
 
         global $app, $config;
@@ -4196,7 +4204,7 @@ class storyModel extends model
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
-        if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
+        if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product]) && $story->stage != 'projected') or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
 
         return true;
     }
@@ -4262,7 +4270,8 @@ class storyModel extends model
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
+                $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
+                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite' OR $shadow)
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
