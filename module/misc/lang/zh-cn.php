@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“�
 $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[迅捷界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['17.6.2']      = '2022-09-23';
 $lang->misc->releaseDate['17.6.1']      = '2022-09-08';
 $lang->misc->releaseDate['17.6']        = '2022-08-26';
 $lang->misc->releaseDate['17.5']        = '2022-08-11';
@@ -189,6 +190,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['17.6.2'][]     = array('title' => '禅道更新叶兰绿、禅道蓝、青春蓝三大主题。实现附件批量上传功能。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.6.1'][]     = array('title' => '优化了多人任务的处理逻辑，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.6'][]       = array('title' => '优化了需求的处理逻辑，拆分了用需和软需的权限。甘特图支持手动拖拽维护任务关系。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.5'][]       = array('title' => '提供高效的可视化统计工具。优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');

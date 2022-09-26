@@ -2899,9 +2899,10 @@ class taskModel extends model
         $estimate    = fixer::input('post')->cleanINT('consumed,left')->get();
         $today       = helper::today();
 
-        if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
-        if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+        if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
+        if($estimate->date > $today)            return dao::$errors[] = $this->lang->task->error->date;
+        if($estimate->consumed <= 0)            return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
+        if($estimate->left < 0)                 return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
         $task = $this->getById($oldEstimate->objectID);
         $this->dao->update(TABLE_EFFORT)->data($estimate)

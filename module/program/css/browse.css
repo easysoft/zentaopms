@@ -14,7 +14,8 @@ tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
 
 .has-suffix > a {padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
 
-.is-nest-child span.table-nest-icon {visibility: hidden; width: 0;}
+tr[data-type="project"] span.table-nest-icon {visibility: hidden; width: 0;}
+tr[data-type="project"].no-nest .c-name {padding-left: 12px;}
 div.checkbox-primary + span.table-nest-icon {margin-left: 0px !important;}
 
 #checkAll + label.hover:after {border-width: 0px;}
