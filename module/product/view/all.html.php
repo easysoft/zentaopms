@@ -11,13 +11,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
+  <div class="btn-toolBar pull-left">
     <?php common::sortFeatureMenu();?>
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->product->edit));?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -36,7 +38,6 @@
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='product'></div>
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='true' data-expand-nest-child='true'>
-      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
       <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>

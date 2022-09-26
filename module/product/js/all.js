@@ -1,6 +1,15 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
+    $('#productListForm .c-checkbox').hide();
+
+    $('input[name^="showEdit"]').click(function()
+    {
+        $('#productListForm .c-checkbox').hide();
+        var showEdit = $(this).is(':checked') ? 1 : 0;
+        if(showEdit) $('#productListForm .c-checkbox').show();
+    });
+
     /* Init table sort. */
     $('#productTableList').addClass('sortable').sortable(
     {
