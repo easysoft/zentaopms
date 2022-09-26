@@ -671,7 +671,7 @@
             defaultOpenUrl = !defaultOpenUrl ? codeApp : defaultOpenUrl + '#app=' + codeApp;
         }
 
-        openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp, $.cookie('tab'));
+        openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);
 
         /* Refresh more menu on window resize */
         $(window).on('resize', refreshMoreMenu);

@@ -2523,9 +2523,6 @@ class projectModel extends model
         $this->session->set('project', $projectID, 'project');
         $this->session->set('noSprint', true);
 
-        $this->app->tab = 'project';
-        $_COOKIE['tab'] = 'project';
-
         $navGroup = zget($this->lang->navGroup, $moduleName);
         $this->lang->$navGroup->menu        = $this->lang->noSprint->{$modal}->menu;
         $this->lang->$navGroup->menuOrder   = $this->lang->noSprint->{$modal}->menuOrder;
