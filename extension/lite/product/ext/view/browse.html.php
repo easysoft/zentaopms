@@ -18,6 +18,7 @@ body {margin-bottom: 25px;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 .assignedTo{border-radius: 4px !important;}
+#productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #EDEEF2; margin: 0 4px 0 0;}
 </style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
