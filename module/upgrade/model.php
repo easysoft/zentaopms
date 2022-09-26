@@ -7547,48 +7547,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Create a default program.
-     *
-     * @access public
-     * @return object
-     */
-    public function createDefaultProgram()
-    {
-        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->upgrade->defaultProgram)->fetch();
-        if($program) return $program;
-
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
-
-        $program = new stdclass();
-        $program->name          = $this->lang->upgrade->defaultProgram;
-        $program->type          = 'program';
-        $program->status        = 'doing';
-        $program->begin         = helper::now();
-        $program->end           = LONG_TIME;
-        $program->openedBy      = $account;
-        $program->openedDate    = helper::now();
-        $program->openedVersion = $this->config->version;
-        $program->acl           = 'open';
-        $program->days          = $this->computeDaysDelta($program->begin, $program->end);
-        $program->grade         = 1;
-        $program->vision        = 'rnd';
-
-        $this->app->loadLang('program');
-        $this->app->loadLang('project');
-        $this->lang->project->name = $this->lang->program->name;
-
-        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
-        if(dao::isError()) return false;
-
-        $programID = $this->dao->lastInsertId();
-
-        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
-
-        return $this->loadModel('program')->getByID($programID);
-    }
-
-    /**
      * Historical projects are upgraded by project.
      *
      * @param  int    $programID

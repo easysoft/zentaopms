@@ -1598,6 +1598,17 @@ class programModel extends model
      */
     public function createDefaultProgram()
     {
+        $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+        if($defaultProgram)
+        {
+            $programID = $defaultProgram->value;
+            $program   = $this->dao->select('id')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq(0)->fetch();
+            if($program) return $programID;
+        }
+
+        $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->program->defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+        if($program) return $program->id;
+
         $account  = isset($this->app->user->account) ? $this->app->user->account : '';
         $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
 

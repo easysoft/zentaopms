@@ -63,7 +63,6 @@ $lang->upgrade->toMAXGuide     = '禅道旗舰版版本升级';
 $lang->upgrade->line            = '产品线';
 $lang->upgrade->allLines        = "所有{$lang->productCommon}线";
 $lang->upgrade->program         = '目标项目集和项目';
-$lang->upgrade->defaultProgram  = '默认项目集';
 $lang->upgrade->existProgram    = '已有项目集';
 $lang->upgrade->existProject    = '已有项目';
 $lang->upgrade->existLine       = '已有' . $lang->productCommon . '线';

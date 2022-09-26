@@ -61,7 +61,6 @@ $lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 $lang->upgrade->line            = 'Product Line';
 $lang->upgrade->allLines        = "All Product Lines";
 $lang->upgrade->program         = 'Merge Project';
-$lang->upgrade->defaultProgram  = 'Default Program';
 $lang->upgrade->existProgram    = 'Existing programs';
 $lang->upgrade->existProject    = 'Existing projects';
 $lang->upgrade->existLine       = 'Existing' . $lang->productCommon . ' lines';
