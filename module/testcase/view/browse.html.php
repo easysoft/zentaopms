@@ -114,6 +114,7 @@ js::set('suiteID',        $suiteID);
           <tr data-id='<?php echo $case->id?>'>
             <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tr>
+          <?php $caseProductIds[$case->product] = $case->product;?>
           <?php endforeach;?>
         </tbody>
       </table>
@@ -129,7 +130,6 @@ js::set('suiteID',        $suiteID);
             $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
-            foreach($cases as $case) $caseProductIds[$case->product] = $case->product;
             $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
             $actionLink    = $this->createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch");
             $misc          = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
