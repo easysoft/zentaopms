@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $activeClass = $currentObjectType == 'all' ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->all . "</span>", '', "class='btn btn-link $activeClass'");?>
+    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->action->periods['all'] . "</span>", '', "class='btn btn-link $activeClass'");?>
     <?php
     /* Output the objectType order by preferredTypeConfig. */
     foreach($preferredTypeConfig as $objectType)

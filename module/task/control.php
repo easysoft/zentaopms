@@ -941,7 +941,11 @@ class task extends control
         }
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        if(!isonlybody() and $execution->type == 'kanban')
+        {
+            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', false, true);
+            return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        }
 
         $this->session->project = $task->project;
 

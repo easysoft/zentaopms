@@ -77,7 +77,7 @@ $lang->mr->assignedToMe = '指派给我';
 $lang->mr->createdByMe  = '由我创建';
 
 $lang->mr->statusList = array();
-$lang->mr->statusList['all']    = '所有';
+$lang->mr->statusList['all']    = '全部';
 $lang->mr->statusList['opened'] = '开放中';
 $lang->mr->statusList['merged'] = '已合并';
 $lang->mr->statusList['closed'] = '已关闭';

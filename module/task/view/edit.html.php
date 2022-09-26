@@ -26,8 +26,8 @@
 
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
-<?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
+<?php js::set('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'))?>
 <?php js::set('requiredFields', $config->task->edit->requiredFields);?>
 <?php
 $requiredFields = array();

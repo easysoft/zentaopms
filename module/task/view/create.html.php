@@ -19,7 +19,7 @@
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
 <?php
@@ -123,11 +123,11 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
               <thead>
                 <tr class='text-center'>
                   <th class='c-name'><?php echo $lang->task->storyAB;?></th>
-                  <th class='c-pri'><?php echo $lang->task->pri;?></th>
-                  <th class='c-date'><?php echo $lang->task->estStarted;?></th>
-                  <th class='c-date'><?php echo $lang->task->deadline;?></th>
+                  <th class='c-pri <?php if(isset($requiredFields['pri'])) echo 'required';?>'><?php echo $lang->task->pri;?></th>
+                  <th class='c-date <?php if(isset($requiredFields['estStarted'])) echo 'required';?>'><?php echo $lang->task->estStarted;?></th>
+                  <th class='c-date <?php if(isset($requiredFields['deadline'])) echo 'required';?>'><?php echo $lang->task->deadline;?></th>
                   <th class='c-assignedTo'><?php echo $lang->task->assignedTo;?></th>
-                  <th class='c-estimate'><?php echo $lang->task->estimate;?></th>
+                  <th class='c-estimate <?php if(isset($requiredFields['estimate'])) echo 'required';?>'><?php echo $lang->task->estimate;?></th>
                   <th class='c-actions'><?php echo $lang->actions;?></th>
                 </tr>
               </thead>

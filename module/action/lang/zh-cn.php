@@ -82,7 +82,7 @@ $lang->action->dynamic->all        = '所有';
 $lang->action->dynamic->hidden     = '已隐藏';
 $lang->action->dynamic->search     = '搜索';
 
-$lang->action->periods['all']       = $lang->action->dynamic->all;
+$lang->action->periods['all']       = '全部';
 $lang->action->periods['today']     = $lang->action->dynamic->today;
 $lang->action->periods['yesterday'] = $lang->action->dynamic->yesterday;
 $lang->action->periods['thisweek']  = $lang->action->dynamic->thisWeek;

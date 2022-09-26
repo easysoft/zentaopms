@@ -1,3 +1,4 @@
+#mainContent {min-height: 500px;}
 .table-recorded thead{background: rgb(245 245 245);}
 .form-condensed .table-form {margin-bottom: 20px;}
 .hours {display: flex; float: left; transform: translate(0, 50%); margin: 0;}
@@ -16,3 +17,4 @@
 .main-header ul.hours:before{content:"（"}
 .main-header ul.hours:after{content:"）"}
 .body-modal .main-header>h2 { max-width: 70% !important; margin-right:0px;}
+.table-record .form-date {border-right: none;}

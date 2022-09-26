@@ -148,7 +148,7 @@ $lang->testtask->finishedDateLess  = '实际完成日期不能小于开始日期
 $lang->testtask->finishedDateMore  = '实际完成日期不能大于今天';
 
 $lang->testtask->assignedToMe  = '指派给我';
-$lang->testtask->allCases      = '所有用例';
+$lang->testtask->allCases      = '全部用例';
 
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';

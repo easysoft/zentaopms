@@ -1972,6 +1972,11 @@ $('[data-tab]').on('shown.zui.tab', function(e)
     {
         $regions.addClass('active').removeClass('notAll');
         if(hasActions) $regionActions.removeClass('active');
+        $regions.each(function()
+        {
+            var isFold = $(this).find('.region-header i').hasClass('icon-angle-down');
+            if(isFold) $(this).find('.kanban').css('display', 'none');
+        });
     }
     else
     {
@@ -1991,6 +1996,7 @@ $('[data-tab]').on('shown.zui.tab', function(e)
             if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
         });
     }
+     window.scrollTo(0, 0);
 
     /* To manually refresh stay under the current tab, save the ID of the current region. */
     var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);

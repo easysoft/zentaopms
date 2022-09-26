@@ -1805,10 +1805,23 @@ class taskModel extends model
 
         /* Fix bug#3036. */
         foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
-        foreach($record->left     as $id => $item) $record->left[$id]     = trim($item);
-        foreach($record->consumed as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
-        foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
-        foreach($record->dates    as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+        foreach($record->consumed as $id => $item)
+        {
+            if(!is_numeric($item) and !empty($item))
+            {
+                dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+            }
+            elseif(is_numeric($item) and $item <= 0)
+            {
+                dao::$errors[] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
+            }
+        }
+        foreach($record->left as $id => $item)
+        {
+            $record->left[$id] = trim($item);
+            if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+        }
+        foreach($record->dates as $id => $item) if($item > $today) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
         if(dao::isError()) return false;
 
         $estimates    = array();
@@ -1828,8 +1841,9 @@ class taskModel extends model
 
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
-                if(!$record->consumed[$id])   helper::end(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '') helper::end(js::alert($this->lang->task->error->left));
+                if(helper::isZeroDate($record->dates[$id])) helper::end(js::alert($this->lang->task->error->dateEmpty));
+                if(!$record->consumed[$id])                 helper::end(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '')               helper::end(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
@@ -2885,9 +2899,10 @@ class taskModel extends model
         $estimate    = fixer::input('post')->cleanINT('consumed,left')->get();
         $today       = helper::today();
 
-        if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
-        if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+        if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
+        if($estimate->date > $today)            return dao::$errors[] = $this->lang->task->error->date;
+        if($estimate->consumed <= 0)            return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
+        if($estimate->left < 0)                 return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
         $task = $this->getById($oldEstimate->objectID);
         $this->dao->update(TABLE_EFFORT)->data($estimate)
@@ -3846,6 +3861,7 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
         if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
         {
@@ -3867,15 +3883,16 @@ class taskModel extends model
         }
         elseif(empty($task->assignedTo))
         {
-            $btnTextClass   = 'text-primary';
+            $btnClass       = $btnTextClass = 'assigned-none';
             $assignedToText = $this->lang->task->noAssigned;
         }
-        if($task->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if($task->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($task->assignedTo) and $task->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= $task->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }

@@ -255,6 +255,7 @@ $lang->task->error->recordMinus       = '工时不能为负数';
 $lang->task->error->leftNumber        = '"预计剩余"必须为数字';
 $lang->task->error->recordMinus       = '工时不能为负数';
 $lang->task->error->consumedSmall     = '"总计消耗"必须大于之前消耗';
+$lang->task->error->dateEmpty         = '请填写"日期"';
 $lang->task->error->consumedThisTime  = '请填写"消耗"';
 $lang->task->error->left              = '请填写"剩余"';
 $lang->task->error->work              = '"备注"必须小于%d个字符';

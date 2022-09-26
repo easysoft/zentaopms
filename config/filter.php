@@ -169,6 +169,7 @@ $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
 $filter->productplan->browse      = new stdclass();
 $filter->kanban->space            = new stdclass();
+$filter->execution->kanban        = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -300,6 +301,7 @@ $filter->execution->story->cookie['storyProductParam']   = 'int';
 $filter->execution->story->cookie['storyBranchParam']    = 'int';
 $filter->execution->story->cookie['executionStoryOrder'] = 'code';
 $filter->execution->export->cookie['checkedItem']        = 'reg::checked';
+$filter->execution->kanban->cookie['taskToOpen']         = 'int';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';
