@@ -22,7 +22,18 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
+          <td colspan='2'>
+            <div style="display: flex;">
+                <?php echo html::radio('fluidBoard', array('0' => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('colWidth', '264', "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
+            </div>
+            <div style="display: flex; margin-top: 10px;">
+                <?php echo html::radio('fluidBoard', array('1' => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('colMinWidth', '', "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
+                <span class="input-divider">~</span>
+                <?php echo html::input('colMaxWidth', '', "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
+            </div>
+        </td>
         </tr>
         <?php if($laneCount > 1):?>
         <tr>
