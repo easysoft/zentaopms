@@ -614,11 +614,11 @@ class task extends control
         $executionList = $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
         $project       = $this->loadModel('project')->getByID($task->project);
         $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
-        $execution     = array();
+        $executions    = array();
         foreach($executionList as $val)
         {
-           $values      = str_replace($replace, $project->name, $val);
-           $execution[] = $values;
+           $values       = str_replace($replace, $project->name, $val);
+           $executions[] = $values;
         }
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
@@ -629,7 +629,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $execution;
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $executions;
         $this->display();
     }
 
