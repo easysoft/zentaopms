@@ -205,6 +205,7 @@ class install extends control
         if(!empty($_POST))
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
+            $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
             return print(js::locate(inlink('step5'), 'parent'));
         }
 
