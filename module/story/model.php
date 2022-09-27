@@ -4580,7 +4580,7 @@ class storyModel extends model
         $storyLink   = helper::createLink('story', 'view', "storyID=$story->id&version=0&param=0&storyType=$story->type");
         $canView     = common::hasPriv($story->type, 'view', null, "storyType=$story->type");
 
-        if($tab == 'project' and !$this->session->noSprint)
+        if($tab == 'project' and $this->session->multiple)
         {
             $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
             $canView   = common::hasPriv('projectstory', 'view');
@@ -4862,7 +4862,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution' || $this->session->noSprint)
+                if($tab == 'execution' || !$this->session->multiple)
                 {
                     $menuType = 'execution';
                 }

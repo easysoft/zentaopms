@@ -71,7 +71,7 @@ class story extends control
             if(empty($objectID)) $objectID = $this->session->project;
 
             $projectID = $objectID;
-            if($this->session->noSprint) $projectID = $this->session->project;
+            if(!$this->session->multiple) $projectID = $this->session->project;
             $projectID = isset($objects[$projectID]) ? $projectID : $this->session->project;
             $projectID = $this->project->saveState($projectID, $objects);
             $this->project->setMenu($projectID);

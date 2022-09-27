@@ -139,7 +139,7 @@ class execution extends control
         $recentExecutions = array_unique($recentExecutions);
         $recentExecutions = array_slice($recentExecutions, 0, 5);
         $recentExecutions = join(',', $recentExecutions);
-        if($this->session->noSprint)
+        if(!$this->session->multiple)
         {
             if(!isset($this->config->execution->recentExecutions) or $this->config->execution->recentExecutions != $recentExecutions) $this->setting->updateItem($this->app->user->account . 'common.execution.recentExecutions', $recentExecutions);
             if(!isset($this->config->execution->lastExecution)    or $this->config->execution->lastExecution != $executionID)         $this->setting->updateItem($this->app->user->account . 'common.execution.lastExecution', $executionID);
@@ -3129,7 +3129,7 @@ class execution extends control
         $products   = $this->product->getProducts($objectID);
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
         $browseLink = $this->session->executionStoryList;
-        if($this->app->tab == 'project' and empty($object->noSprint)) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 
@@ -3517,7 +3517,7 @@ class execution extends control
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('noSprint')->eq('0')
+            ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('project')->in(array_keys($projects))

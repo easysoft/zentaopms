@@ -38,6 +38,7 @@
           $disabled = $mode == 'lean' ? "disabled" : '';
           echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
           ?>
+          <div class="text-danger help-text"><?php echo $lang->custom->switchModeHelper ?></div>
         </td>
       </tr>
       <tr>

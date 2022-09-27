@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
+        
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -351,7 +352,7 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project' and empty($execution->noSprint))
+        elseif($this->app->tab == 'project' and $execution->multiple)
         {
             $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }

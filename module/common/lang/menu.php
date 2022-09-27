@@ -62,7 +62,6 @@ $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
 if($config->systemMode == 'lean') unset($lang->mainNav->program, $lang->mainNav->menuOrder[10]);
-if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->mainNav->execution, $lang->mainNav->menuOrder[25]);
 
 /* My menu. */
 $lang->my->menu             = new stdclass();
@@ -89,7 +88,6 @@ $lang->my->menuOrder[45] = 'score';
 $lang->my->menuOrder[50] = 'contacts';
 
 if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]);
-if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->my->menu->execution, $lang->my->menuOrder[30]);
 
 $lang->my->menu->work['subMenu']              = new stdclass();
 $lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task');
@@ -377,45 +375,45 @@ $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang-
 
 $lang->execution->dividerMenu = ',story,build,';
 
-$lang->noSprint                        = new stdclass();
-$lang->noSprint->scrum                 = new stdclass();
-$lang->noSprint->scrum->menu           = new stdclass();
-$lang->noSprint->scrum->menu->task     = $lang->execution->menu->task;
-$lang->noSprint->scrum->menu->kanban   = $lang->execution->menu->kanban;
-$lang->noSprint->scrum->menu->burn     = $lang->execution->menu->burn;
-$lang->noSprint->scrum->menu->view     = $lang->execution->menu->view;
-$lang->noSprint->scrum->menu->story    = $lang->execution->menu->story;
-$lang->noSprint->scrum->menu->qa       = $lang->scrum->menu->qa;
-$lang->noSprint->scrum->menu->devops   = $lang->scrum->menu->devops;
-$lang->noSprint->scrum->menu->doc      = $lang->scrum->menu->doc;
-$lang->noSprint->scrum->menu->build    = $lang->scrum->menu->build;
-$lang->noSprint->scrum->menu->dynamic  = $lang->scrum->menu->dynamic;
-$lang->noSprint->scrum->menu->settings = $lang->scrum->menu->settings;
+$lang->project->noMultiple                        = new stdclass();
+$lang->project->noMultiple->scrum                 = new stdclass();
+$lang->project->noMultiple->scrum->menu           = new stdclass();
+$lang->project->noMultiple->scrum->menu->task     = $lang->execution->menu->task;
+$lang->project->noMultiple->scrum->menu->kanban   = $lang->execution->menu->kanban;
+$lang->project->noMultiple->scrum->menu->burn     = $lang->execution->menu->burn;
+$lang->project->noMultiple->scrum->menu->view     = $lang->execution->menu->view;
+$lang->project->noMultiple->scrum->menu->story    = $lang->execution->menu->story;
+$lang->project->noMultiple->scrum->menu->qa       = $lang->scrum->menu->qa;
+$lang->project->noMultiple->scrum->menu->devops   = $lang->scrum->menu->devops;
+$lang->project->noMultiple->scrum->menu->doc      = $lang->scrum->menu->doc;
+$lang->project->noMultiple->scrum->menu->build    = $lang->scrum->menu->build;
+$lang->project->noMultiple->scrum->menu->dynamic  = $lang->scrum->menu->dynamic;
+$lang->project->noMultiple->scrum->menu->settings = $lang->scrum->menu->settings;
 
-$lang->noSprint->kanban                 = new stdclass();
-$lang->noSprint->kanban->menu           = new stdclass();
-$lang->noSprint->kanban->menu->kanban   = array('link' => "{$lang->kanban->common}|execution|kanban|executionID=%s");
-$lang->noSprint->kanban->menu->build    = $lang->kanbanProject->menu->build;
-$lang->noSprint->kanban->menu->settings = $lang->kanbanProject->menu->settings;
+$lang->project->noMultiple->kanban                 = new stdclass();
+$lang->project->noMultiple->kanban->menu           = new stdclass();
+$lang->project->noMultiple->kanban->menu->kanban   = array('link' => "{$lang->kanban->common}|execution|kanban|executionID=%s");
+$lang->project->noMultiple->kanban->menu->build    = $lang->kanbanProject->menu->build;
+$lang->project->noMultiple->kanban->menu->settings = $lang->kanbanProject->menu->settings;
 
-$lang->noSprint->scrum->dividerMenu  = ',story,build,';
-$lang->noSprint->kanban->dividerMenu = '';
+$lang->project->noMultiple->scrum->dividerMenu  = ',story,build,';
+$lang->project->noMultiple->kanban->dividerMenu = '';
 
-$lang->noSprint->scrum->menuOrder[5]  = 'task';
-$lang->noSprint->scrum->menuOrder[10] = 'kanban';
-$lang->noSprint->scrum->menuOrder[15] = 'burn';
-$lang->noSprint->scrum->menuOrder[20] = 'view';
-$lang->noSprint->scrum->menuOrder[25] = 'story';
-$lang->noSprint->scrum->menuOrder[30] = 'qa';
-$lang->noSprint->scrum->menuOrder[35] = 'devops';
-$lang->noSprint->scrum->menuOrder[40] = 'doc';
-$lang->noSprint->scrum->menuOrder[45] = 'build';
-$lang->noSprint->scrum->menuOrder[50] = 'dynamic';
-$lang->noSprint->scrum->menuOrder[55] = 'settings';
+$lang->project->noMultiple->scrum->menuOrder[5]  = 'task';
+$lang->project->noMultiple->scrum->menuOrder[10] = 'kanban';
+$lang->project->noMultiple->scrum->menuOrder[15] = 'burn';
+$lang->project->noMultiple->scrum->menuOrder[20] = 'view';
+$lang->project->noMultiple->scrum->menuOrder[25] = 'story';
+$lang->project->noMultiple->scrum->menuOrder[30] = 'qa';
+$lang->project->noMultiple->scrum->menuOrder[35] = 'devops';
+$lang->project->noMultiple->scrum->menuOrder[40] = 'doc';
+$lang->project->noMultiple->scrum->menuOrder[45] = 'build';
+$lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
+$lang->project->noMultiple->scrum->menuOrder[55] = 'settings';
 
-$lang->noSprint->kanban->menuOrder[5]  = 'kanban';
-$lang->noSprint->kanban->menuOrder[10] = 'build';
-$lang->noSprint->kanban->menuOrder[15] = 'settings';
+$lang->project->noMultiple->kanban->menuOrder[5]  = 'kanban';
+$lang->project->noMultiple->kanban->menuOrder[10] = 'build';
+$lang->project->noMultiple->kanban->menuOrder[15] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();
@@ -500,13 +498,11 @@ $lang->doc->menuOrder[30] = 'project';
 $lang->doc->menuOrder[35] = 'execution';
 $lang->doc->menuOrder[36] = 'api';
 $lang->doc->menuOrder[40] = 'custom';
-if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->doc->menu->execution, $lang->doc->menuOrder[35]);
 
 $lang->doc->menu->product['subMenu']   = new stdclass();
 $lang->doc->menu->project['subMenu']   = new stdclass();
 $lang->doc->menu->execution['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']    = new stdclass();
-if(isset($config->projectMode) and $config->projectMode == 'noSprint') unset($lang->doc->menu->execution['subMenu']);
 
 $lang->doc->menu->api['subMenu'] = new stdclass();
 $lang->doc->menu->api['subMenu']->index  = array('link' => "{$lang->doc->apiDoc}|api|index|libID=%s", 'alias' => 'create,edit');

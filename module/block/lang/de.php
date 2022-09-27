@@ -322,11 +322,8 @@ $lang->block->default['full']['my']['10']['title']  = 'Project List';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-if(!isset($config->projectMode) || $config->projectMode != 'noSprint')
-{
-    $lang->block->default['full']['my']['10']['block']  = 'project';
-    $lang->block->default['full']['my']['10']['source'] = 'project';
-}
+$lang->block->default['full']['my']['10']['block']  = 'execution';
+$lang->block->default['full']['my']['10']['source'] = 'execution';
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
@@ -353,11 +350,11 @@ $lang->block->availableBlocks->issue       = 'My Issues';
 $lang->block->availableBlocks->meeting     = 'My Meetings';
 $lang->block->availableBlocks->feedback    = 'My Feedbacks';
 
-$lang->block->moduleList['product'] = $lang->productCommon;
-$lang->block->moduleList['project'] = 'Project';
-if(!isset($config->projectMode) || $config->projectMode != 'noSprint') $lang->block->moduleList['execution'] = $lang->execution->common;
-$lang->block->moduleList['qa']      = 'QA';
-$lang->block->moduleList['todo']    = 'Todos';
+$lang->block->moduleList['product']   = $lang->productCommon;
+$lang->block->moduleList['project']   = 'Project';
+$lang->block->moduleList['execution'] = $lang->execution->common;
+$lang->block->moduleList['qa']        = 'QA';
+$lang->block->moduleList['todo']      = 'Todos';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
