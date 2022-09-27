@@ -121,7 +121,6 @@
 #programTableList .icon-kanban:before {content: '\e983';}
 #programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
 #programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
-#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
