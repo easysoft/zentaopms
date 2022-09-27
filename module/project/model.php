@@ -999,8 +999,11 @@ class projectModel extends model
             {
                 $projectName = $project->name;
 
-                $programID = zget($projectProgram, $project->id, '');
-                if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                if($this->config->systemMode == 'new')
+                {
+                    $programID = zget($projectProgram, $project->id, '');
+                    if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+                }
 
                 $pairs[$project->id] = $projectName;
             }
@@ -1339,7 +1342,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if($project->noSprint == 1 and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(!$project->multiple and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -2475,69 +2478,61 @@ class projectModel extends model
 
         common::setMenuVars('project', $objectID);
 
-        $this->setNoSprintMenu($objectID);
+        $this->setNomultipleMenu($objectID);
         return $objectID;
     }
 
     /**
-     * Set noSprint menu.
+     * Set multi-scrum menu.
      *
      * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function setNoSprintMenu($objectID)
+    public function setNoMultipleMenu($objectID)
     {
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
 
-        $this->session->set('noSprint', false);
+        $this->session->set('multiple', true);
 
-        $navGroup = zget($this->lang->navGroup, $moduleName);
-        $this->config->resetNavGroup['execution'] = 'execution';
-        $this->config->resetNavGroup['task']      = zget($this->lang->navGroup, 'task');
-        $this->config->resetNavGroup['story']     = zget($this->lang->navGroup, 'story');
-        $this->config->resetNavGroup[$moduleName] = $navGroup;
-
-
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('noSprint')->eq('1')->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->andWhere('multiple')->eq('0')->fetch();
         if(empty($project)) return;
 
-        if($project->type != 'project' and $project->type != 'sprint') return;
+        if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return;
 
         if($project->type == 'project')
         {
+            $model       = $project->model;
             $projectID   = $project->id;
             $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('project')->eq($projectID)
-                ->andWhere('noSprint')->eq(1)
+                ->andWhere('multiple')->eq('0')
                 ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq('0')
                 ->fetch('id');
         }
-        elseif($project->type == 'sprint')
+        else
         {
+            $model       = $project->type == 'kanban' ? 'kanban' : 'scrum';
             $executionID = $project->id;
             $projectID   = $project->project;
         }
         if(empty($projectID) or empty($executionID)) return;
 
         $this->session->set('project', $projectID, 'project');
-        $this->session->set('noSprint', true);
+        $this->session->set('multiple', false);
 
-        $this->app->tab = 'project';
-        $_COOKIE['tab'] = 'project';
-
-        $this->lang->navGroup->$moduleName   = 'project';
-        $this->lang->$navGroup->menu         = $this->lang->noSprint->menu;
-        $this->lang->$navGroup->menuOrder    = $this->lang->noSprint->menuOrder;
-        $this->lang->$navGroup->dividerMenu  = $this->lang->noSprint->dividerMenu;
+        $navGroup = zget($this->lang->navGroup, $moduleName);
+        $this->lang->$navGroup->menu        = $this->lang->project->noMultiple->{$model}->menu;
+        $this->lang->$navGroup->menuOrder   = $this->lang->project->noMultiple->{$model}->menuOrder;
+        $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
 
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
             $objectID = 0;
-            if(strpos($this->config->project->noSprint['project'], ",{$label},") !== false) $objectID = $projectID;
-            if(strpos($this->config->project->noSprint['execution'], ",{$label},") !== false)
+            if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $projectID;
+            if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
             {
                 $objectID = $executionID;
                 $this->lang->$navGroup->menu->$label['subModule'] = 'project';
@@ -2558,13 +2553,8 @@ class projectModel extends model
             }
         }
 
-        $this->config->resetNavGroup['execution'] = 'project';
-        $this->config->resetNavGroup['task']      = 'project';
-        $this->config->resetNavGroup['story']     = 'project';
-        $this->config->resetNavGroup[$moduleName] = 'project';
-
         /* If objectID is set, cannot use homeMenu. */
-        unset($this->lang->$navGroup->homeMenu);
+        unset($this->lang->project->homeMenu);
         $this->lang->switcherMenu         = $this->getSwitcher($projectID, $moduleName, $methodName);
         $this->lang->project->menu        = $this->lang->$navGroup->menu;
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;

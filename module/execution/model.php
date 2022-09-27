@@ -123,7 +123,7 @@ class executionModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
-        $this->loadModel('project')->setNoSprintMenu($executionID);
+        $this->loadModel('project')->setNoMultipleMenu($executionID);
     }
 
     /**
@@ -299,7 +299,6 @@ class executionModel extends model
      */
     public function create($copyExecutionID = '')
     {
-        $type = 'sprint';
         $this->lang->execution->team = $this->lang->execution->teamname;
 
         if(empty($_POST['project']))
@@ -1269,7 +1268,7 @@ class executionModel extends model
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($this->session->noSprint and $this->app->tab == 'execution')->andWhere('noSprint')->eq('0')->fi()
+            ->beginIF(!$this->session->multiple and $this->app->tab == 'execution')->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
@@ -1489,7 +1488,7 @@ class executionModel extends model
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.noSprint')->eq('0')
+            ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -4949,9 +4948,10 @@ class executionModel extends model
     public function createDefaultSprint($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $post    = $_POST;
+
         $_POST = array();
         $_POST['project']     = $projectID;
-        $_POST['parent']      = $projectID;
         $_POST['name']        = $project->name;
         $_POST['code']        = $project->code;
         $_POST['begin']       = $project->begin;
@@ -4966,9 +4966,16 @@ class executionModel extends model
         $_POST['QD']          = '';
         $_POST['PM']          = '';
         $_POST['RD']          = '';
-        $_POST['noSprint']    = 1;
+        $_POST['multiple']    = '0';
 
         $executionID = $this->create();
+        if($project->model == 'kanban')
+        {
+            $execution = $this->getById($executionID);
+            $this->loadModel('kanban')->createRDKanban($execution);
+        }
+
+        $_POST = $post;
 
         return $executionID;
     }

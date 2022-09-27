@@ -237,7 +237,7 @@ class search extends control
         {
             if(!isset($this->lang->search->modules[$objectType])) continue;
             if($this->config->systemMode != 'new' and $objectType == 'program') continue;
-            if(!empty($this->config->projectMode) and $this->config->projectMode == 'noSprint' and $objectType == 'execution') continue;
+
             $typeList[$objectType] = $this->lang->search->modules[$objectType];
         }
 

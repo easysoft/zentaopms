@@ -4,16 +4,9 @@ $(function()
 
     $('[name=mode]').change(function()
     {
-        if($(this).val() != mode)
-        {
-            $('#submit').removeAttr('disabled');
-        }
-        else
-        {
-            $('#submit').attr('disabled',true);
-        }
-        if(mode == 'lean') return;
-        $("#selectDefaultProgram").toggle($(this).val() == 'lean');
+        $('#submit').prop('disabled', 'disabled');
+        if(mode != $(this).val()) $('#submit').prop('disabled', '');
+        $('#program').closest('tr').toggle(mode == 'new' && $(this).val() == 'lean');
     });
 
 

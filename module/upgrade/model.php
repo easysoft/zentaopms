@@ -7529,65 +7529,6 @@ class upgradeModel extends model
         return true;
     }
 
-    /*
-     * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return bool
-     */
-    public function classic2Lean($programID)
-    {
-        /* Set project mode as noSprint. */
-        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noSprint');
-
-        $this->upgradeInProjectMode($programID);
-
-        return !dao::isError();
-    }
-
-    /**
-     * Create a default program.
-     *
-     * @access public
-     * @return object
-     */
-    public function createDefaultProgram()
-    {
-        $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->upgrade->defaultProgram)->fetch();
-        if($program) return $program;
-
-        $account = isset($this->app->user->account) ? $this->app->user->account : '';
-
-        $program = new stdclass();
-        $program->name          = $this->lang->upgrade->defaultProgram;
-        $program->type          = 'program';
-        $program->status        = 'doing';
-        $program->begin         = helper::now();
-        $program->end           = LONG_TIME;
-        $program->openedBy      = $account;
-        $program->openedDate    = helper::now();
-        $program->openedVersion = $this->config->version;
-        $program->acl           = 'open';
-        $program->days          = $this->computeDaysDelta($program->begin, $program->end);
-        $program->grade         = 1;
-        $program->vision        = 'rnd';
-
-        $this->app->loadLang('program');
-        $this->app->loadLang('project');
-        $this->lang->project->name = $this->lang->program->name;
-
-        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
-        if(dao::isError()) return false;
-
-        $programID = $this->dao->lastInsertId();
-
-        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
-        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
-
-        return $this->loadModel('program')->getByID($programID);
-    }
-
     /**
      * Historical projects are upgraded by project.
      *
@@ -7595,12 +7536,11 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function upgradeInProjectMode($programID)
+    public function upgradeInProjectMode($programID, $fromMode = '')
     {
         $this->loadModel('action');
-        $now         = helper::now();
-        $account     = isset($this->app->user->account) ? $this->app->user->account : '';
-        $projectMode = $this->setting->getItem('owner=system&module=common&section=global&key=projectMode');
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
         $noMergedSprints = $this->getNoMergedSprints();
         if(!$noMergedSprints) return true;
@@ -7625,7 +7565,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($projectMode == 'noSprint') $project->noSprint = '1';
+            if($fromMode == 'classic') $project->multiple = '0';
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
             if(dao::isError()) return false;

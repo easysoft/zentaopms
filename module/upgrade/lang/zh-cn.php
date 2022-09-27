@@ -41,29 +41,28 @@ $lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操�
                                       </ul>
                                       <p><strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="#" onclick="location.reload()">继续更新</a></strong></p>';
 
-$lang->upgrade->selectVersion  = '选择版本';
-$lang->upgrade->continue       = '继续';
-$lang->upgrade->noteVersion    = "务必选择正确的版本，否则会造成数据丢失。";
-$lang->upgrade->fromVersion    = '原来的版本';
-$lang->upgrade->toVersion      = '升级到';
-$lang->upgrade->confirm        = '确认要执行的SQL语句';
-$lang->upgrade->sureExecute    = '确认执行';
-$lang->upgrade->upgradingTips  = '正在升级中，请耐心等待，切勿刷新页面、断电、关机！';
-$lang->upgrade->forbiddenExt   = '以下插件与新版本不兼容，已经自动禁用：';
-$lang->upgrade->updateFile     = '需要更新附件信息。';
-$lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
-$lang->upgrade->afterDeleted   = '请执行上面命令删除文件， 删除后刷新！';
-$lang->upgrade->mergeProgram   = '数据迁移';
-$lang->upgrade->mergeTips      = '数据迁移提示';
-$lang->upgrade->toPMS15Guide   = '禅道开源版15版本升级';
-$lang->upgrade->toPRO10Guide   = '禅道专业版10版本升级';
-$lang->upgrade->toBIZ5Guide    = '禅道企业版5版本升级';
-$lang->upgrade->toMAXGuide     = '禅道旗舰版版本升级';
+$lang->upgrade->selectVersion = '选择版本';
+$lang->upgrade->continue      = '继续';
+$lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
+$lang->upgrade->fromVersion   = '原来的版本';
+$lang->upgrade->toVersion     = '升级到';
+$lang->upgrade->confirm       = '确认要执行的SQL语句';
+$lang->upgrade->sureExecute   = '确认执行';
+$lang->upgrade->upgradingTips = '正在升级中，请耐心等待，切勿刷新页面、断电、关机！';
+$lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自动禁用：';
+$lang->upgrade->updateFile    = '需要更新附件信息。';
+$lang->upgrade->noticeSQL     = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
+$lang->upgrade->afterDeleted  = '请执行上面命令删除文件， 删除后刷新！';
+$lang->upgrade->mergeProgram  = '数据迁移';
+$lang->upgrade->mergeTips     = '数据迁移提示';
+$lang->upgrade->toPMS15Guide  = '禅道开源版15版本升级';
+$lang->upgrade->toPRO10Guide  = '禅道专业版10版本升级';
+$lang->upgrade->toBIZ5Guide   = '禅道企业版5版本升级';
+$lang->upgrade->toMAXGuide    = '禅道旗舰版版本升级';
 
 $lang->upgrade->line            = '产品线';
 $lang->upgrade->allLines        = "所有{$lang->productCommon}线";
 $lang->upgrade->program         = '目标项目集和项目';
-$lang->upgrade->defaultProgram  = '默认项目集';
 $lang->upgrade->existProgram    = '已有项目集';
 $lang->upgrade->existProject    = '已有项目';
 $lang->upgrade->existLine       = '已有' . $lang->productCommon . '线';
@@ -72,6 +71,7 @@ $lang->upgrade->project         = '迭代';
 $lang->upgrade->repo            = '版本库';
 $lang->upgrade->mergeRepo       = '归并版本库';
 $lang->upgrade->setProgram      = '设置项目所属项目集';
+$lang->upgrade->setProject      = "设置{$lang->executionCommon}所属项目";
 $lang->upgrade->dataMethod      = '数据迁移方式';
 $lang->upgrade->selectMergeMode = '请选择数据归并方式';
 $lang->upgrade->mergeMode       = '数据归并方式：';
@@ -85,47 +85,49 @@ $lang->upgrade->fileName        = '文件名称';
 $lang->upgrade->next            = '下一步';
 $lang->upgrade->back            = '上一步';
 
-$lang->upgrade->newProgram         = '新建';
-$lang->upgrade->editedName         = '调整后名称';
-$lang->upgrade->projectEmpty       = '所属项目不能为空！';
-$lang->upgrade->mergeSummary       = "尊敬的用户，您的系统中共有%s个{$lang->productCommon}，%s个{$lang->projectCommon}等待迁移。";
-$lang->upgrade->mergeByProject     = "当前提供如下2种数据迁移方式，如果历史的项目都是长周期的，那么我们建议把历史的项目作为项目升级。</br>如果历史的项目都是短周期的，那么我们建议把历史的项目作为迭代升级。";
-$lang->upgrade->mergeRepoTips      = "将选中的版本库归并到所选产品下。";
-$lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
-$lang->upgrade->needChangeEngine   = '本次升级需要更换表引擎， [后台->系统->表引擎] 页面更换引擎。';
-$lang->upgrade->errorEngineInnodb  = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
-$lang->upgrade->duplicateProject   = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
-$lang->upgrade->upgradeTips        = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
-$lang->upgrade->moveEXTFileFail    = '迁移文件失败， 请执行上面命令后刷新！';
-$lang->upgrade->deleteDirTip       = '升级后，如下文件夹会影响系统功能的使用，请删除。';
-$lang->upgrade->errorNoProduct     = "请选择需要归并的{$lang->productCommon}。";
-$lang->upgrade->errorNoExecution   = "请选择需要归并的{$lang->projectCommon}。";
-$lang->upgrade->moveExtFileTip     = <<<EOT
+$lang->upgrade->newProgram        = '新建';
+$lang->upgrade->editedName        = '调整后名称';
+$lang->upgrade->projectEmpty      = '所属项目不能为空！';
+$lang->upgrade->mergeSummary      = "尊敬的用户，您的系统中共有%s等待迁移。";
+$lang->upgrade->productCount      = "%s个{$lang->productCommon}";
+$lang->upgrade->projectCount      = "%s个{$lang->projectCommon}";
+$lang->upgrade->mergeByProject    = "当前提供如下2种数据迁移方式，如果历史的{$lang->projectCommon}都是长周期的，那么我们建议把历史的{$lang->projectCommon}作为项目升级。</br>如果历史的{$lang->projectCommon}都是短周期的，那么我们建议把历史的{$lang->projectCommon}作为{$lang->executionCommon}升级。";
+$lang->upgrade->mergeRepoTips     = "将选中的版本库归并到所选产品下。";
+$lang->upgrade->needBuild4Add     = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
+$lang->upgrade->needChangeEngine  = '本次升级需要更换表引擎， [后台->系统->表引擎] 页面更换引擎。';
+$lang->upgrade->errorEngineInnodb = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
+$lang->upgrade->duplicateProject  = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
+$lang->upgrade->upgradeTips       = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
+$lang->upgrade->moveEXTFileFail   = '迁移文件失败， 请执行上面命令后刷新！';
+$lang->upgrade->deleteDirTip      = '升级后，如下文件夹会影响系统功能的使用，请删除。';
+$lang->upgrade->errorNoProduct    = "请选择需要归并的{$lang->productCommon}。";
+$lang->upgrade->errorNoExecution  = "请选择需要归并的{$lang->projectCommon}。";
+$lang->upgrade->moveExtFileTip    = <<<EOT
 <p>新版本将对历史的定制/插件进行扩展机制兼容处理，需要将定制/插件相关的文件迁移到extension/custom下，否则定制/插件功能将无法使用。</p>
 <p>请您确认系统是否有做过定制/插件，如没有做过定制/插件，可取消勾选如下文件；如果不清楚是否做过定制/插件，也可保持文件勾选。</p>
 EOT;
 
 $lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
-$lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为迭代升级";
+$lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为{$lang->executionCommon}升级";
 
 $lang->upgrade->createProjectTip = <<<EOT
 <p>升级后历史的{$lang->projectCommon}一一对应新版本中的项目。</p>
-<p>系统会根据历史{$lang->projectCommon}分别创建一个与该{$lang->projectCommon}同名的迭代，并将之前{$lang->projectCommon}的任务、需求、Bug等数据迁移至迭代中。</p>
+<p>系统会根据历史{$lang->projectCommon}分别创建一个与该{$lang->projectCommon}同名的{$lang->executionCommon}，并将之前{$lang->projectCommon}的任务、需求、Bug等数据迁移至{$lang->executionCommon}中。</p>
 EOT;
 
 $lang->upgrade->createExecutionTip = <<<EOT
-<p>系统会把历史的{$lang->projectCommon}作为迭代进行升级。</p>
-<p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的迭代。</p>
+<p>系统会把历史的{$lang->projectCommon}作为{$lang->executionCommon}进行升级。</p>
+<p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的{$lang->executionCommon}。</p>
 EOT;
 
 $lang->upgrade->mergeModes = array();
-$lang->upgrade->mergeModes['project']   = '自动归并数据，将历史的项目作为项目升级';
-$lang->upgrade->mergeModes['execution'] = '自动归并数据，将历史的项目作为迭代升级';
+$lang->upgrade->mergeModes['project']   = "自动归并数据，将历史的{$lang->projectCommon}作为项目升级";
+$lang->upgrade->mergeModes['execution'] = "自动归并数据，将历史的{$lang->projectCommon}作为{$lang->executionCommon}升级";
 $lang->upgrade->mergeModes['manually']  = '手工归并数据';
 
-$lang->upgrade->mergeProjectTip   = '历史的项目将直接同步到新版本的项目中，同时系统将会根据历史项目分别创建一个与该项目同名的迭代，并将之前项目下的任务、需求、Bug等数据迁移至迭代中。';
-$lang->upgrade->mergeExecutionTip = '系统将自动按年创建项目，将历史的迭代数据按照年份归并到对应的项目下。';
-$lang->upgrade->createProgramTip  = '同时系统将自动创建一个默认的项目集，将所有的项目都放在默认的项目集下。';
+$lang->upgrade->mergeProjectTip   = "历史的{$lang->projectCommon}将直接同步到新版本的项目中，同时系统将会根据历史{$lang->projectCommon}分别创建一个与该{$lang->projectCommon}同名的{$lang->executionCommon}，并将之前{$lang->projectCommon}下的任务、需求、Bug等数据迁移至{$lang->executionCommon}中。";
+$lang->upgrade->mergeExecutionTip = "系统将自动按年创建项目，将历史的{$lang->projectCommon}数据按照年份归并到对应的项目下。";
+$lang->upgrade->createProgramTip  = "同时系统将自动创建一个默认的项目集，将所有的{$lang->projectCommon}都放在默认的项目集下。";
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
 include dirname(__FILE__) . '/version.php';

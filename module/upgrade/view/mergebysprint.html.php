@@ -1,6 +1,10 @@
 <div class='alert alert-info'>
   <?php
-  printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
+  $content = '';
+  if($noMergedProductCount) $content .= sprintf($lang->upgrade->productCount, $noMergedProductCount);
+  if($content) $content .= ',';
+  if($noMergedSprintCount)  $content .= sprintf($lang->upgrade->projectCount, $noMergedSprintCount);
+  printf($lang->upgrade->mergeSummary, $content);
   echo '<br />' . $lang->upgrade->mergeByProject;
   ?>
 </div>

@@ -73,15 +73,11 @@
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if(!isset($this->config->projectMode) and $model != 'waterfall'):?>
+        <?php if($model != 'waterfall'):?>
         <tr>
-          <th><?php echo $lang->project->noSprint;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, 0));?></td>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, '1'));?></td>
         </tr>
-        <?php elseif($model == 'waterfall'):?>
-        <?php echo html::hidden('noSprint', 0);?>
-        <?php else:?>
-        <?php echo html::hidden('noSprint', 1);?>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
@@ -246,7 +242,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($copyProjects as $id => $name):?>
+      <?php foreach($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endforeach;?>

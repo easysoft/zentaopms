@@ -171,7 +171,7 @@ class upgrade extends control
                 /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
                 $this->upgrade->relationDefaultProgram($programID);
 
-                $this->upgrade->classic2Lean($programID);
+                $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
                 $selectMode = false;
             }

@@ -635,7 +635,6 @@ class searchModel extends model
         else
         {
             if($this->config->systemMode != 'new') unset($this->config->search->fields->program);
-            if(!empty($this->config->projectMode) and $this->config->projectMode == 'noSprint') unset($this->config->search->fields->execution);
 
             foreach($this->config->search->fields as $objectType => $fields)
             {

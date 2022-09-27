@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
+        
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -110,9 +111,6 @@ class task extends control
             $this->view->regionPairs = $regionPairs;
             $this->view->lanePairs   = $lanePairs;
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -354,7 +352,7 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project' and empty($execution->noSprint))
+        elseif($this->app->tab == 'project' and $execution->multiple)
         {
             $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }
@@ -599,8 +597,6 @@ class task extends control
                 return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
             }
         }
-
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
@@ -962,9 +958,6 @@ class task extends control
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
-
-        /* Set menu. */
-        if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);
 

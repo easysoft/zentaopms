@@ -23,7 +23,7 @@
     </div>
     <table class='table table-form'>
       <tr>
-        <th class='text-top'><?php echo $lang->custom->mode;?></th>
+        <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
         <td>
           <p>
             <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : '';?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
@@ -31,8 +31,8 @@
           </p>
         </td>
       </tr>
-      <tr id="selectDefaultProgram" class='hide'>
-        <td></td>
+      <tr class='hide'>
+        <th><?php echo $lang->custom->defaultProgram;?></th>
         <td>
           <?php
           $disabled = $mode == 'lean' ? "disabled" : '';
@@ -42,7 +42,7 @@
         </td>
       </tr>
       <tr>
-        <th class='text-top'><?php echo $lang->custom->selectDefaultProgram;?></th>
+        <td></td>
         <td><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
     </table>
