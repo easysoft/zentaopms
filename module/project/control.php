@@ -1124,7 +1124,6 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
 
         /* team member pairs. */
         $memberPairs   = array();
@@ -1153,20 +1152,6 @@ class project extends control
             }
         }
 
-        /* Process the openedBuild and resolvedBuild fields. */
-        $bugs = $this->bug->processBuildForBugs($bugs);
-
-        /* Get story and task id list. */
-        $storyIdList = $taskIdList = array();
-        foreach($bugs as $bug)
-        {
-            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
-            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
-        }
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
-
         $moduleID = $type != 'bysearch' ? $param : 0;
         $modules  = $this->tree->getAllModulePairs('bug');
 
@@ -1186,6 +1171,21 @@ class project extends control
             $moduleTree = '';
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
 
         $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->projectBug->showModule : '';
 
