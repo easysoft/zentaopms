@@ -175,8 +175,7 @@
                 </td>
               </tr>
               <?php else:?>
-              <?php if(!$product->shadow):?>
-              <tr>
+              <tr class="<?php if($product->shadow) echo 'hidden';?>">
                 <th><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
@@ -185,9 +184,8 @@
                   </div>
                 </td>
               </tr>
-              <?php endif;?>
               <tr>
-                <th><?php echo $lang->testcase->module;?></th>
+                <th class='w-100px'><?php echo $lang->testcase->module;?></th>
                 <td>
                   <div class='input-group' id='moduleIdBox'>
                   <?php
