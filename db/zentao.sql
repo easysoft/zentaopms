@@ -1193,7 +1193,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `displayCards` smallint(6) NOT NULL default '0',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
-  `noSprint` enum('0','1') NOT NULL DEFAULT '0',
+  `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),

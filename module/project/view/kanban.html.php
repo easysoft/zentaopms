@@ -39,7 +39,6 @@ $kanbanColumns['waitProject']    = array('name' => $lang->project->waitProjects,
 $kanbanColumns['doingProject']   = array('name' => $lang->project->doingProjects, 'type' => 'doingProject');
 $kanbanColumns['doingExecution'] = array('name' => $lang->project->doingExecutions, 'type' => 'doingExecution');
 $kanbanColumns['closedProject']  = array('name' => $lang->project->closedProjects, 'type' => 'closedProject');
-if(!empty($config->projectMode) and $config->projectMode == 'noSprint') unset($kanbanColumns['doingExecution']);
 $userPrivs = array();
 $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');

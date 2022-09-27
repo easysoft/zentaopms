@@ -7529,23 +7529,6 @@ class upgradeModel extends model
         return true;
     }
 
-    /*
-     * Upgrade from classic mode of 15 version  to the lite mode of 18 version.
-     *
-     * @param  int    $programID
-     * @access public
-     * @return bool
-     */
-    public function classic2Lean($programID)
-    {
-        /* Set project mode as noSprint. */
-        $this->loadModel('setting')->setItem('system.common.global.projectMode', 'noSprint');
-
-        $this->upgradeInProjectMode($programID);
-
-        return !dao::isError();
-    }
-
     /**
      * Historical projects are upgraded by project.
      *
@@ -7553,12 +7536,11 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function upgradeInProjectMode($programID)
+    public function upgradeInProjectMode($programID, $fromMode = '')
     {
         $this->loadModel('action');
-        $now         = helper::now();
-        $account     = isset($this->app->user->account) ? $this->app->user->account : '';
-        $projectMode = $this->setting->getItem('owner=system&module=common&section=global&key=projectMode');
+        $now     = helper::now();
+        $account = isset($this->app->user->account) ? $this->app->user->account : '';
 
         $noMergedSprints = $this->getNoMergedSprints();
         if(!$noMergedSprints) return true;
@@ -7583,7 +7565,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
-            if($projectMode == 'noSprint') $project->noSprint = '1';
+            if($fromMode == 'classic') $project->multiple = '0';
 
             $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
             if(dao::isError()) return false;

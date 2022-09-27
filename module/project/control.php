@@ -306,12 +306,12 @@ class project extends control
         $project = $this->project->getByID($projectID);
 
         /* Locate to task when set no execution. */
-        if($project->noSprint)
+        if(!$project->multiple)
         {
             $executions = $this->loadModel('execution')->getList($project->id);
             foreach($executions as $execution)
             {
-                if($execution->noSprint) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
+                if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
             }
         }
 
@@ -580,12 +580,12 @@ class project extends control
         {
             $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
-            $this->lang->project->noSprint   = $this->lang->project->kanban;
+            $this->lang->project->multiple   = $this->lang->project->kanban;
         }
 
         if($model == 'scrum')
         {
-            $this->lang->project->noSprint = empty($this->config->custom->sprintConcept) ?
+            $this->lang->project->multiple = empty($this->config->custom->sprintConcept) ?
             $this->config->executionCommonList[$this->app->getClientLang()][0] :
             $this->config->executionCommonList[$this->app->getClientLang()][1];
         }
@@ -736,11 +736,11 @@ class project extends control
 
         if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
-        if($project->model == 'kanban') $this->lang->project->noSprint = $this->lang->project->kanban;
+        if($project->model == 'kanban') $this->lang->project->multiple = $this->lang->project->kanban;
 
         if($project->model == 'scrum')
         {
-            $this->lang->project->noSprint = empty($this->config->custom->sprintConcept) ?
+            $this->lang->project->multiple = empty($this->config->custom->sprintConcept) ?
             $this->config->executionCommonList[$this->app->getClientLang()][0] :
             $this->config->executionCommonList[$this->app->getClientLang()][1];
         }

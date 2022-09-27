@@ -257,8 +257,8 @@ $lang->project->featureBar['build']['all'] = 'Build List';
 $lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 
-$lang->project->noSprintList['0'] = "Enable";
-$lang->project->noSprintList['1'] = "Disable";
+$lang->project->multipleList['0'] = 'No';
+$lang->project->multipleList['1'] = 'Yes';
 
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
@@ -324,26 +324,26 @@ $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';
 $lang->project->programTitle['end']  = 'End-level project only';
 
-$lang->project->accessDenied        = 'Access denied to this project';
-$lang->project->chooseProgramType   = 'Select management type';
-$lang->project->cannotCreateChild   = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
-$lang->project->hasChildren         = 'This project has a child project, so it cannot be deleted.';
-$lang->project->confirmDelete       = 'Do you want to delete \"%s\"?';
-$lang->project->cannotChangeToCat   = "The project has contents, so you cannot it to a parent project.";
-$lang->project->cannotCancelCat     = "There are child projects of this project. You cannot cancel the parent project mark.";
-$lang->project->parentBeginEnd      = "The begin and end date of the parent project: %s ~ %s";
-$lang->project->parentBudget        = "The budget of the parent program: ";
+$lang->project->accessDenied         = 'Access denied to this project';
+$lang->project->chooseProgramType    = 'Select management type';
+$lang->project->cannotCreateChild    = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
+$lang->project->hasChildren          = 'This project has a child project, so it cannot be deleted.';
+$lang->project->confirmDelete        = 'Do you want to delete \"%s\"?';
+$lang->project->cannotChangeToCat    = "The project has contents, so you cannot it to a parent project.";
+$lang->project->cannotCancelCat      = "There are child projects of this project. You cannot cancel the parent project mark.";
+$lang->project->parentBeginEnd       = "The begin and end date of the parent project: %s ~ %s";
+$lang->project->parentBudget         = "The budget of the parent program: ";
 $lang->project->beginLetterParent    = "The start date of the project is < the start date of the parent program:";
 $lang->project->endGreaterParent     = "The finish date of the project is > the finish date of the parent program:";
 $lang->project->dateExceedParent     = "The start and finish date of the project was > the start and finish date of the parent program:";
-$lang->project->beginGreateChild    = 'The start date of the project should be ≥ the start date of program: %s.';
-$lang->project->endLetterChild      = 'The finish date of the project should be ≤ the finish date of program: %s.';
+$lang->project->beginGreateChild     = 'The start date of the project should be ≥ the start date of program: %s.';
+$lang->project->endLetterChild       = 'The finish date of the project should be ≤ the finish date of program: %s.';
 $lang->project->begigLetterExecution = 'The start date of project should be ≤ the minimum start date of the execution: %s.';
 $lang->project->endGreateExecution   = 'The finish date of the project should be ≥ the maximum finish date of the execution: %s.';
-$lang->project->childLongTime       = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
-$lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
+$lang->project->childLongTime        = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
+$lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
 
-$lang->project->noSprint = 'No sprint';
+$lang->project->multiple = 'Multi-scrum';

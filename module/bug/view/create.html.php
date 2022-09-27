@@ -78,7 +78,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
-          <?php $noSprint      = (isset($config->projectMode) and $config->projectMode == 'noSprint');?>
           <tr>
             <th>
               <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
@@ -111,7 +110,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <?php endif;?>
             <?php if($showExecution):?>
             <td>
-              <?php if(!$noSprint):?>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
@@ -123,11 +121,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                   </div>
                 </div>
               </div>
-              <?php else:?>
-              <div class='input-group' id='executionIdBox'>
-                <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
-              </div>
-              <?php endif;?>
             </td>
             <?php endif;?>
             <td>

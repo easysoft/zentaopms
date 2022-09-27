@@ -77,15 +77,11 @@
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if(!isset($this->config->projectMode) and $model != 'waterfall'):?>
+        <?php if($model != 'waterfall'):?>
         <tr>
-          <th><?php echo $lang->project->noSprint;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('noSprint', $lang->project->noSprintList, $project->noSprint, 'disabled'));?></td>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, $project->multiple, 'disabled'));?></td>
         </tr>
-        <?php elseif($model == 'waterfall'):?>
-        <?php echo html::hidden('noSprint', 0);?>
-        <?php else:?>
-        <?php echo html::hidden('noSprint', 1);?>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
