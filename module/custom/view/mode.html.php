@@ -24,13 +24,15 @@
     <table class='table table-form'>
       <tr>
         <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
-        <td>
+        <td class='w-200px'>
           <p>
             <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : '';?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
             <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : '';?> id="modenew"><?php echo $lang->upgrade->to18Mode['new'];?></label>
           </p>
         </td>
+        <td></td>
       </tr>
+      <?php if($program):?>
       <tr class='hide'>
         <th><?php echo $lang->custom->defaultProgram;?></th>
         <td>
@@ -38,9 +40,9 @@
           $disabled = $mode == 'lean' ? "disabled" : '';
           echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
           ?>
-          <div class="text-danger help-text"><?php echo $lang->custom->switchModeHelper ?></div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <td></td>
         <td><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
