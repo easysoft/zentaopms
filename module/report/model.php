@@ -424,12 +424,17 @@ class reportModel extends model
      */
     public function getBugAssign()
     {
-        $bugs = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUG)->alias('t1')
+        $bugs = $this->dao->select('t1.*, t2.name AS productName')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->eq('active')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('assignedTo');
+        $productProjects = $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.hasProduct')->eq(0)
+            ->fetchPairs();
         $assign = array();
         foreach($bugs as $user => $userBugs)
         {
@@ -439,6 +444,7 @@ class reportModel extends model
                 {
                     $assign[$user]['bug'][$bug->productName]['count']     = isset($assign[$user]['bug'][$bug->productName]['count']) ? $assign[$user]['bug'][$bug->productName]['count'] + 1 : 1;
                     $assign[$user]['bug'][$bug->productName]['productID'] = $bug->product;
+                    $assign[$user]['bug'][$bug->productName]['projectID'] = zget($productProjects, $bug->product, 0);
                     $assign[$user]['total']['count']   = isset($assign[$user]['total']['count']) ? $assign[$user]['total']['count'] + 1 : 1;
                 }
             }
