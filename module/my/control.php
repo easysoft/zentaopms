@@ -119,9 +119,9 @@ class my extends control
         $taskCount = $pager->recTotal;
 
         /* Get the number of stories assigned to me. */
-        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false);
+        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false, 'all');
         $assignedToStoryCount = $pager->recTotal;
-        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false);
+        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false, 'all');
         $reviewByStoryCount   = $pager->recTotal;
         $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
@@ -130,9 +130,9 @@ class my extends control
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */
-            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement');
+            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement', false, 'all');
             $assignedRequirementCount = $pager->recTotal;
-            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement');
+            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement', false, 'all');
             $reviewByRequirementCount = $pager->recTotal;
             $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;
         }
@@ -351,7 +351,7 @@ EOF;
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false);
+            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false, 'all');
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -416,7 +416,7 @@ EOF;
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
