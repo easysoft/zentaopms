@@ -7580,6 +7580,8 @@ class upgradeModel extends model
 
             $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($sprint->id)->fetchPairs();
             $this->processMergedData($programID, $projectID, '', $productIdList, array($sprint->id));
+
+            if($fromMode == 'classic') $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
         }
 
         $this->fixProjectPath($programID);
