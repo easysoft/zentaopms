@@ -56,7 +56,7 @@
             <th class='c-requirement' colspan="5"><?php echo $lang->story->requirement;?></th>
             <?php endif;?>
             <th class="c-story" colspan="5"><?php echo $lang->story->story;?></th>
-            <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
+            <th class="c-bug" colspan="2"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <th class="c-release"  rowspan="2"><?php echo $lang->product->release;?></th>
             <?php
@@ -79,7 +79,6 @@
             <th><?php echo $lang->story->statusList['reviewing'];?></th>
             <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
-            <th><?php echo $lang->close;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
           </tr>
         </thead>
@@ -127,7 +126,6 @@
             <td><?php echo $program['reviewingStories'];?></td>
             <td><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
             <td><?php echo $program['unResolvedBugs'];?></td>
-            <td><?php echo $program['closedBugs'];?></td>
             <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $program['plans'];?></td>
             <td><?php echo $program['releases'];?></td>
@@ -174,7 +172,6 @@
             <td><?php echo isset($line['reviewingStories']) ? $line['reviewingStories'] : 0;?></td>
             <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
-            <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
             <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
             <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
@@ -235,7 +232,6 @@
             <td><?php echo $product->stories['reviewing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
-            <td><?php echo $product->closedBugs;?></td>
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
