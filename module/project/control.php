@@ -519,12 +519,13 @@ class project extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $name      = '';
-        $code      = '';
-        $team      = '';
-        $whitelist = '';
-        $acl       = 'private';
-        $auth      = 'extend';
+        $name       = '';
+        $code       = '';
+        $team       = '';
+        $whitelist  = '';
+        $acl        = 'private';
+        $auth       = 'extend';
+        $hasProduct = 1;
 
         $products      = array();
         $productPlans  = array();
@@ -541,6 +542,7 @@ class project extends control
             $whitelist   = $copyProject->whitelist;
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
+            $hasProduct  = $copyProject->hasProduct;
 
             $products = $this->product->getProducts($copyProjectID);
             foreach($products as $product)
@@ -585,6 +587,7 @@ class project extends control
         $this->view->acl                 = $acl;
         $this->view->auth                = $auth;
         $this->view->whitelist           = $whitelist;
+        $this->view->hasProduct          = $hasProduct;
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->programList         = $this->program->getParentPairs();
         $this->view->parentProgram       = $parentProgram;
