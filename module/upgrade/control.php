@@ -158,18 +158,16 @@ class upgrade extends control
 
             $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
             $selectMode = true;
+
             if($systemMode == 'classic')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'lean');
 
-                /* Lean mode create default program. */
                 $programID = $this->loadModel('program')->createDefaultProgram();
-
-                /* Set default program config. */
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
 
-                /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
-                $this->upgrade->relationDefaultProgram($programID);
+                /* Set default program for product and project with no program. */
+                $this->upgrade->relateDefaultProgram($programID);
 
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
@@ -218,12 +216,12 @@ class upgrade extends control
             $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $fromVersion));
             if($mode == 'lean')
             {
-                /* Lean mode create default program. */
                 $programID = $this->loadModel('program')->createDefaultProgram();
-                /* Set default program config. */
                 $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
-                /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
-                $this->upgrade->relationDefaultProgram($programID);
+
+                /* Set default program for product and project with no program. */
+                $this->upgrade->relateDefaultProgram($programID);
+
                 if(version_compare($openVersion, '15_0', '<')) $this->locate(inlink('selectMergeMode', "fromVersion=$fromVersion&mode=lean"));
 
                 $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
