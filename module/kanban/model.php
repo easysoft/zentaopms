@@ -1554,7 +1554,7 @@ class kanbanModel extends model
 
             $teamPairs = array();
             foreach($taskTeams[$taskID] as $account => $team) $teamPairs[$account] = $team->realname;
-            $task->team = $teamPairs;
+            $task->teamMember = $teamPairs;
         }
 
         /* Get objects cards menus. */
@@ -1675,9 +1675,9 @@ class kanbanModel extends model
                     if($groupBy == 'assignedTo')
                     {
                         $laneID = (string)$laneID;
-                        if(empty($object->team) and $laneID and $object->$groupBy !== $laneID) continue;
-                        if(empty($object->team) and $laneID === '0' and !empty($object->$groupBy)) continue;
-                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
+                        if(empty($object->teamMember) and $laneID and (string)$object->$groupBy !== $laneID) continue;
+                        if(empty($object->teamMember) and $laneID === '0' and !empty($object->$groupBy)) continue;
+                        if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
 
                         if($object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
                     }
@@ -1746,9 +1746,9 @@ class kanbanModel extends model
         {
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
 
-            if($groupBy == 'assignedTo' and !empty($item->team))
+            if($groupBy == 'assignedTo' and !empty($item->teamMember))
             {
-                foreach($item->team as $account => $name)
+                foreach($item->teamMember as $account => $name)
                 {
                     if(!isset($groupByList[$account])) $groupByList[$account] = $account;
                 }
