@@ -22,9 +22,10 @@ $efforts    = array_values($efforts);
 foreach($efforts as $key => $effort)
 {
     $prevEffort = $key > 0 ? $efforts[$key - 1] : null;
-    $order   = (!$prevEffort or $prevEffort->order == $effort->order) ? $index : ++$index;
-    $account = $effort->account;
-    $allEfforts[$order][] = $effort;
+    $order      = (!$prevEffort or $prevEffort->order == $effort->order) ? $index : ++$index;
+    $account    = $effort->account;
+
+    $allEfforts[$order][]        = $effort;
     $recorders[$order][$account] = $account;
     if($app->user->account == $account)
     {
