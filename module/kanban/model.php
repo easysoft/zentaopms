@@ -1610,6 +1610,7 @@ class kanbanModel extends model
             $laneData['order']           = $lane->order;
             $laneData['type']            = $browseType;
             $laneData['defaultCardType'] = $browseType;
+            if(empty($laneID) and !in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $laneID = '';
 
             if($browseType == 'task' and $groupBy == 'story')
             {
@@ -1671,13 +1672,12 @@ class kanbanModel extends model
 
                     $cardData = array();
                     if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if($laneID and in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
-                    if(empty($laneID) and !empty($object->$groupBy)) continue;
+                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
                     if($groupBy == 'assignedTo')
                     {
                         $laneID = (string)$laneID;
-                        if(empty($object->teamMember) and $laneID and (string)$object->$groupBy !== $laneID) continue;
-                        if(empty($object->teamMember) and $laneID === '0' and !empty($object->$groupBy)) continue;
+                        if(empty($object->$groupBy)) $object->$groupBy = '';
+                        if(empty($object->teamMember) and (string)$object->$groupBy !== $laneID) continue;
                         if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
 
                         if($object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
