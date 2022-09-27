@@ -903,7 +903,7 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'lean')
         {
-            $features = array('opportunity');
+            $features = array('scrumOpportunity', 'scrumMeeting', 'scrumAuditplan', 'scrumProcess');
             foreach($features as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
@@ -914,20 +914,72 @@ class customModel extends model
     }
 
     /**
-     * Verify whether there is opportunity data
+     * Verify whether there is scrum opportunity data
      *
      * @access public
      * @return bool
      */
-    public function hasOpportunityData()
+    public function hasScrumOpportunityData()
     {
         if($this->config->edition == 'max')
         {
-            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->count();
+            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
-        else
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum meeting data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumMeetingData()
+    {
+        if($this->config->edition == 'max')
         {
-            return false;
+            return $this->dao->select('id')->from(TABLE_EXECUTION)->alias('t1')
+                ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
         }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum auditplan data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumAuditplanData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_EXECUTION)->alias('t1')
+                ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum process data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumProcessData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+        }
+        return false;
     }
 }
