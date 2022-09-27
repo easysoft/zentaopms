@@ -136,6 +136,8 @@ class product extends control
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $product   = $this->product->getById($productID);
 
+        if($product && !isset($this->products[$product->id])) $this->products[$product->id] = $product->name;
+
         if($product and $product->type != 'normal')
         {
             $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
