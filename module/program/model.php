@@ -1601,9 +1601,8 @@ class programModel extends model
         $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
         if($defaultProgram)
         {
-            $programID = $defaultProgram->value;
-            $program   = $this->dao->select('id')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq(0)->fetch();
-            if($program) return $programID;
+            $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('id')->eq($defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+            if($program) return $defaultProgram;
         }
 
         $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->program->defaultProgram)->andWhere('deleted')->eq(0)->fetch();

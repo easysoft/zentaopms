@@ -632,7 +632,8 @@ class custom extends control
         {
             $mode    = fixer::input('post')->get('mode');
             $program = isset($_POST['program']) ? $_POST['program'] : 0;
-            if($mode == 'lean' and empty($program)) return $this->send(array('result' => 'fail', 'message' => array('program' => $this->lang->custom->switchModeHelper)));
+
+            if($mode == 'lean' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
 
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $program);

@@ -58,7 +58,6 @@ $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
 $lang->custom->execution            = 'Execution';
 $lang->custom->defaultProgram       = 'Default program';
-$lang->custom->switchModeHelper     = 'Select a default item set. Subsequent data added in the system will be associated with the default item set';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';

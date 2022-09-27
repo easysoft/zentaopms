@@ -58,7 +58,6 @@ $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
 $lang->custom->execution            = '执行';
 $lang->custom->defaultProgram       = '选择默认项目集';
-$lang->custom->switchModeHelper     = '请选择一个默认项目集，后续在系统中新增的数据将关联在默认项目集下';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';

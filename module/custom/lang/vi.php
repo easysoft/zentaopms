@@ -51,7 +51,6 @@ $lang->custom->convertRelationTitle = "Please firstly set the conversion factor 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
 $lang->custom->defaultProgram       = 'Default program';
-$lang->custom->switchModeHelper     = 'Select a default item set. Subsequent data added in the system will be associated with the default item set';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
