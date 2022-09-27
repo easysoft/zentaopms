@@ -374,10 +374,10 @@ class actionModel extends model
             elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
-                $name      = $execution->name;
-                $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
-                if($name)
+                if(!empty($execution))
                 {
+                    $name      = $execution->name;
+                    $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
                     $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
                 }
             }
