@@ -171,7 +171,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -181,18 +181,20 @@ class router extends baseRouter
 
         $hourKey = $planKey = $URSR = $URAndSR = 0;
 
-        $mode       = 'new';
-        $score      = '0';
-        $projectKey = ITERATION_KEY;
+        $mode             = 'new';
+        $score            = '0';
+        $projectKey       = ITERATION_KEY;
+        $disabledFeatures = '';
 
         foreach($commonSettings as $setting)
         {
-            if($setting->key == 'sprintConcept')                                 $projectKey = $setting->value;
-            if($setting->key == 'hourPoint')                                     $hourKey    = $setting->value;
-            if($setting->key == 'URSR')                                          $URSR       = $setting->value;
-            if($setting->key == 'URAndSR')                                       $URAndSR    = $setting->value;
-            if($setting->key == 'mode' and $setting->section == 'global')        $mode       = $setting->value;
-            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score      = $setting->value;
+            if($setting->key == 'sprintConcept')                                 $projectKey       = $setting->value;
+            if($setting->key == 'hourPoint')                                     $hourKey          = $setting->value;
+            if($setting->key == 'URSR')                                          $URSR             = $setting->value;
+            if($setting->key == 'URAndSR')                                       $URAndSR          = $setting->value;
+            if($setting->key == 'mode' and $setting->section == 'global')        $mode             = $setting->value;
+            if($setting->key == 'scoreStatus' and $setting->section == 'global') $score            = $setting->value;
+            if($setting->key == 'disabledFeatures')                              $disabledFeatures = $setting->value;
         }
 
         /* Lite Version is compatible with classic modes */
@@ -200,6 +202,8 @@ class router extends baseRouter
 
         /* Record system mode. */
         $config->systemMode = $mode;
+
+        $config->disabledFeatures = $disabledFeatures;
 
         /* Record system score.*/
         $config->systemScore = $score;
