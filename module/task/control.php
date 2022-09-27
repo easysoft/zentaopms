@@ -611,14 +611,24 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
-        $executionList = $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
-        $project       = $this->loadModel('project')->getByID($task->project);
-        $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
-        $executions    = array();
-        foreach($executionList as $val)
+        $executions = array();
+        if(!empty($task->project))
         {
-           $values       = str_replace($replace, $project->name, $val);
-           $executions[] = $values;
+            $executionList  = $this->execution->getPairs($task->project);
+            $project        = $this->loadModel('project')->getByID($task->project);
+
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key=>$val)
+                {
+                    $values           = $project->name . '/' . $val;
+                    $executions[$key] = $values;
+                }
+            }
+            else
+            {
+                $executions = $executionList;
+            }
         }
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
