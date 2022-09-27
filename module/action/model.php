@@ -1060,6 +1060,9 @@ class actionModel extends model
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
 
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = implode(',', $efforts);
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1087,6 +1090,7 @@ class actionModel extends model
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
             ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
+            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
