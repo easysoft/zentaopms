@@ -7,6 +7,8 @@ $(function()
         $('#productTitle, #linkPlan').closest('tr').toggle(hasProduct == 1);
     });
 
+    $('[name=hasProduct]').change();
+
     $('#copyProjects a').click(function()
     {
         setCopyProject($(this).data('id'));

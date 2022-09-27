@@ -74,7 +74,7 @@
         <?php endif;?>
         <tr>
           <th id='projectType'><?php echo $lang->project->type;?></th>
-          <td><?php echo html::radio('hasProduct', $lang->project->projectTypeList, 1);?></td>
+          <td><?php echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
@@ -212,6 +212,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
+              if($copyProjectID) echo html::hidden('hasProduct', $hasProduct);
               echo html::hidden('model', $model);
               echo html::submitButton();
               echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();
