@@ -874,6 +874,21 @@ class projectModel extends model
     }
 
     /**
+     * Get No product project|execution List.
+     *
+     * @access public
+     * @return array
+     */
+    public function getNoProductList()
+    {
+        return $this->dao->select('t1.product, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.hasProduct')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
      * Process the project privs according to the project model.
      *
      * @param  string $model    sprint | waterfall
