@@ -890,4 +890,44 @@ class customModel extends model
             }
         }
     }
+
+    /**
+     * Set features to disable.
+     *
+     * @param  int    $mode
+     * @access public
+     * @return void
+     */
+    public function disableFeaturesByMode($mode)
+    {
+        $disabledFeatures = '';
+        if($mode == 'lean')
+        {
+            $features = array('opportunity');
+            foreach($features as $feature)
+            {
+                $function = 'has' . ucfirst($feature) . 'Data';
+                if(!$this->$function()) $disabledFeatures .= "$feature,";
+            }
+        }
+        $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
+    }
+
+    /**
+     * Verify whether there is opportunity data
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasOpportunityData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->count();
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

@@ -635,10 +635,12 @@ class custom extends control
             if($mode == 'lean' and empty($program)) return $this->send(array('result' => 'fail', 'message' => array('program' => $this->lang->custom->switchModeHelper)));
 
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $program);
+            $this->setting->setItem('system.common.global.defaultProgram', $program);
 
             /* 只有没有关联项目集的产品和项目关联到默认项目集下. */
             $this->loadModel('upgrade')->relationDefaultProgram($program);
+
+            $this->custom->disableFeaturesByMode($mode);
 
             if($mode == 'lean') $this->custom->processProjectAcl();
 
