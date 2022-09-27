@@ -2,12 +2,18 @@ $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
     $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+    $('.c-name').css('border-left', 'none');
 
     $('input[name^="showEdit"]').click(function()
     {
         $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+        $('.c-name').css('border-left', 'none');
         var showEdit = $(this).is(':checked') ? 1 : 0;
-        if(showEdit) $('#productListForm .c-checkbox, #productListForm .check-all').show();
+        if(showEdit)
+        {
+            $('#productListForm .c-checkbox, #productListForm .check-all').show();
+            $('.c-name').css('border-left', '1px solid #ddd');
+        }
     });
 
     /* Init table sort. */
