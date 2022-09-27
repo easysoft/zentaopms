@@ -199,6 +199,7 @@ class upgrade extends control
         {
             $mode = fixer::input('post')->get('mode');
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
+            $this->loadModel('custom')->disableFeaturesByMode($mode);
 
             /* Update sprint concept. */
             $sprintConcept = 0;
