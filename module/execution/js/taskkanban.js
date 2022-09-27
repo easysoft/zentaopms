@@ -1232,8 +1232,8 @@ $(function()
     var commonOptions =
     {
         maxColHeight:         'auto',
-        minColWidth:          240,
-        maxColWidth:          240,
+        minColWidth:          typeof window.minColWidth === 'number' ? window.minColWidth : 180,
+        maxColWidth:          typeof window.maxColWidth === 'number' ? window.maxColWidth : 384,
         cardHeight:           getCardHeight(),
         showCount:            true,
         showZeroCount:        true,

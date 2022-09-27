@@ -24,14 +24,14 @@
           <th><?php echo $lang->kanban->columnWidth;?></th>
           <td colspan='2'>
             <div style="display: flex;">
-                <?php echo html::radio('fluidBoard', array('0' => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('colWidth', '264', "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
+                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('colWidth', $execution->colWidth, "class='form-control inline-block setting-input' required  autocomplete='off'");?>px
             </div>
             <div style="display: flex; margin-top: 10px;">
-                <?php echo html::radio('fluidBoard', array('1' => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('colMinWidth', '', "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
+                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::input('minColWidth', $execution->minColWidth, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
-                <?php echo html::input('colMaxWidth', '', "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
+                <?php echo html::input('maxColWidth', $execution->maxColWidth, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
             </div>
         </td>
         </tr>

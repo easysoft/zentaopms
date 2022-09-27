@@ -223,6 +223,8 @@ js::set('priv',
 <?php js::set('userList', $userList);?>
 <?php js::set('entertime', time());?>
 <?php js::set('fluidBoard', $execution->fluidBoard);?>
+<?php js::set('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);?>
+<?php js::set('maxColWidth',$execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);?>
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>

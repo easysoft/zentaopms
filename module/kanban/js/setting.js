@@ -39,6 +39,12 @@ $(function()
             return false;
         }
     })
+    $(document).on('change', "#mainContent input[name^=fluidBoard]", function(e)
+    {
+        $('#colWidth').attr('disabled', e.target.value == 1);
+        $('#minColWidth').attr('disabled', e.target.value == 0);
+        $('#maxColWidth').attr('disabled', e.target.value == 0);
+    })
 })
 
 /**

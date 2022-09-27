@@ -1124,13 +1124,24 @@ class executionModel extends model
     public function setKanban($executionID)
     {
         $execution = fixer::input('post')
+            ->setDefault('colWidth', 0)
+            ->setDefault('minColWidth', 0)
+            ->setDefault('maxColWidth', 0)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->remove('heightType')
             ->get();
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
-
-        $this->dao->update(TABLE_EXECUTION)->data($execution)->where('id')->eq((int)$executionID)->exec();
+        if($this->post->fluidBoard == '0' and empty($execution->colWidth))
+        {
+            $execution->colWidth = 264;
+        }
+        if($this->post->fluidBoard)
+        {
+            if(empty($execution->minColWidth)) $execution->minColWidth = 180;
+            if(empty($execution->maxColWidth)) $execution->maxColWidth = 384;
+        }
+        $this->dao->update(TABLE_EXECUTION)->data($execution)->checkIF($execution->fluidBoard , 'maxColWidth', 'ge', $execution->minColWidth)->where('id')->eq((int)$executionID)->exec();
     }
 
     /**

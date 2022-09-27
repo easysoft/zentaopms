@@ -2327,13 +2327,24 @@ class kanbanModel extends model
             ->setDefault('lastEditedBy', $account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('displayCards', 0)
+            ->setDefault('colWidth', 0)
+            ->setDefault('minColWidth', 0)
+            ->setDefault('maxColWidth', 0)
             ->setIF($this->post->import == 'off', 'object', '')
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->remove('import,importObjectList,heightType')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
-
+        if(!$this->post->fluidBoard and empty($kanban->colWidth))
+        {
+            $kanban->colWidth = 264;
+        }
+        if($this->post->fluidBoard)
+        {
+            if(empty($kanban->minColWidth))  $kanban->minColWidth = 180;
+            if(empty($kanban->maxColWidth))  $kanban->maxColWidth = 384;
+        }
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
             if(!$this->checkDisplayCards($kanban->displayCards)) return;
@@ -2342,6 +2353,7 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->checkIF($kanban->fluidBoard , 'maxColWidth', 'ge', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
