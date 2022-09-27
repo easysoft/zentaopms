@@ -611,6 +611,26 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        $executions = array();
+        if(!empty($task->project))
+        {
+            $executionList  = $this->execution->getPairs($task->project);
+            $project        = $this->loadModel('project')->getByID($task->project);
+
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key=>$val)
+                {
+                    $values           = $project->name . '/' . $val;
+                    $executions[$key] = $values;
+                }
+            }
+            else
+            {
+                $executions = $executionList;
+            }
+        }
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -619,7 +639,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $executions;
         $this->display();
     }
 
