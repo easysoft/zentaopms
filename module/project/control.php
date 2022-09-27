@@ -580,20 +580,11 @@ class project extends control
         {
             $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
-            $this->lang->project->multiple   = $this->lang->project->kanban;
         }
 
         $sprintConcept = empty($this->config->custom->sprintConcept) ?
         $this->config->executionCommonList[$this->app->getClientLang()][0] :
         $this->config->executionCommonList[$this->app->getClientLang()][1];
-
-        $this->lang->project->noSprint = sprintf($this->lang->project->noSprint,$sprintConcept);
-        if(common::checkNotCN())
-        {
-            $this->lang->project->multiple = empty($this->config->custom->sprintConcept) ?
-            $this->config->executionCommonList[$this->app->getClientLang()][0] :
-            $this->config->executionCommonList[$this->app->getClientLang()][1];
-        }
 
         $this->view->title = $this->lang->project->create;
 
@@ -740,16 +731,6 @@ class project extends control
         }
 
         if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
-
-        if($project->model == 'kanban') $this->lang->project->multiple = $this->lang->project->kanban;
-
-        $this->lang->project->noSprint = sprintf($this->lang->project->noSprint,$sprintConcept);
-        if(common::checkNotCN())
-        {
-            $this->lang->project->multiple = empty($this->config->custom->sprintConcept) ?
-            $this->config->executionCommonList[$this->app->getClientLang()][0] :
-            $this->config->executionCommonList[$this->app->getClientLang()][1];
-        }
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
