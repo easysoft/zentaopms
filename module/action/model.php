@@ -1061,7 +1061,7 @@ class actionModel extends model
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
 
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
-        $efforts = implode(',', $efforts);
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
