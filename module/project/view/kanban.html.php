@@ -12,7 +12,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
 <?php if($this->config->systemMode != 'new'):?>
-<style> .kanban-lane-name span.text{display:none;} </style>
+<style>
+.kanban-lane-name{display:none;}
+.kanban-header-cols{left:0px !important;}
+ </style>
 <?php endif;?>
 <?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php if(empty($kanbanGroup)):?>
