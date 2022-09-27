@@ -410,7 +410,7 @@ $lang->kanbanSetting->optionList['0'] = '隱藏';
 $lang->kanbanSetting->optionList['1'] = '顯示';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
+$lang->printKanban->common  = '打印看板';
 $lang->printKanban->content = '內容';
 $lang->printKanban->print   = '打印';
 
