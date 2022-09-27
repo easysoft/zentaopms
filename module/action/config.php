@@ -69,8 +69,8 @@ $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolum
 $config->action->preferredTypeNum = 10;
 
 $config->action->preferredType = new stdclass();
-$config->action->preferredType->new     = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
-$config->action->preferredType->lite    = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'project', 'execution');
+$config->action->preferredType->new  = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
+$config->action->preferredType->lean = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'project', 'execution');
 
 global $app, $lang;
 $app->loadLang('action');
