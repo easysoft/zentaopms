@@ -1507,6 +1507,7 @@ $(function()
     $(window).on('resize', function(a)
     {
         adjustAddBtnPosition();
+        initRegionTabs();
     });
 
     resetLaneHeight();
@@ -1558,8 +1559,6 @@ $(function()
 
     distance    = 0;
     radiusWidth = 10;
-    $(window).on('resize', initRegionTabs);
-    initRegionTabs();
 
     $('.leftBtn').click(function()
     {
