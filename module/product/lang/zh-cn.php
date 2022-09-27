@@ -37,8 +37,8 @@ $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
 $lang->product->track            = "查看需求矩阵";
 $lang->product->checkedProducts  = '已选择%s项产品';
-$lang->product->pageProducts     = '本页共%s个产品。';
-$lang->product->pageLines        = '本页共%s个产品线，%s个产品。';
+$lang->product->pageSummary      = '本页共%s个产品。';
+$lang->product->lineSummary      = '本页共%s个产品线，%s个产品。';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";
