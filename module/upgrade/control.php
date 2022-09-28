@@ -171,6 +171,8 @@ class upgrade extends control
 
                 $this->upgrade->upgradeInProjectMode($programID, $systemMode);
 
+                $this->loadModel('custom')->disableFeaturesByMode($mode);
+
                 $selectMode = false;
             }
             if(version_compare($openVersion, '18_0', '>=')) $selectMode = false;
