@@ -4273,7 +4273,7 @@ class storyModel extends model
 
                 if(in_array($this->app->tab, array('product', 'project')))
                 {
-                    if(($canChange or $canRecall or $canSubmitReview or $canReview or $canEdit) and ($canBatchCreate or $canClose or $canUnlinkStory))
+                    if(($canChange or $canRecall or $canSubmitReview or $canReview or $canEdit) and ($canCreateCase or $canBatchCreate or $canClose or $canUnlinkStory))
                     {
                         $menu .= "<div class='dividing-line'></div>";
                     }
