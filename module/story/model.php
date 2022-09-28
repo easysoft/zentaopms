@@ -4257,8 +4257,7 @@ class storyModel extends model
                 $title   = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
                 $title   = $isClick ? $title : $this->lang->story->recallTip['actived'];
                 $menu   .= $this->buildMenu('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type", $story, $type, 'undo', 'hiddenwin', 'showinonlybody', false, '', $title);
-
-                $menu .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
+                $menu   .= $this->buildMenu('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, $type, '', '', 'showinonlybody');
 
                 $vars            = "storyType={$story->type}";
                 $canChange       = common::hasPriv('story', 'change', '', $vars);
