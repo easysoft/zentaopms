@@ -809,17 +809,18 @@ EOF;
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->position[] = $this->lang->my->project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $projects;
-        $this->view->PMList     = $PMList;
-        $this->view->pager      = $pager;
-        $this->view->status     = $status;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->position[]  = $this->lang->my->project;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects    = $projects;
+        $this->view->PMList      = $PMList;
+        $this->view->pager       = $pager;
+        $this->view->status      = $status;
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->usersAvatar = $this->user->getAvatarPairs('');
         $this->display();
     }
 

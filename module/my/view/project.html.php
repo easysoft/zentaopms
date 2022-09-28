@@ -65,9 +65,13 @@
           <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <td class='text-right c-budget'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
-          <td>
-            <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
-            <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>
+          <td class='c-manager'>
+            <?php if(!empty($project->PM)):?>
+            <?php $userName = zget($users, $project->PM);?>
+            <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$project->PM], 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-top avatar-{$project->PM}"); ?>
+            <?php $userID   = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : '';?>
+            <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
+            <?php endif;?>
           </td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
