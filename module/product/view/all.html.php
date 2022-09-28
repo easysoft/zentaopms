@@ -50,9 +50,6 @@
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
-            <?php if($this->config->URAndSR):?>
-            <th class='c-requirement' colspan="5"><?php echo $lang->story->requirement;?></th>
-            <?php endif;?>
             <th class="c-story" colspan="5"><?php echo $lang->story->story;?></th>
             <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
@@ -64,13 +61,6 @@
             <th class='c-actions' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
-            <?php if($this->config->URAndSR):?>
-            <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
-            <th><?php echo $lang->story->activate;?></th>
-            <th><?php echo $lang->story->change;?></th>
-            <th><?php echo $lang->story->statusList['reviewing'];?></th>
-            <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
-            <?php endif;?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
@@ -112,13 +102,6 @@
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $program['programName']?>
             </td>
-            <?php if($this->config->URAndSR):?>
-            <td><?php echo $program['draftRequirements'];?></td>
-            <td><?php echo $program['activeRequirements'];?></td>
-            <td><?php echo $program['changingRequirements'];?></td>
-            <td><?php echo $program['reviewingRequirements'];?></td>
-            <td><?php echo $program['totalRequirements'] == 0 ? 0 : round($program['closedRequirements'] / $program['totalRequirements'], 3) * 100;?>%</td>
-            <?php endif;?>
             <td><?php echo $program['draftStories'];?></td>
             <td><?php echo $program['activeStories'];?></td>
             <td><?php echo $program['changingStories'];?></td>
@@ -159,13 +142,6 @@
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
-            <?php if($this->config->URAndSR):?>
-            <td><?php echo isset($line['draftRequirements']) ? $line['draftRequirements'] : 0;?></td>
-            <td><?php echo isset($line['activeRequirements']) ? $line['activeRequirements'] : 0;?></td>
-            <td><?php echo isset($line['changingRequirements']) ? $line['changingRequirements'] : 0;?></td>
-            <td><?php echo isset($line['reviewingRequirements']) ? $line['reviewingRequirements'] : 0;?></td>
-            <td><?php echo (isset($line['totalRequirements']) and $line['totalRequirements'] != 0) ? round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100 : 0;?>%</td>
-            <?php endif;?>
             <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
             <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
@@ -185,8 +161,7 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'] + $product->requirements['reviewing'];
+          $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];
 
           $trClass = '';
           if($product->line)
@@ -220,13 +195,6 @@
               echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
               ?>
             </td>
-            <?php if($this->config->URAndSR):?>
-            <td><?php echo $product->requirements['draft'];?></td>
-            <td><?php echo $product->requirements['active'];?></td>
-            <td><?php echo $product->requirements['changing'];?></td>
-            <td><?php echo $product->requirements['reviewing'];?></td>
-            <td><?php echo $totalRequirements == 0 ? 0 : round($product->requirements['closed'] / $totalRequirements, 3) * 100;?>%</td>
-            <?php endif;?>
             <td><?php echo $product->stories['draft'];?></td>
             <td><?php echo $product->stories['active'];?></td>
             <td><?php echo $product->stories['changing'];?></td>
