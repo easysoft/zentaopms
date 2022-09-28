@@ -1,14 +1,12 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
-    $('#productListForm .c-checkbox, #productListForm .check-all').hide();
-
     $('input[name^="showEdit"]').click(function()
     {
-        $('#productListForm .c-checkbox, #productListForm .check-all').hide();
-        var showEdit = $(this).is(':checked') ? 1 : 0;
-        if(showEdit) $('#productListForm .c-checkbox, #productListForm .check-all').show();
+        $.cookie('showProductBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
+        setCheckbox();
     });
+    setCheckbox();
 
     /* Init table sort. */
     $('#productTableList').addClass('sortable').sortable(
@@ -44,6 +42,23 @@ $(function()
             $('#productListForm').table('initNestedList');
         }
     });
+
+    /**
+     * Set batch edit checkbox.
+     *
+     * @access public
+     * @return void
+     */
+    function setCheckbox()
+    {
+        $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+        $('.c-name').css('border-left', 'none');
+        if($.cookie('showProductBatchEdit') == 1)
+        {
+            $('#productListForm .c-checkbox, #productListForm .check-all').show();
+            $('.c-name').css('border-left', '1px solid #ddd');
+        }
+    }
 
     /* Update parent checkbox */
     function updatePrarentCheckbox($parent)

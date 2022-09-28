@@ -3,3 +3,4 @@
 tbody.sortable > tr > td > span.sort-handler {color: #999;}
 .icon-move {color: #16a8f8;}
 .table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -4px;}
+.statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}

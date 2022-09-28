@@ -378,6 +378,7 @@ class project extends control
         $this->view->recTotal       = $recTotal;
         $this->view->recPerPage     = $recPerPage;
         $this->view->pageID         = $pageID;
+        $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
         $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
 
         $this->display();
