@@ -1,9 +1,6 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
-    $('#productListForm .c-checkbox, #productListForm .check-all').hide();
-    $('.c-name').css('border-left', 'none');
-
     $('input[name^="showEdit"]').click(function()
     {
         $.cookie('showProductBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
@@ -46,6 +43,12 @@ $(function()
         }
     });
 
+    /**
+     * Set batch edit checkbox.
+     *
+     * @access public
+     * @return void
+     */
     function setCheckbox()
     {
         $('#productListForm .c-checkbox, #productListForm .check-all').hide();

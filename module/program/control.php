@@ -163,14 +163,15 @@ class program extends control
             $this->view->program = $program;
         }
 
-        $this->view->title       = $this->lang->program->product;
-        $this->view->position[]  = $this->lang->program->product;
-        $this->view->programID   = $programID;
-        $this->view->browseType  = $browseType;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products    = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->title         = $this->lang->program->product;
+        $this->view->position[]    = $this->lang->program->product;
+        $this->view->programID     = $programID;
+        $this->view->browseType    = $browseType;
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products      = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
 
         $this->display();
     }

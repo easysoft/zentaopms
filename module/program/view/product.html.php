@@ -11,14 +11,18 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('checkedProducts', $lang->product->checkedProducts);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
+<?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
 <div id="mainMenu" class="clearfix">
   <?php if(!isonlybody()):?>
-  <div class="btn-toolbar pull-left">
+  <div class="btn-toolBar pull-left">
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink("product", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->product->edit), $showBatchEdit);?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'create', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->product->create, '', 'class="btn btn-primary"');?>
@@ -34,7 +38,6 @@
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" id="productListForm" method="post" action='<?php echo $this->createLink('product', 'batchEdit', "programID=$programID");?>'>
       <?php $canOrder = common::hasPriv('product', 'updateOrder');?>
-      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit');?>
       <table id="productList" class="table has-sort-head table-bordered table-fixed">
         <?php $vars = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
@@ -72,10 +75,9 @@
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
               <?php if($canBatchEdit):?>
-              <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)));?>
-              <?php else:?>
-              <?php printf('%03d', $product->id);?>
+              <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)), '', 'class="id-checkbox ' . (!$showBatchEdit ? 'hidden"' : '"'));?>
               <?php endif;?>
+              <span class="product-id <?php if($canBatchEdit && $showBatchEdit) echo 'hidden';?>"><?php printf('%03d', $product->id);?></span>
             </td>
             <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
             <td><?php echo $product->stories['draft'];?></td>
@@ -101,8 +103,15 @@
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit, '', 'btn');?>
+          <?php
+          $actionLink = $this->createLink('product', 'batchEdit');
+          echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
+          ?>
         </div>
+        <?php
+        $summary = sprintf($lang->product->pageSummary, count($products));
+        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        ?>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
