@@ -804,8 +804,8 @@ class productModel extends model
             $productID = (int)$productID;
             $products[$productID] = new stdClass();
             if($this->config->systemMode == 'new' and isset($data->programs[$productID])) $products[$productID]->program = (int)$data->programs[$productID];
+            if($this->config->systemMode == 'new' and isset($data->lines[$productID]))    $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->name    = $productName;
-            $products[$productID]->line    = (int)$data->lines[$productID];
             $products[$productID]->PO      = $data->POs[$productID];
             $products[$productID]->QD      = $data->QDs[$productID];
             $products[$productID]->RD      = $data->RDs[$productID];
