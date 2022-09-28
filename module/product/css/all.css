@@ -90,5 +90,5 @@ th.c-actions {width: 50px;}
 #productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 .statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
 .table-footer.fixed-footer .statistic {color: #fff;}
-#productTableList .c-manager {padding-left: 20px;}
-#productTableList .c-manager a {top: 7px; left: 28px;}
+#productTableList .c-manager {padding-left: 14px;}
+#productTableList .c-manager a {top: 7px; left: 22px;}
