@@ -24,8 +24,12 @@
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->repo->product; ?></th>
-            <td class='required'><?php echo html::select('product[]', $products, empty($objectID) ? '' : array_keys($products), "class='form-control chosen' multiple"); ?></td>
+            <th><?php echo $lang->repo->product;?></th>
+            <td class='required'><?php echo html::select('product[]', $products, empty($objectID) ? '' : array_keys($products), "class='form-control chosen' multiple");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->repo->project; ?></th>
+            <td id='projectContainer'><?php echo html::select('projectList[]', $projectList, array(), "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>

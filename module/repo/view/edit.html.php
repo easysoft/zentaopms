@@ -29,7 +29,11 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->repo->product; ?></th>
-            <td class='required'><?php echo html::select('product[]', $products, $repo->product, "class='form-control chosen' multiple"); ?></td>
+            <td class='required'><?php echo html::select('product[]', $products, $repo->product, "class='form-control chosen' multiple");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->repo->project; ?></th>
+            <td id='projectContainer'><?php echo html::select('projectList[]', $projectList, $repo->projectList, "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>

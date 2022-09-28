@@ -147,6 +147,7 @@ class repo extends control
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
+        $this->view->projectList  = array();
         $this->view->productID    = $productID;
         $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID     = $objectID;
@@ -202,14 +203,23 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $this->view->repo          = $repo;
-        $this->view->repoID        = $repoID;
-        $this->view->objectID      = $objectID;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $productList    = explode(',', $repo->product);
+        $projectOptions = array();
+        foreach($productList as $productID)
+        {
+            $projects       = $this->loadModel('product')->getProjectListByProduct($productID);
+            $projectOptions = $projectOptions + array_combine(array_column($projects, 'id'), array_column($projects, 'name'));
+        }
+
+        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo         = $repo;
+        $this->view->repoID       = $repoID;
+        $this->view->objectID     = $objectID;
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products     = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->projectList  = $projectOptions;
+        $this->view->serviceHosts = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -1198,6 +1208,29 @@ class repo extends control
         $this->view->link      = $this->createLink($module, $method, "repoID=%s");
 
         $this->display();
+    }
+
+    /**
+     * Get projects list by product id list by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxProjectsOfProducts()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('productList', array())
+            ->setDefault('projectList', array())
+            ->get();
+
+        $projectOptions = array();
+        foreach($postData->productList as $productID)
+        {
+            $projects       = $this->loadModel('product')->getProjectListByProduct($productID);
+            $projectOptions = $projectOptions + array_combine(array_column($projects, 'id'), array_column($projects, 'name'));
+        }
+
+        return print html::select('projectList[]', $projectOptions, $postData->projectList, "class='form-control chosen' multiple");
     }
 
     /**

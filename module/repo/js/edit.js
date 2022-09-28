@@ -7,6 +7,17 @@ $(function()
         $form.css('min-height', $form.height());
     })
 
+    $('#product').change(function()
+    {
+        var projectList = $('#projectList').val();
+        var productList = $('#product').val();
+        $.post(createLink('repo', 'ajaxProjectsOfProducts'), { productList, projectList }, function(response)
+        {
+            $('#projectContainer').html('').append(response);
+            $('#projectList').chosen().trigger("chosen:updated");
+        });
+    });
+
     $('#serviceHost').change(function()
     {
         host = $('#serviceHost').val();
