@@ -551,7 +551,17 @@ $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|i
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
 
-if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+if($config->edition == 'max')
+{
+    if(strpos(",$config->disabledFeatures,", ',scrumAuditplan,') === false || strpos(",$config->disabledFeatures,", ',waterfall,') === false)
+    {
+        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+    }
+    else if(strpos(",$config->disabledFeatures,", ',scrumProcess,') === false || strpos(",$config->disabledFeatures,", ',waterfall,') === false)
+    {
+        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+    }
+}
 
 $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 
