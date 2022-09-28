@@ -5,16 +5,16 @@ $(function()
     {
         $form = $(this).closest('form');
         $form.css('min-height', $form.height());
-    })
+    });
 
     $('#product').change(function()
     {
-        var projectList = $('#projectList').val();
-        var productList = $('#product').val();
-        $.post(createLink('repo', 'ajaxProjectsOfProducts'), { productList, projectList }, function(response)
+        var projects = $('#projects').val();
+        var products = $('#product').val();
+        $.post(createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
         {
             $('#projectContainer').html('').append(response);
-            $('#projectList').chosen().trigger("chosen:updated");
+            $('#projects').chosen().trigger("chosen:updated");
         });
     });
 

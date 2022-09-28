@@ -3,4 +3,4 @@ ALTER TABLE `zt_project` ADD `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1
 
 ALTER TABLE `zt_product` MODIFY `name` varchar(110) NOT NULL;
 
-ALTER TABLE `zt_repo` ADD `projectList` varchar(200) NOT NULL AFTER `product`;
+ALTER TABLE `zt_repo` ADD `projects` varchar(255) NOT NULL AFTER `product`;

@@ -200,7 +200,7 @@ class repoModel extends model
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
-            ->setDefault('projectList', '')->join('projectList', ',')
+            ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -266,7 +266,7 @@ class repoModel extends model
             ->setDefault('product', '')
             ->skipSpecial('path,client,account,password')
             ->join('product', ',')
-            ->setDefault('projectList', '')->join('projectList', ',')
+            ->setDefault('projects', '')->join('projects', ',')
             ->get();
 
         if($data->path != $repo->path) $data->synced = 0;

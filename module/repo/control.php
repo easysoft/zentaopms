@@ -203,12 +203,12 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $productList    = explode(',', $repo->product);
+        $products       = explode(',', $repo->product);
         $projectOptions = array();
-        foreach($productList as $productID)
+        foreach($products as $productID)
         {
-            $projects       = $this->loadModel('product')->getProjectListByProduct($productID);
-            $projectOptions = $projectOptions + array_combine(array_column($projects, 'id'), array_column($projects, 'name'));
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $projectOptions = $projectOptions + $projects;
         }
 
         $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
@@ -218,7 +218,7 @@ class repo extends control
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->projectList  = $projectOptions;
+        $this->view->projects     = $projectOptions;
         $this->view->serviceHosts = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
@@ -1219,18 +1219,18 @@ class repo extends control
     public function ajaxProjectsOfProducts()
     {
         $postData = fixer::input('post')
-            ->setDefault('productList', array())
-            ->setDefault('projectList', array())
+            ->setDefault('products', array())
+            ->setDefault('projects', array())
             ->get();
 
         $projectOptions = array();
-        foreach($postData->productList as $productID)
+        foreach($postData->products as $productID)
         {
-            $projects       = $this->loadModel('product')->getProjectListByProduct($productID);
-            $projectOptions = $projectOptions + array_combine(array_column($projects, 'id'), array_column($projects, 'name'));
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $projectOptions = $projectOptions + $projects;
         }
 
-        return print html::select('projectList[]', $projectOptions, $postData->projectList, "class='form-control chosen' multiple");
+        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
     }
 
     /**
