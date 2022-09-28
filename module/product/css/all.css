@@ -38,14 +38,12 @@
 #sidebar>.cell {width: 100%;}
 
 th.c-name {width: 400px;}
-th.c-requirement {width: 290px;}
 th.c-story {width: 290px;}
-th.c-bug {width: 200px;}
+th.c-bug {width: 150px;}
 th.c-plan {width: 45px;}
 th.c-release {width: 50px;}
 th.c-actions {width: 50px;}
 [lang='en'] .en-wrap-text {white-space: normal; height: 24px; line-height: 1; font-size: 12px;}
-
 
 #productListForm thead>tr>th,
 #productListForm tbody>tr>td {text-align: center; text-overflow: unset!important}
