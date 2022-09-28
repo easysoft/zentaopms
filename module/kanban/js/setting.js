@@ -39,11 +39,15 @@ $(function()
             return false;
         }
     })
-    $(document).on('change', "#mainContent input[name^=fluidBoard]", function(e)
+    $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
+    $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
+    var fluidBoard = $("#mainContent input[name='fluidBoard'][checked='checked']").val() || 0;
+    $('#colWidth').attr('disabled', fluidBoard == 1);
+    $('#minColWidth, #maxColWidth').attr('disabled', fluidBoard == 0);
+    $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
     {
         $('#colWidth').attr('disabled', e.target.value == 1);
-        $('#minColWidth').attr('disabled', e.target.value == 0);
-        $('#maxColWidth').attr('disabled', e.target.value == 0);
+        $('#minColWidth, #maxColWidth').attr('disabled', e.target.value == 0);
     })
 })
 
