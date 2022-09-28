@@ -44,8 +44,15 @@
   </div>
   <?php else:?>
   <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
-    <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
-    <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
+    <?php
+    $canBatchEdit      = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');
+    $canBatchClose     = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');
+    $canFinish         = common::hasPriv('task', 'finish');
+    $canClose          = common::hasPriv('task', 'close');
+    $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+    $canEdit           = common::hasPriv('task', 'edit');
+    $canBatchCreate    = common::hasPriv('task', 'batchCreate');
+    ?>
     <div class="table-responsive">
       <table class="table has-sort-head table-fixed" id='taskTable'>
         <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -151,11 +158,18 @@
                   }
                   else
                   {
-                      $attr = isset($kanbanList[$task->execution]) ? "disabled" : '';
+                      $attr       = isset($kanbanList[$task->execution]) ? "disabled" : '';
+                      $canStart   = ($task->status != 'pause' and common::hasPriv('task', 'start'));
+                      $canRestart = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
                       if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                       if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                      common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                       common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                      common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+                      if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+                      {
+                          echo "<div class='dividing-line'></div>";
+                      }
 
                       common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                       common::printIcon('task', 'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='95%'");
@@ -221,10 +235,17 @@
                     }
                     else
                     {
+                        $canStart   = ($child->status != 'pause' and common::hasPriv('task', 'start'));
+                        $canRestart = ($child->status == 'pause' and common::hasPriv('task', 'restart'));
                         if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                         if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                        common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                         common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                        common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+
+                        if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+                        {
+                            echo "<div class='dividing-line'></div>";
+                        }
 
                         common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
                         common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'");
