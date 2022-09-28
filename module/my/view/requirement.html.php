@@ -116,8 +116,14 @@
                 echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
 
-                $storyType = 'storyType=requirement';
-                if((common::hasPriv('story', 'change', '', $storyType) or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType)) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review', '', $storyType)) or common::hasPriv('story', 'recall', '', $storyType) or common::hasPriv('story', 'edit', '', $storyType)) and common::hasPriv('story', 'close', '', $storyType))
+                $storyType       = 'storyType=requirement';
+                $canChange       = common::hasPriv('story', 'change', '', $storyType);
+                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType));
+                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review', '', $storyType));
+                $canRecall       = common::hasPriv('story', 'recall', '', $storyType);
+                $canEdit         = common::hasPriv('story', 'edit', '', $storyType);
+                $canClose        = common::hasPriv('story', 'close', '', $storyType);
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and $canClose)
                 {
                     echo "<div class='dividing-line'></div>";
                 }
@@ -171,8 +177,14 @@
 
                     common::printIcon('story', 'recall', "$vars&from=list&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                     common::printIcon('story', 'edit',   "$vars&from=default&storyType=story", $child, 'list');
-                    $storyType = 'storyType=story';
-                    if((common::hasPriv('story', 'change', '', $storyType) or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType)) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review', '', $storyType)) or common::hasPriv('story', 'recall', '', $storyType) or common::hasPriv('story', 'edit', '', $storyType)) and common::hasPriv('story', 'close', '', $storyType))
+                    $storyType       = 'storyType=story';
+                    $canChange       = common::hasPriv('story', 'change', '', $storyType);
+                    $canSubmitReview = (strpos('draft,changing', $child->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType));
+                    $canReview       = (strpos('draft,draft', $child->status) === false and common::hasPriv('story', 'review', '', $storyType));
+                    $canRecall       = common::hasPriv('story', 'recall', '', $storyType);
+                    $canEdit         = common::hasPriv('story', 'edit', '', $storyType);
+                    $canClose        = common::hasPriv('story', 'close', '', $storyType);
+                    if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and $canClose)
                     {
                         echo "<div class='dividing-line'></div>";
                     }

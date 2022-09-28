@@ -50,6 +50,11 @@
       $canBatchReview   = common::hasPriv('story', 'batchReview');
       $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
+      $canChange        = common::hasPriv('story', 'change');
+      $canRecall        = common::hasPriv('story', 'recall');
+      $canEdit          = common::hasPriv('story', 'edit');
+      $canCreateCase    = common::hasPriv('testcase', 'create');
+      $canClose         = common::hasPriv('story', 'close');
       ?>
       <thead>
         <tr>
@@ -118,16 +123,18 @@
                 echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
 
-                if((common::hasPriv('story', 'change') or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('story', 'edit')) and (common::hasPriv('testcase', 'create') or common::hasPriv('story', 'close')))
+                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview'));
+                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review'));
+
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and ($canCreateCase or $canClose))
                 {
                     echo "<div class='dividing-line'></div>";
                 }
 
                 echo common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
-                if(common::hasPriv('testcase', 'create') and common::hasPriv('story', 'close') )
-                {
-                    echo "<div class='dividing-line'></div>";
-                }
+
+                if($canCreateCase and $canClose) echo "<div class='dividing-line'></div>";
+
                 echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
             }
             ?>
@@ -176,15 +183,19 @@
                 }
                 common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
-                if((common::hasPriv('story', 'change') or (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview')) or (strpos('active,reviewing,closed', $story->status) !== false and common::hasPriv('story', 'review')) or common::hasPriv('story', 'recall') or common::hasPriv('story', 'edit')) and (common::hasPriv('testcase', 'create') or common::hasPriv('story', 'close')))
+
+                $canSubmitReview = (strpos('draft,changing', $child->status) !== false and common::hasPriv('story', 'submitReview'));
+                $canReview       = (strpos('draft,changing', $child->status) === false and common::hasPriv('story', 'review'));
+
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and ($canCreateCase or $canClose))
                 {
                     echo "<div class='dividing-line'></div>";
                 }
+
                 common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
-                if(common::hasPriv('testcase', 'create') and common::hasPriv('story', 'close') )
-                {
-                    echo "<div class='dividing-line'></div>";
-                }
+
+                if($canCreateCase and $canClose) echo "<div class='dividing-line'></div>";
+
                 common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
             }
             ?>
