@@ -218,8 +218,7 @@
             <?php endif;?>
             <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
               <?php
-              $productLink = html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
-              echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
+              echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               ?>
             </td>
             <?php if($this->config->URAndSR):?>
