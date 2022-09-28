@@ -224,7 +224,7 @@ class router extends baseRouter
 
         /* User preference init. */
         $config->URSR          = $URSR;
-        $config->URAndSR       = $URAndSR;
+        $config->URAndSR       = $URAndSR && strpos(",{$disabledFeatures},", ',URStory,') === false;
         $config->programLink   = 'program-browse';
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
