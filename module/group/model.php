@@ -469,6 +469,23 @@ class groupModel extends model
     {
         $actions  = $this->post->actions;
         $oldGroup = $this->getByID($groupID);
+        $projects = isset($actions['projects']) ? $actions['projects'] : array();
+        $sprints  = isset($actions['sprints'])  ? $actions['sprints']  : array();
+
+        /* Add shadow productID when select noProduct project or execution. */
+        if($projects or $sprints)
+        {
+            /* Get all noProduct projects and executions . */
+            $noProductList       = $this->loadModel('project')->getNoProductList();
+            $shadowProductIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+            $noProductObjects    = array_merge($projects, $sprints);
+
+            foreach($noProductObjects as $objectID)
+            {
+                if(isset($noProductList[$objectID])) $actions['products'][] = $noProductList[$objectID]->product;
+            }
+        }
+
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
