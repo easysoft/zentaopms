@@ -26,7 +26,7 @@ $(function()
     const mainHeader = document.getElementById('mainHeader');
     if(!mainHeader) return;
     const style = window.getComputedStyle(mainHeader, null);
-    const color = window.getComputedStyle(document.querySelector('#navbar .nav>li:not(.active)>a'), null).color;
+    const color = window.getComputedStyle(document.querySelector('#userMenu .nav>li:not(.active)>a'), null).color;
     const clientHeaderStyle = {windowControlBtnColor: color, background: style.background, color: color};
     window.parent.appHeaderStyleUpdated = true;
     window.open('xxc://setAppHeaderStyle/zentao-integrated/' + encodeURIComponent(JSON.stringify(clientHeaderStyle)), '_blank');
