@@ -66,10 +66,11 @@ class programModel extends model
      * @param  string       $mode       all|assign
      * @param  string       $status     all|noclosed
      * @param  string|array $append
+     * @param  string|int   $shadow     all | 0 | 1
      * @access public
      * @return array
      */
-    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '')
+    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0)
     {
         /* Get the top programID. */
         if($programID)
@@ -86,8 +87,8 @@ class programModel extends model
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('shadow')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi()
