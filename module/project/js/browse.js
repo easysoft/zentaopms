@@ -24,6 +24,12 @@ $(function()
     if(!useDatatable) resetNameWidth();
 });
 
+/**
+ * Set batch edit checkbox.
+ *
+ * @access public
+ * @return void
+ */
 function setCheckbox()
 {
     $('#projectForm .checkbox-primary').hide();

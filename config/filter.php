@@ -249,13 +249,14 @@ $filter->product->dynamic->cookie['preBranch']        = 'reg::word';
 
 $filter->branch->default->cookie['preBranch'] = 'reg::word';
 
-$filter->program->default->cookie['lastPGM']            = 'int';
-$filter->program->default->cookie['lastPRJ']            = 'int';
-$filter->program->prjbrowse->cookie['programType']      = 'code';
-$filter->program->project->cookie['involved']           = 'code';
-$filter->program->browse->cookie['showClosed']          = 'code';
-$filter->program->export->cookie['checkedItem']         = 'reg::checked';
-$filter->program->ajaxgetdropmenu->cookie['showClosed'] = 'code';
+$filter->program->default->cookie['lastPGM']              = 'int';
+$filter->program->default->cookie['lastPRJ']              = 'int';
+$filter->program->prjbrowse->cookie['programType']        = 'code';
+$filter->program->project->cookie['involved']             = 'code';
+$filter->program->project->cookie['showProjectBatchEdit'] = 'int';
+$filter->program->browse->cookie['showClosed']            = 'code';
+$filter->program->export->cookie['checkedItem']           = 'reg::checked';
+$filter->program->ajaxgetdropmenu->cookie['showClosed']   = 'code';
 
 $filter->project->default->cookie['lastProject']         = 'int';
 $filter->project->default->cookie['lastPRJ']             = 'int';
