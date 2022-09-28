@@ -54,6 +54,7 @@ $canBatchEdit = common::hasPriv('project', 'batchEdit');
               foreach($setting as $value)
               {
                 if($value->id == 'projectStatus' and $browseType !== 'all') $value->show = false;
+                if($value->id == 'status' and strpos('all,undone', $browseType) === false) $value->show = false;
                 if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
               }
             ?>
