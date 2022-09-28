@@ -16,33 +16,45 @@ foreach($task->team as $team) $teamOrders[$team->order] = $team->account;
 $myOrders   = array();
 $allEfforts = array();
 $recorders  = array();
-foreach($efforts as $effort)
+$index      = 0;
+$allOrders  = array();
+$efforts    = array_values($efforts);
+foreach($efforts as $key => $effort)
 {
-    $order   = $effort->order;
-    $account = $effort->account;
-    $allEfforts[$order][] = $effort;
+    $prevEffort = $key > 0 ? $efforts[$key - 1] : null;
+    $order      = (!$prevEffort or $prevEffort->order == $effort->order) ? $index : ++$index;
+    $account    = $effort->account;
+
+    $allEfforts[$order][]        = $effort;
     $recorders[$order][$account] = $account;
     if($app->user->account == $account)
     {
         if(!isset($myOrders[$order])) $myOrders[$order] = 0;
         $myOrders[$order] += 1;
     }
+    $allOrders[$order] = $effort->order + 1;
 }
 ?>
 <div id='linearefforts'>
   <div class='tabs'>
     <ul class='nav nav-tabs'>
-      <li class='active'><a href='#legendMyEffort' data-toggle='tab'><?php echo $lang->task->myEffort;?></a></li>
-      <li><a href='#legendAllEffort' data-toggle='tab'><?php echo $lang->task->allEffort;?></a></li>
+      <li class='my-effort'><a href='#legendMyEffort' data-toggle='tab'><?php echo $lang->task->myEffort;?></a></li>
+      <li class='all-effort'><a href='#legendAllEffort' data-toggle='tab'><?php echo $lang->task->allEffort;?></a></li>
     </ul>
     <div class='tab-content'>
-      <div class='tab-pane active' id='legendMyEffort'>
+      <div class='tab-pane' id='legendMyEffort'>
         <?php if(!empty($myOrders)):?>
-        <table class='table table-bordered table-fixed table-recorded'>
+        <table class='table table-bordered table-fixed table-recorded has-sort-head'>
           <thead>
             <tr class='text-center'>
-              <th class="w-60px"> <?php echo $lang->task->teamOrder;?></th>
-              <th class="w-120px"><?php echo $lang->task->date;?></th>
+              <?php
+              $vars    = (isset($objectType) ? "objectType=$objectType&" : '') . "taskID=$task->id&from=$from&orderBy=%s";
+              $sort    = explode(',', $orderBy);
+              $orderBy = zget($sort, '0', '');
+              if(!strpos($orderBy, '_')) $orderBy .= '_asc';
+              ?>
+              <th class="w-60px"><?php common::printOrderLink('order', $orderBy, $vars, $lang->task->teamOrder);?></th>
+              <th class="w-120px"><?php common::printOrderLink('date', $orderBy, $vars, $lang->task->date);?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
               <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
@@ -58,7 +70,7 @@ foreach($efforts as $effort)
             <?php if($effort->account != $this->app->user->account) continue;?>
             <tr class="text-center">
               <?php if(!$showOrder):?>
-              <td rowspan='<?php echo $count;?>'><?php echo $order + 1;?></td>
+              <td rowspan='<?php echo $count;?>'><?php echo $allOrders[$order];?></td>
               <?php $showOrder = true;?>
               <?php endif;?>
               <td><?php echo $effort->date;?></td>
@@ -84,11 +96,12 @@ foreach($efforts as $effort)
         <?php endif;?>
       </div>
       <div class='tab-pane' id='legendAllEffort'>
-        <table class='table table-bordered table-fixed table-recorded'>
+        <table class='table table-bordered table-fixed table-recorded has-sort-head'>
           <thead>
             <tr class='text-center'>
-              <th class="w-60px"> <?php echo $lang->task->teamOrder;?></th>
-              <th class="w-120px"><?php echo $lang->task->date;?></th>
+              <?php $vars = (isset($objectType) ? "objectType=$objectType&" : '') . "taskID=$task->id&from=$from&orderBy=%s";?>
+              <th class="w-60px  order-btn"><?php common::printOrderLink('order', $orderBy, $vars, $lang->task->teamOrder);?></th>
+              <th class="w-120px order-btn"><?php common::printOrderLink('date', $orderBy, $vars, $lang->task->date);?></th>
               <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
               <th><?php echo $lang->task->work;?></th>
               <th class="thWidth"><?php echo $lang->task->consumedAB;?></th>
@@ -103,7 +116,7 @@ foreach($efforts as $effort)
             <?php foreach($allEfforts[$order] as $effort):?>
             <tr class="text-center">
               <?php if(!$showOrder):?>
-              <td rowspan='<?php echo $count;?>'><?php echo $order + 1;?></td>
+              <td rowspan='<?php echo $count;?>'><?php echo $allOrders[$order];?></td>
               <?php $showOrder = true;?>
               <?php endif;?>
               <td><?php echo $effort->date;?></td>

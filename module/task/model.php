@@ -2910,12 +2910,13 @@ class taskModel extends model
             ->where('id')->eq((int)$estimateID)
             ->exec();
 
-        $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
-        $left         = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
         $lastEstimate = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('objectID')->eq($task->id)
             ->andWhere('objectType')->eq('task')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
+
+        $consumed = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
+        $left     = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
 
         $now  = helper::now();
         $data = new stdClass();

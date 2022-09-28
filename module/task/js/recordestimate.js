@@ -1,12 +1,30 @@
 $(function()
 {
+    /* Set default tab. */
+    if($.cookie('recordEstimateType') == 'all')
+    {
+        $('#recordForm').addClass('hidden');
+        $('.my-effort, #legendMyEffort').removeClass('active');
+        $('.all-effort, #legendAllEffort').addClass('active');
+    }
+    else
+    {
+        $('.my-effort, #legendMyEffort').addClass('active');
+        $('#recordForm').removeClass('hidden');
+    }
+    $.cookie('recordEstimateType', null);
+
+    $('.order-btn').on('click', function()
+    {
+        $.cookie('recordEstimateType', 'all');
+    });
+
     /* Hide creation logs when displaying team logs. */
     $('#linearefforts .tabs ul > li').click(function()
     {
         var tab = $(this).find('a').attr('href');
         $('#recordForm').toggleClass('hidden', tab == '#legendAllEffort');
     });
-
 
     $('.form-date').datetimepicker('setEndDate', today);
 

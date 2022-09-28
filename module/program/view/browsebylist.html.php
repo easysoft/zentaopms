@@ -61,7 +61,8 @@
           &nbsp;<span class="icon icon-cards-view" style="color: #888fa1;"></span>
           <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
-          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
+          <?php $projectType = $lang->project->{$program->model};?>
+          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', "class='text-ellipsis text-primary' title='{$program->name} ($projectType)'");?>
           <?php
           if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
           {

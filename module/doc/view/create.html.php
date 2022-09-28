@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php js::set('from', $from);?>
 <?php if(strpos($config->doc->textTypes, $docType) !== false and $from == 'doc'):?>
 <?php include 'createtexttype.html.php';?>
 <?php else:?>

@@ -50,7 +50,7 @@
                 ?>
                 </nobr>
               </td>
-              <td class='w-300px'>
+              <td class='w-500px'>
                 <?php
                 $maxOrder = 0;
                 foreach($sons as $sonDept)
@@ -174,39 +174,37 @@ $(function()
         e.stopPropagation();
     });
 
-    $("#dataForm").submit(function(e)
+
+    $("input[name*='depts']").change(function ()
     {
-        var postDept = new Array();
-        var depts    = new Array();
+        var depts        = new Array();
+        var modifyData   = $(this).val();
+        var changedInput = $(this);
 
-        $.each($('input[name*="depts[]"]'), function(index, value)
-        {
-            if($(this).val()) postDept.push($(this).val());
-        });
+        changedInput.wrap('<span>');
+        changedInput.closest('span').addClass('dataField');
 
-        $.each($('input[name*="depts[id"]'), function(index, value)
+        $('input[name^="depts"]').not($(this)).each(function()
         {
             if($(this).val()) depts.push($(this).val());
         });
 
-        for(var i = 0; i < postDept.length; i++)
+        if(depts.indexOf(modifyData) > -1)
         {
-            if(depts.indexOf(postDept[i]) > -1 || postDept[i] == postDept[i + 1])
-            {
-                if(confirm(repeatDepart))
-                {
-                    var link = createLink('dept', 'manageChild');
-                    break;
-                }
-                else
-                {
-                    setTimeout(function()
-                    {
-                        $('#submit').removeAttr('disabled');
-                    },10)
-                    return false;
-                }
-            }
+            $('.dataField #depts\\[\\]').addClass('intro');
+            $('.intro').css({"margin" : "5px 0px 5px 0px", "display" : "inline", "width" : "50%"});
+            changedInput.after('<span style="padding-left: 15px;color: #1183fb" class="tips">' + repeatDepart + '</span>');
+        }
+    });
+
+    $("input[name*='depts']").focus(function ()
+    {
+        if($('.dataField').length)
+        {
+            $('.intro').removeAttr('style');
+            $('.intro').unwrap();
+            $('#depts\\[\\]').removeClass('intro');
+            $('.tips').remove();
         }
     });
 });

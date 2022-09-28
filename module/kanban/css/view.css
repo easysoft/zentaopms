@@ -185,3 +185,4 @@
 .region.active.notAll {margin-top: -5px;}
 .region.active.notAll .region-header {display: none;}
 .region.active.notAll .kanban, .region.active.notAll .kanban .kanban-header {background-color: #efefef;}
+.kanban-card a[disabled] {color: #313c52;}
