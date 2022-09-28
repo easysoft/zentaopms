@@ -2040,7 +2040,7 @@ class projectModel extends model
                     $userAvatar = !empty($user) ? $user->avatar : '';
                     $PMLink     = helper::createLink('user', 'profile', "userID=$userID", '', true);
                     $userName   = zget($users, $project->PM);
-                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-top avatar-{$project->PM}");
+                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}");
                     echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':
