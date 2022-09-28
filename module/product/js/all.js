@@ -1,4 +1,110 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
+
+/**
+ * Set batch edit checkbox.
+ *
+ * @access public
+ * @return void
+ */
+function setCheckbox()
+{
+    $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+    $('.c-name').css('border-left', 'none');
+    if($.cookie('showProductBatchEdit') == 1)
+    {
+        $('#productListForm .c-checkbox, #productListForm .check-all').show();
+        $('.c-name').css('border-left', '1px solid #ddd');
+    }
+    else
+    {
+        $(":checkbox[name^='productIDList']").prop('checked', false);
+        $('.table-actions').hide();
+        $('.check-all').removeClass('checked');
+        $('#productsCount').show();
+    }
+}
+
+/* Update parent checkbox */
+function updatePrarentCheckbox($parent)
+{
+    var $row          = $parent.closest('tr');
+    var $checkbox     = $row.find('.program-checkbox');
+    var rowID         = $row.data('id');
+    var $subRows      = $('#productTableList').children('.row-product[data-nest-path^="' + rowID + ',"],.row-product[data-nest-path*=",' + rowID + ',"]');
+    var allCount      = $subRows.length;
+    var selectedCount = $subRows.find('input:checkbox:checked').length;
+    var isAllChecked  = allCount > 0 && allCount === selectedCount;
+    $checkbox.toggleClass('checked', isAllChecked)
+        .toggleClass('indeterminate', selectedCount > 0 && selectedCount < allCount);
+    $row.toggleClass('checked', isAllChecked);
+}
+
+/* Update checkboxes */
+function updateCheckboxes()
+{
+    $('#productTableList').children('.row-program,.row-line').each(function()
+    {
+        updatePrarentCheckbox($(this))
+    });
+}
+
+/**
+ * Add a statistics prompt statement after the Edit button.
+ *
+ * @access public
+ * @return void
+ */
+function addStatistic()
+{
+    var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
+    if(checkedLength > 0)
+    {
+        var summary = checkedProducts.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
+
+        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+        $('#productsCount').hide();
+        $('#productsSummary').remove();
+        $('#editBtn').after(statistic);
+        $('.table-actions').show();
+    }
+    else
+    {
+        $('.table-actions').hide();
+        $('#productsCount').show();
+        $('#productsSummary').addClass('hidden');
+    }
+}
+
+/**
+ * Anti shake operation for jquery.
+ *
+ * @param  fn $fn
+ * @param  delay $delay
+ * @access public
+ * @return void
+ */
+function debounce(fn, delay)
+{
+    var timer = null;
+    return function()
+    {
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(fn, delay)
+    }
+}
+
+/**
+ * Update statistics.
+ *
+ * @access public
+ * @return void
+ */
+function updateStatistic()
+{
+    debounce(addStatistic(), 200)
+}
+
 $(function()
 {
     $('input[name^="showEdit"]').click(function()
@@ -42,104 +148,6 @@ $(function()
             $('#productListForm').table('initNestedList');
         }
     });
-
-    /**
-     * Set batch edit checkbox.
-     *
-     * @access public
-     * @return void
-     */
-    function setCheckbox()
-    {
-        $('#productListForm .c-checkbox, #productListForm .check-all').hide();
-        $('.c-name').css('border-left', 'none');
-        if($.cookie('showProductBatchEdit') == 1)
-        {
-            $('#productListForm .c-checkbox, #productListForm .check-all').show();
-            $('.c-name').css('border-left', '1px solid #ddd');
-        }
-    }
-
-    /* Update parent checkbox */
-    function updatePrarentCheckbox($parent)
-    {
-        var $row          = $parent.closest('tr');
-        var $checkbox     = $row.find('.program-checkbox');
-        var rowID         = $row.data('id');
-        var $subRows      = $('#productTableList').children('.row-product[data-nest-path^="' + rowID + ',"],.row-product[data-nest-path*=",' + rowID + ',"]');
-        var allCount      = $subRows.length;
-        var selectedCount = $subRows.find('input:checkbox:checked').length;
-        var isAllChecked  = allCount > 0 && allCount === selectedCount;
-        $checkbox.toggleClass('checked', isAllChecked)
-            .toggleClass('indeterminate', selectedCount > 0 && selectedCount < allCount);
-        $row.toggleClass('checked', isAllChecked);
-    }
-
-    /* Update checkboxes */
-    function updateCheckboxes()
-    {
-        $('#productTableList').children('.row-program,.row-line').each(function()
-        {
-            updatePrarentCheckbox($(this))
-        });
-    }
-
-    /**
-     * Add a statistics prompt statement after the Edit button.
-     *
-     * @access public
-     * @return void
-     */
-    function addStatistic()
-    {
-        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        if(checkedLength > 0)
-        {
-            var summary = checkedProducts.replace('%s', checkedLength);
-            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
-
-            var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
-            $('#productsCount').hide();
-            $('#productsSummary').remove();
-            $('#editBtn').after(statistic);
-            $('.table-actions').show();
-        }
-        else
-        {
-            $('.table-actions').hide();
-            $('#productsCount').show();
-            $('#productsSummary').addClass('hidden');
-        }
-    }
-
-    /**
-     * Anti shake operation for jquery.
-     *
-     * @param  fn $fn
-     * @param  delay $delay
-     * @access public
-     * @return void
-     */
-    function debounce(fn, delay)
-    {
-        var timer = null;
-        return function()
-        {
-            if(timer) clearTimeout(timer);
-            timer = setTimeout(fn, delay)
-        }
-    }
-
-    /**
-     * Update statistics.
-     *
-     * @access public
-     * @return void
-     */
-    function updateStatistic()
-    {
-        debounce(addStatistic(), 200)
-    }
 
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {

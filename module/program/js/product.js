@@ -43,6 +43,9 @@ function setCheckbox()
     }
     else
     {
+        $(":checkbox[name^='productIDList']").prop('checked', false);
+        $('.table-actions').hide();
+        $('.check-all').removeClass('checked');
         $('#productListForm .product-id').removeClass('hidden');
     }
 }
