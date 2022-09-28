@@ -27,6 +27,7 @@ class taskModel extends model
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
+
         $executionID    = (int)$executionID;
         $estStarted     = '0000-00-00';
         $deadline       = '0000-00-00';
