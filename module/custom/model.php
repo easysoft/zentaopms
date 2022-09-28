@@ -828,7 +828,7 @@ class customModel extends model
         $counts = array();
         $counts['waterfall'] = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->fetch('waterfallCount');
         $counts['URStory']   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('URStoryCount');
-        if($this->config->edition == 'max') $count['assetLib'] = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->eq('0')->fetch('assetLibCount');
+        if($this->config->edition == 'max') $counts['assetLib'] = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->eq('0')->fetch('assetLibCount');
 
         return $counts;
     }
@@ -903,14 +903,59 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'lean')
         {
-            $features = array('scrumOpportunity', 'scrumMeeting', 'scrumAuditplan', 'scrumProcess');
-            foreach($features as $feature)
+            foreach($this->config->custom->features as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";
             }
         }
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
+    }
+
+    /**
+     * Check for URStory data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasURStoryData()
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for waterfall project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for issue data.
+     *
+     * @access public
+     * @return bool|int
+     */
+    public function hasScrumIssueData()
+    {
+        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ISSUE)->where('deleted')->eq('0')->andWhere('execution')->ne(0)->count();
+        return false;
+    }
+
+    /**
+     * Check for risk data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumRiskData()
+    {
+        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_RISK)->where('deleted')->eq('0')->andWhere('execution')->ne(0)->count();
+        return false;
     }
 
     /**
