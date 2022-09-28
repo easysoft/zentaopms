@@ -18,3 +18,6 @@
 .main-header ul.hours:after{content:"）"}
 .body-modal .main-header>h2 { max-width: 70% !important; margin-right:0px;}
 .table-record .form-date {border-right: none;}
+
+.table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
+.table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}

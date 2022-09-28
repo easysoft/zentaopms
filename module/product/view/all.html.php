@@ -253,8 +253,8 @@
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <?php
-        $content = empty($productLines) ? sprintf($lang->product->pageProducts, count($productStats)) : sprintf($lang->product->pageLines, count($lineNames),  count($productStats));
-        echo "<div id='productsCount' class='statistic'>$content</div>";
+        $summary = empty($productLines) ? sprintf($lang->product->pageSummary, count($productStats)) : sprintf($lang->product->lineSummary, count($lineNames), count($productStats));
+        echo "<div id='productsCount' class='statistic'>$summary</div>";
         ?>
         <div class="table-actions btn-toolbar">
           <?php

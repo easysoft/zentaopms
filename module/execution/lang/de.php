@@ -467,7 +467,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Kanban Einstellung";
 $lang->execution->setKanban     = "Kanban Einstellung";
 $lang->execution->resetKanban   = "Einstellungen zurücksetzen";
-$lang->execution->printKanban   = "Kanban drucken";
+$lang->execution->printKanban   = "drucken Kanban";
 $lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 
@@ -487,7 +487,7 @@ $lang->kanbanSetting->optionList['0'] = 'Verstecken';
 $lang->kanbanSetting->optionList['1'] = 'Anzeigen';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = 'Kanban drucken';
+$lang->printKanban->common  = 'drucken Kanban';
 $lang->printKanban->content = 'Inhanlt';
 $lang->printKanban->print   = 'Drucken';
 

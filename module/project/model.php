@@ -1979,7 +1979,7 @@ class projectModel extends model
             if($id == 'name')
             {
                 $class .= ' text-left';
-                $title  = "title='{$project->name} ({$this->lang->project->{$project->model}})'";
+                $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
             }
 
             if($id == 'end')
