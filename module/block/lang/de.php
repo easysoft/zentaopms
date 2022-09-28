@@ -322,8 +322,6 @@ $lang->block->default['full']['my']['10']['title']  = 'Project List';
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
-$lang->block->default['full']['my']['10']['block']  = 'execution';
-$lang->block->default['full']['my']['10']['source'] = 'execution';
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
