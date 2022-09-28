@@ -53,6 +53,7 @@
           <?php
           $icon = '';
           if($program->type == 'program') $icon = ' icon-program';
+          if($program->type == 'project') $icon = ' icon-common icon-' . $program->model;
           $class = $program->type == 'program' ? ' table-nest-toggle' : '';
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
@@ -118,9 +119,8 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-/* #programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
-#programTableList .is-nest-child > .c-name > a {color: #2463c7!important;} */
-#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
+#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>

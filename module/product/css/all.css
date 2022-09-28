@@ -38,14 +38,12 @@
 #sidebar>.cell {width: 100%;}
 
 th.c-name {width: 400px;}
-th.c-requirement {width: 290px;}
 th.c-story {width: 290px;}
-th.c-bug {width: 200px;}
+th.c-bug {width: 150px;}
 th.c-plan {width: 45px;}
 th.c-release {width: 50px;}
 th.c-actions {width: 50px;}
 [lang='en'] .en-wrap-text {white-space: normal; height: 24px; line-height: 1; font-size: 12px;}
-
 
 #productListForm thead>tr>th,
 #productListForm tbody>tr>td {text-align: center; text-overflow: unset!important}
@@ -86,6 +84,7 @@ th.c-actions {width: 50px;}
     [lang^='zh-'] th.c-story {width: 220px;}
 }
 
+#productTableList .c-name > span.table-nest-icon {width: 0; visibility: hidden;}
 #productTableList > tr.row-line.is-nest-child > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 #productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 .statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
