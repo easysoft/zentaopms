@@ -529,6 +529,7 @@ class project extends control
 
         $products      = array();
         $productPlans  = array();
+        $shadow        = 0;
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
         if($copyProjectID)
@@ -543,8 +544,9 @@ class project extends control
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
             $hasProduct  = $copyProject->hasProduct;
+            $products    = $this->product->getProducts($copyProjectID);
 
-            $products = $this->product->getProducts($copyProjectID);
+            if(!$copyProject->hasProduct) $shadow = 1;
             foreach($products as $product)
             {
                 foreach($product->branches as $branch)
@@ -573,7 +575,7 @@ class project extends control
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
-        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
+        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed', '', $shadow);
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
