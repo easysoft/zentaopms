@@ -847,10 +847,15 @@ class customModel extends model
             ->andWhere('acl')->eq('program')
             ->fetchGroup('parent', 'id');
 
-        $programs = $this->dao->select("id,CONCAT(PM,',',openedBy)")->from(TABLE_PROGRAM)
+        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
             ->where('id')->in(array_keys($projectGroup))
             ->andWhere('type')->eq('program')
             ->fetchPairs();
+
+        $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('program')
+            ->andWhere('objectID')->in(array_keys($projectGroup))
+            ->fetchGroup('objectID', 'user');
 
         $projectIDList = array();
         foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));
@@ -863,7 +868,11 @@ class customModel extends model
         {
             foreach($projects as $project)
             {
-                $whitelist = rtrim($project->whitelist . ',' . zget($programs, $project->parent, ''));
+                $PM          = zget($programPM, $project->parent, '');
+                $stakeholder = zget($stakeholders, $project->parent, '');
+                if($stakeholder) $stakeholder = join(',', array_keys($stakeholder));
+
+                $whitelist = rtrim($project->whitelist . ',' . $PM . ',' . $stakeholder);
                 $whitelist = explode(',', $whitelist);
                 $whitelist = array_filter(array_unique($whitelist));
                 $whitelist = join(',', $whitelist);
