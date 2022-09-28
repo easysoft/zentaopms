@@ -392,11 +392,11 @@ function addItem(obj)
     }
     if($nextTr.find('.deadlineBox').length == 0)
     {
-        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto['+ index +']" id="deadlineDitto" checked/> ' + ditto + '</span>');
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[' + index + ']" id="deadlineDitto" checked/> ' + ditto + '</span>');
     }
     if($nextTr.find('.estStartedBox').length == 0)
     {
-        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto['+ index +'] id="estStartedDitto" checked/> ' + ditto + '</span>');
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[' + index + '] id="estStartedDitto" checked/> ' + ditto + '</span>');
     }
 
     if($nextTr.find('.deadlineBox').is(':hidden'))
