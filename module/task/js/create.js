@@ -392,7 +392,7 @@ function addItem(obj)
     }
     if($nextTr.find('.deadlineBox').length == 0)
     {
-        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto['+ index +' ]" id="deadlineDitto" checked/> ' + ditto + '</span>');
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto['+ index +']" id="deadlineDitto" checked/> ' + ditto + '</span>');
     }
     if($nextTr.find('.estStartedBox').length == 0)
     {

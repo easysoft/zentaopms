@@ -49,6 +49,8 @@ class taskModel extends model
                 if(empty($storyID)) continue;
                 $estStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $estStarted : $this->post->testEstStarted[$i];
                 $deadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on'))     ? $deadline : $this->post->testDeadline[$i];
+                $assignedTo = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+
                 if($estStarted > $deadline)
                 {
                     dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
@@ -59,7 +61,7 @@ class taskModel extends model
                 $task->pri        = $this->post->testPri[$i];
                 $task->estStarted = $estStarted;
                 $task->deadline   = $deadline;
-                $task->assignedTo = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+                $task->assignedTo = $assignedTo;
                 $task->estimate   = $this->post->testEstimate[$i];
                 $task->left       = $this->post->testEstimate[$i];
 
