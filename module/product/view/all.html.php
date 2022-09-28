@@ -11,13 +11,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
+<?php js::set('productLines', $productLines); ?>
+<?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
+  <div class="btn-toolBar pull-left">
     <?php common::sortFeatureMenu();?>
     <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
     <?php $recTotalLabel = $browseType == $key ? " <span class='label label-light label-badge'>{$recTotal}</span>" : '';?>
     <?php echo html::a(inlink("all", "browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>" . $recTotalLabel, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->product->edit), $showBatchEdit);?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -36,7 +39,6 @@
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='product'></div>
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='true' data-expand-nest-child='true'>
-      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
       <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
@@ -54,7 +56,7 @@
               <?php common::printOrderLink('PO', $orderBy, $vars, $lang->product->manager);?>
             </th>
             <th class="c-story" colspan="5"><?php echo $lang->story->story;?></th>
-            <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
+            <th class="c-bug" colspan="2"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <th class="c-release"  rowspan="2"><?php echo $lang->product->release;?></th>
             <?php
@@ -70,7 +72,6 @@
             <th><?php echo $lang->story->statusList['reviewing'];?></th>
             <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
-            <th><?php echo $lang->close;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
           </tr>
         </thead>
@@ -124,7 +125,6 @@
             <td><?php echo $program['reviewingStories'];?></td>
             <td><?php echo $program['totalStories'] == 0 ? 0 : round($program['closedStories'] / $program['totalStories'], 3) * 100;?>%</td>
             <td><?php echo $program['unResolvedBugs'];?></td>
-            <td><?php echo $program['closedBugs'];?></td>
             <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $program['plans'];?></td>
             <td><?php echo $program['releases'];?></td>
@@ -165,7 +165,6 @@
             <td><?php echo isset($line['reviewingStories']) ? $line['reviewingStories'] : 0;?></td>
             <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
-            <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
             <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
             <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
@@ -208,8 +207,7 @@
             <?php endif;?>
             <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
               <?php
-              $productLink = html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
-              echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
+              echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               ?>
             </td>
             <td class='c-manager'>
@@ -230,7 +228,6 @@
             <td><?php echo $product->stories['reviewing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
-            <td><?php echo $product->closedBugs;?></td>
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
@@ -247,13 +244,17 @@
         <?php echo $pager->show('left', 'pagerjs');?>
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <?php
+        $summary = empty($productLines) ? sprintf($lang->product->pageSummary, count($productStats)) : sprintf($lang->product->lineSummary, count($lineNames), count($productStats));
+        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        ?>
         <div class="table-actions btn-toolbar">
           <?php
           $actionLink = $this->createLink('product', 'batchEdit');
           echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
           ?>
-        <?php endif;?>
         </div>
+        <?php endif;?>
       </div>
     </form>
   </div>

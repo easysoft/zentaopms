@@ -8,7 +8,7 @@
 .nav > li.divider {margin: 0 10px 0 5px; background-color: #000; opacity: 0.06; width: 1px ; height: 15px; padding: 0 !important;}
 .table-bordered td, .table-bordered th { border: 1px solid #EEEEEE; }
 .table-recorded thead { background: #F5F6F8}
-.table>thead>tr>th{ border-bottom: 1px solid #EEEEEE}
+.table>thead>tr>th{border-bottom: 1px solid #EEEEEE; font-weight: 400;}
 #linearefforts .nav li.active a{color: #0c64eb !important}
 .input-group-addon {background: #fff}
 .icon-calendar {color: rgb(22, 168, 248)}
@@ -18,3 +18,6 @@
 .main-header ul.hours:after{content:"）"}
 .body-modal .main-header>h2 { max-width: 70% !important; margin-right:0px;}
 .table-record .form-date {border-right: none;}
+
+.table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
+.table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}

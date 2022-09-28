@@ -1292,6 +1292,7 @@ class product extends control
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
+        $this->view->showBatchEdit    = $this->cookie->showProductBatchEdit;
 
         $this->display();
     }

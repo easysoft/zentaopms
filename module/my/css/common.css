@@ -8,3 +8,4 @@
 .dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
 
 .btn-toolbar .nav-title {float: left; display: inline-block; padding: 6px 12px; margin-bottom: 0; font-size: 13px; font-weight: bolder; line-height: 18px; text-align: center; white-space: nowrap; vertical-align: middle;}
+#myStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}

@@ -1112,10 +1112,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $from
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function recordEstimate($taskID, $from = '')
+    public function recordEstimate($taskID, $from = '', $orderBy = '')
     {
         $this->commonAction($taskID);
 
@@ -1174,12 +1175,14 @@ class task extends control
         $this->session->set('estimateList', $uri, 'execution');
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
-        $task    = $this->task->getById($taskID);
-        $orderBy = 'date,id';
-        if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
+        $task = $this->task->getById($taskID);
+        if(!empty($task->team) and $task->mode == 'linear' and !$orderBy) $orderBy = 'order_asc';
+        if(!$orderBy) $orderBy = 'date_asc';
 
         $this->view->title   = $this->lang->task->record;
         $this->view->task    = $task;
+        $this->view->from    = $from;
+        $this->view->orderBy = $orderBy;
         $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
