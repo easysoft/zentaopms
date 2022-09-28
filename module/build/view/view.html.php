@@ -20,6 +20,7 @@
 #stories .action {display: none;}
 #bugs .action {display: none;}
 tbody tr td:first-child input {display: none;}
+.page-title .dropdown-menu {top: 40px; left: 70px;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
@@ -28,8 +29,8 @@ tbody tr td:first-child input {display: none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'>
-      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <span title='<?php echo $build->name;?>'>
+      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='text btn btn-link btn-active-text'");?>
       <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
