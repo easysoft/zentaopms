@@ -659,14 +659,16 @@ class productModel extends model
             ->get();
 
         $this->lang->error->unique = $this->lang->error->repeat;
-        $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
-        $programID = isset($product->program) ? $product->program : 0;
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
+
         /* Lean mode relation defaultProgram. */
+        $programID = isset($product->program) ? $product->program : 0;
         if($this->config->systemMode == 'lean')
         {
             $programID = $this->config->global->defaultProgram;
             $product->program = $this->config->global->defaultProgram;
         }
+
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
@@ -758,7 +760,7 @@ class productModel extends model
 
         $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
-        $programID = isset($product->program) ? $product->program : 0;
+        $programID = isset($product->program) ? $product->program : $oldProduct->program;
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
@@ -1127,13 +1129,13 @@ class productModel extends model
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
 
-        $linePairs = $this->getLinePairs();
-        $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
-
         if($this->config->systemMode == 'new')
         {
             $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
             $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
+
+            $linePairs = $this->getLinePairs();
+            $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->all->search);

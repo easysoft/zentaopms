@@ -22,7 +22,9 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'", true, true)?>
+    <?php if($config->systemMode == 'new'):?>
     <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link iframe"', '', true);?>
+    <?php endif;?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary create-product-btn"');?>
   </div>
 </div>
@@ -102,7 +104,7 @@
                   }
               }
           }
-          ;?>
+          ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
@@ -136,7 +138,7 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products'])):?>
+          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'new'):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)
@@ -189,7 +191,7 @@
           $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'] + $product->requirements['reviewing'];
 
           $trClass = '';
-          if($product->line)
+          if($product->line and $this->config->systemMode == 'new')
           {
               $path = "line.$product->line,$product->id";
               if($this->config->systemMode == 'new' and $product->program) $path = "program.$product->program,$path";

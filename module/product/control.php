@@ -1440,12 +1440,14 @@ class product extends control
             {
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = zget($productLang, $fieldName);
+
                 unset($fields[$key]);
+                if($this->config->systemMode != 'new' and ($fieldName == 'line' or $fieldName == 'program')) unset($fields[$fieldName]);
             }
 
-            $lastProgram = $lastLine = '';
-            $lines = $this->product->getLinePairs();
-            $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
+            $lastProgram  = $lastLine = '';
+            $lines        = $this->product->getLinePairs();
+            $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
                 $product->line = zget($lines, $product->line, '');
@@ -1476,13 +1478,19 @@ class product extends control
                     $rowspan[$i]['rows']['program'] = 1;
                     $programI = $i;
                 }
-                else $rowspan[$programI]['rows']['program'] ++;
+                else
+                {
+                    $rowspan[$programI]['rows']['program'] ++;
+                }
                 if($lastLine == '' or $product->line != $lastLine)
                 {
                     $rowspan[$i]['rows']['line'] = 1;
                     $lineI = $i;
                 }
-                else $rowspan[$lineI]['rows']['line'] ++;
+                else
+                {
+                    $rowspan[$lineI]['rows']['line'] ++;
+                }
                 $lastProgram = $product->program;
                 $lastLine    = $product->line;
 

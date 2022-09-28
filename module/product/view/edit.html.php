@@ -43,11 +43,11 @@
             <?php if($attr == 'disabled') echo html::hidden('program', $product->program);?>
             <td><?php echo html::select('program', $programs, $product->program, "class='form-control chosen' $attr");?></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
             <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td><td></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>

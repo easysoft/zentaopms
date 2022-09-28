@@ -29,7 +29,6 @@
             <th class='w-140px'><?php echo $lang->program->common;?></th>
             <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td><td></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
             <?php if(common::hasPriv('product', 'manageLine') and $programID):?>
@@ -52,6 +51,7 @@
             <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td><td></td>
             <?php endif;?>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
