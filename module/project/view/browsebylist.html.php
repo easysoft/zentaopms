@@ -41,7 +41,7 @@
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->project->edit));?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->project->edit), $showBatchEdit);?>
     <?php if($browseType != 'bysearch') echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
@@ -106,7 +106,7 @@
             <?php
             foreach($setting as $value)
             {
-              if($value->id == 'status' and strpos(',all,bysearch,', ",$browseType,") === false) $value->show = false;
+              if($value->id == 'status' and strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
               if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
               if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);

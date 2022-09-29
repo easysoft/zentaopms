@@ -163,14 +163,17 @@ class program extends control
             $this->view->program = $program;
         }
 
-        $this->view->title       = $this->lang->program->product;
-        $this->view->position[]  = $this->lang->program->product;
-        $this->view->programID   = $programID;
-        $this->view->browseType  = $browseType;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->products    = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->title         = $this->lang->program->product;
+        $this->view->position[]    = $this->lang->program->product;
+        $this->view->programID     = $programID;
+        $this->view->browseType    = $browseType;
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->products      = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar   = $this->user->getAvatarPairs('');
+        $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
 
         $this->display();
     }
@@ -479,12 +482,13 @@ class program extends control
         $this->view->title      = $this->lang->program->project;
         $this->view->position[] = $this->lang->program->project;
 
-        $this->view->projectStats = $projectStats;
-        $this->view->pager        = $pager;
-        $this->view->programID    = $programID;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->browseType   = $browseType;
-        $this->view->orderBy      = $orderBy;
+        $this->view->projectStats  = $projectStats;
+        $this->view->pager         = $pager;
+        $this->view->programID     = $programID;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->browseType    = $browseType;
+        $this->view->orderBy       = $orderBy;
+        $this->view->showBatchEdit = $this->cookie->showProjectBatchEdit;
 
         $this->display();
     }

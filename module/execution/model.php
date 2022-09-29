@@ -706,7 +706,7 @@ class executionModel extends model
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
             {
-                dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
+                dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
                 return false;
             }
             elseif(!empty($executionCode))
@@ -714,7 +714,7 @@ class executionModel extends model
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                     return false;
                 }
                 $codeList[$executionCode] = $executionCode;

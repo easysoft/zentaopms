@@ -37,8 +37,8 @@ $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'View Stories Matrix';
 $lang->product->checkedProducts  = '%s products selected';
-$lang->product->pageProducts     = 'Total products: %s.';
-$lang->product->pageLines        = 'Total product lines: %s, Total products: %s.';
+$lang->product->pageSummary      = 'Total products: %s.';
+$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Close {$lang->productCommon}";

@@ -1457,7 +1457,7 @@ $(function()
         resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
-    $('.region-header').on('click', '.action', hideKanbanAction);
+    $('#regionTabs, .region-header').on('click', '.action', hideKanbanAction);
     $('#TRAction').on('click', '.btn', hideKanbanAction);
 
     /* Hide action box when user click document */

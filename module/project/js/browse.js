@@ -1,29 +1,40 @@
 $(function()
 {
-    $('#projectForm .checkbox-primary').hide();
     $('input[name^="involved"]').click(function()
     {
         var involved = $(this).is(':checked') ? 1 : 0;
-        $.cookie('involved', involved, {expires:config.cookieLife, path:config.webRoot});
+        $.cookie('involved', involved, {expires: config.cookieLife, path: config.webRoot});
         window.location.reload();
     });
 
     $('[id="switchButton"]').click(function()
     {
         var projectType = $(this).attr('data-type');
-        $.cookie('projectType', projectType, {expires:config.cookieLife, path:config.webRoot});
+        $.cookie('projectType', projectType, {expires: config.cookieLife, path: config.webRoot});
         window.location.reload();
     });
 
     $('input[name^="showEdit"]').click(function()
     {
-        $('#projectForm .checkbox-primary').hide();
-        var showEdit = $(this).is(':checked') ? 1 : 0;
-        if(showEdit) $('#projectForm .checkbox-primary').show();
+        $.cookie('showProjectBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
+        setCheckbox();
     });
+    setCheckbox();
 
     if(!useDatatable) resetNameWidth();
 });
+
+/**
+ * Set batch edit checkbox.
+ *
+ * @access public
+ * @return void
+ */
+function setCheckbox()
+{
+    $('#projectForm .checkbox-primary').hide();
+    if($.cookie('showProjectBatchEdit') == 1) $('#projectForm .checkbox-primary').show();
+}
 
 function resetNameWidth()
 {

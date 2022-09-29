@@ -81,7 +81,7 @@ class release extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -140,7 +140,7 @@ class release extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'execution', $release->build, false);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
         foreach($releasedBuilds as $releasedBuild)
         {
