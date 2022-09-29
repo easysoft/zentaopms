@@ -140,7 +140,30 @@
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
-        <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('execution', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
+        <td class='text-center'>
+          <?php
+          if(!empty($plan->projects))
+          {
+              if(count($plan->projects) === 1)
+              {
+                  echo html::a(helper::createLink('execution', 'task', 'projectID=' . key($plan->projects)), '<i class="icon-run text-primary"></i>');
+              }
+              else
+              {
+                  $projectHtml  = '<div class="popover right">';
+                  $projectHtml .= '<div class="arrow"></div>';
+                  $projectHtml .= '<div class="popover-content">';
+                  $projectHtml .= '<ul class="execution-tip">';
+                  foreach($plan->projects as $projectID => $project) $projectHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "projectID=$projectID"), $project->name, '', 'class="project-link"') . '</li>';
+                  $projectHtml .= '</ul>';
+                  $projectHtml .= '</div>';
+                  $projectHtml .= '</div>';
+                  echo "<i class='icon-run project-popover text-primary'></i>";
+                  echo $projectHtml;
+              }
+          }
+          ?>
+        </td>
         <td class='text-left content'>
           <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>

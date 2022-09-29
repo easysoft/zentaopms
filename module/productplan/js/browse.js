@@ -99,6 +99,26 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
+
+    $('.project-popover').on('click', function()
+    {
+        var showPopover = $(this).next().css('display') == 'block';
+        $('.popover.right').hide();
+        if(!showPopover) $(this).next().show();
+    });
+
+    $('.project-link').on('click', function()
+    {
+        $('.popover.right').hide();
+    });
+
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover');
+        if(!$toggle.length) $('.popover.right').hide();
+    });
 });
 
 /* Define menu creators. */
