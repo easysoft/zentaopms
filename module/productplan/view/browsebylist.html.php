@@ -33,6 +33,8 @@
 </div>
 <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='productplan'></div>
 <div id="mainContent">
+  <?php $totalParent = 0;?>
+  <?php $totalChild  = 0;?>
   <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>
@@ -43,7 +45,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
+  <form class='main-table table-productplan' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
     <table class='table has-sort-head' id="productplanList">
       <thead>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -89,10 +91,13 @@
       {
           $parent   = $plan->id;
           $children = isset($plan->children) ? $plan->children : 0;
+
+          $totalParent ++;
       }
       if($plan->parent == 0) $parent = 0;
       if(!empty($parent) and $plan->parent > 0 and $plan->parent != $parent) $parent = 0;
       if($plan->parent <= 0) $i = 0;
+      if($plan->parent > 0) $totalChild ++;
 
       $class = '';
       if(!empty($parent) and $plan->parent == $parent)
@@ -103,7 +108,7 @@
           $i++;
       }
       ?>
-      <tr class='<?php echo $class;?>'>
+      <tr class='<?php echo $class;?>' data-parent="<?php echo $plan->parent;?>">
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
@@ -179,8 +184,34 @@
         </div>
       <?php endif;?>
       </div>
+      <div class="table-statistic"><?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    var pageSummary    = '<?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?>';
+    var checkedSummary = '<?php echo $lang->productplan->checkedSummary?>';
+    $('#productplanForm').table(
+    {
+        replaceId: 'productplanList',
+        statisticCreator: function(table)
+        {
+            var $table        = table.getTable();
+            var $checkedRows  = $table.find('tbody>tr.checked');
+            var checkedTotal  = $checkedRows.length;
+            var checkedParent = $checkedRows.filter("[data-parent=-1]").length;
+            var checkedNormal = $checkedRows.filter("[data-parent=0]").length;
+            var checkedChild  = checkedTotal - checkedParent - checkedNormal;
+            var summary       = checkedSummary.replace('%total%', checkedTotal)
+                .replace('%parent%', checkedParent)
+                .replace('%child%', checkedChild);
+
+            return checkedTotal ? summary : pageSummary;
+        }
+    });
+});
+</script>

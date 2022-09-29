@@ -73,6 +73,8 @@ $lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
 $lang->productplan->selectProjects     = "Please select the project";
 $lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
+$lang->productplan->summary            = "Total <strong>%s</strong> plans on this page, Parent Plan <strong>%s</strong> ,Child Plan <strong>%s</strong>.";
+$lang->productplan->checkedSummary     = "Seleted <strong>%total%</strong> plans, Parent Plan <strong>%parent%</strong>, Child Plan <strong>%child%</strong>.";
 
 $lang->productplan->id         = 'ID';
 $lang->productplan->product    = $lang->productCommon;
