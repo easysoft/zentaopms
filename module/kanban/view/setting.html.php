@@ -27,7 +27,18 @@
       </tr>
       <tr>
         <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $kanban->fluidBoard));?></td>
+        <td colspan='2'>
+            <div class="radio-col">
+                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), $kanban->fluidBoard);?>
+                <?php echo html::input('colWidth', !empty($kanban->colWidth) ? $kanban->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' required placeholder='{$this->config->colWidth}' autocomplete='off'");?>px
+            </div>
+            <div class="radio-col mt10">
+                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), $kanban->fluidBoard);?>
+                <?php echo html::input('minColWidth', !empty($kanban->minColWidth) ? $kanban->minColWidth : $this->config->minColWidth, "class='form-control inline-block setting-input' required placeholder='{$this->config->minColWidth}' autocomplete='off'");?>px
+                <span class="input-divider">~</span>
+                <?php echo html::input('maxColWidth', !empty($kanban->maxColWidth) ? $kanban->maxColWidth : $this->config->maxColWidth, "class='form-control inline-block setting-input' required placeholder='{$this->config->maxColWidth}' autocomplete='off'");?>px
+            </div>
+        </td>
       </tr>
       <?php if($laneCount > 1):?>
       <tr>

@@ -41,8 +41,12 @@ js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('displayCards', $kanban->displayCards);
 js::set('fluidBoard', $kanban->fluidBoard);
+js::set('minColWidth', $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth);
+js::set('maxColWidth',$kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth);
 js::set('mode', $config->systemMode);
 js::set('alignment', $kanban->alignment);
+js::set('defaultMinColWidth', $this->config->minColWidth);
+js::set('defaultMaxColWidth', $this->config->maxColWidth);
 js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
 
 $canSortRegion         = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;

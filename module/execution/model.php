@@ -1130,7 +1130,18 @@ class executionModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
 
-        $this->dao->update(TABLE_EXECUTION)->data($execution)->where('id')->eq((int)$executionID)->exec();
+        $this->app->loadLang('kanban');
+        $this->lang->project->colWidth    = $this->lang->kanban->colWidth;
+        $this->lang->project->minColWidth = $this->lang->kanban->minColWidth;
+        $this->lang->project->maxColWidth = $this->lang->kanban->maxColWidth;
+        $this->dao->update(TABLE_EXECUTION)->data($execution)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->checkIF(!$execution->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($execution->minColWidth and $execution->maxColWidth and $execution->fluidBoard, 'maxColWidth', 'ge', $kanban->minColWidth)
+            ->where('id')->eq((int)$executionID)
+            ->exec();
     }
 
     /**

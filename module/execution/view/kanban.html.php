@@ -47,6 +47,8 @@ js::set('entertime', time());
 js::set('displayCards', $execution->displayCards);
 js::set('productNum', $productNum);
 js::set('fluidBoard', $execution->fluidBoard);
+js::set('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
+js::set('maxColWidth',$execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
@@ -56,6 +58,8 @@ js::set('executionID', $execution->id);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');
+js::set('defaultMinColWidth', $this->config->minColWidth);
+js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
