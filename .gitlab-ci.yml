@@ -1,12 +1,13 @@
 stages:
-  - sonar
-  - unit_test
-  - uitest
-  - notify
-  - cleanup_packages
+  - sonarqube
+  - unit-test
+  - ui-test
   - package
-sonarqube:
-  stage: sonar
+  - cleanup-packages
+  - notify
+ 
+program-static-analysis:
+  stage: sonarqube
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -19,6 +20,25 @@ sonarqube:
   allow_failure: true
   only:
     - master # or the name of your main branch
+
+unit-test:
+  stage: unit-test
+  script:
+  - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
+  only:
+  - master
+  - merge_requests
+
+ui-test:
+  stage: ui-test
+  script:
+  - "/home/gitlab-runner/bin/zentao-uitest.sh ${CI_PROJECT_DIR}"
+  allow_failure: true
+  only:
+  - master
+  - merge_requests
+
 package:
   stage: package
   script:
@@ -26,22 +46,15 @@ package:
   allow_failure: true
   only:
     - master
-unit_test:
-  stage: unit_test
+
+cleanup-packages:
+  stage: cleanup-packages
   script:
-  - "/home/gitlab-runner/bin/zentao-unittest.sh ${CI_PROJECT_DIR}"
-  allow_failure: true
+    - make clean
+  when: on_failure
   only:
   - master
-  - merge_requests
-uitest:
-  stage: uitest
-  script:
-  - "/home/gitlab-runner/bin/zentao-uitest.sh ${CI_PROJECT_DIR}"
-  allow_failure: true
-  only:
-  - master
-  - merge_requests
+
 notify:
   stage: notify
   script:
@@ -50,8 +63,3 @@ notify:
   only:
   - master
   - merge_requests
-cleanup_packages:
-  stage: cleanup_packages
-  script:
-    - make clean
-  when: on_failure
