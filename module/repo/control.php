@@ -147,7 +147,7 @@ class repo extends control
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->projectList  = array();
+        $this->view->projects     = array();
         $this->view->productID    = $productID;
         $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID     = $objectID;
@@ -204,12 +204,7 @@ class repo extends control
         }
 
         $products       = explode(',', $repo->product);
-        $projectOptions = array();
-        foreach($products as $productID)
-        {
-            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $projectOptions = $projectOptions + $projects;
-        }
+        $projectOptions = $this->filterProject($products);
 
         $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->repo         = $repo;
@@ -1223,14 +1218,35 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
-        $projectOptions = array();
-        foreach($postData->products as $productID)
+        $projectOptions = $this->filterProject($postData->products, $postData->projects);
+        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
+    }
+
+    /**
+     * Remove projects without privileges.
+     *
+     * @param  array   $productIDList
+     * @access private
+     * @return array
+     */
+    private function filterProject($productIDList, $projectIDList = array())
+    {
+        $allProjects = array();
+        foreach($productIDList as $productID)
         {
-            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $projectOptions = $projectOptions + $projects;
+            $projects    = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $allProjects = $allProjects + $projects;
         }
 
-        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
+        $accessProjects = explode(',', $this->app->user->view->projects);
+        $accessProjects = $accessProjects + $projectIDList; /* Merge projects can be accessed and exists.*/
+        $projectOptions = array();
+        foreach($allProjects as $projectID => $projectName)
+        {
+            if(in_array($projectID, $accessProjects)) $projectOptions[$projectID] = $projectName;
+        }
+
+        return $projectOptions;
     }
 
     /**
