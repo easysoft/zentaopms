@@ -111,7 +111,7 @@
           $i++;
       }
       ?>
-      <tr class='<?php echo $class;?>'>
+      <tr class='<?php echo $class;?>' data-id="<?php echo $plan->id;?>">
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
