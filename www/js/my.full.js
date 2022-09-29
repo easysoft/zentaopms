@@ -878,7 +878,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         setTimeout(function()
         {
             hasCollapsed = $table.find('td.has-child a.' + toggleClass + '.collapsed').length != 0;
-            $('#toggleFold').html(hasCollapsed ? unfoldAll : foldAll).toggleClass('collapsed', hasCollapsed);
+            $('#toggleFold').toggleClass('collapsed', hasCollapsed);
         }, 100);
 
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});

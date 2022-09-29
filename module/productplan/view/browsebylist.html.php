@@ -9,6 +9,9 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php $unfoldPlans = isset($config->productplan->browse->unfoldPlans) ? json_decode($config->productplan->browse->unfoldPlans, true) : array();?>
+<?php $unfoldPlans = zget($unfoldPlans, $productID, array());?>
+<?php js::set('unfoldPlans', $unfoldPlans);?>
 <style>
 .c-actions {width: 250px;}
 #productplanList .c-actions .btn+.btn {margin-left: -1px;}

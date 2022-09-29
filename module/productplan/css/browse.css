@@ -35,3 +35,4 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .panel-actions {position: relative; padding: 0 0; padding-top: 1px;}
 .icon-list {padding-left: 7px;}
 .icon-kanban {padding-left: 7px; font-size: 16px;}
+#productplanList thead th.c-title {width: 100%;}

@@ -128,11 +128,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
 
 
-.flex-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.flex-between {display: flex;align-items: center;justify-content: space-between;}
 #toggleFold > .icon {display: inline-block; transition: transform .2s; transform: rotate(-90deg);}
 #toggleFold.collapsed > .icon {transform: rotate(90deg);}
 
