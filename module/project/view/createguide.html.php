@@ -28,6 +28,7 @@
             <p><?php echo $lang->project->scrumTitle; ?></p>
           </div>
         </div>
+        <?php if(strpos(",$config->disabledFeatures,", ',waterfall,') === false):?>
         <div class='col-xs-4'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=waterfall&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', "data-app='{$tab}' class='createButton'")?>
@@ -35,6 +36,7 @@
             <p><?php echo $lang->project->waterfallTitle; ?></p>
           </div>
         </div>
+        <?php endif;?>
         <div class='col-xs-4'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=kanban&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='kanban' src='{$config->webRoot}theme/default/images/main/kanban.png'>", '', "data-app='{$tab}' class='createButton'")?>

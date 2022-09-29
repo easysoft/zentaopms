@@ -320,7 +320,9 @@ $lang->stakeholder->methodOrder[75] = 'viewExpect';
 $lang->stakeholder->methodOrder[80] = 'userIssue';
 
 global $config;
-if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
+$hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false || (defined('IN_UPGRADE') && IN_UPGRADE);
+$isURSR       = $config->URAndSR || (defined('IN_UPGRADE') && IN_UPGRADE);
+if($hasWaterfall)
 {
     /* Design. */
     $lang->resource->design = new stdclass();
@@ -348,6 +350,33 @@ if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
     $lang->design->methodOrder[50] = 'unlinkCommit';
     $lang->design->methodOrder[55] = 'revision';
 
+    /* Program plan. */
+    $lang->resource->programplan = new stdclass();
+    $lang->resource->programplan->create = 'create';
+    $lang->resource->programplan->edit   = 'edit';
+
+    $lang->programplan->methodOrder[0] = 'create';
+    $lang->programplan->methodOrder[5] = 'edit';
+
+    /* Stage. */
+    $lang->resource->stage = new stdclass();
+    $lang->resource->stage->browse      = 'browse';
+    $lang->resource->stage->create      = 'create';
+    $lang->resource->stage->batchCreate = 'batchCreate';
+    $lang->resource->stage->edit        = 'edit';
+    $lang->resource->stage->setType     = 'setType';
+    $lang->resource->stage->delete      = 'delete';
+
+    $lang->stage->methodOrder[5]  = 'browse';
+    $lang->stage->methodOrder[10] = 'create';
+    $lang->stage->methodOrder[15] = 'batchCreate';
+    $lang->stage->methodOrder[20] = 'edit';
+    $lang->stage->methodOrder[25] = 'setType';
+    $lang->stage->methodOrder[30] = 'delete';
+}
+
+if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
+{
     /* Program. */
     $lang->resource->program = new stdclass();
     $lang->resource->program->browse                  = 'browse';
@@ -389,38 +418,14 @@ if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
     $lang->program->methodOrder[90] = 'unbindWhitelist';
     $lang->program->methodOrder[95] = 'updateOrder';
 
-    /* Program plan. */
-    $lang->resource->programplan = new stdclass();
-    $lang->resource->programplan->create = 'create';
-    $lang->resource->programplan->edit   = 'edit';
-
-    $lang->programplan->methodOrder[0] = 'create';
-    $lang->programplan->methodOrder[5] = 'edit';
-
     $lang->resource->project->programTitle = 'moduleOpen';
-
-    /* Stage. */
-    $lang->resource->stage = new stdclass();
-    $lang->resource->stage->browse      = 'browse';
-    $lang->resource->stage->create      = 'create';
-    $lang->resource->stage->batchCreate = 'batchCreate';
-    $lang->resource->stage->edit        = 'edit';
-    $lang->resource->stage->setType     = 'setType';
-    $lang->resource->stage->delete      = 'delete';
-
-    $lang->stage->methodOrder[5]  = 'browse';
-    $lang->stage->methodOrder[10] = 'create';
-    $lang->stage->methodOrder[15] = 'batchCreate';
-    $lang->stage->methodOrder[20] = 'edit';
-    $lang->stage->methodOrder[25] = 'setType';
-    $lang->stage->methodOrder[30] = 'delete';
 }
 
 /* Product. */
 $lang->resource->product = new stdclass();
 $lang->resource->product->index           = 'indexAction';
 $lang->resource->product->browse          = 'browse';
-if($config->URAndSR) $lang->resource->product->requirement = 'requirement';
+if($isURSR) $lang->resource->product->requirement = 'requirement';
 $lang->resource->product->create          = 'create';
 $lang->resource->product->view            = 'view';
 $lang->resource->product->edit            = 'edit';
@@ -444,7 +449,7 @@ $lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
-if($config->URAndSR) $lang->product->methodOrder[6] = 'requirement';
+if($isURSR) $lang->product->methodOrder[6] = 'requirement';
 $lang->product->methodOrder[10]  = 'create';
 $lang->product->methodOrder[15]  = 'view';
 $lang->product->methodOrder[20]  = 'edit';
@@ -491,7 +496,7 @@ $lang->resource->story = new stdclass();
 $lang->resource->story->create             = 'create';
 $lang->resource->story->batchCreate        = 'batchCreate';
 $lang->resource->story->edit               = 'editAction';
-if($config->URAndSR) $lang->resource->story->linkStory = 'linkStory';
+if($isURSR) $lang->resource->story->linkStory = 'linkStory';
 $lang->resource->story->batchEdit          = 'batchEdit';
 $lang->resource->story->export             = 'exportAction';
 $lang->resource->story->delete             = 'deleteAction';
@@ -540,14 +545,14 @@ $lang->story->methodOrder[90]  = 'tasks';
 $lang->story->methodOrder[95]  = 'bugs';
 $lang->story->methodOrder[100] = 'cases';
 $lang->story->methodOrder[105] = 'report';
-if($config->URAndSR) $lang->story->methodOrder[110] = 'linkStory';
+if($isURSR) $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
 $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
 
-if($config->URAndSR)
+if($isURSR)
 {
     /* Requirement. */
     $lang->resource->requirement = new stdclass();

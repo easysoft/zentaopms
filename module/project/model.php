@@ -2577,14 +2577,9 @@ class projectModel extends model
         {
             if($module == '') continue;
 
-            $type = '';
+            $type  = '';
             $table = constant('TABLE_'. strtoupper($module));
-            $object = new stdclass();
-
-            if($table == TABLE_EXECUTION)
-            {
-                $type = $model == 'scrum' ? 'sprint' : 'stage';
-            }
+            if($module == 'execution') $type = $model == 'scrum' ? 'sprint' : 'stage';
 
             $object = $this->getDataByProject($table, $projectID, $type);
             if(!empty($object)) return false;
