@@ -7533,6 +7533,7 @@ class upgradeModel extends model
      * Historical projects are upgraded by project.
      *
      * @param  int    $programID
+     * @param  string $fromMode
      * @access public
      * @return bool
      */
