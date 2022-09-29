@@ -63,7 +63,7 @@
           <td class='c-manager'>
             <?php if(!empty($project->PM)):?>
             <?php $userName = zget($users, $project->PM);?>
-            <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$project->PM], 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-top avatar-{$project->PM}"); ?>
+            <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$project->PM], 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}"); ?>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : '';?>
             <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
             <?php endif;?>
