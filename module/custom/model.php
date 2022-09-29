@@ -951,7 +951,14 @@ class customModel extends model
      */
     public function hasScrumIssueData()
     {
-        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ISSUE)->where('deleted')->eq('0')->andWhere('execution')->ne(0)->count();
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
         return false;
     }
 
@@ -963,7 +970,14 @@ class customModel extends model
      */
     public function hasScrumRiskData()
     {
-        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_RISK)->where('deleted')->eq('0')->andWhere('execution')->ne(0)->count();
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
         return false;
     }
 
