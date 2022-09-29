@@ -992,7 +992,7 @@ class customModel extends model
     {
         if($this->config->edition == 'max')
         {
-            return $this->dao->select('id')->from(TABLE_EXECUTION)->alias('t1')
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
                 ->where('t1.model')->eq('scrum')
                 ->andWhere('t1.deleted')->eq('0')
@@ -1012,7 +1012,7 @@ class customModel extends model
     {
         if($this->config->edition == 'max')
         {
-            return $this->dao->select('id')->from(TABLE_EXECUTION)->alias('t1')
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
                 ->where('t1.model')->eq('scrum')
                 ->andWhere('t1.deleted')->eq('0')
