@@ -1184,7 +1184,7 @@ class productplanModel extends model
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
-            if(($canStart or $canFinsh or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            if(($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
             {
                 $menu .= "<div class='dividing-line'></div>";
             }
