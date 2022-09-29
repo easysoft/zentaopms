@@ -1,3 +1,10 @@
+<style>
+#taskTeamEditor button > i {color: #5e626d;}
+#taskTeamEditor .estimateBox span {background-color: #fff;}
+#taskTeamEditor .estimateBox input {background-color: #fff; border-right-width: 0px;}
+#taskTeamEditor input, #taskTeamEditor span, #taskTeamEditor .chosen-container > a {border-color: #eee;}
+</style>
+<?php $i = 1;?>
 <?php if(!empty($task->team)):?>
 <?php foreach($task->team as $member):?>
 <?php
@@ -18,6 +25,9 @@ $hourDisabled = $memberDisabled;
 if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = false;
 ?>
 <tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
+  <td>
+    <span><?php echo $i;?></span>
+  </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
     <?php echo html::hidden("teamSource[]", $member->account);?>
@@ -35,24 +45,28 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
   </td>
   <td class='w-130px sort-handler'>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(isset($task->mode) and $task->mode == 'linear'):?>
     <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
     <?php endif;?>
-    <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
+<?php $i ++;?>
 <?php endforeach;?>
 <?php endif;?>
 <tr class='template teamTemplate member-wait'>
+  <td>
+    <span><?php echo $i;?></span>
+  </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
   <td>
     <?php if(empty($task->team)):?>
-    <div class='input-group'>
+    <div class='input-group estimateBox'>
       <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-      <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+      <span class='input-group-addon'><?php echo 'h';?></span>
     </div>
     <?php else:?>
     <div class='input-group'>
@@ -67,10 +81,10 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
   </td>
   <td class='w-130px sort-handler'>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(empty($task->mode) or $task->mode == 'linear'):?>
     <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
     <?php endif;?>
-    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
 <?php $newRowCount = (!empty($task->team) and count($task->team) < 6) ? 6 - count($task->team) : 1;?>
@@ -89,6 +103,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 </tr>
 <?php endif;?>
 <?php endif;?>
+<?php js::set('id', $i);?>
 <script>
 $(document).ready(function()
 {
@@ -99,8 +114,8 @@ $(document).ready(function()
     /* Init task team manage dialog */
     var $taskTeamEditor = $('tr.teamTemplate').closest('table').batchActionForm(
     {
-        idStart: 0,
-        idEnd: newRowCount - 1,
+        idStart: id,
+        idEnd: id + newRowCount - 1,
         chosen: true,
         datetimepicker: false,
         colorPicker: false,

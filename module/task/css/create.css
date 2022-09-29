@@ -28,3 +28,9 @@
 .c-modulel {width: 110px;}
 
 .keep-row-height {height: 32px;}
+#modalTeam .modal-dialog {height: 360px; width: 620px;}
+#modalTeam .modal-header {height: 44px; padding: 10px 0;}
+#modalTeam .modal-header .modal-title {font-size: 13px; color: #3c4353;}
+#modalTeam .modal-body {padding-top: 12px;}
+#taskTeamEditor tr {padding: 8px 7px 8px 7px;}
+#taskTeamEditor td {height: 36px;}

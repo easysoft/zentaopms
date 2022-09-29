@@ -289,7 +289,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
               <button type='button' class='close' data-dismiss='modal'>
                 <i class="icon icon-close"></i>
               </button>
-              <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
+              <h4 class='modal-title'><?php echo $lang->task->teamSetting;?></h4>
             </div>
             <div class='modal-body'>
               <table class="table table-form" id='taskTeamEditor'>

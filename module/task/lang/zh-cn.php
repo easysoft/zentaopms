@@ -147,6 +147,7 @@ $lang->task->my                = '我的';
 $lang->task->hasConsumed       = '之前消耗';
 $lang->task->multiple          = '多人任务';
 $lang->task->multipleAB        = '多人';
+$lang->task->teamSetting       = '团队设置';
 $lang->task->team              = '团队';
 $lang->task->transfer          = '转交';
 $lang->task->transferTo        = '转交给';
