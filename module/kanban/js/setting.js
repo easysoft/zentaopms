@@ -48,6 +48,16 @@ $(function()
     {
         $('#colWidth').attr('disabled', e.target.value == 1);
         $('#minColWidth, #maxColWidth').attr('disabled', e.target.value == 0);
+        if(e.target.value == 0 && $('#minColWidthLabel, #maxColWidthLabel'))
+        {
+            $('#minColWidthLabel, #maxColWidthLabel').remove();
+            $('#minColWidth, #maxColWidth').removeClass('has-error');
+        }
+        else if(e.target.value == 1 && $('#colWidthLabel'))
+        {
+            $('#colWidthLabel').remove();
+            $('#colWidth').removeClass('has-error');
+        }
     })
 })
 
