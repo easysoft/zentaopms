@@ -157,7 +157,6 @@ $lang->story->design         = '相關設計';
 $lang->story->case           = '相關用例';
 $lang->story->bug            = '相關Bug';
 $lang->story->repoCommit     = '相關提交';
-$lang->story->noRequirement  = '無需求';
 $lang->story->one            = '一個';
 $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';

@@ -174,7 +174,6 @@ $lang->story->design           = '相关设计';
 $lang->story->case             = '相关用例';
 $lang->story->bug              = '相关Bug';
 $lang->story->repoCommit       = '相关提交';
-$lang->story->noRequirement    = '无需求';
 $lang->story->one              = '一个';
 $lang->story->field            = '同步的字段';
 $lang->story->completeRate     = '完成率';

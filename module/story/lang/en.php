@@ -174,7 +174,6 @@ $lang->story->design           = 'Design';
 $lang->story->case             = 'Cases';
 $lang->story->bug              = 'Bugs';
 $lang->story->repoCommit       = 'Commits';
-$lang->story->noRequirement    = 'No Requirements';
 $lang->story->one              = 'One';
 $lang->story->field            = 'Sync Field';
 $lang->story->completeRate     = 'Completion Rate';
