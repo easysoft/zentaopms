@@ -2035,6 +2035,17 @@ class bug extends control
         /* Set the menu. */
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
+        /* Hide plan and product in no product project. */
+        if($bug->project and $this->app->tab != 'qa')
+        {
+            $project = $this->loadModel('project')->getByID($bug->project);
+            if(!$project->hasProduct)
+            {
+                unset($this->config->bug->search['fields']['product']);
+                if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+            }
+        }
+
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&excludeBugs=$excludeBugs&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
