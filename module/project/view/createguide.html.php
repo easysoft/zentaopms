@@ -20,7 +20,11 @@
       <button class="close" data-dismiss="modal">x</button>
       <h2 class='text-center'><?php echo $lang->project->chooseProgramType; ?></h2>
       <div class='row'>
-        <div class='col-xs-4'>
+        <?php
+        $hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false;
+        $colClass = $hasWaterfall ? 'col-xs-4' : 'col-xs-6';
+        ?>
+        <div class='<?php echo $colClass?>'>
         <?php $tab = $from == 'global' ? 'project' : $app->tab;?>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=scrum&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='scrum' src='{$config->webRoot}theme/default/images/main/scrum.png'>", '', "data-app='{$tab}' class='createButton'")?>
@@ -28,8 +32,8 @@
             <p><?php echo $lang->project->scrumTitle; ?></p>
           </div>
         </div>
-        <?php if(strpos(",$config->disabledFeatures,", ',waterfall,') === false):?>
-        <div class='col-xs-4'>
+        <?php if($hasWaterfall):?>
+        <div class='<?php echo $colClass?>'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=waterfall&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->waterfall; ?></h3>
@@ -37,7 +41,7 @@
           </div>
         </div>
         <?php endif;?>
-        <div class='col-xs-4'>
+        <div class='<?php echo $colClass?>'>
           <div class='project-type text-center'>
             <?php echo html::a($this->createLink("project", "create", "model=kanban&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='kanban' src='{$config->webRoot}theme/default/images/main/kanban.png'>", '', "data-app='{$tab}' class='createButton'")?>
             <h3><?php echo $lang->project->kanban;?></h3>
