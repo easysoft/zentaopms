@@ -55,8 +55,8 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri'>      <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
           <th>                    <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='c-pri'>      <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
           <?php if($type == 'assigntome'):?>
           <th class='c-task'>     <?php common::printOrderLink('task',          $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
