@@ -24,7 +24,13 @@ function setCheckbox()
     }
 }
 
-/* Update parent checkbox */
+/**
+ * Update prarent checkbox.
+ *
+ * @param  object $parent
+ * @access public
+ * @return void
+ */
 function updatePrarentCheckbox($parent)
 {
     var $row          = $parent.closest('tr');
@@ -39,7 +45,12 @@ function updatePrarentCheckbox($parent)
     $row.toggleClass('checked', isAllChecked);
 }
 
-/* Update checkboxes */
+/**
+ * Update all checkbox.
+ *
+ * @access public
+ * @return void
+ */
 function updateCheckboxes()
 {
     $('#productTableList').children('.row-program,.row-line').each(function()
