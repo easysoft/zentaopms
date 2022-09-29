@@ -1406,7 +1406,7 @@ class productModel extends model
     public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0)
     {
         if(empty($productID)) return array();
-        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent,t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('stage,sprint,kanban')
@@ -1420,14 +1420,13 @@ class productModel extends model
         $projectIdList = array();
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
-        $isBuildReport  = $this->app->rawModule == 'report' and $this->app->rawMethod == 'build';
         $executionPairs = array(0 => '');
         $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList, 'all');
         foreach($executions as $id => $execution)
         {
             if($execution->grade == 2 && isset($executions[$execution->parent]))
             {
-                $execution->name = (($execution->hasProduct or $isBuildReport) ? $projectPairs[$execution->project] . '/' : '') . $executions[$execution->parent]->name . '/' . $execution->name;
+                $execution->name = $projectPairs[$execution->project] . '/' . $executions[$execution->parent]->name . '/' . $execution->name;
                 $executions[$execution->parent]->children[$id] = $execution->name;
                 unset($executions[$id]);
             }
@@ -1440,7 +1439,7 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = (($execution->hasProduct or $isBuildReport) ? $projectPairs[$execution->project] . '/' : '') . $execution->name;
+           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
            if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
         }
 
