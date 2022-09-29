@@ -4140,10 +4140,24 @@ class taskModel extends model
         $storyChanged = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed'));
         if($storyChanged) return $this->buildMenu('task', 'confirmStoryChange', $params, $task, 'browse', '', 'hiddenwin');
 
+        $canStart          = ($task->status != 'pause' and common::hasPriv('task', 'start'));
+        $canRestart        = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
+        $canFinish         = common::hasPriv('task', 'finish');
+        $canClose          = common::hasPriv('task', 'close');
+        $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+        $canEdit           = common::hasPriv('task', 'edit');
+        $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
+
         if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
         if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
+
+        if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+        {
+            $menu .= "<div class='dividing-line'></div>";
+        }
+
         $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
         if($this->config->vision == 'rnd')

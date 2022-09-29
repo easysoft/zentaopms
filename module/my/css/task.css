@@ -36,3 +36,4 @@ html[lang="en"] .c-user-short {width: 88px;}
 [lang^=fr] #taskTable .assigned-title {width: 130px !important;}
 [lang^=fr] #taskTable .c-user-short {width: 75px;}
 [lang^=fr] #taskTable .c-status {width: 71px;}
+#myTaskForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}

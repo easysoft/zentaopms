@@ -9,11 +9,6 @@
  * @link        https://www.zentao.net
  */
 ?>
-<style>
-.c-actions {width: 250px;}
-#productplanList .c-actions .btn+.btn {margin-left: -1px;}
-#productplanList .c-actions .btn {display: block; float: left;}
-</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php common::sortFeatureMenu();?>
