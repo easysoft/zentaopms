@@ -1195,8 +1195,8 @@ class story extends control
         $product  = $this->loadModel('product')->getByID($story->product);
 
         /* Get users in team. */
-        $teamUsers = $product->reviewer;
-        if(!$teamUsers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
