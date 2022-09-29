@@ -25,13 +25,13 @@
           <td colspan='2'>
             <div style="display: flex;">
                 <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('colWidth', ($execution->colWidth ? $execution->colWidth : 264), "class='form-control inline-block setting-input' required  autocomplete='off'");?>px
+                <?php echo html::input('colWidth', isset($execution->colWidth) ? $execution->colWidth : 264, "class='form-control inline-block setting-input' required  autocomplete='off'");?>px
             </div>
             <div style="display: flex; margin-top: 10px;">
                 <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('minColWidth', ($execution->minColWidth ? $execution->minColWidth : 180), "class='form-control inline-block setting-input' required autocomplete='off'");?>px
+                <?php echo html::input('minColWidth', isset($execution->minColWidth) ? $execution->minColWidth : 180, "class='form-control inline-block setting-input' required autocomplete='off'");?>px
                 <span class="input-divider">~</span>
-                <?php echo html::input('maxColWidth', ($execution->maxColWidth ? $execution->maxColWidth : 384), "class='form-control inline-block setting-input' required autocomplete='off'");?>px
+                <?php echo html::input('maxColWidth', isset($execution->maxColWidth) ? $execution->maxColWidth : 384, "class='form-control inline-block setting-input' required autocomplete='off'");?>px
             </div>
         </td>
         </tr>
