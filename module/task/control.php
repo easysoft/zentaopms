@@ -1176,7 +1176,18 @@ class task extends control
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
         $task = $this->task->getById($taskID);
-        if(!empty($task->team) and $task->mode == 'linear' and !$orderBy) $orderBy = 'order_asc';
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            if(empty($orderBy))
+            {
+                $orderBy = 'order_asc,id';
+            }
+            else
+            {
+                /* The id sort with order or date style. */
+                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
+            }
+        }
         if(!$orderBy) $orderBy = 'date_asc';
 
         $this->view->title   = $this->lang->task->record;
