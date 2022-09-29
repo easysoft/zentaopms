@@ -1420,13 +1420,14 @@ class productModel extends model
         $projectIdList = array();
         foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
 
+        $isBuildReport  = $this->app->rawModule == 'report' and $this->app->rawMethod == 'build';
         $executionPairs = array(0 => '');
         $projectPairs   = $this->loadModel('project')->getPairsByIdList($projectIdList, 'all');
         foreach($executions as $id => $execution)
         {
             if($execution->grade == 2 && isset($executions[$execution->parent]))
             {
-                $execution->name = ($execution->hasProduct ? $projectPairs[$execution->project] . '/' : '') . $executions[$execution->parent]->name . '/' . $execution->name;
+                $execution->name = (($execution->hasProduct or $isBuildReport) ? $projectPairs[$execution->project] . '/' : '') . $executions[$execution->parent]->name . '/' . $execution->name;
                 $executions[$execution->parent]->children[$id] = $execution->name;
                 unset($executions[$id]);
             }
@@ -1439,7 +1440,7 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = ($execution->hasProduct ? $projectPairs[$execution->project] . '/' : '') . $execution->name;
+           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = (($execution->hasProduct or $isBuildReport) ? $projectPairs[$execution->project] . '/' : '') . $execution->name;
            if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
         }
 
