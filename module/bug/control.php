@@ -1158,7 +1158,7 @@ class bug extends control
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
-        if(isset($productBugs[$bugID])) unset($productBugs[$bugID]);
+        unset($productBugs[$bugID]);
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1815,7 +1815,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
-        if(isset($productBugs[$bugID])) unset($productBugs[$bugID]);
+        unset($productBugs[$bugID]);
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
