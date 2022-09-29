@@ -2896,7 +2896,7 @@ class taskModel extends model
     public function updateEstimate($estimateID)
     {
         $oldEstimate = $this->getEstimateById($estimateID);
-        $estimate    = fixer::input('post')->cleanINT('consumed,left')->get();
+        $estimate    = fixer::input('post')->get();
         $today       = helper::today();
 
         if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
