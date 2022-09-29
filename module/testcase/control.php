@@ -1403,7 +1403,7 @@ class testcase extends control
 
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
+        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), zget($this->products, $case->product, ''));
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;

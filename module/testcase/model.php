@@ -1914,7 +1914,8 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
     {
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
+        $productName = zget($products, $productID, '');
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productName) + array('all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['product']['values'] = $product;
 
         $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
