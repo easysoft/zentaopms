@@ -1286,6 +1286,9 @@ class product extends control
         $this->view->productStructure = $productStructure;
         $this->view->productLines     = $productLines;
         $this->view->programLines     = $programLines;
+        $this->view->users            = $this->user->getPairs('noletter');
+        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
