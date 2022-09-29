@@ -55,13 +55,13 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri' title=<?php echo $lang->testcase->pri;?>>      <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
           <th>                    <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='c-pri' title=<?php echo $lang->testcase->pri;?>>      <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
           <?php if($type == 'assigntome'):?>
           <th class='c-task'>     <?php common::printOrderLink('task',          $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
           <th class='c-type'>     <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='c-user'>     <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-user'>     <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->testcase->openedByAB);?></th>
           <th class='c-user'>     <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='c-full-date'><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='c-result'>   <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
@@ -86,10 +86,10 @@
             <?php endif;?>
             <?php echo sprintf('%03d', $case->id); ?>
           </td>
-          <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
           <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
           <td class='c-name'><?php echo html::a($this->createLink('testcase', 'view', $params), $case->title, null, "style='color: $case->color' title='{$case->title}'");?></td>
+          <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php if($type == 'assigntome'):?>
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>

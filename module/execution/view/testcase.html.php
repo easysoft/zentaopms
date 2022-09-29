@@ -49,10 +49,10 @@
         <thead>
           <tr>
             <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
-            <th class='c-pri' title=<?php echo $lang->execution->pri;?>>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
             <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+            <th class='c-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-            <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->testcase->openedByAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
             <th class='c-date'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
             <th class='c-result'><?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
@@ -70,10 +70,10 @@
             <td class="c-id">
               <?php echo sprintf('%03d', $case->id); ?>
             </td>
-            <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <?php $params = "testcaseID=$caseID&version=$case->version";?>
             <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
             <td class='c-title text-left' title="<?php echo $case->title?>"><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'");?></td>
+            <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
             <td><?php echo zget($users, $case->openedBy);?></td>
             <td><?php echo zget($users, $case->lastRunner);?></td>
