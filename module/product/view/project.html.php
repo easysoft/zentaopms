@@ -73,7 +73,7 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name}'");
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name} ({$lang->project->{$project->model}})'");
             }
             else
             {
