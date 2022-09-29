@@ -1109,13 +1109,16 @@ class project extends control
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
         $products = $this->product->getProducts($projectID);
 
-        if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+        if(!$project->hasProduct)
+        {
+            unset($this->config->bug->search['fields']['product']);
+            if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
 
-        $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
-        if($hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
+        if($project->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -1203,7 +1206,7 @@ class project extends control
         $this->view->pager           = $pager;
         $this->view->orderBy         = $orderBy;
         $this->view->productID       = $productID;
-        $this->view->project         = $this->project->getById($projectID);
+        $this->view->project         = $project;
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
@@ -1224,7 +1227,6 @@ class project extends control
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
         $this->view->showBranch      = false;
-
 
         $this->display();
     }
