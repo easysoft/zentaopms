@@ -1299,6 +1299,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `product` varchar(255) NOT NULL,
+  `projects` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
   `prefix` varchar(100) NOT NULL,

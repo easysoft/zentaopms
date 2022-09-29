@@ -5,7 +5,7 @@ $(function()
     {
         $form = $(this).closest('form');
         $form.css('min-height', $form.height());
-    })
+    });
 
     $('#repoForm').bind('DOMNodeInserted', function(e)
     {
@@ -21,6 +21,17 @@ $(function()
                 $("#client").removeAttr("style");
             }
         }
+    });
+
+    $('#product').change(function()
+    {
+        var projects = $('#projects').val();
+        var products = $('#product').val();
+        $.post(createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
+        {
+            $('#projectContainer').html('').append(response);
+            $('#projects').chosen().trigger("chosen:updated");
+        });
     });
 
     $('#serviceHost').change(function()

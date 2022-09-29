@@ -147,6 +147,7 @@ class repo extends control
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
+        $this->view->projects     = array();
         $this->view->productID    = $productID;
         $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID     = $objectID;
@@ -202,14 +203,18 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $this->view->repo          = $repo;
-        $this->view->repoID        = $repoID;
-        $this->view->objectID      = $objectID;
-        $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $products       = explode(',', $repo->product);
+        $projectOptions = $this->filterProject($products);
+
+        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo         = $repo;
+        $this->view->repoID       = $repoID;
+        $this->view->objectID     = $objectID;
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products     = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->projects     = $projectOptions;
+        $this->view->serviceHosts = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -1198,6 +1203,50 @@ class repo extends control
         $this->view->link      = $this->createLink($module, $method, "repoID=%s");
 
         $this->display();
+    }
+
+    /**
+     * Get projects list by product id list by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxProjectsOfProducts()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('products', array())
+            ->setDefault('projects', array())
+            ->get();
+
+        $projectOptions = $this->filterProject($postData->products, $postData->projects);
+        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
+    }
+
+    /**
+     * Remove projects without privileges.
+     *
+     * @param  array   $productIDList
+     * @access private
+     * @return array
+     */
+    private function filterProject($productIDList, $projectIDList = array())
+    {
+        $allProjects = array();
+        foreach($productIDList as $productID)
+        {
+            $projects    = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $allProjects = $allProjects + $projects;
+        }
+
+        $accessProjects = explode(',', $this->app->user->view->projects);
+        $accessProjects = $accessProjects + $projectIDList; /* Merge projects can be accessed and exists.*/
+        $projectOptions = array();
+        foreach($allProjects as $projectID => $projectName)
+        {
+            if(in_array($projectID, $accessProjects)) $projectOptions[$projectID] = $projectName;
+        }
+
+        return $projectOptions;
     }
 
     /**
