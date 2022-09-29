@@ -1318,6 +1318,7 @@ class execution extends control
         $this->view->position[]    = html::a($this->createLink('execution', 'testtask', "executionID=$executionID"), $this->executions[$executionID]);
         $this->view->position[]    = $this->lang->testtask->common;
         $this->view->execution     = $execution;
+        $this->view->project       = $this->loadModel('project')->getByID($execution->project);
         $this->view->executionID   = $executionID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
