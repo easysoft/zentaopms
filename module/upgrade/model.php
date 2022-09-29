@@ -7733,6 +7733,8 @@ class upgradeModel extends model
     {
         $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('program')->eq(0)->exec();
 
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('type')->eq('line')->andWhere('root')->eq('0')->exec();
+
         $this->dao->update(TABLE_PROJECT)->set("path = CONCAT(',{$programID}', path)")->set('grade = grade + 1')->where('type')->eq('project')->andWhere('parent')->eq(0)->andWhere('grade')->eq(1)->exec();
 
         return !dao::isError();
