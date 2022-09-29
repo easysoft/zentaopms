@@ -89,6 +89,9 @@ $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
 $lang->kanban->allUsers            = 'Load All Users';
+$lang->kanban->colWidth            = 'Column Width';
+$lang->kanban->minColWidth         = 'Min Column Width';
+$lang->kanban->maxColWidth         = 'Max Column Width';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';

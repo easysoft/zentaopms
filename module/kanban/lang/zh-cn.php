@@ -89,6 +89,9 @@ $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '列标题对齐方式';
 $lang->kanban->allUsers            = '加载所有用户';
+$lang->kanban->colWidth            = '列宽';
+$lang->kanban->minColWidth         = '最小列宽';
+$lang->kanban->maxColWidth         = '最大列宽';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
