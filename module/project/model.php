@@ -967,6 +967,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'nomultiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
             ->orderBy($orderBy)
