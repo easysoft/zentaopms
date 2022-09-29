@@ -529,6 +529,7 @@ class project extends control
 
         $products      = array();
         $productPlans  = array();
+        $shadow        = 0;
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
         if($copyProjectID)
@@ -543,8 +544,9 @@ class project extends control
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
             $hasProduct  = $copyProject->hasProduct;
+            $products    = $this->product->getProducts($copyProjectID);
 
-            $products = $this->product->getProducts($copyProjectID);
+            if(!$copyProject->hasProduct) $shadow = 1;
             foreach($products as $product)
             {
                 foreach($product->branches as $branch)
@@ -573,7 +575,7 @@ class project extends control
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
-        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
+        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed', '', $shadow);
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
@@ -1107,9 +1109,13 @@ class project extends control
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
         $products = $this->product->getProducts($projectID);
 
+        if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
+
+        $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
+        if($hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -1247,7 +1253,9 @@ class project extends control
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
 
         $extra = "$projectID,$browseType";
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
+
+        $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
+        if($hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }

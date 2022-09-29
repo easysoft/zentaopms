@@ -1195,8 +1195,21 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $productPairs      = $this->product->getPairs();
+        $productPairs      = $this->product->getPairs('', 0, '', 'all');
         $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
+
+        /* Waterfall project has no plan. */
+        $waterfallProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.type')->eq('project')
+            ->andWhere('t2.model')->eq('waterfall')
+            ->andWhere('t2.hasProduct')->eq('0')
+            ->fetchPairs();
+
+        foreach($productPairs as $id => $name)
+        {
+            if(isset($waterfallProducts[$id])) unset($productPairs[$id]);
+        }
 
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
@@ -1247,7 +1260,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs();
+        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs('', 0, '', 'all');
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);

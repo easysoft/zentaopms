@@ -174,6 +174,23 @@ class projectModel extends model
     }
 
     /**
+     * Get a project by its shadow product.
+     *
+     * @param  int    $product
+     * @access public
+     * @return object
+     */
+    public function getByShadowProduct($product)
+    {
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->eq($product)
+            ->andWhere('t2.type')->eq('project')
+            ->limit(1)
+            ->fetch();
+    }
+
+    /**
      * Get project info.
      *
      * @param  string    $status
