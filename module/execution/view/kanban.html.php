@@ -58,6 +58,8 @@ js::set('executionID', $execution->id);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');
+js::set('defaultMinColWidth', $this->config->minColWidth);
+js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');

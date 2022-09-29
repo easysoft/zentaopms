@@ -122,11 +122,9 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .input-divider {margin: 0 4px;}
 .setting-input {width: 64px; height: 20px; margin: 0 4px; text-align: center;}
 .setting-input.disabled,.setting-input[disabled="disabled"] {color: #C4C4C4;}
+.radio-col {display: flex;}
+.mt10 {margin-top: 10px;}
 
-/* #mainMenu > .btn-toolBar .btn-link .label-light,
-#mainMenu > .btn-toolbar .btn-link .label-light {color: #203362; background: #fff;}
-#mainMenu > .btn-toolBar .btn-active-text,
-#mainMenu > .btn-toolbar .btn-active-text {background: #E6EAF1;} */
 
 #programTableList > tr:hover {background: #E6F0FF; opacity: 0.8;}
 #programTableList > tr[data-type="project"] > .c-name:hover > a {color: #1E6AEB !important;}

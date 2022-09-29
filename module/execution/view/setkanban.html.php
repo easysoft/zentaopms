@@ -23,15 +23,15 @@
         <tr>
           <th><?php echo $lang->kanban->columnWidth;?></th>
           <td colspan='2'>
-            <div style="display: flex;">
+            <div class="radio-col">
                 <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('colWidth', isset($execution->colWidth) ? $execution->colWidth : 264, "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
+                <?php echo html::input('colWidth', isset($execution->colWidth) and $execution->colWidth !== 0 ? $execution->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
             </div>
-            <div style="display: flex; margin-top: 10px;">
+            <div class="radio-col mt10">
                 <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
-                <?php echo html::input('minColWidth', isset($execution->minColWidth) ? $execution->minColWidth : 180, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
+                <?php echo html::input('minColWidth', isset($execution->minColWidth) and $execution->minColWidth !== 0 ? $execution->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
-                <?php echo html::input('maxColWidth', isset($execution->maxColWidth) ? $execution->maxColWidth : 384, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
+                <?php echo html::input('maxColWidth', isset($execution->maxColWidth) and $execution->maxColWidth !== 0 ? $execution->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
             </div>
         </td>
         </tr>

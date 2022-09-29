@@ -97,6 +97,11 @@ $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|edu
 $config->CSPs = array();
 $config->CSPs[] = "form-action 'self';connect-src 'self'";
 
+/* Config for kanban col setting */
+$config->colWidth    = 264;
+$config->minColWidth = 180;
+$config->maxColWidth = 384;
+
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();
 $config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.

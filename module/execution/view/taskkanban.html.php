@@ -229,4 +229,6 @@ js::set('priv',
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>
 <?php js::set('orderBy', $storyOrder);?>
+<?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
+<?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php include '../../common/view/footer.html.php';?>

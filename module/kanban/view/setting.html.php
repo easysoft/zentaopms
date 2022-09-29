@@ -28,15 +28,15 @@
       <tr>
         <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
         <td colspan='2'>
-            <div>
+            <div class="radio-col">
                 <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), $kanban->fluidBoard);?>
-                <?php echo html::input('colWidth', isset($kanban->colWidth) ? $kanban->colWidth: 264, "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
+                <?php echo html::input('colWidth', isset($kanban->colWidth) and $kanban->colWidth !== 0 ? $kanban->colWidth: $this->config->colWidth, "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
             </div>
-            <div style="margin-top: 10px;">
+            <div class="radio-col mt10">
                 <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), $kanban->fluidBoard);?>
-                <?php echo html::input('minColWidth', isset($kanban->minColWidth) ? $kanban->minColWidth : 180, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
+                <?php echo html::input('minColWidth', isset($kanban->minColWidth) and $kanban->minColWidth !== 0 ? $kanban->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
-                <?php echo html::input('maxColWidth', isset($kanban->maxColWidth) ? $kanban->maxColWidth: 384, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
+                <?php echo html::input('maxColWidth', isset($kanban->maxColWidth) and $kanban->maxColWidth !== 0 ? $kanban->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
             </div>
         </td>
       </tr>
