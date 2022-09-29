@@ -473,7 +473,7 @@ class groupModel extends model
         $sprints  = isset($actions['sprints'])  ? $actions['sprints']  : array();
 
         /* Add shadow productID when select noProduct project or execution. */
-        if($projects or $sprints)
+        if(($projects or $sprints) and isset($actions['products']))
         {
             /* Get all noProduct projects and executions . */
             $noProductList       = $this->loadModel('project')->getNoProductList();
@@ -610,7 +610,7 @@ class groupModel extends model
             $products[$lineID]   = isset($products[$lineID])   ? $products[$lineID]   : array();
             $executions[$lineID] = isset($executions[$lineID]) ? $executions[$lineID] : array();
 
-            if($projects[$lineID] or $executions[$lineID])
+            if(($projects[$lineID] or $executions[$lineID]) and !empty($products[$lineID]))
             {
                 $objects = array_merge($projects[$lineID], $executions[$lineID]);
                 foreach($objects as $objectID)
