@@ -99,9 +99,9 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
-
-    $('.project-popover').on('click', function()
+    $('.project-popover').on('click', function(e)
     {
+        e.stopPropagation();
         var showPopover = $(this).next().css('display') == 'block';
         $('.popover.right').hide();
         if(!showPopover) $(this).next().show();
@@ -116,7 +116,7 @@ $(function()
     $(document).on('mousedown', function(e)
     {
         var $target = $(e.target);
-        var $toggle = $target.closest('.popover');
+        var $toggle = $target.closest('.popover, .project-popover');
         if(!$toggle.length) $('.popover.right').hide();
     });
 });

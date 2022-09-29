@@ -9,6 +9,9 @@
  * @link        https://www.zentao.net
  */
 ?>
+<style>
+#taskPopover .arrow {margin-top: -55px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -150,7 +153,7 @@
               }
               else
               {
-                  $projectHtml  = '<div class="popover right">';
+                  $projectHtml  = '<div class="popover right"  id="taskPopover">';
                   $projectHtml .= '<div class="arrow"></div>';
                   $projectHtml .= '<div class="popover-content">';
                   $projectHtml .= '<ul class="execution-tip">';
