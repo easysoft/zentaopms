@@ -7568,7 +7568,7 @@ class upgradeModel extends model
             $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
             if($fromMode == 'classic') $project->multiple = '0';
 
-            $this->dao->insert(TABLE_PROJECT)->data($project)->check('name', 'unique', "type='project' AND parent=$programID AND deleted='0'")->exec();
+            $this->dao->insert(TABLE_PROJECT)->data($project)->exec();
             if(dao::isError()) return false;
 
             $projectID = $this->dao->lastInsertId();
