@@ -864,19 +864,14 @@ class story extends control
         $this->view->hiddenURS     = false;
         $this->view->teamUsers     = array();
 
-        if($this->app->tab === 'project' || $this->app->tab === 'execution')
+        if($product->shadow)
         {
-            $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
-            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+            $project = $this->project->getByShadowProduct($product->id);
+            $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
+            $this->view->hiddenProduct = true;
 
-            if(empty($project->hasProduct))
-            {
-                $this->view->teamUsers     = $this->project->getTeamMemberPairs($project->id);
-                $this->view->hiddenProduct = true;
-
-                if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
-                if($project->model === 'kanban') $this->view->hiddenURS  = true;
-            }
+            if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+            if($project->model === 'kanban') $this->view->hiddenURS  = true;
         }
 
         /* Display status of branch. */
