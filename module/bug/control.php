@@ -2328,6 +2328,11 @@ class bug extends control
         $product = $this->loadModel('product')->getByID($productID);
         if($product->type == 'normal') $this->config->bug->exportFields = str_replace('branch,', '', $this->config->bug->exportFields);
 
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            if($product->shadow) $this->config->bug->exportFields = str_replace('product,', '', $this->config->bug->exportFields);
+        }
+
         $fileName = $this->lang->bug->common;
         if($executionID)
         {

@@ -3639,7 +3639,7 @@ class bugModel extends model
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->fetchAll('id');
+        $bugs = $this->loadModel('port')->getQueryDatas('bug');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

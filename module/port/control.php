@@ -169,6 +169,7 @@ class port extends control
         {
             $product = $this->loadModel('product')->getByID($this->session->bugPortParams['productID']);
             if($product->type == 'normal') unset($fields['branch']);
+            if($product->shadow and ($this->app->tab == 'execution' or $this->app->tab == 'project')) unset($fields['product']);
         }
         if($model == 'task') $datas = $this->task->processDatas4Task($datas);
         $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
