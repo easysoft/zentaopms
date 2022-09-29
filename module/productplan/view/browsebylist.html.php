@@ -9,9 +9,6 @@
  * @link        https://www.zentao.net
  */
 ?>
-<style>
-#taskPopover .arrow {margin-top: -55px;}
-</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -149,20 +146,21 @@
           {
               if(count($plan->projects) === 1)
               {
-                  echo html::a(helper::createLink('execution', 'task', 'projectID=' . key($plan->projects)), '<i class="icon-run text-primary"></i>');
+                  $executionID = key($plan->projects);
+                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}'");
               }
               else
               {
-                  $projectHtml  = '<div class="popover right"  id="taskPopover">';
-                  $projectHtml .= '<div class="arrow"></div>';
-                  $projectHtml .= '<div class="popover-content">';
-                  $projectHtml .= '<ul class="execution-tip">';
-                  foreach($plan->projects as $projectID => $project) $projectHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "projectID=$projectID"), $project->name, '', 'class="project-link"') . '</li>';
-                  $projectHtml .= '</ul>';
-                  $projectHtml .= '</div>';
-                  $projectHtml .= '</div>';
-                  echo "<i class='icon-run project-popover text-primary'></i>";
-                  echo $projectHtml;
+                  $executionHtml  = '<div class="popover right"  id="taskPopover">';
+                  $executionHtml .= '<div class="arrow"></div>';
+                  $executionHtml .= '<div class="popover-content">';
+                  $executionHtml .= '<ul class="execution-tip">';
+                  foreach($plan->executions as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
+                  $executionHtml .= '</ul>';
+                  $executionHtml .= '</div>';
+                  $executionHtml .= '</div>';
+                  echo "<i class='icon-run execution-popover text-primary'></i>";
+                  echo $executionHtml;
               }
           }
           ?>
