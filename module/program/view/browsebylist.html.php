@@ -5,8 +5,8 @@
     <thead>
       <tr>
         <th class='table-nest-title'>
-          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php echo $lang->nameAB;?>
+          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
         </th>
         <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='c-user'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
@@ -106,6 +106,9 @@
   </div>
 </form>
 <style>
+th.table-nest-title {padding-left: 12px !important;}
+th.table-nest-title > .table-nest-toggle-global {left: auto; right: 10px; font-size: 12px; color: #888fa1;}
+th.table-nest-title > .table-nest-toggle-global:before {width: 100%;}
 #programTableList.sortable-sorting > tr {opacity: 0.7}
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
@@ -121,6 +124,7 @@
 #programTableList .icon-kanban:before {content: '\e983';}
 #programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
 #programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
+#programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
