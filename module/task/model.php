@@ -29,7 +29,11 @@ class taskModel extends model
         }
 
         $executionID    = (int)$executionID;
+        $estStarted     = '0000-00-00';
+        $deadline       = '0000-00-00';
+        $assignedTo     = '';
         $taskIdList     = array();
+        $taskDatas      = array();
         $taskFiles      = array();
         $requiredFields = "," . $this->config->task->create->requiredFields . ",";
 
@@ -38,26 +42,31 @@ class taskModel extends model
             foreach($this->post->testStory as $i => $storyID)
             {
                 if(empty($storyID)) continue;
-                if($this->post->testEstStarted[$i] > $this->post->testDeadline[$i])
-                {
-                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
-                    return false;
-                }
             }
 
             /* Check required fields when create test task. */
             foreach($this->post->testStory as $i => $storyID)
             {
                 if(empty($storyID)) continue;
+                $estStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $estStarted : $this->post->testEstStarted[$i];
+                $deadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on'))     ? $deadline : $this->post->testDeadline[$i];
+                $assignedTo = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+
+                if($estStarted > $deadline)
+                {
+                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
+                    return false;
+                }
 
                 $task = new stdclass();
                 $task->pri        = $this->post->testPri[$i];
-                $task->estStarted = $this->post->testEstStarted[$i];
-                $task->deadline   = $this->post->testDeadline[$i];
-                $task->assignedTo = $this->post->testAssignedTo[$i];
+                $task->estStarted = $estStarted;
+                $task->deadline   = $deadline;
+                $task->assignedTo = $assignedTo;
                 $task->estimate   = $this->post->testEstimate[$i];
                 $task->left       = $this->post->testEstimate[$i];
 
+                /* Check requiredFields */
                 $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($requiredFields, 'notempty');
                 if(dao::isError())
                 {
@@ -67,6 +76,7 @@ class taskModel extends model
                         return false;
                     }
                 }
+                $taskDatas[$i] = $task;
             }
 
             $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
@@ -187,10 +197,6 @@ class taskModel extends model
                 $this->loadModel('action');
                 if($this->post->testStory)
                 {
-                    $assignedTo     = '';
-                    $testEstStarted = '0000-00-00';
-                    $testDeadline   = '0000-00-00';
-
                     foreach($this->post->testStory as $storyID)
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
@@ -200,9 +206,9 @@ class taskModel extends model
                     {
                         if(!isset($testStories[$storyID])) continue;
 
-                        $assignedTo     = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
-                        $testEstStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $testEstStarted : $this->post->testEstStarted[$i];
-                        $testDeadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on')) ? $testDeadline : $this->post->testDeadline[$i];
+                        $assignedTo     = $taskDatas[$i]->assignedTo;
+                        $testEstStarted = $taskDatas[$i]->estStarted;
+                        $testDeadline   = $taskDatas[$i]->deadline;
 
                         $task->parent       = $taskID;
                         $task->story        = $storyID;
