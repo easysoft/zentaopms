@@ -2356,7 +2356,10 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
-            ->checkIF($kanban->fluidBoard , 'maxColWidth', 'ge', $kanban->minColWidth)
+            ->batchCheck('colWidth,minColWidth,maxColWidth', 'int')
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($kanban->fluidBoard, 'maxColWidth', 'ge', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
