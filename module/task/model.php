@@ -2896,8 +2896,11 @@ class taskModel extends model
     public function updateEstimate($estimateID)
     {
         $oldEstimate = $this->getEstimateById($estimateID);
-        $estimate    = fixer::input('post')->get();
         $today       = helper::today();
+        $estimate    = fixer::input('post')
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
+            ->get();
 
         if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
         if($estimate->date > $today)            return dao::$errors[] = $this->lang->task->error->date;
