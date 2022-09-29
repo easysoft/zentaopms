@@ -1163,6 +1163,7 @@ class commonModel extends model
                     {
                         foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                         {
+                            if(empty($dropMenuItem)) continue;
                             if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                             /* Parse drop menu link. */

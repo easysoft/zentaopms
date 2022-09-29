@@ -189,6 +189,7 @@ $lang->resource->project->export              = 'export';
 $lang->resource->project->updateOrder         = 'updateOrder';
 $lang->resource->project->team                = 'teamAction';
 $lang->resource->project->unlinkMember        = 'unlinkMember';
+$lang->resource->project->programTitle        = 'moduleOpen';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'browse';
@@ -319,113 +320,102 @@ $lang->stakeholder->methodOrder[70] = 'editExpect';
 $lang->stakeholder->methodOrder[75] = 'viewExpect';
 $lang->stakeholder->methodOrder[80] = 'userIssue';
 
-global $config;
-$hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false || (defined('IN_UPGRADE') && IN_UPGRADE);
-$isURSR       = $config->URAndSR || (defined('IN_UPGRADE') && IN_UPGRADE);
-if($hasWaterfall)
-{
-    /* Design. */
-    $lang->resource->design = new stdclass();
-    $lang->resource->design->browse       = 'browse';
-    $lang->resource->design->view         = 'view';
-    $lang->resource->design->create       = 'create';
-    $lang->resource->design->batchCreate  = 'batchCreate';
-    $lang->resource->design->edit         = 'edit';
-    $lang->resource->design->assignTo     = 'assignTo';
-    $lang->resource->design->delete       = 'delete';
-    $lang->resource->design->linkCommit   = 'linkCommit';
-    $lang->resource->design->viewCommit   = 'viewCommit';
-    $lang->resource->design->unlinkCommit = 'unlinkCommit';
-    $lang->resource->design->revision     = 'revision';
+/* Design. */
+$lang->resource->design = new stdclass();
+$lang->resource->design->browse       = 'browse';
+$lang->resource->design->view         = 'view';
+$lang->resource->design->create       = 'create';
+$lang->resource->design->batchCreate  = 'batchCreate';
+$lang->resource->design->edit         = 'edit';
+$lang->resource->design->assignTo     = 'assignTo';
+$lang->resource->design->delete       = 'delete';
+$lang->resource->design->linkCommit   = 'linkCommit';
+$lang->resource->design->viewCommit   = 'viewCommit';
+$lang->resource->design->unlinkCommit = 'unlinkCommit';
+$lang->resource->design->revision     = 'revision';
 
-    $lang->design->methodOrder[5]  = 'browse';
-    $lang->design->methodOrder[10] = 'view';
-    $lang->design->methodOrder[15] = 'create';
-    $lang->design->methodOrder[20] = 'batchCreate';
-    $lang->design->methodOrder[25] = 'edit';
-    $lang->design->methodOrder[30] = 'assignTo';
-    $lang->design->methodOrder[35] = 'delete';
-    $lang->design->methodOrder[40] = 'linkCommit';
-    $lang->design->methodOrder[45] = 'viewCommit';
-    $lang->design->methodOrder[50] = 'unlinkCommit';
-    $lang->design->methodOrder[55] = 'revision';
+$lang->design->methodOrder[5]  = 'browse';
+$lang->design->methodOrder[10] = 'view';
+$lang->design->methodOrder[15] = 'create';
+$lang->design->methodOrder[20] = 'batchCreate';
+$lang->design->methodOrder[25] = 'edit';
+$lang->design->methodOrder[30] = 'assignTo';
+$lang->design->methodOrder[35] = 'delete';
+$lang->design->methodOrder[40] = 'linkCommit';
+$lang->design->methodOrder[45] = 'viewCommit';
+$lang->design->methodOrder[50] = 'unlinkCommit';
+$lang->design->methodOrder[55] = 'revision';
 
-    /* Program plan. */
-    $lang->resource->programplan = new stdclass();
-    $lang->resource->programplan->create = 'create';
-    $lang->resource->programplan->edit   = 'edit';
+/* Program plan. */
+$lang->resource->programplan = new stdclass();
+$lang->resource->programplan->create = 'create';
+$lang->resource->programplan->edit   = 'edit';
 
-    $lang->programplan->methodOrder[0] = 'create';
-    $lang->programplan->methodOrder[5] = 'edit';
+$lang->programplan->methodOrder[0] = 'create';
+$lang->programplan->methodOrder[5] = 'edit';
 
-    /* Stage. */
-    $lang->resource->stage = new stdclass();
-    $lang->resource->stage->browse      = 'browse';
-    $lang->resource->stage->create      = 'create';
-    $lang->resource->stage->batchCreate = 'batchCreate';
-    $lang->resource->stage->edit        = 'edit';
-    $lang->resource->stage->setType     = 'setType';
-    $lang->resource->stage->delete      = 'delete';
+/* Stage. */
+$lang->resource->stage = new stdclass();
+$lang->resource->stage->browse      = 'browse';
+$lang->resource->stage->create      = 'create';
+$lang->resource->stage->batchCreate = 'batchCreate';
+$lang->resource->stage->edit        = 'edit';
+$lang->resource->stage->setType     = 'setType';
+$lang->resource->stage->delete      = 'delete';
 
-    $lang->stage->methodOrder[5]  = 'browse';
-    $lang->stage->methodOrder[10] = 'create';
-    $lang->stage->methodOrder[15] = 'batchCreate';
-    $lang->stage->methodOrder[20] = 'edit';
-    $lang->stage->methodOrder[25] = 'setType';
-    $lang->stage->methodOrder[30] = 'delete';
-}
+$lang->stage->methodOrder[5]  = 'browse';
+$lang->stage->methodOrder[10] = 'create';
+$lang->stage->methodOrder[15] = 'batchCreate';
+$lang->stage->methodOrder[20] = 'edit';
+$lang->stage->methodOrder[25] = 'setType';
+$lang->stage->methodOrder[30] = 'delete';
 
-if($config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE))
-{
-    /* Program. */
-    $lang->resource->program = new stdclass();
-    $lang->resource->program->browse                  = 'browse';
-    $lang->resource->program->kanban                  = 'kanbanAction';
-    $lang->resource->program->view                    = 'view';
-    $lang->resource->program->product                 = 'product';
-    $lang->resource->program->create                  = 'create';
-    $lang->resource->program->edit                    = 'edit';
-    $lang->resource->program->start                   = 'start';
-    $lang->resource->program->suspend                 = 'suspend';
-    $lang->resource->program->activate                = 'activate';
-    $lang->resource->program->close                   = 'close';
-    $lang->resource->program->delete                  = 'delete';
-    $lang->resource->program->project                 = 'project';
-    $lang->resource->program->stakeholder             = 'stakeholder';
-    $lang->resource->program->createStakeholder       = 'createStakeholder';
-    $lang->resource->program->unlinkStakeholder       = 'unlinkStakeholder';
-    $lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
-    $lang->resource->program->unbindWhitelist         = 'unbindWhitelist';
-    $lang->resource->program->updateOrder             = 'updateOrder';
+/* Program. */
+$lang->resource->program = new stdclass();
+$lang->resource->program->browse                  = 'browse';
+$lang->resource->program->kanban                  = 'kanbanAction';
+$lang->resource->program->view                    = 'view';
+$lang->resource->program->product                 = 'product';
+$lang->resource->program->create                  = 'create';
+$lang->resource->program->edit                    = 'edit';
+$lang->resource->program->start                   = 'start';
+$lang->resource->program->suspend                 = 'suspend';
+$lang->resource->program->activate                = 'activate';
+$lang->resource->program->close                   = 'close';
+$lang->resource->program->delete                  = 'delete';
+$lang->resource->program->project                 = 'project';
+$lang->resource->program->stakeholder             = 'stakeholder';
+$lang->resource->program->createStakeholder       = 'createStakeholder';
+$lang->resource->program->unlinkStakeholder       = 'unlinkStakeholder';
+$lang->resource->program->batchUnlinkStakeholders = 'batchUnlinkStakeholders';
+$lang->resource->program->unbindWhitelist         = 'unbindWhitelist';
+$lang->resource->program->updateOrder             = 'updateOrder';
 
-    $lang->program->methodOrder[5]  = 'browse';
-    $lang->program->methodOrder[10] = 'kanban';
-    $lang->program->methodOrder[15] = 'view';
-    $lang->program->methodOrder[20] = 'product';
-    $lang->program->methodOrder[25] = 'create';
-    $lang->program->methodOrder[30] = 'edit';
-    $lang->program->methodOrder[35] = 'view';
-    $lang->program->methodOrder[40] = 'start';
-    $lang->program->methodOrder[45] = 'suspend';
-    $lang->program->methodOrder[50] = 'activate';
-    $lang->program->methodOrder[55] = 'close';
-    $lang->program->methodOrder[60] = 'delete';
-    $lang->program->methodOrder[65] = 'project';
-    $lang->program->methodOrder[70] = 'stakeholder';
-    $lang->program->methodOrder[75] = 'createStakeholder';
-    $lang->program->methodOrder[80] = 'unlinkStakeholder';
-    $lang->program->methodOrder[85] = 'batchUnlinkStakeholders';
-    $lang->program->methodOrder[90] = 'unbindWhitelist';
-    $lang->program->methodOrder[95] = 'updateOrder';
-
-    $lang->resource->project->programTitle = 'moduleOpen';
-}
+$lang->program->methodOrder[5]  = 'browse';
+$lang->program->methodOrder[10] = 'kanban';
+$lang->program->methodOrder[15] = 'view';
+$lang->program->methodOrder[20] = 'product';
+$lang->program->methodOrder[25] = 'create';
+$lang->program->methodOrder[30] = 'edit';
+$lang->program->methodOrder[35] = 'view';
+$lang->program->methodOrder[40] = 'start';
+$lang->program->methodOrder[45] = 'suspend';
+$lang->program->methodOrder[50] = 'activate';
+$lang->program->methodOrder[55] = 'close';
+$lang->program->methodOrder[60] = 'delete';
+$lang->program->methodOrder[65] = 'project';
+$lang->program->methodOrder[70] = 'stakeholder';
+$lang->program->methodOrder[75] = 'createStakeholder';
+$lang->program->methodOrder[80] = 'unlinkStakeholder';
+$lang->program->methodOrder[85] = 'batchUnlinkStakeholders';
+$lang->program->methodOrder[90] = 'unbindWhitelist';
+$lang->program->methodOrder[95] = 'updateOrder';
 
 /* Product. */
 $lang->resource->product = new stdclass();
 $lang->resource->product->index           = 'indexAction';
 $lang->resource->product->browse          = 'browse';
-if($isURSR) $lang->resource->product->requirement = 'requirement';
+$lang->resource->product->requirement     = 'requirement';
 $lang->resource->product->create          = 'create';
 $lang->resource->product->view            = 'view';
 $lang->resource->product->edit            = 'edit';
@@ -449,7 +439,7 @@ $lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
-if($isURSR) $lang->product->methodOrder[6] = 'requirement';
+$lang->product->methodOrder[6]   = 'requirement';
 $lang->product->methodOrder[10]  = 'create';
 $lang->product->methodOrder[15]  = 'view';
 $lang->product->methodOrder[20]  = 'edit';
@@ -496,7 +486,7 @@ $lang->resource->story = new stdclass();
 $lang->resource->story->create             = 'create';
 $lang->resource->story->batchCreate        = 'batchCreate';
 $lang->resource->story->edit               = 'editAction';
-if($isURSR) $lang->resource->story->linkStory = 'linkStory';
+$lang->resource->story->linkStory          = 'linkStory';
 $lang->resource->story->batchEdit          = 'batchEdit';
 $lang->resource->story->export             = 'exportAction';
 $lang->resource->story->delete             = 'deleteAction';
@@ -545,62 +535,59 @@ $lang->story->methodOrder[90]  = 'tasks';
 $lang->story->methodOrder[95]  = 'bugs';
 $lang->story->methodOrder[100] = 'cases';
 $lang->story->methodOrder[105] = 'report';
-if($isURSR) $lang->story->methodOrder[110] = 'linkStory';
+$lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
 $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
 
-if($isURSR)
-{
-    /* Requirement. */
-    $lang->resource->requirement = new stdclass();
-    $lang->resource->requirement->create            = 'create';
-    $lang->resource->requirement->batchCreate       = 'batchCreate';
-    $lang->resource->requirement->edit              = 'editAction';
-    $lang->resource->requirement->linkStory         = 'linkStory';
-    $lang->resource->requirement->batchEdit         = 'batchEdit';
-    $lang->resource->requirement->export            = 'exportAction';
-    $lang->resource->requirement->delete            = 'deleteAction';
-    $lang->resource->requirement->view              = 'view';
-    $lang->resource->requirement->change            = 'changeAction';
-    $lang->resource->requirement->review            = 'reviewAction';
-    $lang->resource->requirement->submitReview      = 'submitReview';
-    $lang->resource->requirement->batchReview       = 'batchReview';
-    $lang->resource->requirement->recall            = 'recall';
-    $lang->resource->requirement->assignTo          = 'assignAction';
-    $lang->resource->requirement->close             = 'closeAction';
-    $lang->resource->requirement->batchClose        = 'batchClose';
-    $lang->resource->requirement->activate          = 'activateAction';
-    $lang->resource->requirement->report            = 'reportAction';
-    $lang->resource->requirement->batchChangeBranch = 'batchChangeBranch';
-    $lang->resource->requirement->batchAssignTo     = 'batchAssignTo';
-    $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
-    $lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
+/* Requirement. */
+$lang->resource->requirement = new stdclass();
+$lang->resource->requirement->create            = 'create';
+$lang->resource->requirement->batchCreate       = 'batchCreate';
+$lang->resource->requirement->edit              = 'editAction';
+$lang->resource->requirement->linkStory         = 'linkStory';
+$lang->resource->requirement->batchEdit         = 'batchEdit';
+$lang->resource->requirement->export            = 'exportAction';
+$lang->resource->requirement->delete            = 'deleteAction';
+$lang->resource->requirement->view              = 'view';
+$lang->resource->requirement->change            = 'changeAction';
+$lang->resource->requirement->review            = 'reviewAction';
+$lang->resource->requirement->submitReview      = 'submitReview';
+$lang->resource->requirement->batchReview       = 'batchReview';
+$lang->resource->requirement->recall            = 'recall';
+$lang->resource->requirement->assignTo          = 'assignAction';
+$lang->resource->requirement->close             = 'closeAction';
+$lang->resource->requirement->batchClose        = 'batchClose';
+$lang->resource->requirement->activate          = 'activateAction';
+$lang->resource->requirement->report            = 'reportAction';
+$lang->resource->requirement->batchChangeBranch = 'batchChangeBranch';
+$lang->resource->requirement->batchAssignTo     = 'batchAssignTo';
+$lang->resource->requirement->batchChangeModule = 'batchChangeModule';
+$lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
 
-    $lang->requirement->methodOrder[5]   = 'create';
-    $lang->requirement->methodOrder[10]  = 'batchCreate';
-    $lang->requirement->methodOrder[15]  = 'edit';
-    $lang->requirement->methodOrder[20]  = 'export';
-    $lang->requirement->methodOrder[25]  = 'delete';
-    $lang->requirement->methodOrder[30]  = 'view';
-    $lang->requirement->methodOrder[35]  = 'change';
-    $lang->requirement->methodOrder[40]  = 'review';
-    $lang->requirement->methodOrder[44]  = 'submitReview';
-    $lang->requirement->methodOrder[45]  = 'batchReview';
-    $lang->requirement->methodOrder[50]  = 'recall';
-    $lang->requirement->methodOrder[55]  = 'close';
-    $lang->requirement->methodOrder[60]  = 'batchClose';
-    $lang->requirement->methodOrder[65]  = 'assignTo';
-    $lang->requirement->methodOrder[70]  = 'batchAssignTo';
-    $lang->requirement->methodOrder[75]  = 'activate';
-    $lang->requirement->methodOrder[80]  = 'report';
-    $lang->requirement->methodOrder[85]  = 'linkStory';
-    $lang->requirement->methodOrder[90]  = 'batchChangeBranch';
-    $lang->requirement->methodOrder[95]  = 'batchChangeModule';
-    $lang->requirement->methodOrder[100] = 'linkRequirements';
-}
+$lang->requirement->methodOrder[5]   = 'create';
+$lang->requirement->methodOrder[10]  = 'batchCreate';
+$lang->requirement->methodOrder[15]  = 'edit';
+$lang->requirement->methodOrder[20]  = 'export';
+$lang->requirement->methodOrder[25]  = 'delete';
+$lang->requirement->methodOrder[30]  = 'view';
+$lang->requirement->methodOrder[35]  = 'change';
+$lang->requirement->methodOrder[40]  = 'review';
+$lang->requirement->methodOrder[44]  = 'submitReview';
+$lang->requirement->methodOrder[45]  = 'batchReview';
+$lang->requirement->methodOrder[50]  = 'recall';
+$lang->requirement->methodOrder[55]  = 'close';
+$lang->requirement->methodOrder[60]  = 'batchClose';
+$lang->requirement->methodOrder[65]  = 'assignTo';
+$lang->requirement->methodOrder[70]  = 'batchAssignTo';
+$lang->requirement->methodOrder[75]  = 'activate';
+$lang->requirement->methodOrder[80]  = 'report';
+$lang->requirement->methodOrder[85]  = 'linkStory';
+$lang->requirement->methodOrder[90]  = 'batchChangeBranch';
+$lang->requirement->methodOrder[95]  = 'batchChangeModule';
+$lang->requirement->methodOrder[100] = 'linkRequirements';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -828,10 +815,7 @@ $lang->resource->execution->storyView         = 'storyView';
 $lang->resource->execution->executionkanban   = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
 $lang->resource->execution->setKanban         = 'setKanban';
-//if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
-//$lang->execution->methodOrder[0]   = 'index';
-//if($config->systemMode == 'classic') $lang->project->methodOrder[1] = 'list';
 $lang->execution->methodOrder[5]   = 'view';
 $lang->execution->methodOrder[10]  = 'browse';
 $lang->execution->methodOrder[15]  = 'create';
@@ -1885,5 +1869,27 @@ $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
 $lang->dev->methodOrder[15] = 'editor';
 $lang->dev->methodOrder[20] = 'translate';
+
+global $config;
+$hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false || (defined('IN_UPGRADE') && IN_UPGRADE);
+$isURSR       = $config->URAndSR || (defined('IN_UPGRADE') && IN_UPGRADE);
+$hasProgram   = $config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE);
+if(!$hasWaterfall)
+{
+    unset($lang->resource->design);
+    unset($lang->resource->programplan);
+    unset($lang->resource->stage);
+}
+if(!$hasProgram)
+{
+    unset($lang->resource->program);
+    unset($lang->resource->project->programTitle);
+}
+if(!$isURSR)
+{
+    unset($lang->resource->product->requirement);
+    unset($lang->resource->story->linkStory);
+    unset($lang->resource->requirement);
+}
 
 include (dirname(__FILE__) . '/changelog.php');

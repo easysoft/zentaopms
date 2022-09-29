@@ -22,7 +22,7 @@ $config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
-$config->custom->features = array('waterfall', 'URStory', 'scrumOpportunity', 'scrumMeeting', 'scrumAuditplan', 'scrumProcess', 'scrumIssue', 'scrumRisk');
+$config->custom->features = array('waterfall', 'URStory', 'scrumOpportunity', 'scrumMeeting', 'scrumAuditplan', 'scrumProcess', 'scrumIssue', 'scrumRisk', 'assetlib');
 
 $config->custom->requiredModules[50] = 'bug';
 $config->custom->requiredModules[55] = 'testcase';

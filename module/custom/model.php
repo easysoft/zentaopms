@@ -944,6 +944,17 @@ class customModel extends model
     }
 
     /**
+     * Check for assetlib data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasAssetlibData()
+    {
+        return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+    }
+
+    /**
      * Check for issue data.
      *
      * @access public
