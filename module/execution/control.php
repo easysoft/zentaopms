@@ -983,9 +983,12 @@ class execution extends control
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
 
+        $hasProduct = $this->dao->findByID($execution->project)->from(TABLE_PROJECT)->fetch('hasProduct');
+        if($execution->project and !$hasProduct) unset($this->config->bug->search['fields']['product']);
+
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
+        if($hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -1133,8 +1136,12 @@ class execution extends control
         $products = $this->product->getProducts($executionID, 'all', '', false);
         if(count($products) == 1) $productID = key($products);
 
+        $execution = $this->execution->getByID($executionID);
+
+        $hasProduct = $this->dao->findByID($execution->project)->from(TABLE_PROJECT)->fetch('hasProduct');
+
         $extra = $executionID;
-        $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, $branchID);
+        if($hasProduct) $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, $branchID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1167,7 +1174,7 @@ class execution extends control
         $this->view->pager       = $pager;
         $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->execution   = $this->execution->getByID($executionID);
+        $this->view->execution   = $execution;
         $this->view->moduleTree  = $moduleTree;
         $this->view->modules     = $modules;
         $this->view->moduleID    = $moduleID;

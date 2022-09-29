@@ -118,6 +118,8 @@ class testcase extends control
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
             $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
             $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+            $hasProduct     = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
+            if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
 
             $this->loadModel('project')->setMenu($projectID);
         }
@@ -1596,6 +1598,8 @@ class testcase extends control
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+        if($product->shadow and $this->app->tab == 'project') $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
+
         if($_POST)
         {
             $this->loadModel('file');
