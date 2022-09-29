@@ -59,10 +59,11 @@ if(!empty($members) && $task->mode == 'linear')
     <?php if(!empty($task->team) and $task->mode == 'linear'):?>
     <?php include __DIR__ . '/lineareffort.html.php';?>
     <?php else:?>
-    <table class='table table-bordered table-fixed table-recorded'>
+    <table class='table table-bordered table-fixed table-recorded has-sort-head'>
       <thead>
         <tr class='text-center'>
-          <th class="w-120px"><?php echo $lang->task->date;?></th>
+          <?php $vars = "taskID=$task->id&from=$from&orderBy=%s";?>
+          <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
           <th><?php echo $lang->task->work;?></th>
           <th class="thWidth"><?php echo $lang->task->consumed;?></th>
@@ -103,7 +104,7 @@ if(!empty($members) && $task->mode == 'linear')
       </div>
     </div>
     <?php else:?>
-    <form id="recordForm" method='post' target='hiddenwin'>
+    <form id="recordForm" class='hidden' method='post' target='hiddenwin'>
       <?php
       $readonly = '';
       $left     = '';
