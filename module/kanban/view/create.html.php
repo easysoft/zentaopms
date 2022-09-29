@@ -69,13 +69,13 @@
         <td colspan='2'>
             <div>
                 <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
-                <?php echo html::input('colWidth', isset($copyKanban->colWidth) ? $copyKanban->colWidth : 264, "class='form-control inline-block setting-input' required autocomplete='off'");?>px
+                <?php echo html::input('colWidth', isset($copyKanban->colWidth) ? $copyKanban->colWidth : 264, "class='form-control inline-block setting-input' required placeholder='264' autocomplete='off'");?>px
             </div>
             <div style="margin-top: 10px;">
                 <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0);?>
-                <?php echo html::input('minColWidth', isset($copyKanban->minColWidth) ? $copyKanban->minColWidth : 180, "class='form-control inline-block setting-input' required autocomplete='off'");?>px
+                <?php echo html::input('minColWidth', isset($copyKanban->minColWidth) ? $copyKanban->minColWidth : 180, "class='form-control inline-block setting-input' required placeholder='180' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
-                <?php echo html::input('maxColWidth', isset($copyKanban->maxColWidth) ? $copyKanban->maxColWidth : 384, "class='form-control inline-block setting-input' required autocomplete='off'");?>px
+                <?php echo html::input('maxColWidth', isset($copyKanban->maxColWidth) ? $copyKanban->maxColWidth : 384, "class='form-control inline-block setting-input' required placeholder='384' autocomplete='off'");?>px
             </div>
         </td>
       </tr>
