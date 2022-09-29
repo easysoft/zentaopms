@@ -17,12 +17,13 @@
 .project-name {position: relative; display: flex; align-items: center;}
 .project-name > span,
 .project-name > span {flex: none;}
-.project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.project-name > a {display: inline-block; max-width: calc(100% - 50px);}
 .project-name.has-prefix > a,
 .project-name.has-suffix > a {max-width: calc(100% - 100px);}
 .project-name.has-prefix > a {padding-left: 5px;}
 .project-name.has-suffix > a {padding-right: 5px;}
 </style>
+<?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
@@ -40,6 +41,7 @@
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->project->edit), $showBatchEdit);?>
     <?php if($browseType != 'bysearch') echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
@@ -99,13 +101,12 @@
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $fixedFieldsWidth['leftWidth']?>' data-fixed-right-width='<?php echo $fixedFieldsWidth['rightWidth']?>'>
-      <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
             foreach($setting as $value)
             {
-              if($value->id == 'status' and strpos(',all,bysearch,', ",$browseType,") === false) $value->show = false;
+              if($value->id == 'status' and strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
               if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
               if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);

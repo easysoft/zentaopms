@@ -37,6 +37,8 @@ $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'View Stories Matrix';
 $lang->product->checkedProducts  = '%s products selected';
+$lang->product->pageSummary      = 'Total products: %s.';
+$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Close {$lang->productCommon}";
@@ -186,7 +188,7 @@ $lang->product->statusList['closed'] = 'Geschlossen';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Stakeholders and owner of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {

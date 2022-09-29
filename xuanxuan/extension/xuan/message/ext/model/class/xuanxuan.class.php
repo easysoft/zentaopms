@@ -150,7 +150,7 @@ class xuanxuanMessage extends messageModel
 
                 $content = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
-                if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
                 {

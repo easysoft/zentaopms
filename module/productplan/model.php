@@ -1130,6 +1130,16 @@ class productplanModel extends model
     {
         $params = "planID=$plan->id";
 
+        $canStart       = common::hasPriv('productplan', 'start');
+        $canFinish      = common::hasPriv('productplan', 'finish');
+        $canClose       = common::hasPriv('productplan', 'close');
+        $canCreateExec  = common::hasPriv('execution', 'create');
+        $canLinkStory   = common::hasPriv('productplan', 'linkStory');
+        $canLinkBug     = common::hasPriv('productplan', 'linkBug');
+        $canEdit        = common::hasPriv('productplan', 'edit');
+        $canCreateChild = common::hasPriv('productplan', 'create');
+        $canDelete      = common::hasPriv('productplan', 'delete');
+
         $menu  = '';
         $menu .= $this->buildMenu('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
         $menu .= $this->buildMenu('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
@@ -1174,6 +1184,11 @@ class productplanModel extends model
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
+            if(($canStart or $canFinsh or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            {
+                $menu .= "<div class='dividing-line'></div>";
+            }
+
             if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0)
             {
                 $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
@@ -1196,6 +1211,11 @@ class productplanModel extends model
         }
 
         $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+
+        if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+        {
+            $menu .= "<div class='dividing-line'></div>";
+        }
 
         if($type == 'browse') $menu .= $this->buildMenu('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
 

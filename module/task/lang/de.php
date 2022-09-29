@@ -260,6 +260,7 @@ $lang->task->error->recordMinus       = 'Work hours should not be negative numbe
 $lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Genutzt" muss larger than before.';
+$lang->task->error->dateEmpty         = 'Please enter "Date"';
 $lang->task->error->consumedThisTime  = 'Bitte geben Sie die Stunden an';
 $lang->task->error->left              = 'Bitte geben Sie die verbleibenden Stunden an"';
 $lang->task->error->work              = '"Bemerkung" muss kleiner als %d Zeichen sein.';

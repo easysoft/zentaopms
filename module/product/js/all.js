@@ -1,6 +1,13 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
 $(function()
 {
+    $('input[name^="showEdit"]').click(function()
+    {
+        $.cookie('showProductBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
+        setCheckbox();
+    });
+    setCheckbox();
+
     /* Init table sort. */
     $('#productTableList').addClass('sortable').sortable(
     {
@@ -36,6 +43,23 @@ $(function()
         }
     });
 
+    /**
+     * Set batch edit checkbox.
+     *
+     * @access public
+     * @return void
+     */
+    function setCheckbox()
+    {
+        $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+        $('.c-name').css('border-left', 'none');
+        if($.cookie('showProductBatchEdit') == 1)
+        {
+            $('#productListForm .c-checkbox, #productListForm .check-all').show();
+            $('.c-name').css('border-left', '1px solid #ddd');
+        }
+    }
+
     /* Update parent checkbox */
     function updatePrarentCheckbox($parent)
     {
@@ -69,17 +93,21 @@ $(function()
     function addStatistic()
     {
         var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        var summary       = checkedProducts.replace('%s', checkedLength);
-        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
-        var statistic     = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
-
         if(checkedLength > 0)
         {
+            var summary = checkedProducts.replace('%s', checkedLength);
+            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
+
+            var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+            $('#productsCount').hide();
             $('#productsSummary').remove();
             $('#editBtn').after(statistic);
+            $('.table-actions').show();
         }
         else
         {
+            $('.table-actions').hide();
+            $('#productsCount').show();
             $('#productsSummary').addClass('hidden');
         }
     }

@@ -54,14 +54,8 @@ $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto
 
 global $lang, $app;
 $config->story->datatable = new stdclass();
-if($app->tab == 'execution')
-{
-    $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
-}
-else
-{
-    $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
-}
+
+$config->story->datatable->defaultField = array('id', 'title', 'plan', 'pri', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
@@ -78,16 +72,70 @@ if($app->tab == 'execution')
     $config->story->datatable->fieldList['order']['name']     = $this->lang->story->order;
 }
 
+$config->story->datatable->fieldList['title']['title']    = 'title';
+$config->story->datatable->fieldList['title']['fixed']    = 'left';
+$config->story->datatable->fieldList['title']['width']    = 'auto';
+$config->story->datatable->fieldList['title']['required'] = 'yes';
+
+$config->story->datatable->fieldList['plan']['title']      = 'planAB';
+$config->story->datatable->fieldList['plan']['fixed']      = 'no';
+$config->story->datatable->fieldList['plan']['width']      = '90';
+$config->story->datatable->fieldList['plan']['required']   = 'no';
+$config->story->datatable->fieldList['plan']['control']    = 'select';
+$config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
+
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
 $config->story->datatable->fieldList['pri']['width']    = '35';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 $config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 
-$config->story->datatable->fieldList['title']['title']    = 'title';
-$config->story->datatable->fieldList['title']['fixed']    = 'left';
-$config->story->datatable->fieldList['title']['width']    = 'auto';
-$config->story->datatable->fieldList['title']['required'] = 'yes';
+$config->story->datatable->fieldList['status']['title']    = 'statusAB';
+$config->story->datatable->fieldList['status']['fixed']    = 'no';
+$config->story->datatable->fieldList['status']['width']    = '60';
+$config->story->datatable->fieldList['status']['required'] = 'no';
+
+$config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
+$config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['openedBy']['width']    = '60';
+$config->story->datatable->fieldList['openedBy']['required'] = 'no';
+
+$config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
+$config->story->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->story->datatable->fieldList['estimate']['width']    = '50';
+$config->story->datatable->fieldList['estimate']['required'] = 'no';
+
+$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
+
+$config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
+$config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
+$config->story->datatable->fieldList['reviewedBy']['width']      = '100';
+$config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
+$config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
+$config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
+
+
+$config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
+$config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['reviewedDate']['width']    = '90';
+$config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
+
+$config->story->datatable->fieldList['stage']['title']    = 'stageAB';
+$config->story->datatable->fieldList['stage']['fixed']    = 'no';
+$config->story->datatable->fieldList['stage']['width']    = '85';
+$config->story->datatable->fieldList['stage']['required'] = 'no';
+
+$config->story->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
+$config->story->datatable->fieldList['assignedTo']['fixed']    = 'no';
+$config->story->datatable->fieldList['assignedTo']['width']    = '90';
+$config->story->datatable->fieldList['assignedTo']['required'] = 'no';
+
+$config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
+$config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['assignedDate']['width']    = '90';
+$config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
@@ -109,13 +157,6 @@ $config->story->datatable->fieldList['keywords']['fixed']    = 'no';
 $config->story->datatable->fieldList['keywords']['width']    = '100';
 $config->story->datatable->fieldList['keywords']['required'] = 'no';
 
-$config->story->datatable->fieldList['plan']['title']      = 'planAB';
-$config->story->datatable->fieldList['plan']['fixed']      = 'no';
-$config->story->datatable->fieldList['plan']['width']      = '90';
-$config->story->datatable->fieldList['plan']['required']   = 'no';
-$config->story->datatable->fieldList['plan']['control']    = 'select';
-$config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
-
 $config->story->datatable->fieldList['source']['title']    = 'source';
 $config->story->datatable->fieldList['source']['fixed']    = 'no';
 $config->story->datatable->fieldList['source']['width']    = '90';
@@ -131,56 +172,10 @@ $config->story->datatable->fieldList['category']['fixed']    = 'no';
 $config->story->datatable->fieldList['category']['width']    = '60';
 $config->story->datatable->fieldList['category']['required'] = 'no';
 
-$config->story->datatable->fieldList['status']['title']    = 'statusAB';
-$config->story->datatable->fieldList['status']['fixed']    = 'no';
-$config->story->datatable->fieldList['status']['width']    = '60';
-$config->story->datatable->fieldList['status']['required'] = 'no';
-
-$config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
-$config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '50';
-$config->story->datatable->fieldList['estimate']['required'] = 'no';
-
-$config->story->datatable->fieldList['stage']['title']    = 'stageAB';
-$config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '85';
-$config->story->datatable->fieldList['stage']['required'] = 'no';
-
-$config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
-$config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->story->datatable->fieldList['openedBy']['width']    = '60';
-$config->story->datatable->fieldList['openedBy']['required'] = 'no';
-
 $config->story->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->story->datatable->fieldList['openedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['openedDate']['width']    = '90';
 $config->story->datatable->fieldList['openedDate']['required'] = 'no';
-
-$config->story->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
-$config->story->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->story->datatable->fieldList['assignedTo']['width']    = '90';
-$config->story->datatable->fieldList['assignedTo']['required'] = 'no';
-
-$config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
-$config->story->datatable->fieldList['assignedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['assignedDate']['width']    = '90';
-$config->story->datatable->fieldList['assignedDate']['required'] = 'no';
-
-$config->story->datatable->fieldList['reviewedBy']['title']      = 'reviewedBy';
-$config->story->datatable->fieldList['reviewedBy']['fixed']      = 'no';
-$config->story->datatable->fieldList['reviewedBy']['width']      = '80';
-$config->story->datatable->fieldList['reviewedBy']['required']   = 'no';
-$config->story->datatable->fieldList['reviewedBy']['control']    = 'multiple';
-$config->story->datatable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
-
-$config->story->datatable->fieldList['reviewer']['title']      = 'reviewedBy';
-$config->story->datatable->fieldList['reviewer']['control']    = 'multiple';
-$config->story->datatable->fieldList['reviewer']['dataSource'] = array('module' => 'story', 'method' => 'getStoriesReviewer', 'params' => '$productID');
-
-$config->story->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
-$config->story->datatable->fieldList['reviewedDate']['fixed']    = 'no';
-$config->story->datatable->fieldList['reviewedDate']['width']    = '90';
-$config->story->datatable->fieldList['reviewedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['needReview']['title']      = 'needReview';
 $config->story->datatable->fieldList['needReview']['control']    = 'select';
@@ -259,5 +254,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '200';
+$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '210';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

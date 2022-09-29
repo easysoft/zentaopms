@@ -25,7 +25,7 @@ foreach($products as $product)
     $linkHtml    = sprintf($link, $product->id);
     if($product->status == 'normal' and $product->PO == $this->app->user->account)
     {
-        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-important $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$tab'");
+        $myProductsHtml .= html::a($linkHtml, $productName, '', "class='text-primary $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$tab'");
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {

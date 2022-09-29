@@ -37,6 +37,8 @@ $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
 $lang->product->track            = "查看需求矩阵";
 $lang->product->checkedProducts  = '已选择%s项产品';
+$lang->product->pageSummary      = '本页共%s个产品。';
+$lang->product->lineSummary      = '本页共%s个产品线，%s个产品。';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";
@@ -207,7 +209,7 @@ $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
-$lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featureBar['browse']['allstory']     = '全部';
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
@@ -216,7 +218,7 @@ $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByM
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
-$lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
+$lang->product->featureBar['all']['all']      = '全部' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 

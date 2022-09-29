@@ -267,8 +267,8 @@ $lang->bug->statusList['active']   = 'Kích hoạt';
 $lang->bug->statusList['resolved'] = 'Đã giải quyết';
 $lang->bug->statusList['closed']   = 'Đã đóng';
 
-$lang->bug->confirmedList[1] = 'Có';
-$lang->bug->confirmedList[0] = 'Không';
+$lang->bug->confirmedList[1] = 'đã xác nhận';
+$lang->bug->confirmedList[0] = 'chưa được xác nhận';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'Như thiết kế';

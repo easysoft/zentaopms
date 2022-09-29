@@ -167,7 +167,6 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
-            ->beginIF(!$this->cookie->showClosed and $status == 'all')->andWhere('status')->ne('closed')->fi()
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
@@ -226,7 +225,6 @@ class programModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
@@ -1184,7 +1182,7 @@ class programModel extends model
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
-            ->where('path')->like("%{$parentProgram->id}%")
+            ->where('path')->like("%,{$parentProgram->id},%")
             ->andWhere('grade')->eq($childGrade)
             ->andWhere('deleted')->eq('0')
             ->fetch('sumBudget');
@@ -1579,7 +1577,7 @@ class programModel extends model
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', '', '', "data-app='project'");
 

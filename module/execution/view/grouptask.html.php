@@ -33,7 +33,7 @@
     <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->allTasks}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->featureBar['task']['all']}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
