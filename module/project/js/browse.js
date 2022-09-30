@@ -46,9 +46,9 @@ $(function()
         if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
     });
 
-    $('#projectForm .table').on('click', '.sortable tr', function(e)
+    $('#tableCustomBtn').on('click', function()
     {
-        if($.cookie('showProjectBatchEdit') != 1) e.stopPropagation();
+        $('.contextmenu-show').removeClass('contextmenu-show').find('.contextmenu-menu').removeClass('open');
     });
 });
 
