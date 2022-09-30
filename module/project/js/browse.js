@@ -45,6 +45,11 @@ $(function()
     {
         if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
     });
+
+    $('#tableCustomBtn').on('click', function()
+    {
+        $('.contextmenu-show').removeClass('contextmenu-show').find('.contextmenu-menu').removeClass('open');
+    });
 });
 
 /**
