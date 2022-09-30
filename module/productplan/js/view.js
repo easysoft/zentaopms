@@ -44,8 +44,6 @@ function loadURL(url, type)
 
 $(function()
 {
-    $('#actionsBox a').first().prevAll('.divider').hide();
-
     /* Recalculate the maximum width of the title. */
     var maxWidth = $('#mainMenu').width() - $('#actionsBox').width() - $('#mainMenu .btn-toolbar .page-title .label-info').width() - 177;
     $('#mainMenu .btn-toolbar .page-title .text').css('max-width', maxWidth.toString() + 'px');
