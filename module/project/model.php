@@ -1975,11 +1975,14 @@ class projectModel extends model
                 $class .= ' c-name';
                 $title  = "title={$project->code}";
             }
-
-            if($id == 'name')
+            elseif($id == 'name')
             {
                 $class .= ' text-left';
                 $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
+            }
+            elseif($id == 'PM')
+            {
+                $class .= ' c-manager';
             }
 
             if($id == 'end')
@@ -2029,10 +2032,12 @@ class projectModel extends model
                     echo $project->code;
                     break;
                 case 'PM':
-                    $user     = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID   = !empty($user) ? $user->id : '';
-                    $PMLink   = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    $userName = zget($users, $project->PM);
+                    $user       = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID     = !empty($user) ? $user->id : '';
+                    $userAvatar = !empty($user) ? $user->avatar : '';
+                    $PMLink     = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    $userName   = zget($users, $project->PM);
+                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}");
                     echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':

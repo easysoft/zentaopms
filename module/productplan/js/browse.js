@@ -57,8 +57,8 @@ $(function()
         $('#kanban').kanban(
         {
             data:         kanbanData,
-            minColWidth:  290,
-            maxColWidth:  290,
+            minColWidth:  typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+            maxColWidth:  typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
             maxColHeight: 460,
             minColHeight: 190,
             cardHeight:   80,
@@ -98,6 +98,26 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+    });
+    $('.project-popover').on('click', function(e)
+    {
+        e.stopPropagation();
+        var showPopover = $(this).next().css('display') == 'block';
+        $('.popover.right').hide();
+        if(!showPopover) $(this).next().show();
+    });
+
+    $('.project-link').on('click', function()
+    {
+        $('.popover.right').hide();
+    });
+
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover, .project-popover');
+        if(!$toggle.length) $('.popover.right').hide();
     });
 });
 

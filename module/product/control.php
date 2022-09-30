@@ -1286,6 +1286,9 @@ class product extends control
         $this->view->productStructure = $productStructure;
         $this->view->productLines     = $productLines;
         $this->view->programLines     = $programLines;
+        $this->view->users            = $this->user->getPairs('noletter');
+        $this->view->userIdPairs      = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar      = $this->user->getAvatarPairs('');
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
@@ -1437,7 +1440,6 @@ class product extends control
             $productConfig = $this->config->product;
 
             /* Create field lists. */
-            if(!$this->config->URAndSR) $productConfig->list->exportFields = str_replace('activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,', '', $productConfig->list->exportFields);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
@@ -1448,28 +1450,21 @@ class product extends control
 
             $lastProgram = $lastLine = '';
             $lines = $this->product->getLinePairs();
+            $users = $this->user->getPairs('noletter');
             $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
-                $product->line = zget($lines, $product->line, '');
-                if($this->config->URAndSR)
-                {
-                    $product->activeRequirements  = (int) $product->requirements['active'];
-                    $product->changedRequirements = (int) $product->requirements['changing'];
-                    $product->draftRequirements   = (int) $product->requirements['draft'];
-                    $product->closedRequirements  = (int) $product->requirements['closed'];
-                    $product->totalRequirements   = $product->activeRequirements + $product->changedRequirements + $product->draftRequirements + $product->closedRequirements;
-                    $product->requireCompleteRate = ($product->totalRequirements == 0 ? 0 : round($product->closedRequirements / $product->totalRequirements, 3) * 100) . '%';
-                }
+                $product->line              = zget($lines, $product->line, '');
+                $product->manager           = zget($users, $product->PO, '');
+                $product->draftStories      = (int)$product->stories['draft'];
                 $product->activeStories     = (int)$product->stories['active'];
                 $product->changedStories    = (int)$product->stories['changing'];
-                $product->draftStories      = (int)$product->stories['draft'];
+                $product->reviewingStories  = (int)$product->stories['reviewing'];
                 $product->closedStories     = (int)$product->stories['closed'];
-                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
+                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
                 $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
                 $product->unResolvedBugs    = (int)$product->unResolved;
                 $product->assignToNullBugs  = (int)$product->assignToNull;
-                $product->closedBugs        = (int)$product->closedBugs;
                 $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
                 $product->program           = $product->programName;
 

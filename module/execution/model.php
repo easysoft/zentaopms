@@ -1130,7 +1130,18 @@ class executionModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
 
-        $this->dao->update(TABLE_EXECUTION)->data($execution)->where('id')->eq((int)$executionID)->exec();
+        $this->app->loadLang('kanban');
+        $this->lang->project->colWidth    = $this->lang->kanban->colWidth;
+        $this->lang->project->minColWidth = $this->lang->kanban->minColWidth;
+        $this->lang->project->maxColWidth = $this->lang->kanban->maxColWidth;
+        $this->dao->update(TABLE_EXECUTION)->data($execution)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->checkIF(!$execution->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($execution->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($execution->minColWidth and $execution->maxColWidth and $execution->fluidBoard, 'maxColWidth', 'gt', $execution->minColWidth)
+            ->where('id')->eq((int)$executionID)
+            ->exec();
     }
 
     /**
@@ -4865,7 +4876,7 @@ class executionModel extends model
             case 'name':
                 $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';
                 $executionLink = $execution->projectModel == 'kanban' ? html::a(helper::createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a(helper::createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
-                if(!$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
+                if($this->config->systemMode != 'classic' and !$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
                 if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$this->lang->programplan->childrenAB}</span> ";
                 echo !empty($execution->children) ? "<span class='text-ellipsis'>$execution->name</span>" :  $executionLink;
                 if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
