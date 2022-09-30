@@ -1674,6 +1674,18 @@ class executionModel extends model
     }
 
     /**
+     * Get no multiple execution id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getNoMultipleID($projectID)
+    {
+        return $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq(0)->andWhere('deleted')->eq(0)->fetch('id');
+    }
+
+    /**
      * Create the link from module,method,extra
      *
      * @param  string  $module

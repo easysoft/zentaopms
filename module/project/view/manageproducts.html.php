@@ -29,6 +29,7 @@
           <?php $isDisabled = '';?>
           <?php if($branchID == BRANCH_MAIN and isset($unmodifiableMainBranches[$productID])) $isDisabled = "disabled='disabled'";?>
           <?php if($branchID != BRANCH_MAIN and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) $isDisabled = "disabled='disabled'";?>
+          <?php if(empty($project->multiple)) $isDisabled = '';?>
           <?php $title      = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? $lang->project->notAllowRemoveProducts : $productName;?>
           <?php $checked    = 'checked';?>
           <div class='col-sm-4'>

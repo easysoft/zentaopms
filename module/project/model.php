@@ -2031,7 +2031,7 @@ class projectModel extends model
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
 
         /* Remove execution members. */
-        if($removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
+        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
         {
             $this->dao->delete()->from(TABLE_TEAM)
                 ->where('root')->in($childSprints)
