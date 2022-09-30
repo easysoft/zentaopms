@@ -2576,6 +2576,7 @@ class projectModel extends model
         else
         {
             unset($lang->project->menu->settings['subMenu']->module);
+            unset($lang->project->menu->settings['subMenu']->managerepo);
             unset($lang->project->menu->projectplan);
         }
 
@@ -2841,5 +2842,59 @@ class projectModel extends model
         }
 
         return $menu;
+    }
+
+    /**
+     * Update linked repos.
+     *
+     * @param  int    $projectID
+     * @param  array  $repos
+     * @access public
+     * @return void
+     */
+    public function updateRepoRelations($projectID, $repos)
+    {
+        /* Delete old relations. */
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq('project')
+            ->andWhere('AID')->eq($projectID)
+            ->andWhere('BType')->eq('repo')
+            ->exec();
+
+        /* Insert new relations. */
+        foreach($repos as $repoID)
+        {
+            $newRelation = new stdclass;
+            $newRelation->AType = 'project';
+            $newRelation->AID   = $projectID;
+            $newRelation->BType = 'repo';
+            $newRelation->BID   = $repoID;
+
+            $this->dao->insert(TABLE_RELATION)->data($newRelation)->exec();
+        }
+    }
+
+    /**
+     * Get linked repo pairs by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function linkedRepoPairs($projectID)
+    {
+        $repoIDList = $this->dao->select('BID')->from(TABLE_RELATION)
+            ->where('AType')->eq('project')
+            ->andWhere('AID')->eq($projectID)
+            ->andWhere('BType')->eq('repo')
+            ->fetchPairs('BID', 'BID');
+
+
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($repoIDList)
+            ->fetchPairs('id', 'name');
+
+        return $repos;
     }
 }

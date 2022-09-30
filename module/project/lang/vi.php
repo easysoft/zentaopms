@@ -51,6 +51,9 @@ $lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
 $lang->project->testreport        = 'Testreport';
 $lang->project->selectProgram     = 'Program filtering';
 $lang->project->teamMember        = 'Team Member';
+$lang->project->manageRepo        = 'Manage Repo';
+$lang->project->linkedRepo        = 'Link Repo';
+$lang->project->unlinkedRepo      = 'Unlink Repo';
 
 /* Fields. */
 $lang->project->common             = 'Project';

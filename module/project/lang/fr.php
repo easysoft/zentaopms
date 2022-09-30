@@ -64,6 +64,9 @@ $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
 $lang->project->ignore             = 'Ignorer';
+$lang->project->manageRepo         = 'Manage Repo';
+$lang->project->linkedRepo         = 'Link Repo';
+$lang->project->unlinkedRepo       = 'Unlink Repo';
 
 /* Fields. */
 $lang->project->common             = 'Projets';

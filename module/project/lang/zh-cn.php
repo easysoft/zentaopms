@@ -64,6 +64,9 @@ $lang->project->budgetNumber       = '『预算』金额必须为数字。';
 $lang->project->budgetGe0          = '『预算』金额必须大于等于0。';
 $lang->project->allProjects        = '所有项目';
 $lang->project->ignore             = '忽略';
+$lang->project->manageRepo         = '关联代码库';
+$lang->project->linkedRepo         = '已关联代码库';
+$lang->project->unlinkedRepo       = '未关联代码库';
 
 /* Fields. */
 $lang->project->common             = '项目';
