@@ -58,6 +58,8 @@ $(function()
         saveCustomFields('createFields');
         return false;
     });
+
+    $(document).on('change', '#module', loadURS);
 });
 
 /**
@@ -75,6 +77,30 @@ function loadAssignedTo()
         $('#assignedTo').replaceWith(data);
         $('#assignedToBox .picker').remove();
         $('#assignedTo').picker();
+    });
+}
+
+/**
+ * Load URS.
+ *
+ * @access public
+ * @return void
+ */
+function loadURS()
+{
+    var productID       = $('#product').val();
+    var branchID        = $('#branch').val();
+    var moduleID        = $('#module').val();
+    var requirementList = $('#URS').val();
+    requirementList     = requirementList ? requirementList.join(',') : '';
+
+    var link = createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
+
+    $.post(link, function(data)
+    {
+        $('#URS').replaceWith(data);
+        $('#URS_chosen').remove();
+        $('#URS').chosen();
     });
 }
 
