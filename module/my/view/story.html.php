@@ -120,7 +120,8 @@
                     echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
                 }
 
-                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
 
                 $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview'));
@@ -181,7 +182,9 @@
                 {
                     common::printIcon('story', 'review', $vars, $child, 'list', 'search', '', 'iframe', true);
                 }
-                common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+
+                $title = $child->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
 
                 $canSubmitReview = (strpos('draft,changing', $child->status) !== false and common::hasPriv('story', 'submitReview'));

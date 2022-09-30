@@ -113,7 +113,9 @@
                 {
                     echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
                 }
-                echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+
+                $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                echo common::buildIconButton('story', 'recall', "$vars&from=list&confirm=no&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                 echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
 
                 $storyType       = 'storyType=requirement';
@@ -175,7 +177,8 @@
                         common::printIcon('story', 'review', "$vars&from=product&storyType=story", $child, 'list', 'search', '', 'iframe', true);
                     }
 
-                    common::printIcon('story', 'recall', "$vars&from=list&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
+                    $title = $child->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                    common::printIcon('story', 'recall', "$vars&from=list&confirm=no&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                     common::printIcon('story', 'edit',   "$vars&from=default&storyType=story", $child, 'list');
                     $storyType       = 'storyType=story';
                     $canChange       = common::hasPriv('story', 'change', '', $storyType);
