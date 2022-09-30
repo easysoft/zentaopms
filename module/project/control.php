@@ -1990,6 +1990,13 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
+            /* Delete shadow product.*/
+            if(!$project->hasProduct)
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
+            }
+
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
