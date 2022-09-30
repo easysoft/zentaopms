@@ -117,7 +117,7 @@ $(function()
     $(document).on('mousedown', function(e)
     {
         var $target = $(e.target);
-        var $toggle = $target.closest('.popover, .project-popover');
+        var $toggle = $target.closest('.popover, .execution-popover');
         if(!$toggle.length) $('.popover.right').hide();
     });
 });
