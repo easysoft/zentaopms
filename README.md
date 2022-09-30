@@ -32,20 +32,20 @@ Besides, with ZenTao's feature-rich modules including data visualization, measur
 
 # Official Website
 
-- Website
-- Manual
-- FAQ
-- Extension
+- [Website](https://www.zentao.pm/)
+- [Manual](https://www.zentao.pm/book/)
+- [FAQ](https://www.zentao.pm/page/faq.html)
+- [Extension](https://www.zentao.pm/extension-browse.html)
 
 # Demo
 
-- ZenTao Opensource
-- ZenTao Biz
-- ZenTao Max
+- [ZenTao Opensource](https://demo15.zentao.pm)
+- [ZenTao Biz](https://biz.demo15.zentao.pm)
+- [ZenTao Max](https://max.demo15.zentao.pm)
 
 # Security Vulnerabilities
 
-If you find any vulnerability in ZenTao system please feel free to contact us at  chunsheng@easycorp.ltd. We do appreciate your time and effort.
+If you find any vulnerability in ZenTao system please feel free to contact us at chunsheng@easycorp.ltd. We do appreciate your time and effort.
 
 # License
 
