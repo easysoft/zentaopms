@@ -181,15 +181,15 @@ $config->testcase->datatable->fieldList['lastRunner']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['lastRunner']['width']    = '70';
 $config->testcase->datatable->fieldList['lastRunner']['required'] = 'no';
 
-$config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
-$config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunResult']['width']    = '70';
-$config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
-
 $config->testcase->datatable->fieldList['lastRunDate']['title']    = 'lastRunDate';
 $config->testcase->datatable->fieldList['lastRunDate']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['lastRunDate']['width']    = '90';
 $config->testcase->datatable->fieldList['lastRunDate']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
+$config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['lastRunResult']['width']    = '70';
+$config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->testcase->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
