@@ -1332,6 +1332,9 @@ function refreshBudgetUnit(data)
 
 /**
  * Handle radio logic of Kanban column width setting.
+ * 
+ * @access public
+ * @return void
  */
 
 function handleKanbanWidthAttr ()
