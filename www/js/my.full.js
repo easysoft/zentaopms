@@ -99,6 +99,12 @@
     }
 
     init();
+
+    /* Hide context menu when window is scroll. */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 }(jQuery));
 
 /**
@@ -1332,7 +1338,7 @@ function refreshBudgetUnit(data)
 
 /**
  * Handle radio logic of Kanban column width setting.
- * 
+ *
  * @access public
  * @return void
  */

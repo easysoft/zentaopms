@@ -100,7 +100,8 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
-    $('.project-popover').on('click', function(e)
+
+    $('.execution-popover').on('click', function(e)
     {
         e.stopPropagation();
         var showPopover = $(this).next().css('display') == 'block';
@@ -108,7 +109,7 @@ $(function()
         if(!showPopover) $(this).next().show();
     });
 
-    $('.project-link').on('click', function()
+    $('.execution-link').on('click', function()
     {
         $('.popover.right').hide();
     });

@@ -1065,7 +1065,7 @@ class taskModel extends model
         }
 
         /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
-        if(!$this->post->assignedTo and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
+        if(!$this->post->assignedTo and !empty($oldTask->team) and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)

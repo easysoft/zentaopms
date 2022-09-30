@@ -9,7 +9,7 @@ $(function()
 
     $(":checkbox[name^='productIDList']").on('click', function()
     {
-        updateStatistic()
+        updateStatistic();
     });
 
     $(".check-all").on('click', function()
@@ -22,7 +22,17 @@ $(function()
         {
             $(":checkbox[name^='productIDList']").prop('checked', true);
         }
-        updateStatistic()
+        updateStatistic();
+    });
+
+    $('.main-table').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProductBatchEdit') == 1) updateStatistic();
+    });
+
+    $('#productListForm .table').on('click', '.sortable tr', function(e)
+    {
+        if($.cookie('showProductBatchEdit') != 1) e.stopPropagation();
     });
 });
 
@@ -37,15 +47,15 @@ function setCheckbox()
 {
     $('#productListForm .checkbox-primary, #productListForm .check-all').hide();
     $('#productListForm .product-id').addClass('hidden');
+    $(":checkbox[name^='productIDList']").prop('checked', false);
+    $('.check-all, .sortable tr').removeClass('checked');
     if($.cookie('showProductBatchEdit') == 1)
     {
         $('#productListForm .checkbox-primary, #productListForm .check-all').show();
     }
     else
     {
-        $(":checkbox[name^='productIDList']").prop('checked', false);
         $('.table-actions').hide();
-        $('.check-all').removeClass('checked');
         $('#productListForm .product-id').removeClass('hidden');
     }
 }

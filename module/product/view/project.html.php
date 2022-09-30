@@ -53,7 +53,7 @@
           <th class='c-status'><?php echo $lang->project->status;?></th>
           <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
-          <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
+          <th class="c-budget text-right"><?php echo $lang->project->budget;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
           <th class='c-date'><?php echo $lang->project->end;?></th>
           <th class="c-number text-right"><?php echo $lang->project->estimate;?></th>
@@ -93,8 +93,7 @@
           </td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
-          <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
-          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
+          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis text-right"><?php echo $budgetTitle;?></td>
           <td class='padding-right text-left'><?php echo $project->begin;?></td>
           <td class='padding-right text-left'><?php echo $project->end;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>

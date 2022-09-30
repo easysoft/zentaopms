@@ -329,7 +329,7 @@ EOF;
     {
         $this->loadModel('story');
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -394,7 +394,7 @@ EOF;
     {
         /* Save session. */
         $this->loadModel('story');
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
