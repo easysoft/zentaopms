@@ -1184,7 +1184,7 @@ class productplanModel extends model
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
-            if(($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
             {
                 $menu .= "<div class='dividing-line'></div>";
             }
@@ -1212,7 +1212,7 @@ class productplanModel extends model
 
         $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
-        if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+        if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
         {
             $menu .= "<div class='dividing-line'></div>";
         }
