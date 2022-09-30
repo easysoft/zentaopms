@@ -10,6 +10,8 @@ function setCheckbox()
 {
     $('#productListForm .c-checkbox, #productListForm .check-all').hide();
     $('.c-name').css('border-left', 'none');
+    $(":checkbox[name^='productIDList']").prop('checked', false);
+    $('.check-all, .program-checkbox, .row-product').removeClass('checked');
     if($.cookie('showProductBatchEdit') == 1)
     {
         $('#productListForm .c-checkbox, #productListForm .check-all').show();
@@ -17,9 +19,7 @@ function setCheckbox()
     }
     else
     {
-        $(":checkbox[name^='productIDList']").prop('checked', false);
         $('.table-actions').hide();
-        $('.check-all').removeClass('checked');
         $('#productsCount').show();
     }
 }
@@ -160,8 +160,19 @@ $(function()
         }
     });
 
+    $('.main-table').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProductBatchEdit') == 1) updateStatistic();
+    });
+
+    $('#productTableList').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProductBatchEdit') != 1) e.stopPropagation();
+    });
+
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
+        if($.cookie('showProductBatchEdit') != 1) return;
         if($(e.target).closest('.table-nest-toggle,a').length) return;
 
         var $row      = $(this);

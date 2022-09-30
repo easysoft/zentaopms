@@ -156,11 +156,11 @@
               }
               else
               {
-                  $executionHtml  = '<div class="popover right"  id="taskPopover">';
+                  $executionHtml  = '<div class="popover right">';
                   $executionHtml .= '<div class="arrow"></div>';
                   $executionHtml .= '<div class="popover-content">';
                   $executionHtml .= '<ul class="execution-tip">';
-                  foreach($plan->executions as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
+                  foreach($plan->projects as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
                   $executionHtml .= '</ul>';
                   $executionHtml .= '</div>';
                   $executionHtml .= '</div>';
