@@ -56,9 +56,9 @@ ZenTao is an opensource project management software licensed on [AGPL](https://w
 
 ZenTao Biz, ZenTao Max, and ZenTao Cloud are available for you if ZenTao Opensource can not meet your feature requirement.
 
-## ZenTao Biz
+> [Learn more about the comparison between ZenTao Opensource, ZenTao Biz, and ZenTao Max](https://www.zentao.pm/page/vs.html).
 
-> Learn more about the comparison between ZenTao Biz and ZenTao Opensource.
+## ZenTao Biz
 
 ZenTao Biz has more powerful functions based on the ZenTao Open Source. It also expands horizontally based on the project management process and covers more roles. 
 
@@ -68,15 +68,13 @@ On the other hand, ZenTao Biz has more added functions such as operation and mai
 
 ## ZenTao Max
 
-> Learn more about the comparison between ZenTao Opensource, ZenTao Biz, and ZenTao Max.
-
 ZenTao Max, the most advanced ZenTao version, allows users to easily monitor and track the entire process of project management. It also helps improve the robustness and maturity of enterprises to greatly increase the probability of project success.
 
 The features such as process control, process definition, project measurement, issue management, risk management, quality assurance, and project reporting are strong enhanced in ZenTao Max. It's also supported the implementation of CMMI standards, help enterprises pass CMMI assessment.
 
 ## ZenTao Cloud
 
-> Learn more about [ZenTao Cloud]().
+> Learn more about [ZenTao Cloud](https://www.zentao.pm/page/saas-pricing.html).
 
 ZenTao Cloud provides a flexible solution for users who prefer the SaaS service and running businesses anywhere and anytime. It's easy to use and super convenient in that it only needs one click to activate an account. Besides, ZenTao Cloud requires no maintenance and will keep updating automatically. With HTTPS agreement, your data will keep safe and no worry about information disclosure. Even better, data on ZenTao Cloud will backup automatically and users can download the backup file at any time.
 
