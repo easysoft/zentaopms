@@ -7121,12 +7121,13 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `module` mediumint(8) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL,
-  `solution` varchar(255) NOT NULL,
   `desc` text NOT NULL,
   `openedBuild` varchar(255) NOT NULL,
   `assignedTo` varchar(255) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `realStarted` datetime NOT NULL,
+  `startBy` varchar(255) NOT NULL,
+  `startDate` datetime NOT NULL,
   `deadline` date NOT NULL,
   `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `estimate` float unsigned NOT NULL,
@@ -7138,11 +7139,13 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `activatedCount` int(10) NOT NULL,
   `activatedBy` varchar(30) NOT NULL,
   `activatedDate` datetime NOT NULL,
-  `finishedBy` varchar(30) NOT NULL,
-  `finishedDate` datetime NOT NULL,
   `closedBy` varchar(30) NOT NULL,
   `closedDate` datetime NOT NULL,
-  `closedReason` varchar(30) NOT NULL,
+  `finishedBy` varchar(30) NOT NULL,
+  `finishedDate` datetime NOT NULL,
+  `resolvedBy` varchar(30) NOT NULL,
+  `resolvedDate` datetime NOT NULL,
+  `resolution` varchar(1000) NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `keyword` varchar(255) NOT NULL,
@@ -7669,6 +7672,7 @@ ADD `grade` tinyint(3) unsigned NOT NULL DEFAULT '0' AFTER `path`,
 ADD `order` smallint(5) unsigned NOT NULL DEFAULT '0' AFTER `grade`;
 
 ALTER TABLE `zt_product` ADD `feedback` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `RD`;
+ALTER TABLE `zt_product` ADD `ticket` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `feedback`;
 
 ALTER TABLE `zt_leave`       ADD `level` tinyint(3) NOT NULL;
 ALTER TABLE `zt_leave`       ADD `assignedTo` varchar(30) NOT NULL;
