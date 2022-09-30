@@ -69,7 +69,6 @@ function setCheckbox()
 function addStatistic()
 {
     var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-    console.log(checkedLength)
     if(checkedLength > 0)
     {
         var summary = checkedProducts.replace('%s', checkedLength);
