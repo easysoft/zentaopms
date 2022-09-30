@@ -1330,6 +1330,10 @@ function refreshBudgetUnit(data)
     }
 }
 
+/**
+ * Handle radio logic of Kanban column width setting.
+ */
+
 function handleKanbanWidthAttr ()
 {
     $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
