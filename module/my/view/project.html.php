@@ -36,13 +36,13 @@
         <tr>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
+          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <?php if($status == 'openedbyme'):?>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
           <?php endif;?>
+          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
           <th class='c-date c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
           <th class='c-date c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
-          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
-          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -53,13 +53,6 @@
           <td class='c-name text-left' title='<?php echo $project->name?>'>
             <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project' title='{$project->name} ({$this->lang->project->{$project->model}})'");?>
           </td>
-          <?php if($status == 'openedbyme'):?>
-          <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
-          <?php endif;?>
-          <td class='text-left'><?php echo $project->begin;?></td>
-          <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
-          <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
-          <td class='text-right c-budget'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
           <td class='c-manager'>
             <?php if(!empty($project->PM)):?>
             <?php $userName = zget($users, $project->PM);?>
@@ -68,6 +61,13 @@
             <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
             <?php endif;?>
           </td>
+          <?php if($status == 'openedbyme'):?>
+          <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+          <?php endif;?>
+          <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
+          <td class='text-right c-budget'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
+          <td class='text-left'><?php echo $project->begin;?></td>
+          <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
           <td class='c-actions'>
             <?php if($project->status == 'wait' || $project->status == 'suspended') common::printIcon('project', 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);?>
             <?php if($project->status == 'doing')  common::printIcon('project', 'close',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe', true);?>
