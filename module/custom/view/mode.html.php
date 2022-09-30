@@ -24,7 +24,7 @@
     <table class='table table-form'>
       <tr>
         <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
-        <td class='w-200px'>
+        <td class='w-300px'>
           <p>
             <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : '';?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
             <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : '';?> id="modenew"><?php echo $lang->upgrade->to18Mode['new'];?></label>
