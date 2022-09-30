@@ -61,7 +61,6 @@ class testcaseModel extends model
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->stripTags($this->config->testcase->editor->create['id'], $this->config->allowedTags)
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
@@ -78,7 +77,6 @@ class testcaseModel extends model
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
-        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
         if(!$this->dao->isError())
         {
