@@ -1373,6 +1373,13 @@ $(function()
         });
     }, 10000);
     resetKanbanHeight();
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth =  kanbanMinColWidth *0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 });
 
 $('#type').change(function()
