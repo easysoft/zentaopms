@@ -61,11 +61,11 @@
           <th class='c-task'>     <?php common::printOrderLink('task',          $orderBy, $vars, $lang->testtask->common);?></th>
           <?php endif;?>
           <th class='c-type'>     <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='c-status'>   <?php echo $lang->statusAB;?></th>
           <th class='c-user'>     <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->testcase->openedByAB);?></th>
           <th class='c-user'>     <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='c-full-date'><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='c-result'>   <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='c-status'>   <?php echo $lang->statusAB;?></th>
           <th class='c-actions-5 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -94,11 +94,11 @@
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
+          <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
           <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-          <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)
