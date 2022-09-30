@@ -54,6 +54,7 @@ $lang->execution->end                 = 'Planned End';
 $lang->execution->dateRange           = 'Plan Duration';
 $lang->execution->realBeganAB         = 'Actual Begin';
 $lang->execution->realEndAB           = 'Actual End';
+$lang->execution->teamCount           = 'number of people';
 $lang->execution->realBegan           = 'Actual Begin';
 $lang->execution->realEnd             = 'Actual End';
 $lang->execution->to                  = 'To';

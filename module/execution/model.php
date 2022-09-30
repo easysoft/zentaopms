@@ -1531,6 +1531,15 @@ class executionModel extends model
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
 
+        /* Get the number of execution teams. */
+        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in(array_keys($executions))
+            ->andWhere('t1.type')->ne('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchAll('root');
+
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         /* Process executions. */
@@ -1557,6 +1566,7 @@ class executionModel extends model
 
             /* Process the hours. */
             $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
+            $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
 
             if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
@@ -4841,6 +4851,12 @@ class executionModel extends model
                 if(!empty($execution->children)) $class .= ' has-child';
             }
 
+            if($id == 'teamCount')
+            {
+                $title = " title='{$execution->teamCount}'";
+                $class .= ' text-right';
+            }
+
             if($id == 'project') $title = " title='{$execution->projectName}'";
             if($id == 'code')    $title = " title='{$execution->code}'";
 
@@ -4908,6 +4924,9 @@ class executionModel extends model
                 break;
             case 'begin':
                 echo helper::isZeroDate($execution->begin) ? '' : $execution->begin;
+                break;
+            case 'teamCount':
+                echo $execution->teamCount;
                 break;
             case 'end':
                 echo helper::isZeroDate($execution->end) ? '' : $execution->end;
