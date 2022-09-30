@@ -2462,6 +2462,38 @@ class story extends control
     }
 
     /**
+     * AJAX: get the user requirements of the product.
+     *
+     * @param  int    $productID
+     * @param  string $labelName
+     * @param  bool   $isMultiple
+     * @param  int    $defaultID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductURS($productID, $labelName = '', $isMultiple = false, $defaultID = '')
+    {
+        $requirements = array('0' => '') + $this->story->getRequirements($productID);
+        $labelName    = $isMultiple ? $labelName . '[]' : $labelName;
+        $misc         = $isMultiple ? 'class="form-control" multiple' : 'class="form-control"';
+        return print(html::select($labelName, $requirements, $defaultID, $misc));
+    }
+
+    /**
+     * AJAX: get the parent story.
+     *
+     * @param  int    $productID
+     * @param  string $labelName
+     * @access public
+     * @return string
+     */
+    public function ajaxGetParentStory($productID, $labelName = '')
+    {
+        $stories = $this->story->getParentStoryPairs($productID);
+        return print(html::select($labelName, $stories, 0, 'class="form-control"'));
+    }
+
+    /**
      * The report page.
      *
      * @param  int    $productID
