@@ -1450,8 +1450,8 @@ function initKanban($kanban)
         data:              groupBy == 'default' ? region.groups : kanbanData[groupBy],
         maxColHeight:      'auto',
         calcColHeight:     calcColHeight,
-        minColWidth:       typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
-        maxColWidth:       typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
+        minColWidth:       typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:       typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
         displayCards:      typeof window.displayCards === 'number' ? window.displayCards : 2,
@@ -1474,10 +1474,10 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
-    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth;
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
     if(kanbanMinColWidth < 190)
     {
-        var miniColWidth =  kanbanMinColWidth *0.2;
+        var miniColWidth = kanbanMinColWidth * 0.2;
         $('.kanban-header-col>.title>span:not(.text)').hide();
         $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
     }
