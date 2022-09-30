@@ -107,8 +107,9 @@
 </form>
 <style>
 th.table-nest-title {padding-left: 12px !important;}
-th.table-nest-title > .table-nest-toggle-global {left: auto; right: 10px; font-size: 12px; color: #888fa1;}
-th.table-nest-title > .table-nest-toggle-global:before {width: 100%;}
+th.table-nest-title > .table-nest-toggle-global {left: auto; right: 6px; font-size: 12px; color: #888fa1;}
+th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !important;}
+#programTableList td.c-name span.icon.table-nest-toggle {cursor: pointer;}
 #programTableList.sortable-sorting > tr {opacity: 0.7}
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
