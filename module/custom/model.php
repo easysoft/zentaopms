@@ -951,7 +951,8 @@ class customModel extends model
      */
     public function hasAssetlibData()
     {
-        return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        return false;
     }
 
     /**
