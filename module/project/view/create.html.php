@@ -52,7 +52,7 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <tr>
+        <tr class='<?php echo !empty($globalDisableProgram) ? 'hidden' : '';?>'>
           <th class='w-130px'><?php echo $lang->project->parent;?></th>
           <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' data-lastSelected=$programID onchange='setParentProgram(this.value)' $disabled");?></td>
@@ -63,13 +63,20 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-130px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
+          <td></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
+        </tr>
+        <?php endif;?>
+        <?php if($model != 'waterfall'):?>
+        <tr>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, '1'));?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -240,7 +247,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php foreach ($copyProjects as $id => $name):?>
+      <?php foreach($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endforeach;?>

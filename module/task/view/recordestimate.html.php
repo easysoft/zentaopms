@@ -21,7 +21,11 @@ if(!empty($members) && $task->mode == 'linear')
     $isCurrent   = false;
     foreach($task->team as $taskTeam)
     {
-        if($isCurrent) $nextAccount = $taskTeam->account;
+        if($isCurrent)
+        {
+            $nextAccount = $taskTeam->account;
+            break;
+        }
         if($task->assignedTo == $taskTeam->account and $taskTeam->account == $app->user->account and $taskTeam->status != 'done') $isCurrent = true;
     }
     if($nextAccount) $confirmRecord = sprintf($lang->task->confirmTransfer, zget($users, $nextAccount));

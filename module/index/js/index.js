@@ -26,7 +26,7 @@
             url:      manualUrl || $helpLink.attr('href'),
             external: true,
             text:     manualText || $helpLink.text(),
-            appUrl:  config.webRoot + '#app=help'
+            appUrl:   config.webRoot + '#app=help'
         };
         var $menuMainNav = $('#menuMainNav').empty();
         window.appsMenuItems.forEach(function(item)

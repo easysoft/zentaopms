@@ -56,9 +56,8 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Enable or Disable Code';
-
-if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = 'Execution';
+$lang->custom->defaultProgram       = 'Default program';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -89,7 +88,7 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
+$lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -104,7 +103,7 @@ $lang->custom->object['block']     = 'Block';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
@@ -237,25 +236,26 @@ $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = 'Product - Project';
-    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
-    $lang->custom->sprintConceptList[2] = 'Product - Sprint';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
-}
+$lang->custom->sprintConceptList[0] = 'Program Product Iteration';
+$lang->custom->sprintConceptList[1] = 'Program Product Sprint';
 
 $lang->custom->workingList['full'] = 'Application Lifecycle Management';
 
-$lang->custom->menuTip          = 'Click to show/hide the menu. Drag to switch display order.';
-$lang->custom->saveFail         = 'Failed to save!';
-$lang->custom->page             = ' Page';
-$lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
-$lang->custom->changeModeTips   = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
+$lang->custom->menuTip        = 'Click to show/hide the menu. Drag to switch display order.';
+$lang->custom->saveFail       = 'Failed to save!';
+$lang->custom->page           = ' Page';
+$lang->custom->changeModeTips = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
+
+$lang->custom->changeModeTitleTips['new']   = 'Please double confirm to switch to New mode.';
+$lang->custom->changeModeTitleTips['lean']  = 'Please double confirm to switch to Lean mode.';
+$lang->custom->changeModeContentTips['new'] = 'The new mode is suitable for medium and large R&D teams. After switching the new mode, the system will enable functions such as program sets.';
+
+$lang->custom->hasMoreData['yes'] = 'After switching to lean mode, the system will close the program function, and the related functions of the program will be hidden.';
+$lang->custom->hasMoreData['no']  = 'After switching to lean mode, the system will close functions such as program sets, %s.';
+
+$lang->custom->needClosedFunctions['waterfall'] = 'Waterfall';
+$lang->custom->needClosedFunctions['URStory']   = 'User Story';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = 'Assetlib';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
@@ -273,9 +273,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview']   = "1. Which combination of management fits your company?";
-$lang->custom->conceptQuestions['URAndSR']    = "2. Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
-$lang->custom->conceptQuestions['storypoint'] = "3. Which of the following units is your company using for scale estimation?";
+$lang->custom->conceptQuestions['overview']   = "Which combination of management fits your company?";
+$lang->custom->conceptQuestions['URAndSR']    = "Do you want to use the concept of {$lang->URCommon} and {$lang->SRCommon} in ZenTao?";
+$lang->custom->conceptQuestions['storypoint'] = "Which of the following units is your company using for scale estimation?";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

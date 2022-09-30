@@ -1744,7 +1744,7 @@ class taskModel extends model
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = (!empty($oldTask->team) and $currentTeam) ? $estimate->consumed - $currentTeam->consumed : $estimate->consumed - $oldTask->consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
-        $estimateID = $this->addTaskEstimate($estimate);
+        if($estimate->consumed > 0) $estimateID = $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team) and $currentTeam)
         {
@@ -1754,7 +1754,7 @@ class taskModel extends model
             $team->status   = empty($team->left) ? 'done' : 'doing';
 
             $this->dao->update(TABLE_TASKTEAM)->data($team)->where('id')->eq($currentTeam->id)->exec();
-            if($oldTask->mode == 'linear') $this->updateEstimateOrder($estimateID, $currentTeam->order);
+            if($oldTask->mode == 'linear' and !empty($estimateID)) $this->updateEstimateOrder($estimateID, $currentTeam->order);
 
             $task = $this->computeHours4Multiple($oldTask, $task);
             if($team->status == 'done')
@@ -2242,6 +2242,7 @@ class taskModel extends model
             ->add('id', $taskID)
             ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
+            ->setDefault('assignedTo', '')
             ->setDefault('status', 'doing')
             ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
             ->setDefault('finishedDate, canceledDate, closedDate', '0000-00-00 00:00:00')
@@ -2885,7 +2886,7 @@ class taskModel extends model
         $today       = helper::today();
 
         if($estimate->date > $today) return dao::$errors[] = $this->lang->task->error->date;
-        if($estimate->consumed < 0)  return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->record, '0');
+        if($estimate->consumed <= 0) return dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
         if($estimate->left < 0)      return dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
         $task = $this->getById($oldEstimate->objectID);

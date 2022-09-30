@@ -251,6 +251,9 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
 
+global $config;
+if(strpos(",$config->disabledFeatures,", ',waterfall,') !== false) unset($lang->project->modelList['waterfall']);
+
 $lang->project->featureBar['browse']['all']       = '所有';
 $lang->project->featureBar['browse']['undone']    = '未完成';
 $lang->project->featureBar['browse']['wait']      = '未开始';
@@ -262,6 +265,9 @@ $lang->project->featureBar['build']['all'] = '所有版本';
 
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
+
+$lang->project->multipleList['1'] = '是';
+$lang->project->multipleList['0'] = '否';
 
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
@@ -276,6 +282,13 @@ $lang->project->kanbanAclList['open']    = "公开 (有项目视图权限即可�
 $lang->project->kanbanSubAclList['private'] = "私有 (只有项目负责人、团队成员可访问)";
 $lang->project->kanbanSubAclList['open']    = "公开 (有项目视图权限即可访问)";
 $lang->project->kanbanSubAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、项目负责人、团队成员可访问）';
+
+global $config;
+if($config->systemMode != 'new')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
 
 $lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
 $lang->project->authList['reset']  = '重新定义 (只取项目权限)';
@@ -320,9 +333,9 @@ $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';
 $lang->project->programTitle['end']  = '只显示最后一级项目集';
 
-$lang->project->accessDenied        = '您无权访问该项目！';
-$lang->project->chooseProgramType   = '选择项目管理方式';
-$lang->project->cannotCreateChild   = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
+$lang->project->accessDenied         = '您无权访问该项目！';
+$lang->project->chooseProgramType    = '选择项目管理方式';
+$lang->project->cannotCreateChild    = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->project->hasChildren          = '该项目有子项目存在，不能删除。';
 $lang->project->confirmDelete        = '您确定删除项目“%s”吗？';
 $lang->project->cannotChangeToCat    = "该项目已经有实际的内容，无法修改为父项目";
@@ -341,3 +354,5 @@ $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户�
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+
+$lang->project->multiple = "多{$lang->executionCommon}项目";

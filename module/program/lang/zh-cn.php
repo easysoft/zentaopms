@@ -163,3 +163,5 @@ $lang->program->kanban->doingExecutions = '进行中的执行';
 $lang->program->kanban->normalReleases  = '正常的发布';
 
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
+
+$lang->program->defaultProgram = '默认项目集';

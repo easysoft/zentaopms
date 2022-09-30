@@ -56,9 +56,8 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
-
-if($config->systemMode == 'new') $lang->custom->execution = '执行';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+$lang->custom->execution            = '执行';
+$lang->custom->defaultProgram       = '选择默认项目集';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -89,7 +88,7 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
-if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
+$lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['kanban']    = $lang->custom->kanban;
@@ -104,7 +103,7 @@ $lang->custom->object['block']     = '区块';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
 
-if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
 $lang->custom->menuOrder[15] = 'execution';
 $lang->custom->menuOrder[20] = 'kanban';
@@ -237,25 +236,26 @@ $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 
 global $config;
-if($config->systemMode == 'classic')
-{
-    $lang->custom->sprintConceptList[0] = '产品 - 项目';
-    $lang->custom->sprintConceptList[1] = '产品 - 迭代';
-    $lang->custom->sprintConceptList[2] = '产品 - 冲刺';
-}
-else
-{
-    $lang->custom->sprintConceptList[0] = '项目 - 产品 - 迭代';
-    $lang->custom->sprintConceptList[1] = '项目 - 产品 - 冲刺';
-}
+$lang->custom->sprintConceptList[0] = '项目 产品 迭代';
+$lang->custom->sprintConceptList[1] = '项目 产品 冲刺';
 
 $lang->custom->workingList['full'] = '完整研发管理工具';
 
-$lang->custom->menuTip          = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
-$lang->custom->saveFail         = '保存失败！';
-$lang->custom->page             = '页面';
-$lang->custom->changeClassicTip = '切换为老版本的习惯后，系统将取消项目集功能。';
-$lang->custom->changeModeTips   = '历史删除数据不参与数据归并流程，切换模式后将不支持还原，请知悉';
+$lang->custom->menuTip        = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
+$lang->custom->saveFail       = '保存失败！';
+$lang->custom->page           = '页面';
+$lang->custom->changeModeTips = '历史删除数据不参与数据归并流程，切换模式后将不支持还原，请知悉';
+
+$lang->custom->changeModeTitleTips['new']   = '您确定要切换到综合模式吗？';
+$lang->custom->changeModeTitleTips['lean']  = '您确定要切换到迅捷模式吗？';
+$lang->custom->changeModeContentTips['new'] = '综合模式适用于中大型研发团队，切换综合模式后，系统将启用项目集等功能。';
+
+$lang->custom->hasMoreData['yes'] = '切换到迅捷模式后，系统将关闭项目集功能，项目集的相关功能将会被隐藏。';
+$lang->custom->hasMoreData['no']  = '切换到迅捷模式后，系统将关闭项目集，%s等功能。';
+
+$lang->custom->needClosedFunctions['waterfall'] = '瀑布项目';
+$lang->custom->needClosedFunctions['URStory']   = '用户需求';
+if($config->edition == 'max') $lang->custom->needClosedFunctions['assetLib'] = '资产库';
 
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';
@@ -273,9 +273,9 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['execution']   = $lang->custom->execution;
 
-$lang->custom->conceptQuestions['overview']   = "1. 下述哪种组合方式更适合您公司的管理现状？";
-$lang->custom->conceptQuestions['URAndSR']    = "2. 是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
-$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用以下哪种单位来做规模估算？";
+$lang->custom->conceptQuestions['overview']   = "下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['URAndSR']    = "是否启用{$lang->URCommon}和{$lang->SRCommon}概念？";
+$lang->custom->conceptQuestions['storypoint'] = "您公司是在使用以下哪种单位来做规模估算？";
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();

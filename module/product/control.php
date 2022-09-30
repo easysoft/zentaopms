@@ -415,8 +415,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($programID) $lines = array('') + $this->product->getLinePairs($programID);
-        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+        if($programID and $this->config->systemMode == 'new') $lines = array('') + $this->product->getLinePairs($programID);
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
 
@@ -560,8 +559,7 @@ class product extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $lines = array();
-        if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
-        if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+        if($product->program and $this->config->systemMode == 'new') $lines = array('') + $this->product->getLinePairs($product->program);
 
         /* Get programs. */
         $programs = $this->loadModel('program')->getTopPairs();
@@ -1273,7 +1271,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Process product structure. */
-        if($this->config->systemMode == 'classic' and $orderBy == 'program_asc') $orderBy = 'line_desc,order_asc';
+        if($this->config->systemMode == 'lean' and $orderBy == 'program_asc') $orderBy = 'order_asc';
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
         $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
@@ -1452,12 +1450,14 @@ class product extends control
             {
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = zget($productLang, $fieldName);
+
                 unset($fields[$key]);
+                if($this->config->systemMode != 'new' and ($fieldName == 'line' or $fieldName == 'program')) unset($fields[$fieldName]);
             }
 
-            $lastProgram = $lastLine = '';
-            $lines = $this->product->getLinePairs();
-            $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
+            $lastProgram  = $lastLine = '';
+            $lines        = $this->product->getLinePairs();
+            $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
                 $product->line = zget($lines, $product->line, '');
@@ -1488,13 +1488,19 @@ class product extends control
                     $rowspan[$i]['rows']['program'] = 1;
                     $programI = $i;
                 }
-                else $rowspan[$programI]['rows']['program'] ++;
+                else
+                {
+                    $rowspan[$programI]['rows']['program'] ++;
+                }
                 if($lastLine == '' or $product->line != $lastLine)
                 {
                     $rowspan[$i]['rows']['line'] = 1;
                     $lineI = $i;
                 }
-                else $rowspan[$lineI]['rows']['line'] ++;
+                else
+                {
+                    $rowspan[$lineI]['rows']['line'] ++;
+                }
                 $lastProgram = $product->program;
                 $lastLine    = $product->line;
 

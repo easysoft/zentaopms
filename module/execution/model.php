@@ -92,7 +92,7 @@ class executionModel extends model
         $this->session->set('execution', $executionID, $this->app->tab);
 
         /* Unset story, bug, build and testtask if type is ops. */
-        if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
+        if($execution and $execution->type == 'stage')
         {
             global $lang;
             $this->app->loadLang('project');
@@ -124,6 +124,8 @@ class executionModel extends model
 
         $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
+
+        $this->loadModel('project')->setNoMultipleMenu($executionID);
     }
 
     /**
@@ -147,30 +149,20 @@ class executionModel extends model
         setCookie("lastExecution", $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentExecution = $this->getById($executionID);
 
-        if($this->config->systemMode == 'new')
+        if(isset($currentExecution->type) and $currentExecution->type == 'program') return;
+
+        if($currentExecution->project) $project = $this->loadModel('project')->getByID($currentExecution->project);
+
+        if(isset($project) and $project->model == 'waterfall')
         {
-            if(isset($currentExecution->type) and $currentExecution->type == 'program') return;
-
-            if($currentExecution->project) $project = $this->loadModel('project')->getByID($currentExecution->project);
-
-            if(isset($project) and $project->model == 'waterfall')
-            {
-                $productID   = $this->loadModel('product')->getProductIDByProject($project->id);
-                $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
-                $currentExecution->name = $productName . '/' . $currentExecution->name;
-            }
+            $productID   = $this->loadModel('product')->getProductIDByProject($project->id);
+            $productName = $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $currentExecution->name = $productName . '/' . $currentExecution->name;
         }
 
         $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=$extra");
         $currentExecutionName = '';
         if(isset($currentExecution->name)) $currentExecutionName = $currentExecution->name;
-
-        if($this->config->systemMode == 'classic')
-        {
-            $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-sprint'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "</div></div>";
-        }
 
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentExecution->type]}'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
@@ -309,27 +301,23 @@ class executionModel extends model
      */
     public function create($copyExecutionID = '')
     {
-        $type = 'sprint';
         $this->lang->execution->team = $this->lang->execution->teamname;
 
-        if($this->config->systemMode == 'new')
+        if(empty($_POST['project']))
         {
-            if(empty($_POST['project']))
-            {
-                dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
-                return false;
-            }
-
-            if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
-            if(dao::isError()) return false;
-
-            /* Determine whether to add a sprint or a stage according to the model of the execution. */
-            $project = $this->loadModel('project')->getByID($_POST['project']);
-            $type    = 'sprint';
-            if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
-
-            $this->config->execution->create->requiredFields .= ',project';
+            dao::$errors['message'][] = $this->lang->execution->projectNotEmpty;
+            return false;
         }
+
+        $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
+        if(dao::isError()) return false;
+
+        /* Determine whether to add a sprint or a stage according to the model of the execution. */
+        $project = $this->loadModel('project')->getByID($_POST['project']);
+        $type    = 'sprint';
+        if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
+
+        $this->config->execution->create->requiredFields .= ',project';
 
         /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
@@ -350,7 +338,6 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->setDefault('type', $type)
@@ -426,7 +413,7 @@ class executionModel extends model
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
 
             /* Update the path. */
-            if($this->config->systemMode == 'new') $this->setTreePath($executionID);
+            $this->setTreePath($executionID);
 
             $this->updateProducts($executionID);
 
@@ -450,7 +437,7 @@ class executionModel extends model
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                 $teamMembers[$account] = $member;
             }
-            if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, $teamMembers);
+            $this->addProjectMembers($sprint->project, $teamMembers);
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
@@ -525,7 +512,7 @@ class executionModel extends model
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
-        if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        if(empty($execution->project) or $execution->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
@@ -811,7 +798,7 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
+                ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
@@ -909,7 +896,7 @@ class executionModel extends model
             ->remove('comment')
             ->get();
 
-        if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->putoff['id'], $this->post->uid);
@@ -1233,15 +1220,12 @@ class executionModel extends model
             $currentExecution     = $this->getById($executionID);
             $currentExecutionName = $currentExecution->name;
 
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->loadModel('project')->getByID($currentExecution->project);
+            $project = $this->loadModel('project')->getByID($currentExecution->project);
 
-                if($project)
-                {
-                    $projectNameTitle = $project->name . ' / ';
-                    $projectNameSpan  = "<span class='text'>{$project->name}</span> / ";
-                }
+            if($project)
+            {
+                $projectNameTitle = $project->name . ' / ';
+                $projectNameSpan  = "<span class='text'>{$project->name}</span> / ";
             }
         }
 
@@ -1292,9 +1276,10 @@ class executionModel extends model
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF(!$this->session->multiple and $this->app->tab == 'execution')->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
-            ->beginIF($projectID and $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($type != 'all' and $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$this->app->user->admin and strpos($mode, 'all') === false)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
@@ -1511,6 +1496,7 @@ class executionModel extends model
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -1565,7 +1551,7 @@ class executionModel extends model
             if($param == 'skipParent')
             {
                 if($execution->parent < 0 and $execution->type == 'stage') unset($executions[$key]);
-                if($this->config->systemMode == 'new' and $execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
+                if($execution->projectName) $execution->name = $execution->projectName . ' / ' . $execution->name;
             }
             else
             {
@@ -2308,28 +2294,13 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        if($this->config->systemMode == 'classic')
-        {
-            $products = $this->loadModel('product')->getProducts($toExecution);
-            if(empty($products)) return array();
-
-            $execution  = $this->getById($toExecution);
-            $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in(array_keys($products))
-                ->andWhere('t2.project')->eq($execution->project)
-                ->fetchGroup('project');
-        }
-        else
-        {
-            $execution       = $this->getById($toExecution);
-            $project         = $this->loadModel('project')->getById($execution->project);
-            $brotherProjects = $this->project->getBrotherProjects($project);
-            $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
-                ->where('project')->in($brotherProjects)
-                ->andWhere('status')->ne('closed')
-                ->fetchPairs('id');
-        }
+        $execution       = $this->getById($toExecution);
+        $project         = $this->loadModel('project')->getById($execution->project);
+        $brotherProjects = $this->project->getBrotherProjects($project);
+        $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('project')->in($brotherProjects)
+            ->andWhere('status')->ne('closed')
+            ->fetchPairs('id');
 
         $branches = str_replace(',', "','", $branches);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
@@ -2829,12 +2800,10 @@ class executionModel extends model
             }
         }
 
-        if($this->config->systemMode == 'new')
-        {
-            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-            $this->session->set('project', $projectID);
-            $this->linkStory($projectID, $planStories, $planProducts);
-        }
+        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        $this->session->set('project', $projectID);
+        $this->linkStory($projectID, $planStories, $planProducts);
+
         $this->linkStory($executionID, $planStories, $planProducts);
     }
 
@@ -2998,7 +2967,7 @@ class executionModel extends model
      */
     public function getCanCopyObjects($projectID = 0)
     {
-        if(empty($projectID) and $this->config->systemMode == 'new') return array();
+        if(empty($projectID)) return array();
 
         $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -4594,11 +4563,10 @@ class executionModel extends model
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
         echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
-        if($this->config->systemMode == 'new')
-        {
-            $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
-            echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
-        }
+
+        $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+        echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
+
         if(empty($execution->children))
         {
             echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
@@ -4981,5 +4949,46 @@ class executionModel extends model
         $this->config->execution->all->search['params']['project']['values'] = $projectPairs + array('all' => $this->lang->execution->allProject);
 
         $this->loadModel('search')->setSearchParams($this->config->execution->all->search);
+    }
+
+    /*
+     * Create default sprint.
+     *
+     * @param  int $projectID
+     * @return int
+     * */
+    public function createDefaultSprint($projectID)
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $post    = $_POST;
+
+        $_POST = array();
+        $_POST['project']     = $projectID;
+        $_POST['name']        = $project->name;
+        $_POST['code']        = $project->code;
+        $_POST['begin']       = $project->begin;
+        $_POST['end']         = $project->end;
+        $_POST['status']      = 'wait';
+        $_POST['days']        = $project->days;
+        $_POST['products']    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+        $_POST['team']        = $project->team;
+        $_POST['teamMembers'] = array($this->app->user->account);
+        $_POST['acl']         = 'open';
+        $_POST['PO']          = '';
+        $_POST['QD']          = '';
+        $_POST['PM']          = '';
+        $_POST['RD']          = '';
+        $_POST['multiple']    = '0';
+
+        $executionID = $this->create();
+        if($project->model == 'kanban')
+        {
+            $execution = $this->getById($executionID);
+            $this->loadModel('kanban')->createRDKanban($execution);
+        }
+
+        $_POST = $post;
+
+        return $executionID;
     }
 }

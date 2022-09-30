@@ -49,40 +49,32 @@ class commonModel extends model
         global $app;
         $rawModule = $app->rawModule;
 
-        if($this->config->systemMode == 'classic')
+        if($rawModule == 'task' or $rawModule == 'effort')
         {
-            if($rawModule == 'task') $this->syncExecutionStatus($objectID);
+            $taskID    = $objectID;
+            $execution = $this->syncExecutionStatus($taskID);
+            $project   = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
         }
-
-        if($this->config->systemMode == 'new')
+        if($rawModule == 'execution')
         {
-            if($rawModule == 'task' or $rawModule == 'effort')
-            {
-                $taskID    = $objectID;
-                $execution = $this->syncExecutionStatus($taskID);
-                $project   = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'execution')
-            {
-                $executionID = $objectID;
-                $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
-                $this->syncExecutionByChild($execution);
-                $project     = $this->syncProjectStatus($execution);
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'project')
-            {
-                $projectID = $objectID;
-                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-                $this->syncProgramStatus($project);
-            }
-            if($rawModule == 'program')
-            {
-                $programID = $objectID;
-                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-                $this->syncProgramStatus($program);
-            }
+            $executionID = $objectID;
+            $execution   = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+            $this->syncExecutionByChild($execution);
+            $project     = $this->syncProjectStatus($execution);
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'project')
+        {
+            $projectID = $objectID;
+            $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $this->syncProgramStatus($project);
+        }
+        if($rawModule == 'program' and $this->config->systemMode == 'new')
+        {
+            $programID = $objectID;
+            $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+            $this->syncProgramStatus($program);
         }
     }
 
@@ -619,15 +611,13 @@ class commonModel extends model
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
-        if($config->edition == 'open') unset($lang->createIcons['effort']);
-        if($config->systemMode == 'classic') unset($lang->createIcons['project'], $lang->createIcons['program']);
+        if($config->edition == 'open')   unset($lang->createIcons['effort']);
+        if($config->systemMode != 'new') unset($lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
+
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            /* Change icon when object type is execution and mode is classic. */
-            if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
-
             $createMethod = 'create';
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
@@ -939,7 +929,6 @@ class commonModel extends model
             if($tab == 'product') $currentMethod = 'all';
         }
 
-        if($config->systemMode == 'classic' and $tab == 'execution') $icon = zget($lang->navIcons, 'project', '');
         $link = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
         $html = $link ? html::a($link, "$icon {$lang->$tab->common}", '', "class='$className' style='padding-top: 2px'") : "$icon {$lang->$tab->common}";
@@ -1174,6 +1163,7 @@ class commonModel extends model
                     {
                         foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                         {
+                            if(empty($dropMenuItem)) continue;
                             if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                             /* Parse drop menu link. */
@@ -1248,9 +1238,9 @@ class commonModel extends model
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
 
         $searchObjects = $lang->searchObjects;
-        if($config->systemMode != 'new') unset($searchObjects['program'], $searchObjects['project']);
+        if($config->systemMode != 'new') unset($searchObjects['program']);
 
-        foreach ($searchObjects as $key => $value)
+        foreach($searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
@@ -1691,7 +1681,6 @@ EOD;
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if($config->systemMode == 'classic' and strtolower($module) == 'project') $module = 'execution';
         if(!commonModel::hasPriv($module, $method, $object, $vars)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
@@ -1999,11 +1988,10 @@ EOD;
             $oldStatus    = zget($old, 'status', '');
             $newStatus    = zget($new, 'status', '');
             $newSubStatus = zget($new, 'subStatus', '');
+            if(empty($moduleName)) $moduleName = $app->getModuleName();
 
             if($oldID and $oldStatus and $newStatus and !$newSubStatus and $oldStatus != $newStatus)
             {
-                if(empty($moduleName)) $moduleName = $app->getModuleName();
-
                 $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
 
@@ -2017,6 +2005,11 @@ EOD;
                     $new->subStatus = $default;
                 }
             }
+
+            $dateFields = array();
+            $sql        = "SELECT `field` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `control` in ('date', 'datetime')";
+            $stmt       = $app->dbh->query($sql);
+            while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
         }
 
         $changes = array();
@@ -2029,24 +2022,29 @@ EOD;
             if(strtolower($key) == 'editedby')        continue;
             if(strtolower($key) == 'editeddate')      continue;
             if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate' and $value == '')     continue;
-            if(strtolower($key) == 'canceleddate' and $value == '')     continue;
-            if(strtolower($key) == 'hangupeddate' and $value == '')     continue;
-            if(strtolower($key) == 'lastcheckeddate' and $value == '')  continue;
-            if(strtolower($key) == 'activateddate' and $value == '')    continue;
-            if(strtolower($key) == 'closeddate'   and $value == '')     continue;
+            if(strtolower($key) == 'finisheddate'     and $value == '') continue;
+            if(strtolower($key) == 'canceleddate'     and $value == '') continue;
+            if(strtolower($key) == 'hangupeddate'     and $value == '') continue;
+            if(strtolower($key) == 'lastcheckeddate'  and $value == '') continue;
+            if(strtolower($key) == 'activateddate'    and $value == '') continue;
+            if(strtolower($key) == 'closeddate'       and $value == '') continue;
             if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
 
-            if(isset($old->$key) and $value != stripslashes($old->$key))
+            if(isset($old->$key))
             {
-                $diff = '';
-                if(substr_count($value, "\n") > 1     or
-                    substr_count($old->$key, "\n") > 1 or
-                    strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
+                if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
+
+                if($value != stripslashes($old->$key))
                 {
-                    $diff = commonModel::diff($old->$key, $value);
+                    $diff = '';
+                    if(substr_count($value, "\n") > 1     or
+                        substr_count($old->$key, "\n") > 1 or
+                        strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
+                    {
+                        $diff = commonModel::diff($old->$key, $value);
+                    }
+                    $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
                 }
-                $changes[] = array('field' => $key, 'old' => $old->$key, 'new' => $value, 'diff' => $diff);
             }
         }
         return $changes;
@@ -3407,7 +3405,7 @@ EOD;
      * @param  int     $objectID
      * @param  array   $params
      */
-    static private function setMenuVarsEx($menu, $objectID, $params = array())
+    static public function setMenuVarsEx($menu, $objectID, $params = array())
     {
         if(is_array($menu))
         {

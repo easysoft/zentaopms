@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
+        
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -110,9 +111,6 @@ class task extends control
             $this->view->regionPairs = $regionPairs;
             $this->view->lanePairs   = $lanePairs;
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
 
         if(!empty($_POST))
         {
@@ -291,7 +289,7 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'noclosed', 0, true);
+        $executions = $this->execution->getByProject($projectID, 'noclosed', 0, true);
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -354,7 +352,7 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
-        elseif($this->app->tab == 'project')
+        elseif($this->app->tab == 'project' and $execution->multiple)
         {
             $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         }
@@ -436,11 +434,8 @@ class task extends control
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Set Custom*/
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-        }
+        $project = $this->project->getByID($execution->project);
+        if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
 
         foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
         {
@@ -603,8 +598,6 @@ class task extends control
             }
         }
 
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
-
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
@@ -619,7 +612,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $this->view->executions    = $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
         $this->display();
     }
 
@@ -730,11 +723,8 @@ class task extends control
         /* Set Custom*/
         if(isset($execution))
         {
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->project->getByID($execution->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
+            $project = $this->project->getByID($execution->project);
+            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
 
             foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
             {
@@ -969,9 +959,6 @@ class task extends control
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
 
-        /* Set menu. */
-        if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
-
         $this->executeHooks($taskID);
 
         $title      = "TASK#$task->id $task->name / $execution->name";
@@ -1038,12 +1025,9 @@ class task extends control
                 return print(js::error(dao::getError()));
             }
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Started';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Started';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
             $this->loadModel('common')->syncPPEStatus($taskID);
@@ -1447,12 +1431,9 @@ class task extends control
             $changes = $this->task->start($taskID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 

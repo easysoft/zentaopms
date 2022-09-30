@@ -103,7 +103,8 @@ class action extends control
 
         $preferredType       = array();
         $moreType            = array();
-        $preferredTypeConfig = $this->config->systemMode == 'new' ? $this->config->action->preferredType->new : $this->config->action->preferredType->classic;
+        $preferredTypeConfig = $this->config->action->preferredType->new;
+        if($this->config->systemMode == 'lean') $preferredTypeConfig = $this->config->action->preferredType->lean;
         foreach($objectTypeList as $objectType)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;

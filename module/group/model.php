@@ -403,6 +403,7 @@ class groupModel extends model
      */
     public function updatePrivByGroup($groupID, $menu, $version)
     {
+        /* Delete old. */
         /* Set priv when have version. */
         if($version)
         {
@@ -417,27 +418,19 @@ class groupModel extends model
                     $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->eq($module)->andWhere('method')->eq($method)->exec();
                 }
             }
-
-            /* Replace new. */
-            if($this->post->actions)
-            {
-                foreach($this->post->actions as $moduleName => $moduleActions)
-                {
-                    foreach($moduleActions as $actionName)
-                    {
-                        $data         = new stdclass();
-                        $data->group  = $groupID;
-                        $data->module = $moduleName;
-                        $data->method = $actionName;
-                        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                    }
-                }
-            }
-            return true;
         }
-
-        /* Delete old. */
-        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)->andWhere('module')->in($this->getMenuModules($menu))->exec();
+        else
+        {
+            foreach($this->getMenuModules($menu) as $moduleName)
+            {
+                $methodList = (array)zget($this->lang->resource, $moduleName, array());
+                $methodList = array_keys($methodList);
+                $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)
+                    ->andWhere('module')->eq($moduleName)
+                    ->beginIF($methodList)->andWhere('method')->in($methodList)->fi()
+                    ->exec();
+            }
+        }
 
         /* Insert new. */
         if($this->post->actions)
@@ -454,7 +447,6 @@ class groupModel extends model
                 }
             }
         }
-
         return true;
     }
 

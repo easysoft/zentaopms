@@ -132,15 +132,13 @@ class blockModel extends model
      */
     public function getBlockList($module = 'my', $type = '')
     {
-        $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
+        return $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('hidden')->eq(0)
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
-
-        return $blocks;
     }
 
     /**

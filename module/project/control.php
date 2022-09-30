@@ -11,6 +11,21 @@
 class project extends control
 {
     /**
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->view->globalDisableProgram = $this->config->systemMode != 'new';
+    }
+
+    /**
      * Project create guide.
      *
      * @param  int    $programID
@@ -296,6 +311,17 @@ class project extends control
         $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
+
+        /* Locate to task when set no execution. */
+        if(!$project->multiple)
+        {
+            $executions = $this->loadModel('execution')->getList($project->id);
+            foreach($executions as $execution)
+            {
+                if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
+            }
+        }
+
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
@@ -514,6 +540,8 @@ class project extends control
         }
 
         if($this->app->tab == 'program' and $programID) $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         $this->session->set('projectModel', $model);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -556,9 +584,7 @@ class project extends control
             }
         }
 
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
-        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
-
+        if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);
 
         if($model == 'kanban')
@@ -567,8 +593,11 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $this->view->title      = $this->lang->project->create;
-        $this->view->position[] = $this->lang->project->create;
+        $sprintConcept = empty($this->config->custom->sprintConcept) ?
+        $this->config->executionCommonList[$this->app->getClientLang()][0] :
+        $this->config->executionCommonList[$this->app->getClientLang()][1];
+
+        $this->view->title = $this->lang->project->create;
 
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
@@ -740,7 +769,7 @@ class project extends control
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
-        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
+        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel) ? '' : 'disabled';
         $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
 
         $this->display();
@@ -749,12 +778,10 @@ class project extends control
     /**
      * Batch edit projects.
      *
-     * @param  string $from
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function batchEdit($from = 'browse', $projectID = 0)
+    public function batchEdit()
     {
         $this->loadModel('action');
         $this->loadModel('execution');

@@ -66,12 +66,17 @@ class story extends control
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
-            $objectID = empty($objectID) ? $this->session->project : $objectID;
-            $objects  = $this->project->getPairsByProgram();
-            $objectID = $this->project->saveState($objectID, $objects);
-            $this->project->setMenu($objectID);
+            $objects = $this->project->getPairsByProgram();
+
+            if(empty($objectID)) $objectID = $this->session->project;
+
+            $projectID = $objectID;
+            if(!$this->session->multiple) $projectID = $this->session->project;
+            $projectID = isset($objects[$projectID]) ? $projectID : $this->session->project;
+            $projectID = $this->project->saveState($projectID, $objects);
+            $this->project->setMenu($projectID);
         }
         else if($this->app->tab == 'execution')
         {

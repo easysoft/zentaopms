@@ -706,7 +706,7 @@ class portModel extends model
                     $lists[$listName] = $fieldList[$field]['values'];
                     if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
                 }
-                $this->config->excel->sysDataField[] = $field;
+                if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
 
             $lists['listStyle'] = $listFields;

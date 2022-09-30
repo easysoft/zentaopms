@@ -97,8 +97,11 @@ $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
 if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
 $config->product->all->search['fields']['id']          = $lang->product->id;
-if($config->systemMode == 'new') $config->product->all->search['fields']['program'] = $lang->product->program;
-$config->product->all->search['fields']['line']        = $lang->product->line;
+if($config->systemMode == 'new')
+{
+    $config->product->all->search['fields']['program'] = $lang->product->program;
+    $config->product->all->search['fields']['line']    = $lang->product->line;
+}
 $config->product->all->search['fields']['desc']        = $lang->product->desc;
 $config->product->all->search['fields']['PO']          = $lang->product->PO;
 $config->product->all->search['fields']['QD']          = $lang->product->QD;

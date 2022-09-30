@@ -251,6 +251,9 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
+global $config;
+if(strpos(",$config->disabledFeatures,", ',waterfall,') !== false) unset($lang->project->modelList['waterfall']);
+
 $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Unfinished';
 $lang->project->featureBar['browse']['wait']      = 'Waiting';
@@ -262,6 +265,9 @@ $lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
+
+$lang->project->multipleList['1'] = 'Yes';
+$lang->project->multipleList['0'] = 'No';
 
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = "Open";
@@ -341,3 +347,5 @@ $lang->project->confirmUnlinkMember  = "Do you want to remove this user from pro
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+
+$lang->project->multiple = "Multi {$lang->executionCommon}";
