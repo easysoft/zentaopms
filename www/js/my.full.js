@@ -1336,7 +1336,6 @@ function refreshBudgetUnit(data)
  * @access public
  * @return void
  */
-
 function handleKanbanWidthAttr ()
 {
     $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
