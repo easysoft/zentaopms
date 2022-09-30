@@ -171,6 +171,8 @@ class program extends control
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->products      = $this->loadModel('product')->getStats($orderBy, $pager, $browseType, '', 'story', $programID);
+        $this->view->userIdPairs   = $this->user->getPairs('noletter|showid');
+        $this->view->usersAvatar   = $this->user->getAvatarPairs('');
         $this->view->showBatchEdit = $this->cookie->showProductBatchEdit;
 
         $this->display();
@@ -194,7 +196,8 @@ class program extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('program', $programID, 'opened');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => $this->session->programList));
+            $locateLink = $this->session->programList ? $this->session->programList : $this->createLink('program', 'browse');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => $locateLink));
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);

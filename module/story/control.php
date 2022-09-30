@@ -421,7 +421,7 @@ class story extends control
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
         $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
 
         $this->display();
@@ -687,7 +687,7 @@ class story extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $executionID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? 0 : 1;
         $this->view->forceReview      = $this->story->checkForceReview();
         $this->view->executionID      = $executionID;
 
@@ -1150,7 +1150,7 @@ class story extends control
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
-        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0) and empty($reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
 
@@ -1572,7 +1572,7 @@ class story extends control
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview = (($this->app->user->account == $product->PO || $this->config->story->needReview == 0) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
 
         $this->display();
     }

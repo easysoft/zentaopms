@@ -11,3 +11,4 @@ td.delayed {background: #e84e0f !important; color: white;}
 #taskList .c-progress{padding-right: 8px; text-align: right;}
 #datatable-taskList .c-progress{padding-right: 8px; text-align: right;}
 .c-finishedBy, .c-lastEditedBy {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#executionTaskForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}

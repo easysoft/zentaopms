@@ -38,6 +38,7 @@
 #sidebar>.cell {width: 100%;}
 
 th.c-name {width: 400px;}
+th.c-PO {width: 100px;}
 th.c-story {width: 290px;}
 th.c-bug {width: 150px;}
 th.c-plan {width: 45px;}
@@ -89,4 +90,6 @@ th.c-actions {width: 50px;}
 #productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 .statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
 .table-footer.fixed-footer .statistic {color: #fff;}
+#productTableList .c-manager {padding-left: 14px;}
+#productTableList .c-manager a {top: 7px; left: 22px;}
 .checkbox-primary {margin-right: 10px;}

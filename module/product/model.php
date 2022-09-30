@@ -1817,11 +1817,15 @@ class productModel extends model
         {
             $programKeys = array(0 => 0);
             foreach($products as $product) $programKeys[] = $product->program;
-            $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+            $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
-                ->fetchPairs();
+                ->fetchAll('id');
 
-            foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
+            foreach($products as $product)
+            {
+                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+                $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+            }
         }
 
         $stats = array();
@@ -2045,6 +2049,7 @@ class productModel extends model
                 /* Init vars. */
                 /* Program name. */
                 $productStructure[$product->program]['programName'] = $product->programName;
+                $productStructure[$product->program]['programPM']   = $product->programPM;
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
         }

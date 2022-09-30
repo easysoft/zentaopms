@@ -179,6 +179,9 @@
           <td id="plansBox" colspan="2">
             <div class='row'>
               <?php $i = 0;?>
+              <?php if(empty($linkedProducts)):?>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][][]", $productPlans, '', "class='form-control chosen' multiple");?></div>
+              <?php else:?>
               <?php foreach($linkedProducts as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
@@ -186,6 +189,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
+              <?php endif;?>
             </div>
           </td>
         </tr>

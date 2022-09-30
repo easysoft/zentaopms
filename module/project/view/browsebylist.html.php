@@ -18,8 +18,6 @@
 .project-name > span,
 .project-name > span {flex: none;}
 .project-name > a {display: inline-block; max-width: calc(100% - 50px);}
-.project-name.has-prefix > a,
-.project-name.has-suffix > a {max-width: calc(100% - 100px);}
 .project-name.has-prefix > a {padding-left: 5px;}
 .project-name.has-suffix > a {padding-right: 5px;}
 </style>
@@ -106,7 +104,7 @@
             <?php
             foreach($setting as $value)
             {
-              if($value->id == 'status' and strpos(',all,bysearch,', ",$browseType,") === false) $value->show = false;
+              if($value->id == 'status' and strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
               if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
               if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
