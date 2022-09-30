@@ -45,11 +45,6 @@ $(function()
     {
         if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
     });
-
-    $('#projectForm .table').on('click', '.sortable tr', function(e)
-    {
-        if($.cookie('showProjectBatchEdit') != 1) e.stopPropagation();
-    });
 });
 
 /**
