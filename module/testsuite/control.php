@@ -323,7 +323,7 @@ class testsuite extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
         unset($this->config->testcase->search['fields']['product']);
