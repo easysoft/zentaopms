@@ -1329,3 +1329,33 @@ function refreshBudgetUnit(data)
         $('#future').prop('checked', false);
     }
 }
+
+function handleKanbanWidthAttr ()
+{
+    $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
+    $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
+    var fluidBoard = $("#mainContent input[name='fluidBoard'][checked='checked']").val() || 0;
+    var addAttrEle = fluidBoard == 0 ? '#colWidth' : '#minColWidth, #maxColWidth';
+    $(addAttrEle).closest('.width-radio-row').addClass('required');
+    $('#colWidth').attr('disabled',fluidBoard == 1);
+    $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
+    $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
+    {
+        $('#colWidth').attr('disabled', e.target.value == 1);
+        $('#minColWidth, #maxColWidth').attr('disabled', e.target.value == 0);
+        if(e.target.value == 0 && $('#minColWidthLabel, #maxColWidthLabel'))
+        {
+            $('#colWidth').closest('.width-radio-row').addClass('required');
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').removeClass('required');
+            $('#minColWidthLabel, #maxColWidthLabel').remove();
+            $('#minColWidth, #maxColWidth').removeClass('has-error');
+        }
+        else if(e.target.value == 1 && $('#colWidthLabel'))
+        {
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').addClass('required');
+            $('#colWidth').closest('.width-radio-row').removeClass('required');
+            $('#colWidthLabel').remove();
+            $('#colWidth').removeClass('has-error');
+        }
+    })
+}
