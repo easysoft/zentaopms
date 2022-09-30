@@ -1449,9 +1449,17 @@ class commonModel extends model
             echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
             echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
 
-            $appqrcode = self::http('https://www.zentao.net/page/appqrcode.json');
             /* Intranet users use local pictures. */
-            if(!empty($appqrcode))
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, 'https://www.zentao.net/page/appqrcode.json');
+            curl_setopt($curl, CURLOPT_TIMEOUT_MS, 200);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, 200);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            $connected = curl_exec($curl);
+            curl_close($curl);
+            if($connected)
             {
                 echo "<li><div class='mobile-qrcode'><iframe src='https://www.zentao.net/page/appqrcode.html?v={$config->version}' frameborder='0' scrolling='no' seamless></iframe></div></li>";
             }
@@ -2129,6 +2137,8 @@ EOD;
         {
             if(strpos($orderBy, 'priOrder') !== false) $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
             if(strpos($orderBy, 'severityOrder') !== false) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
+            $queryCondition = str_replace('t4.status', 'status', $queryCondition);
+
             $sql = $this->dao->select("*$select")->from($table)
                 ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()

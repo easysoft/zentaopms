@@ -36,7 +36,7 @@ $config->project->multiple['execution'] = ',task,kanban,burn,view,story,';
 
 global $lang;
 $config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'progress', 'actions');
+$config->project->datatable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
 
 $config->project->datatable->fieldList['id']['title']    = 'ID';
 $config->project->datatable->fieldList['id']['fixed']    = 'left';
@@ -81,6 +81,12 @@ $config->project->datatable->fieldList['hasProduct']['required'] = 'no';
 $config->project->datatable->fieldList['hasProduct']['sort']     = 'yes';
 $config->project->datatable->fieldList['hasProduct']['pri']      = '2';
 
+$config->project->datatable->fieldList['budget']['title']    = 'budget';
+$config->project->datatable->fieldList['budget']['fixed']    = 'no';
+$config->project->datatable->fieldList['budget']['width']    = '100';
+$config->project->datatable->fieldList['budget']['required'] = 'yes';
+$config->project->datatable->fieldList['budget']['pri']      = '3';
+
 $config->project->datatable->fieldList['begin']['title']    = 'begin';
 $config->project->datatable->fieldList['begin']['fixed']    = 'no';
 $config->project->datatable->fieldList['begin']['width']    = '115';
@@ -92,12 +98,6 @@ $config->project->datatable->fieldList['end']['fixed']    = 'no';
 $config->project->datatable->fieldList['end']['width']    = '100';
 $config->project->datatable->fieldList['end']['required'] = 'no';
 $config->project->datatable->fieldList['end']['pri']      = '3';
-
-$config->project->datatable->fieldList['budget']['title']    = 'budget';
-$config->project->datatable->fieldList['budget']['fixed']    = 'no';
-$config->project->datatable->fieldList['budget']['width']    = '100';
-$config->project->datatable->fieldList['budget']['required'] = 'yes';
-$config->project->datatable->fieldList['budget']['pri']      = '3';
 
 $config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
 $config->project->datatable->fieldList['teamCount']['fixed']    = 'no';

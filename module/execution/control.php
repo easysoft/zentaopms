@@ -2407,10 +2407,10 @@ class execution extends control
     /**
      * Kanban.
      *
-     * @param int     $executionID
-     * @param string  $browseType
-     * @param string  $orderBy
-     * @param string  $groupBy
+     * @param  int     $executionID
+     * @param  string  $browseType
+     * @param  string  $orderBy
+     * @param  string  $groupBy
      * @access public
      * @return void
      */
@@ -2464,7 +2464,6 @@ class execution extends control
         }
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
-
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
@@ -2473,6 +2472,9 @@ class execution extends control
         }
 
         $projectID = $this->loadModel('task')->getProjectID($execution->id);
+
+        $taskToOpen = !empty($_COOKIE['taskToOpen']) ? $_COOKIE['taskToOpen'] : 0;
+        setcookie('taskToOpen', 0, time() - 3600, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->users            = $users;
@@ -2493,6 +2495,7 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
+        $this->view->taskToOpen       = $taskToOpen;
         $this->display();
     }
 
@@ -2540,7 +2543,7 @@ class execution extends control
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
+            $this->kanban->createExecutionLane($executionID, $browseType);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
@@ -3230,7 +3233,7 @@ class execution extends control
         {
             $this->project->setMenu($object->id);
         }
-        elseif($object->type == 'sprint' or $object->type == 'stage')
+        elseif($object->type == 'sprint' or $object->type == 'stage' or $object->type == 'kanban')
         {
             $this->execution->setMenu($object->id);
         }

@@ -628,6 +628,18 @@ class doc extends control
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
             $this->doc->delete(TABLE_DOC, $docID);
 
+            /* Delete doc files. */
+            $this->loadModel('file');
+            foreach($doc->files as $fileID => $file)
+            {
+                $file = $this->file->getById($fileID);
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+                $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+
+                $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+                if(empty($fileRecord)) @unlink($file->realPath);
+            }
+
             /* if ajax request, send result. */
             if($this->server->ajax)
             {

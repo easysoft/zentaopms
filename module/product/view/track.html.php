@@ -72,7 +72,7 @@
             <?php if(count($track) != 0):?>
             <?php $i = 0;?>
             <?php foreach($track as $storyID => $story):?>
-            <?php if($i != 1) echo '<tr>';?>
+            <?php if($i > 0) echo '<tr>';?>
               <td>
                 <?php if(isset($story->parent) and $story->parent > 0):?><span class="label label-badge label-light" title="<?php echo $this->lang->story->children;?>"><?php echo $this->lang->story->childrenAB;?></span><?php endif;?>
                 <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$tab'");?>
@@ -108,7 +108,7 @@
                 <?php echo html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bug->title, '', "title='$bug->title'") . '<br/>';?>
                 <?php endforeach;?>
               </td>
-            <?php if($i != 1) echo '</tr>';?>
+            <?php if($i > 0) echo '</tr>';?>
             <?php $i++;?>
             <?php endforeach;?>
             <?php endif;?>

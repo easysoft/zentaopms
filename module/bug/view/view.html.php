@@ -395,7 +395,7 @@
                 <?php if($bug->case):?>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=" . ($bug->testtask ? "&from=testtask&taskID={$bug->testtask}" : ''), '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
+                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($bug->toCases):?>

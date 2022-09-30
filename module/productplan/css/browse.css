@@ -35,3 +35,7 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .panel-actions {position: relative; padding: 0 0; padding-top: 1px;}
 .icon-list {padding-left: 7px;}
 .icon-kanban {padding-left: 7px; font-size: 16px;}
+#productplanList .c-actions {width: 265px;}
+#productplanList .c-actions .btn+.btn {margin-left: -1px;}
+#productplanList .c-actions .btn {display: block; float: left;}
+#productplanList td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 6px 0 0 0; float: left;}

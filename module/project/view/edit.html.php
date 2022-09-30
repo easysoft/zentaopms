@@ -52,7 +52,7 @@
         <?php endif;?>
         <?php if(empty($globalDisableProgram)):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->parent;?></th>
+          <th class='w-120px'><?php echo $lang->project->parent;?></th>
           <?php
           $attr = '';
           if(!isset($programList[$project->parent]))

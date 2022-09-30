@@ -143,7 +143,7 @@ $lang->program->statusList['doing']     = '进行中';
 $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
-$lang->program->featureBar['browse']['all']       = '所有';
+$lang->program->featureBar['browse']['all']       = '全部';
 $lang->program->featureBar['browse']['unclosed']  = '未关闭';
 $lang->program->featureBar['browse']['wait']      = '未开始';
 $lang->program->featureBar['browse']['doing']     = '进行中';

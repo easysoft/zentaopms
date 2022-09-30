@@ -53,7 +53,7 @@
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
       <?php foreach($lang->productplan->orderList as $order => $label):?>
       <?php $active = $orderBy == $order ? 'active' : '';?>
-        <li class='<?php echo $active;?>'><?php echo html::a($this->createLink($app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=0&orderBy=$order"), $label);?></li>
+        <li class='<?php echo $active;?>'><?php echo html::a($this->createLink($app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"), $label);?></li>
       <?php endforeach;?>
       </ul>
     </div>

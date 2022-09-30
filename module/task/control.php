@@ -48,7 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
-        
+
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
@@ -604,6 +604,26 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        $executions = array();
+        if(!empty($task->project))
+        {
+            $executionList  = $this->execution->getPairs($task->project);
+            $project        = $this->loadModel('project')->getByID($task->project);
+
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key=>$val)
+                {
+                    $values           = $project->name . '/' . $val;
+                    $executions[$key] = $values;
+                }
+            }
+            else
+            {
+                $executions = $executionList;
+            }
+        }
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -612,7 +632,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $this->view->executions    = $executions;
         $this->display();
     }
 
@@ -931,7 +951,11 @@ class task extends control
         }
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        if(!isonlybody() and $execution->type == 'kanban')
+        {
+            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', false, true);
+            return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        }
 
         $this->session->project = $task->project;
 
@@ -1095,10 +1119,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $from
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function recordEstimate($taskID, $from = '')
+    public function recordEstimate($taskID, $from = '', $orderBy = '')
     {
         $this->commonAction($taskID);
 
@@ -1136,7 +1161,7 @@ class task extends control
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban($kanbanData)"));
                 }
                 if($from == 'taskkanban')
                 {
@@ -1146,9 +1171,9 @@ class task extends control
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
+                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
-                return print(js::closeModal('parent.parent', 'this'));
+                return print(js::reload('parent') . js::execute("if(typeof(parent.parent.ajaxRefresh) == 'function') parent.parent.ajaxRefresh()"));
             }
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1157,12 +1182,25 @@ class task extends control
         $this->session->set('estimateList', $uri, 'execution');
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
-        $task    = $this->task->getById($taskID);
-        $orderBy = 'date,id';
-        if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
+        $task = $this->task->getById($taskID);
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            if(empty($orderBy))
+            {
+                $orderBy = 'order_asc,id';
+            }
+            else
+            {
+                /* The id sort with order or date style. */
+                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
+            }
+        }
+        if(!$orderBy) $orderBy = 'date_asc';
 
         $this->view->title   = $this->lang->task->record;
         $this->view->task    = $task;
+        $this->view->from    = $from;
+        $this->view->orderBy = $orderBy;
         $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
@@ -1186,7 +1224,7 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
+            $url = $this->session->estimateList ? $this->session->estimateList : inlink('recordEstimate', "taskID={$estimate->task}");
             return print(js::locate($url, 'parent'));
         }
 

@@ -1554,7 +1554,7 @@ class kanbanModel extends model
 
             $teamPairs = array();
             foreach($taskTeams[$taskID] as $account => $team) $teamPairs[$account] = $team->realname;
-            $task->team = $teamPairs;
+            $task->teamMember = $teamPairs;
         }
 
         /* Get objects cards menus. */
@@ -1610,6 +1610,7 @@ class kanbanModel extends model
             $laneData['order']           = $lane->order;
             $laneData['type']            = $browseType;
             $laneData['defaultCardType'] = $browseType;
+            if(empty($laneID) and !in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $laneID = '';
 
             if($browseType == 'task' and $groupBy == 'story')
             {
@@ -1675,8 +1676,9 @@ class kanbanModel extends model
                     if($groupBy == 'assignedTo')
                     {
                         $laneID = (string)$laneID;
-                        if(empty($object->team) and $object->$groupBy !== $laneID) continue;
-                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
+                        if(empty($object->$groupBy)) $object->$groupBy = '';
+                        if(empty($object->teamMember) and (string)$object->$groupBy !== $laneID) continue;
+                        if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
 
                         if($object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
                     }
@@ -1745,9 +1747,9 @@ class kanbanModel extends model
         {
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
 
-            if($groupBy == 'assignedTo' and !empty($item->team))
+            if($groupBy == 'assignedTo' and !empty($item->teamMember))
             {
-                foreach($item->team as $account => $name)
+                foreach($item->teamMember as $account => $name)
                 {
                     if(!isset($groupByList[$account])) $groupByList[$account] = $account;
                 }
@@ -1796,6 +1798,7 @@ class kanbanModel extends model
 
         if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
         if(in_array($groupBy, array('assignedTo', 'source'))) $objectPairs[] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if($browseType == 'bug' and $groupBy == 'type') $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
 
         $laneColor = 0;
         $order     = 1;
@@ -2234,6 +2237,9 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'ge', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
@@ -2333,24 +2339,20 @@ class kanbanModel extends model
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
-
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
-        {
-            if(!$this->checkDisplayCards($kanban->displayCards)) return;
-        }
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->checkDisplayCards($kanban->displayCards)) return;
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'ge', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            return common::createChanges($oldKanban, $kanban);
-        }
+        if(dao::isError()) return false;
 
-        return false;
+        return common::createChanges($oldKanban, $kanban);
     }
 
     /**
@@ -2420,72 +2422,19 @@ class kanbanModel extends model
      *
      * @param  int    $executionID
      * @param  string $type all|story|bug|task
-     * @param  string $groupBy default
      * @access public
      * @return void
      */
-    public function createExecutionLane($executionID, $type = 'all', $groupBy = 'default')
+    public function createExecutionLane($executionID, $type = 'all')
     {
-        if($groupBy == 'default' or $type == 'all')
+        foreach($this->config->kanban->default as $type => $lane)
         {
-            foreach($this->config->kanban->default as $type => $lane)
-            {
-                $lane->type      = $type;
-                $lane->execution = $executionID;
-                $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+            $lane->type      = $type;
+            $lane->execution = $executionID;
+            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
-                $laneID = $this->dao->lastInsertId();
-                $this->createExecutionColumns($laneID, $type, $executionID);
-            }
-        }
-        else
-        {
-            $this->loadModel($type);
-            $groupList = $this->getObjectGroup($executionID, $type, $groupBy);
-
-            $objectPairs = array();
-            if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,bug,task')->andWhere('deleted')->eq('0')->fetchPairs();
-            if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
-            if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
-
-            $laneName   = '';
-            $laneOrder  = 5;
-            $colorIndex = 0;
-            foreach($groupList as $groupKey)
-            {
-                if($groupKey)
-                {
-                    if(strpos('module,story,assignedTo', $groupBy) !== false)
-                    {
-                        $laneName = zget($objectPairs, $groupKey);
-                    }
-                    else
-                    {
-                        $laneName = zget($this->lang->$type->{$groupBy . 'List'}, $groupKey);
-                    }
-                }
-                else
-                {
-                    $laneName = $this->lang->kanban->noGroup;
-                }
-
-                $lane = new stdClass();
-                $lane->execution = $executionID;
-                $lane->type      = $type;
-                $lane->groupby   = $groupBy;
-                $lane->extra     = $groupKey;
-                $lane->name      = $laneName;
-                $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
-                $lane->order     = $laneOrder;
-
-                $laneOrder  += 5;
-                $colorIndex += 1;
-                if($colorIndex == count($this->config->kanban->laneColorList) + 1) $colorIndex = 0;
-                $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-
-                $laneID = $this->dao->lastInsertId();
-                $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
-            }
+            $laneID = $this->dao->lastInsertId();
+            $this->createExecutionColumns($laneID, $type, $executionID);
         }
     }
 

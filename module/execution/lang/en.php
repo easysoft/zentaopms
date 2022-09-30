@@ -465,7 +465,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Settings";
 $lang->execution->setKanban     = "Set Kanban";
 $lang->execution->resetKanban   = "Reset";
-$lang->execution->printKanban   = "Print";
+$lang->execution->printKanban   = "Print Kanban";
 $lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 

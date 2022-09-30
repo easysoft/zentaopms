@@ -29,7 +29,7 @@ fields:
       range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: password
     note: "密码"
-    range: 123qwe!@#{346}
+    range: 123Qwe!@#{346}
     format: md5
   - field: role
     note: "职位"

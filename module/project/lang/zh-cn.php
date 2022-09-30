@@ -254,14 +254,14 @@ $lang->project->modelList['kanban']    = "看板";
 global $config;
 if(strpos(",$config->disabledFeatures,", ',waterfall,') !== false) unset($lang->project->modelList['waterfall']);
 
-$lang->project->featureBar['browse']['all']       = '所有';
+$lang->project->featureBar['browse']['all']       = '全部';
 $lang->project->featureBar['browse']['undone']    = '未完成';
 $lang->project->featureBar['browse']['wait']      = '未开始';
 $lang->project->featureBar['browse']['doing']     = '进行中';
 $lang->project->featureBar['browse']['suspended'] = '已挂起';
 $lang->project->featureBar['browse']['closed']    = '已关闭';
 
-$lang->project->featureBar['build']['all'] = '所有版本';
+$lang->project->featureBar['build']['all'] = '全部版本';
 
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";

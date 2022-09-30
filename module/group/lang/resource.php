@@ -1667,6 +1667,7 @@ $lang->resource->report->bugCreate        = 'bugCreate';
 $lang->resource->report->bugAssign        = 'bugAssign';
 $lang->resource->report->workload         = 'workload';
 $lang->resource->report->annualData       = 'annual';
+$lang->resource->report->allAnnualData    = 'viewEveryoneAnnual';
 
 $lang->report->methodOrder[0]  = 'index';
 $lang->report->methodOrder[5]  = 'projectDeviation';

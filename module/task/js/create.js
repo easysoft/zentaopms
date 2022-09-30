@@ -392,11 +392,11 @@ function addItem(obj)
     }
     if($nextTr.find('.deadlineBox').length == 0)
     {
-        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[]" id="deadlineDitto" checked/> ' + ditto + '</span>');
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[' + index + ']" id="deadlineDitto" checked/> ' + ditto + '</span>');
     }
     if($nextTr.find('.estStartedBox').length == 0)
     {
-        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[] id="estStartedDitto" checked/> ' + ditto + '</span>');
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[' + index + '] id="estStartedDitto" checked/> ' + ditto + '</span>');
     }
 
     if($nextTr.find('.deadlineBox').is(':hidden'))
@@ -409,6 +409,7 @@ function addItem(obj)
         $nextTr.find('.estStartedBox').show();
         $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
     }
+    index ++;
 }
 
 /**
@@ -583,7 +584,7 @@ $('#modalTeam tfoot .btn').click(function()
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
         if(!isNaN(estimate) && estimate > 0) time += estimate;
-        if(account != '' && (isNaN(estimate) || estimate == 0))
+        if(account != '' && (isNaN(estimate) || estimate <= 0))
         {
               bootbox.alert(account + ' ' + estimateNotEmpty);
               error = true;

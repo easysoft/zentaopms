@@ -511,6 +511,8 @@ class bug extends control
         $type        = 'codeerror';
         $pri         = 3;
         $color       = '';
+        $feedbackBy  = '';
+        $notifyEmail = '';
 
         /* Parse the extras. extract fix php7.2. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -536,6 +538,8 @@ class bug extends control
             $deadline    = helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
+            $feedbackBy  = $bug->feedbackBy;
+            $notifyEmail = $bug->notifyEmail;
             if($pri == 0) $pri = '3';
         }
 
@@ -690,6 +694,8 @@ class bug extends control
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
         $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+        $this->view->feedbackBy       = $feedbackBy;
+        $this->view->notifyEmail      = $notifyEmail;
 
         $this->display();
     }
@@ -1154,6 +1160,7 @@ class bug extends control
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         if($product->shadow) $this->view->project = $this->loadModel('project')->getByShadowProduct($bug->product);
 
@@ -1812,6 +1819,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
@@ -2328,6 +2336,15 @@ class bug extends control
         {
             $this->loadModel('port');
             $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            if(!$productID)
+            {
+                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+            }
+
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }

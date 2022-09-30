@@ -1982,6 +1982,17 @@ class userModel extends model
                 $productIdList = zget($programProduct, $programStakeholder->objectID, array());
                 foreach($productIdList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
             }
+
+            $sql = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
+                ->where('type')->eq('program')
+                ->andWhere('id')->in(array_keys($programProduct))
+                ->query();
+
+            while($programOwner = $sql->fetch())
+            {
+                $productIdList = zget($programProduct, $programOwner->id, array());
+                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
+            }
         }
 
         return array($teamGroups, $stakeholderGroups);

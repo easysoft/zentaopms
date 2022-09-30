@@ -37,3 +37,5 @@ $lang->weekly->ev = 'Earned Value(EV)';
 $lang->weekly->ac = 'Actual Cost(AC)';
 $lang->weekly->sv = 'Schedule Variance(SV%)';
 $lang->weekly->cv = 'Cost Variance(CV%)';
+
+$lang->weekly->totalCount = 'Total : %u tasks';

@@ -88,6 +88,7 @@
           <td class='text-left'><?php echo zget($users, $task->finishedBy);?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='6' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($finished));?></tr>
       </tbody>
     </table>
 
@@ -120,6 +121,7 @@
           <td class='text-left'><?php echo $task->progress;?>%</td>
         </tr>
         <?php endforeach;?>
+        <td colspan='7' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($postponed));?></tr>
       </tbody>
     </table>
 
@@ -148,6 +150,7 @@
           <td class='text-left'><?php echo $task->deadline;?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='5' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($nextWeek));?></tr>
       </tbody>
     </table>
 

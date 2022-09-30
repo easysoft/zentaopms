@@ -169,7 +169,6 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
-            ->beginIF(!$this->cookie->showClosed and $status == 'all')->andWhere('status')->ne('closed')->fi()
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
@@ -228,7 +227,6 @@ class programModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
@@ -842,12 +840,17 @@ class programModel extends model
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
-            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+            $this->loadModel('user');
+            if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
 	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
 	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
-            $this->loadModel('user');
             foreach($children as $id => $type) $this->user->updateUserView($id, $type);
+            if(isset($program->PM) and $program->PM != $oldProgram->PM)
+            {
+                $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs('id');
+                foreach($productIdList as $productID) $this->user->updateUserView($productID, 'product');
+            }
 
             if($oldProgram->parent != $program->parent)
             {
@@ -1180,7 +1183,7 @@ class programModel extends model
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
-            ->where('path')->like("%{$parentProgram->id}%")
+            ->where('path')->like("%,{$parentProgram->id},%")
             ->andWhere('grade')->eq($childGrade)
             ->andWhere('deleted')->eq('0')
             ->fetch('sumBudget');
@@ -1575,7 +1578,7 @@ class programModel extends model
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', '', '', "data-app='project'");
 
