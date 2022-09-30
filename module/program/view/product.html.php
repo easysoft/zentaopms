@@ -62,7 +62,7 @@
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
-            <th><?php echo $lang->story->review;?></th>
+            <th><?php echo $lang->story->statusList['reviewing'];?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
