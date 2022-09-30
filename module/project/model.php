@@ -922,7 +922,7 @@ class projectModel extends model
             {
                 unset($privs->$module);
             }
-            else
+            elseif($methods)
             {
                 foreach($methods as $method => $label)
                 {
