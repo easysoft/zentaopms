@@ -145,7 +145,31 @@
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
-        <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('execution', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
+        <td class='text-center'>
+          <?php
+          if(!empty($plan->projects))
+          {
+              if(count($plan->projects) === 1)
+              {
+                  $executionID = key($plan->projects);
+                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}'");
+              }
+              else
+              {
+                  $executionHtml  = '<div class="popover right"  id="taskPopover">';
+                  $executionHtml .= '<div class="arrow"></div>';
+                  $executionHtml .= '<div class="popover-content">';
+                  $executionHtml .= '<ul class="execution-tip">';
+                  foreach($plan->executions as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
+                  $executionHtml .= '</ul>';
+                  $executionHtml .= '</div>';
+                  $executionHtml .= '</div>';
+                  echo "<i class='icon-run execution-popover text-primary'></i>";
+                  echo $executionHtml;
+              }
+          }
+          ?>
+        </td>
         <td class='text-left content'>
           <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
