@@ -1351,6 +1351,10 @@ function handleKanbanWidthAttr ()
     $(addAttrEle).closest('.width-radio-row').addClass('required');
     $('#colWidth').attr('disabled',fluidBoard == 1);
     $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
+    $("#minColWidth, #maxColWidth").on('input', function(){
+        $('#minColWidthLabel, #maxColWidthLabel').remove();
+        $('#minColWidth, #maxColWidth').removeClass('has-error');
+    })
     $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
     {
         $('#colWidth').attr('disabled', e.target.value == 1);
