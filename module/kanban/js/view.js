@@ -1399,8 +1399,8 @@ function initKanban($kanban)
         maxColHeight:          510,
         calcColHeight:         calcColHeight,
         fluidBoardWidth:       fluidBoard,
-        minColWidth:           285,
-        maxColWidth:           285,
+        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
         cardHeight:            cardHeight,
         displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:      kanbanLang.createColumn,
@@ -1559,6 +1559,7 @@ $(function()
 
     distance    = 0;
     radiusWidth = 10;
+    initRegionTabs();
 
     $('.leftBtn').click(function()
     {

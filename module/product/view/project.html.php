@@ -73,11 +73,11 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name);
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name} ({$lang->project->{$project->model}})'");
             }
             else
             {
-                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name);
+                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name, '', "title='{$project->name}'");
             }
             ?>
           </td>

@@ -118,10 +118,14 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #downloadMobile .dropdown-menu .mobile-version {text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
 
-/* #mainMenu > .btn-toolBar .btn-link .label-light,
-#mainMenu > .btn-toolbar .btn-link .label-light {color: #203362; background: #fff;}
-#mainMenu > .btn-toolBar .btn-active-text,
-#mainMenu > .btn-toolbar .btn-active-text {background: #E6EAF1;} */
+.radio-text-divider {width: 1px; height: 13px; display: inline-block; margin: -2px 9px 0; background: #D9D9D9; vertical-align: middle;}
+.input-divider {margin: 0 4px;}
+.setting-input {width: 64px; height: 20px; margin: 0 4px; text-align: center;}
+.setting-input.disabled,.setting-input[disabled="disabled"] {color: #C4C4C4;}
+.width-radio-row {display: flex;}
+#dataform .width-radio-row.required:after {top: 1px; left: 360px;}
+.mt10 {margin-top: 10px;}
+
 
 #programTableList > tr:hover {background: #E6F0FF; opacity: 0.8;}
 #programTableList > tr[data-type="project"] > .c-name:hover > a {color: #1E6AEB !important;}

@@ -1517,7 +1517,6 @@ EOF;
         $this->session->set('designList',         $uri, 'project');
         $this->session->set('productPlanList',    $uri, 'product');
         $this->session->set('releaseList',        $uri, 'product');
-        $this->session->set('programList',        $uri, 'program');
         $this->session->set('projectList',        $uri, 'project');
         $this->session->set('executionList',      $uri, 'execution');
         $this->session->set('taskList',           $uri, 'execution');

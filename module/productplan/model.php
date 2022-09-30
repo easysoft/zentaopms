@@ -122,14 +122,14 @@ class productplanModel extends model
 
             foreach($planIdList as $planID)
             {
-                $planProjects[$planID] = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($product)
                     ->andWhere('t2.deleted')->eq(0)
                     ->andWhere('t1.plan')->like(",$planID,")
                     ->andWhere('t2.type')->in('sprint,stage,kanban')
                     ->orderBy('project_desc')
-                    ->fetch('project');
+                    ->fetchAll('project');
             }
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
@@ -159,12 +159,11 @@ class productplanModel extends model
                         ->andWhere('deleted')->eq(0)
                         ->fetchPairs('id', 'estimate');
                 }
-                $plan->stories   = count($storyPairs);
-                $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-                $plan->hour      = array_sum($storyPairs);
-                $plan->project   = zget($planProjects, $plan->id, '');
-                $plan->projectID = $plan->project;
-                $plan->expired   = $plan->end < $date ? true : false;
+                $plan->stories  = count($storyPairs);
+                $plan->bugs     = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
+                $plan->hour     = array_sum($storyPairs);
+                $plan->projects = zget($planProjects, $plan->id, '');
+                $plan->expired  = $plan->end < $date ? true : false;
 
                 /* Sync linked stories. */
                 if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
@@ -1134,8 +1133,8 @@ class productplanModel extends model
         $canFinish      = common::hasPriv('productplan', 'finish');
         $canClose       = common::hasPriv('productplan', 'close');
         $canCreateExec  = common::hasPriv('execution', 'create');
-        $canLinkStory   = common::hasPriv('productplan', 'linkStory');
-        $canLinkBug     = common::hasPriv('productplan', 'linkBug');
+        $canLinkStory   = common::hasPriv('productplan', 'linkStory', $plan);
+        $canLinkBug     = common::hasPriv('productplan', 'linkBug', $plan);
         $canEdit        = common::hasPriv('productplan', 'edit');
         $canCreateChild = common::hasPriv('productplan', 'create');
         $canDelete      = common::hasPriv('productplan', 'delete');
@@ -1179,30 +1178,30 @@ class productplanModel extends model
                     $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
                 }
             }
-            else
+            elseif($canCreateExec)
             {
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
-            if(($canStart or $canFinsh or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
             {
                 $menu .= "<div class='dividing-line'></div>";
             }
 
-            if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0)
+            if($canLinkStory and $plan->parent >= 0)
             {
                 $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
             }
-            else
+            elseif($canLinkStory)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-link' title='{$this->lang->productplan->linkStory}'></i></button>";
             }
 
-            if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0)
+            if($canLinkBug and $plan->parent >= 0)
             {
                 $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
             }
-            else
+            elseif($canLinkBug)
             {
                 $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
             }
@@ -1212,7 +1211,7 @@ class productplanModel extends model
 
         $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
-        if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+        if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
         {
             $menu .= "<div class='dividing-line'></div>";
         }
@@ -1227,8 +1226,8 @@ class productplanModel extends model
 
             $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
-            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-            if(common::hasPriv('productplan', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+            if($canEdit and $editClickable) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if($canDelete and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 
         return $menu;
