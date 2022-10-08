@@ -70,7 +70,7 @@
         <th class='c-story text-center'><?php echo $lang->productplan->stories;?></th>
         <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
         <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
-        <th class='c-execution text-center'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-execution c-actions'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
@@ -145,14 +145,14 @@
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
-        <td class='text-center'>
+        <td class='text-center c-actions execution-links'>
           <?php
           if(!empty($plan->projects))
           {
               if(count($plan->projects) === 1)
               {
                   $executionID = key($plan->projects);
-                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}'");
+                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}' class='btn'");
               }
               else
               {
@@ -164,7 +164,7 @@
                   $executionHtml .= '</ul>';
                   $executionHtml .= '</div>';
                   $executionHtml .= '</div>';
-                  echo "<i class='icon-run execution-popover text-primary'></i>";
+                  echo "<a href='javascript:;' class='btn execution-popover'><i class='icon-run text-primary'></i></a>";
                   echo $executionHtml;
               }
           }
