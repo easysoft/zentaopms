@@ -1393,6 +1393,14 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project') $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        /* Unset search field in single project. */
+        if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
+        {
+            $project = $this->loadModel('project')->getById($case->project);
+            if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+        }
+
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
@@ -1410,6 +1418,7 @@ class testcase extends control
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
+        $this->view->product    = $this->loadModel('product')->getByID($case->product);
         $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
@@ -1443,12 +1452,17 @@ class testcase extends control
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
 
-        unset($this->config->bug->search['fields']['product']);
+        /* Unset search field in single project. */
         if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
         {
             $project = $this->loadModel('project')->getById($case->project);
-            if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+            if(!$project->hasProduct)
+            {
+                unset($this->config->bug->search['fields']['product']);
+                if($project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+            }
         }
+
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
@@ -1463,6 +1477,7 @@ class testcase extends control
         /* Assign. */
         $this->view->position[] = $this->lang->testcase->linkBugs;
         $this->view->case       = $case;
+        $this->view->product    = $this->loadModel('product')->getByID($case->product);
         $this->view->bugs2Link  = empty($bugs2Link) ? $bugs2Link : $bugs2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
