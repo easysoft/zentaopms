@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `resolution` varchar(1000) NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `keyword` varchar(255) NOT NULL,
+  `keywords` varchar(255) NOT NULL,
   `repeatTicket` mediumint(8) NOT NULL DEFAULT '0',
   `mailto` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
