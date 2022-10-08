@@ -46,3 +46,4 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .execution-tip {list-style: none;}
 .popover.right .arrow {margin-top: -30px;}
 .execution-tip li {overflow: hidden; text-overflow: unset; white-space: nowrap;}
+td.execution-links {overflow: visible;}

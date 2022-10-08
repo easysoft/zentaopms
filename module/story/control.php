@@ -388,6 +388,7 @@ class story extends control
 
         /* Get the module's children id list. */
         $moduleID     = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $moduleID     = isset($moduleOptionMenu[$moduleID]) ? $moduleID : 0;
         $moduleIdList = $this->tree->getAllChildId($moduleID);
 
         /* Set Custom. */
