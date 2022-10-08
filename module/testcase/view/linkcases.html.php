@@ -33,9 +33,6 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
-          <?php if(!$product->shadow):?>
-          <th><?php echo $lang->testcase->product;?></th>
-          <?php endif;?>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='c-type'><?php echo $lang->testcase->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
@@ -54,9 +51,6 @@
             <?php printf('%03d', $case2Link->id);?>
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case2Link->pri, $case2Link->pri)?>'><?php echo zget($lang->testcase->priList, $case2Link->pri, $case2Link->pri)?></span></td>
-          <?php if(!$product->shadow):?>
-          <td class='c-name'><?php echo html::a($this->createLink('product', 'browse', "productID={$case2Link->product}&branch={$case2Link->branch}"), $products[$case2Link->product], '_blank');?></td>
-          <?php endif;?>
           <td class='c-name' title='<?php echo $case2Link->title;?>'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case2Link->id"), $case2Link->title, '_blank');?></td>
           <td><?php echo $lang->testcase->typeList[$case2Link->type];?></td>
           <td><?php echo zget($users, $case2Link->openedBy);?></td>
