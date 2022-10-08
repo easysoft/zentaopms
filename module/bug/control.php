@@ -833,6 +833,8 @@ class bug extends control
         }
 
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
+        $project   = $this->loadModel('project')->getByID($projectID);
+        if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
 
         /* Get branches. */
         if($executionID)
@@ -853,7 +855,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
-        $this->view->project          = $this->loadModel('project')->getByID($projectID);
+        $this->view->project          = $project;
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;

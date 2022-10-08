@@ -57,7 +57,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'> <?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'> <?php echo $lang->bug->module;?></th>
             <?php if($config->systemMode == 'new'):?>
-            <th class='c-project<?php echo zget($visibleFields, 'project', ' hidden') . zget($requiredFields, 'project', '', ' required');?> projectBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->project;?></th>
+            <th class='c-project<?php echo zget($visibleFields, 'project', ' hidden') . zget($requiredFields, 'project', '', ' required');?> projectBox'><?php echo $lang->bug->project;?></th>
             <?php endif;?>
             <th class='c-execution<?php echo zget($visibleFields, 'execution', ' hidden') . zget($requiredFields, 'execution', '', ' required');?> executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
             <th class='c-build required'><?php echo $lang->bug->openedBuild;?></th>
