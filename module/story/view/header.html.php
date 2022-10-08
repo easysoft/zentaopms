@@ -36,6 +36,7 @@ function loadProduct(productID)
     oldProductID = $('#product').val();
     loadProductBranches(productID);
     loadProductReviewers(productID);
+    loadURS();
 
     if(typeof(storyType) == 'string' && storyType == 'story')
     {
@@ -74,6 +75,7 @@ function loadBranch()
 
     loadProductModules(productID, branch);
     loadProductPlans(productID, branch);
+    loadURS();
 }
 
 /**
@@ -103,6 +105,7 @@ function loadProductBranches(productID)
 
         loadProductModules(productID, $('#branch').val());
         loadProductPlans(productID, $('#branch').val());
+        loadURS();
     })
 }
 
@@ -133,6 +136,8 @@ function loadProductModules(productID, branch)
         if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
+
+    loadURS();
 }
 
 /**
