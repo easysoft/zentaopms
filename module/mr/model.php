@@ -201,6 +201,8 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
             ->setDefault('repoID', 0)
+            ->setDefault('sourceProject,targetProject', 0)
+            ->setDefault('sourceBranch,targetBranch', '')
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->setDefault('squash', 0)

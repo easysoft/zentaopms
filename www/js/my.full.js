@@ -99,6 +99,12 @@
     }
 
     init();
+
+    /* Hide context menu when window is scroll. */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 }(jQuery));
 
 /**
@@ -1332,7 +1338,7 @@ function refreshBudgetUnit(data)
 
 /**
  * Handle radio logic of Kanban column width setting.
- * 
+ *
  * @access public
  * @return void
  */
@@ -1345,6 +1351,11 @@ function handleKanbanWidthAttr ()
     $(addAttrEle).closest('.width-radio-row').addClass('required');
     $('#colWidth').attr('disabled',fluidBoard == 1);
     $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
+    $("#minColWidth, #maxColWidth").on('input', function()
+    {
+        $('#minColWidthLabel, #maxColWidthLabel').remove();
+        $('#minColWidth, #maxColWidth').removeClass('has-error');
+    });
     $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
     {
         $('#colWidth').attr('disabled', e.target.value == 1);
@@ -1363,5 +1374,5 @@ function handleKanbanWidthAttr ()
             $('#colWidthLabel').remove();
             $('#colWidth').removeClass('has-error');
         }
-    })
+    });
 }

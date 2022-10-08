@@ -386,6 +386,11 @@ class story extends control
         $reviewers = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
+        /* Get the module's children id list. */
+        $moduleID     = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $moduleID     = isset($moduleOptionMenu[$moduleID]) ? $moduleID : 0;
+        $moduleIdList = $this->tree->getAllChildId($moduleID);
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -398,7 +403,7 @@ class story extends control
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->users            = $users;
-        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent|unexpired|noclosed'));
         $this->view->planID           = $planID;
@@ -420,7 +425,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
+        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
 
@@ -2464,6 +2469,38 @@ class story extends control
     }
 
     /**
+     * AJAX: get the user requirements of the product.
+     *
+     * @param  int    $productID
+     * @param  string $labelName
+     * @param  bool   $isMultiple
+     * @param  int    $defaultID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductURS($productID, $labelName = '', $isMultiple = false, $defaultID = '')
+    {
+        $requirements = array('0' => '') + $this->story->getRequirements($productID);
+        $labelName    = $isMultiple ? $labelName . '[]' : $labelName;
+        $misc         = $isMultiple ? 'class="form-control" multiple' : 'class="form-control"';
+        return print(html::select($labelName, $requirements, $defaultID, $misc));
+    }
+
+    /**
+     * AJAX: get the parent story.
+     *
+     * @param  int    $productID
+     * @param  string $labelName
+     * @access public
+     * @return string
+     */
+    public function ajaxGetParentStory($productID, $labelName = '')
+    {
+        $stories = $this->story->getParentStoryPairs($productID);
+        return print(html::select($labelName, $stories, 0, 'class="form-control"'));
+    }
+
+    /**
      * The report page.
      *
      * @param  int    $productID
@@ -2693,5 +2730,24 @@ class story extends control
 
         return false;
 
+    }
+
+    /**
+     * AJAX: Get user requirements.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  int    $moduleID
+     * @param  string $requirementList
+     * @access public
+     * @return string
+     */
+    public function ajaxGetURS($productID, $branchID = 0, $moduleID = 0, $requirementList = 0)
+    {
+        $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
+
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+
+        return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
 }

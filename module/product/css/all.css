@@ -58,11 +58,14 @@ th.c-actions {width: 50px;}
 #productListForm th.table-nest-title .header {margin-left: 5px;}
 #productListForm th.table-nest-title .sort-up {padding-left: 5px;}
 #productListForm th.table-nest-title .sort-down {padding-left: 5px;}
-#productListForm th.table-nest-title .table-nest-toggle {top: 12px; opacity: .6;}
+#productListForm th.table-nest-title .table-nest-toggle {top: 14px; left: auto; right: 10px; opacity: .6;}
+#productListForm th.table-nest-title .table-nest-toggle::before {position: absolute; top: 0 !important; right: 0; bottom: 0; left: 0;}
 #productListForm th.table-nest-title .table-nest-toggle:hover {opacity: 1;}
 #productListForm .table.has-sort-head thead>tr>th>a:after,
 #productListForm .table.has-sort-head thead>tr>th>a:before {top: -3px;}
 #productListForm .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px;}
+#productTableList td.table-nest-title > span.icon.table-nest-toggle {vertical-align: middle;}
+#productList > thead th.table-nest-title.c-name {position: relative; padding-left: 4px !important;}
 
 @media screen and (max-width: 1460px)
 {
