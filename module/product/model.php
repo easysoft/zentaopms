@@ -876,7 +876,6 @@ class productModel extends model
     public function close($productID)
     {
         $oldProduct = $this->getById($productID);
-        $now        = helper::now();
         $product    = fixer::input('post')
             ->add('id', $productID)
             ->setDefault('status', 'closed')
