@@ -1442,6 +1442,13 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        unset($this->config->bug->search['fields']['product']);
+        if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
+        {
+            $project = $this->loadModel('project')->getById($case->project);
+            if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+        }
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
