@@ -1909,6 +1909,7 @@ class projectModel extends model
         if(!$oldProject->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+            unset($_POST);
             $this->product->close($productID);
         }
 
