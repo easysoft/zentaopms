@@ -157,7 +157,7 @@ class baseValidater
      */
     public static function checkMobile($var)
     {
-        return preg_match("/^1[3-5,7,8]{1}[0-9]{9}$/", $var) ? true : false;
+        return preg_match("/^1[3-9]{1}[0-9]{9}$/", $var) ? true : false;
     }
 
     /**
@@ -661,11 +661,11 @@ class baseValidater
         global $config;
         if(empty($config->framework->filterXSS)) return $var;
 
-        if(stripos($var, '<script') !== false)
+        if(stripos($var, '&lt;script') !== false or stripos($var, '<script') !== false)
         {
             $var      = (string)$var;
-            $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(');
-            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (');
+            $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(', 'alert(', 'confirm(');
+            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (', 'a l e r t (', 'c o n f i r m (');
             $var      = str_ireplace($evils, $replaces, $var);
         }
 
@@ -691,6 +691,12 @@ class baseValidater
         $moduleName = $app->getModuleName();
         $methodName = $app->getMethodName();
         $params     = $app->getParams();
+
+        if($moduleName == 'tutorial' and $methodName == 'wizard' and isset($params['module']) and isset($params['method']))
+        {
+            $moduleName = $params['module'];
+            $methodName = $params['method'];
+        }
 
         if($type == 'cookie')
         {

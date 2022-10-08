@@ -3,7 +3,7 @@
  * The batch edit view of testcase module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     testcase
  * @version     $Id$
@@ -11,10 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('from', $from);?>
 <?php $this->app->loadLang('testcase'); unset($this->lang->testcase->resultList['n/a']); ?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->testtask->common . $lang->colon . $lang->testtask->batchRun;?></h2>
+    <h2><?php echo ($from == 'testtask' ? ($lang->testtask->common . $lang->colon) : ''). $lang->testtask->batchRun;?></h2>
   </div>
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-fixed table-form table-bordered'>
@@ -28,16 +29,9 @@
           <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
         </tr>
       </thead>
-      <?php $moduleOptionMenu = $productID ? $moduleOptionMenu : array();?>
       <?php foreach($cases as $caseID => $case):?>
       <?php if($case->status == 'wait') continue;?>
-      <?php
-      if(!$productID)
-      {
-          echo html::hidden("caseIDList[$case->id]", $caseID);
-          if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getOptionMenu($case->product, 'case', 0, $case->branch);
-      }
-       ?>
+      <?php if(!$productID) echo html::hidden("caseIDList[$case->id]", $caseID); ?>
       <tr class='text-center'>
         <td><?php echo $caseID . html::hidden("version[$caseID]", $case->version)?></td>
         <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>

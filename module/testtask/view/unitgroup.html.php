@@ -15,7 +15,7 @@
         </div>
       </th>
       <th class='c-id-sm'><?php echo $lang->idAB;?></th>
-      <th class='w-pri'>  <?php echo $lang->priAB;?></th>
+      <th class='w-pri' title='<?php echo $lang->pri;?>'>  <?php echo $lang->priAB;?></th>
       <th><?php echo $lang->testcase->title;?></th>
       <th class='w-80px'> <?php echo $lang->testtask->lastRunAccount;?></th>
       <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>

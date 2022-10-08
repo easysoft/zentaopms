@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $config->gitlab->create = new stdclass;
 $config->gitlab->create->requiredFields = 'name,url,token';
 
@@ -114,3 +114,17 @@ $config->gitlab->objectTypes['']      = '';
 $config->gitlab->objectTypes['task']  = '任务';
 $config->gitlab->objectTypes['bug']   = 'Bug';
 $config->gitlab->objectTypes['story'] = '需求';
+
+$config->gitlab->accessLevel = array();
+$config->gitlab->accessLevel['guest']      = 10;
+$config->gitlab->accessLevel['reporter']   = 20;
+$config->gitlab->accessLevel['developer']  = 30;
+$config->gitlab->accessLevel['maintainer'] = 40;
+$config->gitlab->accessLevel['owner']      = 50;
+
+/* Minimum compatible version. */
+$config->gitlab->minCompatibleVersion = '9.0';
+
+$config->gitlab->menus['project'] = 'browseProject';
+$config->gitlab->menus['group']   = 'browseGroup';
+$config->gitlab->menus['user']    = 'browseUser';

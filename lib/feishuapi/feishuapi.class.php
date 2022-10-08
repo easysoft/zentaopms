@@ -9,12 +9,11 @@ class feishuapi
     private $errors = array();
 
     /**
-     * Construct 
-     * 
-     * @param  string $appKey 
-     * @param  string $appSecret 
-     * @param  string $agentId 
-     * @param  string $apiUrl 
+     * Construct
+     *
+     * @param  string $appId
+     * @param  string $appSecret
+     * @param  string $apiUrl
      * @access public
      * @return void
      */
@@ -29,7 +28,7 @@ class feishuapi
 
     /**
      * Get token.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -47,7 +46,7 @@ class feishuapi
 
     /**
      * Get users.
-     * 
+     *
      * @param  string $selectedDepts
      * @access public
      * @return array
@@ -73,7 +72,7 @@ class feishuapi
             $pageToken = '';
             while(true)
             {
-                $response = $this->queryAPI($this->apiUrl . "contact/v3/users?department_id={$deptID}" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+                $response = $this->queryAPI($this->apiUrl . "contact/v3/users?department_id={$deptID}&page_size=50" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
                 if(isset($response->data->items))
                 {
                     foreach($response->data->items as $user) $users[$user->name] = $user->open_id;
@@ -103,7 +102,7 @@ class feishuapi
 
     /**
      * Get depts.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -146,33 +145,29 @@ class feishuapi
 
     /**
      * Get department tree structure.
-     * 
+     *
+     * @param  string    $departmentID
      * @access public
      * @return array
      */
-    public function getDeptTree()
+    public function getChildDeptTree($departmentID)
     {
-        $depts = array('result' => 'success', 'data' => array());
-
-        /* Gets the enterprise name. */
-        $response = $this->queryAPI($this->apiUrl . "tenant/v2/tenant/query", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
-        $company  = array('id' => '1', 'pId' => '0', 'name' => $response->data->tenant->name, 'open' => 1);
-        $data     = array($company);
-
         /* Get depts by parent dept. */
+        $depts     = array();
         $pageToken = '';
+        $index     = 0;
         while(true)
         {
-            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id={$departmentID}" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=false&page_size=50", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
             if(isset($response->data->items))
             {
                 foreach($response->data->items as $key => $dept)
                 {
-                    $key ++;
-                    $data[$key]['id']   = $dept->open_department_id;
-                    $data[$key]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
-                    $data[$key]['name'] = $dept->name;
-                    $data[$key]['open'] = 1;
+                    $depts[$index]['id']   = $dept->open_department_id;
+                    $depts[$index]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
+                    $depts[$index]['name'] = $dept->name;
+                    $depts[$index]['open'] = 1;
+                    $index++;
                 }
             }
 
@@ -180,15 +175,135 @@ class feishuapi
             $pageToken = $response->data->page_token;
         }
 
-        $depts['data'] = $data;
         return $depts;
     }
 
     /**
-     * Send message 
-     * 
-     * @param  string $userList 
-     * @param  string $message 
+     * Get the first tier department.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDeptTree()
+    {
+        $depts = array('data' => array());
+
+        /* Gets the enterprise name. */
+        $response = $this->queryAPI($this->apiUrl . "tenant/v2/tenant/query", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+        $company  = array('id' => '1', 'pId' => '0', 'name' => $response->data->tenant->name, 'open' => 1);
+        $depts    = array($company);
+
+        $departmentIdList = $this->getScopes();
+
+        $urls = array();
+        foreach($departmentIdList as $departmentID) $urls[] = $this->apiUrl . "contact/v3/departments/{$departmentID}";
+        $datas = $this->multiRequest($urls);
+
+        foreach($datas as $index => $dept)
+        {
+            $index += 1;
+            $dept   = json_decode($dept);
+
+            $memberCount = $dept->data->department->member_count;
+            $status      = $dept->data->department->status->is_deleted;
+
+            $depts[$index]['id']   = $dept->data->department->open_department_id;
+            $depts[$index]['pId']  = empty($dept->data->department->parent_department_id) ? 1 : $dept->data->department->parent_department_id;
+            $depts[$index]['name'] = $dept->data->department->name;
+            $depts[$index]['open'] = 1;
+        }
+
+        return $depts;
+    }
+
+    /**
+     * Get the visible range of the application.
+     *
+     * @access public
+     * @return array
+     */
+    public function getScopes()
+    {
+        $pageToken        = '';
+        $departmentIdList = array();
+
+        while(true)
+        {
+            $response      = $this->queryAPI($this->apiUrl . "contact/v3/scopes" . "?user_id_type=open_id&department_id_type=open_department_id&page_token={$pageToken}&page_size=100", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            $departmentIds = isset($response->data->department_ids) ? $response->data->department_ids : array();
+            foreach($departmentIds as $id) $departmentIdList[] = $id;
+
+            if(!isset($response->data->page_token)) break;
+            $pageToken = $response->data->page_token;
+        }
+
+        return $departmentIdList;
+    }
+
+    /**
+     * Handle the concurrency of requests.
+     *
+     * @param  array    $urls
+     * @access public
+     * @return array
+     */
+    public function multiRequest($urls)
+    {
+        $curl        = curl_multi_init();
+        $urlHandlers = array();
+        $urlData     = array();
+
+        /* Set request header information. */
+        $headers   = array();
+        $headers[] = "Content-Type: application/json";
+        if($this->token) $headers[] = "Authorization:Bearer {$this->token}";
+
+        /* Initialize multiple request handles to one. */
+        foreach($urls as $url)
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $urlHandlers[] = $ch;
+            curl_multi_add_handle($curl, $ch);
+        }
+
+        $active = null;
+        do
+        {
+            $mrc = curl_multi_exec($curl, $active);
+        }
+        while($mrc == CURLM_CALL_MULTI_PERFORM);
+
+        while($active and $mrc == CURLM_OK)
+        {
+            usleep(50000);
+            if(curl_multi_select($curl) != -1)
+            {
+                do
+                {
+                    $mrc = curl_multi_exec($curl, $active);
+                }
+                while($mrc == CURLM_CALL_MULTI_PERFORM);
+            }
+        }
+
+        foreach($urlHandlers as $index => $ch)
+        {
+            $urlData[$index] = curl_multi_getcontent($ch);
+            curl_multi_remove_handle($curl, $ch);
+        }
+        curl_multi_close($curl);
+        return $urlData;
+    }
+
+    /**
+     * Send message
+     *
+     * @param  string $userList
+     * @param  string $message
      * @access public
      * @return array
      */
@@ -206,36 +321,46 @@ class feishuapi
 
     /**
      * Query API.
-     * 
-     * @param  string $url 
+     *
+     * @param  string $url
      * @access public
      * @return string
      */
-    public function queryAPI($url, $data = '', $opt = array())
+    public function queryAPI($url, $data = '', $options = array())
     {
         $headers = array();
         $headers[] = "Content-Type: application/json";
         if($this->token) $headers[] = "Authorization:Bearer {$this->token}";
 
-        $response = common::http($url, $data, $opt, $headers);
+        $response = common::http($url, $data, $options, $headers);
         $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
         if(isset($response->code) and $response->code == 0) return $response;
 
         if(empty($response)) $this->errors = $errors;
+        if(isset($response->result) and $response->result == 'fail') $this->errors['curl'] = $response->message;
         if(isset($response->code)) $this->errors[$response->code] = "Errcode:{$response->code}, Errmsg:{$response->msg}";
         if(!empty($this->errors))
         {
-            echo js::error(array_shift($this->errors));
-            die(js::locate(helper::createLink('webhook', 'browse')));
+            if(helper::isAjaxRequest())
+            {
+                http_response_code(500);
+                echo array_shift($this->errors);
+                die();
+            }
+            else
+            {
+                echo js::error(array_shift($this->errors));
+                die(js::locate(helper::createLink('webhook', 'browse')));
+            }
         }
         return false;
     }
 
     /**
      * Check for errors.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -246,7 +371,7 @@ class feishuapi
 
     /**
      * Get errors.
-     * 
+     *
      * @access public
      * @return array
      */

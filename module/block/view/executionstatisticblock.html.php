@@ -69,8 +69,8 @@ $(function()
         var isPrev = $(this).is('.prev');
         var $activeItem = $nav.children('.active');
         var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
-        if ($next.length) $next.find('a').trigger('click');
-        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
+        if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
+        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
 
@@ -185,11 +185,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&productID=0&branch=0&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&productID=0&branch=0&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
                     </tr>
                   </table>
                 </div>

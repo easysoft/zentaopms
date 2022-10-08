@@ -3,7 +3,7 @@
  * The createByg view file of testcase module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testcase
  * @version     $Id$
@@ -74,10 +74,6 @@ $(function()
         $('#tr-detail_1').removeClass("hide");
     });
 });
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
-var sessionString = '<?php echo $sessionString;?>';
+var sessionString = '<?php echo session_name() . '=' . session_id();?>';
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

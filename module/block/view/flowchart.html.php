@@ -3,7 +3,7 @@
 <?php $idx = 0; ?>
   <div class='row row-<?php echo $flowName?>'>
   <?php foreach ($flow as $flowItem):?>
-    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><?php echo $flowItem ?></div></div>
+    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><span class='flow-item-display'><?php echo $flowItem ?></span></div></div>
   <?php endforeach; ?>
   </div>
 <?php endforeach; ?>
@@ -16,8 +16,9 @@
 .ie-8 .flow-item > div:before {display: none}
 .flow-item > div:before {border-left-color: #fff; z-index: 1}
 .flow-item > div:after {left: auto; right: -10px; z-index: 2}
+.flow-item > div > span {display: flow-root; overflow: hidden;}
 .ie-8 .flow-item > div {margin-right: 10px}
-.flow-item-0 > div {color: #838A9D; font-weight: bold; padding-left: 0;}
+.flow-item-0 > div {color: #3C4353; font-weight: bold; padding-left: 0;}
 .flow-item-0 > div:before {display: none}
 .flow-item-1 > div {background: #E3F2FD}
 .flow-item-1 > div:after {border-left-color: #E3F2FD}
@@ -44,4 +45,6 @@
 .block-sm .flow-item > div:before, .block-sm .flow-item > div:after {border-width: 15px 0 15px 6px;}
 .block-sm .row-3 .flow-item-1, .block-sm .row-3 .flow-item-3 {width: 25%}
 .block-sm .flow-item > div:after {right: -6px;}
+
+.flow-item-display {overflow: hidden; white-space:nowrap; text-overflow: ellipsis;}
 </style>

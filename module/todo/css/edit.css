@@ -5,3 +5,7 @@
 .nameBox {display: grid;}
 .chosen-container-single .chosen-single {height: 34px;}
 #begin_chosen .chosen-single {border-right-width: 0px;}
+.beginBox {padding-right: 0px;}
+.endBox {padding-left: 0px;}
+.beforeDaysBox {width: 250px; padding-top: 5px;}
+.nameBox + span {border-radius: 0px;}

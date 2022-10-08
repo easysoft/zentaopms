@@ -3,7 +3,7 @@
  * The report block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -22,20 +22,20 @@
 .product-info {position: relative; height: 65px;}
 .product-info + .product-info {margin-top: 10px;}
 .product-info .progress {position: absolute; left: 10px; top: 35px; right: 90px;}
-.product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
+.product-info .progress-info {position: absolute; left: 5px; top: 10px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
-html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 90px;}
+html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 75px;}
 .product-info .type-value,
 .product-info .type-label {font-size: 12px; overflow: visible; text-overflow: ellipsis; white-space: nowrap;}
 .product-info .type-value {font-size: 14px;}
 .product-info .type-value > strong {font-size: 20px; color: #3C4353;}
-.product-info .actions {position: absolute; left: 10px; top: 14px;}
+.product-info .actions {position: absolute; right: 90px; top: 14px;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 220px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative}
 .block-statistic .nav-secondary > li:hover {background: #f5f5f5;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
@@ -84,8 +84,8 @@ $(function()
         var isPrev = $(this).is('.prev');
         var $activeItem = $nav.children('.active');
         var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
-        if ($next.length) $next.find('a').trigger('click');
-        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
+        if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
+        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
 
     });
@@ -127,10 +127,10 @@ $(function()
               <div class="tile-title"><?php echo $lang->SRCommon;?></div>
               <?php if($product->stories):?>
               <div class="tile-amount"><?php echo array_sum($product->stories);?></div>
-              <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm"');?>
+              <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm" data-app="product"');?>
               <?php else:?>
               <div class="tile-amount">0</div>
-              <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm"');?>
+              <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm" data-app="product"');?>
               <?php endif;?>
             </div>
             <ul class="types-line">
@@ -157,7 +157,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info' data-app='product'");?>
               </div>
               <?php endif;?>
               <div class="type-info">
@@ -190,7 +190,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info' data-app='product'");?>
               </div>
               <?php endif;?>
               <div class="type-info">

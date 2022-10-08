@@ -3,7 +3,7 @@
  * The model file of testreport module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testreport
  * @version     $Id$
@@ -149,7 +149,7 @@ class testreportModel extends model
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = $stageGoups = $handleGroups = array();
 
         /* Init stageGroups. */
-        $isEmptyStage = true;
+        $stageGroups = array();
         foreach($this->lang->bug->priList as $priKey => $priValue)
         {
             $stageGroups[$priKey]['generated'] = 0;
@@ -158,7 +158,7 @@ class testreportModel extends model
         }
 
         /* Init handleGroups. */
-        $isEmptyHandle  = true;
+        $handleGroups   = array();
         $beginTimeStamp = strtotime($begin);
         $endTimeStamp   = strtotime($end);
         for($i = $beginTimeStamp; $i <= $endTimeStamp; $i += 86400)
@@ -174,7 +174,8 @@ class testreportModel extends model
 
         foreach($allBugs as $bug)
         {
-            if(!empty(array_intersect(explode(',', $bug->openedBuild), $buildIdList))) $buildBugs[$bug->id] = $bug;
+            $intersect = array_intersect(explode(',', $bug->openedBuild), $buildIdList);
+            if(!empty($intersect)) $buildBugs[$bug->id] = $bug;
         }
 
         /* Get bug reactivated actions during the testreport. */
@@ -219,8 +220,6 @@ class testreportModel extends model
                 $resolvedDate = date('m-d', strtotime($bug->resolvedDate));
                 $stageGroups[$bug->pri]['resolved']      += 1;
                 $handleGroups['resolved'][$resolvedDate] += 1;
-                $isEmptyStage  = false;
-                $isEmptyHandle = false;
             }
         }
 
@@ -234,8 +233,6 @@ class testreportModel extends model
                 $foundBugs[$bug->id] = $bug;
                 $stageGroups[$bug->pri]['generated']    += 1;
                 $handleGroups['generated'][$openedDate] += 1;
-                $isEmptyStage  = false;
-                $isEmptyHandle = false;
 
                 if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59")
                 {
@@ -278,8 +275,8 @@ class testreportModel extends model
         $bugSummary['countBugByTask']      = $byCaseNum;
         $bugSummary['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugSummary['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
-        $bugInfo['bugStageGroups']         = $isEmptyStage ? array() : $stageGroups;
-        $bugInfo['bugHandleGroups']        = $isEmptyHandle ? array() : $handleGroups;
+        $bugInfo['bugStageGroups']         = $stageGroups;
+        $bugInfo['bugHandleGroups']        = $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
@@ -331,7 +328,7 @@ class testreportModel extends model
         $this->loadModel('tree');
         $modules = array();
         $data    = array();
-        if(is_string($productIdList)) $productIdList = explode(',', $productIdList);
+        if(!is_array($productIdList)) $productIdList = explode(',', $productIdList);
         foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
         foreach($moduleGroups as $moduleID => $count)
         {
@@ -571,5 +568,23 @@ class testreportModel extends model
         return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)
             ->andWhere('id')->in(trim($storyIdList, ','))
             ->fetchAll('id');
+    }
+
+    /**
+     * Get pairs.
+     *
+     * @param  int    $productID
+     * @param  int    $appendID
+     * @access public
+     * @return array
+     */
+    public function getPairs($productID = 0, $appendID = 0)
+    {
+        return $this->dao->select('id,title')->from(TABLE_TESTREPORT)
+            ->where('deleted')->eq(0)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($appendID)->orWhere('id')->eq($appendID)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs();
     }
 }

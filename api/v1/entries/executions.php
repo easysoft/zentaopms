@@ -3,7 +3,7 @@
  * The executions entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -41,7 +41,7 @@ class executionsEntry extends entry
         else
         {
             $control = $this->loadController('execution', 'all');
-            $control->all($this->param('status', 'all'), $this->param('project', $projectID), $this->param('order', 'id_desc'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+            $control->all($this->param('status', 'all'), $this->param('order', 'id_desc'), 0, '', 0, $this->param('limit', 20), $this->param('page', 1));
             $data = $this->getData();
 
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');

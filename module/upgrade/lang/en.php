@@ -3,7 +3,7 @@
  * The upgrade module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -14,20 +14,21 @@ $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
 $lang->upgrade->fail            = 'Failed';
 $lang->upgrade->successTip      = 'Successed';
-$lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is updated.</p>";
+$lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations! Your ZenTao is updated.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';
 $lang->upgrade->license         = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning        = 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extensions';
 $lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->warnningContent = <<<EOT
-<p>Please backup your database before updating ZenTao!</p>
+<p>The upgrade requires high database privileges, please use the root user.<br>
+   Please backup your database before updating ZenTao!</p>
 <pre>
 1. Use phpMyAdmin to backup.
 2. Use mysqlCommand to backup.
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    Change the red text into corresponding Username and Database name.
-   e.g. mysqldump -u root -p zentao >zentao.bak
+   e.g. mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
@@ -40,24 +41,25 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       </ul>
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
-$lang->upgrade->selectVersion = 'Version';
-$lang->upgrade->continue      = 'Continue';
-$lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
-$lang->upgrade->fromVersion   = 'From';
-$lang->upgrade->toVersion     = 'To';
-$lang->upgrade->confirm       = 'Confirm SQL';
-$lang->upgrade->sureExecute   = 'Execute';
-$lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'File information has to be updated.';
-$lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'Please execute commands to delete the files. Please refresh after you delete them.';
-$lang->upgrade->mergeProgram  = 'Data Merge';
-$lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
-$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
-$lang->upgrade->to15Desc      = <<<EOD
+$lang->upgrade->selectVersion  = 'Version';
+$lang->upgrade->continue       = 'Continue';
+$lang->upgrade->noteVersion    = "Select the compatible version, or it might cause data loss.";
+$lang->upgrade->fromVersion    = 'From';
+$lang->upgrade->toVersion      = 'To';
+$lang->upgrade->confirm        = 'Confirm SQL';
+$lang->upgrade->sureExecute    = 'Execute';
+$lang->upgrade->upgradingTips  = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
+$lang->upgrade->forbiddenExt   = 'The extension is incompatible with the version. It has been deactivated:';
+$lang->upgrade->updateFile     = 'File information has to be updated.';
+$lang->upgrade->noticeSQL      = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
+$lang->upgrade->afterDeleted   = 'Please execute commands to delete the files. Please refresh after you delete them.';
+$lang->upgrade->mergeProgram   = 'Data Merge';
+$lang->upgrade->mergeTips      = 'Data Migration Tips';
+$lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide   = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide    = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide     = 'ZenTao ultimate version upgrade';
+$lang->upgrade->to15Desc       = <<<EOD
 <p>ZenTao version 15.0 has major upgrade of features, including:</p>
 <p><strong>1. Add the concept of Program</strong></p>
 <p>A program is a collection of interrelated and coordinated projects. It is at the highest level and belongs to the concept of a strategic level. It has multi-level project management, helping managers to form strategic directions and allocate resources at a macro level.</p>
@@ -70,7 +72,7 @@ $lang->upgrade->to15Desc      = <<<EOD
 <p>You can try the online demo before you decide to enable new features: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>New Features Online Demo</a></p>
 <p>You can also download an introduction PPT to help you understand it：<a class='text-info' href='' target='_blank'> New Features Introduction PPT</a></p>
 <video src="https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4" width="100%" controls ="controls"></video>
-<p style="text-align:center"><small>ZenTao Version 15.0 Introduction</small></p>
+<p style="text-align:center"><small>ZenTao Version 15 Introduction</small></p>
 <br/>
 <p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
@@ -87,7 +89,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <h4>2. Independent {$lang->projectCommon}</h4>
 <p>Choose several {$lang->projectCommon}s and migrate them to one Program, or migrate them separately.</p>
 <h4>4. Link {$lang->projectCommon}s of several {$lang->productCommon}s</h4>
-<p>You can set {$lang->projectCommon}s as one new project.</p>
+<p>After selecting a historical {$lang->projectCommon} as a project upgrade, the user can select the program to which this project belongs or create a new program.</p>
+<p>After selecting a historical {$lang->projectCommon} as the iterative upgrade, the user can select the project and program to which the execution belongs or create a new project and program.</p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = 'Keep the classic mode';
@@ -96,23 +99,26 @@ $lang->upgrade->to15Mode['new']     = 'Use the program mode';
 $lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the Program mode in the Admin-Custom-Custom later.';
 $lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
 
-$lang->upgrade->line          = 'Product Line';
-$lang->upgrade->allLines      = "All Product Lines";
-$lang->upgrade->program       = 'Merge Project';
-$lang->upgrade->existProgram  = 'Existing programs';
-$lang->upgrade->existProject  = 'Existing projects';
-$lang->upgrade->existLine     = 'Existing' . $lang->productCommon . ' lines';
-$lang->upgrade->product       = $lang->productCommon;
-$lang->upgrade->project       = 'Iteration';
-$lang->upgrade->repo          = 'Repo';
-$lang->upgrade->mergeRepo     = 'Merge Repo';
-$lang->upgrade->setProgram    = 'Set the project to which the program belongs';
-$lang->upgrade->dataMethod    = 'Data migration method';
-$lang->upgrade->begin         = 'Begin Date';
-$lang->upgrade->end           = 'End Date';
-$lang->upgrade->selectProject = 'The target project';
-$lang->upgrade->programName   = 'Program Name';
-$lang->upgrade->projectName   = 'Project Name';
+$lang->upgrade->line           = 'Product Line';
+$lang->upgrade->allLines       = "All Product Lines";
+$lang->upgrade->program        = 'Merge Project';
+$lang->upgrade->existProgram   = 'Existing programs';
+$lang->upgrade->existProject   = 'Existing projects';
+$lang->upgrade->existLine      = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->product        = $lang->productCommon;
+$lang->upgrade->project        = 'Iteration';
+$lang->upgrade->repo           = 'Repo';
+$lang->upgrade->mergeRepo      = 'Merge Repo';
+$lang->upgrade->setProgram     = 'Set the project to which the program belongs';
+$lang->upgrade->dataMethod     = 'Data migration method';
+$lang->upgrade->begin          = 'Begin Date';
+$lang->upgrade->end            = 'End Date';
+$lang->upgrade->selectProject  = 'The target project';
+$lang->upgrade->programName    = 'Program Name';
+$lang->upgrade->projectName    = 'Project Name';
+$lang->upgrade->compatibleEXT  = 'Extension mechanism compatible';
+$lang->upgrade->fileName       = 'File Name';
+$lang->upgrade->next           = 'Next';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->editedName         = 'New Name';
@@ -124,9 +130,18 @@ $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You ca
 $lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
+$lang->upgrade->needChangeEngine   = 'The table engine needs to be replaced in this upgrade, Please go [Admin->System->TableEngine] page to replace engine.';
 $lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
+$lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
+$lang->upgrade->deleteDirTip       = 'After the upgrade, the following folders will affect the use of system functions, please delete them.';
+$lang->upgrade->errorNoProduct     = "Select the {$lang->productCommon} that you want to merge.";
+$lang->upgrade->errorNoExecution   = "Select the {$lang->projectCommon} that you want to merge.";
+$lang->upgrade->moveExtFileTip     = <<<EOT
+<p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to extension/custom, otherwise the customization/plug-in function will not be available.</p>
+<p>Please confirm whether the system has been customized/plug-in. If no customization/plug-in has been done, you can uncheck the following files; Whether you have done customization/plug-in, you can also keep the file checked.</p>
+EOT;
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
@@ -142,3 +157,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 EOT;
 
 include dirname(__FILE__) . '/version.php';
+
+$lang->upgrade->recoveryActions = new stdclass();
+$lang->upgrade->recoveryActions->cancel = 'Cancel';
+$lang->upgrade->recoveryActions->review = 'Review';

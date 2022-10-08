@@ -31,7 +31,7 @@ class score extends control
      */
     public function rule()
     {
-        $this->loadModel('my')->setMenu();
+        $this->app->loadLang('my');
 
         $this->view->title      = $this->lang->my->scoreRule;
         $this->view->position[] = $this->lang->my->scoreRule;

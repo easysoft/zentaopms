@@ -3,7 +3,7 @@
  * The start file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: start.html.php 935 2010-07-06 07:49:24Z jajacn@126.com $
@@ -18,12 +18,16 @@
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
-  if(!empty($task->team) && $task->assignedTo != $this->app->user->account):
+  if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
   ?>
   <div class="alert with-icon">
     <i class="icon-exclamation-sign"></i>
     <div class="content">
+      <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
       <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->start);?></p>
+      <?php else:?>
+      <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->start);?></p>
+      <?php endif;?>
     </div>
   </div>
   <?php else:?>
@@ -37,12 +41,21 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
+    <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start') echo "onsubmit='return checkLeft();'"?>>
       <table class='table table-form'>
-        <tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'>
-            <?php echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");?>
+            <?php
+            if($task->mode == 'linear')
+            {
+                echo zget($members, $assignedTo) . html::hidden('assignedTo', $assignedTo);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");
+            }
+            ?>
           </td>
           <td></td>
         </tr>
@@ -52,19 +65,33 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->consumed;?></th>
+          <?php
+          $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+          $consumed    = !empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed;
+          $lblConsumed = $lang->task->consumed;
+          $readonly    = '';
+          if($app->rawMethod == 'restart' and !empty($currentTeam))
+          {
+              $lblConsumed = $lang->task->myConsumed;
+              $readonly    = 'readonly';
+          }
+          elseif($app->rawMethod == 'start' and $task->mode == 'linear')
+          {
+              $lblConsumed = $lang->task->myConsumed;
+          }
+          ?>
+          <th><?php echo $lblConsumed;?></th>
           <td>
             <div class='input-group'>
-              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->consumed : $task->consumed;?>
-              <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+              <?php echo html::input('consumed', $consumed, "class='form-control' $readonly");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td>
             <div class='input-group'>
-              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->left : $task->left;?>
+              <?php $left = !empty($currentTeam) ? (float)$currentTeam->left : $task->left;?>
               <?php echo html::input('left', $left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
@@ -73,7 +100,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'doing');?></td>
         </tr>
-        <?php $this->printExtendFields($task, 'table', 'columns=2');?> 
+        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>

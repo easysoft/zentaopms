@@ -3,7 +3,7 @@
  * The risk view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: risk.html.php 4771 2021-01-13 14:18:02Z $
@@ -52,7 +52,7 @@
           <td title="<?php echo zget($lang->issue->typeList, $issue->type);?>"><?php echo zget($lang->issue->typeList, $issue->type);?></td>
           <td class="text-ellipsis" title="<?php echo $issue->title;?>"><?php echo html::a($this->createLink('issue', 'view', "id=$issue->id", '', '', $issue->project), $issue->title, '', "data-group='project'");?></td>
           <td title="<?php echo zget($lang->issue->severityList, $issue->severity);?>"><?php echo zget($lang->issue->severityList, $issue->severity);?></td>
-          <td title="<?php echo $issue->pri;?>"><?php echo $issue->pri;?></td>
+          <td title="<?php echo $issue->pri;?>" class="c-pri text-center"><span class="label-pri <?php echo 'label-pri-' . $issue->pri;?>"><?php echo $issue->pri;?></span></td>
           <td title="<?php echo zget($users, $issue->owner);?>"><?php echo zget($users, $issue->owner);?></td>
           <td title="<?php echo zget($lang->issue->statusList, $issue->status);?>"><?php echo zget($lang->issue->statusList, $issue->status);?></td>
           <?php $issue->createdDate = substr($issue->createdDate, 0, 10)?>

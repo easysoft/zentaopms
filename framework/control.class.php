@@ -42,8 +42,6 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            $this->checkRequireFlowField();
-
             if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
             {
                 if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
@@ -58,6 +56,11 @@ class control extends baseControl
                     if(isset($this->config->{$this->moduleName}->list->exportFields))
                     {
                         foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
+                    }
+
+                    foreach($exportFields as $flowField => $exportField)
+                    {
+                        if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
                     }
                 }
             }
@@ -77,31 +80,49 @@ class control extends baseControl
             }
 
             /* If workflow is created by a normal user, set priv. */
-            if(isset($this->app->user) and !$this->app->user->admin)
-            {
-                $actions = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                $labels  = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                if(!empty($actions))
-                {
-                    foreach($actions as $module => $actionObj)
-                    {
-                        foreach($actionObj as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
-                    }
-                }
+            if(isset($this->app->user) and !$this->app->user->admin) $this->setDefaultPrivByWorkflow();
+        }
+    }
 
-                if(!empty($labels))
+    /**
+     * Det default priv by workflow.
+     *
+     * @access public
+     * @return bool
+     */
+    public function setDefaultPrivByWorkflow()
+    {
+        $actionList = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($actionList)
+        {
+            foreach($actionList as $module => $actions)
+            {
+                foreach($actions as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
+            }
+        }
+
+        $labelList = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($labelList)
+        {
+            foreach($labelList as $module => $labels)
+            {
+                foreach($labels as $label)
                 {
-                    foreach($labels as $module => $codeObj)
-                    {
-                        foreach($codeObj as $code)
-                        {
-                            $code = str_replace('browse', '', $code->code);
-                            $this->app->user->rights['rights'][$module][$code] = 1;
-                        }
-                    }
+                    $code = str_replace('browse', '', $label->code);
+                    $this->app->user->rights['rights'][$module][$code] = 1;
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -117,8 +138,9 @@ class control extends baseControl
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if(!isset($this->config->preferenceSetted))
+        if(!isset($this->config->preferenceSetted) and $this->config->vision == 'rnd')
         {
+            setcookie('tab', 'my', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $this->locate(helper::createLink('my', 'preference'));
         }
     }
@@ -173,18 +195,55 @@ class control extends baseControl
         if(!empty($viewExtPath))
         {
             $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $xuanExtViewFile   = $viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $visionExtViewFile = $viewExtPath['vision'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $saasExtViewFile   = $viewExtPath['saas']   . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $customExtViewFile = $viewExtPath['custom'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
 
-            $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
-            $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile))
+            /* Get ext files, site > custom > vision > common. */
+            if(!empty($siteExtViewFile) and file_exists($siteExtViewFile))
             {
-                die(js::error($this->lang->notPage) . js::locate('back'));
+                $viewFile = $siteExtViewFile;
+            }
+            else if(file_exists($customExtViewFile))
+            {
+                $viewFile = $customExtViewFile;
+            }
+            else if(!empty($viewExtPath['vision']) and file_exists($visionExtViewFile))
+            {
+                $viewFile = $visionExtViewFile;
+            }
+            else if(file_exists($xuanExtViewFile))
+            {
+                $viewFile = $xuanExtViewFile;
+            }
+            else if(file_exists($saasExtViewFile))
+            {
+                $viewFile = $saasExtViewFile;
+            }
+            else if(file_exists($commonExtViewFile))
+            {
+                $viewFile = $commonExtViewFile;
             }
 
+            if(!is_file($viewFile)) $viewFile = dirname(dirname($viewExtPath['common'])) . DS . 'view' . DS . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
+
+            /* Get ext hook files. */
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $extHookFiles       = array_merge((array) $commonExtHookFiles, (array) $siteExtHookFiles);
+            if(!empty($viewExtPath['vision']))
+            {
+                $visionExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+                $commonExtHookFiles = array_merge((array)$commonExtHookFiles, (array)$visionExtHookFiles);
+            }
+
+            $xuanExtHookFiles   = glob($viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $saasExtHookFiles   = glob($viewExtPath['saas']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+
+            $siteExtHookFiles = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$xuanExtHookFiles, (array)$saasExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
         }
 
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
@@ -254,6 +313,42 @@ class control extends baseControl
     }
 
     /**
+     * 获取一个方法的输出内容，这样我们可以在一个方法里获取其他模块方法的内容。
+     * 如果模块名为空，则调用该模块、该方法；如果设置了模块名，调用指定模块指定方法。
+     *
+     * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
+     * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
+     *
+     * @param  string $moduleName module name.
+     * @param  string $methodName method name.
+     * @param  array  $params     params.
+     * @access  public
+     * @return  string  the parsed html.
+     */
+    public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
+    {
+        if($moduleName != $this->moduleName) $this->app->fetchModule = $moduleName;
+
+        return parent::fetch($moduleName, $methodName, $params, $appName);
+    }
+
+    /**
+     * Build operate menu of a method.
+     *
+     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  string $displayOn view|browse
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($object, $type = 'view')
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $moduleName = $this->moduleName;
+        return $this->$moduleName->buildOperateMenu($object, $type);
+    }
+
+    /**
      * Execute hooks of a method.
      *
      * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
@@ -269,19 +364,18 @@ class control extends baseControl
     }
 
     /**
-     * Build operate menu of a method.
+     * Set workflow export fields
      *
-     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
-     * @param  string $displayOn view|browse
+     * @param  array  $fields
      * @access public
-     * @return void
+     * @return array
      */
-    public function buildOperateMenu($object, $displayOn = 'view')
+    public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if(!isset($this->config->bizVersion)) return array();
 
-        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
-        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+        $moduleName = $this->moduleName;
+        return $this->$moduleName->getFlowExportFields();
     }
 
     /**
@@ -294,14 +388,22 @@ class control extends baseControl
      *                          position=left|right     The position which the fields displayed in a page.
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
+     * @param  bool   $print
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '')
+    public function printExtendFields($object, $type, $extras = '', $print = true, $moduleName = '', $methodName = '')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        echo $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
+        $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
+        if(!$print) return $fields;
+
+        echo $fields;
     }
 
     /**
@@ -320,6 +422,31 @@ class control extends baseControl
     }
 
     /**
+     * Print view file.
+     *
+     * @param  string    $viewFile
+     * @access public
+     * @return bool|string
+     */
+    public function printViewFile($viewFile)
+    {
+        if(!file_exists($viewFile)) return false;
+
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        extract((array)$this->view);
+        ob_start();
+        include $viewFile;
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        chdir($currentPWD);
+
+        return $output;
+    }
+
+    /**
      * Check require with flow field when post data.
      *
      * @access public
@@ -327,8 +454,12 @@ class control extends baseControl
      */
     public function checkRequireFlowField()
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
         if(empty($_POST)) return false;
+
+        $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
+        if(empty($action)) return false;
+        if($action->extensionType == 'none' and $action->buildin == 1) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
@@ -422,28 +553,4 @@ class control extends baseControl
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 
-    /**
-     * Print view file.
-     *
-     * @param  string    $viewFile
-     * @access public
-     * @return void
-     */
-    public function printViewFile($viewFile)
-    {
-        if(!file_exists($viewFile)) return false;
-
-        $currentPWD = getcwd();
-        chdir(dirname($viewFile));
-
-        extract((array)$this->view);
-        ob_start();
-        include $viewFile;
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        chdir($currentPWD);
-
-        return $output;
-    }
 }

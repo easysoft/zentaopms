@@ -3,7 +3,7 @@
  * The testsuite module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -24,6 +24,7 @@ $lang->testsuite->deleted          = '已删除';
 $lang->testsuite->successSaved     = '保存成功';
 
 $lang->testsuite->id             = '编号';
+$lang->testsuite->pri            = '优先级';
 $lang->testsuite->common         = '套件';
 $lang->testsuite->project        = '所属项目';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
@@ -53,3 +54,5 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
+
+$lang->testsuite->featureBar['browse']['all'] = '套件列表';

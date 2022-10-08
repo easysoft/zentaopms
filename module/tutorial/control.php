@@ -3,7 +3,7 @@
  * The control file of tutorial module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2016 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Hao Sun <sunhao@cnezsoft.com>
  * @package     tutorial
  * @version     $Id: control.php 5002 2013-07-03 08:25:39Z chencongzhi520@gmail.com $
@@ -73,7 +73,7 @@ class tutorial extends control
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         if(empty($referer)) $referer = helper::safe64Encode(helper::createLink('my', 'index', '', 'html'));
-        die(js::locate(helper::safe64Decode($referer), 'parent'));
+        echo js::locate(helper::safe64Decode($referer), 'parent');
     }
 
     /**
@@ -86,7 +86,7 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-        die(json_encode(array('result' => 'success')));
+        echo json_encode(array('result' => 'success'));
     }
 
     /**
@@ -118,7 +118,7 @@ class tutorial extends control
             }
         }
         if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;
-        if(!$hasPriv) die(js::locate('back'));
+        if(!$hasPriv) return print(js::locate('back'));
 
         $params = helper::safe64Decode($params);
         if($_POST)
@@ -127,9 +127,11 @@ class tutorial extends control
             if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
             if($module == 'execution' and $method == 'linkStory') $target = 'self';
             if($module == 'execution' and $method == 'managemembers') $target = 'self';
-            die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
+
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params))));
+            return print(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
-        die($this->fetch($module, $method, $params));
+        echo $this->fetch($module, $method, $params);
     }
 
     /**
@@ -144,7 +146,7 @@ class tutorial extends control
     public function ajaxSaveNovice($novice = 'true', $reload = 'false')
     {
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
-        if($reload == 'true') die(js::reload('parent'));
+        if($reload == 'true') return print(js::reload('parent'));
     }
 
     /**

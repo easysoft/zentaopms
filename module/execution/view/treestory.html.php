@@ -1,11 +1,12 @@
 <?php if(isset($pageCSS)) css::internal($pageCSS);?>
 <div class="detail">
-  <h2 class="detail-title"><span class="label-id"><?php echo $story->id?></span> <span class="label label-story"><?php echo $lang->story->common?></span> <span class="title"><?php echo $story->title;?></span></h2>
+  <h2 class="detail-title"><span class="label-id storyID"><?php echo $story->id?></span> <span class="label status-story status-<?php echo $story->status?>"><?php echo $this->processStatus('story', $story);?></span> <span class="title"><?php echo $story->title;?></span></h2>
   <div class="detail-content article-content">
     <div class="infos">
-      <span class="status-story status-draft"><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span>
-      <span><?php echo $lang->story->stage;?> <?php echo $lang->story->stageList[$story->stage];?></span>
-      <span><?php echo $lang->story->estimate;?> <?php echo $story->estimate;?></span>
+      <span><span class="title"><?php echo $lang->story->stage;?></span> <span><?php echo $lang->story->stageList[$story->stage];?></span></span>
+    </div>
+    <div class="infos">
+      <span><span class="title"><?php echo $lang->story->estimate;?></span> <span><?php echo $story->estimate;?></span></span>
     </div>
     <div class="btn-toolbar">
       <?php
@@ -26,12 +27,14 @@
     <?php echo !empty($story->spec) ? $story->spec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
+<?php if($this->config->vision != 'lite'):?>
 <div class="detail">
   <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
   <div class="detail-content article-content">
     <?php echo !empty($story->verify) ? $story->verify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
+<?php endif;?>
 <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
 
 <details class="detail" open>
@@ -39,16 +42,19 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
+      <?php if($this->config->vision != 'lite'):?>
       <tr>
         <th class='w-100px'><?php echo $lang->story->product;?></th>
         <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
       </tr>
+      <?php endif;?>
       <?php if($product->type != 'normal'):?>
         <tr>
           <th><?php echo sprintf($lang->product->branch, zget($lang->product->branchName, $product->type));?></th>
           <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
         </tr>
       <?php endif;?>
+      <?php if($this->config->vision != 'lite'):?>
       <tr>
         <th><?php echo $lang->story->module;?></th>
           <?php
@@ -64,7 +70,7 @@
               foreach($modulePath as $key => $module)
               {
                   $moduleTitle .= $module->name;
-                  if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                  if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name, '', "data-app='product'")) echo $module->name;
                   if(isset($modulePath[$key + 1]))
                   {
                       $moduleTitle .= '/';
@@ -85,7 +91,7 @@
           {
               foreach($story->planTitle as $planID => $planTitle)
               {
-                  if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $lanTitle;
+                  if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $planTitle;
                   echo '<br />';
               }
           }
@@ -96,6 +102,7 @@
           ?>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->story->source;?></th>
         <td id='source'><?php echo $story->source ? $lang->story->sourceList[$story->source] : $lang->noData;?></td>
@@ -197,6 +204,7 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
+        <?php if($this->config->vision != 'lite'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>
           <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
@@ -241,6 +249,7 @@
             <?php endif;?>
           </td>
         </tr>
+        <?php endif;?>
         <tr class='text-top'>
           <th><?php echo $lang->story->legendLinkStories;?></th>
           <td class='pd-0'>
@@ -252,7 +261,7 @@
               <?php
               foreach($linkStories as $linkStoryID)
               {
-                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('execution', 'storyView', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
               }
               ?>
             </ul>
@@ -270,7 +279,7 @@
               <?php
               foreach($childStories as $childStoryID)
               {
-                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
+                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('execution', 'storyView', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
               }
               ?>
             </ul>

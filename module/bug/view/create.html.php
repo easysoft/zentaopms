@@ -3,7 +3,7 @@
  * The create view of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: create.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
@@ -18,7 +18,7 @@ js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
-js::set('refresh', $lang->refresh);
+js::set('refresh', $lang->refreshIcon);
 js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
@@ -27,6 +27,8 @@ js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
 js::set('tab', $this->app->tab);
+js::set('requiredFields', $config->bug->create->requiredFields);
+js::set('showFields', $showFields);
 if($this->app->tab == 'execution') js::set('objectID', $executionID);
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
@@ -68,7 +70,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>
@@ -89,12 +91,20 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               <div class='input-group' id='bugTypeInputGroup'>
                 <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");?>
                 <?php if($showOS):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+                <div class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+                    <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
+                  </div>
+                </div>
                 <?php endif;?>
                 <?php if($showBrowser):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+                <div class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+                    <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
+                  </div>
+                </div>
                 <?php endif;?>
               </div>
             </td>
@@ -108,7 +118,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 </div>
                 <div class='table-col'>
                   <div class='input-group' id='executionIdBox'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->execution;?></span>
+                    <span class='input-group-addon fix-border' id='executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></span>
                     <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
                   </div>
                 </div>
@@ -138,6 +148,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+          <?php $showNoticefeedbackBy = strpos(",$showFields,", ',noticefeedbackBy,') !== false;?>
           <?php if($showDeadline):?>
             <td id='deadlineTd'>
               <div class='input-group'>
@@ -146,23 +157,25 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           </tr>
+          <?php if($showNoticefeedbackBy):?>
           <tr>
             <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
-            <td><?php echo html::input('feedbackBy', '', "class='form-control'");?></td>
+            <td><?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?></td>
             <td id='notifyEmailTd'>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->bug->notifyEmail?></span>
-                <span><?php echo html::input('notifyEmail', '', "class='form-control'");?></span>
+                <span><?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?></span>
               </div>
             </td>
           </tr>
-          <?php else:?>
+          <?php endif;?>
+          <?php elseif($showNoticefeedbackBy):?>
             <td>
               <div class='input-group' id='feedback'>
               <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
-              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+              <?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?>
               <span class="input-group-addon"><?php echo $lang->bug->notifyEmail?></span>
-              <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+              <?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?>
               </div>
             </td>
           </tr>
@@ -181,7 +194,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col' id='osBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                    <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
+                    <?php echo html::select('os[]', $lang->bug->osList, $os, "class='form-control chosen' multiple");?>
                   </div>
                 </div>
                 <?php endif;?>
@@ -189,10 +202,22 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                    <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
+                    <?php echo html::select('browser[]', $lang->bug->browserList, $browser, "class='form-control chosen' multiple");?>
                   </div>
                 </div>
                 <?php endif;?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
+          <?php if(isset($executionType) and $executionType == 'kanban'):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->region;?></th>
+            <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
               </div>
             </td>
           </tr>
@@ -296,7 +321,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group'>
                 <?php if($showStory):?>
-                <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+                <span class='input-group-addon task'><?php echo $lang->bug->task?></span>
                 <?php endif;?>
                 <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
               </div>
@@ -317,7 +342,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='contactListGroup'>
                 <?php
-                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
+                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control picker-select' multiple");
                 echo $this->fetch('my', 'buildContactLists');
                 ?>
               </div>
@@ -338,6 +363,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <tr class='hide'>
             <th><?php echo $lang->bug->status;?></th>
             <td><?php echo html::hidden('status', 'active');?></td>
+            <td><?php echo html::hidden('issueKey', $issueKey);?></td>
           </tr>
           <?php $this->printExtendFields('', 'table');?>
           <tr>
@@ -363,7 +389,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php js::set('bugExecution', $lang->bug->execution);?>
+<?php js::set('bugExecution', (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})

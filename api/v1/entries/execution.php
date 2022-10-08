@@ -3,7 +3,7 @@
  * The execution entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -21,6 +21,7 @@ class executionEntry extends Entry
     public function get($executionID)
     {
         $fields = $this->param('fields');
+        $status = $this->param('status', 'all');
 
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
@@ -36,6 +37,8 @@ class executionEntry extends Entry
         $execution->products    = array();
         foreach($data->data->products as $productID => $executionProduct)
         {
+            if($status == 'noclosed' and $executionProduct->status == 'closed') continue;
+
             $product = new stdclass();
             $product->id = $executionProduct->id;
             $product->name = $executionProduct->name;
@@ -43,8 +46,8 @@ class executionEntry extends Entry
             foreach($executionProduct->plans as $planID)
             {
                 $plan = new stdclass();
-                $plan->id = $planID;
-                $plan->name = $data->data->planGroups->{$productID}->{$planID};
+                $plan->id   = trim($planID, ',');
+                $plan->name = $data->data->planGroups->{$productID}->{$plan->id};
                 $product->plans[] = $plan;
             }
             $execution->products[] = $product;
@@ -71,6 +74,8 @@ class executionEntry extends Entry
                     {
                         $execution->modules = $data->data->tree;
                     }
+                case 'builds':
+                    $execution->builds  = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone', $executionID, 'execution');
                     break;
                 case 'moduleoptionmenu':
                     $execution->moduleOptionMenu = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
@@ -93,6 +98,10 @@ class executionEntry extends Entry
                     $dynamics = $data->data->dynamics;
                     $execution->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);
                     break;
+                case 'chartdata':
+                    list($dateList, $interval) = $this->loadModel('execution')->getDateList($execution->begin, $execution->end, 'noweekend', '0', 'Y-m-d');
+                    $execution->chartData = $this->execution->buildBurnData($executionID, $dateList, 'noweekend', 'left');
+                    break;
             }
         }
 
@@ -111,10 +120,13 @@ class executionEntry extends Entry
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
         /* Set $_POST variables. */
-        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status';
+        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status,PO,PM,QD,RD';
         $this->batchSetPost($fields, $oldExecution);
 
         $this->setPost('whitelist', $this->request('whitelist', explode(',', $oldExecution->whitelist)));
+
+        $products = $this->loadModel('product')->getProducts($executionID);
+        $this->setPost('products', $this->request('products', array_keys($products)));
 
         $control = $this->loadController('execution', 'edit');
         $control->edit($executionID);

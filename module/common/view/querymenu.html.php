@@ -5,7 +5,7 @@
   padding:0 7px;
   position: absolute;
   right: -10px;
-  top: -5px;
+  top: -3px;
   display: block;
   width: 20px;
   text-align: center;

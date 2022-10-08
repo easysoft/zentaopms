@@ -3,7 +3,7 @@
  * The model file of report module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: model.php 4726 2013-05-03 05:51:27Z chencongzhi520@gmail.com $
@@ -98,12 +98,13 @@ class reportModel extends model
      */
     public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
+        $permission = common::hasPriv('report', 'showProject') or $this->app->user->admin;
+        $tasks      = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$permission)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
@@ -140,11 +141,12 @@ class reportModel extends model
      */
     public function getProducts($conditions, $storyType = 'story')
     {
-        $products = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
+        $permission = common::hasPriv('report', 'showProduct') or $this->app->user->admin;
+        $products   = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
 
@@ -172,6 +174,7 @@ class reportModel extends model
         $stmt = $this->dao->select('id,plan,product,status')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('parent')->ge(0)
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->query();
         while($story = $stmt->fetch())
@@ -294,6 +297,7 @@ class reportModel extends model
                 ->beginIF($dept)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
                 ->andWhere('t1.type')->eq('execution')
                 ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->andWhere('t2.deleted')->eq('0')
                 ->fetchGroup('account', 'name');
 
             $workload = array();
@@ -311,8 +315,8 @@ class reportModel extends model
                             $project[$execution->projectname]['execution'][$name]['count']       = 0;
                             $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
 
-                            $workload[$member]['total']['count']                                 = 0;
-                            $workload[$member]['total']['manhour']                               = 0;
+                            $workload[$member]['total']['count']   = 0;
+                            $workload[$member]['total']['manhour'] = 0;
                         }
                     }
                     $workload[$member]['task']['project'] = $project;
@@ -356,19 +360,33 @@ class reportModel extends model
             $taskGroups[$task->assignedTo][$task->id] = $task;
         }
 
-        $multiTaskTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('task')
-            ->andWhere('root')->in(array_keys($allTasks))
+        $stmt = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($allTasks))
             ->beginIF($dept)->andWhere('account')->in(array_keys($deptUsers))->fi()
-            ->fetchGroup('account', 'root');
-        foreach($multiTaskTeams as $assignedTo => $multiTasks)
+            ->query();
+        $multiTaskTeams = array();
+        while($taskTeam = $stmt->fetch())
         {
-            foreach($multiTasks as $task)
+            $account = $taskTeam->account;
+            if(!isset($multiTaskTeams[$account][$taskTeam->task]))
             {
-                $userTask = clone $allTasks[$task->root];
-                $userTask->estimate = $task->estimate;
-                $userTask->consumed = $task->consumed;
-                $userTask->left     = $task->left;
-                $taskGroups[$assignedTo][$task->root] = $userTask;
+                $multiTaskTeams[$account][$taskTeam->task] = $taskTeam;
+            }
+            else
+            {
+                $multiTaskTeams[$account][$taskTeam->task]->estimate += $taskTeam->estimate;
+                $multiTaskTeams[$account][$taskTeam->task]->consumed += $taskTeam->consumed;
+                $multiTaskTeams[$account][$taskTeam->task]->left     += $taskTeam->left;
+            }
+        }
+        foreach($multiTaskTeams as $assignedTo => $taskTeams)
+        {
+            foreach($taskTeams as $taskTeam)
+            {
+                $userTask = clone $allTasks[$taskTeam->task];
+                $userTask->estimate = $taskTeam->estimate;
+                $userTask->consumed = $taskTeam->consumed;
+                $userTask->left     = $taskTeam->left;
+                $taskGroups[$assignedTo][$taskTeam->task] = $userTask;
             }
         }
 
@@ -390,6 +408,8 @@ class reportModel extends model
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
+
+                if(empty($project)) continue;
                 $workload[$user]['task']['project'] = $project;
             }
         }
@@ -650,6 +670,7 @@ class reportModel extends model
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
     }
@@ -664,12 +685,12 @@ class reportModel extends model
      */
     public function getUserYearEfforts($accounts, $year)
     {
-        $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)
+        $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
 
-        $effort->consumed = round($effort->consumed, 2);
+        $effort->consumed = !empty($effort->consumed) ? round($effort->consumed, 2) : 0;
         return $effort;
     }
 
@@ -1060,10 +1081,11 @@ class reportModel extends model
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root")
-            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage' : 'project')
+            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage,kanban' : 'project')
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
 
         $statusOverview = array();

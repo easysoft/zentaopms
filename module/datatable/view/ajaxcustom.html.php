@@ -3,9 +3,9 @@
  * The view file of datatable module of ZenTaoPMS.
  *
  * @copyright   Copyright 2014-2014 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     business(商业软件) 
+ * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
- * @package     datatable 
+ * @package     datatable
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -67,7 +67,7 @@
         $autoWidth = $col['width'] == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>
-          <div class='actions pull-right'>
+          <div class='actions pull-right' <?php if($autoWidth) echo "style='padding-right: 11px'";?>>
             <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
             <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
           </div>

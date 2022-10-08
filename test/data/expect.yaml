@@ -1,0 +1,25 @@
+title: table zt_expect
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 1-1000
+    - field: userID
+      range: 32-301
+    - field: project
+      range: 11-100{3}
+    - field: expect
+      range: 1-1000
+      prefix: "期望内容"
+    - field: progress
+      range: 1-1000
+      prefix: "达成进展"
+    - field: createdBy
+      range: admin
+    - field: createdDate
+      range: "(M)-(w):60s"
+      type: timestamp
+      format: "YYYY-MM-DD"
+    - field: deleted
+      range: 0

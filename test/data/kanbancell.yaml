@@ -1,0 +1,25 @@
+title: table zt_kanbancell
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: kanban
+      range: 1-100{4}
+    - field: lane
+      range: 1-100{4}
+    - field: column
+      range: 1-400
+    - field: type
+      range: "common"
+    - field: cards
+      fields:
+        - field: card1
+          prefix: ","
+          postfix: ","
+          range: 1-1000:2
+        - field: card2
+          postfix: ","
+          range: 2-1000:2
+        - field: card3
+          postfix: ","
+          range: 801-1000:2

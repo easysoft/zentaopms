@@ -3,7 +3,11 @@
 .block-waterfallreport .col-right {width: 87%;}
 .block-waterfallreport .panel-body {padding-top: 0;}
 .block-waterfallreport .table-row {margin-bottom: 20px;}
+<?php if(common::checkNotCN()):?>
+.block-waterfallreport .stage {position: absolute; top: 14px; left: 140px;}
+<?php else:?>
 .block-waterfallreport .stage {position: absolute; top: 14px; left: 90px;}
+<?php endif;?>
 .block-waterfallreport .col-right .tiles {padding: 10px 0 0 16px;}
 .block-waterfallreport .col-right .tile {width: 20%;}
 .block-waterfallreport .col-right .tile .tile-title {font-weight: 700;}
@@ -16,7 +20,7 @@
 <div class="panel-body conatiner-fluid">
   <div class='table-row'>
     <div class="col col-left hide-in-sm">
-      <h4><?php echo $lang->project->progress;?></h4>
+      <h4><?php echo $lang->project->weekProgress;?></h4>
       <span class='progress-num'><?php echo $progress . '%';?></span>
       <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress;?>%">

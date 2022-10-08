@@ -6,12 +6,9 @@
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
 #navTabs>li {padding: 0px 10px; display: inline-block}
 #navTabs>li>span {display: inline-block;}
-#navTabs>li>a {padding: 8px 0px; display: inline-block}
-#navTabs>li.active>a {font-weight: 700; color: #0c64eb;}
-#navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
-#navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
+#navTabs>li>a {margin: 0!important; padding: 8px 0px; display: inline-block}
 
-#tabContent {margin-top: 10px; z-index: 900;}
+#tabContent {margin-top: 5px; z-index: 900; max-width: 220px}
 .productTree ul {list-style: none; margin: 0}
 .productTree .products>ul {padding-left: 7px;}
 .productTree .products>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
@@ -20,18 +17,18 @@
 .productTree li a i.icon:before {min-width: 16px !important;}
 .productTree li .label {position: unset; margin-bottom: 0;}
 .productTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
-.productTree li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 .productTree .tree li>.list-toggle {line-height: 24px;}
 .productTree .tree li.has-list.open:before {content: unset;}
 
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !important;}
-
-#swapper li > a {padding-top: 4px; padding-bottom: 4px;}
+#swapper li > a {margin-top: 4px; margin-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #subHeader .tree ul {display: block;}
+div#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+#gray-line {width: 230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
+#swapper li >.selected {color: #0c64eb!important;background: #e9f2fb!important;}
 </style>
 <?php
 $productCounts      = array();
@@ -68,9 +65,9 @@ foreach($products as $programID => $programProducts)
     {
         $programName = zget($programs, $programID);
 
-        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($productCounts[$programID]['closed']) $closedProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['closed']) $closedProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProducts as $index => $product)
@@ -82,7 +79,7 @@ foreach($products as $programID => $programProducts)
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
-            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProduct';
 
@@ -90,7 +87,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
         {
-            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+            $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -98,7 +95,7 @@ foreach($products as $programID => $programProducts)
         }
         else if($product->status == 'closed')
         {
-            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -121,7 +118,7 @@ $closedProductsHtml .= '</ul>';
     <div class='list-group'>
       <?php $tabActive = ($myProducts and ($tabActive == 'closed' or $tabActive == 'myProduct')) ? 'myProduct' : 'other';?>
       <?php if($myProducts): ?>
-      <ul class="nav nav-tabs" id="navTabs">
+      <ul class="nav nav-tabs  nav-tabs-primary" id="navTabs">
         <li class="<?php if($tabActive == 'myProduct') echo 'active';?>"><?php echo html::a('#myProduct', $lang->product->mine, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="label label-light label-badge"><?php echo $myProducts;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->product->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>
@@ -141,6 +138,8 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
+  <div id="gray-line" hidden></div>
+  <div id="closed" hidden><?php echo $lang->product->closedProduct?></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
@@ -161,7 +160,7 @@ $(function()
         }
     })
 
-    $('#tabContent [data-ride="tree"]').tree('expand');
+    $('#swapper [data-ride="tree"]').tree('expand');
 
     $('#swapper #dropMenu .search-box').on('onSearchChange', function(event, value)
     {
@@ -176,6 +175,35 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
-    })
+        if($('.form-control.search-input').val().length > 0)
+        {
+            $('#closed').attr("hidden", false);
+            $('#gray-line').attr("hidden", false);
+        }
+        else
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
+    });
+
+    $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
+    {
+        if(!value) return;
+
+        if($("#myProduct .clickable.search-list-item").not(".hidden").length > 0)
+        {
+            $("#navTabs a[href='#myProduct']").tab('show');
+        }
+        else if($("#other .clickable.search-list-item").not(".hidden").length > 0)
+        {
+            $("#navTabs a[href='#other']").tab('show');
+        }
+        if($('ul.tree-angles').height() == 0)
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
+    });
 })
 </script>

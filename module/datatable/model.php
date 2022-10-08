@@ -36,7 +36,7 @@ class datatableModel extends model
             $this->config->$module->datatable->fieldList[$field]['title'] = $title;
         }
 
-        if(isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)
@@ -158,7 +158,7 @@ class datatableModel extends model
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
             if($id == 'id' and (int)$width < 90) $width = '90px';
             $align = $id == 'actions' ? 'text-center' : '';
-            $align = in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? 'text-right' : $align;
+            $align = in_array($id, array('budget', 'teamCount', 'estimate', 'consume', 'consumed', 'left')) ? 'text-right' : $align;
 
             $style  = '';
             $data   = '';

@@ -3,7 +3,7 @@
  * The browse view file of dept module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: browse.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('repeatDepart', $lang->dept->repeatDepart);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->dept->common;?></span></span>
@@ -33,7 +34,7 @@
         <div class='panel-title'><?php echo $lang->dept->manageChild;?></div>
       </div>
       <div class='panel-body'>
-        <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>'>
+        <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>' id="dataForm">
           <table class='table table-form'>
             <tr>
               <td>
@@ -49,7 +50,7 @@
                 ?>
                 </nobr>
               </td>
-              <td class='w-300px'> 
+              <td class='w-500px'>
                 <?php
                 $maxOrder = 0;
                 foreach($sons as $sonDept)
@@ -85,7 +86,7 @@ $(function()
         name: 'deptTree',
         initialState: 'preserve',
         data: data,
-        sortable: 
+        sortable:
         {
             lazy: true,
             nested: true,
@@ -105,7 +106,7 @@ $(function()
             $li.append($toggle);
             return true;
         },
-        actions: 
+        actions:
         {
             sort:
             {
@@ -171,6 +172,40 @@ $(function()
         $('#deptTree').find('li.hover').removeClass('hover');
         $(this).addClass('hover');
         e.stopPropagation();
+    });
+
+
+    $("input[name*='depts']").change(function ()
+    {
+        var depts        = new Array();
+        var modifyData   = $(this).val();
+        var changedInput = $(this);
+
+        changedInput.wrap('<span>');
+        changedInput.closest('span').addClass('dataField');
+
+        $('input[name^="depts"]').not($(this)).each(function()
+        {
+            if($(this).val()) depts.push($(this).val());
+        });
+
+        if(depts.indexOf(modifyData) > -1)
+        {
+            $('.dataField #depts\\[\\]').addClass('intro');
+            $('.intro').css({"margin" : "5px 0px 5px 0px", "display" : "inline", "width" : "50%"});
+            changedInput.after('<span style="padding-left: 15px;color: #1183fb" class="tips">' + repeatDepart + '</span>');
+        }
+    });
+
+    $("input[name*='depts']").focus(function ()
+    {
+        if($('.dataField').length)
+        {
+            $('.intro').removeAttr('style');
+            $('.intro').unwrap();
+            $('#depts\\[\\]').removeClass('intro');
+            $('.tips').remove();
+        }
     });
 });
 </script>

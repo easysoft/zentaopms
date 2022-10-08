@@ -3,7 +3,7 @@
  * The productplan module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: zh-cn.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
@@ -32,20 +32,23 @@ $lang->productplan->plan       = '计划';
 $lang->productplan->allAB      = '所有';
 $lang->productplan->to         = '至';
 $lang->productplan->more       = '更多操作';
+$lang->productplan->comment    = '备注';
 
-$lang->productplan->batchUnlink      = "批量移除";
-$lang->productplan->unlinkAB         = "移除";
-$lang->productplan->linkStory        = "关联{$lang->SRCommon}";
-$lang->productplan->unlinkStory      = "移除{$lang->SRCommon}";
-$lang->productplan->unlinkStoryAB    = "移除";
-$lang->productplan->batchUnlinkStory = "批量移除{$lang->SRCommon}";
-$lang->productplan->linkedStories    = $lang->SRCommon;
-$lang->productplan->unlinkedStories  = "未关联{$lang->SRCommon}";
-$lang->productplan->updateOrder      = '排序';
-$lang->productplan->createChildren   = "创建子计划";
-$lang->productplan->createExecution  = "创建{$lang->execution->common}";
-$lang->productplan->list             = '列表';
-$lang->productplan->kanban           = '看板';
+$lang->productplan->batchUnlink       = "批量移除";
+$lang->productplan->batchClose        = "批量关闭";
+$lang->productplan->batchChangeStatus = "批量修改状态";
+$lang->productplan->unlinkAB          = "移除";
+$lang->productplan->linkStory         = "关联{$lang->SRCommon}";
+$lang->productplan->unlinkStory       = "移除{$lang->SRCommon}";
+$lang->productplan->unlinkStoryAB     = "移除";
+$lang->productplan->batchUnlinkStory  = "批量移除{$lang->SRCommon}";
+$lang->productplan->linkedStories     = $lang->SRCommon;
+$lang->productplan->unlinkedStories   = "未关联{$lang->SRCommon}";
+$lang->productplan->updateOrder       = '排序';
+$lang->productplan->createChildren    = "创建子计划";
+$lang->productplan->createExecution   = "创建{$lang->execution->common}";
+$lang->productplan->list              = '列表';
+$lang->productplan->kanban            = '看板';
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
@@ -56,6 +59,7 @@ $lang->productplan->unexpired        = "未过期";
 $lang->productplan->all              = "所有计划";
 $lang->productplan->setDate          = "设置计划起止时间";
 $lang->productplan->expired          = "已过期";
+$lang->productplan->closedReason     = "关闭原因";
 
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
@@ -69,6 +73,8 @@ $lang->productplan->cannotDeleteParent = "不能删除父计划";
 $lang->productplan->selectProjects     = "请选择所属项目";
 $lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
+$lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>。";
+$lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>。";
 
 $lang->productplan->id         = '编号';
 $lang->productplan->product    = $lang->productCommon;
@@ -77,6 +83,7 @@ $lang->productplan->title      = '名称';
 $lang->productplan->desc       = '描述';
 $lang->productplan->begin      = '开始日期';
 $lang->productplan->end        = '结束日期';
+$lang->productplan->status     = '计划状态';
 $lang->productplan->last       = "上次计划";
 $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}数";
@@ -91,11 +98,15 @@ $lang->productplan->order      = "排序";
 $lang->productplan->deleted    = "已删除";
 $lang->productplan->mailto     = "抄送给";
 $lang->productplan->status     = "计划状态";
+$lang->productplan->planStatus = "状态";
 
 $lang->productplan->statusList['wait']   = '未开始';
 $lang->productplan->statusList['doing']  = '进行中';
 $lang->productplan->statusList['done']   = '已完成';
 $lang->productplan->statusList['closed'] = '已关闭';
+
+$lang->productplan->closedReasonList['done']   = '已完成';
+$lang->productplan->closedReasonList['cancel'] = '已取消';
 
 $lang->productplan->parentActionList['startedbychild']   = '系统判断由于子计划 <strong>开始</strong> ，将计划状态置为 <strong>进行中</strong> 。';
 $lang->productplan->parentActionList['finishedbychild']  = '系统判断由于子计划 <strong>全部完成</strong> ，将计划状态置为 <strong>已完成</strong> 。';
@@ -126,7 +137,8 @@ $lang->productplan->endLetterChildTip    = "父计划[%s]的完成日期：%s，
 $lang->productplan->beginLetterParentTip = "子计划[%s]的开始日期：%s，不能小于父计划的开始日期: %s";
 $lang->productplan->endGreaterParentTip  = "子计划[%s]的完成日期：%s，不能大于父计划的完成日期: %s";
 
-$lang->productplan->featureBar['browse']['all']    = '所有';
+$lang->productplan->featureBar['browse']['all']    = '全部';
+$lang->productplan->featureBar['browse']['undone'] = '未完成';
 $lang->productplan->featureBar['browse']['wait']   = '未开始';
 $lang->productplan->featureBar['browse']['doing']  = '进行中';
 $lang->productplan->featureBar['browse']['done']   = '已完成';

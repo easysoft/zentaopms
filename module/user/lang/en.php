@@ -3,7 +3,7 @@
  * The user module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: en.php 5053 2013-07-06 08:17:37Z wyd621@gmail.com $
@@ -18,6 +18,7 @@ $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
 $lang->user->password         = 'Password';
 $lang->user->password2        = 'Repeat Password';
+$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Role';
 $lang->user->group            = 'Privilege Group';
 $lang->user->realname         = 'Name';
@@ -39,9 +40,13 @@ $lang->user->dingding         = 'DingDing';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = 'Address';
+$lang->user->addressAB        = 'Address';
 $lang->user->zipcode          = 'ZipCode';
 $lang->user->join             = 'Joined';
+$lang->user->joinAB           = 'Joined';
+$lang->user->priv             = 'Privilege';
 $lang->user->visits           = 'Visits';
+$lang->user->visions          = 'Version Type';
 $lang->user->ip               = 'Last IP';
 $lang->user->last             = 'Last Login';
 $lang->user->ranzhi           = 'Zdoo Account';
@@ -72,6 +77,10 @@ $lang->user->products         = $lang->productCommon;
 $lang->user->projects         = 'Project';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
+$lang->user->switchVision     = 'Switch to %s';
+$lang->user->submit           = 'Submit';
+$lang->user->resetPWD         = 'Reset Password';
+$lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -109,6 +118,8 @@ $lang->user->applyTemplate         = 'Templates';
 $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 $lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
+$lang->user->sendEmailSuccess      = 'An email has been sent to your mailbox. Please check it.';
+$lang->user->linkExpired           = 'The link has expired, please apply again.';
 
 $lang->user->profile   = 'Profile';
 $lang->user->project   = $lang->executionCommon . 's';
@@ -145,6 +156,7 @@ $lang->user->loginLocked  = "Please contact the administrator to unlock your acc
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] weak passwords.";
 $lang->user->errorCaptcha = "Captcha Error";
+$lang->user->loginExpired = 'System login has expired, please log in again :)';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -210,14 +222,21 @@ $lang->user->placeholder->verify    = 'Please enter your ZenTao login password t
 $lang->user->placeholder->loginPassword = 'Enter your password';
 $lang->user->placeholder->loginAccount  = 'Enter your account';
 $lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+$lang->user->placeholder->email         = 'Enter your email';
 
+$lang->user->placeholder->passwordStrength[0] = '≥6 letters.';
 $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
+
+$lang->user->placeholder->passwordStrengthCheck[0] = 'The password should be ≥ 6 letters.';
+$lang->user->placeholder->passwordStrengthCheck[1] = 'The password should be ≥ 6 letters, combination of uppercase, lowercase letters and numbers.';
+$lang->user->placeholder->passwordStrengthCheck[2] = 'The password should be ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account        = "ID %s，account must be >= 3 letters, underline or numbers";
 $lang->user->error->accountDupl    = "ID %s，account is used.";
 $lang->user->error->realname       = "ID %s，must be real name";
+$lang->user->error->visions        = "ID %s，must be version type";
 $lang->user->error->password       = "ID %s，password must be >= 6 characters.";
 $lang->user->error->mail           = "ID %s，enter valid Email address";
 $lang->user->error->reserved       = "ID %s，account is reserved.";
@@ -230,6 +249,14 @@ $lang->user->error->verifyPassword   = "Verification failed. Please enter your L
 $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
 $lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
+$lang->user->error->accountEmpty     = 'Account must be not empty !';
+$lang->user->error->emailEmpty       = 'Email must be not empty !';
+$lang->user->error->noUser           = 'Invalid account.';
+$lang->user->error->noEmail          = 'The user does not register email. Please get in touch with the administrator to reset the password.';
+$lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
+$lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
+$lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
+$lang->user->error->loginTimeoutTip  = 'Login failed, please check if the proxy service is normal.';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -247,6 +274,9 @@ $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';
 $lang->user->contacts->listName = 'List Name';
 $lang->user->contacts->userList = 'User List';
+
+$lang->usercontact = new stdclass;
+$lang->usercontact->listName = 'List Name';
 
 $lang->user->contacts->manage        = 'Manage List';
 $lang->user->contacts->contactsList  = 'Contact List';
@@ -282,8 +312,10 @@ $lang->user->mkdirLinux = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
-    <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
+    <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod 777 -R %s</strong>。</div>
     <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
-    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
+    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
+
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";

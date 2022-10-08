@@ -38,6 +38,9 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: engine
+    note: "引擎"
+    range: jenkins,gitlab
   - field: jkHost
     note: "Jenkins服务器"
     range: 1-10000

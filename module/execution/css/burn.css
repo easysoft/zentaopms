@@ -6,5 +6,6 @@
 #burnLegend > div {position: relative; padding-left: 30px;}
 #burnLegend > div > .barline {position: absolute; width: 20px; left: 0; top: 13px; height: 3px; background: #EEEEEE;}
 #burnLegend .line-real .bg-primary {background: #1183fb;}
+#burnLegend .line-real .bg-delay   {background: red;}
 
 .pull-left .input-control {margin-right: 10px;}

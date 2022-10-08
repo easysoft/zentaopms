@@ -32,3 +32,5 @@ $config->mrapproval = new stdclass();
 $config->mrapproval->create = new stdclass();
 $config->mrapproval->create->skippedFields  = '';
 $config->mrapproval->create->requiredFields = 'mrID,account,date,action';
+
+$config->mr->gitServiceList = array('gitlab', 'gitea', 'gogs');

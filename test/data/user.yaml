@@ -19,8 +19,7 @@ fields:
     format: ""
   - field: dept
     note: "所属部门"
-    from: dept.yaml
-    use: id
+    range: 1-100{10}
   - field: account
     note: "用户名"
     fields:
@@ -30,7 +29,7 @@ fields:
       range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: password
     note: "密码"
-    range: 123qwe!@#{346}
+    range: 123Qwe!@#{346}
     format: md5
   - field: role
     note: "职位"
@@ -50,12 +49,20 @@ fields:
     note: "昵称"
   - field: commiter
     note: "源代码帐号"
+    fields:
+    - field: commiter1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: commiter2
+      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: avatar
     note: ""
-    range: 0
+    fields:
+    - field: avatar1
+      range: /home/z/tmp/,/home/z/user/
+    - field: avatar2
+      range: 1-10,10-20
     prefix: ""
-    postfix: ""
-    loop: 0
+    postfix: ".png"
     format: ""
   - field: birthday
     note: "生日"
@@ -73,9 +80,9 @@ fields:
     note: "邮箱"
     fields:
     - field: email1
-      range: 100-999:R
+      range: 1000-9999:2
     - field: email2
-      range: 100-999:R
+      range: 1000-9999:2
     - field: email3
       range: [@qq.com,@163.com,@gmail.com]
   - field: skype
@@ -135,6 +142,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: visions
+    note: "版本"
+    range: rnd
+    prefix: ""
+    postfix: ",lite"
+    loop: 0
+    format: ""
   - field: ip
     note: "最后IP"
     format: ""
@@ -153,6 +167,11 @@ fields:
     range: 1
   - field: ranzhi
     note: "ZDOO账号"
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: score
     note: "积分"
     range: 1-10000:R

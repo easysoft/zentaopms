@@ -3,7 +3,7 @@
  * The model file of extension module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
  * @version     $Id$
@@ -57,20 +57,8 @@ class extensionModel extends model
      */
     public function fetchAPI($url)
     {
-        $this->app->loadConfig('upgrade');
-        $version = $this->config->version;
-        if(strpos($version, 'biz') !== false)
-        {
-            $version = str_replace('.', '_', $version);
-            if(isset($this->config->bizVersion[$version])) $version = $this->config->bizVersion[$version];
-            $version = str_replace('_', '.', $version);
-        }
-        if(strpos($version, 'pro') !== false)
-        {
-            $version = str_replace('.', '_', $version);
-            if(isset($this->config->proVersion[$version])) $version = $this->config->proVersion[$version];
-            $version = str_replace('_', '.', $version);
-        }
+        $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $version = str_replace('_', '.', $version);
 
         $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
         $result = json_decode(common::http($url));
@@ -452,10 +440,15 @@ class extensionModel extends model
             }
             else
             {
-                if(!@mkdir($path, 0755, true))
+                $parentDir = mb_substr($path, 0, strripos($path, '/'));
+                if(!is_dir($path) and !mkdir($path, 0777, true))
                 {
                     $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $return->mkdirCommands .= "mkdir -p $path<br />";
+                    $return->mkdirCommands .= "sudo mkdir -p $path<br />";
+                }
+                if(!is_writable($parentDir))
+                {
+                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
                 $return->dirs2Created[] = $path;
@@ -598,11 +591,11 @@ class extensionModel extends model
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(md5_file($file) != $savedMD5)
+                if(!is_writable($file) or @md5_file($file) != $savedMD5)
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
                 }
-                elseif(!@unlink($file))
+                elseif(!is_writable($file) or !@unlink($file))
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
                 }
@@ -616,7 +609,7 @@ class extensionModel extends model
             foreach($dirs as $dir)
             {
                 if(!is_dir($appRoot . $dir)) continue;
-                if(!rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir"; // fix bug #2965
+                if(!is_writable($appRoot . $dir) or !rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
             }
         }
 
@@ -635,7 +628,10 @@ class extensionModel extends model
     public function cleanModelCache()
     {
         $modelCacheFiles = glob($this->app->getTmpRoot() . 'model/*');
-        foreach($modelCacheFiles as $cacheFile) @unlink($cacheFile);
+        foreach($modelCacheFiles as $cacheFile)
+        {
+            if(is_writable($cacheFile) and !is_dir($cacheFile)) @unlink($cacheFile);
+        }
     }
 
     /**
@@ -905,5 +901,38 @@ class extensionModel extends model
         }
 
         return $expiredDate;
+    }
+
+    /**
+     * Get plugins that are about to expire or have expired.
+     *
+     * @param  bool    $category
+     * @access public
+     * @return array
+     */
+    public function getExpiringPlugins($category = false)
+    {
+        $extensions = $this->getLocalExtensions('installed');
+
+        $plugins = $category ? array('expiring' => array(), 'expired' => array()) : array();
+        $today   = helper::today();
+        foreach($extensions as $extension)
+        {
+            $expiredDate = $this->getExpireDate($extension);
+            if(!empty($expiredDate) and $expiredDate != 'life')
+            {
+                $dateDiff = helper::diffDate($expiredDate, $today);
+                if($category)
+                {
+                    if($dateDiff == 30 or $dateDiff == 14 or ($dateDiff <= 7 and $dateDiff >= 0)) $plugins['expiring'][] = $extension->name;
+                    if($dateDiff <= -1) $plugins['expired'][] = $extension->name;
+                }
+                else
+                {
+                    if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 7) $plugins[] = $extension->name;
+                }
+            }
+        }
+        return $plugins;
     }
 }

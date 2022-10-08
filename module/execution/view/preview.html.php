@@ -87,7 +87,7 @@ $dataType = '';
           </div>
           <?php if($col == 'story' or $dataType == 'bug'):?>
           <?php $desc = $col == 'story' ? $storySpecs[$content->id]->spec : $content->steps;?>
-          <div class='board-content'><?php echo mb_substr(strip_tags($desc, "<p><br/>"), 0, 90, 'utf8')?></div>
+          <div class='board-content'><?php echo mb_substr(strip_tags($desc, "<p><br>"), 0, 90, 'utf8')?></div>
           <?php endif;?>
         </div>
         <div class="board-footer <?php echo $col == 'story' ? 'story' : 'task'?>">

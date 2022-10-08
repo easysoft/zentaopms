@@ -72,4 +72,22 @@ $(document).on('change', 'select', function()
 $(function()
 {
     $('#subNavbar li[data-id="bug"]').addClass('active');
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    var firstResolution  = $('select[id^="resolutions"]').eq(0);
+    var maxAutoDropWidth = document.body.scrollWidth + ($(firstResolution)[0].offsetWidth / 2) - $(firstResolution)[0].getBoundingClientRect().right;
+    $('select[id^="duplicateBugs"]').picker(
+    {
+        disableEmptySearch : true,
+        dropWidth : 'auto',
+        maxAutoDropWidth : maxAutoDropWidth,
+        onReady: function(event)
+        {
+            $(event.picker.$container).addClass('required');
+        }
+    });
 });

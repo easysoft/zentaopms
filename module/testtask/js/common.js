@@ -11,6 +11,10 @@ $(document).ready(function()
                     parent.$.cookie('selfClose', 1);
                     setTimeout(function(){parent.$.closeModal(null, 'this')}, 1200);
                 }
+                else if(response.locate == 'parent.parent')
+                {
+                    setTimeout(function(){parent.location.reload();}, 1200);
+                }
                 else
                 {
                     setTimeout(function(){window.location.href = response.locate;}, 1200);
@@ -32,7 +36,8 @@ function adjustPriBoxWidth()
     var boxWidth   = $('#ownerAndPriBox').width();
     var beginWidth = $("input[name='begin']").outerWidth();
     var addonWidth = $('#ownerAndPriBox .input-group-addon').outerWidth();
-    $('#pri,#pri_chosen .chosen-single').css('width', boxWidth - beginWidth -addonWidth);
+    var width      = boxWidth - beginWidth - addonWidth;
+    $('#pri,#pri_chosen .chosen-single').css('width', width > 0 ? width : '160px');
 }
 
 /**
@@ -63,7 +68,7 @@ function createBug(obj)
     }
     else
     {
-        window.open(link, '_parent');
+        window.open(link, '_blank');
     }
 
     config.onlybody = onlybody;
@@ -91,9 +96,10 @@ function loadExecutionRelated(executionID)
  */
 function loadExecutionBuilds(executionID, selected)
 {
-    selectedBuild = $('#build').val();
+    var selectedBuild = $('#build').val();
+
     if(!selectedBuild) selectedBuild = 0;
-    link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild, '', '', executionID);
+    var link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
     if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
     $('#buildBox').load(link, function()
     {
@@ -106,13 +112,13 @@ function loadExecutionBuilds(executionID, selected)
 /**
  * Load test report.
  *
- * @param  int    buildID
+ * @param  int    productID
  * @access public
  * @return void
  */
-function loadTestReports(buildID)
+function loadTestReports(productID)
 {
-    link = createLink('testtask', 'ajaxGetTestReports', 'buildID=' + buildID);
+    link = createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID);
     $.get(link, function(data)
     {
         if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';

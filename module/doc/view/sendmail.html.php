@@ -3,7 +3,7 @@
  * The sendmail file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     doc
  * @version     $Id: sendmail.html.php 3717 2020-11-03 15:35:07Z  tianshujie@easycorp.ltd $
@@ -18,7 +18,7 @@
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
           <?php $color = empty($object->color) ? '#333' : $object->color;?>
-          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('doc', 'view', "docID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+          <?php echo html::a($domain . helper::createLink('doc', 'view', "docID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
         </td>
       </tr>
     </table>

@@ -3,7 +3,7 @@
  * The edit view of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -59,7 +59,7 @@
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
         <tr>
           <th class='w-140px'><?php echo $lang->user->account;?></th>
-          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
+          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' readonly");?></td>
           <th class='w-130px'><?php echo $lang->user->email;?></th>
           <td>
             <?php echo html::input('email', $user->email, "class='form-control'");?>
@@ -71,7 +71,7 @@
           <td>
             <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+              <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onkeyup='checkPassword(this.value)' placeholder='" . zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '') . "'");?>
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
@@ -81,6 +81,8 @@
         <tr>
           <th><?php echo $lang->user->commiter;?></th>
           <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
+          <th><?php echo $lang->user->visions;?></th>
+          <td><?php echo html::select('visions[]', $visionList, $user->visions, "class='form-control chosen' multiple");?></td>
         </tr>
       </table>
       <table align='center' class='table table-form'>
@@ -115,6 +117,7 @@
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>
+            <?php echo html::hidden('passwordLength', 0);?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>

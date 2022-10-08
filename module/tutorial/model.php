@@ -3,7 +3,7 @@
  * The model file of tutorial module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     tutorial
  * @version     $Id$
@@ -98,24 +98,26 @@ class tutorialModel extends model
     {
         $product = $this->getProduct();
         $product->stories = array();
-        $product->stories[0]         = '';
-        $product->stories[1]         = 'draft';
-        $product->stories[2]         = 'active';
-        $product->stories[3]         = 'closed';
-        $product->stories[4]         = 'changed';
-        $product->stories['']        = 0;
-        $product->stories['draft']   = 0;
-        $product->stories['active']  = 0;
-        $product->stories['closed']  = 0;
-        $product->stories['changed'] = 0;
-        $product->requirements       = $product->stories;
-        $product->plans              = 0;
-        $product->releases           = 0;
-        $product->bugs               = 0;
-        $product->unResolved         = 0;
-        $product->closedBugs         = 0;
-        $product->fixedBugs          = 0;
-        $product->assignToNull       = 0;
+        $product->stories[0]           = '';
+        $product->stories[1]           = 'draft';
+        $product->stories[2]           = 'reviewing';
+        $product->stories[3]           = 'active';
+        $product->stories[4]           = 'closed';
+        $product->stories[5]           = 'changing';
+        $product->stories['']          = 0;
+        $product->stories['draft']     = 0;
+        $product->stories['reviewing'] = 0;
+        $product->stories['active']    = 0;
+        $product->stories['closed']    = 0;
+        $product->stories['changing']  = 0;
+        $product->requirements         = $product->stories;
+        $product->plans                = 0;
+        $product->releases             = 0;
+        $product->bugs                 = 0;
+        $product->unResolved           = 0;
+        $product->closedBugs           = 0;
+        $product->fixedBugs            = 0;
+        $product->assignToNull         = 0;
 
         $productStat[$product->program][$product->line]['products'][$product->id] = $product;
         return $productStat;
@@ -130,32 +132,36 @@ class tutorialModel extends model
     public function getProject()
     {
         $project = new stdclass();
-        $project->id        = 2;
-        $project->project   = 0;
-        $project->model     = 'scrum';
-        $project->type      = 'project';
-        $project->name      = 'Test Project';
-        $project->code      = '';
-        $project->lifetime  = '';
-        $project->begin     = date('Y-m-d', strtotime('-7 days'));
-        $project->end       = date('Y-m-d', strtotime('+7 days'));
-        $project->realBegan = '';
-        $project->realEnd   = '';
-        $project->days      = 10;
-        $project->status    = 'wait';
-        $project->pri       = '1';
-        $project->desc      = '';
-        $project->goal      = '';
-        $project->acl       = 'open';
-        $project->parent    = 0;
-        $project->path      = ',2,';
-        $project->grade     = 1;
-        $project->PM        = $this->app->user->account;
-        $project->PO        = $this->app->user->account;
-        $project->QD        = $this->app->user->account;
-        $project->RD        = $this->app->user->account;
-        $project->budget    = 0;
-        $project->deleted   = '0';
+        $project->id           = 2;
+        $project->project      = 0;
+        $project->model        = 'scrum';
+        $project->type         = 'project';
+        $project->name         = 'Test Project';
+        $project->code         = '';
+        $project->lifetime     = '';
+        $project->begin        = date('Y-m-d', strtotime('-7 days'));
+        $project->end          = date('Y-m-d', strtotime('+7 days'));
+        $project->realBegan    = '';
+        $project->realEnd      = '';
+        $project->days         = 10;
+        $project->status       = 'wait';
+        $project->pri          = '1';
+        $project->desc         = '';
+        $project->goal         = '';
+        $project->acl          = 'open';
+        $project->parent       = 0;
+        $project->path         = ',2,';
+        $project->grade        = 1;
+        $project->PM           = $this->app->user->account;
+        $project->PO           = $this->app->user->account;
+        $project->QD           = $this->app->user->account;
+        $project->RD           = $this->app->user->account;
+        $project->openedBy     = $this->app->user->account;
+        $project->whitelist    = '';
+        $project->budget       = 0;
+        $project->displayCards = 0;
+        $project->fluidBoard   = 0;
+        $project->deleted      = '0';
 
         return $project;
     }
@@ -174,10 +180,11 @@ class tutorialModel extends model
     /**
      * Get project stats for tutorial
      *
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getProjectStats()
+    public function getProjectStats($browseType = '')
     {
         $project   = $this->getProject();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
@@ -186,6 +193,8 @@ class tutorialModel extends model
         $project->leftTasks   = '—';
         $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
+
+        if($browseType and $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
 
         $projectStat[$project->id] = $project;
         return $projectStat;
@@ -205,7 +214,7 @@ class tutorialModel extends model
         $story->branch         = 0;
         $story->parent         = 0;
         $story->category       = 0;
-        $story->module         = 0;
+        $story->module         = 1;
         $story->plan           = '';
         $story->planTitle      = '';
         $story->color          = '';
@@ -264,33 +273,49 @@ class tutorialModel extends model
      */
     public function getExecution()
     {
+        /* Fix bug #21097. */
+        $hours = new stdclass();
+        $hours->totalEstimate = 52;
+        $hours->totalConsumed = 43;
+        $hours->totalLeft     = 7;
+        $hours->progress      = 86;
+        $hours->totalReal     = 50;
+
         $execution = new stdclass();
-        $execution->id             = 3;
-        $execution->project        = 2;
-        $execution->type           = 'sprint';
-        $execution->name           = 'Test execution';
-        $execution->code           = 'test';
-        $execution->lifetime       = '';
-        $execution->begin          = date('Y-m-d', strtotime('-7 days'));
-        $execution->end            = date('Y-m-d', strtotime('+7 days'));
-        $execution->days           = 10;
-        $execution->status         = 'wait';
-        $execution->pri            = '1';
-        $execution->desc           = '';
-        $execution->goal           = '';
-        $execution->acl            = 'open';
-        $execution->parent         = 2;
-        $execution->path           = ',2,3,';
-        $execution->grade          = 1;
-        $execution->PM             = $this->app->user->account;
-        $execution->PO             = $this->app->user->account;
-        $execution->QD             = $this->app->user->account;
-        $execution->RD             = $this->app->user->account;
-        $execution->deleted        = '0';
-        $execution->totalConsumed  = 0;
-        $execution->totalLeft      = 0;
-        $execution->totalHours     = 0;
-        $execution->totalEstimate  = 0;
+        $execution->id            = 3;
+        $execution->project       = 2;
+        $execution->type          = 'sprint';
+        $execution->name          = 'Test execution';
+        $execution->code          = 'test';
+        $execution->lifetime      = '';
+        $execution->attribute     = '';
+        $execution->begin         = date('Y-m-d', strtotime('-7 days'));
+        $execution->end           = date('Y-m-d', strtotime('+7 days'));
+        $execution->realBegan     = '';
+        $execution->realEnd       = '';
+        $execution->suspendedDate = '';
+        $execution->days          = 10;
+        $execution->status        = 'wait';
+        $execution->pri           = '1';
+        $execution->desc          = '';
+        $execution->goal          = '';
+        $execution->acl           = 'open';
+        $execution->parent        = 2;
+        $execution->path          = ',2,3,';
+        $execution->grade         = 1;
+        $execution->PM            = $this->app->user->account;
+        $execution->PO            = $this->app->user->account;
+        $execution->QD            = $this->app->user->account;
+        $execution->RD            = $this->app->user->account;
+        $execution->deleted       = '0';
+        $execution->totalConsumed = 0;
+        $execution->totalLeft     = 0;
+        $execution->totalHours    = 0;
+        $execution->totalEstimate = 0;
+        $execution->displayCards  = 0;
+        $execution->fluidBoard    = 0;
+        $execution->hours         = $hours;
+        $execution->burns         = array(35, 35);
         return $execution;
     }
 

@@ -82,7 +82,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <?php echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
+      <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

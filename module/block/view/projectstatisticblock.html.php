@@ -65,7 +65,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .executionName {padding: 2px 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .block-statistic .lastIteration {padding-top: 6px;}
 .block-statistic .progress-text-left {margin-right: 90px}
-.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -45px;}
+.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -50px;}
 
 .status-count {margin: auto;}
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
@@ -97,8 +97,8 @@ $(function()
         var isPrev = $(this).is('.prev');
         var $activeItem = $nav.children('.active');
         var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
-        if ($next.length) $next.find('a').trigger('click');
-        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
+        if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
+        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
 
@@ -134,16 +134,16 @@ $(function()
       <?php foreach($projects as $project):?>
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
         <div class="table-row">
-          <?php if($project->model == 'scrum'):?>
+          <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
           <div class='table-row'>
             <div class="col-4 text-center">
-              <div><h4><?php echo $lang->block->story;?></h4></div>
+              <div><h4><?php echo $lang->block->storyCount;?></h4></div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->block->allStories . "：";?></div>
                 <div class="col data"><?php echo $project->allStories;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->project->doneStories . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->block->finish . "：";?></div>
                 <div class="col data"><?php echo $project->doneStories;?></div>
               </div>
               <div>
@@ -159,15 +159,30 @@ $(function()
               </div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->estimate . "：";?></div>
-                <div class="col data"><?php echo $project->estimate;?></div>
+                <div class="col data"><?php echo $project->estimate . $lang->execution->workHourUnit;?></div>
               </div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->consumedHours . "：";?></div>
-                <div class="col data"><?php echo $project->consumed;?></div>
+                <div class="col data"><?php echo $project->consumed . $lang->execution->workHourUnit;?></div>
               </div>
             </div>
             <div class="col-4 text-center">
-              <div><h4><?php echo $lang->bug->common;?></h4></div>
+              <div><h4><?php echo $lang->block->taskCount;?></h4></div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->wait . "：";?></div>
+                <div class="col data"><?php echo $project->waitTasks;?></div>
+              </div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->doing . "：";?></div>
+                <div class="col data"><?php echo $project->doingTasks;?></div>
+              </div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->done . "：";?></div>
+                <div class="col data"><?php echo $project->rndDoneTasks;?></div>
+              </div>
+            </div>
+            <div class="col-4 text-center">
+              <div><h4><?php echo $lang->block->bugCount;?></h4></div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
                 <div class="col data"><?php echo $project->allBugs;?></div>

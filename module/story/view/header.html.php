@@ -34,7 +34,30 @@ function loadProduct(productID)
     }
 
     oldProductID = $('#product').val();
-    loadProductBranches(productID)
+    loadProductBranches(productID);
+    loadProductReviewers(productID);
+    loadURS();
+
+    if(typeof(storyType) == 'string' && storyType == 'story')
+    {
+        var requirementLink = createLink('story', 'ajaxGetProductURS', 'productID=' + productID + '&labelName=URS' + '&isMultiple=1');
+        $.get(requirementLink, function(data)
+        {
+            $('#URS').replaceWith(data);
+            $('#URS' + "_chosen").remove();
+            $('#URS').next('.picker').remove();
+            $('#URS').chosen();
+        });
+
+        var storyLink = createLink('story', 'ajaxGetParentStory', 'productID=' + productID + '&labelName=parent');
+        $.get(storyLink, function(data)
+        {
+            $('#parent').replaceWith(data);
+            $('#parent' + "_chosen").remove();
+            $('#parent').next('.picker').remove();
+            $('#parent').chosen();
+        });
+    }
 }
 
 /**
@@ -52,6 +75,7 @@ function loadBranch()
 
     loadProductModules(productID, branch);
     loadProductPlans(productID, branch);
+    loadURS();
 }
 
 /**
@@ -63,7 +87,7 @@ function loadBranch()
  */
 function loadProductBranches(productID)
 {
-    var param = '';
+    var param = 'all';
     if(page == 'create') param = 'active';
     $('#branch').remove();
     $('#branch_chosen').remove();
@@ -81,6 +105,7 @@ function loadProductBranches(productID)
 
         loadProductModules(productID, $('#branch').val());
         loadProductPlans(productID, $('#branch').val());
+        loadURS();
     })
 }
 
@@ -111,6 +136,8 @@ function loadProductModules(productID, branch)
         if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
+
+    loadURS();
 }
 
 /**
@@ -126,7 +153,7 @@ function loadProductPlans(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     var expired = config.currentMethod == 'create' ? 'unexpired' : '';
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent');
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod);
     var $planIdBox = $('#planIdBox');
     $planIdBox.load(planLink, function()
     {
@@ -151,9 +178,21 @@ function loadProductReviewers(productID)
     {
         if(data)
         {
-            $('#reviewer').replaceWith(data);
-            $('#reviewer_chosen').remove();
-            $('#reviewer').chosen();
+            var $reviewer = $('#reviewer');
+            var chosen = $reviewer.data('chosen');
+            if(chosen)
+            {
+                chosen.destroy();
+            }
+            else
+            {
+                var picker = $reviewer.data('zui.picker');
+                if(picker) picker.destroy();
+            }
+            $reviewer.replaceWith(data);
+            $reviewer = $('#reviewer');
+            if($reviewer.data('pickertype')) $reviewer.picker({chosenMode: true});
+            else $reviewer.chosen();
             if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     });

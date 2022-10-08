@@ -1,0 +1,32 @@
+#cards > .col {width: 25% !important;}
+#cards .panel {margin: 0 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 160px; margin-bottom: 5px;}
+#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel-heading {padding: 4px 2px 10px 16px;}
+#cards .kanban-name {overflow: hidden; white-space:nowrap; width: 88%; float: left; padding-top: 8px;}
+#cards .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-1px !important;}
+#cards .kanban-actions {float: right; visibility: hidden;}
+#cards .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
+#cards .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
+#cards .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-6px;}
+#cards .panel-body {padding: 0 16px 16px;}
+#cards .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; display: -webkit-box; float:left;}
+#cards .kanban-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
+#cards .kanban-members {float: left; height: 24px; line-height: 24px;}
+#cards .kanban-members > div {display: inline-block; height: 24px;}
+#cards .kanban-members > div + div {margin-left: -5px;}
+#cards .kanban-members > div > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 1px;}
+#cards .kanban-members > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: relative; border-radius: 50%; top: 3px; margin: 0 3px;}
+#cards .kanban-members > span:before,
+#cards .kanban-members > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
+#cards .kanban-members > span:before {left: -4px;}
+#cards .kanban-members > span:after {right: -4px;}
+#cards .kanban-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
+#cards .kanbanAcl {position: absolute; right: 0px; bottom: 0px; color: #838a9d;}
+
+.kanbans .kanban-actions {float: right; visibility: hidden;}
+.kanbans .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
+.kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
+
+.label-doing {background: #ff5d5d}
+#cardsFooter .pager {margin: 0; float: right;}
+#cardsFooter .pager .btn {padding-top: 4px; border: none;}

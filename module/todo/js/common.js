@@ -9,8 +9,16 @@ function switchDateTodo(switcher)
         $('#date').removeAttr('disabled');
     }
 }
-
-function loadList(type, id)
+/**
+ * Load data.
+ * @param  type        $type        Type of selected todo.
+ * @param  id          $id          ID of selected todo.
+ * @param  defaultType $defaultType Default type of selected todo.
+ * @param  idvalue     $idvalue     ID of the closed todo type.
+ * @access public
+ * @return void
+ */
+function loadList(type, id, defaultType, idvalue)
 {
     if(id)
     {
@@ -23,21 +31,22 @@ function loadList(type, id)
         divID      = '#nameBox';
     }
 
-    var param = 'userID=' + userID;
-    if(id) param += '&id=' + id;
-    if(moduleList.indexOf(type) !== -1)
-    {
-        link = createLink(type, objectsMethod[type], param);
-    }
+    id = id ? id : '';
+    var param = 'userID=' + userID + '&id=' + id;
+    if(type == "task") param += '&status=wait,doing';
+    if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
 
     if(moduleList.indexOf(type) !== -1)
     {
+        link = createLink(type, objectsMethod[type], param);
+
         $.get(link, function(data, status)
         {
             if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
-                if(config.currentMethod == 'edit') $(divClass).html(data).find('select').val(idvalue).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(idvalue).trigger('chosen:updated');
+                if($(divClass + " select").val() == null) $(divClass + " select").attr("data-placeholder", noOptions.replace("%s", chosenType[type])).trigger('chosen:updated');
             }
             else
             {
@@ -48,6 +57,19 @@ function loadList(type, id)
     else
     {
         $(divClass).html($(divID).html());
+    }
+
+
+    if(typeof(nameBoxLabel) != "undefined")
+    {
+        if(type == 'custom' || (typeof(vision) != "undefined" && vision == 'rnd'))
+        {
+            $('#nameBoxLabel').text(nameBoxLabel.custom);
+        }
+        else
+        {
+            $('#nameBoxLabel').text(nameBoxLabel.idvalue);
+        }
     }
 }
 

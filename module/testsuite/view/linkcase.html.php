@@ -3,7 +3,7 @@
  * The linkcase view file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: linkcase.html.php 4411 2013-02-22 00:56:04Z chencongzhi520@gmail.com $
@@ -40,7 +40,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='w-70px text-center'><nobr><?php echo $lang->testsuite->linkVersion;?></nobr></th>
-          <th class='w-70px'><?php echo $lang->priAB;?></th>
+          <th class='w-70px' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='w-90px'><?php echo $lang->testcase->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>

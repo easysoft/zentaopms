@@ -3,7 +3,7 @@
  * The view file of case module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
  * @version     $Id: view.html.php 5000 2013-07-03 08:20:57Z chencongzhi520@gmail.com $
@@ -18,7 +18,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->tab}");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -106,35 +106,17 @@
         <div class="detail-content article-content"><?php echo nl2br(htmlSpecialString($case->xml));?></div>
       </div>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case, 'method' => 'view', 'showDelete' => false));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
-        <?php if(!$case->deleted):?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php
-        if(!$isLibCase)
-        {
-            if(!isonlybody()) echo "<div class='divider'></div>";
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
-            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
-
-            if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
-        }
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe', '', '', $lang->testcase->reviewAB);
-        ?>
-
-        <?php echo $this->buildOperateMenu($case, 'view');?>
-
-        <?php
-        if(!isonlybody()) common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
-        if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
-        if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
-        ?>
-        <?php endif;?>
+        <?php $case->isLibCase = $isLibCase;?>
+        <?php $case->caseFails = $caseFails;?>
+        <?php $case->runID     = $runID;?>
+        <?php echo $this->testcase->buildOperateMenu($case, 'view');?>
       </div>
     </div>
   </div>
@@ -145,6 +127,20 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php if($isLibCase):?>
+            <tr>
+              <th><?php echo $lang->testcase->fromCase;?></th>
+              <td>
+                <?php
+                if(isset($case->linkCaseTitles))
+                {
+                    foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                    {
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                    }
+                }
+                ?>
+              </td>
+            </tr>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
               <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
@@ -204,7 +200,17 @@
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
                 $param = $this->app->tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                if(isset($case->storyTitle))
+                {
+                    if(common::hasPriv('story', 'view'))
+                    {
+                        echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                    }
+                    else
+                    {
+                        echo "#$case->story:$case->storyTitle";
+                    }
+                }
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -251,7 +257,7 @@
                     if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
-                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
+                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask' and !empty($case->product))
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
                     if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
@@ -278,13 +284,13 @@
             <?php if(!$isLibCase):?>
             <tr>
               <th><?php echo $lang->testcase->linkCase;?></th>
-              <td>
+              <td class='linkCaseTitles'>
                 <?php
                 if(isset($case->linkCaseTitles))
                 {
                     foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                     {
-                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%' title='$linkCaseTitle'") . '<br />';
                     }
                 }
                 ?>
@@ -303,18 +309,16 @@
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <th class='thWidth'><?php echo $lang->testcase->fromBug;?></th>
               <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <th class='thWidth' valign="top"><?php echo $lang->testcase->toBug;?></th>
-              <td>
+              <td class='linkBugTitles'>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
               {
-                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
+                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%' title='$bugTitle'") . '<br />';
               }
               ?>
               </td>
@@ -362,14 +366,6 @@
 <?php
 js::set('fullscreen', $lang->fullscreen);
 js::set('retrack', $lang->retrack);
+js::set('isLibCase', $isLibCase);
 ?>
-<?php if(!$isLibCase):?>
-<script>
-$(function()
-{
-    $('#subNavbar [data-id=testcase]').addClass('active');
-    $('#navbar [data-id=testcase]').addClass('active');
-})
-</script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

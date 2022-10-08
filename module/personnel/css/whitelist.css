@@ -1,3 +1,4 @@
-.c-dept {overflow:hidden; text-overflow: ellipsis; white-space: nowrap;}
+.c-dept, .c-role {overflow:hidden; text-overflow: ellipsis; white-space: nowrap;}
 .c-phone {width: 120px;}
 .c-email {width: 200px;}
+.c-role {width: 105px;}

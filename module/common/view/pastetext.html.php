@@ -25,9 +25,19 @@ $(function()
     {
         if(!rowTpl) rowTpl = $('#trTemp tbody').html();
         if(!$formTbody) $formTbody = $form.find('table > tbody');
+
         var lastIndex = parseInt($formTbody.find('tr:last > td:first').text());
+        var moduleArr = ['task', 'story', 'bug', 'testcase'];
+        if($.inArray(config.currentModule, moduleArr) >= 0 && config.currentMethod == 'batchcreate')
+        {
+            lastIndex = rowIndex;
+            rowIndex ++;
+        }
+
         var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));
         $newRow.find('.chosen').chosen();
+        $newRow.find('.picker').remove()
+        $newRow.find('.picker-select').picker();
         $newRow.find('.iframe').modalTrigger({iframe:true});
         $newRow.find('[data-provide="colorpicker-later"]').colorPicker();
         $newRow.datepickerAll();
@@ -50,7 +60,11 @@ $(function()
             {
                 line = $.trim(line);
                 if (!line.length) return;
-                if (!$lastRow) $row = $form.find('tbody>tr:first');
+                if (!$lastRow)
+                {
+                    $row = $form.find('tbody>tr .title-import').first().closest('tr');
+                    if(!$row && batchForm) $row = batchForm.createRow();
+                }
                 else $row = $lastRow.next();
                 while ($row.length && $row.find('.title-import').val().length)
                 {

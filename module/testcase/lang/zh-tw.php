@@ -3,7 +3,7 @@
  * The testcase module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
  * @version     $Id: zh-tw.php 4764 2013-05-05 04:07:04Z chencongzhi520@gmail.com $
@@ -126,7 +126,7 @@ $lang->testcase->importAction            = "導入用例";
 $lang->testcase->fileImport              = "導入CSV";
 $lang->testcase->importFromLib           = "從用例庫中導入";
 $lang->testcase->showImport              = "顯示導入內容";
-$lang->testcase->exportTemplet           = "導出模板";
+$lang->testcase->exportTemplate          = "導出模板";
 $lang->testcase->export                  = "導出數據";
 $lang->testcase->exportAction            = "導出用例";
 $lang->testcase->reportChart             = '報表統計';

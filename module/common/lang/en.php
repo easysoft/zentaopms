@@ -3,7 +3,7 @@
  * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: en.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
@@ -29,6 +29,9 @@ $lang->and       = 'and';
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
 $lang->proName        = 'Pro';
+$lang->bizName        = 'Biz';
+$lang->maxName        = 'Max';
+$lang->liteName       = 'Lite';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
@@ -43,15 +46,17 @@ $lang->collapseMenu   = 'Collapse';
 $lang->preference     = 'Preference';
 $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
-$lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
+$lang->agreement      = "I have read and agreed to the terms and conditions. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> AIUX</a>";
 
 $lang->reset          = 'Reset';
 $lang->cancel         = 'Cancel';
 $lang->refresh        = 'Refresh';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = 'Create';
 $lang->edit           = 'Edit';
 $lang->delete         = 'Delete';
+$lang->activate       = 'Activate';
 $lang->close          = 'Close';
 $lang->unlink         = 'Unlink';
 $lang->import         = 'Import';
@@ -77,6 +82,7 @@ $lang->retrack        = 'Retrack';
 $lang->whitelist      = 'Access whitelist';
 $lang->globalSetting  = 'Global Setting';
 $lang->waterfallModel = 'Waterfall';
+$lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
 
@@ -87,12 +93,13 @@ $lang->history         = 'History';
 $lang->attatch         = 'Files';
 $lang->reverse         = 'Inverse';
 $lang->switchDisplay   = 'Toggle';
+$lang->switchTo        = 'Switch To';
 $lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
 $lang->saveSuccess     = 'Saved';
 $lang->importSuccess   = 'Saved';
 $lang->fail            = 'Fail';
-$lang->addFiles        = 'Added Files';
+$lang->addFiles        = 'Added Files ';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Multi-line Paste';
 $lang->uploadImages    = 'Multi-image Upload';
@@ -111,6 +118,7 @@ $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
 $lang->tutorialConfirm = 'You are using ZenTao tutorial. Do you want to quit right now？';
 $lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
+$lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";
@@ -142,6 +150,10 @@ $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
+
+$lang->pri     = 'Priority';
+$lang->delayed = 'Delayed';
 
 $lang->common->common     = 'Common Module';
 $lang->my->common         = 'My';
@@ -157,6 +169,7 @@ $lang->repo->common       = 'Code';
 $lang->report->common     = 'Statistic';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
+$lang->story->common      = 'Story';
 $lang->task->common       = 'Task';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = 'Testcase';
@@ -175,14 +188,18 @@ $lang->upgrade->common    = 'Update';
 $lang->program->list      = 'Program List';
 $lang->program->kanban    = 'Program Kanban';
 $lang->design->common     = 'Design';
-$lang->design->HLDS       = 'HLDS';
-$lang->design->DDS        = 'DDS';
-$lang->design->DBDS       = 'DBDS';
-$lang->design->ADS        = 'ADS';
+$lang->design->HLDS       = 'Preliminary Design';
+$lang->design->DDS        = 'Detailed Design';
+$lang->design->DBDS       = 'Database Design';
+$lang->design->ADS        = 'Interface Design';
 $lang->stage->common      = 'Stage';
 $lang->stage->list        = 'Stage List';
 $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
+$lang->backup->common     = 'Backup';
+$lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -213,8 +230,6 @@ $lang->module          = 'Module';
 $lang->priv            = 'Privilege';
 $lang->other           = 'Other';
 $lang->estimation      = 'Estimation';
-$lang->issue           = 'Issue';
-$lang->risk            = 'Risk';
 $lang->measure         = 'Report';
 $lang->treeView        = 'Tree View';
 $lang->groupView       = 'Group View';
@@ -271,12 +286,16 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
-$lang->admin->system     = 'System';
-$lang->admin->entry      = 'Application';
-$lang->admin->data       = 'Data';
-$lang->admin->cron       = 'Cron';
-$lang->admin->buildIndex = 'Full Text Search';
+$lang->admin->system      = 'System';
+$lang->admin->entry       = 'Application';
+$lang->admin->data        = 'Data';
+$lang->admin->cron        = 'Cron';
+$lang->admin->buildIndex  = 'Full Text Search';
+$lang->admin->tableEngine = 'Table Engine';
+
+$lang->convert->importJira = 'Import Jira';
 
 $lang->storyConcept = 'Story Concpet';
 
@@ -316,6 +335,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
+$lang->visionList = array();
+$lang->visionList['rnd']  = 'R&D';
+$lang->visionList['lite'] = 'Lite';
+
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
 $lang->createObjects['bug']         = 'Bug';
@@ -351,6 +374,7 @@ $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』format error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->error->repeat          = "『%s』『%s』exists.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
@@ -376,6 +400,7 @@ $lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
 $lang->error->noCurlExt       = 'No Curl module installed';
+$lang->error->loginTimeout    = 'Login has timed out, please login again!';
 
 /* Page info. */
 $lang->pager = new stdclass();
@@ -407,6 +432,7 @@ $lang->colorPicker->errorTip = 'Not a valid color value';
 $lang->downNotify     = "Download Desktop Notification";
 $lang->clientName     = "Desktop";
 $lang->downloadClient = "Download ZenTao Desktop";
+$lang->downloadMobile = "Download Mobile Terminal";
 $lang->clientHelp     = "Client Help";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html";
 $lang->website        = "https://www.zentao.pm";
@@ -427,19 +453,21 @@ $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
 
 /* Time formats settings. */
-if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2'))  define('DT_DATETIME2',  'y-m-d H:i');
-if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
-if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n/d H:i');
-if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
-if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y/m/d');
-if(!defined('DT_DATE4'))      define('DT_DATE4',     'M d');
-if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
-if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
-if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
-if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
-if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
+if(!defined('DT_DATETIME1'))      define('DT_DATETIME1',  'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))      define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_MONTHTIME1'))     define('DT_MONTHTIME1', 'n/d H:i');
+if(!defined('DT_MONTHTIME2'))     define('DT_MONTHTIME2', 'n/d H:i');
+if(!defined('DT_DATE1'))          define('DT_DATE1',     'Y-m-d');
+if(!defined('DT_DATE2'))          define('DT_DATE2',     'Ymd');
+if(!defined('DT_DATE3'))          define('DT_DATE3',     'Y/m/d');
+if(!defined('DT_DATE4'))          define('DT_DATE4',     'M d');
+if(!defined('DT_DATE5'))          define('DT_DATE5',     'j/n');
+if(!defined('DT_TIME1'))          define('DT_TIME1',     'H:i:s');
+if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
+if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
+if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
+if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

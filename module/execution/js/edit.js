@@ -45,7 +45,9 @@ $(function()
         if(isExistedProduct != -1 && productType == 'normal')
         {
             $(this).prop('disabled', true).trigger("chosen:updated");
-            $(this).siblings('div').find('span').attr('title', tip);
+
+            var productTip = tip.replace('%s', linkedStoryIDList[$(this).attr('data-last')][0]);
+            $(this).siblings('div').find('span').attr('title', productTip);
         }
     });
 
@@ -55,22 +57,51 @@ $(function()
         if(isExistedBranch != -1)
         {
             var $product = $(this).closest('.has-branch').find("[name^='products']");
-            if($.inArray($product.val(), unmodifiableProducts) != -1)
+            if($.inArray($product.val(), unmodifiableProducts) != -1 && linkedStoryIDList[$product.val()][$(this).attr('data-last')])
             {
                 $(this).prop('disabled', true).trigger("chosen:updated");
                 $product.prop('disabled', true).trigger("chosen:updated");
-                $product.siblings('div').find('span').attr('title', tip);
+
+                var productTip = tip.replace('%s', linkedStoryIDList[$product.val()][$(this).attr('data-last')]);
+                $product.siblings('div').find('span').attr('title', productTip);
             }
         }
     });
 
-    oldProject = $("#project").val();
-    $('#project').change(function()
+    /* Init. */
+    $("select[id^=branch]").each(disableSelectedBranch);
+    disableSelectedProduct();
+
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
     {
-        if($('#submit').closest('td').find('#syncStories').length == 0)
+        if($(this).val() == 0)
         {
-            $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
+            $("select[id^='branch']").each(disableSelectedBranch);
+
+            disableSelectedProduct();
         }
-        $("#syncStories").val(confirm(confirmSyncStories) ? 'yes' : 'no');
     });
+
+    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 })
+var lastProjectID = $("#project").val();
+
+function changeProject(projectID)
+{
+    if($('#submit').closest('td').find('#syncStories').length == 0)
+    {
+        $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
+    }
+
+    var confirmVal = confirm(confirmSync);
+    $("#syncStories").val(confirmVal ? 'yes' : 'no');
+
+    if(!confirmVal)
+    {
+        $('#project').val(lastProjectID).trigger("chosen:updated");
+        return false;
+    }
+
+    lastProjectID = projectID;
+};

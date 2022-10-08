@@ -3,7 +3,7 @@
  * The model file of redmine convert of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     convert
  * @version     $Id $
@@ -385,7 +385,9 @@ class redmine11ConvertModel extends redmineConvertModel
         /* Insert into zentao */
         foreach($productPlans as $id => $productPlan)
         {
-            $productPlan->product = $this->map['products'][$productPlan->execution_id];
+            $productPlan->product     = $this->map['products'][$productPlan->execution_id];
+            $productPlan->createdBy   = $this->app->user->account;
+            $productPlan->createdDate = helper::now();
             unset($productPlan->id);
             unset($productPlan->execution_id);
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCTPLAN)->data($productPlan)->exec();
@@ -395,7 +397,9 @@ class redmine11ConvertModel extends redmineConvertModel
         foreach($this->map['products'] as $productID)
         {
             $productPlan = $this->dao->dbh($this->dbh)->select("name as title, createdDate as begin")->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
-            $productPlan->product = $productID;
+            $productPlan->product     = $productID;
+            $productPlan->createdBy   = $this->app->user->account;
+            $productPlan->createdDate = helper::now();
             $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCTPLAN)->data($productPlan)->exec();
             $this->map['planOfProduct'][$productID] = $this->dao->lastinsertID();
         }

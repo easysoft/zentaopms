@@ -1,5 +1,16 @@
-$(document).ready(function() 
+$(document).ready(function()
 {
+    if(isLibCase)
+    {
+        $('#subNavbar [data-id=testcase]').removeClass('active');
+        $('#navbar [data-id=testcase]').removeClass('active');
+    }
+    else
+    {
+        $('#subNavbar [data-id=testcase]').addClass('active');
+        $('#navbar [data-id=testcase]').addClass('active');
+    }
+
     if(config.onlybody != 'yes')$(".runCase").modalTrigger({width:'90%', type:'iframe', afterHide:function(){parent.location.href=parent.location.href;}});
     if(config.onlybody != 'yes')$(".results").modalTrigger({width:'90%', type:'iframe'});
 
@@ -21,4 +32,6 @@ $(document).ready(function()
 
         setTimeout($.resetToolbarPosition, 50);
     });
+
+    limitIframeLevel();
 })

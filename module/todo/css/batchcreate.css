@@ -6,13 +6,17 @@
 html[lang="en"] #todoBatchAddForm .col-pri {width: 105px;}
 #todoBatchAddForm .col-date {width: 180px;}
 #todoBatchAddForm .col-pending {width: 70px;}
+#todoBatchAddForm .col-assignedTo {width: 120px;}
+#todoBatchAddForm .col-name {width: auto;}
+#todoBatchAddForm .col-future {width: 90px;}
+#todoBatchAddForm .col-future #select-all {overflow: visible;}
 html[lang="en"] #todoBatchAddForm .col-pending {width: 90px;}
 #todoBatchAddForm .chosen-container-single .chosen-single {border-radius: 0;}
 #todoBatchAddForm .control-time-begin + .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}
 #todoBatchAddForm .control-time-begin + .chosen-container-active .chosen-single {border-right-width: 1px; padding-right: 0;}
 #todoBatchAddHeader [name="date"]:disabled {color: #ccc; text-decoration: line-through;}
-.main-header > .input-group {width: 240px;}
-html[lang="en"] .main-header > .input-group {width: 250px;}
+#mainContent .main-header > .input-group {width: 240px;}
+html[lang="en"] #mainContent .main-header > .input-group, html[lang="de"] #mainContent .main-header > .input-group {width: 250px;}
 
 #formSettingBtn {position: absolute; top: 14px; right: 20px; z-index: 1000;}
 #formSettingBtn .dropdown {margin-right: 0px;}
@@ -20,3 +24,6 @@ html[lang="en"] .main-header > .input-group {width: 250px;}
 #formSettingBtn .checkboxes {padding: 10px 3px;}
 #formSettingBtn .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
 #formSetting .btn {margin-right: 8px;}
+[lang^='fr'] #formSetting {width: 345px !important;}
+[lang^='de'] #formSetting {width: 380px !important;}
+.visible {overflow: visible !important;}

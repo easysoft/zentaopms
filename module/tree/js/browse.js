@@ -6,7 +6,11 @@ function syncModule(rootID, type)
     link = createLink('tree', 'ajaxGetSonModules', 'moduleID=' + moduleID + '&rootID=' + rootID + '&type=' + type);
     $.getJSON(link, function(modules)
     {
-        if(modules.length == 0) return false;
+        if(modules.length == 0)
+        {
+            alert(noSubmodule);
+            return false;
+        }
 
         $('.helplink').addClass('hidden');
         var $inputgroup = $('<div></div>').append($('.col-actions .icon-close:first').closest('.table-row').clone()).html();
@@ -48,7 +52,7 @@ function syncProductOrProject(obj, type)
 {
     if(type == 'product') viewType = 'story';
     if(type == 'project') viewType = 'task';
-    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=" + viewType + "&branch=0&rootModuleID=0&returnType=json");
+    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + obj.value + "&viewType=" + viewType + "&branch=all&rootModuleID=0&returnType=json");
     $.getJSON(link, function(modules)
     {
         $('.helplink').addClass('hidden');

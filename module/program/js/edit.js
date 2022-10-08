@@ -79,7 +79,9 @@ $(function()
         $('#changeUnitTip').modal('hide');
     })
 
-   /* If end is longtime, set the default date to today */
-   var today = $.zui.formatDate(new Date(), 'yyyy-MM-dd');
-   if($('#end').val() == longTime) $('#end').val(today).datetimepicker('update').val(longTime);
+    /* If end is longtime, set the default date to today */
+    var today = $.zui.formatDate(new Date(), 'yyyy-MM-dd');
+    if($('#end').val() == longTime) $('#end').val(today).datetimepicker('update').val(longTime);
+
+    $('#realBegan').datetimepicker('setEndDate', today);
 });

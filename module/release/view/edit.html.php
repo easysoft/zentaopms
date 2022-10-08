@@ -3,7 +3,7 @@
  * The edit view of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -29,7 +29,7 @@
             <td><?php echo html::input('name', $release->name, "class='form-control' required");?></td>
             <td>
               <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
-              <div class='checkbox-primary'>
+              <div id='markerBox' class='checkbox-primary'>
                 <input id='marker' name='marker' value='1' type='checkbox' <?php echo $checked;?> />
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>
@@ -56,13 +56,16 @@
             <th><?php echo $lang->release->mailto;?></th>
             <td colspan='2'>
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td colspan='2'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </td>
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>

@@ -3,7 +3,7 @@
  * The create storyestimate view of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Liyuchun  <liyuchun@cnezsoft.com>
  * @package     execution
  * @version     $Id
@@ -14,13 +14,17 @@
 #showAverage {margin: 0;}
 .chosen-container-single .chosen-single div b {top: 8px !important;}
 .chosen-container .chosen-drop {bottom: auto !important;}
+.pull-left {margin: 12px 0px;}
 </style>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('executionID', $executionID);?>
 <?php js::set('storyID', $storyID);?>
 <div id='mainContent' class='main-content'>
   <div class="main-header">
-    <h2><?php echo $lang->execution->storyEstimate;?></h2>
+    <h2>
+      <span class='label label-id'><?php echo $storyID;?></span>
+      <span title='<?php echo $story->title;?>'><?php echo $story->title;?></span>
+    </h2>
   </div>
   <?php if(empty($team)):?>
   <div class="table-empty-tip">

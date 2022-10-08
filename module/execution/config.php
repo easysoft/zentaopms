@@ -1,16 +1,22 @@
 <?php
 $config->execution = new stdclass();
-$config->execution->defaultWorkhours = '7.0';
-$config->execution->orderBy          = 'isDone,status,order_desc';
-$config->execution->maxBurnDay       = '31';
-$config->execution->weekend          = '2';
-$config->execution->ownerFields      = array('PO', 'PM', 'QD', 'RD');
+$config->execution->defaultWorkhours  = '7.0';
+$config->execution->orderBy           = 'isDone,status,order_desc';
+$config->execution->maxBurnDay        = '31';
+$config->execution->weekend           = '2';
+$config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
+$config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
+$config->execution->modelList['kanban']    = 'kanban';
+
+$config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
+
+$config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
 
 global $lang, $app;
 $app->loadLang('task');
@@ -48,6 +54,7 @@ $config->execution->search['fields']['desc']           = $lang->task->desc;
 $config->execution->search['fields']['assignedTo']     = $lang->task->assignedTo;
 $config->execution->search['fields']['pri']            = $lang->task->pri;
 
+if($app->tab == 'my' and $config->systemMode == 'new') $config->execution->search['fields']['project'] = $lang->task->project;
 $config->execution->search['fields']['execution']      = $lang->task->execution;
 $config->execution->search['fields']['module']         = $lang->task->module;
 $config->execution->search['fields']['estimate']       = $lang->task->estimate;
@@ -64,7 +71,6 @@ $config->execution->search['fields']['canceledBy']     = $lang->task->canceledBy
 $config->execution->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
 
 $config->execution->search['fields']['mailto']         = $lang->task->mailto;
-$config->execution->search['fields']['finishedList']   = $lang->task->finishedList;
 
 $config->execution->search['fields']['openedDate']     = $lang->task->openedDate;
 $config->execution->search['fields']['deadline']       = $lang->task->deadline;
@@ -75,6 +81,7 @@ $config->execution->search['fields']['finishedDate']   = $lang->task->finishedDa
 $config->execution->search['fields']['closedDate']     = $lang->task->closedDate;
 $config->execution->search['fields']['canceledDate']   = $lang->task->canceledDate;
 $config->execution->search['fields']['lastEditedDate'] = $lang->task->lastEditedDate;
+$config->execution->search['fields']['activatedDate']  = $lang->task->activatedDate;
 
 $config->execution->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
@@ -82,6 +89,7 @@ $config->execution->search['params']['desc']           = array('operator' => 'in
 $config->execution->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
 
+if($app->tab == 'my' and $config->systemMode == 'new') $config->execution->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->execution->search['params']['execution']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->execution->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -98,7 +106,6 @@ $config->execution->search['params']['cancelBy']       = array('operator' => '='
 $config->execution->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
-$config->execution->search['params']['finishedList']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 $config->execution->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
@@ -109,6 +116,40 @@ $config->execution->search['params']['finishedDate']   = array('operator' => '='
 $config->execution->search['params']['closedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['canceledDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['lastEditedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->search['params']['activatedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+
+$app->loadLang('execution');
+$config->execution->all = new stdclass();
+$config->execution->all->search['module'] = 'execution';
+$config->execution->all->search['fields']['name']           = $lang->execution->execName;
+$config->execution->all->search['fields']['id']             = $lang->execution->execId;
+$config->execution->all->search['fields']['status']         = $lang->execution->execStatus;
+if($config->systemMode == 'new') $config->execution->all->search['fields']['project'] = $lang->execution->project;
+$config->execution->all->search['fields']['PM']             = $lang->execution->owner;
+$config->execution->all->search['fields']['openedBy']       = $lang->execution->openedBy;
+$config->execution->all->search['fields']['openedDate']     = $lang->execution->openedDate;
+$config->execution->all->search['fields']['begin']          = $lang->execution->begin;
+$config->execution->all->search['fields']['end']            = $lang->execution->end;
+$config->execution->all->search['fields']['realBegan']      = $lang->execution->realBegan;
+$config->execution->all->search['fields']['realEnd']        = $lang->execution->realEnd;
+$config->execution->all->search['fields']['closedBy']       = $lang->execution->closedBy;
+$config->execution->all->search['fields']['lastEditedDate'] = $lang->execution->lastEditedDate;
+$config->execution->all->search['fields']['closedDate']     = $lang->execution->closedDate;
+
+$config->execution->all->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->execution->all->search['params']['id']             = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->execution->all->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => array('') + $lang->execution->statusList);
+if($config->systemMode == 'new') $config->execution->all->search['params']['project'] = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->execution->all->search['params']['PM']             = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->execution->all->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->execution->all->search['params']['openedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['begin']          = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['end']            = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['realBegan']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['realEnd']        = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;
@@ -124,3 +165,116 @@ $config->execution->kanbanSetting->colorList['pause']  = '#fdc137';
 $config->execution->kanbanSetting->colorList['done']   = '#0BD986';
 $config->execution->kanbanSetting->colorList['cancel'] = '#CBD0DB';
 $config->execution->kanbanSetting->colorList['closed'] = '#838A9D';
+
+$config->execution->gantt = new stdclass();
+$config->execution->gantt->linkType['end']['begin']   = 0;
+$config->execution->gantt->linkType['begin']['begin'] = 1;
+$config->execution->gantt->linkType['end']['end']     = 2;
+$config->execution->gantt->linkType['begin']['end']   = 3;
+
+$config->execution->datatable = new stdclass();
+if((!isset($config->setCode) or $config->setCode == 1) and $config->systemMode == 'new')
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+elseif($config->systemMode == 'new')
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+else
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+
+$config->execution->datatable->fieldList['id']['title']    = 'idAB';
+$config->execution->datatable->fieldList['id']['fixed']    = 'left';
+$config->execution->datatable->fieldList['id']['width']    = '70';
+$config->execution->datatable->fieldList['id']['required'] = 'yes';
+
+$config->execution->datatable->fieldList['name']['title']    = 'execName';
+$config->execution->datatable->fieldList['name']['fixed']    = 'left';
+$config->execution->datatable->fieldList['name']['width']    = 'auto';
+$config->execution->datatable->fieldList['name']['required'] = 'yes';
+
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
+    $config->execution->datatable->fieldList['code']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['code']['width']    = '95';
+    $config->execution->datatable->fieldList['code']['required'] = 'no';
+}
+
+if($config->systemMode == 'new')
+{
+    $config->execution->datatable->fieldList['project']['title']    = 'project';
+    $config->execution->datatable->fieldList['project']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['project']['width']    = '100';
+    $config->execution->datatable->fieldList['project']['required'] = 'no';
+}
+
+$config->execution->datatable->fieldList['PM']['title']    = 'owner';
+$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
+$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['required'] = 'no';
+
+$config->execution->datatable->fieldList['status']['title']    = 'execStatus';
+$config->execution->datatable->fieldList['status']['fixed']    = 'no';
+$config->execution->datatable->fieldList['status']['width']    = '100';
+$config->execution->datatable->fieldList['status']['required'] = 'no';
+
+$config->execution->datatable->fieldList['progress']['title']    = 'progress';
+$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
+$config->execution->datatable->fieldList['progress']['width']    = '70';
+$config->execution->datatable->fieldList['progress']['required'] = 'no';
+$config->execution->datatable->fieldList['progress']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
+$config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
+$config->execution->datatable->fieldList['openedDate']['width']    = '85';
+$config->execution->datatable->fieldList['openedDate']['required'] = 'no';
+
+$config->execution->datatable->fieldList['begin']['title']    = 'begin';
+$config->execution->datatable->fieldList['begin']['fixed']    = 'no';
+$config->execution->datatable->fieldList['begin']['width']    = '100';
+$config->execution->datatable->fieldList['begin']['required'] = 'no';
+
+$config->execution->datatable->fieldList['end']['title']    = 'end';
+$config->execution->datatable->fieldList['end']['fixed']    = 'no';
+$config->execution->datatable->fieldList['end']['width']    = '90';
+$config->execution->datatable->fieldList['end']['required'] = 'no';
+
+$config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
+$config->execution->datatable->fieldList['realBegan']['fixed']    = 'no';
+$config->execution->datatable->fieldList['realBegan']['width']    = '90';
+$config->execution->datatable->fieldList['realBegan']['required'] = 'no';
+$config->execution->datatable->fieldList['realBegan']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
+$config->execution->datatable->fieldList['realEnd']['fixed']    = 'no';
+$config->execution->datatable->fieldList['realEnd']['width']    = '90';
+$config->execution->datatable->fieldList['realEnd']['required'] = 'no';
+$config->execution->datatable->fieldList['realEnd']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
+$config->execution->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->execution->datatable->fieldList['estimate']['width']    = '70';
+$config->execution->datatable->fieldList['estimate']['required'] = 'no';
+$config->execution->datatable->fieldList['estimate']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['consumed']['title']    = 'consumed';
+$config->execution->datatable->fieldList['consumed']['fixed']    = 'no';
+$config->execution->datatable->fieldList['consumed']['width']    = '75';
+$config->execution->datatable->fieldList['consumed']['required'] = 'no';
+$config->execution->datatable->fieldList['consumed']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['left']['title']    = 'left';
+$config->execution->datatable->fieldList['left']['fixed']    = 'no';
+$config->execution->datatable->fieldList['left']['width']    = '70';
+$config->execution->datatable->fieldList['left']['required'] = 'no';
+$config->execution->datatable->fieldList['left']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['burn']['title']    = 'burn';
+$config->execution->datatable->fieldList['burn']['fixed']    = 'no';
+$config->execution->datatable->fieldList['burn']['width']    = '80';
+$config->execution->datatable->fieldList['burn']['required'] = 'no';
+$config->execution->datatable->fieldList['burn']['sort']     = 'no';

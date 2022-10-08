@@ -3,7 +3,7 @@
  * The model file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: model.php 5005 2013-07-03 08:39:11Z chencongzhi520@gmail.com $
@@ -37,11 +37,12 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function getList()
+    public function getList($params = 'nodeleted')
     {
         return $this->dao->select('*')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('inside')
+            ->where(true)
+            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq('inside')->fi()
+            ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
             ->fetchAll();
     }
@@ -102,6 +103,7 @@ class userModel extends model
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->beginIF($this->config->vision and $this->app->rawModule !== 'kanban')->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);
@@ -110,8 +112,11 @@ class userModel extends model
         {
             if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
             $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
-            $connectString  = $this->config->requestType == 'GET' ? '&' : '?';
-            $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore') . $connectString . "params=" . base64_encode($moreLinkParams);
+
+            $moreLink  = helper::createLink('user', 'ajaxGetMore');
+            $moreLink .= strpos($moreLink, '?') === false ? '?' : '&';
+            $moreLink .= "params=" . base64_encode($moreLinkParams);
+            $this->config->user->moreLink = $moreLink;
         }
 
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
@@ -119,10 +124,20 @@ class userModel extends model
         /* Cycle the user records to append the first letter of his account. */
         foreach($users as $account => $user)
         {
-            $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
-            if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
-            $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $user->account : ($user->realname ? $user->realname : $user->account));
+            if(strpos($params, 'showid') !== false)
+            {
+                $users[$account] = $user->id;
+            }
+            else
+            {
+                $firstLetter = ucfirst(mb_substr($user->account, 0, 1)) . ':';
+                if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
+                $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $user->account : ($user->realname ? $user->realname : $user->account));
+            }
         }
+
+        /* Put the current user first. */
+        $users = $this->processAccountSort($users);
 
         /* Append empty, closed, and guest users. */
         if(strpos($params, 'noempty')   === false) $users = array('' => '') + $users;
@@ -138,10 +153,10 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getAvatarPairs()
+    public function getAvatarPairs($params = 'nodeleted')
     {
         $avatarPairs = array();
-        $userList    = $this->getList();
+        $userList    = $this->getList($params);
         foreach($userList as $user) $avatarPairs[$user->account] = $user->avatar;
 
         return $avatarPairs;
@@ -150,10 +165,11 @@ class userModel extends model
     /**
      * Get commiters from the user table.
      *
+     * @param  string  $field
      * @access public
      * @return array
      */
-    public function getCommiters()
+    public function getCommiters($field = 'realname')
     {
         $rawCommiters = $this->dao->select('commiter, account, realname')->from(TABLE_USER)->where('commiter')->ne('')->fetchAll();
         if(!$rawCommiters) return array();
@@ -164,7 +180,7 @@ class userModel extends model
             $userCommiters = explode(',', $commiter->commiter);
             foreach($userCommiters as $userCommiter)
             {
-                $commiters[$userCommiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+                $commiters[$userCommiter] = $commiter->$field ? $commiter->$field : $commiter->account;
             }
         }
 
@@ -218,7 +234,7 @@ class userModel extends model
     {
         $users = $this->dao->select('account, realname, avatar, dept, role')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('type')->eq($type)->fi()
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetchAll('account');
 
@@ -241,13 +257,16 @@ class userModel extends model
     /**
      * Get user info by ID.
      *
-     * @param  mix    $userID
-     * @param  string    $field id|account
+     * @param  mix     $userID
+     * @param  string  $field id|account
      * @access public
      * @return object|bool
      */
     public function getById($userID, $field = 'account')
     {
+        /* Return current user when user is guest or empty to make sure pages in dashboard work fine. */
+        if(empty($userID) && $this->app->user->account == 'guest') return $this->app->user;
+
         if($field == 'id') $userID = (int)$userID;
         if($field == 'account') $userID = str_replace(' ', '', $userID);
 
@@ -274,6 +293,7 @@ class userModel extends model
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -295,10 +315,12 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setDefault('type', 'inside')
             ->setDefault('company', 0)
+            ->setDefault('visions', '')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
+            ->join('visions', ',')
+            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -340,12 +362,17 @@ class userModel extends model
         if(!dao::isError())
         {
             $userID = $this->dao->lastInsertID();
-            if($this->post->group)
+
+            /* Set usergroup for account. */
+            if(isset($_POST['group']))
             {
-                $data = new stdClass();
-                $data->account = $this->post->account;
-                $data->group   = $this->post->group;
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                foreach($this->post->group as $groupID)
+                {
+                    $data          = new stdclass();
+                    $data->account = $this->post->account;
+                    $data->group   = $groupID;
+                    $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                }
             }
 
             $this->computeUserView($user->account);
@@ -366,33 +393,35 @@ class userModel extends model
      */
     public function batchCreate()
     {
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) helper::end(js::alert($this->lang->user->error->verifyPassword));
 
         $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
-        for($i = 0; $i < $this->config->user->batchCreate; $i++)
+        for($i = 1; $i <= $this->config->user->batchCreate; $i++)
         {
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
             {
-                if(strtolower($users->account[$i]) == 'guest') die(js::error(sprintf($this->lang->user->error->reserved, $i + 1)));
+                if(strtolower($users->account[$i]) == 'guest') helper::end(js::error(sprintf($this->lang->user->error->reserved, $i)));
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(in_array($users->account[$i], $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(!validater::checkAccount($users->account[$i])) die(js::error(sprintf($this->lang->user->error->account, $i + 1)));
-                if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
+                if($account) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
+                if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
+                if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i)));
+                if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i)));
+                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i)));
+                if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i + 1)));
-                $role = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i)));
+                $role    = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                $visions = in_array('ditto', $users->visions[$i]) ? (isset($prev['visions']) ? $prev['visions'] : array()) : $users->visions[$i];
 
                 /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) die(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
+                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) helper::end(js::error(sprintf($this->lang->user->error->weakPassword, $i)));
                 if(!empty($this->config->safe->changeWeak))
                 {
                     if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) die(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
+                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) helper::end(js::error(sprintf($this->lang->user->error->dangerPassword, $i, $this->config->safe->weak)));
                 }
 
                 $data[$i] = new stdclass();
@@ -401,7 +430,7 @@ class userModel extends model
                 $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
-                $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
+                $data[$i]->group    = in_array('ditto', isset($users->group[$i]) ? $users->group[$i] : array()) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
@@ -417,6 +446,7 @@ class userModel extends model
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
+                $data[$i]->visions  = join(',', $visions);
 
                 /* Check required fields. */
                 foreach(explode(',', $this->config->user->create->requiredFields) as $field)
@@ -427,7 +457,7 @@ class userModel extends model
                     if(!isset($data[$i]->$field)) continue;
                     if(!empty($data[$i]->$field)) continue;
 
-                    die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                    helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
                 }
 
                 /* Change for append field, such as feedback. */
@@ -447,6 +477,7 @@ class userModel extends model
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
+                $prev['visions']  = $visions;
                 $prev['password'] = $users->password[$i];
             }
         }
@@ -455,15 +486,22 @@ class userModel extends model
         $userIDList = array();
         foreach($data as $user)
         {
-            if($user->group)
+            if(is_array($user->group))
             {
-                $group = new stdClass();
-                $group->account = $user->account;
-                $group->group   = $user->group;
-                $this->dao->replace(TABLE_USERGROUP)->data($group)->exec();
+                foreach($user->group as $group)
+                {
+                    $groups = new stdClass();
+                    $groups->account = $user->account;
+                    $groups->group   = $group;
+                    $this->dao->insert(TABLE_USERGROUP)->data($groups)->exec();
+                }
             }
             unset($user->group);
-            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()
+                ->checkIF($user->email  != '', 'email',  'email')
+                ->checkIF($user->phone  != '', 'phone',  'phone')
+                ->checkIF($user->mobile != '', 'mobile', 'mobile')
+                ->exec();
 
             /* Fix bug #2941 */
             $userID       = $this->dao->lastInsertID();
@@ -473,7 +511,7 @@ class userModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                helper::end(js::reload('parent'));
             }
             else
             {
@@ -502,9 +540,11 @@ class userModel extends model
         $user   = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setDefault('company', 0)
+            ->setDefault('visions', '')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength')
+            ->join('visions', ',')
+            ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -545,6 +585,7 @@ class userModel extends model
             ->checkIF($this->post->mobile != '', 'mobile', 'mobile')
             ->where('id')->eq((int)$userID)
             ->exec();
+        if(dao::isError()) return false;
 
         /* If account changed, update the privilege. */
         if($this->post->account != $oldUser->account)
@@ -586,9 +627,13 @@ class userModel extends model
             $this->computeUserView($this->post->account, true);
         }
 
-        if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
         if(!dao::isError())
         {
+            if($user->account == $this->app->user->account)
+            {
+                if(!empty($user->password)) $this->app->user->password = $user->password;
+                if(!empty($user->realname)) $this->app->user->realname = $user->realname;
+            }
             $this->loadModel('score')->create('user', 'editProfile');
             $this->loadModel('action')->create('user', $userID, 'edited');
             $this->loadModel('mail');
@@ -623,7 +668,7 @@ class userModel extends model
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) helper::end(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
@@ -647,6 +692,7 @@ class userModel extends model
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
+            $users[$id]['visions']  = !empty($data->visions[$id]) ? join(',', $data->visions[$id]) : '';
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
@@ -659,7 +705,7 @@ class userModel extends model
                 if(!isset($users[$id][$field])) continue;
                 if(!empty($users[$id][$field])) continue;
 
-                die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
             }
 
             if(!empty($this->config->user->batchAppendFields))
@@ -674,11 +720,11 @@ class userModel extends model
                 }
             }
 
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));
-            if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(in_array($account, $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(!validater::checkAccount($users[$id]['account'])) helper::end(js::error(sprintf($this->lang->user->error->account, $id)));
+            if($users[$id]['realname'] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $id)));
+            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) helper::end(js::error(sprintf($this->lang->user->error->mail, $id)));
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];
@@ -688,15 +734,28 @@ class userModel extends model
         $this->loadModel('mail');
         foreach($users as $id => $user)
         {
-            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq((int)$id)->exec();
+            $this->dao->update(TABLE_USER)->data($user)
+                ->autoCheck()
+                ->checkIF($user['email']  != '', 'email',  'email')
+                ->checkIF($user['phone']  != '', 'phone',  'phone')
+                ->checkIF($user['mobile'] != '', 'mobile', 'mobile')
+                ->where('id')->eq((int)$id)
+                ->exec();
             $oldUser = $oldUsers[$id];
-            if(!dao::isError())
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                helper::end(js::reload('parent'));
+            }
+            else
             {
                 if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
                 {
                     $this->mail->syncSendCloud('delete', $oldUser->email);
                     $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
                 }
+
+                if($this->app->user->account == $user['account'] and !empty($user['realname'])) $this->app->user->realname = $user['realname'];
             }
 
             if($user['account'] != $oldUser->account)
@@ -727,7 +786,7 @@ class userModel extends model
 
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->remove('account, password1, password2, originalPassword, passwordStrength')
+            ->remove('account, password1, password2, originalPassword, passwordStrength,passwordLength')
             ->get();
 
         if(empty($_POST['originalPassword']) or $this->post->originalPassword != md5($this->app->user->password . $this->session->rand))
@@ -737,10 +796,12 @@ class userModel extends model
         }
 
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
+        $_SESSION['user']->password      = $user->password;
         $this->app->user->password       = $user->password;
         $this->app->user->modifyPassword = false;
         if(!dao::isError())
         {
+            if(!empty($this->app->user->modifyPasswordReason)) $this->app->user->modifyPasswordReason = '';
             $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($this->post->password1));
         }
     }
@@ -759,7 +820,7 @@ class userModel extends model
         $user = $this->getById($this->post->account);
         if(!$user) return false;
 
-        $password = md5($this->post->password1);
+        $password = substr($this->post->password1, 0, 32);
         $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
         return !dao::isError();
     }
@@ -774,17 +835,28 @@ class userModel extends model
     {
         $_POST['password1'] = trim($_POST['password1']);
         $_POST['password2'] = trim($_POST['password2']);
-        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password) . '<br/>';
         if($this->post->password1 != false)
         {
-            if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
-            if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
+            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword) . '<br/>';
 
-            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = $this->lang->user->weakPassword;
+            if(isset($_POST['passwordLength']) and $this->post->passwordLength < 6 and empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword) . '<br/>';
+
+            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame . '<br/>';
+
             if(!empty($this->config->safe->changeWeak))
             {
                 if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+
+                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+
+                $weaks = array();
+                foreach(explode(',', $this->config->safe->weak) as $weak)
+                {
+                    $weak = md5(trim($weak));
+                    $weaks[$weak] = $weak;
+                }
+                if(isset($weaks[substr($this->post->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
             }
         }
         return !dao::isError();
@@ -801,6 +873,8 @@ class userModel extends model
     public function identify($account, $password)
     {
         if(!$account or !$password) return false;
+        /* Check account rule in login.  */
+        if(!validater::checkAccount($account)) return false;
 
         /* Get the user first. If $password length is 32, don't add the password condition.  */
         $record = $this->dao->select('*')->from(TABLE_USER)
@@ -833,7 +907,7 @@ class userModel extends model
 
         if($user)
         {
-            $ip   = $this->server->remote_addr;
+            $ip   = helper::getRemoteIp();
             $last = $this->server->request_time;
 
             $user->lastTime       = $user->last;
@@ -846,6 +920,12 @@ class userModel extends model
                 $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
                 if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
             }
+            /* Check weak password when login. */
+            if(!$user->modifyPassword and $this->app->moduleName == 'user' and $this->app->methodName == 'login' and isset($_POST['passwordStrength']))
+            {
+                $user->modifyPassword = (isset($this->config->safe->mode) and $this->post->passwordStrength < $this->config->safe->mode);
+                if($user->modifyPassword) $user->modifyPasswordReason = 'passwordStrengthWeak';
+            }
 
             /* code for bug #2729. */
             if(defined('IN_USE')) $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
@@ -853,6 +933,13 @@ class userModel extends model
             /* Create cycle todo in login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
             $this->loadModel('todo')->createByCycle($todoList);
+
+            /* Fix bug #17082. */
+            if($user->avatar)
+            {
+                $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
+                if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
+            }
         }
         return $user;
     }
@@ -914,7 +1001,7 @@ class userModel extends model
      */
     public function authorize($account)
     {
-        $account = filter_var($account, FILTER_SANITIZE_STRING);
+        $account = filter_var($account, FILTER_UNSAFE_RAW);
         if(!$account) return false;
 
         $rights = array();
@@ -931,6 +1018,7 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
                 ->where('t2.account')->eq($account)
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.role')->ne('projectAdmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
@@ -947,7 +1035,6 @@ class userModel extends model
             /* Authorize by group. */
             foreach($groups as $group)
             {
-                $acl = json_decode($group->acl, true);
                 if(empty($group->acl))
                 {
                     $programAllow = true;
@@ -959,6 +1046,7 @@ class userModel extends model
                     break;
                 }
 
+                $acl = json_decode($group->acl, true);
                 if(empty($acl['programs'])) $programAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['products'])) $productAllow = true;
@@ -991,34 +1079,52 @@ class userModel extends model
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.project')->eq(0);
+                ->andWhere('t1.project')->eq(0)
+                ->andWhere('t1.vision')->eq($this->config->vision);
         }
 
         $stmt = $sql->query();
         if(!$stmt) return array('rights' => $rights, 'acls' => $acls);
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-            $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
+            if($row['module'] and $row['method']) $rights[strtolower($row['module'])][strtolower($row['method'])] = true;
         }
 
         /* Get can manage projects by user. */
-        $canManageProjects = array();
+        $canManageProjects   = '';
+        $canManagePrograms   = '';
+        $canManageProducts   = '';
+        $canManageExecutions = '';
         if(!defined('IN_UPGRADE'))
         {
-            $projectAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
-            $canManageProjects   = $this->dao->select('project')->from(TABLE_USERGROUP)->where('`group`')->eq($projectAdminGroupID)->andWhere('account')->eq($account)->fetch('project');
+            $canManageObjects = $this->dao->select('programs,projects,products,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll();
+            foreach($canManageObjects as $object)
+            {
+                $canManageProjects   .= $object->projects   . ',';
+                $canManageProducts   .= $object->products   . ',';
+                $canManagePrograms   .= $object->programs   . ',';
+                $canManageExecutions .= $object->executions . ',';
+            }
         }
-        return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects);
+
+        /* Set basic priv when no any priv. */
+        if(empty($rights))
+        {
+            $rights['index']['index'] = 1;
+            $rights['my']['index']    = 1;
+        }
+        return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects, 'programs' => $canManagePrograms, 'products' => $canManageProducts, 'executions' => $canManageExecutions);
     }
 
     /**
      * login function.
      *
-     * @param  object    $user
+     * @param  object $user
+     * @param  bool   $addAction
      * @access public
      * @return bool|object
      */
-    public function login($user)
+    public function login($user, $addAction = true)
     {
         if(!$user) return false;
 
@@ -1032,7 +1138,7 @@ class userModel extends model
 
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
-        if(isset($user->id)) $this->loadModel('action')->create('user', $user->id, 'login');
+        if(isset($user->id) and $addAction) $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
         /* Keep login. */
@@ -1080,6 +1186,32 @@ class userModel extends model
     }
 
     /**
+     * Get groups by visions.
+     *
+     * @param  array $visions
+     * @access public
+     * @return array
+     */
+    public function getGroupsByVisions($visions)
+    {
+        if(!is_array($visions)) return array();
+        $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->in($visions)
+            ->fetchAll('id');
+
+        $visionList = $this->getVisionList();
+
+        foreach($groups as $key => $group)
+        {
+            $groups[$key] = $group->name;
+            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+        }
+
+        return $groups;
+    }
+
+    /**
      * Get the project or execution in which the user participates..
      *
      * @param  string $account
@@ -1092,7 +1224,7 @@ class userModel extends model
      */
     public function getObjects($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $objectType    = $type == 'execution' ? 'sprint,stage' : $type;
+        $objectType    = $type == 'execution' ? 'sprint,stage,kanban' : $type;
         $myObjectsList = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->eq($type)
@@ -1105,6 +1237,7 @@ class userModel extends model
             ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->orderBy("t2.$orderBy")
             ->page($pager)
             ->fetchAll('root');
@@ -1192,11 +1325,13 @@ class userModel extends model
      */
     public function failPlus($account)
     {
+        if(!validater::checkAccount($account)) return 0;
+
         /* Save session fails. */
         $sessionFails  = (int)$this->session->loginFails;
         $sessionFails += 1;
         $this->session->set('loginFails', $sessionFails);
-        if($sessionFails >= $this->config->user->failTimes) $this->session->set('loginLocked', date('Y-m-d H:i:s'));
+        if($sessionFails >= $this->config->user->failTimes) $this->session->set("{$account}.loginLocked", date('Y-m-d H:i:s'));
 
         $user  = $this->dao->select('fails')->from(TABLE_USER)->where('account')->eq($account)->fetch();
         if(empty($user)) return 0;
@@ -1227,7 +1362,7 @@ class userModel extends model
      */
     public function checkLocked($account)
     {
-        if($this->session->loginLocked and (time() - strtotime($this->session->loginLocked)) <= $this->config->user->lockMinutes * 60) return true;
+        if($this->session->{"{$account}.loginLocked"} and (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
 
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch();
         if(empty($user)) return false;
@@ -1248,7 +1383,7 @@ class userModel extends model
         $this->dao->update(TABLE_USER)->set('fails')->eq(0)->set('locked')->eq('0000-00-00 00:00:00')->where('account')->eq($account)->exec();
 
         unset($_SESSION['loginFails']);
-        unset($_SESSION['loginLocked']);
+        unset($_SESSION["{$account}.loginLocked"]);
     }
 
     /**
@@ -1380,13 +1515,14 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            die(js::error(dao::getError()));
+            return print(js::error(dao::getError()));
         }
 
         $this->dao->insert(TABLE_USERCONTACT)->data($data)
+            ->check('listName', 'unique', "account = '{$data->account}'")
             ->autoCheck()
             ->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
         return $this->dao->lastInsertID();
     }
@@ -1409,13 +1545,13 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            die(js::error(dao::getError()));
+            return false;
         }
 
         $this->dao->update(TABLE_USERCONTACT)->data($data)
             ->where('id')->eq($listID)
             ->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return false;
     }
 
     /**
@@ -1539,7 +1675,6 @@ class userModel extends model
         $strength = 0;
         $length   = strlen($password);
 
-        $uniqueChars = '';
         $complexity  = array();
         $chars = str_split($password);
         foreach($chars as $letter)
@@ -1547,7 +1682,7 @@ class userModel extends model
             $asc = ord($letter);
             if($asc >= 48 && $asc <= 57)
             {
-                $complexity[2] = 2;
+                $complexity[0] = 1;
             }
             elseif($asc >= 65 && $asc <= 90)
             {
@@ -1555,20 +1690,17 @@ class userModel extends model
             }
             elseif($asc >= 97 && $asc <= 122)
             {
-                $complexity[0] = 1;
+                $complexity[2] = 4;
             }
             else
             {
-                $complexity[3] = 3;
+                $complexity[3] = 8;
             }
-            if(strpos($uniqueChars, $letter) === false) $uniqueChars .= $letter;
         }
-        if(strlen($uniqueChars) > 4)$strength += strlen($uniqueChars) - 4;
-        $strength += array_sum($complexity) + (2 * (count($complexity) - 1));
-        if($length < 6 and $strength >= 10) $strength = 9;
+        $sumComplexity = array_sum($complexity);
 
-        $strength = $strength > 29 ? 29 : $strength;
-        $strength = floor($strength / 10);
+        if(($sumComplexity == 7 or $sumComplexity == 15) and $length >= 6)  $strength = 1;
+        if($sumComplexity == 15 and $length >= 10) $strength = 2;
 
         return $strength;
     }
@@ -1624,7 +1756,27 @@ class userModel extends model
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage')->fi()->fetchAll('id');
+            if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()->fetchAll('id');
+
+            /* Get admins. */
+            $manageObjects = array();
+            $projectAdmins = $this->dao->select('`group`,programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('group');
+            foreach($projectAdmins as $projectAdmin)
+            {
+                foreach($projectAdmin as $key => $value)
+                {
+                    $manageObjects[$key]['list'] = isset($manageObjects[$key]['list']) ? $manageObjects[$key]['list'] : '';
+
+                    if($value == 'all')
+                    {
+                        $manageObjects[$key]['isAdmin'] = 1;
+                    }
+                    else
+                    {
+                        $manageObjects[$key]['list'] .= $value . ',';
+                    }
+                }
+            }
 
             /* Get teams. */
             if($teams === null)
@@ -1683,43 +1835,79 @@ class userModel extends model
             else
             {
                 /* Process program userview. */
-                $programs = array();
-                foreach($allPrograms as $id => $program)
+                if(!empty($manageObjects['programs']['isAdmin']))
                 {
-                    $programStakeholders = zget($stakeholders, $id, array());
-                    if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
-                    if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
+                    $userView->programs = join(',', array_keys($allPrograms));
                 }
-                $userView->programs = join(',', $programs);
+                else
+                {
+                    $programs       = array();
+                    $managePrograms = isset($manageObjects['programs']['list']) ? $manageObjects['programs']['list'] : '';
+                    foreach($allPrograms as $id => $program)
+                    {
+                        $programStakeholders = zget($stakeholders, $id, array());
+                        if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
+                        if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
+                        if(strpos(",$managePrograms,", ",$id,") !== false) $programs[$id] = $id;
+                    }
+                    $userView->programs = join(',', $programs);
+                }
 
                 /* Process product userview. */
-                $products = array();
-                foreach($allProducts as $id => $product)
+                if(!empty($manageObjects['products']['isAdmin']))
                 {
-                    if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                    $userView->products = join(',', array_keys($allProducts));
                 }
-                $userView->products = join(',', $products);
+                else
+                {
+                    $products       = array();
+                    $manageProducts = isset($manageObjects['products']['list']) ? $manageObjects['products']['list'] : '';
+                    foreach($allProducts as $id => $product)
+                    {
+                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                        if(strpos(",$manageProducts,", ",$id,") !== false) $products[$id] = $id;
+                    }
+                    $userView->products = join(',', $products);
+                }
 
                 /* Process project userview. */
-                $projects = array();
-                foreach($allProjects as $id => $project)
+                if(!empty($manageObjects['projects']['isAdmin']))
                 {
-                    $projectTeams        = zget($teams, $id, array());
-                    $projectStakeholders = zget($stakeholders, $id, array());
-                    if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
-                    if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
+                    $userView->projects = join(',', array_keys($allProjects));
                 }
-                $userView->projects = join(',', $projects);
+                else
+                {
+                    $projects       = array();
+                    $manageProjects = isset($manageObjects['projects']['list']) ? $manageObjects['projects']['list'] : '';
+                    foreach($allProjects as $id => $project)
+                    {
+                        $projectTeams        = zget($teams, $id, array());
+                        $projectStakeholders = zget($stakeholders, $id, array());
+                        if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
+                        if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
+                        if(strpos(",$manageProjects,", ",$id,") !== false) $projects[$id] = $id;
+                    }
+                    $userView->projects = join(',', $projects);
+                }
 
                 /* Process sprint userview. */
-                $sprints = array();
-                foreach($allSprints as $id => $sprint)
+                if(!empty($manageObjects['executions']['isAdmin']))
                 {
-                    $sprintTeams        = zget($teams, $id, array());
-                    $sprintStakeholders = zget($stakeholders, $sprint->project, array());
-                    if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
+                    $userView->sprints = join(',', array_keys($allSprints));
                 }
-                $userView->sprints = join(',', $sprints);
+                else
+                {
+                    $sprints          = array();
+                    $manageExecutions = isset($manageObjects['executions']['list']) ? $manageObjects['executions']['list'] : '';
+                    foreach($allSprints as $id => $sprint)
+                    {
+                        $sprintTeams        = zget($teams, $id, array());
+                        $sprintStakeholders = zget($stakeholders, $sprint->project, array());
+                        if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
+                        if(strpos(",$manageExecutions,", ",$id,") !== false) $sprints[$id] = $id;
+                    }
+                    $userView->sprints = join(',', $sprints);
+                }
             }
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
@@ -1795,6 +1983,17 @@ class userModel extends model
                 $productIdList = zget($programProduct, $programStakeholder->objectID, array());
                 foreach($productIdList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
             }
+
+            $sql = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
+                ->where('type')->eq('program')
+                ->andWhere('id')->in(array_keys($programProduct))
+                ->query();
+
+            while($programOwner = $sql->fetch())
+            {
+                $productIdList = zget($programProduct, $programOwner->id, array());
+                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
+            }
         }
 
         return array($teamGroups, $stakeholderGroups);
@@ -1869,7 +2068,7 @@ class userModel extends model
         /* Set opened sprints and stages into userview. */
         $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('acl')->eq('open')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage')->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in($userView->projects)->fi()
             ->fetchAll('id');
 
@@ -1939,6 +2138,9 @@ class userModel extends model
         /* Get all parent program and subprogram relation. */
         $parentPMGroup = $this->loadModel('program')->getParentPM($programIdList);
 
+        /* Get programs's admins. */
+        $programAdmins = $this->loadModel('group')->getAdmins($programIdList, 'programs');
+
         $whiteListGroup = array();
         $stmt = $this->dao->select('objectID,account')->from(TABLE_ACL)
             ->where('objectType')->eq('program')
@@ -1956,6 +2158,7 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
+                $admins       = zget($programAdmins, $program->id, array());
                 if($program->acl == 'program')
                 {
                     $parentIds = explode(',', $program->path);
@@ -1965,7 +2168,7 @@ class userModel extends model
                         $stakeholders += zget($parentPMGroup, $parentId, array());
                     }
                 }
-                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList);
+                $authedUsers += $this->getProgramAuthedUsers($program, $stakeholders, $whiteList, $admins);
             }
         }
 
@@ -1984,13 +2187,14 @@ class userModel extends model
             {
                 $stakeholders = zget($stakeholderGroup, $program->id, array());
                 $whiteList    = zget($whiteListGroup, $program->id, array());
+                $admins       = zget($programAdmins, $program->id, array());
                 if($program->acl == 'program')
                 {
                     $stakeholders += zget($parentStakeholderGroup, $program->id, array());
                     $stakeholders += zget($parentPMGroup, $program->id, array());
                 }
 
-                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders, $whiteList);
+                $hasPriv = $this->checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins);
                 if($hasPriv and strpos(",{$view},", ",{$programID},") === false)  $view .= ",{$programID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$programID},") !== false) $view  = trim(str_replace(",{$programID},", ',', ",{$view},"), ',');
             }
@@ -2036,6 +2240,9 @@ class userModel extends model
         /* Get self stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
+        /* Get projects's admins. */
+        $projectAdmins = $this->loadModel('group')->getAdmins($projectIdList, 'projects');
+
         /* Get all parent program and subprogram relation. */
         $parentStakeholderGroup = $this->stakeholder->getParentStakeholderGroup($projectIdList);
 
@@ -2049,9 +2256,10 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
                 $whiteList    = zget($whiteListGroup, $project->id, array());
+                $admins       = zget($projectAdmins, $project->id, array());
                 if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
-                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList);
+                $authedUsers += $this->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList, $admins);
             }
         }
 
@@ -2071,9 +2279,10 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $project->id, array());
                 $teams        = zget($teamGroups, $project->id, array());
                 $whiteList    = zget($whiteListGroup, $project->id, array());
+                $admins       = zget($projectAdmins, $project->id, array());
                 if($project->acl == 'program') $stakeholders += zget($parentStakeholderGroup, $project->id, array());
 
-                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList);
+                $hasPriv = $this->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins);
                 if($hasPriv and strpos(",{$view},", ",{$projectID},") === false)  $view .= ",{$projectID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$projectID},") !== false) $view  = trim(str_replace(",{$projectID},", ',', ",{$view},"), ',');
             }
@@ -2114,6 +2323,9 @@ class userModel extends model
 
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
+        /* Get products' admins. */
+        $productAdmins = $this->loadModel('group')->getAdmins($productIdList, 'products');
+
         /* Get product view list. */
         $viewList = array();
         if(empty($users))
@@ -2123,7 +2335,8 @@ class userModel extends model
                 $teams        = zget($productTeams, $productID, array());
                 $stakeholders = zget($productStakeholders, $productID, array());
                 $whiteList    = zget($whiteListGroup, $productID, array());
-                $viewList    += $this->getProductViewListUsers($product, $teams, $stakeholders, $whiteList);
+                $admins       = zget($productAdmins, $productID, array());
+                $viewList    += $this->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
             }
 
             $users = $viewList;
@@ -2141,8 +2354,9 @@ class userModel extends model
                 $members      = zget($productTeams, $productID, array());
                 $stakeholders = zget($productStakeholders, $productID, array());
                 $whiteList    = zget($whiteListGroup, $productID, array());
+                $admins       = zget($productAdmins, $productID, array());
 
-                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders, $whiteList);
+                $hasPriv = $this->checkProductPriv($product, $account, zget($userGroups, $account, ''), $members, $stakeholders, $whiteList, $admins);
                 if($hasPriv and strpos(",{$view},", ",{$productID},") === false)  $view .= ",{$productID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$productID},") !== false) $view  = trim(str_replace(",{$productID},", ',', ",{$view},"), ',');
             }
@@ -2194,6 +2408,9 @@ class userModel extends model
         /* Get parent project stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
+        /* Get executions' admins. */
+        $executionAdmins = $this->loadModel('group')->getAdmins($sprintIdList, 'executions');
+
         /* Get auth users. */
         $authedUsers = array();
         if(!empty($users)) $authedUsers = $users;
@@ -2205,8 +2422,9 @@ class userModel extends model
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $parentTeams  = zget($teamGroups, $sprint->project, array());
                 $whiteList    = zget($whiteListGroup, $sprint->project, array());
+                $admins       = zget($executionAdmins, $sprint->id, array());
 
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList, $admins);
 
                 /* If you have parent stage view permissions, you have child stage permissions. */
                 if($sprint->type == 'stage' && $sprint->grade == 2)
@@ -2233,8 +2451,9 @@ class userModel extends model
                 $stakeholders = zget($stakeholderGroup, $sprint->project, array());
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $whiteList    = zget($whiteListGroup, $sprint->id, array());
+                $admins       = zget($executionAdmins, $sprint->id, array());
 
-                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
+                $hasPriv = $this->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
                 if($hasPriv and strpos(",{$view},", ",{$sprintID},") === false)  $view .= ",{$sprintID}";
                 if(!$hasPriv and strpos(",{$view},", ",{$sprintID},") !== false) $view  = trim(str_replace(",{$sprintID},", ',', ",{$view},"), ',');
             }
@@ -2249,10 +2468,11 @@ class userModel extends model
      * @param  string $account
      * @param  array  $stakeholders
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return bool
      */
-    public function checkProgramPriv($program, $account, $stakeholders, $whiteList)
+    public function checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
@@ -2269,7 +2489,8 @@ class userModel extends model
         if($program->acl == 'open') return true;
 
         if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account])) return true;
+        if(isset($whiteList[$account]))    return true;
+        if(isset($admins[$account]))       return true;
 
         return false;
     }
@@ -2282,17 +2503,20 @@ class userModel extends model
      * @param  string    $groups
      * @param  array     $teams
      * @param  array     $whiteList
+     * @param  array     $admins
      * @access public
      * @return bool
      */
-    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList)
+    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
-        if($project->acl == 'open') return true;
-        if(isset($teams[$account])) return true;
+
+        if($project->acl == 'open')        return true;
+        if(isset($teams[$account]))        return true;
         if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account])) return true;
+        if(isset($whiteList[$account]))    return true;
+        if(isset($admins[$account]))       return true;
 
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
@@ -2303,11 +2527,11 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private' and $this->config->systemMode == 'new')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($parent)) return false;
-            if($parent->PM == $account || $parent->openedBy == $account) return true;
+            if($parent->PM == $account or $parent->openedBy == $account) return true;
         }
 
         return false;
@@ -2321,12 +2545,13 @@ class userModel extends model
      * @param  string    $groups
      * @param  array     $teams
      * @param  array     $whiteList
+     * @param  array     $admins
      * @access public
      * @return bool
      */
-    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList)
+    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins = array())
     {
-        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList);
+        return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
@@ -2338,18 +2563,20 @@ class userModel extends model
      * @param  array  $linkedProjects
      * @param  array  $teams
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return bool
      */
-    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList)
+    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
-        if(isset($teams[$account])) return true;
+        if(isset($teams[$account]))        return true;
         if(isset($stakeholders[$account])) return true;
-        if(isset($whiteList[$account])) return true;
+        if(isset($whiteList[$account]))    return true;
+        if(isset($admins[$account]))       return true;
 
         return false;
     }
@@ -2361,10 +2588,11 @@ class userModel extends model
      * @param  array  $stakeholders
      * @param  array  $teams
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return array
      */
-    public function getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList)
+    public function getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList, $admins = array())
     {
         $users = array();
 
@@ -2379,6 +2607,7 @@ class userModel extends model
         $users += $stakeholders ? $stakeholders : array();
         $users += $teams ? $teams : array();
         $users += $whiteList ? $whiteList : array();
+        $users += $admins ? $admins : array();
 
         /* Parent program managers. */
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
@@ -2409,10 +2638,11 @@ class userModel extends model
      * @param  object $program
      * @param  array  $stakeholders
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return array
      */
-    public function getProgramAuthedUsers($program, $stakeholders, $whiteList)
+    public function getProgramAuthedUsers($program, $stakeholders, $whiteList, $admins)
     {
         $users = array();
 
@@ -2423,6 +2653,7 @@ class userModel extends model
 
         $users += $stakeholders ? $stakeholders : array();
         $users += $whiteList ? $whiteList : array();
+        $users += $admins ? $admins : array();
 
         return $users;
     }
@@ -2434,12 +2665,13 @@ class userModel extends model
      * @param  array  $stakeholders
      * @param  array  $teams
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return array
      */
-    public function getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList)
+    public function getSprintAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins)
     {
-        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams, $whiteList);
+        return $this->getProjectAuthedUsers($sprint, $stakeholders, $teams, $whiteList, $admins);
     }
 
     /**
@@ -2449,10 +2681,11 @@ class userModel extends model
      * @param  array  $linkedProjects
      * @param  array  $teams
      * @param  array  $whiteList
+     * @param  array  $admins
      * @access public
      * @return array
      */
-    public function getProductViewListUsers($product, $teams, $stakeholders, $whiteList)
+    public function getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins)
     {
         $users = array();
 
@@ -2479,9 +2712,18 @@ class userModel extends model
                 ->fetchPairs();
         }
 
+        if($admins === '')
+        {
+            $admins = $this->dao->select('account')->from(TABLE_PROJECTADMIN)
+                ->where("CONCAT(',', products, ',')")->like("%,$product->id,%")
+                ->orWhere('products')->eq('all')
+                ->fetchPairs();
+        }
+
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();
         $users += $whiteList ? $whiteList : array();
+        $users += $admins ? $admins : array();
 
         return $users;
     }
@@ -2520,6 +2762,10 @@ class userModel extends model
             if(!empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
+
+        /* Put the current user first. */
+        $users = $this->processAccountSort($users);
+
         return array('' => '') + $users;
     }
 
@@ -2592,26 +2838,32 @@ class userModel extends model
     public function getPersonalData($account = '')
     {
         if(empty($account)) $account = $this->app->user->account;
-        $count   = 'count(*) AS count';
+        $count   = 'count(id) AS count';
+        $t1Count = 'count(t1.id) AS count';
 
         $personalData = array();
         $personalData['createdTodos']        = $this->dao->select($count)->from(TABLE_TODO)->where('account')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['createdRequirements'] = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('requirement')->fetch('count');
-        $personalData['createdStories']      = $this->dao->select($count)->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('type')->eq('story')->fetch('count');
-        $personalData['createdBugs']         = $this->dao->select($count)->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['resolvedBugs']        = $this->dao->select($count)->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['createdCases']        = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->andWhere('product')->ne(0)->fetch('count');
-        if(isset($this->config->maxVersion))
+        $personalData['createdRequirements'] = $this->dao->select($t1Count)->from(TABLE_STORY)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.openedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->andWhere('t1.type')->eq('requirement')->fetch('count');
+        $personalData['createdStories']      = $this->dao->select($t1Count)->from(TABLE_STORY)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.openedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->andWhere('t1.type')->eq('story')->fetch('count');
+        $personalData['createdBugs']         = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.openedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
+        $personalData['resolvedBugs']        = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftjoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
+        $personalData['createdCases']        = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        if($this->config->edition == 'max')
         {
-            $personalData['createdRisks']        = $this->dao->select($count)->from(TABLE_RISK)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-            $personalData['resolvedRisks']       = $this->dao->select($count)->from(TABLE_RISK)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-            $personalData['createdIssues']       = $this->dao->select($count)->from(TABLE_ISSUE)->where('createdBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-            $personalData['resolvedIssues']      = $this->dao->select($count)->from(TABLE_ISSUE)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+            $personalData['createdRisks']   = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.createdBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
+            $personalData['resolvedRisks']  = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
+            $personalData['createdIssues']  = $this->dao->select($t1Count)->from(TABLE_ISSUE)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.createdBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
+            $personalData['resolvedIssues'] = $this->dao->select($t1Count)->from(TABLE_ISSUE)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         }
-        $personalData['createdDocs']         = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $personalData['finishedTasks']       = $this->dao->select($count)->from(TABLE_TASK)->where('deleted')->eq('0')
-            ->andWhere('finishedBy', true)->eq($account)
-            ->orWhere('finishedList')->like("%,{$account},%")
+        $allLibs = $this->loadModel('doc')->getLibs('all');
+        $personalData['createdDocs']   = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('lib')->in(array_keys($allLibs))->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['finishedTasks'] = $this->dao->select($t1Count)->from(TABLE_TASK)->alias('t1')
+            ->leftjoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftjoin(TABLE_TASKTEAM)->alias('t3')->on('t1.id = t3.task')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.finishedBy', true)->eq($account)
+            ->orWhere('t3.status')->eq("done")
             ->markRight(1)
             ->fetch('count');
 
@@ -2646,5 +2898,102 @@ class userModel extends model
             $userDetails[$user->account] = $user;
         }
         return $userDetails;
+    }
+
+    /**
+     * Get vision list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getVisionList()
+    {
+        $visionList = $this->lang->visionList;
+
+        foreach($visionList as $visionKey => $visionName)
+        {
+            if(strpos($this->config->visions, ",{$visionKey},") === false) unset($visionList[$visionKey]);
+        }
+
+        return $visionList;
+    }
+
+    /**
+     * Get users who have authority to create stories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCanCreateStoryUsers()
+    {
+        $users     = $this->getPairs('noclosed|nodeleted');
+        $groupList = $this->dao->select('*')->from(TABLE_USERGROUP)
+            ->where('account')->in(array_keys($users))
+            ->fetchGroup('account', 'group');
+
+        $hasPrivGroups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('(method')->eq('create')
+            ->orWhere('method')->eq('batchCreate')
+            ->markRight(1)
+            ->fetchAll('group');
+
+        foreach($users as $account => $user)
+        {
+            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
+
+            if(!isset($groupList[$account]))
+            {
+                unset($users[$account]);
+                continue;
+            }
+
+            $groups  = $groupList[$account];
+            $hasPriv = false;
+            foreach($groups as $groupID => $group)
+            {
+                if(isset($hasPrivGroups[$groupID]))
+                {
+                    $hasPriv = true;
+                    break;
+                }
+            }
+
+            if(!$hasPriv) unset($users[$account]);
+        }
+
+        return $users;
+    }
+
+    /**
+     * Switch admin of ZenTao.
+     *
+     * @access public
+     * @return void
+     */
+    public function su()
+    {
+        $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
+        $admins  = explode(',', trim($company->admins, ','));
+        $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($admins[0])->fetch();
+    }
+
+    /**
+     * Put the current user first.
+     *
+     * @param  array    $users
+     * @access public
+     * @return array
+     */
+    public function processAccountSort($users = array())
+    {
+        if(isset($users[$this->app->user->account]))
+        {
+            $currentUser = array();
+            $currentUser[$this->app->user->account] = $users[$this->app->user->account];
+            unset($users[$this->app->user->account]);
+            $users = $currentUser + $users;
+        }
+        return $users;
     }
 }

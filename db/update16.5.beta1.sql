@@ -1,0 +1,12 @@
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `name` varchar(255) NOT NULL AFTER `id`;
+ALTER TABLE `zt_vmtemplate` CHANGE COLUMN `status` `osVersion`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' AFTER `osCategory`;
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `osLang` varchar(50) NOT NULL AFTER `osVersion`;
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `osArch` varchar(50) NOT NULL AFTER `osLang`;
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `cpuCoreNum` smallint(4) NOT NULL DEFAULT 0 AFTER `osLang`;
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `memorySize` int NOT NULL DEFAULT 0 AFTER `cpuCoreNum`;
+ALTER TABLE `zt_vmtemplate` ADD COLUMN `diskSize` int NOT NULL DEFAULT 0 AFTER `memorySize`;
+ALTER TABLE `zt_vm` ADD COLUMN `osCpu` tinyint(2) NOT NULL DEFAULT 0 AFTER `osLang`;
+ALTER TABLE `zt_vm` ADD COLUMN `osMemory` smallint(6) NOT NULL DEFAULT 0 AFTER `osCpu`;
+ALTER TABLE `zt_vm` ADD COLUMN `osDisk` smallint(6) NOT NULL DEFAULT 0 AFTER `osMemory`;
+ALTER TABLE `zt_vm` DROP COLUMN `ip`, DROP COLUMN `agentPort`;
+ALTER TABLE `zt_vm` CHANGE COLUMN `vnc` `vncPort` int(10) NOT NULL DEFAULT 0 AFTER `heatbeat`;

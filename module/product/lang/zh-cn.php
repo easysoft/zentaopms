@@ -3,35 +3,42 @@
  * The product module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->index           = $lang->productCommon . '主页';
-$lang->product->browse          = "{$lang->SRCommon}列表";
-$lang->product->dynamic         = $lang->productCommon . '动态';
-$lang->product->view            = "{$lang->productCommon}概况";
-$lang->product->edit            = "编辑{$lang->productCommon}";
-$lang->product->batchEdit       = '批量编辑';
-$lang->product->create          = "添加{$lang->productCommon}";
-$lang->product->delete          = "删除{$lang->productCommon}";
-$lang->product->deleted         = '已删除';
-$lang->product->close           = '关闭';
-$lang->product->select          = "请选择{$lang->productCommon}";
-$lang->product->mine            = '我负责';
-$lang->product->other           = '其他';
-$lang->product->closed          = '已关闭';
-$lang->product->updateOrder     = '排序';
-$lang->product->all             = "所有{$lang->productCommon}";
-$lang->product->manageLine      = "维护{$lang->productCommon}线";
-$lang->product->newLine         = "新建{$lang->productCommon}线";
-$lang->product->export          = '导出数据';
-$lang->product->dashboard       = "{$lang->productCommon}仪表盘";
-$lang->product->changeProgram   = "{$lang->productCommon}调整所属项目集影响范围确认";
-$lang->product->addWhitelist    = '添加白名单';
-$lang->product->unbindWhitelist = '移除白名单';
+$lang->product->index            = $lang->productCommon . '主页';
+$lang->product->browse           = "{$lang->SRCommon}列表";
+$lang->product->requirement      = "{$lang->URCommon}列表";
+$lang->product->dynamic          = $lang->productCommon . '动态';
+$lang->product->view             = "{$lang->productCommon}概况";
+$lang->product->edit             = "编辑{$lang->productCommon}";
+$lang->product->batchEdit        = '批量编辑';
+$lang->product->create           = "添加{$lang->productCommon}";
+$lang->product->delete           = "删除{$lang->productCommon}";
+$lang->product->deleted          = '已删除';
+$lang->product->close            = '关闭';
+$lang->product->select           = "请选择{$lang->productCommon}";
+$lang->product->mine             = '我负责';
+$lang->product->other            = '其他';
+$lang->product->closed           = '已关闭';
+$lang->product->closedProduct    = '已关闭的产品';
+$lang->product->updateOrder      = '排序';
+$lang->product->all              = "所有{$lang->productCommon}";
+$lang->product->manageLine       = "维护{$lang->productCommon}线";
+$lang->product->newLine          = "新建{$lang->productCommon}线";
+$lang->product->export           = '导出数据';
+$lang->product->dashboard        = "{$lang->productCommon}仪表盘";
+$lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集影响范围确认";
+$lang->product->changeProgramTip = "%s > 修改项目集";
+$lang->product->addWhitelist     = '添加白名单';
+$lang->product->unbindWhitelist  = '移除白名单';
+$lang->product->track            = "查看需求矩阵";
+$lang->product->checkedProducts  = '已选择%s项产品';
+$lang->product->pageSummary      = '本页共%s个产品。';
+$lang->product->lineSummary      = '本页共%s个产品线，%s个产品。';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";
@@ -65,6 +72,8 @@ $lang->product->changedStories        = "已变更{$lang->SRCommon}";
 $lang->product->changedStoriesTitle   = "已变更{$lang->SRCommon}";
 $lang->product->draftStories          = "草稿{$lang->SRCommon}";
 $lang->product->draftStoriesTitle     = "草稿{$lang->SRCommon}";
+$lang->product->reviewingStories      = "评审中{$lang->SRCommon}";
+$lang->product->reviewingStoriesTitle = "评审中{$lang->SRCommon}";
 $lang->product->closedStories         = "已关闭{$lang->SRCommon}";
 $lang->product->closedStoriesTitle    = "已关闭{$lang->SRCommon}";
 $lang->product->storyCompleteRate     = "{$lang->SRCommon}完成率";
@@ -85,10 +94,13 @@ $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied         = "您无权访问该{$lang->productCommon}";
 $lang->product->programChangeTip     = "如下项目只关联了该{$lang->productCommon}， 将直接转移至新项目集下。";
-$lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请取消关联后再操作";
+$lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请点击项目名称进入{$lang->SRCommon}列表取消关联后再操作";
 $lang->product->confirmChangeProgram = "如下项目既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新项目集下。";
 $lang->product->changeProgramError   = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到项目，请取消关联后再操作";
+$lang->product->changeLineError      = "产品线下已有产品，不可修改所属项目集。";
 $lang->product->programEmpty         = '项目集不能为空';
+$lang->product->nameIsDuplicate      = "『%s』产品线已经存在，请重新设置！";
+$lang->product->nameIsDuplicated     = "产品线已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
@@ -126,20 +138,22 @@ $lang->product->createdDate    = '创建日期';
 $lang->product->createdVersion = '创建版本';
 $lang->product->mailto         = '抄送给';
 
-$lang->product->searchStory  = '搜索';
-$lang->product->assignedToMe = '指给我';
-$lang->product->openedByMe   = '我创建';
-$lang->product->reviewedByMe = '我评审';
-$lang->product->reviewByMe   = '待我评审';
-$lang->product->closedByMe   = '我关闭';
-$lang->product->draftStory   = '草稿';
-$lang->product->activeStory  = '激活';
-$lang->product->changedStory = '已变更';
-$lang->product->willClose    = '待关闭';
-$lang->product->closedStory  = '已关闭';
-$lang->product->unclosed     = '未关闭';
-$lang->product->unplan       = "未计划";
-$lang->product->viewByUser   = '按用户查看';
+$lang->product->searchStory    = '搜索';
+$lang->product->assignedToMe   = '指给我';
+$lang->product->openedByMe     = '我创建';
+$lang->product->reviewedByMe   = '我评审';
+$lang->product->reviewByMe     = '待我评审';
+$lang->product->closedByMe     = '我关闭';
+$lang->product->draftStory     = '草稿';
+$lang->product->activeStory    = '激活';
+$lang->product->changingStory  = '变更中';
+$lang->product->reviewingStory = '评审中';
+$lang->product->willClose      = '待关闭';
+$lang->product->closedStory    = '已关闭';
+$lang->product->unclosed       = '未关闭';
+$lang->product->unplan         = "未计划";
+$lang->product->viewByUser     = '按用户查看';
+$lang->product->assignedByMe   = '我指派';
 
 /* Product Kanban. */
 $lang->product->myProduct             = '我负责的' . $lang->productCommon;
@@ -176,7 +190,7 @@ $lang->product->statusList['closed'] = '结束';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的干系人、相关联项目的团队成员和干系人可访问)";
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的负责人及干系人、相关联项目的团队成员和干系人可访问)";
 }
 else
 {
@@ -197,7 +211,7 @@ $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
-$lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featureBar['browse']['allstory']     = '全部';
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
@@ -206,12 +220,14 @@ $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByM
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
-$lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
+$lang->product->featureBar['all']['all']      = '全部' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
-$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
-$lang->product->moreSelects['willclose']    = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;
+$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;

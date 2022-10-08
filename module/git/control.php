@@ -3,7 +3,7 @@
  * The control file of git currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     git
  * @version     $Id$
@@ -34,24 +34,30 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
-        $path = helper::safe64Decode($path);
-        if(common::hasPriv('repo', 'diff'))
+        $path        = helper::safe64Decode($path);
+        $repos       = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $currentRepo = null;
+        foreach($repos as $repo)
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
-            foreach($repos as $repo)
-            {
-                if(strpos($path, $repo->path) === 0)
-                {
-                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $oldRevision = "$revision^";
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
-                }
-            }
+            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $currentRepo = $repo;
+        }
+
+        if($currentRepo and common::hasPriv('repo', 'diff'))
+        {
+            $entry       = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
+            $oldRevision = "$revision^";
+            return $this->locate($this->repo->createLink('diff', "repoID=$currentRepo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
+        }
+
+        if($currentRepo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($currentRepo);
         }
 
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->diff     = $this->git->diff($path, $revision);
+        $this->view->diff     = $currentRepo ? $scm->diff($path, $revision) : '';
 
         $this->display();
     }
@@ -68,23 +74,28 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
-        $path = helper::safe64Decode($path);
-        if(common::hasPriv('repo', 'view'))
+        $path        = helper::safe64Decode($path);
+        $repos       = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $currentRepo = null;
+        foreach($repos as $repo)
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
-            foreach($repos as $repo)
-            {
-                if(strpos($path, $repo->path) === 0)
-                {
-                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
-                }
-            }
+            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $currentRepo = $repo;
         }
 
+        if($currentRepo and common::hasPriv('repo', 'view'))
+        {
+            $entry = $this->repo->encodePath(str_replace($currentRepo->path, '', $path));
+            return $this->locate($this->repo->createLink('view', "repoID=$currentRepo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
+        }
+
+        if($currentRepo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($currentRepo);
+        }
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->code     = $this->git->cat($path, $revision);
+        $this->view->code     = $currentRepo ? $scm->cat($path, $revision) : '';
 
        $this->display();
     }
@@ -136,8 +147,7 @@ class git extends control
             $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
             $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
             $this->view->parsedObjects = $parsedObjects;
-            $this->display();
-            exit;
+            return $this->display();
         }
     }
 
@@ -154,7 +164,7 @@ class git extends control
         $message  = trim($this->post->message);
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
-        if(empty($repoUrl)) die();
+        if(empty($repoUrl)) return;
         $repoUrl = rtrim($repoUrl, '/') . '/';
 
         $parsedFiles = array();
@@ -193,7 +203,6 @@ class git extends control
             $log->files    = $parsedFiles;
             $this->git->saveAction2PMS($objects, $log, $repoUrl);
         }
-        die();
     }
 
     /**
@@ -205,6 +214,6 @@ class git extends control
     public function ajaxGetRepos()
     {
         $repos = $this->git->getRepos();
-        die(json_encode($repos));
+        echo json_encode($repos);
     }
 }

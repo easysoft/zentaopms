@@ -70,15 +70,22 @@ class stakeholder extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $members = array();
         if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($objectID);
-            $this->view->members = $this->loadModel('program')->getTeamMemberPairs($objectID);
+            $members = $this->loadModel('program')->getTeamMemberPairs($objectID);
         }
         else
         {
             $this->loadModel('project')->setMenu($objectID);
-            $this->view->members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
+            $members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
+        }
+
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($members as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($members[$account]);
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
@@ -86,6 +93,7 @@ class stakeholder extends control
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
         $this->view->programID  = $this->app->tab == 'program' ? $objectID : 0;
         $this->view->projectID  = $this->app->tab == 'project' ? $objectID : 0;
+        $this->view->members    = $members;
 
         $this->display();
     }
@@ -105,7 +113,7 @@ class stakeholder extends control
         {
             $stakeholderList = $this->stakeholder->batchCreate($projectID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stakeholderList));
-            die(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
+            return print(js::locate($this->createLink('stakeholder', 'browse', "projectID=$projectID"), 'parent'));
         }
 
         if($this->app->tab == 'program')
@@ -206,7 +214,13 @@ class stakeholder extends control
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
-        die(html::select('user', $members, $user, "class='form-control chosen'"));
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($members as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($members[$account]);
+        }
+
+        echo html::select('user', $members, $user, "class='form-control chosen'");
     }
 
     /**
@@ -229,10 +243,15 @@ class stakeholder extends control
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
 
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users        = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($companyUsers as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($companyUsers[$account]);
+        }
 
-        die(html::select('user', $companyUsers, $user, "class='form-control chosen'"));
+        echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
     }
 
     /**
@@ -241,11 +260,16 @@ class stakeholder extends control
      * @access public
      * @return void
      */
-    public function ajaxGetOutsideUser()
+    public function ajaxGetOutsideUser($objectID = 0)
     {
-        $users = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $users        = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($users as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($users[$account]);
+        }
 
-        die(html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);"));
+        echo html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);");
     }
 
     /**
@@ -288,7 +312,7 @@ class stakeholder extends control
 
         $partakeList = array_merge($insideList, $outsideList);
 
-        die(json_encode(array('begin' => $begin, 'realBegin' => $realBegin, 'status' => $status, 'situation' => $situation, 'partakeList' => $partakeList)));
+        echo json_encode(array('begin' => $begin, 'realBegin' => $realBegin, 'status' => $status, 'situation' => $situation, 'partakeList' => $partakeList));
     }
 
     /**
@@ -303,7 +327,7 @@ class stakeholder extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->stakeholder->confirmDelete, inLink('delete', "userID=$userID&confirm=yes")));
+            return print(js::confirm($this->lang->stakeholder->confirmDelete, inLink('delete', "userID=$userID&confirm=yes")));
         }
         else
         {
@@ -316,7 +340,7 @@ class stakeholder extends control
             {
                 $this->loadModel('project')->updateInvolvedUserView($stakeholder->objectID, $stakeholder->user);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -393,8 +417,8 @@ class stakeholder extends control
         if(!empty($_POST))
         {
             $result = $this->stakeholder->communicate($userID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
@@ -418,9 +442,9 @@ class stakeholder extends control
         if(!empty($_POST))
         {
             $expectID = $this->stakeholder->expect($user->id);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
-            die(js::closeModal('parent.parent', 'this'));
+            return print(js::closeModal('parent.parent', 'this'));
         }
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;

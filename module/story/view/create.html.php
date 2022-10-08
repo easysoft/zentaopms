@@ -3,7 +3,7 @@
  * The create view of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: create.html.php 4902 2013-06-26 05:25:58Z wyd621@gmail.com $
@@ -11,15 +11,19 @@
  */
 ?>
 <?php include './header.html.php';?>
-<style>
-#product_chosen {border-right:1px solid #dcdcdc;}
-#branch_chosen>a {border-left:0px;}
-</style>
 <?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyType', $type);?>
+<?php js::set('requiredFields', $config->story->create->requiredFields);?>
+<?php
+foreach(explode(',', $config->story->create->requiredFields) as $field)
+{
+    if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+}
+?>
+<?php js::set('showFields', $showFields);?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -27,17 +31,19 @@
   <div class="center-block">
     <div class="main-header">
       <h2><?php echo $lang->story->create;?></h2>
+      <?php if(!$this->story->checkForceReview()):?>
+      <div class="needNotReviewBox">
+        <div class='checkbox-primary'>
+          <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+          <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
+        </div>
+      </div>
+      <?php endif;?>
       <div class="pull-right btn-toolbar">
         <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <?php
-    foreach(explode(',', $config->story->create->requiredFields) as $field)
-    {
-        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
-    }
-    ?>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
@@ -60,13 +66,14 @@
                     echo "<div class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>
               </div>
             </td>
           </tr>
+          <?php $hiddenSource = strpos(",$showFields,", ',source,') !== false ? '' : 'hidden';?>
           <?php if($type == 'story'):?>
           <tr>
             <th class='planTh'><?php echo $lang->story->planAB;?></th>
@@ -86,54 +93,24 @@
                 ?>
               </div>
             </td>
-            <?php if(strpos(",$showFields,", ',source,') !== false):?>
-            <td colspan="2" class='sourceTd'>
-              <div class="input-group">
-                <div class="input-group">
-                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  <span class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></span>
-                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : "style='width: 180px;'"?>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
-                </div>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
+              <div class='input-group'>
+                <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
+                <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
-            <?php endif;?>
           </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
-              <div class="table-row">
-                <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
-                </div>
-                <?php if(!$this->story->checkForceReview()):?>
-                <div class="table-col w-130px">
-                  <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
-                    <div class='checkbox-primary'>
-                      <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-                      <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
-                    </div>
-                  </span>
-                </div>
-                <?php endif;?>
-              </div>
+          <tr class='sourceBox <?php echo $hiddenSource;?>'>
+            <th><?php echo $lang->story->source;?></th>
+            <td colspan='2'>
+              <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
             </td>
-            <?php if($type == 'requirement'):?>
-            <?php if(strpos(",$showFields,", ',source,') !== false):?>
-            <td colspan="2" class='sourceTd'>
+            <td colspan="2" class="sourceTd">
               <div class="input-group">
-                <div class="input-group">
-                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
-                </div>
+                <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
+                <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
               </div>
             </td>
-            <?php endif;?>
-            <?php else:?>
             <td colspan="2" id='feedbackBox' class='hidden'>
               <div class="input-group">
                 <div class="input-group">
@@ -144,19 +121,73 @@
                 </div>
               </div>
             </td>
-            <?php endif;?>
           </tr>
-          <?php if($type == 'story' and $this->config->URAndSR):?>
+          <?php else:?>
+          <tr>
+            <th class='planTh'><?php echo $lang->story->assignedTo;?></th>
+            <td colspan='2' id='assignedToBox'>
+              <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
+            </td>
+            <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
+              <div class="input-group">
+                <div class="input-group">
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
+                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                  <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <th><?php echo $lang->story->reviewedBy;?></th>
+            <td colspan='2' id='reviewerBox'>
+              <div class="table-row">
+                <?php $required = $this->story->checkForceReview() ? 'required' : '';?>
+                <?php echo $this->story->checkForceReview() ? '' : html::hidden('needNotReview', 1);?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple $required");?>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <?php if($type == 'story'):?>
+          <?php if($this->config->URAndSR):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
-            <td colspan="4"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2">
+              <div class='input-group' id='moduleIdBox'>
+                <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
+                <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
+          <tr>
+            <th><?php echo $lang->story->parent;?></th>
+            <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php endif;?>
+          <?php endif;?>
+          <?php if (isset($executionType) and $executionType == 'kanban'):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->region;?>
+            <td colspan="2"><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td colspan="2">
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
+              </div>
+            </td>
           </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->title;?></th>
             <td colspan="4">
               <div class='table-row'>
-                <div class='table-col'>
+                <div class='table-col input-size'>
                   <div class="input-control has-icon-right">
                     <?php echo html::input('title', $storyTitle, "class='form-control' required");?>
                     <div class="colorpicker">
@@ -168,14 +199,14 @@
                     </div>
                   </div>
                 </div>
-                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
-                <div class='table-col w-150px'>
+                <?php $hiddenPri = strpos(",$showFields,", ',pri,') !== false ? '' : 'hidden';?>
+                <div class="table-col categoryBox">
                   <div class="input-group">
                     <span class="input-group-addon fix-border br-0"><?php echo $lang->story->category;?></span>
                     <?php echo html::select('category', $lang->story->categoryList, 'feature', "class='form-control chosen'");?>
                   </div>
                 </div>
-                <div class='table-col w-120px'>
+                <div class="table-col <?php echo $hiddenPri?> priBox">
                   <div class="input-group">
                     <span class="input-group-addon fix-border br-0"><?php echo $lang->story->pri;?></span>
                     <?php
@@ -211,15 +242,13 @@
                     <?php endif;?>
                   </div>
                 </div>
-                <?php endif; ?>
-                <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-                <div class='table-col w-120px'>
+                <?php $hiddenEstimate = strpos(",$showFields,", ',estimate,') !== false ? '' : 'hidden';?>
+                <div class="table-col <?php echo $hiddenEstimate?> estimateBox">
                   <div class="input-group">
                     <span class="input-group-addon fix-border br-0"><?php echo $lang->story->estimateAB;?></span>
                     <input type="text" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off" placeholder='<?php echo $lang->story->hour;?>' />
                   </div>
                 </div>
-                <?php endif;?>
               </div>
             </td>
           </tr>
@@ -230,46 +259,41 @@
               <?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlSpecialString($lang->story->specTemplate . "\n" . $lang->noticePasteImg) . "'");?>
             </td>
           </tr>
-          <?php if(strpos(",$showFields,", ',verify,') !== false):?>
-          <tr>
+          <?php $hiddenVerify = strpos(",$showFields,", ',verify,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenVerify;?> verifyBox">
             <th><?php echo $lang->story->verify;?></th>
             <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
-          </tr>
-          <?php endif;?>
-          <tr class='hide'>
-            <th><?php echo $lang->story->status;?></th>
-            <td><?php echo html::hidden('status', 'draft');?></td>
           </tr>
           <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
-          <?php if(strpos(",$showFields,", ',mailto,') !== false):?>
-          <tr>
+          <?php $hiddenMailto = strpos(",$showFields,", ',mailto,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenMailto?> mailtoBox">
             <th><?php echo $lang->story->mailto;?></th>
             <td colspan="4">
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
                 <?php echo $this->fetch('my', 'buildContactLists');?>
               </div>
             </td>
           </tr>
-          <?php endif;?>
-          <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
-          <tr>
+          <?php $hiddenKeyWords = strpos(",$showFields,", ',keywords,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenKeyWords?> keywordsBox">
             <th><?php echo $lang->story->keywords;?></th>
             <td colspan="4">
               <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
             </td>
           </tr>
-          <?php endif;?>
         </tbody>
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php echo html::hidden('type', $type) . html::submitButton();?>
-              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
+              <?php echo html::hidden('type', $type);?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>
         </tfoot>

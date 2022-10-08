@@ -7,15 +7,13 @@
  */
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, i);
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    var newItem = $('#names' + i).closest('tr');
+    var newItem = $('#names' + itemIndex).closest('tr');
     newItem.find('.form-date').datepicker();
-    $("#output" + i).chosen();
-    $("#PM_i__chosen").remove();
-    $("#PM" + i).chosen();
-    $("#output_i__chosen").remove();
-    i ++;
+    $("#output" + itemIndex).picker();
+    $("#PM" + itemIndex).picker();
+    itemIndex ++;
 }
 
 /**

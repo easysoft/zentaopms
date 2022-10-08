@@ -3,7 +3,7 @@
  * The view file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: view.html.php 4141 2013-01-18 06:15:13Z zhujinyonging@gmail.com $
@@ -31,11 +31,7 @@
     <?php
     if(!$suite->deleted and $canBeChanged)
     {
-        echo $this->buildOperateMenu($suite, 'view');
-
-        common::printLink('testsuite', 'linkCase', "suiteID=$suite->id", "<i class='icon icon-link'> </i> " . '', '', "class='btn btn-link' title='{$lang->testsuite->linkCase}'");
-        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
-        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');
+        echo $this->testsuite->buildOperateMenu($suite, 'view');
     }
     ?>
   </div>
@@ -60,8 +56,8 @@
                 <?php endif;?>
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></nobr>
               </th>
-              <th class='c-pri w-50px'><?php common::printOrderLink('pri',     $orderBy, $vars, $lang->priAB);?></th>
-              <th class='w-100px'><?php common::printOrderLink('module',       $orderBy, $vars, $lang->testcase->module);?></th>
+              <th class='c-pri w-50px' title=<?php echo $lang->testsuite->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+              <th class='w-90px'><?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
               <th class='c-name'><?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='w-90px'><?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
               <th class='c-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>

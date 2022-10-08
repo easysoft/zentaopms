@@ -3,7 +3,7 @@
  * The model file of backup module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     backup
  * @version     $Id$
@@ -135,7 +135,7 @@ class backupModel extends model
         $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
 
         $backupDir    = dirname($backupFile);
-        $fileName     = date('YmdHis') . mt_rand(0, 9); 
+        $fileName     = date('YmdHis') . mt_rand(0, 9);
         $backFileName = "{$backupDir}/{$fileName}.sql";
         if(!$nosafe) $backFileName .= '.php';
 
@@ -304,7 +304,7 @@ class backupModel extends model
 
     /**
      * Get backup path.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -410,7 +410,7 @@ class backupModel extends model
         $fileName   = basename($file);
 
         $summaryFile = $backupPath . DS . 'summary';
-        if(!file_exists($summaryFile) and touch($summaryFile)) return false;
+        if(!file_exists($summaryFile) and !touch($summaryFile)) return false;
 
         $summary = json_decode(file_get_contents($summaryFile), true);
         if(empty($summary)) $summary = array();

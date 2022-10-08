@@ -3,7 +3,7 @@
  * The upgrade module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: zh-tw.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -73,7 +73,7 @@ $lang->upgrade->to15Desc       = <<<EOD
 <p>您可以在綫體驗最新版本的功能，以決定是否啟用新的模式：<a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>最新版演示demo</a></p>
 <p>您還可以下載新版本功能介紹PPT：<a class='text-info' href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank'>最新版功能介紹PPT</a></p>
 <video src="https://dl.cnezsoft.com/vedio/program0716.mp4"  width="100%" controls ="controls"></video>
-<p style="text-align:center"><small>禪道15.0版本介紹</small></p>
+<p style="text-align:center"><small>禪道15版本介紹</small></p>
 <br/>
 <p><strong>請問您計劃如何使用禪道的新版本呢？</strong></p>
 EOD;

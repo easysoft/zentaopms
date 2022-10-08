@@ -11,28 +11,29 @@
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
-#cards .project-type-label {padding: 1px 2px;}
+#cards .project-type-label {padding: 2px 2px; margin-bottom: 3px;}
 #cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
 #cards .project-infos {font-size: 12px; padding: 0 15px;}
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 10px;}
-#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px; padding-left: 10px;}
+#cards .project-detail {position: absolute; bottom: 27px; left: 16px; right: 16px; font-size: 12px; padding-left: 10px;}
 #cards .project-detail > p {margin-bottom: 8px;}
 #cards .project-detail .progress {height: 4px;}
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .panel-heading {cursor: pointer;}
-#cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
+#cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 40px; overflow-x: auto; position: relative;}
 #cards .project-stages:after {content: ' '; width: 30px; display: block; right: -5px; top: 16px; bottom: -5px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
 #cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
 #cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
-#cards .project-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
+#cards .project-stage-item > div {max-width: 70px; white-space: nowrap; overflow: hidden; text-align: center; text-overflow: ellipsis;}
 #cards .project-stage-item:before {content: ' '; display: block; width: 8px; height: 8px; border-radius: 50%; background: #D1D1D1; position: absolute; left: 50%; margin-left: -4px; top: 0; z-index: 1;}
 #cards .project-stage-item + .project-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
 #cards .project-stage-item.is-going {color: #333;}
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
 #dashboard .block-recentproject .panel-body {padding: 0;}
 .execution-name {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.scrollbar::-webkit-scrollbar:horizontal {height: 5px;}
 </style>
 <div class="panel-body">
   <?php if(empty($projects)):?>
@@ -44,13 +45,10 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <?php if(isset($config->maxVersion)):?>
-          <?php if($project->model === 'waterfall'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
-          <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
-          <?php endif; ?>
-          <?php endif; ?>
+          <?php if($config->systemMode == 'new'):?>
+          <?php $labelClass = $project->model == 'waterfall' ? 'label-warning' : 'label-info';?>
+          <span class='project-type-label label <?php echo $labelClass;?> label-outline'><?php echo $lang->project->{$project->model};?></span>
+          <?php endif;?>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
@@ -86,11 +84,11 @@
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
             <?php else: ?>
             <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
-            <div class='project-stages-container scrollbar-hover'>
+            <div class='project-stages-container scrollbar-hover scrollbar'>
               <div class='project-stages-row'>
-                <?php foreach ($projectProjects as $project): ?>
-                <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going'; ?>'>
-                  <div><?php echo $project->name; ?></div>
+                <?php foreach ($projectProjects as $project):?>
+                <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going';?>'>
+                  <div title="<?php echo $project->name;?>"><?php echo $project->name;?></div>
                 </div>
                 <?php endforeach; ?>
               </div>
@@ -100,8 +98,8 @@
           <?php else: ?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
-            <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
             <?php if($project):?>
+            <p class='text-muted'><?php echo $project->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration;?></p>
             <div class='row'>
               <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>

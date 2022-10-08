@@ -36,3 +36,4 @@
 .table-bordered > #steps > tr > td textarea:hover {border-color: #808080;}
 .table-bordered > #steps > tr > td textarea:focus {border-color: #4d90fe;}
 .table-bordered > #steps .step-child .step-child-id {border-right: 1px dotted #ddd; border-left: none;}
+.table-footer {z-index: 1;}

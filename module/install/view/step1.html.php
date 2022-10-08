@@ -3,7 +3,7 @@
  * The html template file of step1 method of install module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: step1.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -95,7 +95,7 @@
           </td>
           <td class='<?php echo $tmpRootResult;?>'><?php echo $lang->install->$tmpRootResult;?></td>
           <td class='text-left f-12px'>
-            <?php 
+            <?php
             if(!$tmpRootInfo['exists'])   printf($mkdir, $tmpRootInfo['path'], $tmpRootInfo['path']);
             if(!$tmpRootInfo['writable']) printf($chmod, $tmpRootInfo['path'], $tmpRootInfo['path']);
             ?>
@@ -111,7 +111,7 @@
           </td>
           <td class='<?php echo $dataRootResult;?>'><?php echo $lang->install->$dataRootResult;?></td>
           <td class='text-left f-12px'>
-            <?php 
+            <?php
             if(!$dataRootInfo['exists'])   printf($mkdir, $dataRootInfo['path'], $dataRootInfo['path']);
             if(!$dataRootInfo['writable']) printf($chmod, $dataRootInfo['path'], $dataRootInfo['path']);
             ?>
@@ -137,6 +137,9 @@
         <?php endif;?>
       </table>
     </div>
+    <?php if($notice):?>
+    <div class='text-danger text-notice'><?php echo $notice;?></div>
+    <?php endif;?>
     <div class='modal-footer'>
       <?php
       if($phpResult      == 'ok' and

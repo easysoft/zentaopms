@@ -3,7 +3,7 @@
  * The project entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -86,6 +86,7 @@ class projectsEntry extends entry
         $this->setPost('whitelist', $this->request('whitelist', array()));
         $this->setPost('PM', $this->request('PM', ''));
         $this->setPost('model', $this->request('model', 'scrum'));
+        $this->setPost('parent', $this->request('parent', 0));
 
         $control = $this->loadController('project', 'create');
         $this->requireFields('name,code,begin,end,products');

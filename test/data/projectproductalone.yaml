@@ -1,0 +1,12 @@
+title: zt_projectproduct
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 731-732{5},733-750
+  - field: product
+    range: 101-110,111-112{5},113-120
+  - field: branch
+    range: 0
+  - field: plan
+    range: 0

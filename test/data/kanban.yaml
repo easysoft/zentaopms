@@ -1,0 +1,81 @@
+title: table zt_kanban
+desc: "看板表"
+author: automated export
+version: "1.0"
+fields:
+    - field: space
+      range: 1-50{2}
+    - field: name
+      fields:
+        - field: name1
+          range: 通用看板
+        - field: name2
+          range: 1-10000
+    - field: owner
+      fields:
+        - field: owner1
+          range: po{10},user{10},test{10},pm{10},po{10}
+        - field: owner2
+          range: 15-100{2},3-100{2},1-100{2},1-100{2},1-100{2}
+    - field: team
+      fields:
+        - field: team1
+          prefix: ","
+          range: user{10},test{10},pm{10},po{10},po{10}
+        - field: team2
+          range: 3-100{2},1-100{2},1-100{2},1-100{2},35-100{2}
+          postfix: ","
+        - field: team3
+          range: po{10},pm{10},test{10},user[10],user{10}
+        - field: team4
+          range: 15-100{2},15-100{2},15-100{2},15-100{2},35-100{2}
+          postfix: ","
+    - field: desc
+      range: "看板详情"
+    - field: acl
+      range: extend,open
+    - field: whitelist
+      note: "白名单"
+      fields:
+        - field: whitelist1
+          prefix: ","
+          range: user{10},test{10},pm{10},po{10},po{10}
+        - field: whitelist2
+          range: 3-100{2},1-100{2},1-100{2},1-100{2},35-100{2}
+          postfix: ","
+        - field: whitelist3
+          range: po{10},pm{10},test{10},user[10],user{10}
+        - field: whitelist4
+          range: 15-100{2},15-100{2},15-100{2},15-100{2},35-100{2}
+    - field: archived
+      range: "1"
+    - field: performable
+      range: "0"
+    - field: status
+      range: "active"
+    - field: order
+      range: 5-10000:5
+    - field: displayCards
+      range: "0"
+    - field: fluidBoard
+      range: "0"
+    - field: object
+      range: ""
+      prefix: "plans,releases,builds,executions,cards"
+    - field: createdBy
+      range: "admin"
+    - field: createdDate
+      range: "(-1M)-(+M):1D"
+      type: timestamp
+      format: "YYYY-MM-DD"
+      prefix: "\t"
+    - field: lastEditedBy
+      range: ""
+    - field: lastEditedDate
+      range: ""
+    - field: closedBy
+      range: ""
+    - field: closedDate
+      range: ""
+    - field: deleted
+      range: "0"

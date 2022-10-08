@@ -3,7 +3,7 @@
  * The report view file of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: report.html.php 4657 2013-04-17 02:01:26Z chencongzhi520@gmail.com $
@@ -65,8 +65,19 @@
                   <th class='w-60px text-right'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
+              <?php
+              $colorList = array();
+              if(strpos(strtolower($chartType), 'pri') !== false)
+              {
+                  $colorList = $config->bug->colorList->pri;
+              }
+              elseif(strpos(strtolower($chartType), 'severity') !== false)
+              {
+                  $colorList = $config->bug->colorList->severity;
+              }
+              ?>
               <?php foreach($datas[$chartType] as $key => $data):?>
-              <tr>
+              <tr data-color="<?php echo !empty($colorList) ? zget($colorList, $key, '#C0C0C0') : '';?>">
                 <td class='chart-color'><i class='chart-color-dot'></i></td>
                 <td class='chart-label text-left' title='<?php echo isset($data->title) ? $data->title : $data->name;?>'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>

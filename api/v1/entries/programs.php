@@ -3,7 +3,7 @@
  * The programs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -48,7 +48,7 @@ class programsEntry extends Entry
                 unset($program->desc);
                 $program->end = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
 
-                $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$program->budget, 2);
+                $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);
                 $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
 
                 if(empty($program->parent)) $result[$program->id] = $program;

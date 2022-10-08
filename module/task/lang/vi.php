@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Tạm ngưng';
 $lang->task->view                = "Chi tiết nhiệm vụ";
 $lang->task->logEfforts          = "Chấm công";
 $lang->task->record              = "Dự tính";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->start               = "Bắt đầu";
 $lang->task->startAction         = "Bắt đầu nhiệm vụ";
 $lang->task->restart             = "Tiếp tục";
@@ -47,11 +48,12 @@ $lang->task->case                = 'Tình huống liên kết';
 $lang->task->confirmStoryChange  = "Xác nhận thay đổi";
 $lang->task->storyChange         = "Câu chuyện đã thay đổi";
 $lang->task->progress            = 'Tiến độ';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Tiến độ';
 $lang->task->progressTips        = 'Đã làm/(Đã làm + Còn lại)';
 $lang->task->copy                = 'Copy nhiệm vụ';
 $lang->task->waitTask            = 'Đang đợi nhiệm vụ';
 $lang->task->allModule           = 'Tất cả Module';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common           = 'Nhiệm vụ';
 $lang->task->id               = 'ID';
@@ -118,6 +120,7 @@ $lang->task->editEstimate     = 'Sửa dự tính';
 $lang->task->deleteEstimate   = 'Xóa dự tính';
 $lang->task->colorTag         = 'Màu';
 $lang->task->files            = 'Files';
+$lang->task->my               = 'My ';
 $lang->task->hasConsumed      = 'Đã làm';
 $lang->task->multiple         = 'Nhiều người dùng';
 $lang->task->multipleAB       = 'M';
@@ -213,7 +216,7 @@ $lang->task->error->consumedSmall     = '"Tổng giờ làm" phải là > số c
 $lang->task->error->consumedThisTime  = 'Vui lòng nhập "Số giờ làm"';
 $lang->task->error->left              = 'Vui lòng nhập "Giờ còn lại"';
 $lang->task->error->work              = '"Nhận xét" phải là <  %d ký tự.';
-$lang->task->error->skipClose         = 'Nhiệm vụ: %s không là "Kết thúc” hoặc “Đã hủy”. Bạn có muốn đóng nó?';
+$lang->task->error->skipClose         = 'Nhiệm vụ: %s không là “Kết thúc” hoặc “Đã hủy”. Bạn có muốn đóng nó?';
 $lang->task->error->consumed          = 'Nhiệm vụ: %s giờ phải là < 0. Bỏ qua thay đổi cho nhiệm vụ này.';
 $lang->task->error->assignedTo        = 'Nhiệm vụ nhiều người dùng trong tình trạng hiện tại không thể giao cho một thành viên người không trong Nhóm nhiệm vụ.';
 $lang->task->error->consumedEmpty     = '"Giờ làm" không nên 0.';
@@ -223,7 +226,7 @@ $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
-$lang->task->error->date              = 'The date should be >= today.';
+$lang->task->error->date              = 'The date should be <= today.';
 
 /* Report. */
 $lang->task->report = new stdclass();

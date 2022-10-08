@@ -3,7 +3,7 @@
  * The index view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Thanatos <thanatos915@163.com>
  * @package     doc
  * @version     $Id$
@@ -19,6 +19,11 @@
         <h2><?php echo $lang->api->managePublish;?></h2>
       </div>
     </div>
+    <?php if(empty($releases)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+    </div>
+    <?php else:?>
     <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
       <table class='table has-sort-head' id='userList'>
         <thead>
@@ -48,6 +53,7 @@
         </tbody>
       </table>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

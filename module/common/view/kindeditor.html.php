@@ -34,9 +34,18 @@ $uid = uniqid('');
     'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
     'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
     'indent', 'outdent', 'subscript', 'superscript', '|',
-    'table', 'code', '|', 'pagebreak', 'anchor', '|',
+    'table', 'code', 'pagebreak',
     'fullscreen', 'source', 'preview', 'about'];
-    var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
+    var docTools =
+    [ 'formatblock', 'fontname', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic','underline', 'strikethrough', '|',
+    'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
+    'insertorderedlist', 'insertunorderedlist', '|',
+    'emoticons', 'image', 'insertfile', 'hr', '|', 'link', '|',
+    'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
+    'indent', 'outdent', 'subscript', 'superscript', '|',
+    'table', 'code', 'pagebreak',
+    'source'];
+    var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools, docTools: docTools};
 
     /* Kindeditor default options. */
     var editorDefaults =

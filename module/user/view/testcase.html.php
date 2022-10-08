@@ -3,7 +3,7 @@
  * The test view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: test.html.php 1191 2010-11-13 07:30:35Z jajacn@126.com $
@@ -34,15 +34,15 @@
       ?>
       <thead>
         <tr class='colhead'>
-          <th class='c-id'>    <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-          <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
-          <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
-          <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
+          <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='c-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+          <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->testcase->openedByAB);?></th>
           <th class='c-user'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='c-date'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='c-result'><?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>
@@ -50,14 +50,14 @@
         <?php $caseID = $type == 'case2Him' ? $case->case : $case->id?>
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title);?></td>
+          <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+          <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
-          <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+          <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-          <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
         </tr>
         <?php endforeach;?>
       </tbody>

@@ -3,7 +3,7 @@
  * The runrun view file of testtask of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: runcase.html.php 4723 2013-05-03 05:19:29Z chencongzhi520@gmail.com $
@@ -130,10 +130,6 @@ $(function()
         $('#casesResults table caption .result-tip').html($('#resultTip').html());
     });
 });
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
-var sessionString = '<?php echo $sessionString;?>';
+var sessionString = '<?php echo session_name() . '=' . session_id();?>';
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>

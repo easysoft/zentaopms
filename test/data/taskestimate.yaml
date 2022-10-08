@@ -1,0 +1,48 @@
+title: table zt_taskestimate
+desc: "预计工时"
+author: automated export
+version: "1.0"
+fields:
+  - field: task
+    note: "任务ID"
+    range: 1-600
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "更新日期"
+    range: "(-1M)-(+1w):60s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+    prefix: ""
+    postfix: ""
+    loop: 0
+  - field: left
+    note: "总计消耗"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: consumed
+    note: "预计剩余"
+    range: 3-11
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "操作账号"
+    range: po82{1},admin{1111111}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: work
+    note: "工作备注"
+    range: 1-10000
+    prefix: "这里是工作内容"
+    postfix: ""
+    loop: 0
+    format: ""

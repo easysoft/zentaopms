@@ -3,7 +3,7 @@
  * The close view file of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: close.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -30,7 +30,7 @@
         </tr>
         <tr id='duplicateStoryBox' style='display:none'>
           <th><?php echo $lang->story->duplicateStory;?></th>
-          <td class='required'><?php echo html::input('duplicateStory', '', "class='form-control'");?></td><td></td>
+          <td class='required'><?php echo html::select('duplicateStory', array('' => '') + $productStories, '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'"); ?></td><td></td>
         </tr>
         <tr id='childStoriesBox' style='display:none'>
           <th><?php echo $lang->story->childStories;?></th>

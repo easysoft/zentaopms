@@ -9,6 +9,8 @@ $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'Augeordnet an';
 $lang->webhook->setting    = 'Einstellungen';
 
+$lang->webhook->logAction = 'Webhook Log';
+
 $lang->webhook->browse = 'Durchsuchen';
 $lang->webhook->create = 'Erstellen';
 $lang->webhook->edit   = 'Bearbeiten';
@@ -34,12 +36,18 @@ $lang->webhook->editedDate  = 'Bearbeitet am';
 $lang->webhook->date        = 'Datum';
 $lang->webhook->data        = 'Daten';
 $lang->webhook->result      = 'Ergebnis';
+$lang->webhook->products    = $lang->productCommon;
+$lang->webhook->executions  = $lang->execution->common;
+$lang->webhook->actions     = 'Log';
+$lang->webhook->deleted     = 'Deleted';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = 'Dingding Robot';
 $lang->webhook->typeList['dinguser']    = 'Dingding Notifier';
 $lang->webhook->typeList['wechatgroup'] = 'Enterprise WeChat Robot';
 $lang->webhook->typeList['wechatuser']  = 'Enterprise WeChat Notifier';
+$lang->webhook->typeList['feishugroup'] = 'Feishu Robot';
+$lang->webhook->typeList['feishuuser']  = 'Feishu Notifier';
 $lang->webhook->typeList['default']     = 'Others';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchron';
@@ -58,6 +66,11 @@ $lang->webhook->wechatAgentId    = 'Agent ID';
 $lang->webhook->wechatUserid     = 'Wechat Userid';
 $lang->webhook->wechatBindStatus = 'Bind Status';
 
+$lang->webhook->feishuAppId       = 'Feishu App ID';
+$lang->webhook->feishuAppSecret   = 'Feishu App Secret';
+$lang->webhook->feishuUserid      = 'Feishu Users';
+$lang->webhook->feishuBindStatus  = 'Feishu Bind Status';
+
 $lang->webhook->zentaoUser  = 'Zentao User';
 
 $lang->webhook->dingBindStatusList['0'] = 'No';
@@ -74,6 +87,8 @@ $lang->webhook->paramsList['comment']    = 'Kommentar';
 $lang->webhook->paramsList['text']       = 'Aktionsbeschreibung';
 
 $lang->webhook->confirmDelete = 'Möchten Sie diesen Hook löschen?';
+$lang->webhook->friendlyTips  = 'Friendly reminder: Click on a department to expand the sub-departments under the department.';
+$lang->webhook->loadPrompt    = 'There is a lot of data and the loading is slow, please wait.';
 
 $lang->webhook->trimWords = '';
 
@@ -91,6 +106,7 @@ $lang->webhook->note->typeList['dingding']  = 'Fügen Sie einen eigenen bot in d
 $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat and get the webhook url.';
 $lang->webhook->note->typeList['default']   = 'Webhookadresse on anderen erhalten.';
 
-$lang->webhook->error = new stdclass();
-$lang->webhook->error->curl   = 'Laden Sie php-curl in der php.ini.';
-$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';
+$lang->webhook->error               = new stdclass();
+$lang->webhook->error->curl         = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->noDept       = 'There is no department selected. Please choose department first.';
+$lang->webhook->error->requestError = 'Request error!';

@@ -69,23 +69,6 @@ $(function()
         return false;
     })
 
-    if($('#sidebar').size() > 0)
-    {
-        var fixH = $("#sidebar").offset().top;
-        $(window).scroll(function()
-        {
-            var scroH = $(this).scrollTop();
-            if(scroH>=fixH)
-            {
-                $("#sidebar > .side-body").addClass('affix');
-            }
-            else if(scroH<fixH)
-            {
-                $("#sidebar > .side-body").removeClass('affix');
-            }
-        });
-    }
-
     if($("main").is(".hide-sidebar"))
     {
         $(".sidebar-toggle").children().attr("class", "icon icon-angle-left");

@@ -1,6 +1,130 @@
 $("#" + browseType + "Tab").addClass('btn-active-text');
+
+/**
+ * Set batch edit checkbox.
+ *
+ * @access public
+ * @return void
+ */
+function setCheckbox()
+{
+    $('#productListForm .c-checkbox, #productListForm .check-all').hide();
+    $('.c-name').css('border-left', 'none');
+    $(":checkbox[name^='productIDList']").prop('checked', false);
+    $('.check-all, .program-checkbox, .row-product').removeClass('checked');
+    if($.cookie('showProductBatchEdit') == 1)
+    {
+        $('#productListForm .c-checkbox, #productListForm .check-all').show();
+        $('.c-name').css('border-left', '1px solid #ddd');
+    }
+    else
+    {
+        $('.table-actions').hide();
+        $('#productsCount').show();
+    }
+}
+
+/**
+ * Update prarent checkbox.
+ *
+ * @param  object $parent
+ * @access public
+ * @return void
+ */
+function updatePrarentCheckbox($parent)
+{
+    var $row          = $parent.closest('tr');
+    var $checkbox     = $row.find('.program-checkbox');
+    var rowID         = $row.data('id');
+    var $subRows      = $('#productTableList').children('.row-product[data-nest-path^="' + rowID + ',"],.row-product[data-nest-path*=",' + rowID + ',"]');
+    var allCount      = $subRows.length;
+    var selectedCount = $subRows.find('input:checkbox:checked').length;
+    var isAllChecked  = allCount > 0 && allCount === selectedCount;
+    $checkbox.toggleClass('checked', isAllChecked)
+        .toggleClass('indeterminate', selectedCount > 0 && selectedCount < allCount);
+    $row.toggleClass('checked', isAllChecked);
+}
+
+/**
+ * Update all checkbox.
+ *
+ * @access public
+ * @return void
+ */
+function updateCheckboxes()
+{
+    $('#productTableList').children('.row-program,.row-line').each(function()
+    {
+        updatePrarentCheckbox($(this))
+    });
+}
+
+/**
+ * Add a statistics prompt statement after the Edit button.
+ *
+ * @access public
+ * @return void
+ */
+function addStatistic()
+{
+    var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
+    if(checkedLength > 0)
+    {
+        var summary = checkedProducts.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
+
+        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+        $('#productsCount').hide();
+        $('#productsSummary').remove();
+        $('#editBtn').after(statistic);
+        $('.table-actions').show();
+    }
+    else
+    {
+        $('.table-actions').hide();
+        $('#productsCount').show();
+        $('#productsSummary').addClass('hidden');
+    }
+}
+
+/**
+ * Anti shake operation for jquery.
+ *
+ * @param  fn $fn
+ * @param  delay $delay
+ * @access public
+ * @return void
+ */
+function debounce(fn, delay)
+{
+    var timer = null;
+    return function()
+    {
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(fn, delay)
+    }
+}
+
+/**
+ * Update statistics.
+ *
+ * @access public
+ * @return void
+ */
+function updateStatistic()
+{
+    debounce(addStatistic(), 200)
+}
+
 $(function()
 {
+    $('input[name^="showEdit"]').click(function()
+    {
+        $.cookie('showProductBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
+        setCheckbox();
+    });
+    setCheckbox();
+
     /* Init table sort. */
     $('#productTableList').addClass('sortable').sortable(
     {
@@ -13,7 +137,9 @@ $(function()
         /* Set movable conditions. */
         canMoveHere: function($ele, $target)
         {
-            return $ele.data('parent') === $target.data('parent');
+            var canMove = true;
+            if($ele.hasClass('no-nest')) canMove = $target.hasClass('no-nest') ? true : false;
+            return $ele.data('parent') === $target.data('parent') && canMove;
         },
         start: function(e)
         {
@@ -34,32 +160,19 @@ $(function()
         }
     });
 
-    /* Update parent checkbox */
-    function updatePrarentCheckbox($parent)
+    $('.main-table').on('click', 'tr', function(e)
     {
-        var $row          = $parent.closest('tr');
-        var $checkbox     = $row.find('.program-checkbox');
-        var rowID         = $row.data('id');
-        var $subRows      = $('#productTableList').children('.row-product[data-nest-path^="' + rowID + ',"],.row-product[data-nest-path*=",' + rowID + ',"]');
-        var allCount      = $subRows.length;
-        var selectedCount = $subRows.find('input:checkbox:checked').length;
-        var isAllChecked  = allCount > 0 && allCount === selectedCount;
-        $checkbox.toggleClass('checked', isAllChecked)
-            .toggleClass('indeterminate', selectedCount > 0 && selectedCount < allCount);
-        $row.toggleClass('checked', isAllChecked);
-    }
+        if($.cookie('showProductBatchEdit') == 1) updateStatistic();
+    });
 
-    /* Update checkboxes */
-    function updateCheckboxes()
+    $('#productTableList').on('click', 'tr', function(e)
     {
-        $('#productTableList').children('.row-program,.row-line').each(function()
-        {
-            updatePrarentCheckbox($(this))
-        });
-    }
+        if($.cookie('showProductBatchEdit') != 1) e.stopPropagation();
+    });
 
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
+        if($.cookie('showProductBatchEdit') != 1) return;
         if($(e.target).closest('.table-nest-toggle,a').length) return;
 
         var $row      = $(this);
@@ -77,10 +190,27 @@ $(function()
         {
             updatePrarentCheckbox($('#productTableList>tr[data-id="' + parentID + '"]'));
         }
+        updateStatistic()
     });
+
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
 
-    /* Disable animation for large rows */
-    $('#productListForm').toggleClass('no-animation', $('#productTableList>tr').length > 40)
+    $(":checkbox[name^='productIDList']").on('click', function()
+    {
+        updateStatistic()
+    });
+
+    $(".check-all").on('click', function()
+    {
+        if($(":checkbox[name^='productIDList']:not(:checked)").length == 0)
+        {
+            $(":checkbox[name^='productIDList']").prop('checked', false);
+        }
+        else
+        {
+            $(":checkbox[name^='productIDList']").prop('checked', true);
+        }
+        updateStatistic()
+    });
 });

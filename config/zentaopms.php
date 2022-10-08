@@ -3,7 +3,7 @@
 * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
 *
 * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
-* @license     ZPL (http://zpl.pub/page/zplv12.html)
+* @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     config
 * @version     $Id: zentaopms.php 5068 2017-06-20 15:35:22Z pengjx $
@@ -23,6 +23,14 @@ $config->productCommonList['fr'][0]    = 'Product';
 $config->productCommonList['fr'][1]    = 'Project';
 $config->productCommonList['vi'][0]    = 'Sản phẩm';
 $config->productCommonList['vi'][1]    = 'Project';
+$config->productCommonList['ru'][0]    = 'продукт';
+$config->productCommonList['ru'][1]    = 'Проект';
+$config->productCommonList['ja'][0]    = '製品';
+$config->productCommonList['ja'][1]    = 'プロジェクト';
+$config->productCommonList['es'][0]    = 'Productos';
+$config->productCommonList['es'][1]    = 'Proyecto';
+$config->productCommonList['pt'][0]    = 'produto';
+$config->productCommonList['pt'][1]    = 'projecto';
 
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '项目';
@@ -49,6 +57,22 @@ $config->projectCommonList['vi'][0] = 'Project';
 $config->projectCommonList['vi'][1] = 'Iteration';
 $config->projectCommonList['vi'][2] = 'Sprint';
 
+$config->projectCommonList['ru'][0] = 'Проект';
+$config->projectCommonList['ru'][1] = 'итерация';
+$config->projectCommonList['ru'][2] = 'пробивание';
+
+$config->projectCommonList['ja'][0] = 'プロジェクト';
+$config->projectCommonList['ja'][1] = '反復';
+$config->projectCommonList['ja'][2] = 'スパート';
+
+$config->projectCommonList['es'][0] = 'Proyecto';
+$config->projectCommonList['es'][1] = 'Iteración';
+$config->projectCommonList['es'][2] = 'Sprint';
+
+$config->projectCommonList['pt'][0] = 'Projecto';
+$config->projectCommonList['pt'][1] = 'Iteração';
+$config->projectCommonList['pt'][2] = 'Sprint';
+
 $config->executionCommonList['zh-cn'][0] = '迭代';
 $config->executionCommonList['zh-cn'][1] = '冲刺';
 $config->executionCommonList['zh-cn'][2] = '阶段';
@@ -72,6 +96,22 @@ $config->executionCommonList['fr'][2] = 'Phase';
 $config->executionCommonList['vi'][0] = 'Lặp lại';
 $config->executionCommonList['vi'][1] = 'Sprint';
 $config->executionCommonList['vi'][2] = 'Giai đoạn';
+
+$config->executionCommonList['ru'][0] = 'итерация';
+$config->executionCommonList['ru'][1] = 'пробивание';
+$config->executionCommonList['ru'][2] = ' этап';
+
+$config->executionCommonList['ja'][0] = '反復';
+$config->executionCommonList['ja'][1] = 'スパート';
+$config->executionCommonList['ja'][2] = 'ステージ';
+
+$config->executionCommonList['es'][0] = 'Iteración';
+$config->executionCommonList['es'][1] = 'Sprint';
+$config->executionCommonList['es'][2] = 'Fase';
+
+$config->executionCommonList['pt'][0] = 'Iteração';
+$config->executionCommonList['pt'][1] = 'Sprint';
+$config->executionCommonList['pt'][2] = 'Fase';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
@@ -98,6 +138,22 @@ $config->hourPointCommonList['vi'][0] = 'giờ';
 $config->hourPointCommonList['vi'][1] = 'điểm';
 $config->hourPointCommonList['vi'][2] = 'function point';
 
+$config->hourPointCommonList['ru'][0] = 'продолжительность рабочего времени';
+$config->hourPointCommonList['ru'][1] = 'точка повести';
+$config->hourPointCommonList['ru'][2] = 'функциональная точка';
+
+$config->hourPointCommonList['ja'][0] = '工数';
+$config->hourPointCommonList['ja'][1] = 'ストーリーポイント';
+$config->hourPointCommonList['ja'][2] = 'きのうてん';
+
+$config->hourPointCommonList['es'][0] = 'Horas de trabajo';
+$config->hourPointCommonList['es'][1] = 'Punto de historia';
+$config->hourPointCommonList['es'][2] = 'Punto de función';
+
+$config->hourPointCommonList['pt'][0] = 'horas de trabalho';
+$config->hourPointCommonList['pt'][1] = 'Ponto da história';
+$config->hourPointCommonList['pt'][2] = 'Ponto de função';
+
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
@@ -114,6 +170,14 @@ $config->charsets['fr']['utf-8']    = 'UTF-8';
 $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
+$config->charsets['ru']['utf-8']    = 'UTF-8';
+$config->charsets['ru']['GBK']      = 'GBK';
+$config->charsets['ja']['utf-8']    = 'UTF-8';
+$config->charsets['ja']['GBK']      = 'GBK';
+$config->charsets['es']['utf-8']    = 'UTF-8';
+$config->charsets['es']['GBK']      = 'GBK';
+$config->charsets['pt']['utf-8']    = 'UTF-8';
+$config->charsets['pt']['GBK']      = 'GBK';
 
 $config->openMethods = array();
 $config->openMethods[] = 'gitlab.webhook';
@@ -122,7 +186,9 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.logout';
 $config->openMethods[] = 'user.deny';
 $config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.checktable';
 $config->openMethods[] = 'misc.qrcode';
@@ -145,6 +211,20 @@ $config->openMethods[] = 'doc.selectlibtype';
 $config->openMethods[] = 'sso.getfeishusso';
 $config->openMethods[] = 'sso.feishuauthen';
 $config->openMethods[] = 'sso.feishulogin';
+$config->openMethods[] = 'kanban.importcard';
+$config->openMethods[] = 'kanban.importplan';
+$config->openMethods[] = 'kanban.importrelease';
+$config->openMethods[] = 'kanban.importexecution';
+$config->openMethods[] = 'kanban.importbuild';
+$config->openMethods[] = 'kanban.activatecard';
+$config->openMethods[] = 'kanban.finishcard';
+$config->openMethods[] = 'kanban.deleteobjectcard';
+$config->openMethods[] = 'admin.ignore';
+$config->openMethods[] = 'personnel.unbindwhitelist';
+$config->openMethods[] = 'tree.viewhistory';
+$config->openMethods[] = 'doc.createbasicinfo';
+$config->openMethods[] = 'project.createguide';
+$config->openMethods[] = 'task.editteam';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -186,13 +266,16 @@ define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
+define('TABLE_TASKTEAM',      '`' . $config->db->prefix . 'taskteam`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
+define('TABLE_PROJECTADMIN',  '`' . $config->db->prefix . 'projectadmin`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
 define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
+define('TABLE_CFD',           '`' . $config->db->prefix . 'cfd`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
@@ -245,11 +328,16 @@ define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
 define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
+define('TABLE_KANBANCELL',   '`' . $config->db->prefix . 'kanbancell`');
 if(!defined('TABLE_LANG'))        define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
+
+define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
+define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
+define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -292,12 +380,26 @@ $config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
 $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
 $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
+$config->objectTables['gitea']        = TABLE_PIPELINE;
+$config->objectTables['gogs']         = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
+$config->objectTables['stage']        = TABLE_STAGE;
+$config->objectTables['apistruct']    = TABLE_APISTRUCT;
+$config->objectTables['repo']         = TABLE_REPO;
 
-$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
+$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+
+$config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
-$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+
+$config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
+
+$config->showMainMenu = true;
+$config->maxPriValue  = '256';
+
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');

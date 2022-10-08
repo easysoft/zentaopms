@@ -3,7 +3,7 @@
  * The control file of misc of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
  * @version     $Id: control.php 5128 2013-07-13 08:59:49Z chencongzhi520@gmail.com $
@@ -20,7 +20,7 @@ class misc extends control
     public function ping()
     {
         if(mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
-        die("<html><head><meta http-equiv=refresh' content='600' /></head><body></body></html>");
+        echo "<html><head><meta http-equiv='refresh' content='600' /></head><body></body></html>";
     }
 
     /**
@@ -31,7 +31,7 @@ class misc extends control
      */
     public function phpinfo()
     {
-        die(phpinfo());
+        phpinfo();
     }
 
     /**
@@ -42,7 +42,7 @@ class misc extends control
      */
     public function about()
     {
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -74,11 +74,14 @@ class misc extends control
 
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());
-        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang.html";
+        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
         $latestVersionList = common::http($link);
 
-        $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        if(!isset($this->config->global->latestVersionList) or $this->config->global->latestVersionList != $latestVersionList)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        }
     }
 
     /**
@@ -130,10 +133,10 @@ class misc extends control
         /* remove the old config.json, add a new one. */
         $archive = new pclzip($packageFile);
         $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
-        if($result == 0) die("Error : " . $archive->errorInfo(true));
+        if($result == 0) return print("Error : " . $archive->errorInfo(true));
 
         $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'notify');
-        if($result == 0) die("Error : " . $archive->errorInfo(true));
+        if($result == 0) return print("Error : " . $archive->errorInfo(true));
 
         $zipContent = file_get_contents($packageFile);
         unlink($loginFile);
@@ -155,7 +158,7 @@ class misc extends control
         if(!extension_loaded('gd'))
         {
             $this->view->noGDLib = sprintf($this->lang->misc->noGDLib, $loginAPI);
-            die($this->display());
+            return print($this->display());
         }
 
         $this->app->loadClass('qrcode');
@@ -214,7 +217,7 @@ class misc extends control
     {
         $this->app->loadConfig('extension');
         $check = @fopen(dirname($this->config->extension->apiRoot), "r");
-        die($check ? 'success' : 'fail');
+        print($check ? 'success' : 'fail');
     }
 
     /**
@@ -262,7 +265,7 @@ class misc extends control
         $this->loadModel('setting');
         $setting     = $this->setting->createDAO($this->setting->parseItemParam($condition), 'select')->fetch();
         $newUnfoldID = $this->post->newUnfoldID;
-        if(empty($newUnfoldID)) die();
+        if(empty($newUnfoldID)) return;
 
         $newUnfoldID  = json_decode($newUnfoldID);
         $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
@@ -280,7 +283,7 @@ class misc extends control
         {
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
         }
-        die('success');
+        echo 'success';
     }
 
     /**

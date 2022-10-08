@@ -4,7 +4,7 @@
  * The control file of jenkins module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: ${FILE_NAME} 5144 2020/1/8 8:10 下午 chenqi@cnezsoft.com $
@@ -35,8 +35,6 @@ class jenkins extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(common::hasPriv('jenkins', 'create')) $this->lang->TRActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -109,13 +107,13 @@ class jenkins extends control
      */
     public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confim != 'yes') return print(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) die(js::alert($this->lang->jenkins->error->linkedJob));
+        if($jobs) return print(js::alert($this->lang->jenkins->error->linkedJob));
 
         $this->jenkins->delete(TABLE_PIPELINE, $id);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -127,9 +125,9 @@ class jenkins extends control
      */
     public function ajaxGetJenkinsTasks($id)
     {
-        if(empty($id)) die(json_encode(array('' => '')));
+        if(empty($id)) return print(json_encode(array('' => '')));
 
         $tasks = $this->jenkins->getTasks($id);
-        die(json_encode($tasks));
+        echo json_encode($tasks);
     }
 }

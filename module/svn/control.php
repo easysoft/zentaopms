@@ -3,7 +3,7 @@
  * The control file of svn currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     svn
  * @version     $Id$
@@ -124,8 +124,7 @@ class svn extends control
             $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
             $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
             $this->view->parsedObjects = $parsedObjects;
-            $this->display();
-            exit;
+            return $this->display();
         }
     }
 
@@ -144,7 +143,7 @@ class svn extends control
         $files    = $this->post->files;
 
         /* Ignore git. */
-        if(strpos($repoUrl, '://') === false) die();
+        if(strpos($repoUrl, '://') === false) return;
 
         $parsedFiles = array();
         $repoDirs    = explode('/', trim($repoUrl, '/'));
@@ -182,7 +181,6 @@ class svn extends control
             $log->files    = $parsedFiles;
             $this->repo->saveAction2PMS($objects, $log, $repoUrl);
         }
-        die();
     }
 
     /**
@@ -194,6 +192,6 @@ class svn extends control
     public function ajaxGetRepos()
     {
         $repos = $this->svn->getRepos();
-        die(json_encode($repos));
+        echo json_encode($repos);
     }
 }

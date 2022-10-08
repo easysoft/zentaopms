@@ -3,7 +3,7 @@
  * The browse view file of holiday module of ZenTao.
  *
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chujilu <chujilu@cnezsoft.com>
  * @package     holiday
  * @version     $Id$
@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php
-    echo html::a($this->createLink('holiday', 'browse'), '<span class="text">' . $lang->holiday->all . '</span>', '', "class='btn btn-link btn-active-text'");
+    echo html::a($this->createLink('holiday', 'browse'), '<span class="text">' . $lang->holiday->all . '</span>', '', "class='btn btn-link btn-active-text' data-app='oa'");
     ?>
   </div>
   <div class='pull-right'>

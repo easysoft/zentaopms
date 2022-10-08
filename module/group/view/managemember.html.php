@@ -3,7 +3,7 @@
  * The manage member view of group module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: managemember.html.php 4627 2013-04-10 05:42:20Z chencongzhi520@gmail.com $
@@ -40,7 +40,7 @@
             </th>
             <td id='group' class='pv-10px'><?php $i = 1;?>
               <?php foreach($groupUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), $account);?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), $account);?></div>
               <?php endforeach;?>
             </td>
           </tr>
@@ -54,11 +54,11 @@
             </th>
             <td id='other' class='pv-10px'><?php $i = 1;?>
               <?php foreach($otherUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
               <?php endforeach;?>
             </td>
           </tr>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'new' and !empty($outsideUsers)):?>
           <tr>
             <th class='w-140px'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">
@@ -68,7 +68,7 @@
             </th>
             <td id='outside' class='pv-10px'><?php $i = 1;?>
               <?php foreach($outsideUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
               <?php endforeach;?>
             </td>
           </tr>

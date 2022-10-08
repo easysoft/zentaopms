@@ -1,13 +1,13 @@
 #mainMenu, .actions, .pager-size-menu, .tab-btn-container ul li span {display: none;}
-#main {min-width: unset; overflow-y: overlay;}
-.main-content {padding: 0; }
+#main {min-width: unset; overflow-y: overlay; position: unset !important;}
+.main-content {padding: 0;}
 .main-table {margin-bottom: 40px;}
 .main-content, .main-table > .table, .main-table > .table-footer, .main-table > .table-header, .main-table > .table-responsive {box-shadow: none!important;}
 .table-footer {position: fixed; width: 100%; bottom: 0;}
 .tab-btn-container {width: 100%; background-color: #f2f2f2;}
 .tab-btn-container ul {padding-left: 200px;;}
 .tab-btn-container ul li {list-style: none;}
-.plan-title {position: absolute; top: 0; left: 0; padding: 8px 15px; font-weight: bolder; width: 200px;}
+.plan-title {position: absolute; top: 0; left: 0; padding: 8px 15px; font-weight: bolder; width: 200px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden}
 .tab-btn-container ul li.active span {display: inline-block;}
 .linkButton {position: absolute; right: 0; top: 0; padding-right: 10px; cursor: pointer;}
 .linkButton i {font-size: 18px !important;}

@@ -33,7 +33,7 @@ $config->project->sortFields->budget = 'budget';
 
 global $lang;
 $config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
+$config->project->datatable->defaultField = array('id', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'progress', 'actions');
 
 $config->project->datatable->fieldList['id']['title']    = 'ID';
 $config->project->datatable->fieldList['id']['fixed']    = 'left';
@@ -49,13 +49,16 @@ $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
 
-$config->project->datatable->fieldList['code']['title']    = 'code';
-$config->project->datatable->fieldList['code']['fixed']    = 'left';
-$config->project->datatable->fieldList['code']['width']    = '100';
-$config->project->datatable->fieldList['code']['minWidth'] = '180';
-$config->project->datatable->fieldList['code']['required'] = 'no';
-$config->project->datatable->fieldList['code']['sort']     = 'no';
-$config->project->datatable->fieldList['code']['pri']      = '1';
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->project->datatable->fieldList['code']['title']    = 'code';
+    $config->project->datatable->fieldList['code']['fixed']    = 'left';
+    $config->project->datatable->fieldList['code']['width']    = '100';
+    $config->project->datatable->fieldList['code']['minWidth'] = '180';
+    $config->project->datatable->fieldList['code']['required'] = 'no';
+    $config->project->datatable->fieldList['code']['sort']     = 'no';
+    $config->project->datatable->fieldList['code']['pri']      = '1';
+}
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -66,28 +69,28 @@ $config->project->datatable->fieldList['PM']['pri']      = '2';
 
 $config->project->datatable->fieldList['status']['title']    = 'status';
 $config->project->datatable->fieldList['status']['fixed']    = 'left';
-$config->project->datatable->fieldList['status']['width']    = '80';
+$config->project->datatable->fieldList['status']['width']    = '65';
 $config->project->datatable->fieldList['status']['required'] = 'no';
 $config->project->datatable->fieldList['status']['sort']     = 'yes';
 $config->project->datatable->fieldList['status']['pri']      = '2';
 
+$config->project->datatable->fieldList['budget']['title']    = 'budget';
+$config->project->datatable->fieldList['budget']['fixed']    = 'no';
+$config->project->datatable->fieldList['budget']['width']    = '100';
+$config->project->datatable->fieldList['budget']['required'] = 'yes';
+$config->project->datatable->fieldList['budget']['pri']      = '3';
+
 $config->project->datatable->fieldList['begin']['title']    = 'begin';
 $config->project->datatable->fieldList['begin']['fixed']    = 'no';
-$config->project->datatable->fieldList['begin']['width']    = '90';
+$config->project->datatable->fieldList['begin']['width']    = '115';
 $config->project->datatable->fieldList['begin']['required'] = 'no';
 $config->project->datatable->fieldList['begin']['pri']      = '9';
 
 $config->project->datatable->fieldList['end']['title']    = 'end';
 $config->project->datatable->fieldList['end']['fixed']    = 'no';
-$config->project->datatable->fieldList['end']['width']    = '90';
+$config->project->datatable->fieldList['end']['width']    = '100';
 $config->project->datatable->fieldList['end']['required'] = 'no';
 $config->project->datatable->fieldList['end']['pri']      = '3';
-
-$config->project->datatable->fieldList['budget']['title']    = 'budget';
-$config->project->datatable->fieldList['budget']['fixed']    = 'no';
-$config->project->datatable->fieldList['budget']['width']    = '80';
-$config->project->datatable->fieldList['budget']['required'] = 'yes';
-$config->project->datatable->fieldList['budget']['pri']      = '3';
 
 $config->project->datatable->fieldList['teamCount']['title']    = 'teamCount';
 $config->project->datatable->fieldList['teamCount']['fixed']    = 'no';
@@ -132,13 +135,52 @@ $config->project->maxCheckList = new stdclass();
 $config->project->maxCheckList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case', 'issue', 'risk', 'meeting');
 $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
 
-$config->project->excludedPriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
-$config->project->excludedPriv['story']      = array('report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'batchToTask', 'processStoryChange', 'track', 'tasks', 'bugs', 'cases');
-$config->project->excludedPriv['bug']        = array('browse', 'batchChangePlan', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'report', 'batchChangeModule', 'batchChangeBranch');
-$config->project->excludedPriv['testcase']   = array('browse', 'batchChangeModule', 'batchChangeBranch');
-$config->project->excludedPriv['testtask']   = array('browse', 'view', 'start', 'activate', 'block', 'close');
-$config->project->excludedPriv['doc']        = array('browse', 'view', 'catalog', 'index');
-$config->project->excludedPriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
-$config->project->excludedPriv['testreport'] = array('browse');
-$config->project->excludedPriv['auditplan']  = array('delete');
-if(!isset($config->maxVersion)) $config->project->excludedPriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');
+$config->project->search['module']                   = 'project';
+$config->project->search['fields']['name']           = $lang->project->name;
+if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['fields']['code'] = $lang->project->code;
+$config->project->search['fields']['id']             = $lang->project->id;
+$config->project->search['fields']['model']          = $lang->project->model;
+$config->project->search['fields']['parent']         = $lang->project->parent;
+$config->project->search['fields']['status']         = $lang->project->status;
+$config->project->search['fields']['desc']           = $lang->project->desc;
+$config->project->search['fields']['PM']             = $lang->project->PM;
+$config->project->search['fields']['openedDate']     = $lang->project->openedDate;
+$config->project->search['fields']['begin']          = $lang->project->begin;
+$config->project->search['fields']['end']            = $lang->project->end;
+$config->project->search['fields']['realBegan']      = $lang->project->realBeganAB;
+$config->project->search['fields']['realEnd']        = $lang->project->realEndAB;
+$config->project->search['fields']['openedBy']       = $lang->project->openedBy;
+$config->project->search['fields']['closedBy']       = $lang->project->closedBy;
+$config->project->search['fields']['lastEditedDate'] = $lang->project->lastEditedDate;
+$config->project->search['fields']['closedDate']     = $lang->project->closedDate;
+
+$config->project->search['params']['name']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
+if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['params']['code'] = array('operator' => '=', 'control' => 'input' , 'values' => '');
+$config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
+$config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
+$config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');
+$config->project->search['params']['status']         = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->statusList);
+$config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
+$config->project->search['params']['PM']             = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
+$config->project->search['params']['openedDate']     = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['begin']          = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['end']            = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['realBegan']      = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['realEnd']        = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['openedBy']       = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
+$config->project->search['params']['closedBy']       = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
+$config->project->search['params']['lastEditedDate'] = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['closedDate']     = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+
+$config->project->includedPriv['project']    = array('edit', 'group', 'createGroup', 'managePriv', 'manageMembers', 'manageGroupMember', 'copyGroup', 'editGroup', 'start', 'suspend', 'close', 'activate', 'delete', 'view', 'whitelist', 'addWhitelist', 'unbindWhitelist', 'manageProducts', 'dynamic', 'build', 'bug', 'testcase', 'testtask', 'testreport', 'execution', 'team', 'unlinkMember');
+$config->project->includedPriv['execution']  = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
+$config->project->includedPriv['task']       = array('create');
+$config->project->includedPriv['story']      = array('create', 'batchCreate', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'batchChangePlan', 'batchChangeStage', 'assignTo', 'batchAssignTo', 'activate', 'zeroCase', 'batchEdit', 'import', 'showImport', 'exportTemplate', 'importToLib', 'batchImportToLib', 'relation', 'browse');
+$config->project->includedPriv['bug']        = array('create', 'confirmBug', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate');
+$config->project->includedPriv['testcase']   = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchCaseTypeChange', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit');
+$config->project->includedPriv['testtask']   = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'browseUnits', 'unitCases', 'importUnitResult', 'batchRun', 'runDeployCase', 'deployCaseResults');
+$config->project->includedPriv['doc']        = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'delete', 'deleteFile', 'allLibs', 'objectLibs', 'collect', 'tableContents', 'showFiles', 'diff', 'manageBook', 'importToPracticeLib', 'importToComponentLib');
+$config->project->includedPriv['repo']       = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'editBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
+$config->project->includedPriv['testreport'] = array('create', 'view', 'delete', 'edit', 'export');
+$config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
+if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');

@@ -3,7 +3,7 @@
  * The edit view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: edit.html.php 4897 2013-06-26 01:13:16Z wyd621@gmail.com $
@@ -17,9 +17,25 @@
 <?php js::set('oldStoryID', $task->story);?>
 <?php js::set('oldAssignedTo', $task->assignedTo);?>
 <?php js::set('oldExecutionID', $task->execution);?>
+<?php js::set('oldConsumed', $task->consumed);?>
+<?php js::set('taskStatus', $task->status);?>
+<?php js::set('currentUser', $app->user->account);?>
+<?php js::set('team', $task->members);?>
+<?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('changeExecutionConfirmed', false);?>
-<?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
+
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
+<?php js::set('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'))?>
+<?php js::set('requiredFields', $config->task->edit->requiredFields);?>
+<?php
+$requiredFields = array();
+foreach(explode(',', $config->task->edit->requiredFields) as $field)
+{
+    if($field) $requiredFields[$field] = '';
+}
+?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -50,7 +66,7 @@
                   <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
                   <span class='input-group-addon'>
                     <div class='checkbox-primary'>
-                      <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
+                      <input type='checkBox' name='multiple' id='multiple' value='1' disabled <?php echo empty($task->team) ? '' : 'checked';?> />
                       <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
                     </div>
                   </span>
@@ -72,7 +88,10 @@
           <?php $this->printExtendFields($task, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
           <div class='detail text-center form-actions'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
@@ -100,10 +119,10 @@
                 <th class='thWidth'><?php echo $lang->task->module;?></th>
                 <td>
                   <div class='table-row'>
-                    <span class='table-col' id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></span>
-                    <span class='table-col w-100px text-middle pl-10px'>
+                    <span class='table-col' id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen"');?></span>
+                    <span class='table-col text-middle pl-10px' id='showAllModuleBox'>
                       <div class="checkbox-primary">
-                        <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
+                        <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->all;?></label>
                       </div>
                     </span>
                   </div>
@@ -112,7 +131,7 @@
               <?php if($execution->type != 'ops'):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
-                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen'");?></span></td>
+                <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down' data-max_drop_width='0'");?></span></td>
               </tr>
               <?php endif;?>
               <?php if($task->parent >= 0 and empty($task->team)):?>
@@ -123,12 +142,12 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and $task->assignedTo != $this->app->user->account) ? "disabled='disabled'" :'';?>
+                <?php $disableAssignedTo = (!empty($task->team) and $task->mode == 'linear') ? "disabled='disabled'" : '';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
                 {
-                    $teamAccounts = array_keys($task->team);
+                    $teamAccounts = $task->members;
                     foreach($teamAccounts as $teamAccount)
                     {
                         if(!isset($members[$teamAccount])) continue;
@@ -141,6 +160,10 @@
                 }
                 ?>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
+              </tr>
+              <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
+                <th><?php echo $lang->task->mode;?></th>
+                <td><?php echo zget($lang->task->modeList, $task->mode) . html::hidden('mode', $task->mode);?></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
@@ -164,7 +187,7 @@
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $execution->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control chosen" multiple');?>
+                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -185,20 +208,17 @@
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
                 <td>
-                  <?php $disabled = (!empty($task->team) or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
+                  <?php $readonly = (!empty($task->team) or $task->parent < 0) ? "readonly" : '';?>
+                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$readonly}");?>
                 </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
-                <td><?php echo $task->consumed . ' '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
+                <td><?php echo '<span id=consumedSpan>' . $task->consumed . '</span> '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
-                <td>
-                  <?php $disabled = (!empty($task->team)  or $task->parent < 0) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
-                </td>
+                <td><?php echo html::input('left', $task->left, "class='form-control' {$readonly}");?></td>
               </tr>
             </table>
           </div>
@@ -258,47 +278,10 @@
         <div class="modal-content with-padding" id='taskTeamEditor'>
           <table class='table table-form'>
             <tbody class="sortable">
-              <?php foreach($task->team as $member):?>
-              <tr>
-                <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
-                <td>
-                  <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tr class='template'>
-                <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
-                <td>
-                  <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  </div>
-                </td>
-                <td class='w-130px sort-handler'>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                </td>
-              </tr>
+              <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
             </tbody>
             <tfoot>
-              <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary btn-wide' data-dismiss='modal'");?></td></tr>
+              <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
             </tfoot>
           </table>
         </div>

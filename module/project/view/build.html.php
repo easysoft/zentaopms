@@ -3,7 +3,7 @@
  * The build view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: build.html.php 4262 2013-01-24 08:48:56Z chencongzhi520@gmail.com $
@@ -11,21 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('allExecutions', $allExecutions)?>
 <?php js::set('executions', $executions)?>
 <?php js::set('projectID', $projectID)?>
+<?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->execution->build}</span>";
-    $active = '';
-    if($type == 'all')
+    common::sortFeatureMenu();
+    foreach($lang->project->featureBar['build'] as $featureType => $label)
     {
-        $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        $label       = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
-    echo html::a(inlink('build', "projectID=$projectID&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
@@ -71,23 +73,7 @@
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
-          <td class="c-actions">
-            <?php
-            if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::canBeChanged('build', $build))
-            {
-                echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}' data-app='project'");
-            }
-            common::printIcon('testtask', 'create', "product=$build->product&executionID={$build->execution}&build=$build->id&projectID=$projectID", $build, 'list', 'bullhorn', '', '', '', "data-app='project'");
-            $lang->build->view = $lang->project->bug;
-            common::printIcon('build', 'view', "buildID=$build->id&type=generatedBug", $build, 'list', 'bug', '', '', '', "data-app='project'");
-            common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
-            if(common::hasPriv('build',  'delete', $build))
-            {
-                $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-                echo html::a("###", '<i class="icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"buildList\", confirmDelete)' class='btn' title='{$lang->build->delete}'");
-            }
-            ?>
-          </td>
+          <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse');?></td>
         </tr>
         <?php endforeach;?>
         <?php endforeach;?>

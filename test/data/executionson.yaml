@@ -1,0 +1,86 @@
+title: table zt_execution
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 701-730
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 子阶段
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 41-70
+  - field: model
+    range: []
+  - field: type
+    range: stage
+  - field: budget
+    range: 700000-1:100
+  - field: status
+    range: wait,doing
+  - field: percent
+    range: 0
+  - field: auth
+    range: "extend"
+  - field: desc
+    range: 1-10000
+    prefix: "迭代描述"
+  - field: grade
+    range: 2
+  - field: parent
+    range: 131-160
+  - field: path
+    fields:
+     - field: path1
+       prefix: ","
+       range: 41-70
+     - field: path2
+       prefix: ","
+       postfix: ","
+       range: 131-160
+     - field: path6
+       range: 701-730
+       postfix: ","
+  - field: acl
+    range: open{4},private{4}
+  - field: PO
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: PM
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: QD
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: RD
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: openedVersion
+    range: "16.5"
+  - field: whitelist
+    froms:
+      - from: common.user.v1.yaml
+        use: empty{8}
+      - from: common.user.v1.yaml
+        use: empty{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: one{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: two{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: three{8}
+        prefix: ","

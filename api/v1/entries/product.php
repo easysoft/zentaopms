@@ -3,7 +3,7 @@
  * The product entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -51,14 +51,32 @@ class productEntry extends Entry
                         $product->modules = $data->data->tree;
                     }
                     break;
+                case 'execution':
+                    $product->execution = $this->loadModel('product')->getExecutionPairsByProduct($productID);
+                    break;
+                case 'bugstatistic':
+                    $product->bugStatistic = $this->loadModel('bug')->getStatistic($productID);
+                    break;
+                case 'moduleoptionmenu':
+                    $modules = $this->loadModel('tree')->getOptionMenu($productID, $this->param('moduleType', 'story'));
+                    $product->moduleOptionMenu = array();
+                    foreach($modules as $id => $name) $product->moduleOptionMenu[] = array('id' => $id, 'name' => $name);
+                    break;
+                case 'parentstories':
+                    $product->parentstories= $this->loadModel('story')->getParentStoryPairs($productID);
+                    break;
+                case 'builds':
+                    $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch', $this->param('object', 0), $this->param('objectType', 'execution'));
+                    break;
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
+                    $users   = $this->loadModel('user')->getPairs();
                     $actions = $data->data->actions;
                     $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
                     break;
                 case 'lastexecution':
-                    $execution = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    $execution = $this->dao->select('t2.id,t2.name,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                         ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                         ->where('t2.deleted')->eq(0)
                         ->andWhere('t1.product')->eq($productID)
@@ -102,7 +120,7 @@ class productEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $product = $this->product->getByID($productID);
-        $this->send(200, $this->format($product, 'createdDate:time'));
+        $this->send(200, $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user'));
     }
 
     /**

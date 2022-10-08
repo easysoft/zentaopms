@@ -406,6 +406,9 @@ class baseRouter
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
 
+        $this->setEdition();
+        $this->setVision();
+
         $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
         $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
 
@@ -614,13 +617,29 @@ class baseRouter
      */
     public function setSuperVars()
     {
+        if(isset($_SERVER['REQUEST_URI']))
+        {
+            $URI = $_SERVER['REQUEST_URI'];
+            if(strpos($URI, '?') !== false)
+            {
+                $parsedURL = parse_url($URI);
+                if(isset($parsedURL['query']))
+                {
+                    parse_str($parsedURL['query'], $parsedQuery);
+                    foreach($parsedQuery as $key => $value)
+                    {
+                        if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    }
+                }
+            }
+        }
+
         $this->post    = new super('post');
         $this->get     = new super('get');
         $this->server  = new super('server');
         $this->cookie  = new super('cookie');
         $this->session = new super('session', $this->tab);
 
-        unset($GLOBALS);
         unset($_REQUEST);
 
         /* Change for CSRF. */
@@ -639,6 +658,20 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+
+        /* Filter common get and cookie vars. */
+        if($this->config->framework->filterParam == 2)
+        {
+            global $filter;
+            foreach($filter->default->get as $key => $rules)
+            {
+                if(isset($_GET[$key]) and !validater::checkByRule($_GET[$key], $rules)) unset($_GET[$key]);
+            }
+            foreach($filter->default->cookie as $key => $rules)
+            {
+                if(isset($_COOKIE[$key]) and !validater::checkByRule($_COOKIE[$key], $rules)) unset($_COOKIE[$key]);
+            }
+        }
     }
 
     /**
@@ -663,6 +696,69 @@ class baseRouter
     public function setDebug()
     {
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+    }
+
+    /**
+     * 设置版本。
+     * Set edition.
+     *
+     * @access public
+     * @return void
+     */
+    public function setEdition()
+    {
+        if(isset($this->config->edition)) return $this->config->edition;
+
+        $edition = substr($this->config->version, 0, 3);
+        if(in_array($edition, array('pro', 'biz', 'max'))) return $this->config->edition = $edition;
+        $this->config->edition = 'open';
+    }
+
+    /**
+     * 设置vision。
+     * set Debug.
+     *
+     * @access public
+     * @return void
+     */
+    public function setVision()
+    {
+        $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
+        if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
+        if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+
+        $vision = '';
+        if($this->config->installed and validater::checkAccount($account))
+        {
+            $sql     = new sql();
+            $account = $sql->quote($account);
+            $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
+            if($vision) $vision = $vision->value;
+            if(empty($vision))
+            {
+                $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+                if(!empty($user->visions)) list($vision) = explode(',', $user->visions);
+            }
+        }
+
+        list($defaultVision) = explode(',', trim($this->config->visions, ','));
+        if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
+
+        $this->config->vision = $vision ? $vision : $defaultVision;
+    }
+
+    /**
+     * Get installed version.
+     *
+     * @access public
+     * @return string
+     */
+    public function getInstalledVersion()
+    {
+        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
+        if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
+        return $version;
     }
 
     /**
@@ -813,6 +909,18 @@ class baseRouter
     }
 
     /**
+     * 获取扩展根目录。
+     * Get the root of extension.
+     *
+     * @access public
+     * @return string
+     */
+    public function getExtensionRoot()
+    {
+        return $this->basePath . 'extension' . DS;
+    }
+
+    /**
      * 获取$webRoot，即应用的路径。
      * Get the $webRoot var.
      *
@@ -873,6 +981,32 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
+        if(ini_get('session.save_handler') == 'files' and isset($_GET['tid']))
+        {
+            $savePath = ini_get('session.save_path');
+            $writable = is_writable($savePath);
+            if(!$writable)
+            {
+                $savePath = $this->getTmpRoot() . 'session';
+                if(!is_dir($savePath)) mkdir($savePath, 0777, true);
+                $writable = is_writable($savePath);
+                if($writable) session_save_path($this->getTmpRoot() . 'session');
+            }
+
+            if($writable)
+            {
+                $ztSessionHandler = new ztSessionHandler($_GET['tid']);
+                session_set_save_handler(
+                    array($ztSessionHandler, "open"),
+                    array($ztSessionHandler, "close"),
+                    array($ztSessionHandler, "read"),
+                    array($ztSessionHandler, "write"),
+                    array($ztSessionHandler, "destroy"),
+                    array($ztSessionHandler, "gc")
+                );
+            }
+        }
+
         /* If request header has token, use it as session for authentication. */
         if(isset($_SERVER['HTTP_TOKEN'])) session_id($_SERVER['HTTP_TOKEN']);
 
@@ -882,31 +1016,30 @@ class baseRouter
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         session_start();
 
-        $this->sessionID = session_id();
+        $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+        if(isset($_GET[$this->config->sessionVar]))
+        {
+            helper::restartSession($_GET[$this->config->sessionVar]);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
 
         define('SESSION_STARTED', true);
     }
 
     /**
-     * 从cookie中获取当前的group, 即URL锚链接'#open=?'。
-     * Get current group from cookie, original source is url '#open=?'.
+     * 从cookie中获取当前的group, 即URL锚链接'#tab=?'。
+     * Get current group from cookie, original source is url '#tab=?'.
      *
      * @access public
      * @return void
      */
     public function setOpenApp()
     {
-        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab']))
-        {
-            $this->tab = $_COOKIE['tab'];
-        }
-        else
-        {
-            $module    = $this->rawModule;
-            $this->tab = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
-        }
+        $module    = $this->rawModule;
+        $this->tab = 'my';
+        if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
+        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
     }
 
     /**
@@ -1284,7 +1417,7 @@ class baseRouter
      */
     public function setControlFile($exitIfNone = true)
     {
-        $this->controlFile = $this->moduleRoot . $this->moduleName . DS . 'control.php';
+        $this->controlFile = $this->getModulePath() . 'control.php';
         if(file_exists($this->controlFile)) return true;
         $this->triggerError("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
     }
@@ -1303,6 +1436,138 @@ class baseRouter
     }
 
     /**
+     * 设置要被调用方法的参数。
+     * Set the params of method calling.
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        try
+        {
+            $appName    = $this->appName;
+            $moduleName = $this->moduleName;
+            $methodName = $this->methodName;
+
+            /*
+             * 引入该模块的control文件。
+             * Include the control file of the module.
+             **/
+            $isExt = $this->setActionExtFile();
+            if($isExt)
+            {
+                $controlFile = $this->controlFile;
+                spl_autoload_register(function($class) use ($moduleName, $controlFile)
+                {
+                    if($class == $moduleName) include $controlFile;
+                });
+            }
+
+            $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
+
+            /* Check file is encode by ioncube. */
+            $isEncrypted = false;
+            if(strpos($file2Included, 'extension' . DS . $this->config->edition . DS) !== false)
+            {
+                $fp = fopen($file2Included, 'r');
+                $line1 = fgets($fp);
+                $line2 = fgets($fp);
+                fclose($fp);
+                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+            }
+
+            /*
+             * 设置control的类名。
+             * Set the class name of the control.
+             **/
+            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+
+            /*
+             * 创建control类的实例。
+             * Create a instance of the control.
+             **/
+            $module = new $className();
+            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+            $this->control = $module;
+
+            /* include default value for module*/
+            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+
+            /*
+             * 使用反射机制获取函数参数的默认值。
+             * Get the default settings of the method to be called using the reflecting.
+             *
+             * */
+            $defaultParams = array();
+            $methodReflect = new reflectionMethod($className, $methodName);
+            foreach($methodReflect->getParameters() as $param)
+            {
+                $name = $param->getName();
+
+                $default = '_NOT_SET';
+                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted and $param->isDefaultValueAvailable())
+                {
+                    $default = $param->getDefaultValue();
+                }
+
+                $defaultParams[$name] = $default;
+            }
+
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
+            if ('cli' === PHP_SAPI)
+            {
+                if ($this->params)
+                {
+                    $this->params = array_merge($defaultParams, $this->params);
+                }
+                else
+                {
+                    $this->params = $defaultParams;
+                }
+            }
+            else
+            {
+                if($this->config->framework->filterParam == 2)
+                {
+                    $_GET     = validater::filterParam($_GET, 'get');
+                    $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+                }
+            }
+            return true;
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            echo $endResponseException->getContent();
+            return false;
+        }
+    }
+
+    /**
      * 获取一个模块的路径。
      * Get the path of one module.
      *
@@ -1314,11 +1579,37 @@ class baseRouter
     public function getModulePath($appName = '', $moduleName = '')
     {
         if($moduleName == '') $moduleName = $this->moduleName;
+        $moduleName = strtolower($moduleName);
 
         if($this->checkModuleName($moduleName))
         {
-            $modulePath = $this->getModuleRoot($appName) . strtolower($moduleName) . DS;
-            return $modulePath;
+            $modulePath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS;
+            if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+
+            /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+            $modulePath = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS;
+            if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+
+            /* 2. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+            if($this->config->vision != 'rnd')
+            {
+                $modulePath = $this->getExtensionRoot() . $this->config->vision . DS . $moduleName . DS;
+                if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+            }
+
+            /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
+            if($this->config->edition != 'open')
+            {
+                $modulePath = $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS;
+                if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+            }
+
+            /* 4. 尝试查找喧喧是否有此模块。 Try to find the module in xuan. */
+            $modulePath = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS;
+            if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+
+            /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+            return $this->getModuleRoot($appName) . $moduleName . DS;
         }
     }
 
@@ -1337,17 +1628,28 @@ class baseRouter
      */
     public function getModuleExtPath($appName, $moduleName, $ext)
     {
+        $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+
         /* 检查失败或者extensionLevel为0，直接返回空。If check failed or extensionLevel == 0, return empty array. */
-        if(!$this->checkModuleName($moduleName) or $this->config->framework->extensionLevel == 0) return array();
+        if(!$this->checkModuleName($moduleName) or $this->config->framework->extensionLevel == 0) return array('saas' => $saasExtPath);
+
+        $paths = array();
 
         /* When extensionLevel == 1. */
-        $modulePath = $this->getModulePath($appName, $moduleName);
-        $paths = array();
-        $paths['common'] = $modulePath . 'ext' . DS . $ext . DS;
-        if($this->config->framework->extensionLevel == 1) return $paths;
+        $paths['common'] = $this->config->edition != 'open' ? $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS . 'ext' . DS . $ext . DS : '';
+        $paths['xuan']   = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+        $paths['vision'] = $this->config->vision == 'rnd' ? '' : $this->basePath . 'extension' . DS . $this->config->vision . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+        $paths['custom'] = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+        if($this->config->framework->extensionLevel == 1)
+        {
+            $paths['saas']   = $saasExtPath;
+            return $paths;
+        }
 
         /* When extensionLevel == 2. */
-        $paths['site'] = empty($this->siteCode) ? '' : $modulePath . 'ext' . DS . '_' . $this->siteCode . DS . $ext . DS;
+        $paths['site'] = empty($this->siteCode) ? '' : $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS . 'ext' . DS . '_' . $this->siteCode . DS . $ext . DS;
+        $paths['saas'] = $saasExtPath;
+
         return $paths;
     }
 
@@ -1355,14 +1657,22 @@ class baseRouter
      * 检查模块中某一个变量必须为英文字母和数字组合。Check module a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkModuleName($var)
+    public function checkModuleName($var, $exit = true)
     {
         global $filter;
-        $rule = $filter->default->moduleName;
-        if(validater::checkByRule($var, $rule)) return true;
+        static $checkedModule = array();
+        if(!isset($checkedModule[$var]))
+        {
+            $rule   = $filter->default->moduleName;
+            $result = validater::checkByRule($var, $rule);
+            $checkedModule[$var] = $result;
+        }
+        if($checkedModule[$var]) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1370,16 +1680,18 @@ class baseRouter
      * 检查方法中某一个变量必须为英文字母和数字组合。Check method a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkMethodName($var)
+    public function checkMethodName($var, $exit = true)
     {
         global $filter;
         $rule = $filter->default->methodName;
         if($this->config->framework->filterParam == 2 and isset($filter->{$this->moduleName}->methodName)) $rule = $filter->{$this->moduleName}->methodName;
 
         if(validater::checkByRule($var, $rule)) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1396,15 +1708,34 @@ class baseRouter
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
 
-        /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
+        if(!empty( $moduleExtPaths['saas']))
+        {
+            $this->extActionFile = $moduleExtPaths['saas'] . $this->methodName . '.php';
+            if(file_exists($this->extActionFile)) return true;
+        }
+
+        /* 1. 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。 If extensionLevel == 2 and site extensionFile exists, return it. */
         if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
         {
             $this->extActionFile = $moduleExtPaths['site'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;
         }
 
-        /* 然后再尝试寻找公共扩展文件。Then try to find the common extension file. */
+        /* 2. 尝试在定制开发目录寻找扩展文件。Then try to find the custom extension file. */
+        $this->extActionFile = $moduleExtPaths['custom'] . $this->methodName . '.php';
+        if(file_exists($this->extActionFile)) return true;;
+
+        /* 3. 如果设置过vision，尝试在vision中查找扩展文件。If vision is set, try to find the vision extension file. */
+        if($moduleExtPaths['vision']) $this->extActionFile = $moduleExtPaths['vision'] . $this->methodName . '.php';
+        if(file_exists($this->extActionFile)) return true;;
+
+        /* 4. 在喧喧目录中查找扩展文件。Then try to find the xuan extension file. */
+        if($moduleExtPaths['xuan']) $this->extActionFile = $moduleExtPaths['xuan'] . $this->methodName . '.php';
+        if(file_exists($this->extActionFile)) return true;;
+
+        /* 5. 最后尝试寻找公共扩展文件。Finally, try to find the common extension file. */
         $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
+        if(empty($moduleExtPaths['common'])) return false;
         return file_exists($this->extActionFile);
     }
 
@@ -1482,8 +1813,10 @@ class baseRouter
         if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainModelFile;
 
         /* 计算合并之后的modelFile路径。Compute the merged model file path. */
-        $extModelPrefix  = ($siteExtended and !empty($this->siteCode)) ? $this->siteCode[0] . DS . $this->siteCode : '';
-        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . ($extModelPrefix ? $extModelPrefix . DS : '');
+        $extModelPrefix = $this->config->edition . DS . $this->config->vision . DS;
+        if($siteExtended and !empty($this->siteCode)) $extModelPrefix .= $this->siteCode[0] . DS . $this->siteCode;
+
+        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . $extModelPrefix;
         $mergedModelFile = $mergedModelDir . $moduleName . '.php';
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
@@ -1554,13 +1887,13 @@ class baseRouter
         /* 开始拼装代码。Prepare the codes. */
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::cd(\$app->getBasePath());\n";
-        $modelLines .= "helper::import('" . str_replace($this->getBasePath(), '', $mainModelFile) . "');\n";
-        $modelLines .= "helper::cd();\n";
+        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'model.php');\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
-        foreach($extFiles as $extFile) $modelLines .= self::removePHPTAG($extFile);
+        $extModels = array();
+        foreach($extFiles  as $extFile)  $extModels[basename($extFile)] = $extFile;
+        foreach($extModels as $extModel) $modelLines .= self::removePHPTAG($extModel);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';
@@ -1832,99 +2165,19 @@ class baseRouter
     public function loadModule()
     {
         try {
-            $appName    = $this->appName;
-            $moduleName = $this->moduleName;
-            $methodName = $this->methodName;
-
-            /*
-            * 引入该模块的control文件。
-            * Include the control file of the module.
-            **/
-            $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
-            chdir(dirname($file2Included));
-            helper::import($file2Included);
-
-            /*
-            * 设置control的类名。
-            * Set the class name of the control.
-            **/
-            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
-
-            /*
-            * 创建control类的实例。
-            * Create a instance of the control.
-            **/
-            $module = new $className();
-            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
-            $this->control = $module;
-
-            /* include default value for module*/
-            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
-
-            /*
-            * 使用反射机制获取函数参数的默认值。
-            * Get the default settings of the method to be called using the reflecting.
-            *
-            * */
-            $defaultParams = array();
-            $methodReflect = new reflectionMethod($className, $methodName);
-            foreach($methodReflect->getParameters() as $param)
-            {
-                $name = $param->getName();
-
-                $default = '_NOT_SET';
-                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
-                }
-                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$className][$methodName][$name];
-                }
-                elseif($param->isDefaultValueAvailable())
-                {
-                    $default = $param->getDefaultValue();
-                }
-
-                $defaultParams[$name] = $default;
-            }
-
-            /**
-             * 根据PATH_INFO或者GET方式设置请求的参数。
-             * Set params according PATH_INFO or GET.
-             */
-            if($this->config->requestType != 'GET')
-            {
-                $this->setParamsByPathInfo($defaultParams);
-            }
-            else
-            {
-                $this->setParamsByGET($defaultParams);
-            }
-
-            if($this->config->framework->filterParam == 2)
-            {
-                $_GET     = validater::filterParam($_GET, 'get');
-                $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
-            }
+            if(is_null($this->params) and !$this->setParams()) return false;
 
             /* 调用该方法   Call the method. */
-            call_user_func_array(array($module, $methodName), $this->params);
+            $module = $this->control;
+
+            call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
         }
-        if (isset($module))
-        {
-            return $module;
-        }
-        else
-        {
-            return false;
-        }
+
+        return isset($module) ? $module : false;
     }
 
     /**
@@ -1942,7 +2195,7 @@ class baseRouter
         if($type != 'fetch')
         {
             /* 分割URI。 Spit the URI. */
-            $items     = explode($this->config->requestFix, $this->URI);
+            $items     = explode($this->config->requestFix, (string)$this->URI);
             $itemCount = count($items);
 
             /**
@@ -2006,6 +2259,7 @@ class baseRouter
 
         /* Remove these three params. */
         unset($passedParams['onlybody']);
+        unset($passedParams['tid']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
         /* Check params from URL. */
@@ -2186,7 +2440,14 @@ class baseRouter
 
         /* 查找扩展配置文件。Get extension config files. */
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
-        if($config->framework->extensionLevel >= 1 and !empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+        if($config->framework->extensionLevel >= 1)
+        {
+            if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+            if(!empty($extConfigPath['xuan']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['xuan'], '.php'));
+            if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
+            if(!empty($extConfigPath['saas']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['saas'], '.php'));
+            if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
+        }
         if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site']))   $siteExtConfigFiles   = helper::ls($extConfigPath['site'], '.php');
         $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
 
@@ -2255,14 +2516,17 @@ class baseRouter
     public function exportConfig()
     {
         $view = new stdclass();
-        $view->version     = $this->config->version;
-        $view->requestType = $this->config->requestType;
-        $view->requestFix  = $this->config->requestFix;
-        $view->moduleVar   = $this->config->moduleVar;
-        $view->methodVar   = $this->config->methodVar;
-        $view->viewVar     = $this->config->viewVar;
-        $view->sessionVar  = $this->config->sessionVar;
-        $view->systemMode  = $this->config->systemMode;
+        $view->version       = $this->config->version;
+        $view->requestType   = $this->config->requestType;
+        $view->requestFix    = $this->config->requestFix;
+        $view->moduleVar     = $this->config->moduleVar;
+        $view->methodVar     = $this->config->methodVar;
+        $view->viewVar       = $this->config->viewVar;
+        $view->sessionVar    = $this->config->sessionVar;
+        $view->systemMode    = $this->config->systemMode;
+        $view->sprintConcept = zget($this->config->custom, 'sprintConcept', '0');
+        $view->URAndSR       = zget($this->config->custom, 'URAndSR', '0');
+        $view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 
         $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
@@ -2272,6 +2536,51 @@ class baseRouter
         $view->serverTime  = time();
 
         echo json_encode($view);
+    }
+
+    /**
+     * 获取主语言文件。
+     * Get main lang file.
+     *
+     * @param   string $moduleName     the module name
+     * @param   string $appName     the app name
+     * @access  public
+     * @return  string.
+     */
+    private function getMainLangFile($moduleName, $appName = '')
+    {
+        $path = $moduleName . DS . 'lang' . DS . $this->clientLang . '.php';
+
+        $modulePath = $this->getExtensionRoot() . 'saas' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        /* 2. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+        if($this->config->vision != 'rnd')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
+
+        /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
+        if($this->config->edition != 'open')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->edition . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
+
+        /* 4. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
+        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+        $modulePath = $this->getModuleRoot($appName);
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        return '';
     }
 
     /**
@@ -2291,8 +2600,8 @@ class baseRouter
         $langFilesToLoad = array();
 
         /* 判断主语言文件是否存在。Whether the main lang file exists or not. */
-        $mainLangFile = $modulePath . 'lang' . DS . $this->clientLang . '.php';
-        if(file_exists($mainLangFile)) $langFilesToLoad[] = $mainLangFile;
+        $mainLangFile = $this->getMainLangFile($moduleName, $appName);
+        if($mainLangFile) $langFilesToLoad[] = $mainLangFile;
 
         /* 获取扩展语言文件。If extensionLevel > 0, get extension lang files. */
         if($this->config->framework->extensionLevel > 0)
@@ -2301,7 +2610,14 @@ class baseRouter
             $siteExtLangFiles   = array();
 
             $extLangPath = $this->getModuleExtPath($appName, $moduleName, 'lang');
-            if($this->config->framework->extensionLevel >= 1 and !empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
+            if($this->config->framework->extensionLevel >= 1)
+            {
+                if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
+                if(!empty($extLangPath['xuan'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
+                if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
+                if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
+                if(!empty($extLangPath['saas']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['saas'] . $this->clientLang, '.php'));
+            }
             if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site']))   $siteExtLangFiles   = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
             $extLangFiles  = array_merge($commonExtLangFiles, $siteExtLangFiles);
         }
@@ -2496,13 +2812,15 @@ class baseRouter
          **/
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
-        $errorLog .= "when visiting <strong>" . htmlspecialchars($this->getURI()) . "</strong>\n";
+
+        $URI = $this->getURI();
+        $errorLog .= "when visiting <strong>" . (empty($URI) ? '' : htmlspecialchars($URI)) . "</strong>\n";
 
         /*
          * 为了安全起见，对公网环境隐藏脚本路径。
          * If the ip is pulic, hidden the full path of scripts.
          */
-        $remoteIP = zget($_SERVER, "REMOTE_ADDR", '');
+        $remoteIP = helper::getRemoteIp(true);
         if(!defined('IN_SHELL') and !($remoteIP == '127.0.0.1' or filter_var($remoteIP, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
         {
             $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
@@ -2510,7 +2828,7 @@ class baseRouter
 
         /* 保存到日志文件(Save to log file) */
         $errorFile = $this->logRoot . 'php.' . date('Ymd') . '.log.php';
-        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
+        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
         if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
@@ -2558,7 +2876,7 @@ class baseRouter
         if(!class_exists('dao')) return;
 
         $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
-        if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?>\n");
+        if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?" . ">\n");
 
         $fh = @fopen($sqlLog, 'a');
         if(!$fh) return false;
@@ -2566,6 +2884,17 @@ class baseRouter
         foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
         fwrite($fh, "\n");
         fclose($fh);
+    }
+
+    /**
+     * Check app if it is run in a container.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isContainer()
+    {
+        return strtolower(getenv('IS_CONTAINER')) == 'true';
     }
 }
 
@@ -2810,5 +3139,181 @@ class EndResponseException extends \Exception
     public function getContent()
     {
         return $this->content;
+    }
+}
+
+/**
+ * ZenTao session handler.
+ *
+ * @package framework
+ */
+class ztSessionHandler
+{
+    public $sessSavePath;
+    public $tagID;
+    public $sessionFile;
+    public $sessionID;
+    public $rawID;
+    public $rawFile;
+
+    /**
+     * Construct.
+     *
+     * @param  string $tagID
+     * @access public
+     * @return void
+     */
+    public function __construct($tagID = '')
+    {
+        $this->tagID = $tagID;
+        ini_set('session.save_handler', 'files');
+        register_shutdown_function('session_write_close');
+    }
+
+    /**
+     * Get sessionID
+     *
+     * @access public
+     * @return string
+     */
+    public function getSessionID()
+    {
+        return $this->sessionID;
+    }
+
+    /**
+     * Get session file.
+     *
+     * @param  string    $id
+     * @access public
+     * @return string
+     */
+    public function getSessionFile($id)
+    {
+        if(!empty($this->sessionFile)) return $this->sessionFile;
+
+        $sessionID = $id;
+        if($this->tagID) $sessionID = md5($id . $this->tagID);
+
+        $fileName = "sess_$sessionID";
+
+        $this->sessionFile = $this->sessSavePath . '/' . $fileName;
+        $this->sessionID   = $sessionID;
+        $this->rawID       = $id;
+        $this->rawFile     = $this->sessSavePath . '/' . "sess_$id";
+        return $this->sessionFile;
+    }
+
+    /**
+     * Open
+     *
+     * @param  string    $savePath
+     * @param  string    $sessionName
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function open($savePath, $sessionName)
+    {
+        $this->sessSavePath = $savePath;
+        return true;
+    }
+
+    /**
+     * Close
+     *
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function close()
+    {
+        return true;
+    }
+
+    /**
+     * Read
+     *
+     * @param  string    $id
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function read($id)
+    {
+        $sessFile = $this->getSessionFile($id);
+        if(!file_exists($sessFile))
+        {
+            ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
+        }
+
+        return (string) file_get_contents($sessFile);
+    }
+
+    /**
+     * Write
+     *
+     * @param  string    $id
+     * @param  string    $sessData
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function write($id, $sessData)
+    {
+        $sessFile = $this->getSessionFile($id);
+        if(file_put_contents($sessFile, $sessData))
+        {
+            if(strpos($sessData, 'user|') !== false)
+            {
+                if(file_exists($this->rawFile))
+                {
+                    $rawSessContent = (string) file_get_contents($this->rawFile);
+                    if(strpos($rawSessContent, 'user|') === false) copy($sessFile, $this->rawFile);
+                }
+                else
+                {
+                    copy($sessFile, $this->rawFile);
+                }
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Destroy
+     *
+     * @param  string    $id
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function destroy($id)
+    {
+        $sessFile = $this->getSessionFile($id);
+        unlink($sessFile);
+        unlink($this->rawFile);
+        touch($sessFile);
+        return true;
+    }
+
+    /**
+     * GC
+     *
+     * @param  int    $maxlifeTime
+     * @access public
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function gc($maxlifeTime)
+    {
+        $time = time();
+        foreach(glob("$this->sessSavePath/sess_*") as $fileName)
+        {
+            if(filemtime($fileName) + $maxlifeTime < $time) @unlink($fileName);
+        }
+        return true;
     }
 }

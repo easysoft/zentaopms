@@ -1,5 +1,4 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<style>.c-date {width: 130px;}</style>
 <table class='table main-table' id='cases'>
   <thead>
     <tr>
@@ -25,7 +24,7 @@
     <tr>
       <td><?php echo sprintf('%03d', $case->id) . html::hidden('cases[]', $case->id)?></td>
       <td><span class='label-pri label-pri-<?php echo $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri);?></span></td>
-      <td class='text-left' title='<?php echo $case->title?>'><?php echo html::a($sysURL . $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version&from=testtask&taskID=$case->task", '', true), $case->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+      <td class='text-left c-name' title='<?php echo $case->title?>'><?php echo html::a($sysURL . $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version&from=testtask&taskID=$case->task", '', true), $case->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
       <td><?php echo zget($users, $case->assignedTo);?></td>
       <td><?php echo zget($users, $case->lastRunner);?></td>
@@ -46,14 +45,17 @@
     </tr>
     <?php endif;?>
   </tbody>
-  <?php if(isset($pager)):?>
-  <tfoot>
-    <tr>
-      <td class='text-right' colspan='9'><?php $pager->show('right', 'pagerjs');?></td>
-    </tr>
-  </tfoot>
-  <?php endif;?>
+</table>
+<?php if(isset($pager)):?>
+<div class='table-footer'>
+  <?php $pager->show('right', 'pagerjs');?>
+</div>
+<?php endif;?>
   <?php else:?>
   <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>
 </table>
+<style>
+.c-date {width: 130px;}
+#cases + .table-footer {margin-top: -20px;}
+</style>

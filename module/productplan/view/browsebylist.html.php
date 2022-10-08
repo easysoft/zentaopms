@@ -1,18 +1,17 @@
 <?php
-/**
- * The browsebylist view file of plan module of ZenTaoPMS.
+/** * The browsebylist view file of plan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     plan
  * @version     $Id: browsebylist.html.php 4707 2013-05-02 06:57:41Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.net
  */
 ?>
-<style> .c-actions {width: 240px;} </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php $label   = "<span class='text'>{$menuItem->text}</span>";?>
@@ -20,6 +19,7 @@
     <?php $active  = $menuItem->name == $browseType ? 'btn-active-text' : '';?>
     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=&browseType={$menuItem->name}"), $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
     <?php endforeach;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i><?php echo $lang->searchAB;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
@@ -31,24 +31,27 @@
     <?php endif;?>
   </div>
 </div>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='productplan'></div>
 <div id="mainContent">
+  <?php $totalParent = 0;?>
+  <?php $totalChild  = 0;?>
   <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create') and empty($productPlansNum)):?>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
-  <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
+  <form class='main-table table-productplan' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
     <table class='table has-sort-head' id="productplanList">
       <thead>
-      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
         <th class='c-id'>
-          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+          <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
             <label></label>
           </div>
@@ -64,10 +67,10 @@
         <?php endif;?>
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-        <th class='c-story'><?php echo $lang->productplan->stories;?></th>
-        <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
-        <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
-        <th class='c-execution'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-story text-center'><?php echo $lang->productplan->stories;?></th>
+        <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
+        <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
+        <th class='c-execution c-actions'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
@@ -88,10 +91,13 @@
       {
           $parent   = $plan->id;
           $children = isset($plan->children) ? $plan->children : 0;
+
+          $totalParent ++;
       }
       if($plan->parent == 0) $parent = 0;
       if(!empty($parent) and $plan->parent > 0 and $plan->parent != $parent) $parent = 0;
       if($plan->parent <= 0) $i = 0;
+      if($plan->parent > 0) $totalChild ++;
 
       $class = '';
       if(!empty($parent) and $plan->parent == $parent)
@@ -102,9 +108,9 @@
           $i++;
       }
       ?>
-      <tr class='<?php echo $class;?>'>
+      <tr class='<?php echo $class;?>' data-parent="<?php echo $plan->parent;?>">
         <td class='cell-id'>
-          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+          <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
@@ -121,7 +127,7 @@
           }
 
           echo "<div class='plan-name has-prefix {$class}'>";
-          if($plan->parent > 0 and !isset($plans[$plan->parent])) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
+          if($plan->parent > 0) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($expired)) echo $expired;
           if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
@@ -139,86 +145,97 @@
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
-        <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('execution', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
+        <td class='text-center c-actions execution-links'>
+          <?php
+          if(!empty($plan->projects))
+          {
+              if(count($plan->projects) === 1)
+              {
+                  $executionID = key($plan->projects);
+                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}' class='btn'");
+              }
+              else
+              {
+                  $executionHtml  = '<div class="popover right">';
+                  $executionHtml .= '<div class="arrow"></div>';
+                  $executionHtml .= '<div class="popover-content">';
+                  $executionHtml .= '<ul class="execution-tip">';
+                  foreach($plan->projects as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
+                  $executionHtml .= '</ul>';
+                  $executionHtml .= '</div>';
+                  $executionHtml .= '</div>';
+                  echo "<a href='javascript:;' class='btn execution-popover'><i class='icon-run text-primary'></i></a>";
+                  echo $executionHtml;
+              }
+          }
+          ?>
+        </td>
         <td class='text-left content'>
           <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
-        <td class='c-actions'>
-          <?php
-          if($plan->parent >= 0 )
-          {
-              $attr = "target='hiddenwin'";
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', '', false, $attr);
-          }
-
-          $attr  = $plan->expired ? "disabled='disabled'" : '';
-          $class = '';
-          if($product->type != 'normal')
-          {
-              $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-              if($branchStatus == 'closed') $class = 'disabled';
-          }
-          if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
-          {
-              $disabled      = '';
-              $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
-
-              if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
-
-              if($config->systemMode == 'new')
-              {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled} {$class}' title='{$lang->productplan->createExecution}' $attr");
-              }
-              else
-              {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
-              }
-          }
-          if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
-          if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
-          common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
-          if(common::hasPriv('productplan', 'create', $plan))
-          {
-              if($plan->parent > 0)
-              {
-                  echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
-              }
-              else
-              {
-                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn {$class}' title='{$this->lang->productplan->children}'");
-              }
-          }
-
-          if(common::hasPriv('productplan', 'delete', $plan))
-          {
-              $deleteURL = '###';
-              $disabled  = 'disabled';
-              if($plan->parent >= 0)
-              {
-                  $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=no");
-                  $disabled  = '';
-              }
-              echo html::a($deleteURL, '<i class="icon-trash"></i>', 'hiddenwin', "class='btn {$disabled}' title='{$lang->productplan->delete}'");
-          }
-          ?>
-        </td>
+        <td class='c-actions'><?php echo $this->productplan->buildOperateMenu($plan, 'browse'); ?></td>
       </tr>
       <?php endforeach;?>
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+      <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->edit, '', 'btn');?>
-      </div>
       <?php endif;?>
+      <div class="table-actions btn-toolbar">
+      <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+      <?php $actionLink = $this->inlink('batchEdit', "productID=$product->id&branch=$branch");?>
+      <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink'");?>
+      <?php endif;?>
+      <?php if(common::hasPriv('productplan', 'batchChangeStatus')):?>
+        <div class="btn-group dropup">
+          <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
+          <div class="dropdown-menu search-list">
+            <div class="list-group">
+              <?php
+              foreach($lang->productplan->statusList as $key => $status)
+              {
+                  $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
+
+                  $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
+                  echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
+              }
+              ?>
+            </div>
+          </div>
+        </div>
+      <?php endif;?>
+      </div>
+      <div class="table-statistic"><?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    var pageSummary    = '<?php echo sprintf($lang->productplan->summary, count($plans), $totalParent, $totalChild);?>';
+    var checkedSummary = '<?php echo $lang->productplan->checkedSummary?>';
+    $('#productplanForm').table(
+    {
+        replaceId: 'productplanList',
+        statisticCreator: function(table)
+        {
+            var $table        = table.getTable();
+            var $checkedRows  = $table.find('tbody>tr.checked');
+            var checkedTotal  = $checkedRows.length;
+            var checkedParent = $checkedRows.filter("[data-parent=-1]").length;
+            var checkedNormal = $checkedRows.filter("[data-parent=0]").length;
+            var checkedChild  = checkedTotal - checkedParent - checkedNormal;
+            var summary       = checkedSummary.replace('%total%', checkedTotal)
+                .replace('%parent%', checkedParent)
+                .replace('%child%', checkedChild);
+
+            return checkedTotal ? summary : pageSummary;
+        }
+    });
+});
+</script>

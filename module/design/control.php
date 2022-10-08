@@ -3,7 +3,7 @@
  * The control file of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: control.php 5107 2020-09-02 09:46:12Z tianshujie@easycorp.ltd $
@@ -78,24 +78,33 @@ class design extends control
 
         /* Print top and right actions. */
         $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
-        if(isset($this->config->maxVersion) and common::hasPriv('design', 'submit'))
+        if($this->config->edition == 'max' and common::hasPriv('design', 'submit'))
         {
             $this->lang->TRActions .= '<div class="btn-group">';
             $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");
             $this->lang->TRActions .= '</div>';
         }
-        $this->lang->TRActions .= '<div class="btn-group dropdown">';
-        $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
-        $this->lang->TRActions .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span>";
-        $this->lang->TRActions .= '</button>';
-        $this->lang->TRActions .= "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
 
-        if(common::hasPriv('design', 'create'))      $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'create', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->create, '', "class='btn btn-link'") . '</li>';
-        if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
+        if(common::hasPriv('design', 'create') and common::hasPriv('design', 'batchCreate'))
+        {
+            $this->lang->TRActions .= '<div class="btn-group dropdown">';
+            $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
+            $this->lang->TRActions .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span>";
+            $this->lang->TRActions .= '</button>';
+            $this->lang->TRActions .= "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
 
-        $this->lang->TRActions .= '</ul>';
-        $this->lang->TRActions .= '</div>';
-        $this->lang->TRActions .= '</div>';
+            if(common::hasPriv('design', 'create'))      $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'create', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->create, '', "class='btn btn-link'") . '</li>';
+            if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
+
+            $this->lang->TRActions .= '</ul>';
+            $this->lang->TRActions .= '</div>';
+            $this->lang->TRActions .= '</div>';
+        }
+        else
+        {
+            if(common::hasPriv('design', 'create')) $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
+            if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= html::a(inlink('batchCreate', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->batchCreate}", '', "class='btn btn-primary'");
+        }
 
         /* Init pager and get designs. */
         $this->app->loadClass('pager', $static = true);
@@ -211,8 +220,11 @@ class design extends control
      */
     public function view($designID = 0)
     {
-        $design = $this->design->getByID($designID);
+        $design    = $this->design->getByID($designID);
         $productID = $this->commonAction($design->project, $design->product, $designID);
+
+        $this->session->set('revisionList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
@@ -221,6 +233,7 @@ class design extends control
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
+        $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
 
         $this->display();
     }
@@ -267,6 +280,7 @@ class design extends control
         $this->view->design  = $design;
         $this->view->project = $this->loadModel('project')->getByID($design->project);
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -298,10 +312,8 @@ class design extends control
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
-        if(empty($repoID)) return print(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
-
         $repo      = $this->loadModel('repo')->getRepoByID($repoID);
-        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end);
+        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         if($_POST)
         {
@@ -389,12 +401,15 @@ class design extends control
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
+        $design = $this->design->getCommit($designID, $pager);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
 
-        $this->view->design = $this->design->getCommit($designID, $pager);
+        $this->view->design = $design;
         $this->view->pager  = $pager;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
 
         $this->display();
     }
@@ -410,7 +425,7 @@ class design extends control
     public function revision($repoID = 0, $projectID = 0)
     {
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision", '', true);
+        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision");
         header("location:" . $repoURL);
     }
 

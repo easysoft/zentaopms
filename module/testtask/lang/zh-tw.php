@@ -3,7 +3,7 @@
  * The testtask module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: zh-tw.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -14,7 +14,7 @@ $lang->testtask->create           = "提交測試";
 $lang->testtask->reportChart      = '報表統計';
 $lang->testtask->delete           = "刪除測試單";
 $lang->testtask->importUnitResult = "導入單元測試結果";
-$lang->testtask->importunitresult = "導入單元測試"; //Fix bug custom required testtask.
+$lang->testtask->importUnit       = "導入單元測試"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "單元測試列表";
 $lang->testtask->unitCases        = "單元測試用例";
 $lang->testtask->view             = "概況";
@@ -183,14 +183,6 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = '按用例結果統計
 $lang->testtask->report->charts['testTaskPerType']      = '按用例類型統計';
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模組統計';
 $lang->testtask->report->charts['testTaskPerRunner']    = '按用例執行人統計';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug嚴重級別分佈';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Bug狀態分佈';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug創建者分佈';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解決者分佈';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解決方案分佈';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Bug模組分佈';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug重要程度階段分佈';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Bug每日處理情況分佈';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

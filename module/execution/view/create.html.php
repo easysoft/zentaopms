@@ -3,18 +3,20 @@
  * The create view of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
+<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc') and ($config->systemMode == 'new');?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
+<?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
-  <div class='modal-dialog mw-500px' id='tipsModal'>
+  <?php $tipsModal = $this->config->systemMode == 'new' ? 'newTipsModal' : 'classicTipsModal';?>
+  <div class='modal-dialog' id='<?php echo $tipsModal;?>'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->tips;?></h4>
@@ -25,7 +27,7 @@
   </div>
 </body>
 </html>
-<?php exit;?>
+<?php helper::end();?>
 <?php endif;?>
 
 <?php include '../../common/view/header.html.php';?>
@@ -42,12 +44,16 @@
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('projectID', $projectID);?>
+<?php js::set('copyExecutionID', $copyExecutionID);?>
+<?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
+<?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create;?></h2>
+      <h2><?php echo $showExecutionExec ? $lang->execution->createExec : $lang->execution->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->copyExec : $lang->execution->copy);?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ($showExecutionExec ? $lang->execution->copyExec : $lang->execution->copy);?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
@@ -60,16 +66,18 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th class='w-120px'><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name;?></th>
+          <th class='w-120px'><?php echo $showExecutionExec ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execCode : $lang->execution->code;?></th>
+          <th><?php echo $showExecutionExec ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->execution->dateRange;?></th>
+          <th id='dateRange'><?php echo $lang->execution->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', (isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d')), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->execution->begin . "' required");?>
@@ -77,19 +85,20 @@
               <?php echo html::input('end', (isset($plan) && !empty($plan->end) ? $plan->end : ''), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->execution->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->execution->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id='dateRangeOption' colspan='2'><?php echo html::radio('delta', $lang->execution->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control'");?>
+              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : ''), "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
+          <th><?php echo $showExecutionExec ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
           <?php
           if($isStage)
@@ -104,6 +113,7 @@
           </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php endif;?>
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
@@ -154,19 +164,19 @@
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}]", $productPlan, $plan->id, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}][]", $productPlan, $plan->id, "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][$branchID][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][]", $productPlan, '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][][]", $productPlan, '', "class='form-control chosen' multiple");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>
@@ -179,7 +189,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->copyTeam;?></th>
-          <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
+          <td><?php echo html::select('teams', $teams, empty($copyExecution) ? $projectID : $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
@@ -212,10 +222,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
+          <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>
+          <th><?php echo $showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=execution&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
@@ -229,7 +239,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>
@@ -248,7 +258,10 @@
   <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4>
+      <div class='titleBox'><h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4></div>
+      <?php if($this->config->systemMode == 'new'):?>
+      <div class='projectSelect'><?php echo html::select("project", $copyProjects, $projectID, "class='form-control chosen' required onchange='loadProjectExecutions(this.value)'");?></div>
+      <?php endif;?>
     </div>
     <div class='modal-body'>
       <?php if(count($executions) == 1):?>
@@ -258,6 +271,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
+      <?php if($config->systemMode == 'new' and $projectID == 0) $executions = $copyExecutions;?>
       <?php foreach ($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>

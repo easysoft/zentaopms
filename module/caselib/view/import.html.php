@@ -11,7 +11,7 @@
             <td align='center'>
               <input type='file' name='file' class='form-control'/>
             </td>
-            <td>
+            <td class="w-150px">
               <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
             </td>
             <td class="w-150px">

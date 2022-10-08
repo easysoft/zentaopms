@@ -3,7 +3,7 @@
  * The release module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -24,6 +24,7 @@ $lang->release->batchUnlinkStory = "Mehrere Storys entfernen";
 $lang->release->batchUnlinkBug   = "Mehrere Bugs entfernen";
 
 $lang->release->confirmDelete      = "Möchten Sie dieses Releas löschen?";
+$lang->release->confirmLink        = "Whether to link the stories completed in the version and the bugs solved to the release?";
 $lang->release->confirmUnlinkStory = "Möchten Sie diese Story löschen?";
 $lang->release->confirmUnlinkBug   = "Möchten Sie diesen Bug löschen?";
 $lang->release->existBuild         = '『Build』『%s』 existiert bereits. Sie können den 『name』 ändern oder ein anderes 『build』 wählen.';
@@ -41,6 +42,7 @@ $lang->release->name          = 'Name';
 $lang->release->marker        = 'Meilensteine';
 $lang->release->date          = 'Datum';
 $lang->release->desc          = 'Beschreibung';
+$lang->release->files         = 'Gehäuse';
 $lang->release->status        = 'Status';
 $lang->release->subStatus     = 'Sub Status';
 $lang->release->last          = 'Letztes Release';
@@ -59,6 +61,12 @@ $lang->release->all           = 'All';
 $lang->release->notify        = 'Notify';
 $lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
+$lang->release->mailContent   = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
+$lang->release->storyList     = '<p style="margin-left: 30px;">Story List：%s。</p>';
+$lang->release->bugList       = '<p style="margin-left: 30px;">Bug List：%s。</p>';
+
+$lang->release->storyTitle = 'Story Name';
+$lang->release->bugTitle   = 'Bug Name';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Pfad : ';
@@ -79,8 +87,14 @@ $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, $extra by  <strong>$actor</strong>.', 'extra' => 'changeStatusList');
 $lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
 
+$lang->release->notifyList['FB'] = "Feedback By";
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
 $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
+$lang->release->notifyList['CT'] = "Copy To";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

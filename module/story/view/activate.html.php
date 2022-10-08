@@ -3,7 +3,7 @@
  * The activate view file of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: activate.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -27,16 +27,6 @@
         <tr>
           <th class='w-80px'><?php echo $lang->story->assignedTo;?></th>
           <td class='w-p45'><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control chosen"');?></td><td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->story->status;?></th>
-          <td>
-            <?php
-            unset($lang->story->statusList['']);
-            unset($lang->story->statusList['closed']);
-            echo html::select('status', $lang->story->statusList, 'active', 'class="form-control chosen"');
-            ?>
-          </td>
         </tr>
         <?php $this->printExtendFields($story, 'table');?>
         <tr>

@@ -3,7 +3,7 @@
  * The testtask module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -14,7 +14,7 @@ $lang->testtask->create           = "提交测试";
 $lang->testtask->reportChart      = '报表统计';
 $lang->testtask->delete           = "删除测试单";
 $lang->testtask->importUnitResult = "导入单元测试结果";
-$lang->testtask->importunitresult = "导入单元测试"; //Fix bug custom required testtask.
+$lang->testtask->importUnit       = "导入单元测试"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "单元测试列表";
 $lang->testtask->unitCases        = "单元测试用例";
 $lang->testtask->view             = "概况";
@@ -128,6 +128,7 @@ $lang->testtask->linkByBuild   = '复制测试单';
 $lang->testtask->linkByStory   = "按{$lang->SRCommon}关联";
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';
+$lang->testtask->browseBySuite = '按套件查看';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
@@ -147,7 +148,7 @@ $lang->testtask->finishedDateLess  = '实际完成日期不能小于开始日期
 $lang->testtask->finishedDateMore  = '实际完成日期不能大于今天';
 
 $lang->testtask->assignedToMe  = '指派给我';
-$lang->testtask->allCases      = '所有用例';
+$lang->testtask->allCases      = '全部用例';
 
 $lang->testtask->lblCases      = '用例列表';
 $lang->testtask->lblUnlinkCase = '移除用例';
@@ -179,18 +180,12 @@ $lang->testtask->report->common = '报表';
 $lang->testtask->report->select = '请选择报表类型';
 $lang->testtask->report->create = '生成报表';
 
+$lang->testtask->report->testTaskPerRunResultTip = '共有%s个用例，通过%s个、未执行%s个、失败%s个';
+
 $lang->testtask->report->charts['testTaskPerRunResult'] = '按用例结果统计';
 $lang->testtask->report->charts['testTaskPerType']      = '按用例类型统计';
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模块统计';
 $lang->testtask->report->charts['testTaskPerRunner']    = '按用例执行人统计';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug严重级别分布';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Bug状态分布';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug创建者分布';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解决者分布';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解决方案分布';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Bug模块分布';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug重要程度阶段分布';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Bug每日处理情况分布';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

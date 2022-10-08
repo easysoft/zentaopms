@@ -3,7 +3,7 @@
  * The model file of install module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: model.php 5006 2013-07-03 08:52:21Z wyd621@gmail.com $
@@ -489,7 +489,7 @@ class installModel extends model
         catch (PDOException $exception)
         {
             echo $exception->getMessage();
-            die();
+            helper::end();
         }
         return true;
     }
@@ -502,14 +502,34 @@ class installModel extends model
      */
     public function grantPriv()
     {
-        if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
+        $data = fixer::input('post')
+            ->stripTags('company')
+            ->get();
+
+        $requiredFields = explode(',', $this->config->install->step5RequiredFields);
+        foreach($requiredFields as $field)
+        {
+            if(empty($data->{$field}))
+            {
+                dao::$errors[] = $this->lang->install->errorEmpty[$field];
+                return false;
+            }
+        }
+
+        $this->loadModel('user');
+        $this->app->loadConfig('admin');
+        /* Check password. */
+        if(!validater::checkReg($this->post->password, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
+        if($this->user->computePasswordStrength($this->post->password) < 1) dao::$errors['password'][] = $this->lang->user->placeholder->passwordStrengthCheck[1];
+        if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+        if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+        if(dao::isError()) return false;
 
         /* Insert a company. */
         $company = new stdclass();
-        $company->name   = $this->post->company;
+        $company->name   = $data->company;
         $company->admins = ",{$this->post->account},";
-        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name', 'notempty')->exec();
-
+        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
         {
             /* Set admin. */
@@ -518,20 +538,83 @@ class installModel extends model
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
-            $this->dao->replace(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
+            $admin->visions  = 'rnd,lite';
+            $this->dao->replace(TABLE_USER)->data($admin)->exec();
+        }
+    }
 
-            /* Update group name and desc on dafault lang. */
-            $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
-            foreach($groups as $group)
+    /**
+     * Update language for group and cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateLang()
+    {
+        /* Update group name and desc on dafault lang. */
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        foreach($groups as $group)
+        {
+            $data = zget($this->lang->install->groupList, $group->name, '');
+            if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
+        }
+
+        /* Update cron remark by lang. */
+        foreach($this->lang->install->cronList as $command => $remark)
+        {
+            $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+        }
+
+        foreach($this->lang->install->langList as $langInfo)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($langInfo['value'])->where('module')->eq($langInfo['module'])->andWhere('`key`')->eq($langInfo['key'])->exec();
+        }
+
+        /* Update lang,stage by lang. */
+        $this->app->loadLang('stage');
+        foreach($this->lang->stage->typeList as $key => $value)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($value)->where('`key`')->eq($key)->exec();
+            $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
+        }
+
+        if($this->config->edition != 'open')
+        {
+            /* Update flowdatasource by lang. */
+            foreach($this->lang->install->workflowdatasource as $id => $name)
             {
-                $data = zget($this->lang->install->groupList, $group->name, '');
-                if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
+                $this->dao->update(TABLE_WORKFLOWDATASOURCE)->set('name')->eq($name)->where('id')->eq($id)->exec();
             }
 
-            /* Update cron remark by lang. */
-            foreach($this->lang->install->cronList as $command => $remark)
+            /* Update workflowrule by lang. */
+            foreach($this->lang->install->workflowrule as $id => $name)
             {
-                $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+                $this->dao->update(TABLE_WORKFLOWRULE)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+        }
+
+        if($this->config->edition == 'max')
+        {
+            /* Update process by lang. */
+            foreach($this->lang->install->processList as $id => $name)
+            {
+                $this->dao->update(TABLE_PROCESS)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            foreach($this->lang->install->activity as $id => $name)
+            {
+                $this->dao->update(TABLE_ACTIVITY)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            foreach($this->lang->install->zoutput as $id => $name)
+            {
+                $this->dao->update(TABLE_ZOUTPUT)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            /* Update basicmeas by lang. */
+            foreach($this->lang->install->basicmeasList as $id => $basic)
+            {
+                $this->dao->update(TABLE_BASICMEAS)->set('name')->eq($basic['name'])->set('unit')->eq($basic['unit'])->set('definition')->eq($basic['definition'])->where('id')->eq($id)->exec();
             }
         }
     }
@@ -555,8 +638,12 @@ class installModel extends model
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
+
+            /* Make the deleted user of demo data undeleted.*/
+            if($this->config->edition == 'open') $this->dao->update(TABLE_USER)->set('deleted')->eq('0')->where('deleted')->eq('1')->exec();
         }
 
+        $config = new stdclass();
         $config->module  = 'common';
         $config->owner   = 'system';
         $config->section = 'global';

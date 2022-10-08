@@ -3,7 +3,7 @@
  * The todo module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
@@ -36,6 +36,7 @@ $lang->todo->cycleConfig  = "Recurrence";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
 $lang->todo->execution    = $lang->executionCommon;
+$lang->todo->changeDate   = "Change Date";
 
 $lang->todo->reasonList['story'] = "Convert to Story";
 $lang->todo->reasonList['task']  = "Convert to Task";
@@ -70,6 +71,7 @@ $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
 $lang->todo->deleted      = 'Deleted';
+$lang->todo->ditto        = 'Ditto';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';
@@ -84,6 +86,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit it?';
 $lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';
 $lang->todo->confirmStory = 'This Todo is linked to Story #%s，Do you want to edit it?';
+$lang->todo->noOptions    = 'You have no %s todo at the moment. Please reselect the Todo type.';
 
 $lang->todo->statusList['wait']   = 'Waiting';
 $lang->todo->statusList['doing']  = 'Doing';
@@ -113,8 +116,9 @@ $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 $lang->todo->today          = 'Todo Today';
+$lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->periods['all']             = 'All Todos';
+$lang->todo->periods['all']             = 'Assigned To Yourself';
 $lang->todo->periods['before']          = 'Unfinished';
 $lang->todo->periods['future']          = 'TBD';
 $lang->todo->periods['thisWeek']        = 'This Week';

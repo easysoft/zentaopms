@@ -3,7 +3,7 @@
  * The upgrade router file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: upgrade.php 4677 2013-04-26 06:23:58Z chencongzhi520@gmail.com $
@@ -11,8 +11,9 @@
  */
 /* Judge my.php exists or not. */
 define('IN_UPGRADE', true);
-$dbConfig = dirname(dirname(__FILE__)) . '/config/db.php';
-$myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
+$basePath = dirname(dirname(__FILE__));
+$dbConfig = $basePath . '/config/db.php';
+$myConfig = $basePath . '/config/my.php';
 if(file_exists($dbConfig))
 {
     if(file_exists($myConfig))
@@ -23,7 +24,7 @@ if(file_exists($dbConfig))
 
     if(!@rename($dbConfig, $myConfig))
     {
-        $configDir = dirname(dirname(__FILE__)) . '/config/';
+        $configDir = $basePath . '/config/';
         echo "请执行命令 chmod 777 $configDir 来修改权限，保证禅道在该目录有操作文件权限" . "<br />";
         echo "Please execute the command 'chmod 777 $configDir' to modify the permissions to ensure that the ZenTao has operating file permissions in this directory";
         exit;
@@ -36,6 +37,12 @@ if(file_exists($dbConfig))
     }
 }
 if(!file_exists($myConfig)) die(header('location: install.php'));
+if(file_exists("{$basePath}/config/ext/secret.php") and !unlink("{$basePath}/config/ext/secret.php"))
+{
+    echo "请删除文件 {$basePath}/config/ext/secret.php，后刷新页面<br />";
+    echo "Please delete {$basePath}/config/ext/secret.php and refresh.";
+    exit;
+}
 
 error_reporting(0);
 
@@ -58,7 +65,19 @@ $app->setDebug();
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(($config->version[0] == $config->installedVersion[0] or (is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]))) and version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
 
+/* If run in container, upgrade automatically. */
+if($app->isContainer())
+{
+    $upgradeModel = $common->loadModel('upgrade');
+    $alterSQL     = $upgradeModel->checkConsistency();
+    if(!empty($alterSQL)) $upgradeModel->dao->query("SET @@sql_mode= '';" . $alterSQL);
+
+    $config->set('default.method', 'execute');
+    $app->session->set('upgrading', true);
+    $app->session->set('step', '');
+    $app->post->set('fromVersion', str_replace( '.', '_', strtolower($config->installedVersion)));
+}
+
 /* Run it. */
 $app->parseRequest();
-$common->checkUpgradeStatus();
-$app->loadModule();
+if($common->checkUpgradeStatus()) $app->loadModule();

@@ -3,7 +3,7 @@
  * The model file of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: model.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -57,7 +57,8 @@ class projectreleaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t3.execution = t4.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll();
@@ -96,128 +97,6 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Create a release.
-     *
-     * @access public
-     * @return int
-     */
-    public function create($projectID = 0)
-    {
-        /* Init vars. */
-        $productID = $this->post->product;
-        $branch    = $this->post->branch;
-        $buildID   = 0;
-        $projectID = $projectID ? $projectID : $this->session->project;
-
-        /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
-        /* Check date must be not more than today. */
-        if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
-
-        if($this->post->build)
-        {
-            $build     = $this->loadModel('build')->getByID($this->post->build);
-            $productID = $build->product;
-            $branch    = $build->branch;
-        }
-
-        $release = fixer::input('post')
-            ->add('project', $projectID)
-            ->add('product', (int)$productID)
-            ->add('branch',  (int)$branch)
-            ->setDefault('stories', '')
-            ->join('stories', ',')
-            ->join('bugs', ',')
-            ->join('mailto', ',')
-            ->setIF($this->post->build == false, 'build', $buildID)
-            ->setIF($productID, 'product', $productID)
-            ->setIF($branch, 'branch', $branch)
-            ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-            ->remove('allchecker,files,labels,uid,sync')
-            ->get();
-
-        /* Auto create build when release is not link build. */
-        if(empty($release->build) and $release->name)
-        {
-            $build = $this->dao->select('*')->from(TABLE_BUILD)
-                ->where('deleted')->eq('0')
-                ->andWhere('name')->eq($release->name)
-                ->andWhere('product')->eq($productID)
-                ->andWhere('branch')->eq($branch)
-                ->fetch();
-            if($build)
-            {
-                return dao::$errors['build'] = sprintf($this->lang->release->existBuild, $release->name);
-            }
-            else
-            {
-                $build = new stdclass();
-                $build->project   = $projectID;
-                $build->product   = (int)$productID;
-                $build->branch    = (int)$branch;
-                $build->name      = $release->name;
-                $build->date      = $release->date;
-                $build->builder   = $this->app->user->account;
-                $build->desc      = $release->desc;
-                $build->execution = 0;
-
-                $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
-                $this->dao->insert(TABLE_BUILD)->data($build)
-                    ->autoCheck()
-                    ->check('name', 'unique', "product = '{$productID}' AND branch = '{$branch}' AND deleted = '0'")
-                    ->batchCheck('name', 'notempty')
-                    ->exec();
-                if(dao::isError()) return false;
-
-                $buildID = $this->dao->lastInsertID();
-                $release->build = $buildID;
-            }
-        }
-
-        if($release->build)
-        {
-            $buildInfo = $this->dao->select('branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
-            $release->branch = $buildInfo->branch;
-            if($this->post->sync == 'true')
-            {
-                $release->stories = $buildInfo->stories;
-                $release->bugs    = $buildInfo->bugs;
-            }
-        }
-
-        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
-        $this->dao->insert(TABLE_RELEASE)->data($release)
-            ->autoCheck()
-            ->batchCheck($this->config->release->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = {$release->product} AND branch = {$release->branch} AND deleted = '0'");
-
-        if(dao::isError())
-        {
-            if(!empty($buildID)) $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq($buildID)->exec();
-            return false;
-        }
-
-        $this->dao->exec();
-
-        if(dao::isError())
-        {
-            if(!empty($buildID)) $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq($buildID)->exec();
-        }
-        else
-        {
-            $releaseID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
-            $this->file->saveUpload('release', $releaseID);
-            $this->loadModel('score')->create('release', 'create', $releaseID);
-
-            return $releaseID;
-        }
-
-        return false;
-    }
-
-    /**
      * Update a release.
      *
      * @param  int    $releaseID
@@ -231,8 +110,12 @@ class projectreleaseModel extends model
         $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
+        /* Check build if build is required. */
+        if(strpos($this->config->release->edit->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
+            ->setDefault('mailto', '')
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
@@ -333,13 +216,13 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Judge btn is clickable or not. 
-     * 
-     * @param  int    $release 
-     * @param  string $action 
+     * Judge btn is clickable or not.
+     *
+     * @param  int    $release
+     * @param  string $action
      * @static
      * @access public
-     * @return bool 
+     * @return bool
      */
     public static function isClickable($release, $action)
     {
@@ -347,5 +230,86 @@ class projectreleaseModel extends model
 
         if($action == 'notify') return $release->bugs or $release->stories;
         return true;
+    }
+
+    /**
+     * Build project release action menu.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($release, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($release);
+    }
+
+    /**
+     * Build project release view action menu.
+     *
+     * @param  object $release
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($release)
+    {
+        $canBeChanged = common::canBeChanged('projectrelease', $release);
+        if($release->deleted || !$canBeChanged || isonlybody()) return '';
+
+        $menu   = '';
+        $params = "releaseID=$release->id";
+
+        if(common::hasPriv('projectrelease', 'changeStatus', $release))
+        {
+            $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+            $menu .= html::a(inlink('changeStatus', "$params&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $this->lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$this->lang->release->changeStatusList[$changedStatus]}'");
+        }
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $editClickable   = $this->buildMenu('projectrelease', 'edit',   $params, $release, 'view', '', '', '', '', '', '', false);
+        $deleteClickable = $this->buildMenu('projectrelease', 'delete', $params, $release, 'view', '', '', '', '', '', '', false);
+        if(common::hasPriv('projectrelease', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('projectrelease', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('projectrelease', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('projectrelease', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+
+
+        return $menu;
+    }
+
+    /**
+     * Build project release browse action menu.
+     *
+     * @param  object $release
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($release)
+    {
+        $canBeChanged = common::canBeChanged('projectrelease', $release);
+        if(!$canBeChanged) return '';
+
+        $menu          = '';
+        $params        = "releaseID=$release->id";
+        $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+
+        if(common::hasPriv('projectrelease', 'linkStory')) $menu .= html::a(inlink('view', "$params&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$this->lang->release->linkStory}'");
+        if(common::hasPriv('projectrelease', 'linkBug'))   $menu .= html::a(inlink('view', "$params&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$this->lang->release->linkBug}'");
+        $menu .= $this->buildMenu('projectrelease', 'changeStatus', "$params&status=$changedStatus", $release, 'browse', $release->status == 'normal' ? 'pause' : 'play', 'hiddenwin', '', '', '',$this->lang->release->changeStatusList[$changedStatus]);
+        $menu .= $this->buildMenu('projectrelease', 'edit',   $params, $release, 'browse');
+        $menu .= $this->buildMenu('projectrelease', 'notify', $params, $release, 'browse', 'bullhorn', '', 'iframe', true);
+        $clickable = $this->buildMenu('projectrelease', 'delete', $params, $release, 'browse', '', '', '', '', '', '', false);
+        if(common::hasPriv('projectrelease', 'delete', $release))
+        {
+            $deleteURL = helper::createLink('projectrelease', 'delete', "$params&confirm=yes");
+            $class = 'btn';
+            if(!$clickable) $class .= ' disabled';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='{$class}' title='{$this->lang->release->delete}'");
+        }
+
+        return $menu;
     }
 }

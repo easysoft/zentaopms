@@ -10,7 +10,7 @@ function setPreview()
         storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
         if(!isonlybody)
         {
-            var concat = config.requestType != 'GET' ? '?'  : '&';
+            var concat = storyLink.indexOf('?') < 0 ? '?'  : '&';
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
 
@@ -156,4 +156,16 @@ $(function()
     });
 
     $('#subNavbar li[data-id="testcase"]').addClass('active');
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('createFields');
+        return false;
+    });
 });

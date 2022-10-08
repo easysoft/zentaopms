@@ -15,7 +15,7 @@ include '../../common/view/chart.html.php';
         <tr class='text-center'>
           <th class='c-id'>      <?php echo $lang->idAB;?></th>
           <th class='w-p30'>     <?php echo $lang->task->name;?></th>
-          <th class='c-pri'>     <?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
           <th class='c-status'>  <?php echo $lang->statusAB;?></th>
           <th class='c-user'>    <?php echo $lang->task->assignedToAB;?></th>
           <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
@@ -28,14 +28,18 @@ include '../../common/view/chart.html.php';
         <?php foreach($tasks as $key => $task):?>
         <tr class='text-center'>
           <td><?php echo $task->id;?></td>
-          <td class='text-left' title="<?php echo $task->name?>"><?php echo $task->name;?></td>
+          <td title="<?php echo $task->name?>"><?php echo $task->name;?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td><?php echo $this->processStatus('task', $task);?></td>
           <td><?php echo zget($users, $task->assignedTo, $task->assignedTo);?></td>
           <td><?php echo $task->estimate;?></td>
           <td><?php echo $task->consumed;?></td>
           <td><?php echo $task->left;?></td>
-          <td><div class='progress-pie' title="<?php echo $task->progress?>%" data-value='<?php echo $task->progress;?>'></div></td>
+          <td>
+            <div class='progress-pie' data-doughnut-size='80' data-color='#00DA88' data-value='<?php echo $task->progress?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+               <div class='progress-info'><?php echo $task->progress;?></div>
+            </div>
+          </td>
         </tr>
           <?php if(!empty($task->children)):?>
           <?php $i = 0;?>
@@ -51,7 +55,11 @@ include '../../common/view/chart.html.php';
           <td><?php echo $child->estimate;?></td>
           <td><?php echo $child->consumed;?></td>
           <td><?php echo $child->left;?></td>
-          <td><div class='progress-pie' title="<?php echo $child->progress?>%" data-value='<?php echo $child->progress;?>'></div></td>
+          <td>
+            <div class='progress-pie' data-doughnut-size='80' data-color='#00DA88' data-value='<?php echo $child->progress?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+               <div class='progress-info'><?php echo $child->progress;?></div>
+            </div>
+          </td>
         </tr>
           <?php $i ++;?>
           <?php endforeach;?>

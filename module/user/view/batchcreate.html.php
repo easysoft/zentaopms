@@ -3,7 +3,7 @@
  * The batch create view of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     story
  * @version     $Id$
@@ -38,7 +38,8 @@
           if(strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
+  $minWidth = (count($visibleFields) > 3) ? 'w-150px' : '';
+  $showVisionList = count($visionList) > 1;
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <div class="table-responsive">
@@ -49,6 +50,9 @@
             <th class='c-dept<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
             <th class='accountThWidth required'><?php echo $lang->user->account;?></th>
             <th class='c-realname required'><?php echo $lang->user->realname;?></th>
+            <?php if($showVisionList):?>
+              <th class='c-visions required'><?php echo $lang->user->visions;?></th>
+            <?php endif;?>
             <th class='c-role<?php echo zget($requiredFields, 'role', '', ' required')?>'><?php echo $lang->user->role;?></th>
             <th class='c-group'><?php echo $lang->user->group;?></th>
             <th class='<?php echo zget($visibleFields, 'email', "$minWidth hidden", $minWidth) . zget($requiredFields, 'email', '', ' required')?>'><?php echo $lang->user->email;?></th>
@@ -71,23 +75,31 @@
         <tbody>
         <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
         <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
-        <?php $groupList = $groupList + array('ditto' => $lang->user->ditto)?>
-        <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
+        <?php $groupList  = $groupList + array('ditto' => $lang->user->ditto);?>
+        <?php $visionList = $visionList + array('ditto' => $lang->user->ditto);?>
+        <?php for($i = 1; $i <= $config->user->batchCreate; $i++):?>
         <tr class='text-center'>
-          <td><?php echo $i+1;?></td>
-          <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
+          <td><?php echo $i;?></td>
+          <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 1 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' onchange='changeEmail($i)'");?></td>
           <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
-          <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
-          <td class='text-left' style='overflow:visible'><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='form-control chosen'");?></td>
+          <?php if($showVisionList):?>
+            <td class='text-left' style='overflow:visible'>
+              <?php echo html::select("visions[$i][]", $visionList, $i > 1 ? 'ditto' : (isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)), "class='form-control chosen' multiple");?>
+            </td>
+          <?php else:?>
+            <?php echo html::hidden("visions[$i][]", $this->config->vision);?>
+          <?php endif;?>
+          <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 1 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
+          <td class='text-left' style='overflow:visible'><?php echo html::select("group[$i][]", $groupList, $i > 1 ? 'ditto' : '', "class='form-control chosen' multiple");?></td>
           <td <?php echo zget($visibleFields, 'email', "class='hidden'")?>><?php echo html::input("email[$i]", '', "class='form-control email_$i' onchange='setDefaultEmail($i)'");?></td>
           <td <?php echo zget($visibleFields, 'gender', "class='hidden'")?>><?php echo html::radio("gender[$i]", (array)$lang->user->genderList, 'm');?></td>
           <td align='left'>
             <div class='input-group'>
             <?php
-            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
+            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)' oninput=\"this.value = this.value.replace(/[^\\x00-\\xff]/g, '');\"");
             echo "<span class='input-group-addon passwordStrength'></span>";
-            if($i != 0) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
+            if($i != 1) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
             ?>
             </div>
           </td>
@@ -128,4 +140,5 @@
 </div>
 <?php echo html::hidden('verifyRand', $rand);?>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
+<?php js::set('batchCreateCount', $config->user->batchCreate)?>
 <?php include '../../common/view/footer.html.php';?>

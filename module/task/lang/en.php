@@ -3,7 +3,7 @@
  * The task module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: en.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Delayed';
 $lang->task->view                = "Task Detail";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimates";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Start";
 $lang->task->startAction         = "Start Task";
@@ -40,19 +41,25 @@ $lang->task->cancel              = "Cancel";
 $lang->task->cancelAction        = "Cancel Task";
 $lang->task->activateAction      = "Activate Task";
 $lang->task->activate            = "Activate";
+$lang->task->activatedDate       = "Activate Date";
 $lang->task->export              = "Export Data";
 $lang->task->exportAction        = "Export Task";
 $lang->task->reportChart         = "Report Chart";
 $lang->task->fromBug             = 'From Bug';
 $lang->task->case                = 'Linked Case';
+$lang->task->process             = 'Process Task';
 $lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = 'Progress';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->allModule           = 'All Module';
+$lang->task->replace             = 'Replace';
+$lang->task->myEffort            = 'My Effort';
+$lang->task->allEffort           = 'Team Effort';
+$lang->task->teamOrder           = 'Order';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -71,6 +78,7 @@ $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';
 $lang->task->typeAB            = 'Type';
+$lang->task->mode              = 'Mode';
 $lang->task->sync2Gitlab       = 'Sync to GitLab';
 $lang->task->pri               = 'Priority';
 $lang->task->mailto            = 'Mailto';
@@ -110,7 +118,6 @@ $lang->task->assignedDate      = 'AssignedDate';
 $lang->task->openedBy          = 'CreatedBy';
 $lang->task->openedDate        = 'CreatedDate';
 $lang->task->openedDateAB      = 'CreatedOn';
-$lang->task->activatedDate     = 'Activated Date';
 $lang->task->finishedBy        = 'FinishedBy';
 $lang->task->finishedByAB      = 'FinishedBy';
 $lang->task->finishedDate      = 'ActualFinished';
@@ -127,8 +134,16 @@ $lang->task->lastEdited        = 'EditedBy';
 $lang->task->recordEstimate    = 'Effort';
 $lang->task->editEstimate      = 'Edit Estimates';
 $lang->task->deleteEstimate    = 'Delete Estimates';
+$lang->task->repo              = 'Repo';
+$lang->task->mr                = 'Merge Request';
+$lang->task->entry             = 'Code Path';
+$lang->task->lines             = 'Lines';
+$lang->task->v1                = 'Version A';
+$lang->task->v2                = 'Version B';
+$lang->task->vision            = 'Vision';
 $lang->task->colorTag          = 'Color';
 $lang->task->files             = 'Files';
+$lang->task->my                = 'My ';
 $lang->task->hasConsumed       = 'Already Cost';
 $lang->task->multiple          = 'Multiple Users';
 $lang->task->multipleAB        = 'M';
@@ -142,6 +157,7 @@ $lang->task->parentAB          = 'Parent';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
+$lang->task->teamMember        = 'Team Member';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
@@ -152,7 +168,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = "Select {$lang->SRCommon}";
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
 $lang->task->noAssigned        = 'Unassigned';
@@ -191,6 +207,9 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
 
+$lang->task->modeList['linear'] = 'Serial';
+$lang->task->modeList['multi']  = 'Parallel';
+
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Go to Story List';
@@ -202,26 +221,31 @@ $lang->task->legendDesc   = 'Task Description';
 $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
-$lang->task->confirmDelete          = "Do you want to delete this task?";
-$lang->task->confirmDeleteEstimate  = "Do you want to delete it?";
-$lang->task->copyStoryTitle         = "Copy Story";
-$lang->task->afterSubmit            = "Next ";
-$lang->task->successSaved           = "Created!";
-$lang->task->delayWarning           = " <strong class='text-danger'> Delay %s days </strong>";
-$lang->task->remindBug              = "This task is converted from a bug. Do you want to update the Bug:%s?";
-$lang->task->confirmChangeExecution = "If you change {$lang->executionCommon}, Module, Story and AssignedTo will also be changed. Do you want to change it?";
-$lang->task->confirmFinish          = '"Left Hour" is 0. Do you want to change the status to "Finished"?';
-$lang->task->confirmRecord          = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
-$lang->task->confirmTransfer        = '"Left Hour" is 0，Do you want to transfer task?';
-$lang->task->noticeTaskStart        = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
-$lang->task->noticeLinkStory        = "No story has been linked. You can %s for this project, then %s.";
-$lang->task->noticeSaveRecord       = 'Your Hour is not saved. Please save it first.';
-$lang->task->commentActions         = '%s. %s, commented by <strong>%s</strong>.';
-$lang->task->deniedNotice           = 'Only the %s can %s the task.';
-$lang->task->noTask                 = 'No tasks yet. ';
-$lang->task->createDenied           = 'Create Task is denied in this project';
-$lang->task->cannotDeleteParent     = 'Cannot delete parent task';
-$lang->task->addChildTask           = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
+$lang->task->confirmDelete             = "Do you want to delete this task?";
+$lang->task->confirmDeleteEstimate     = "Do you want to delete it?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
+$lang->task->copyStoryTitle            = "Copy Story";
+$lang->task->afterSubmit               = "Next ";
+$lang->task->successSaved              = "Created!";
+$lang->task->delayWarning              = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->task->remindBug                 = "This task is converted from a bug. Do you want to update the Bug:%s?";
+$lang->task->remindIssue               = "This task is converted from a issue. Do you want to update the Issue:%s?";
+$lang->task->confirmChangeExecution    = "If you change {$lang->executionCommon}, Module, Story and AssignedTo will also be changed. Do you want to change it?";
+$lang->task->confirmFinish             = '"Left Hour" is 0. Do you want to change the status to "Finished"?';
+$lang->task->confirmRecord             = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
+$lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
+$lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
+$lang->task->noticeLinkStory           = "No story has been linked. You can %s for this project, then %s.";
+$lang->task->noticeSaveRecord          = 'Your Hour is not saved. Please save it first.';
+$lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
+$lang->task->commentActions            = '%s. %s, commented by <strong>%s</strong>.';
+$lang->task->deniedNotice              = 'Only the %s can %s the task.';
+$lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
+$lang->task->transferNotice            = 'Linear task cannot be transferred.';
+$lang->task->noTask                    = 'No tasks yet. ';
+$lang->task->createDenied              = 'Create Task is denied in this project';
+$lang->task->cannotDeleteParent        = 'Cannot delete parent task';
+$lang->task->addChildTask              = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
@@ -231,20 +255,26 @@ $lang->task->error->recordMinus       = 'Work hours should not be negative numbe
 $lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Total Cost" must be > the last number.';
+$lang->task->error->dateEmpty         = 'Please enter "Date"';
 $lang->task->error->consumedThisTime  = 'Please enter "Hours Cost"';
 $lang->task->error->left              = 'Please enter "Hours Left"';
 $lang->task->error->work              = '"Comment" must be <  %d characters.';
-$lang->task->error->skipClose         = 'Task: %s is not "Finished” or “Cancelled”. Do you want to close it?';
+$lang->task->error->teamMember        = 'Team members must be at least 2 people';
+$lang->task->error->skipClose         = 'Task: %s is not “Finished” or “Cancelled”. Do you want to close it?';
+$lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->consumed          = 'Task: %s hour must be < 0. Ignore changes to this task.';
 $lang->task->error->assignedTo        = 'Multi-user task in the current status cannot be assigned to a member who is not in the task team.';
-$lang->task->error->consumedEmpty     = '"Current Cost" should not be 0.';
+$lang->task->error->consumedEmpty     = 'Cannot finish the task with 0 "Total Cost", please enter "Current Cost".';
+$lang->task->error->consumedEmptyAB   = '"Current Cost" is 0, please confirm whether you submit.';
 $lang->task->error->deadlineSmall     = '"Deadline" must be greater than "StartDate".';
 $lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
-$lang->task->error->date              = 'The date should be >= today.';
+$lang->task->error->date              = 'The date should be <= today.';
+$lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left" cannot be 0';
+$lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 
 /* Report. */
 $lang->task->report = new stdclass();
@@ -333,3 +363,6 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Estimates';
+
+$lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
+$lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';

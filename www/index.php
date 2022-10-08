@@ -5,7 +5,7 @@
  * All request should be routed by this router.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.php 5036 2013-07-06 05:26:44Z wyd621@gmail.com $
@@ -36,16 +36,15 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 /* installed or not. */
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
+/* Check for need upgrade. */
+$config->installedVersion = $app->getInstalledVersion();
+if($config->version != $config->installedVersion) die(header('location: upgrade.php'));
 
 /* Run the app. */
 $common = $app->loadCommon();
 
 /* Check the request is getconfig or not. */
 if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8Bom($app->exportConfig()));
-
-/* Check for need upgrade. */
-$config->installedVersion = $common->loadModel('setting')->getVersion();
-if(((is_numeric($config->version[0]) and is_numeric($config->installedVersion[0])) or $config->version[0] == $config->installedVersion[0]) and version_compare($config->version, $config->installedVersion, '>')) die(header('location: upgrade.php'));
 
 /* Remove install.php and upgrade.php. */
 if(file_exists('install.php') or file_exists('upgrade.php'))
@@ -69,7 +68,9 @@ if($app->clientDevice == 'mobile' and (strpos($config->version, 'pro') === 0 or 
 if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->view = 'xhtml';
 
 $app->parseRequest();
+if(!$app->setParams()) return;
 $common->checkPriv();
+$common->checkIframe();
 $app->loadModule();
 
 /* Flush the buffer. */

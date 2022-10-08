@@ -57,6 +57,7 @@ $(function()
             $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIdList[]':[id]}, function()
             {
                 refresh();
+                location.reload();
             });
             return true;
         }

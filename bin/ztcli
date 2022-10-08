@@ -15,7 +15,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 define('IN_SHELL', true);
 
 /* Judge the args. */
-if($argc != 2) die('Usage: ' . basename(__FILE__) . " <request>\n");
+if($argc < 2 or $argc > 3) die('Usage: ' . basename(__FILE__) . " <request>\n");
 
 /* Parse the request into params. */
 $request = parse_url(trim($argv[1]));
@@ -33,6 +33,13 @@ include './framework/helper.class.php';
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $common = $app->loadCommon();
 
+/* Set the PATH_INFO request. */
+if(!empty($argv[2]) && $argv[2] == 'pathinfo')
+{
+    $config->requestType = 'PATH_INFO';
+    $config->requestFix  = '-';
+}
+
 /* Set the PATH_INFO variable. */
 if($config->requestType == 'PATH_INFO')
 {
@@ -43,7 +50,7 @@ if($config->requestType == 'PATH_INFO')
     {
         $_SERVER['PATH_INFO'] = $path['basename'];
     }
-    else 
+    else
     {
         /* url like http://pms.zentao.net/zentao/my/, PATH_INFO is 'my'. */
         if(is_dir('./module/' . $path['basename']))

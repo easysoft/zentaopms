@@ -3,7 +3,7 @@
  * The view of mr link module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      gang zeng
  * @package     repo
  * @version     $Id: link.html.php $
@@ -37,8 +37,8 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->view);?></li>
-      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li><?php echo html::a(inlink('view', "MRID={$MR->id}"), $lang->mr->view);?></li>
+      <li><?php echo html::a(inlink('diff', "MRID={$MR->id}"), $lang->mr->viewDiff);?></li>
       <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
       <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
       <li class='<?php if($type == 'task') echo 'active'?>'><a href='#tasks' data-toggle='tab'><?php echo  html::icon('todo', 'text-info') . ' ' . $lang->mr->linkedTasks;?></a></li>
@@ -72,7 +72,7 @@
                 <?php if($canOrder):?>
                 <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-150px text-left'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -89,7 +89,7 @@
               ?>
               <?php foreach($stories as $story):?>
               <?php
-              $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
+              $viewLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);
               $totalEstimate += $story->estimate;
               ?>
               <tr data-id='<?php echo $story->id;?>'>
@@ -102,7 +102,7 @@
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title);
+                  echo html::a($viewLink , $story->title, '', 'class="iframe"');
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -153,7 +153,7 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title=<?php echo $lang->pri;?>> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
@@ -168,7 +168,7 @@
                   <?php printf('%03d', $bug->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', 'class="iframe"');?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
@@ -215,7 +215,7 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title=<?php echo $lang->pri;?>> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('name',      $orderBy, $vars, $lang->task->name);?></th>
                 <th class='c-user'> <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedToAB);?></th>
@@ -230,7 +230,7 @@
                   <?php printf('%03d', $task->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
+                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="iframe"');?></td>
                 <td><?php echo zget($users, $task->finishedBy);?></td>
                 <td><?php echo zget($users, $task->assignedTo);?></td>
                 <td>

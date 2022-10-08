@@ -3,7 +3,7 @@
  * The to20 view file of upgrade module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     upgrade
  * @version     $Id$
@@ -16,17 +16,13 @@
     <form method='post'>
       <div class='panel-title text-center'>
         <?php
-        if(isset($config->maxVersion))
+        if($config->edition == 'max')
         {
             echo $lang->upgrade->toMAXGuide;
         }
-        elseif(isset($config->bizVersion))
+        elseif($config->edition == 'biz')
         {
             echo $lang->upgrade->toBIZ5Guide;
-        }
-        elseif(isset($config->proVersion))
-        {
-            echo $lang->upgrade->toPRO10Guide;
         }
         else
         {

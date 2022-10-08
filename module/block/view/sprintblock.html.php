@@ -3,7 +3,7 @@
  * The sprint block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -14,7 +14,7 @@
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.status-bars {display: table;width: 60%;height: 140px;padding: 5px;padding-top: 50px;margin: 0;overflow: hidden;}
+.status-bars {display: table; width: 80%; height: 140px; padding: 5px; padding-top: 50px; margin: 0; overflow: hidden;}
 </style>
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">

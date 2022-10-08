@@ -5,7 +5,7 @@
 .step-actions {width: 100px;}
 #steps .active td {transition: background-color .5s;}
 #steps .step-steps {resize: none; max-height: 30px;}
-#steps .step-expects {display: none;}
+#steps .step-expects {resize: none;}
 #steps .step-item .step-item-id {display: table-cell; min-width: 40px;}
 #steps .step-item .step-id {color: transparent;}
 #steps .step-id {font-weight: bold;}
@@ -21,6 +21,7 @@
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 #steps .step-type-menu-box {position: relative;}
 #steps .step-type-menu {position: absolute; top: 25px; right: 0; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,.175); background-color: #fff; display: none; border: 1px solid #bbb; min-width: 60px;}
+#steps .step-group .step-expects {display: none;}
 #steps .step-step[data-type="item"] .step-type-menu > a[data-value="item"] {display: none;}
 #steps .step-type-current {display: block; padding: 5px 10px; position: relative; line-height: 20px;}
 #steps .step-type-toggle:hover .step-type-current {background-color: #edf3fe; color: #03c;}

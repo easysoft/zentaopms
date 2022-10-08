@@ -44,3 +44,6 @@ $lang->message->label->blocked      = 'block';
 $lang->message->label->bugconfirmed = 'confirm';
 $lang->message->label->compilepass  = 'compile pass';
 $lang->message->label->compilefail  = 'compile fail';
+$lang->message->label->archived     = 'archive';
+$lang->message->label->restore      = 'restore';
+$lang->message->label->moved        = 'move';

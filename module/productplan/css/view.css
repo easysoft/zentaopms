@@ -31,3 +31,5 @@ ol, ul {padding-left: 20px;}
 #mainMenu .page-title {display: flex;}
 #mainMenu .btn-toolbar .page-title .label {top: 9px; margin-right: 10px; height: 16px;}
 #mainMenu .btn-toolbar .page-title .text {max-width: 434px; overflow: hidden; white-space:nowrap; margin-right: 6px;}
+#actionsBox a:last-of-type + .divider {display: none;}
+#actionsBox div.divider:first-child {display: none;}

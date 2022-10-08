@@ -2,8 +2,22 @@
 $(function()
 {
     removeDitto();
-    if($('th.c-name').width() < 200) $('th.c-name').width(200);
-    if(taskConsumed > 0) alert(addChildTask);
+    $name = $('th.c-name');
+    if($name.width() < 165) $name.width(165);
+    if(taskConsumed > 0) bootbox.alert(addChildTask);
+    $('#customField').on('click', function(){$('#tableBody .chosen-with-drop').removeClass('chosen-with-drop chosen-container-active')});
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('batchCreateFields', 9, $name, 165);
+        return false;
+    });
 });
 
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
@@ -70,6 +84,22 @@ function setStories(moduleID, executionID, num)
 function copyStoryTitle(num)
 {
     var storyTitle = $('#story' + num).find('option:selected').text();
+    var storyValue = $('#story' + num).find('option:selected').val();
+
+    if(storyValue === 'ditto')
+    {
+        for(var i = num; i <= num && i >= 1; i--)
+        {
+            var selectedValue = $('select[id="story' + i +'"]').val();
+            var selectedTitle = $('select[id="story' + i +'"]').find('option:selected').text();
+            if(selectedValue !== 'ditto')
+            {
+                storyTitle = selectedTitle;
+                break;
+            }
+        }
+    }
+
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
@@ -86,8 +116,21 @@ function copyStoryTitle(num)
 /* Set the story module. */
 function setStoryRelated(num)
 {
-    var storyID = $('#story' + num).val();
-    if(storyID && storyID != 'ditto')
+    setPreview(num);
+}
+
+/**
+ * Set preview.
+ *
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setPreview(num)
+{
+    var storyID   = $('#story' + num).val();
+    var storyLink = '#';
+    if(storyID != 0  && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
         $.getJSON(link, function(storyInfo)
@@ -101,15 +144,21 @@ function setStoryRelated(num)
         });
 
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
-        var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+        if(!isonlybody)
+        {
+            var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
+            storyLink  = storyLink + concat + 'onlybody=yes';
+        }
+
         $('#preview' + num).removeAttr('disabled');
+        $('#preview' + num).modalTrigger({type:'iframe'});
+        $('#preview' + num).css('pointer-events', 'auto');
         $('#preview' + num).attr('href', storyLink);
     }
     else
     {
-        storyLink  = '#';
         $('#preview' + num).attr('disabled', true);
+        $('#preview' + num).css('pointer-events', 'none');
         $('#preview' + num).attr('href', storyLink);
     }
 }
@@ -184,6 +233,27 @@ function markStoryTask()
     });
 }
 
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
+}
+
 $(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
 {
     var select = $(this).closest('td').find('select');
@@ -203,6 +273,7 @@ $(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-dr
         $(select).trigger("change");
     }
 })
+
 $(document).on('mousedown', 'select', function()
 {
     if($(this).val() == 'ditto')
@@ -232,7 +303,7 @@ $(function()
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
 
-    if(storyID != 0) setStoryRelated(0);
+    if(storyID != 0) setStoryRelated($('#batchCreateForm table tbody tr:first [id^=story]:first').attr('id').replace('story', ''));
 
     $(document).keydown(function(event)
     {

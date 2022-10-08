@@ -3,7 +3,7 @@
  * The productplans entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -24,7 +24,7 @@ class releasesEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('release', 'browse');
-        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
+        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         /* Response */
         $data = $this->getData();

@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 2343 2011-11-21 05:24:56Z wwccss $
@@ -16,7 +16,8 @@
     <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
-    <div class="tip"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->product->projectInfo;?>></icon></div>
+    <div class="tip"><a data-toggle='tooltip' title='<?php echo $lang->product->projectInfo;?>'><i class='icon-help'></i></a></div>
+
   </div>
   <?php if($config->systemMode == 'new' and $branchStatus != 'closed'):?>
   <div class="btn-toolbar pull-right">
@@ -29,7 +30,11 @@
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
     <p>
+    <?php if($config->systemMode == 'new'):?>
       <span class="text-muted"><?php echo $lang->project->empty;?></span>
+    <?php else:?>
+      <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
+    <?php endif;?>
     </p>
   </div>
   <?php else:?>
@@ -44,11 +49,13 @@
           <?php else:?>
           <th><?php echo $lang->execution->name;?></th>
           <?php endif;?>
+          <?php if(strpos('all,undone', $status) !== false):?>
+          <th class='c-status'><?php echo $lang->project->status;?></th>
+          <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
+          <th class="c-budget text-right"><?php echo $lang->project->budget;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
           <th class='c-date'><?php echo $lang->project->end;?></th>
-          <th class='c-status'><?php echo $lang->project->status;?></th>
-          <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
           <th class="c-number text-right"><?php echo $lang->project->estimate;?></th>
           <th class="c-number text-right"><?php echo $lang->project->consume;?></th>
           <th class="c-progress"><?php echo $lang->project->progress;?></th>
@@ -66,33 +73,34 @@
             <?php
             if($config->systemMode == 'new')
             {
-                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name);
+                echo html::a($this->createLink('project', 'index', 'project=' . $project->id), $project->name, '', "title='{$project->name} ({$lang->project->{$project->model}})'");
             }
             else
             {
-                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name);
+                echo html::a($this->createLink('execution', 'task', 'project=' . $project->id), $project->name, '', "title='{$project->name}'");
             }
             ?>
           </td>
+          <?php if(strpos('all,undone', $status) !== false):?>
+          <?php $statusTitle = $this->processStatus('project', $project);?>
+          <td class='c-status' title='<?php echo $statusTitle;?>'>
+            <span class="status-project status-<?php echo $project->status?>"><?php echo $statusTitle;?></span>
+          </td>
+          <?php endif;?>
           <td class='padding-right'>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
           </td>
-          <td class='padding-right text-left'><?php echo $project->begin;?></td>
-          <td class='padding-right text-left'><?php echo $project->end;?></td>
-          <?php $status = $this->processStatus('project', $project);?>
-          <td class='c-status' title='<?php echo $status;?>'>
-            <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
-          </td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
-          <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
-          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
+          <td title='<?php echo $budgetTitle;?>' class="text-ellipsis text-right"><?php echo $budgetTitle;?></td>
+          <td class='padding-right text-left'><?php echo $project->begin;?></td>
+          <td class='padding-right text-left'><?php echo $project->end;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
           <td>
-            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo $project->hours->progress;?></div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo round($project->hours->progress);?></div>
             </div>
           </td>
         </tr>

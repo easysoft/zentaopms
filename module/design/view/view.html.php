@@ -3,7 +3,7 @@
  * The view of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: view.html.php 4903 2020-09-02 09:32:59Z tianshujie@easycorp.ltd $
@@ -12,9 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('type', $design->type);?>
+<?php js::set('repos', $repos);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
+    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "projectID=$design->project");?>
     <?php if(!isonlybody()) echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
@@ -40,12 +42,15 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($this->session->designList);?>
+        <?php
+        $backLink = $this->createLink('design', 'browse', "projectID=$design->project");
+        common::printBack($app->session->designList != false ? $app->session->designList : $backLink);
+        ?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
         <?php
         common::printIcon('design', 'assignTo',   "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
         common::printIcon('design', 'edit',       "designID=$design->id", $design, 'button', 'alter');
         common::printIcon('design', 'delete',     "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
@@ -69,7 +74,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->design->story;?></th>
-              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story", '', true), zget($stories, $design->story), '',"class=iframe") : '';?></td>
+              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->submission;?></th>

@@ -3,7 +3,7 @@
  * The complete file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: complete.html.php 935 2010-07-06 07:49:24Z jajacn@126.com $
@@ -13,13 +13,19 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('task', $task);?>
+<?php js::set('consumedEmpty', $lang->task->error->consumedEmptyAB);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <?php if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
+        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->finish);?></p>
+        <?php else:?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->finish);?></p>
+        <?php endif;?>
       </div>
     </div>
     <?php else:?>
@@ -41,7 +47,7 @@
         </tr>
         <?php if(!empty($task->team)):?>
         <tr>
-          <th class='thWidth'><?php echo $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo $lang->task->my . $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>
@@ -50,24 +56,53 @@
           <td>
             <div class='input-group'><?php echo html::input('currentConsumed', 0, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
           </td>
-        </tr>
-        <tr>
-          <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
-          <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
-          <?php 
-          echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
-          js::set('consumed', $consumed);
-          ?>
+            <div class='table-row'>
+              <div class='table-col strong w-80px text-right' style='padding-right:10px'><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?> </div>
+              <div class='table-col'>
+                <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
+                <?php
+                echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
+                js::set('consumed', $consumed);
+                ?>
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
-          <th><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
-          <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
+        </tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
+          <th><?php echo $lang->task->assign;?></th>
+          <td>
+            <?php
+            if(!empty($task->team) and $task->mode == 'linear')
+            {
+                echo zget($members, $task->nextBy) . html::hidden('assignedTo', $task->nextBy);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");
+            }
+            ?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->realStarted;?></th>
-          <td><div class='datepicker-wrapper'><?php echo html::input('realStarted', $task->realStarted != '0000-00-00 00:00:00' ? $task->realStarted : '', "class='form-control form-datetime'");?></div></td><td></td>
+          <td>
+            <div class='datepicker-wrapper'>
+            <?php
+            $realStarted = $task->realStarted;
+            $readonly    = 'readonly';
+            if(helper::isZeroDate($realStarted))
+            {
+                $realStarted = '';
+                $readonly    = '';
+            }
+            ?>
+            <?php echo html::input('realStarted', $realStarted, "class='form-control" . ($readonly ? '' : ' form-datetime') . "' $readonly");?>
+            </div>
+          </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->finishedDate;?></th>

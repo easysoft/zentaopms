@@ -29,7 +29,9 @@ function deleteFile(fileID)
 function downloadFile(fileID, extension, imageWidth)
 {
     if(!fileID) return;
-    var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
+    var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    url    += url.indexOf('?') >= 0 ? '&' : '?';
+    url    += sessionString;
     window.open(url, '_blank');
     return false;
 }
@@ -53,7 +55,7 @@ $(document).ready(function()
 {
     // First unbind ajaxForm for form.
     $("#dataform").unbind('submit');
-    
+
     // Bind ajaxForm for form again.
     $('#dataform').ajaxForm(
     {

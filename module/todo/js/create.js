@@ -16,6 +16,7 @@ $(function()
             $('.cycleConfig').removeClass('hidden');
             $('#switchDate').closest('.input-group-addon').addClass('hidden');
             $('#type').closest('tr').addClass('hidden');
+            $('#type').val('custom');
             loadList('custom'); //Fix bug 3278.
         }
         else
@@ -31,7 +32,7 @@ $(function()
     });
 
     $('#pri').on('change', function()
-    {   
+    {
         var $select = $(this);
         var $selector = $select.closest('.pri-selector');
         var value = $select.val();

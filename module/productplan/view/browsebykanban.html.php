@@ -3,7 +3,7 @@
  * The browsebykanban view file of plan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     plan
  * @version     $Id: browsebykanban.html.php 4707 2021-12-27 16:07:41Z $
@@ -52,7 +52,7 @@
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
       <?php foreach($lang->productplan->orderList as $order => $label):?>
       <?php $active = $orderBy == $order ? 'active' : '';?>
-        <li class='<?php echo $active;?>'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branchID&browseType=$browseType&orderBy=$order"), $label);?></li>
+        <li class='<?php echo $active;?>'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"), $label);?></li>
       <?php endforeach;?>
       </ul>
     </div>

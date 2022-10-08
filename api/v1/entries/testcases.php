@@ -3,7 +3,7 @@
  * The testcases entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -23,8 +23,20 @@ class testcasesEntry extends entry
         if(empty($productID)) $productID = $this->param('product', 0);
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
+        $this->app->cookie->caseModule = 0;
+        $this->app->cookie->caseSuite  = 0;
+
+        $type     = $this->param('status', 'all');
+        $param    = 0;
+        $moduleID = $this->param('module', 0);
+        if($moduleID)
+        {
+            $type  = 'byModule';
+            $param = $moduleID;
+        }
+
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', ''), $type, $param, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
@@ -71,9 +83,11 @@ class testcasesEntry extends entry
             $stepType = array();
             foreach($this->requestBody->steps as $step)
             {
+                $type = isset($step->type) ? $step->type : 'step';
+
                 $steps[]    = $step->desc;
-                $expects[]  = $step->expect;
-                $stepType[] = 'item';
+                $expects[]  = $type == 'group' ? '' : $step->expect;
+                $stepType[] = $type;
             }
             $this->setPost('steps',    $steps);
             $this->setPost('expects',  $expects);

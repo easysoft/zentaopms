@@ -413,25 +413,24 @@ class baseControl
          * 首先找sitecode下的扩展文件，如果没有，再找ext下的扩展文件。
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
-        if($this->app->siteCode)
-        {
-            $extPath     = dirname(dirname(realpath($viewFile))) . "/ext/_{$this->app->siteCode}/view";
-            $extViewFile = $extPath . basename($viewFile);
+        $moduleName = basename(dirname(dirname(realpath($viewFile))));
+        $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
 
-            if(file_exists($extViewFile))
+        $checkedOrder = array('site', 'saas', 'custom', 'vision', 'xuan', 'common');
+        $fileName     = basename($viewFile);
+        foreach($checkedOrder as $checkedType)
+        {
+            if(!empty($extPath[$checkedType]))
             {
-                helper::cd($extPath);
-                return $extViewFile;
+                $extViewFile = $extPath[$checkedType] . $fileName;
+                if(file_exists($extViewFile))
+                {
+                    helper::cd($extPath[$checkedType]);
+                    return $extViewFile;
+                }
             }
         }
 
-        $extPath     = dirname(dirname(realpath($viewFile))) . '/ext/view/';
-        $extViewFile = $extPath . basename($viewFile);
-        if(file_exists($extViewFile))
-        {
-            helper::cd($extPath);
-            return $extViewFile;
-        }
         return false;
     }
 
@@ -479,20 +478,15 @@ class baseControl
 
         if(!empty($cssExtPath))
         {
-            $cssMethodExt = $cssExtPath['common'] . $methodName . DS;
-            $cssCommonExt = $cssExtPath['common'] . 'common' . DS;
-
-            $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
-            if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
-
-            $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
-            if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
-
-            if(!empty($cssExtPath['site']))
+            $realModulePath = realPath($modulePath);
+            foreach($cssExtPath as $cssPath)
             {
-                $cssMethodExt = $cssExtPath['site'] . $methodName . DS;
-                $cssCommonExt = $cssExtPath['site'] . 'common' . DS;
-                $cssExtFiles  = glob($cssCommonExt . $devicePrefix . '*.css');
+                if(empty($cssPath)) continue;
+
+                $cssMethodExt = $cssPath . $methodName . DS;
+                $cssCommonExt = $cssPath . 'common' . DS;
+
+                $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
                 if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
 
                 $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
@@ -579,19 +573,13 @@ class baseControl
 
         if(!empty($jsExtPath))
         {
-            $jsMethodExt = $jsExtPath['common'] . $methodName . DS;
-            $jsCommonExt = $jsExtPath['common'] . 'common' . DS;
-
-            $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
-            if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-            $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
-            if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-            if(!empty($jsExtPath['site']))
+            $realModulePath = realPath($modulePath);
+            foreach($jsExtPath as $jsPath)
             {
-                $jsMethodExt = $jsExtPath['site'] . $methodName . DS;
-                $jsCommonExt = $jsExtPath['site'] . 'common' . DS;
+                if(empty($jsPath)) continue;
+
+                $jsMethodExt = $jsPath . $methodName . DS;
+                $jsCommonExt = $jsPath . 'common' . DS;
 
                 $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
@@ -771,6 +759,7 @@ class baseControl
          */
         $this->app->setModuleName($moduleName);
         $this->app->setMethodName($methodName);
+        $this->app->setControlFile();
 
         if(!is_array($params)) parse_str($params, $params);
         $this->app->params = $params;
@@ -793,8 +782,34 @@ class baseControl
              * 设置公共扩展。
              * set common extension.
              */
-            $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
-            $file2Included       = file_exists($commonActionExtFile) ? $commonActionExtFile : $moduleControlFile;
+            $file2Included = $moduleControlFile;
+
+            if(!empty($actionExtPath['common']))
+            {
+                $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
+
+            if(!empty($actionExtPath['xuan']))
+            {
+                $commonActionExtFile = $actionExtPath['xuan'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
+
+            if(!empty($actionExtPath['vision']))
+            {
+                $commonActionExtFile = $actionExtPath['vision'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
+
+            $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
+            if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+
+            if(!empty($actionExtPath['saas']))
+            {
+                $commonActionExtFile = $actionExtPath['saas'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
 
             if(!empty($actionExtPath['site']))
             {
@@ -903,11 +918,17 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            print(urldecode(json_encode($data)));
-            $response = helper::removeUTF8Bom(ob_get_clean());
+            if(defined('RUN_MODE') and RUN_MODE == 'api')
+            {
+                print(urldecode(json_encode($data)));
+                $response = helper::removeUTF8Bom(ob_get_clean());
+                return print($response);
+            }
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api') return print($response);
+            $obLevel = ob_get_level();
+            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
+            $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             die($response);
         }
 
@@ -935,9 +956,9 @@ class baseControl
                     die(isset($data['message']) ? $data['message'] : 'fail');
                 }
 
-                $message = json_decode(json_encode((array)$data['message']));
-                foreach((array)$message as $item => $errors) $message->$item = implode(',', $errors);
-                die(js::alert(strip_tags(implode('\n', (array)$message))));
+                $message = json_decode(json_encode($data['message']), true);
+                foreach($message as $item => $errors) $message[$item] = implode(',', $errors);
+                die(js::alert(strip_tags(implode('\n', $message))));
             }
             die('fail');
         }

@@ -1,19 +1,22 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
+<?php $sessionString = session_name() . '=' . session_id();?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
-          <div class="title" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></div>
+          <div class="title" title="<?php echo $doc->title;?>">
+            <?php echo $doc->title;?>
+            <?php if($doc->deleted):?>
+            <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
+            <?php endif;?>
+          </div>
           <div class="info">
-            <div class="version">
+            <?php $version = $version ? $version : $doc->version;?>
+            <div class="version" data-version='<?php echo $version;?>'>
               <div class='btn-group'>
                 <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version ? $version : $doc->version;?>
+                  #<?php echo $version;?>
                   <span class="caret"></span>
                 </a>
                 <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -41,7 +44,7 @@ $sessionString .= session_name() . '=' . session_id();
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
 
-            <?php if(isset($this->config->maxVersion) and $this->app->tab == 'project'):?>
+            <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
             $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
@@ -69,7 +72,7 @@ $sessionString .= session_name() . '=' . session_id();
             </p>
             <?php endif;?>
             <?php
-            if($doc->type == 'url')
+            if($doc->type == 'url' and $autoloadPage)
             {
                 $url = $doc->content;
                 if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
@@ -98,6 +101,10 @@ $sessionString .= session_name() . '=' . session_id();
                     echo "</div></div>";
                 }
             }
+            elseif($doc->contentType == 'markdown')
+            {
+                echo "<textarea id='markdownContent'></textarea>";
+            }
             else
             {
                 echo $doc->content;
@@ -110,7 +117,15 @@ $sessionString .= session_name() . '=' . session_id();
                 <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
               </a>
               <span class='right-icon'>
-                <?php if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', 'fileID=' . $file->id) . $sessionString, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");?>
+                <?php
+                if(common::hasPriv('file', 'download'))
+                {
+                    $downloadLink  = $this->createLink('file', 'download', 'fileID=' . $file->id);
+                    $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+                    $downloadLink .= $sessionString;
+                    echo html::a($downloadLink, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");
+                }
+                ?>
                 <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
               </span>
             </div>
@@ -199,7 +214,7 @@ $sessionString .= session_name() . '=' . session_id();
   </div>
 </div>
 
-<?php if(isset($this->config->maxVersion)):?>
+<?php if($this->config->edition == 'max'):?>
 <div class="modal fade" id="importToPracticeLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
@@ -273,3 +288,18 @@ $sessionString .= session_name() . '=' . session_id();
 </div>
 <?php endif;?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(String(markdownText));
+    simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+})
+</script>
+<?php endif;?>

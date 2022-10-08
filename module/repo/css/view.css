@@ -2,7 +2,7 @@
 .code .content {border: 1px solid #CCC; padding: 0;}
 .repoCode pre {margin: 0; padding: 0; background: white; border: none;}
 tr,th,td {border-bottom: none;}
-.repoCode pre > table > tbody > tr > th {border: none; background-color: #ECECEC; width: 40px; text-align: right; vertical-align: top;}
+.repoCode pre > table > tbody > tr > th {border-right: 1px solid #E4E4E4; background: #fafafa; color: #999; width: 40px; text-align: right; vertical-align: top;}
 .repoCode pre > table > tbody > tr > th, .repoCode pre > table > tbody > tr > td {padding: 1px 3px;}
 .repoCode pre .commentContent {line-height: 1.4;}
 .repoCode pre > table {border: 0px; width: 100%;}
@@ -13,4 +13,5 @@ tr,th,td {border-bottom: none;}
 .panel .panel-heading .action .input-group {margin-top: -6px; margin-right: -10px;}
 .body-modal .panel-actions {right: 30px;}
 .icon-angle-left {transform: rotateY(180deg);}
-#main {padding: 20px 0; overflow: hidden;}
+#main {padding: 20px 0;}
+.m-repo-view .btn-toolbar .btn-link {margin-right: 0; padding-top: 8px;}

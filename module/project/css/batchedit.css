@@ -1,3 +1,7 @@
 .c-id {width: 40px;}
 .c-date {width: 120px;}
-.c-parent {width: 200px;}
+.c-parent {width: 180px;}
+.c-name {width: 180px;}
+.c-code {width: 160px;}
+.c-acl {width: 125px;}
+#dateTip {padding: 0 7px;}

@@ -82,6 +82,34 @@ $(function()
                 }
             }, 200);
         }
+        else
+        {
+            setTimeout(function()
+            {
+                if($('a[title="Fullscreen"]').hasClass('active'))
+                {
+                    $('.main-header').hide();
+                    $('#submit').addClass('markdown-fullscreen-save');
+                    $('#submit').removeClass('btn-wide');
+                    $('#mainContent .fullscreen').css('padding-top', '8px');
+                    $('#mainContent .fullscreen').css('height', '40px');
+                    $('.CodeMirror-fullscreen').css('top', '40px');
+                    $('.editor-preview-side').css('top', '40px');
+                    $('#submit').data('placement', 'left');
+                    parent.$('.modal-header > .close').addClass('fullscreen-close');
+                }
+                else
+                {
+                    $('.main-header').show();
+                    $('#submit').removeClass('markdown-fullscreen-save');
+                    $('#mainContent .editor-toolbar').css('padding', '1px');
+                    $('#mainContent .editor-toolbar').css('height', '30px');
+                    $('.CodeMirror').css('top', '0px');
+                    $('.editor-preview-side').css('top', '0px');
+                    parent.$('.modal-header > .close').removeClass('fullscreen-close');
+                }
+            }, 200);
+        }
     });
 })
 
@@ -96,4 +124,53 @@ function saveDraft()
     var content = $('#content').val();
     var link    = createLink('doc', 'ajaxSaveDraft', 'docID=' + docID);
     $.post(link, {content: content});
+}
+
+/**
+ * Load whitelist by libID.
+ *
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function loadWhitelist(libID)
+{
+    var groupLink = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=group' + '&docID=' + docID);
+    var userLink  = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user' + '&docID=' + docID);
+    $.post(groupLink, function(groups)
+    {
+        if(groups != 'private')
+        {
+            $('#groups').replaceWith(groups);
+            $('#groups').next('.picker').remove();
+            $('#groups').picker();
+        }
+    });
+
+    $.post(userLink, function(users)
+    {
+        if(users == 'private')
+        {
+            $('#aclopen').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclprivate').prop('checked', true);
+        }
+        else if(users == 'project')
+        {
+            $('#aclprivate').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclopen').prop('checked', true);
+        }
+        else
+        {
+            $('#aclopen').parent('.radio-inline').removeClass('hidden');
+            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
+
+            $('#users').replaceWith(users);
+            $('#users').next('.picker').remove();
+            $('#users').picker();
+        }
+    });
 }

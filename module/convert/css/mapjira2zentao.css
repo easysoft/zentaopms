@@ -1,0 +1,16 @@
+.main-header > ul {display: inline-block; padding: 0; margin: 0;} 
+.main-header > ul > li {position: relative;}
+.main-header > ul > li.active > a {background-color: #1CA5FF; color: #fff}
+.main-header > ul > li > a {min-width: 120px; padding: 5px 20px; text-align: center; transition: none; color: #838a9d}
+.main-header > ul > li.active > a:hover,
+.main-header > ul > li.active > a:focus {background-color: #1CA5FF;}
+.main-header > ul > li .step-number {display: inline-block; width: 14px; height: 14px; border-radius: 7px; text-align: center; line-height: 12px; border: 1px solid #A6AAB8; color: #A6AAB8; font-size: 12px; font-weight: bold; margin-right: 3px;}
+.main-header > ul > li + li > a {padding-left: 35px;}
+.main-header > ul > li + li:before,
+.main-header > ul > li + li:after {content: ' '; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 15px; border-color: transparent transparent transparent #a6aab8; position: absolute; left: 0; top: 0;}
+.main-header > ul > li + li:after {border-left-color: #fff; left: -1px;}
+.main-header > ul > li.active + li:after {border-left-color: #1ca5ff;}
+.main-header > ul > li:hover + li:after {border-left-color: #eceef4;}
+.main-header > ul > li.active:hover + li:after {border-left-color: #1CA5FF;}
+.nav-primary>li.active>a:hover {color: #fff}
+.main-header {margin-top: -15px !important;}

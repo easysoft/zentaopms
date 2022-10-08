@@ -3,7 +3,7 @@
  * The edit view of tree module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: edit.html.php 4795 2013-06-04 05:59:58Z zhujinyonging@gmail.com $
@@ -41,7 +41,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
               <?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='loadBranches(this)'");?>
               <?php if($product->type != 'normal'):?>
               <span class='input-group-addon fix-border fix-padding'></span>
-              <?php echo html::select('branch', $branches, $module->branch, "class='form-control chosen control-branch'");?>
+              <?php echo html::select('branch', $branches, $module->branch, "class='form-control chosen control-branch' onchange='loadModules(this)'");?>
               </div>
               <?php endif;?>
             </div>
@@ -160,14 +160,40 @@ function loadBranches(obj)
     var $inputGroup = $(obj).closest('.input-group');
     $inputGroup.find('#branch').remove();
     $inputGroup.find('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=withClosed"), function(data)
     {
         if(data)
         {
             $inputGroup.append(data);
             $inputGroup.find('#branch').removeAttr('onchange');
+            $inputGroup.find('#branch').attr('onchange', 'loadModules(this)');
             $inputGroup.find('#branch').chosen();
         }
     })
+}
+
+/**
+ * Load modules by product and branch.
+ *
+ * @param  obj $branch
+ * @access public
+ * @return void
+ */
+function loadModules(branch)
+{
+    var productID = $('#root').val();
+    var branchID  = $(branch).val();
+    var moduleID  = $('#parent').val();
+    var moduleBox = $('#parent').closest('tr').children('td');
+
+    if(typeof(branchID) == 'undefined') branchID = 0;
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
+    $(moduleBox).load(link, function()
+    {
+        $(this).children('select').attr('id', 'parent').attr('name', 'parent');
+        $(this).find('select').chosen()
+    });
 }
 </script>

@@ -3,7 +3,7 @@
  * The link bug view of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Fei Chen <chenfei@cnezsoft.com>
  * @package     bug
  * @version     $Id: linkbugs.html.php 4129 2016-03-08 09:00:12Z chenfei $
@@ -32,7 +32,7 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->product;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
@@ -53,7 +53,7 @@
             <?php printf('%03d', $bug2Link->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug2Link->pri?>' title='<?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
-          <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
+          <td class='nobr' title="<?php echo $products[$bug2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
           <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
           <td><?php echo $this->processStatus('bug', $bug);?></td>
           <td><?php echo zget($users, $bug2Link->openedBy);?></td>
@@ -67,6 +67,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php if($bugCount) echo html::submitButton('', '', 'btn btn-default');?></div>
       <?php echo html::hidden('bug', $bug->id);?>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
@@ -89,7 +90,7 @@ $(function()
             output += checkbox;
         });
         $.closeModal();
-        parent.$('#linkBugsBox').html(output);
+        parent.$('#linkBugsBox').html(output).closest('tr').removeClass('hidden');
         return false;
     });
 });

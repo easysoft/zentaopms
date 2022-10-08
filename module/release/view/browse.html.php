@@ -3,7 +3,7 @@
  * The browse view file of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: browse.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -16,9 +16,14 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "'");
+    common::sortFeatureMenu();
+    foreach($lang->release->featureBar['browse'] as $featureType => $label)
+    {
+        $active = $type == $featureType ? 'btn-active-text' : '';
+        $label  = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=$featureType"), $label, '', "id='{$featureType}Tab' class='btn btn-link $active'");
+    }
     ?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -80,30 +85,15 @@
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
-          <?php
-          if($canBeChanged)
-          {
-              if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
-              if(common::hasPriv('release', 'linkBug')) echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");
-              if(common::hasPriv('release', 'changeStatus', $release))
-              {
-                  $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-                  echo html::a($this->createLink('release', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
-              }
-              common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
-              common::printIcon('release', 'notify',   "release=$release->id", $release, 'list', 'bullhorn', '', 'iframe', true);
-              if(common::hasPriv('release', 'delete', $release))
-              {
-                  $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
-              }
-          }
-          ?>
+          <?php echo $this->release->buildOperateMenu($release, 'browse');?>
         </td>
       </tr>
       <?php endforeach;?>
     </tbody>
   </table>
+  <div class='table-footer'>
+    <?php $pager->show('right', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

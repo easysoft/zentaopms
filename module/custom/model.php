@@ -3,7 +3,7 @@
  * The model file of custom module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
  * @version     $Id$
@@ -23,7 +23,7 @@ class customModel extends model
 
         try
         {
-            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->orderBy('lang,id')->get();
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
             $stmt = $this->dbh->query($sql);
 
             $allCustomLang = array();
@@ -77,6 +77,8 @@ class customModel extends model
         $item->value   = $value;
         $item->system  = $system;
 
+        if(!defined('IN_UPGRADE')) $item->vision = $this->config->vision;
+
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }
 
@@ -117,7 +119,7 @@ class customModel extends model
         parse_str($paramString, $params);
 
         /* Init fields not set in the param string. */
-        $fields = 'lang,module,section,key';
+        $fields = 'lang,module,section,key,vision';
         $fields = explode(',', $fields);
         foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
 
@@ -138,7 +140,8 @@ class customModel extends model
             ->beginIF($params['lang'])->andWhere('lang')->in($params['lang'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
-            ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
+            ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi()
+            ->beginIF($params['vision'])->andWhere('`vision`')->eq($params['vision'])->fi();
     }
 
     /**
@@ -241,8 +244,28 @@ class customModel extends model
             {
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
-                $hasPriv = commonModel::hasPriv($module, $method);
+
+                $params  = empty($link[3]) ? '' :  $link[3];
+                $hasPriv = commonModel::hasPriv($module, $method, null, $params);
+
+                /* Fix bug #20464 */
+                if(isset($vars)) unset($vars);
+                if(!$hasPriv and is_array($item) and isset($item['subMenu']))
+                {
+                    foreach($item['subMenu'] as $subMenu)
+                    {
+                        if(!isset($subMenu['link']) or strpos($subMenu['link'], '|') === false) continue;
+                        list($subLabel, $module, $method) = explode('|', $subMenu['link']);
+                        if(count(explode('|', $subMenu['link'])) > 3) list($subLabel, $module, $method, $vars) = explode('|', $subMenu['link']);
+
+                        $hasPriv = commonModel::hasPriv($module, $method);
+                        if($hasPriv) break;
+                    }
+                }
+
                 if($module == 'execution' and $method == 'more') $hasPriv = true;
+                if($module == 'project' and $method == 'other')  $hasPriv = true;
+                if(!$hasPriv and isset($vars)) unset($vars);
             }
 
             if($isTutorialMode || $hasPriv)
@@ -252,6 +275,7 @@ class customModel extends model
                 {
                     $itemLink = array('module' => $module, 'method' => $method);
                     if(isset($link[3])) $itemLink['vars'] = $link[3];
+                    if(isset($vars))    $itemLink['vars'] = $vars;
                     if(is_array($item) and isset($item['target'])) $itemLink['target'] = $item['target'];
                 }
 
@@ -418,7 +442,7 @@ class customModel extends model
         global $lang, $app, $dbh;
         if(!isset($lang->$module->featureBar[$method])) return;
         $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where `account` = '{$app->user->account}' AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
+        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
         {
@@ -521,6 +545,7 @@ class customModel extends model
     public function getURSRPairs()
     {
         $lang = $this->app->getClientLang();
+        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
@@ -602,6 +627,7 @@ class customModel extends model
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
+        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
 
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
@@ -677,8 +703,10 @@ class customModel extends model
             }
         }
 
+        $vision = $this->config->vision;
+
         $this->loadModel('setting');
-        $this->setting->setItems("system.{$moduleName}", $requiredFields);
+        $this->setting->setItems("system.{$moduleName}@$vision", $requiredFields);
     }
 
     /**

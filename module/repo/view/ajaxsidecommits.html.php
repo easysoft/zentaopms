@@ -14,11 +14,12 @@
 $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
-<form id='logForm' class='main-table' data-ride='table' method='post'>
+<?php js::set('paramsBase', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType");?>
+<form id='logForm' class='main-table not-watch' method='post' onsubmit='logsubmit()'>
   <table class='table table-fixed'>
     <thead>
       <tr>
-        <th class='c-checkbox'></th>
+        <th class='c-checkbox w-40px'></th>
         <th class='c-version'><?php echo $lang->repo->revisionA?></th>
         <?php if($repo->SCM != 'Subversion'):?>
         <th class='c-commit'><?php echo $lang->repo->commit?></th>
@@ -52,6 +53,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
     <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->tab}'");?>
     <div class='pull-right'>
+      <ul id="repoPageSize" class="pager" data-ride="pager" data-elements="size_menu" data-rec-total="<?php echo $pager->recTotal;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>"></ul>
       <div class='btn-group'>
         <?php
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;
@@ -67,6 +69,11 @@ if(isset($entry)) $pathInfo .= '&type=file';
   </div>
 </form>
 <script>
+if($.cookie('sideRepoSelected'))
+{
+    var sideRepoSelectedAry = $.cookie('sideRepoSelected').split(',');
+    for(i in sideRepoSelectedAry) $("input:checkbox[value='" + sideRepoSelectedAry[i] + "']").attr('checked', 'checked');
+}
 if($("input:checkbox[name='revision[]']:checked").length < 2)
 {
     $("input:checkbox[name='revision[]']:lt(2)").attr('checked', 'checked');
@@ -83,5 +90,33 @@ $("input:checkbox[name='revision[]']").click(function(){
         $('#diffRepo').remove();
         $("input:checkbox[name='revision[]']").each(function(){$(this).attr("disabled", false)});
     }
+});
+
+/**
+ * Method before submit
+ *
+ * @access public
+ * @return void
+ */
+function logsubmit()
+{
+    $("input:checkbox[name='revision[]']:checked").each(function()
+    {
+        var sideRepoSelected = $.cookie('sideRepoSelected') ? $.cookie('sideRepoSelected').split(',') : [];
+        sideRepoSelected.unshift($(this).val());
+        sideRepoSelected = sideRepoSelected.slice(0, 2);
+        $.cookie('sideRepoSelected', sideRepoSelected.join(','), {expires:config.cookieLife, path:config.webRoot});
+    });
+}
+
+$(function()
+{
+    var myPager = $('#repoPageSize').data('zui.pager');
+    if(!myPager) $('#repoPageSize').pager();
+
+    $('#repoPageSize').on('onPageChange', function(e, state, oldState) {
+        var link = createLink('repo', 'ajaxSideCommits', paramsBase + '&recTotal=' + state.recTotal + '&recPerPage=' + state.recPerPage + '&pageID=' + state.page);
+        $('#sidebar .side-body').load(link);
+    });
 });
 </script>

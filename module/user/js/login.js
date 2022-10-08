@@ -3,6 +3,8 @@ if(window.self !== window.top) window.top.location.href = window.location.href;
 
 $(document).ready(function()
 {
+    timeoutID = null;
+
     /* Fix bug for misc-ping */
     $('#hiddenwin').removeAttr('id');
 
@@ -33,10 +35,19 @@ $(document).ready(function()
         var link      = createLink('user', 'login');
         var keepLogin = $('#keepLoginon').attr('checked') == 'checked' ? 1 : 0;
         var captcha   = $('#captcha').length == 1 ? $('#captcha').val() : '';
+        var timeout   = true;
+
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(function()
+        {
+            if(timeout) alert(loginTimeoutTip);
+        }, 4000);
 
         $.get(createLink('user', 'refreshRandom'), function(data)
         {
             var rand = data;
+            timeout  = false;
+
             $.ajax
             ({
                 url: link,

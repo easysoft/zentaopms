@@ -3,7 +3,7 @@
  * The api module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: zh-tw.php 5129 2013-07-15 00:16:07Z zhujinyonging@gmail.com $
@@ -198,9 +198,6 @@ $lang->api->paramsTypeCustomOptions = array('file' => 'file', 'ref' => 'ref');
 $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
 $lang->api->requiredOptions      = array(0 => '否', 1 => '是');
-
-$lang->doclib       = new stdclass();
-$lang->doclib->name = '介面庫名稱';
 
 $lang->apistruct = new stdClass();
 $lang->apistruct->name = '結構名';

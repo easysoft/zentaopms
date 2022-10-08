@@ -3,7 +3,7 @@
  * The task module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: zh-tw.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
@@ -152,7 +152,7 @@ $lang->task->recordEstimateAction = '添加工時';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "該任務與上一任務不屬於同一%s！";
-$lang->task->selectTestStory   = "選擇測試需求";
+$lang->task->selectTestStory   = "選擇{$lang->SRCommon}";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "無{$lang->SRCommon}";
 $lang->task->noAssigned        = '未指派';

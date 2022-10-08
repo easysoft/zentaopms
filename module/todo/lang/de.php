@@ -3,7 +3,7 @@
  * The todo module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
@@ -36,6 +36,7 @@ $lang->todo->cycleConfig  = "Wiederkehrend setzen";
 $lang->todo->project      = "Project";
 $lang->todo->product      = "Product";
 $lang->todo->execution    = $lang->executionCommon;
+$lang->todo->changeDate   = "Change Date";
 
 $lang->todo->reasonList['story'] = "Story übertragen";
 $lang->todo->reasonList['task']  = "Aufgabe übertragen";
@@ -56,6 +57,7 @@ $lang->todo->pri          = 'Priorität';
 $lang->todo->name         = 'Titel';
 $lang->todo->status       = 'Status';
 $lang->todo->desc         = 'Beschreibung';
+$lang->todo->config       = 'Config';
 $lang->todo->private      = 'Privat';
 $lang->todo->cycleDay     = 'Tag';
 $lang->todo->cycleWeek    = 'Woche';
@@ -68,6 +70,8 @@ $lang->todo->finishedDate = 'FinishedDate';
 $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Fällig';
+$lang->todo->deleted      = 'Deleted';
+$lang->todo->ditto        = 'Dito';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';
@@ -82,6 +86,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = 'Dieser Todo steht in Beziehung mit Bug #%s. Möchten Sie das bearbeiten?';
 $lang->todo->confirmTask  = 'Dieser Todo steht in Beziehung mit Task #%s， Möchten Sie das bearbeiten?';
 $lang->todo->confirmStory = 'Dieser Todo steht in Beziehung mit Story #%s， Möchten Sie das bearbeiten?';
+$lang->todo->noOptions    = 'You have no %s todo at the moment. Please reselect the Todo type.';
 
 $lang->todo->statusList['wait']   = 'Wartend';
 $lang->todo->statusList['doing']  = 'In Arbeit';
@@ -110,6 +115,8 @@ $lang->todo->lblClickCreate = "Klicken um einen ToDo hinzuzufügen";
 $lang->todo->noTodo         = 'Keine ToDos dieses Typs.';
 $lang->todo->noAssignedTo   = "Zuordung an darf nicht leer sein.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
+$lang->todo->today          = 'Todo Today';
+$lang->todo->selectProduct  = "Please select a product";
 
 $lang->todo->periods['all']             = 'Alle';
 $lang->todo->periods['before']          = 'Nicht abgeschlossen';

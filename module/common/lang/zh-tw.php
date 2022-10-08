@@ -3,7 +3,7 @@
  * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
@@ -110,6 +110,7 @@ $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 $lang->levelExceeded   = '層級已超過顯示範圍，更多信息請前往網頁端查看或者是通過搜索方式查看。';
+$lang->noticeOkFile    = '為了安全起見，系統需要確認您的管理員身份。\n 請登錄禪道所在的伺服器，創建%s檔案。\n 注意：\n 1. 檔案內容為空。\n 2. 如果之前檔案存在，刪除之後重新創建。';
 
 $lang->serviceAgreement = "服務協議";
 $lang->privacyPolicy    = "隱私政策";
@@ -180,6 +181,8 @@ $lang->stage->common      = '階段';
 $lang->stage->list        = '階段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->app->common        = '應用';
+$lang->app->serverLink    = '服務器鏈接';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';
@@ -210,8 +213,6 @@ $lang->module          = '模組';
 $lang->priv            = '權限';
 $lang->other           = '其他';
 $lang->estimation      = '估算';
-$lang->issue           = '問題';
-$lang->risk            = '風險';
 $lang->measure         = '度量';
 $lang->treeView        = '樹狀圖';
 $lang->groupView       = '分組視圖';

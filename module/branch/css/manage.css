@@ -4,9 +4,11 @@
 
 a.setDefault {padding-left: 8px !important}
 
-td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
-td.flex .label-primary {min-width: 40px;}
-td.flex .setDefault {min-width: 120px;}
+td.branchName > span.text-ellipsis {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+td.branchName > span {vertical-align: middle;}
 
 #mergeBranch .form-actions {padding-top: 20px;}
 .modal-body {padding-top: 0;}
+.tips {background-color: #ffffff; max-width: 650px; display: flex; padding: 14px;}
+.icon-exclamation-sign.icon {align-self: center; color: #2667E3; font-size: 24px; opacity: 1;}
+#marginTips {max-width: 585px; margin-left: 10px;}

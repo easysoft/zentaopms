@@ -1,0 +1,12 @@
+.project-type-label.label-outline {width: 50px; min-width: 50px;}
+.project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
+[lang^='en'] .project-name > .label-warning {width: 55px !important;}
+
+.has-prefix {position: relative; display: flex; align-items: center;}
+.has-prefix > span {flex: none;}
+.has-prefix > a {padding-left: 5px;}
+
+.has-suffix > a {max-width: calc(100% - 100px); padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.c-budget {width:100px; text-align: right; padding-right:16px !important;}
+.c-manager {white-space: nowrap; overflow: hidden;}
+.c-manager a {top: 8px;}

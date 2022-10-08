@@ -3,7 +3,7 @@
  * The view file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: view.html.php 4808 2013-06-17 05:48:13Z zhujinyonging@gmail.com $
@@ -16,13 +16,6 @@
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -31,8 +24,8 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->multipleAB . (common::checkNotCN() ? ' ' : '') . $lang->task->modeList[$task->mode] . '</span>';?>
+        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $lang->task->childrenAB . '</span>';?>
         <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
@@ -105,18 +98,18 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->task->children;?></div>
         <div class='detail-content article-content'>
-          <table class='table table-hover table-fixed'>
+          <table class='table table-hover table-fixed' id='childrenTable'>
             <thead>
               <tr class='text-center'>
-                <th class='w-50px'> <?php echo $lang->task->id;?></th>
-                <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
+                <th class='c-id'> <?php echo $lang->task->id;?></th>
+                <th class='c-lblPri'> <?php echo $lang->task->lblPri;?></th>
                 <th>                <?php echo $lang->task->name;?></th>
-                <th class='w-100px'><?php echo $lang->task->deadline;?></th>
-                <th class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
-                <th class='w-80px'> <?php echo $lang->task->status;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-                <th class='w-170px'><?php echo $lang->actions;?></th>
+                <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
+                <th class='c-assignedTo'> <?php echo $lang->task->assignedTo;?></th>
+                <th class='c-status'> <?php echo $lang->task->status;?></th>
+                <th class='visible-lg c-consumedAB'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+                <th class='visible-lg c-leftAB'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+                <th class='c-actions'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>
@@ -125,26 +118,25 @@
                 <td><?php echo $child->id;?></td>
                 <td>
                   <?php
-                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
                   echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
                   echo "</span>";
                   ?>
                 </td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
-                <td><?php echo zget($users, $child->assignedTo);?></td>
+                <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
                 <td><?php echo $this->processStatus('task', $child);?></td>
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "executionID=$child->execution&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'finish',   "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   ?>
                 </td>
               </tr>
@@ -155,7 +147,7 @@
       </div>
       <?php endif;?>
       <?php
-      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));
+      echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task, 'method' => 'view', 'showDelete' => false));
 
       $canBeChanged = common::canBeChanged('task', $task);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");
@@ -167,30 +159,12 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($browseLink);?>
-        <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$task->deleted):?>
-        <?php
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'split', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
-        common::printIcon('task', 'assignTo',       "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
-        common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('task', 'pause',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('task', 'finish',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
-        common::printIcon('task', 'activate',       "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
-        common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-
-        echo $this->buildOperateMenu($task, 'view');
-
-        if(!isonlybody()) echo "<div class='divider'></div>";
-        common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
-        common::printIcon('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
-        common::printIcon('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
-        if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
-        ?>
+        <?php if(!isonlybody() and $this->app->getViewType() != 'xhtml'):?>
+        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>
+        <?php echo "<div class='divider'></div>";?>
         <?php endif;?>
+        <?php $task->executionList = $execution;?>
+        <?php echo $this->task->buildOperateMenu($task, 'view');?>
       </div>
     </div>
   </div>
@@ -209,8 +183,23 @@
             <table class="table table-data">
               <tbody>
                 <tr>
+                  <?php
+                  $method = 'view';
+                  if($this->config->vision == 'lite') $method = 'kanban';
+                  ?>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
-                  <td><?php if(!common::printLink('execution', 'view', "executionID=$task->execution", $execution->name)) echo $execution->name;?></td>
+                  <td>
+                  <?php
+                  if($execution->type != 'kanban')
+                  {
+                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
+                  }
+                  else
+                  {
+                      echo $execution->name;
+                  }
+                  ?>
+                </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>
@@ -252,7 +241,7 @@
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
                     $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
+                    if($task->storyTitle and !common::printLink('execution', 'storyView', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -271,8 +260,25 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->assignedTo;?></th>
-                  <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
+                  <td>
+                    <?php
+                    if(!empty($task->team) and $task->mode == 'multi' and strpos('done,cencel,closed', $task->status) === false)
+                    {
+                        foreach($task->team as $member) echo ' ' . zget($users, $member->account);
+                    }
+                    else
+                    {
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                    }
+                    ?>
+                  </td>
                 </tr>
+                <?php if($task->mode):?>
+                <tr>
+                  <th><?php echo $lang->task->mode;?></th>
+                  <td><?php echo zget($lang->task->modeList, $task->mode);?></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
                   <td><?php echo $lang->task->typeList[$task->type];?></td>
@@ -293,14 +299,13 @@
                   <th><?php echo $lang->task->mailto;?></th>
                   <td>
                     <?php
-                    $mailto = explode(',', str_replace(' ', '', $task->mailto));
-                    if(empty($mailto))
+                    if(empty($task->mailto))
                     {
                         echo $lang->noData;
                     }
                     else
                     {
-                        foreach($mailto as $account) echo ' ' . zget($users, $account, $account);
+                        foreach(explode(',', str_replace(' ', '', $task->mailto)) as $account) echo ' ' . zget($users, $account, $account);
                     }
                     ?>
                   </td>
@@ -344,14 +349,16 @@
                 <th class='text-center'><?php echo $lang->task->estimate?></th>
                 <th class='text-center'><?php echo $lang->task->consumed?></th>
                 <th class='text-center'><?php echo $lang->task->left?></th>
+                <th class='text-center'><?php echo $lang->statusAB;?></th>
               </tr>
               </thead>
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
-                  <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                  <td class='text-left'><?php echo zget($users, $member->account);?></td>
                   <td><?php echo (float)$member->estimate?></td>
                   <td><?php echo (float)$member->consumed?></td>
                   <td><?php echo (float)$member->left?></td>
+                  <td class="status-<?php echo $member->status;?>"><?php echo zget($lang->task->statusList, $member->status);?></td>
                 </tr>
                 <?php endforeach;?>
             </table>
@@ -429,11 +436,6 @@
   <?php common::printPreAndNext($preAndNext);?>
 </div>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

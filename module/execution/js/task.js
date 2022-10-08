@@ -38,6 +38,6 @@ function adjustTableFooter()
     {
         $('.table.with-footer-fixed').css('margin-bottom', '0');
         $('.table-footer').removeClass('fixed-footer');
-        $('.table-footer').css({"left":"0", "bottom":"0", "width":"unset"});
+        $('.table-footer').css({'left': 0, 'bottom': 0, 'width': 'unset'});
     }
 }

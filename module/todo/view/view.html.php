@@ -3,7 +3,7 @@
  * The view file of view method of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: view.html.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('systemMode', $config->systemMode);?>
-<?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <style>.chosen-container .chosen-results{max-height: 170px; overflow-y: initial;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -77,15 +76,23 @@
                     $createStoryPriv = common::hasPriv('story', 'create');
                     $createTaskPriv  = common::hasPriv('task', 'create');
                     $createBugPriv   = common::hasPriv('bug', 'create');
-                    if($createStoryPriv or $createTaskPriv or $createBugPriv)
+                    $printBtn        = ($config->vision == 'lite' and (($config->systemMode == 'new' and empty($projects) or $config->systemMode == 'classic' and empty($executions)))) ? false : true;
+                    if($printBtn and ($createStoryPriv or $createTaskPriv or $createBugPriv))
                     {
                         $isonlybody = isonlybody();
                         unset($_GET['onlybody']);
                         echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>{$this->lang->more}<span class='caret'></span></button>";
                         echo "<ul class='dropdown-menu pull-right' role='menu'>";
-                        if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                        if($createStoryPriv and $config->vision == 'lite')
+                        {
+                            echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                        }
+                        else
+                        {
+                            echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                        }
                         if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#executionModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
-                        if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#projectProductModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
+                        if($createBugPriv and $config->vision == 'rnd') echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#projectProductModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
                         echo "</ul>";
                         if($isonlybody) $_GET['onlybody'] = 'yes';
                     }
@@ -202,14 +209,6 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if((empty($projects) and $config->systemMode == 'new') or (empty($executions) and $config->systemMode == 'classic')):?>
-        <div class="table-empty-tip">
-          <p>
-            <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:" . ($config->systemMode == 'new' ? "createProject()" : "createExecution()"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-          </p>
-        </div>
-        <?php else:?>
         <table align='center' class='table table-form'>
           <?php if($config->systemMode == 'new'):?>
           <tr>
@@ -225,7 +224,6 @@
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></td>
           </tr>
         </table>
-        <?php endif;?>
       </div>
     </div>
   </div>
@@ -264,14 +262,6 @@
         <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects) and $config->systemMode == 'new'):?>
-        <div class="table-empty-tip">
-          <p>
-            <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-          </p>
-        </div>
-        <?php else:?>
         <table align='center' class='table table-form'>
           <?php if($config->systemMode == 'new'):?>
           <tr>
@@ -287,16 +277,13 @@
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></td>
           </tr>
         </table>
-        <?php endif;?>
       </div>
     </div>
   </div>
 </div>
 <?php js::set('todoID', $todo->id);?>
 <?php js::set('selectExecution', $lang->execution->selectExecution);?>
-<?php else:?>
-<?php echo $lang->todo->thisIsPrivate;?>
-<?php endif;?>
+<?php js::set('selectProduct', $lang->todo->selectProduct);?>
 <script>
 $(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
 </script>

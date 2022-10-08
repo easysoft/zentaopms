@@ -3,7 +3,7 @@
  * The user module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: zh-tw.php 5053 2013-07-06 08:17:37Z wyd621@gmail.com $
@@ -218,7 +218,7 @@ $lang->user->error = new stdclass();
 $lang->user->error->account        = "【ID %s】的用戶名應該為：三位以上的英文、數字或下劃線的組合";
 $lang->user->error->accountDupl    = "【ID %s】的用戶名已經存在";
 $lang->user->error->realname       = "【ID %s】的真實姓名必須填寫";
-$lang->user->error->password       = "【ID %s】的密碼必須為六位以上";
+$lang->user->error->password       = "【ID %s】的密碼必須為六位及以上";
 $lang->user->error->mail           = "【ID %s】的郵箱地址不正確";
 $lang->user->error->reserved       = "【ID %s】的用戶名已被系統預留";
 $lang->user->error->weakPassword   = "【ID %s】的密碼強度小於系統設定。";
@@ -282,9 +282,9 @@ $lang->user->mkdirLinux = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能創建臨時目錄，請確認目錄<strong style='color:#ed980f'>%s</strong>是否存在並有操作權限。</div>
-    <div style='margin-bottom:8px;'>命令為：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
+    <div style='margin-bottom:8px;'>命令為：<strong style='color:#ed980f'>chmod 777 -R %s</strong>。</div>
     <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
-    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>
+    <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
 

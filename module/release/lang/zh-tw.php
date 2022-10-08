@@ -3,7 +3,7 @@
  * The release module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -42,6 +42,7 @@ $lang->release->name          = '發佈名稱';
 $lang->release->marker        = '里程碑';
 $lang->release->date          = '發佈日期';
 $lang->release->desc          = '描述';
+$lang->release->files         = '附件';
 $lang->release->status        = '狀態';
 $lang->release->subStatus     = '子狀態';
 $lang->release->last          = '上次發佈';

@@ -37,13 +37,29 @@ $(function()
         }
     });
 
-    $('td.c-name.flex').mouseenter(function()
-    {
-        $(this).find('.setDefault').removeClass('hidden');
-    }).mouseleave(function()
-    {
-        $(this).find('.setDefault').addClass('hidden');
-    });
+    //$('td.c-name.flex').mouseenter(function()
+    //{
+    //    $(this).find('.setDefault').removeClass('hidden');
+    //    if($(this).find('span.label-primary').length > 0)
+    //    {
+    //        $(this).find('span.text-ellipsis').css('max-width', 'calc(100% - 50px)');
+    //    }
+    //    else
+    //    {
+    //        $(this).find('span.text-ellipsis').css('max-width', 'calc(100% - 120px)');
+    //    }
+    //}).mouseleave(function()
+    //{
+    //    $(this).find('.setDefault').addClass('hidden');
+    //    if($(this).find('span.label-primary').length > 0)
+    //    {
+    //        $(this).find('span.text-ellipsis').css('max-width', 'calc(100% - 50px)');
+    //    }
+    //    else
+    //    {
+    //        $(this).find('span.text-ellipsis').css('max-width', '100%');
+    //    }
+    //});
 
     $("input[id*='branchIDList']").change(function()
     {

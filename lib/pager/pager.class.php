@@ -90,10 +90,11 @@ class pager extends basePager
      *
      * @param  string $align
      * @param  string $type
+     * @param  int    $maxRecPerPage
      * @access public
      * @return void
      */
-    public function show($align = 'right', $type = 'full')
+    public function show($align = 'right', $type = 'full', $maxRecPerPage = 0)
     {
         if($type == 'pagerjs')
         {
@@ -110,7 +111,26 @@ class pager extends basePager
             }
             else
             {
-                echo "<ul class='pager' data-page-cookie='{$this->pageCookie}' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
+                $pageSizeOptions = '';
+                if($maxRecPerPage)
+                {
+                    /* Set record per page. */
+                    for($i = 5; $i <= 50; $i += 5) $options[] = $i;
+                    $options = array_merge($options, array(100, 200, 500, 1000, 2000));
+
+                    $pageSizeOptions = 'data-page-size-options="';
+                    foreach($options as $option)
+                    {
+                        $pageSizeOptions .= "$option,";
+                        if($option >= $maxRecPerPage)
+                        {
+                            $pageSizeOptions = trim($pageSizeOptions, ',') . '"';
+                            break;
+                        }
+                    }
+                }
+
+                echo "<ul class='pager' $pageSizeOptions data-page-cookie='{$this->pageCookie}' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
             }
         }
         else

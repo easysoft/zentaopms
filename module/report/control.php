@@ -3,7 +3,7 @@
  * The control file of report module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: control.php 4622 2013-03-28 01:09:02Z chencongzhi520@gmail.com $
@@ -33,7 +33,7 @@ class report extends control
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
         if(!$this->projectID) $this->lang->navGroup->report = 'report';
 
-        if((isset($this->config->proVersion) || isset($this->config->bizVersion)) && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
+        if($this->config->edition != 'open' && $this->lang->navGroup->report == 'report' && common::hasPriv('report', 'custom')) $this->lang->report->mainMenuAction = html::a(helper::createLink('report', 'custom'), $this->lang->crystal->custom, '', "class='btn btn-link'");
     }
 
     /**
@@ -57,8 +57,8 @@ class report extends control
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $begin = $begin ? date('Y-m-d', strtotime($begin)) : '';
-        $end   = $end   ? date('Y-m-d', strtotime($end))   : '';
+        $begin = date('Y-m-d', ($begin ? strtotime($begin) : time() - (date('j') - 1) * 24 * 3600));
+        $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
 
         $this->view->title      = $this->lang->report->projectDeviation;
         $this->view->position[] = $this->lang->report->projectDeviation;
@@ -114,7 +114,7 @@ class report extends control
         $this->view->begin      = $begin;
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $execution);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->executions = array('' => '') + $this->report->getProjectExecutions();
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
         $this->view->execution  = $execution;
@@ -137,7 +137,7 @@ class report extends control
         $this->view->position[] = $this->lang->report->bugAssign;
         $this->view->submenu    = 'test';
         $this->view->assigns    = $this->report->getBugAssign();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
 
@@ -195,7 +195,7 @@ class report extends control
         $this->view->position[] = $this->lang->report->workload;
 
         $this->view->workload = $this->report->getWorkload($dept, $assign);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;
         $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);
@@ -289,6 +289,10 @@ class report extends control
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
+        $this->loadModel('dept');
+        $this->loadModel('user');
+
+        $super = common::hasPriv('report', 'allAnnualData');
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
@@ -311,29 +315,35 @@ class report extends control
         }
 
         /* Get users and depts. */
-        $users     = $this->loadModel('user')->getPairs('noletter|useid|noclosed');
-        $users[''] = $this->lang->report->annualData->allUser;
-
-        $depts = $this->loadModel('dept')->getOptionMenu();
-        $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
-        if(empty($userID)) unset($depts[0]);
-
         $accounts = array();
-        if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         if($userID)
         {
-            $user = $this->loadModel('user')->getById($userID, 'id');
-            $dept = $user->dept;
+            $user     = $this->user->getById($userID, 'id');
+            $dept     = $user->dept;
+            $users    = array('' => $this->lang->report->annualData->allUser) + $this->dept->getDeptUserPairs($dept, 'id');
             $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
         }
-        if(empty($accounts)) $accounts = $this->user->getPairs('noletter|noclosed');
-        if($accounts) $accounts = array_keys($accounts);
-
-        if($dept)
+        else
         {
-            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
-            $users = array('' => $this->lang->report->annualData->allUser) + $users;
+            $users    = array('' => $this->lang->report->annualData->allUser) + $this->dept->getDeptUserPairs($dept, 'id');
+            $accounts = $this->dept->getDeptUserPairs($dept);
         }
+
+        $noDepartment = array('0' => '/' . $this->lang->dept->noDepartment);
+        $depts        = $this->dept->getOptionMenu();
+        if(!$super)
+        {
+            $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $noDepartment;
+        }
+        else
+        {
+            $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
+
+            unset($depts[0]);
+            $depts += $noDepartment;
+        }
+
+        if($accounts) $accounts = array_keys($accounts);
 
         /* Get annual data. */
         $data = array();
@@ -345,6 +355,7 @@ class report extends control
         {
             $data['logins'] = $this->report->getUserYearLogins($accounts, $year);
         }
+
         $data['actions']       = $this->report->getUserYearActions($accounts, $year);
         $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
         $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
@@ -360,7 +371,7 @@ class report extends control
 
         if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : ($dept ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
+        $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
         $this->view->data   = $data;
         $this->view->year   = $year;
         $this->view->users  = $users;
@@ -369,6 +380,7 @@ class report extends control
         $this->view->dept   = $dept;
         $this->view->userID = $userID;
         $this->view->months = $this->report->getYearMonths($year);
-        die($this->display());
+
+        $this->display();
     }
 }

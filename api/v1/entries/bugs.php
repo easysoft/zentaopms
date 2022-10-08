@@ -3,7 +3,7 @@
  * The bugs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -33,6 +33,7 @@ class bugsEntry extends entry
             $bugs   = $data->data->bugs;
             $pager  = $data->data->pager;
             $result = array();
+            $this->loadModel('product');
             foreach($bugs as $bug)
             {
                 $status = array('code' => $bug->status, 'name' => $this->lang->bug->statusList[$bug->status]);
@@ -41,6 +42,9 @@ class bugsEntry extends entry
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
                 $bug->status     = $status['code'];
                 $bug->statusName = $status['name'];
+
+                $product            = $this->product->getById($bug->product);
+                $bug->productStatus = $product->status;
 
                 $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool');
             }
@@ -79,8 +83,19 @@ class bugsEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story';
+        $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid';
         $this->batchSetPost($fields);
+
+        $caseID = $this->request('case', 0);
+        if($caseID)
+        {
+            $case = $this->loadModel('testcase')->getById($caseID);
+            if($case)
+            {
+                $this->setPost('case', $case->id);
+                $this->setPost('caseVersion', $case->version);
+            }
+        }
 
         $this->setPost('product', $productID);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));

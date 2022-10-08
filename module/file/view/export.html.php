@@ -3,15 +3,15 @@
  * The export view file of file module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     file
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/chosen.html.php';?>
 <?php $this->app->loadLang('file');?>
 <style>
 #customFields .panel {border: 1px solid #ddd; background: #fafafa; margin: 0;}
@@ -19,6 +19,9 @@
 #customFields .panel {position: relative;}
 #customFields .panel:before, #customFields .panel:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 0 10px 10px 10px; border-color: transparent transparent #f1f1f1 transparent; position: absolute; left: 315px; top: -9px;}
 #customFields .panel:before {border-color: transparent transparent #ddd transparent; top: -10px;}
+
+#mainContent .c-name {width:120px;}
+#mainContent .c-fileName {width:300px;}
 </style>
 <script>
 function setDownloading()
@@ -50,6 +53,16 @@ function switchEncode(fileType)
     if(fileType != 'csv') $encode.val('utf-8').attr('disabled', 'disabled');
     else $encode.removeAttr('disabled');
     $encode.trigger('chosen:updated');
+
+    if(fileType == 'word')
+    {
+        $('#tplBox').closest('tr').addClass('hidden');
+        $('#customFields').addClass('hidden');
+    }
+    else
+    {
+        $('#tplBox').closest('tr').removeClass('hidden');
+    }
 }
 
 function saveTemplate()
@@ -109,7 +122,7 @@ function deleteTemplate()
 
 /**
  * Toggle export template box.
- * 
+ *
  * @access public
  * @return void
  */
@@ -120,7 +133,7 @@ function setExportTPL()
 
 /**
  * Set whether part download.
- * 
+ *
  * @param  input target
  * @access public
  * @return void
@@ -141,7 +154,7 @@ var partQueue = new Array();
 
 /**
  * Set part down and begin the first part down.
- * 
+ *
  * @access public
  * @return void
  */
@@ -165,7 +178,7 @@ function setPartDownloading()
 
 /**
  * Start follow-up part down.
- * 
+ *
  * @access public
  * @return void
  */
@@ -187,7 +200,7 @@ function startPartDownloading()
             $.cookie('downloading', null);
             clearInterval(time);
         }
-    } 
+    }
 }
 
 $(document).ready(function()
@@ -244,10 +257,11 @@ if($isCustomExport)
     {
         $field                    = trim($field);
         $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
+        if(!is_string($exportFieldPairs[$field])) $exportFieldPairs[$field] = $field;
         if(!$hasDefaultField)$selectedFields[] = $field;
     }
     js::set('defaultExportFields', join(',', $selectedFields));
-} 
+}
 ?>
 <main id="main">
   <div class="container">
@@ -259,8 +273,8 @@ if($isCustomExport)
         <table class="table table-form">
           <tbody>
             <tr>
-              <th class='w-120px'><?php echo $lang->file->fileName;?></th>
-              <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
+              <th class='c-name'><?php echo $lang->file->fileName;?></th>
+              <td class="c-fileName"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
               <td></td>
             </tr>
             <tr>
@@ -321,7 +335,7 @@ if($isCustomExport)
             <?php endif?>
             <tr>
               <th></th>
-              <td>
+              <td class='text-center'>
                 <?php echo html::submitButton($lang->export, "onclick='setDownloading();'", 'btn btn-primary');?>
               </td>
             </tr>
@@ -331,4 +345,4 @@ if($isCustomExport)
     </div>
   </div>
 </main>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.lite.html.php';?>

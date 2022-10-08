@@ -4,6 +4,18 @@ $(function()
 
     var $titleCol = $('#batchCreateForm table thead tr th.c-title');
     if($titleCol.width() < 150) $titleCol.width(150);
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+     /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('batchCreateFields', 10, $titleCol, 150);
+        return false;
+    });
 })
 
 /**
@@ -39,18 +51,47 @@ function setOpenedBuilds(link, index)
 }
 
 /**
- * Load execution builds
+ * Set lane.
  *
- * @param  int $productID
- * @param  int $executionID
- * @param  int $index
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
+}
+
+/**
+ * Load execution builds.
+ *
+ * @param  int    $productID
+ * @param  int    $executionID
+ * @param  int    $index
  * @access public
  * @return void
  */
 function loadExecutionBuilds(productID, executionID, index)
 {
-    branch = $('#branches' + index).val();
-    if(executionID)
+    var branch = $('#branches' + index).val();
+    if(executionID == 'ditto')
+    {
+        for(var i = index - 1; i > 0, executionID == 'ditto'; i--)
+        {
+            executionID = $('#executions' + i).val();
+        }
+    }
+
+    if(executionID != 0)
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
     }
@@ -99,13 +140,13 @@ $(document).on('mousedown', 'select', function()
 
 $(document).keydown(function(event)
 {
-    if(event.ctrlKey && event.keyCode == 38)
+    if((event.ctrlKey || event.altKey) && event.keyCode == 38)
     {
         event.stopPropagation();
         event.preventDefault();
         selectFocusJump('up');
     }
-    else if(event.ctrlKey && event.keyCode == 40)
+    else if((event.ctrlKey || event.altKey) && event.keyCode == 40)
     {
         event.stopPropagation();
         event.preventDefault();

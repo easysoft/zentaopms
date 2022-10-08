@@ -1,3 +1,32 @@
+$(function()
+{
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+
+        var fieldList    = showFields + ',';
+        var requiredList = ',' + requiredFields + ',';
+        if(lifetime == 'ops' || (typeof execAttribute != 'undefined' && (execAttribute == 'request' || execAttribute == 'review')))
+        {
+            $('#fieldsstory').parent('div').addClass('hidden');
+        }
+        else if(fieldList.indexOf('story') >= 0 && requiredList.indexOf('story') < 0)
+        {
+            $('#fieldsstory').parent('div').removeClass('hidden');
+        }
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('createFields');
+        return false;
+    });
+
+    if(executionType != 'kanban') executionID = $('#execution').val();
+    loadStories(executionID);
+})
+
 /**
  * Load module, stories and members.
  *
@@ -7,6 +36,17 @@
  */
 function loadAll(executionID)
 {
+    lifetime      = lifetimeList[executionID];
+    var fieldList = showFields + ',';
+    if(lifetime == 'ops')
+    {
+        $('.storyBox').addClass('hidden');
+    }
+    else if(fieldList.indexOf('story') >= 0)
+    {
+        $('.storyBox').removeClass('hidden');
+    }
+
     loadModuleMenu(executionID);
     loadExecutionStories(executionID);
     loadExecutionMembers(executionID);
@@ -23,6 +63,7 @@ function loadExecutionMembers(executionID)
 {
     $("#multipleBox").removeAttr("checked");
     $('.team-group').addClass('hidden');
+    $(".modeBox").addClass("hidden");
     $.get(createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
@@ -56,7 +97,7 @@ function loadExecutionMembers(executionID)
  */
 function loadExecutionStories(executionID)
 {
-    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
+    $.get(createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val() + '&number=&type=full&status=active'), function(data)
     {
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
@@ -111,7 +152,8 @@ function loadExecutionStories(executionID)
  */
 function loadModuleMenu(executionID)
 {
-    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task');
+    var extra = $('#showAllModule').prop('checked') ? 'allModule' : '';
+    var link  = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra);
     $('#moduleIdBox').load(link, function(){$('#module').chosen();});
 }
 
@@ -141,6 +183,7 @@ function setOwners(result)
 {
     $("#multipleBox").removeAttr("checked");
     $('.team-group').addClass('hidden');
+    $('.modeBox').addClass('hidden');
     $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
     $('#assignedTo').next('.picker').removeClass('hidden');
     if(result == 'affair')
@@ -150,6 +193,7 @@ function setOwners(result)
         $('#assignedTo').chosen();
         $('.affair').hide();
         $('.team-group').addClass('hidden');
+        $('.modeBox').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
@@ -169,28 +213,6 @@ function setStoryRelated()
     setStoryModule();
 }
 
-/* Set the story module. */
-function setStoryModule()
-{
-    var storyID = $('#story').val();
-    if(storyID)
-    {
-        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
-        $.getJSON(link, function(storyInfo)
-        {
-            if(storyInfo)
-            {
-                $('#module').val(storyInfo.moduleID);
-                $("#module").trigger("chosen:updated");
-
-                $('#storyEstimate').val(storyInfo.estimate);
-                $('#storyPri'     ).val(storyInfo.pri);
-                $('#storyDesc'    ).val(storyInfo.spec);
-            }
-        });
-    }
-}
-
 /* Set the story priview link. */
 function setPreview()
 {
@@ -203,8 +225,8 @@ function setPreview()
     }
     else
     {
-        storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
-        var concat = config.requestType != 'GET' ? '?'  : '&';
+        storyLink  = createLink('execution', 'storyView', "storyID=" + $('#story').val());
+        var concat = storyLink.indexOf('?') < 0 ? '?' : '&';
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
 
@@ -258,22 +280,29 @@ function loadStories(executionID)
 }
 
 /**
- * load stories of module.
+ * Set lane.
  *
+ * @param  int $regionID
  * @access public
  * @return void
  */
-function loadModuleRelated()
+function setLane(regionID)
 {
-    moduleID    = $('#module').val();
-    executionID = $('#execution').val();
-    setStories(moduleID, executionID);
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lane');
+    $.get(laneLink, function(lane)
+    {
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+        $("#lane" + "_chosen").remove();
+        $("#lane").next('.picker').remove();
+        $("#lane").chosen();
+    });
 }
 
 /* Get select of stories.*/
 function setStories(moduleID, executionID)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID);
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=active');
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();
@@ -297,6 +326,13 @@ function setStories(moduleID, executionID)
         {
             $('#storyBox').removeClass('hidden');
             $('#story').parent().addClass('hidden');
+
+            /* change link when lite */
+            if(vision == 'lite')
+            {
+                config.onlybody = 'no';
+                $('#storyBox > a:first').attr('href', createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=' + moduleID + '&storyID=0&projectID=' + projectID + '&bugID=0&planID=0&todoID=0&extra=&type=story') + '#_single');
+            }
         }
     });
 }
@@ -313,6 +349,8 @@ function toggleSelectTestStory()
         $('#testStoryBox').removeClass('hidden');
         $('#copyButton').addClass('hidden');
         $('.colorpicker').css('right', '0');
+        $('#dataform .table-form>tbody>tr>th').css('width', '130px');
+        $('[lang^="zh-"] #dataform .table-form>tbody>tr>th').css('width', '120px');
     }
     else
     {
@@ -322,15 +360,23 @@ function toggleSelectTestStory()
         $('#estStarted').closest('tr').removeClass('hidden');
         $('#estimate').closest('.table-col').removeClass('hidden');
         $('#testStoryBox').addClass('hidden');
+        $('#dataform .table-form>tbody>tr>th').css('width', '100px');
     }
 }
 
+/**
+ * Add Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function addItem(obj)
 {
     var $tr = $(obj).closest('tr');
     $tr.after($tr.clone());
     var $nextTr = $tr.next();
-    $nextTr.find('#testAssignedTo').val($('#assignedTo').val());
+    $nextTr.find('#testAssignedTo').val('ditto');
     $nextTr.find('#testStory').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testStory').closest('td').find('select').val('').chosen();
     $nextTr.find('#testPri').closest('td').find('.chosen-container').remove();
@@ -338,11 +384,48 @@ function addItem(obj)
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
     $nextTr.find('.form-date').val('').datepicker();
+
+    if($nextTr.find('#testAssignedTo option:selected').val() == '')
+    {
+        $nextTr.find('#testAssignedTo').append("<option value='ditto' title='" + ditto + "'>" + ditto + "</option>");
+        $nextTr.find('#testAssignedTo').val('ditto').chosen().trigger('chosen:updated');
+    }
+    if($nextTr.find('.deadlineBox').length == 0)
+    {
+        $nextTr.find('.deadlineInput').after('<span class="input-group-addon deadlineBox"><input type="checkbox" name="deadlineDitto[' + index + ']" id="deadlineDitto" checked/> ' + ditto + '</span>');
+    }
+    if($nextTr.find('.estStartedBox').length == 0)
+    {
+        $nextTr.find('.startInput').after('<span class="input-group-addon estStartedBox"><input type="checkbox" name="estStartedDitto[' + index + '] id="estStartedDitto" checked/> ' + ditto + '</span>');
+    }
+
+    if($nextTr.find('.deadlineBox').is(':hidden'))
+    {
+        $nextTr.find('.deadlineBox').show();
+        $nextTr.find(".deadlineBox input[type='checkBox']").attr('checked', true);
+    }
+    if($nextTr.find('.estStartedBox').is(':hidden'))
+    {
+        $nextTr.find('.estStartedBox').show();
+        $nextTr.find(".estStartedBox input[type='checkBox']").attr('checked', true);
+    }
+    index ++;
 }
 
+/**
+ * remove Ditto checkBox.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
 function removeItem(obj)
 {
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+    $('.resarch').find('tr:first').find('.estStartedBox').remove();
+    $('.resarch').find('tr:first').find('.deadlineBox').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo option[value="ditto"]').remove();
+    $('.resarch').find('tr:first').find('#testAssignedTo').val('').chosen().trigger('chosen:updated');
 }
 
 function markTestStory()
@@ -397,8 +480,11 @@ $(document).ready(function()
     });
     $('#type').change(function()
     {
-        $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
-        toggleSelectTestStory();
+        if(lifetime != 'ops')
+        {
+            $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
+            toggleSelectTestStory();
+        }
     });
 
     setStoryRelated();
@@ -429,7 +515,7 @@ $(document).ready(function()
 
     $(window).resize();
 
-    /* show team menu. */
+    /* Show team menu. */
     $('[name^=multiple]').change(function()
     {
         if($(this).prop('checked'))
@@ -437,6 +523,7 @@ $(document).ready(function()
             $('#assignedTo, #assignedTo_chosen').addClass('hidden');
             $('#assignedTo').next('.picker').addClass('hidden');
             $('.team-group').removeClass('hidden');
+            $('.modeBox').removeClass('hidden');
             $('#estimate').attr('readonly', true);
         }
         else
@@ -444,61 +531,25 @@ $(document).ready(function()
             $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
             $('#assignedTo').next('.picker').removeClass('hidden');
             $('.team-group').addClass('hidden');
+            $('.modeBox').addClass('hidden');
             $('#estimate').attr('readonly', false);
         }
         $('#dataPlanGroup').fixInputGroup();
     });
 
-    /* Init task team manage dialog */
-    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
-    {
-        idStart: 0,
-        idEnd: 5,
-        chosen: true,
-        datetimepicker: false,
-        colorPicker: false,
-    });
-    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
-
-    var adjustButtons = function()
-    {
-        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
-        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
-    };
-
-    $taskTeamEditor.on('click', '.btn-add', function()
-    {
-        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
-        $newRow.addClass('highlight');
-        setTimeout(function()
-        {
-            $newRow.removeClass('highlight');
-        }, 1600);
-        adjustButtons();
-    }).on('click', '.btn-delete', function()
-    {
-        var $row = $(this).closest('tr');
-        $row.addClass('highlight').fadeOut(700, function()
-        {
-            $row.remove();
-            adjustButtons();
-        });
-    });
-
-    adjustButtons();
-
     $('#showAllModule').change(function()
     {
-        var moduleID = $('#moduleIdBox #module').val();
-        var extra    = $(this).prop('checked') ? 'allModule' : '';
+        var executionID = $('#execution').val();
+        var moduleID    = $('#moduleIdBox #module').val();
+        var extra       = $(this).prop('checked') ? 'allModule' : '';
         $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
-            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + executionID + ")").chosen();
+            $('#module').val(moduleID).chosen();
         });
     });
 });
 
-$(document).on('click', '#testStory_chosen,#story_chosen', function()
+$(document).on('click', '#testStory_chosen', function()
 {
     var $obj  = $(this).prev('select');
     var value = $obj.val();
@@ -516,42 +567,72 @@ $(document).on('click', '#testStory_chosen,#story_chosen', function()
     $obj.trigger("chosen:updated");
 })
 
-$('#modalTeam .btn').click(function()
+$('#modalTeam tfoot .btn').click(function()
 {
-    var team = '';
-    var time = 0;
-
-    /* Unique team. */
-    $('select[name^=team]').each(function(i)
-    {
-        value = $(this).val();
-        if(value == '') return;
-        $('select[name^=team]').each(function(j)
-        {
-            if(i <= j) return;
-            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
-        })
-    })
-    $('select[name^=team]').closest('tr.hidden').remove();
+    var team  = '';
+    var time  = 0;
+    var error = false;
+    var mode  = $('#mode').val();
 
     $('select[name^=team]').each(function()
     {
-        if($(this).find('option:selected').text() != '')
-        {
-            team += ' ' + $(this).find('option:selected').text();
-        }
+        if($(this).val() == '') return;
+
+        var tr      = $(this).closest('tr');
+        var account = $(this).find('option:selected').text();
+        team += ' ' + account;
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
-        if(!isNaN(estimate))
+        if(!isNaN(estimate) && estimate > 0) time += estimate;
+        if(account != '' && (isNaN(estimate) || estimate <= 0))
         {
-            time += estimate;
+              bootbox.alert(account + ' ' + estimateNotEmpty);
+              error = true;
+              return false;
         }
+    });
 
+    if(error) return false;
+    var teamList = team.split(" ");
+    if(teamList.length <= 2)
+    {
+        bootbox.alert(teamMemberError);
+        return false;
+    }
+    else
+    {
         $('#teamMember').val(team);
         $('#estimate').val(time);
-    })
+
+        if($('#modalTeam:hidden').length > 0) return ;
+        $('#modalTeam .close').click();
+    }
 });
 
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
+
+/**
+ * Toggle checkBox Ditto Whether to hide.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function hiddenDitto(obj)
+{
+    var $this  = $(obj);
+    var date   = $this.val();
+    var $ditto = $this.closest('div').find("input[type='checkBox']");
+    if(date == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}

@@ -3,7 +3,7 @@
  * The model file of upgrade module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: model.php 5019 2013-07-05 02:02:31Z wyd621@gmail.com $
@@ -28,6 +28,49 @@ class upgradeModel extends model
     }
 
     /**
+     * Get versions to update
+     *
+     * @param  mixed $openVersion
+     * @access public
+     * @return array
+     */
+    public function getVersionsToUpdate($openVersion, $fromEdition)
+    {
+        $versions = array();
+
+        /* Always update open sql. */
+        foreach($this->lang->upgrade->fromVersions as $version => $versionName)
+        {
+            if(!is_numeric($version[0])) continue;
+            if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
+        }
+        if($fromEdition == 'open') return $versions;
+
+        /* Update pro sql from pro|biz|max. */
+        foreach($this->config->upgrade->proVersion as $pro => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
+        }
+        if($fromEdition == 'pro') return $versions;
+
+        /* Update biz sql from biz|max. */
+        foreach($this->config->upgrade->bizVersion as $biz => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
+        }
+        if($fromEdition == 'biz') return $versions;
+
+        /* Update max sql only from max. */
+        foreach($this->config->upgrade->maxVersion as $max => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['max'][] = $max;
+        }
+
+        return $versions;
+    }
+
+    /**
      * The execute method. According to the $fromVersion call related methods.
      *
      * @param  string $fromVersion
@@ -37,714 +80,665 @@ class upgradeModel extends model
     public function execute($fromVersion)
     {
         set_time_limit(0);
-        $executeXuanxuan = false;
-        switch($fromVersion)
+
+        if(!isset($this->app->user)) $this->loadModel('user')->su();
+
+        $fromEdition = $this->getEditionByVersion($fromVersion);
+
+        /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
+        $currentVersion  = str_replace('.', '_', $this->config->version);
+
+        /* Execute. */
+        $fromOpenVersion = $this->getOpenVersion($fromVersion);
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+        foreach($versions as $openVersion => $chargedVersions)
         {
-        case '0_3beta':
-            $this->saveLogs('Execute 0_3beta');
-            $this->execSQL($this->getUpgradeFile('0.3'));
-        case '0_4beta':
-            $this->saveLogs('Execute 0_4beta');
-            $this->execSQL($this->getUpgradeFile('0.4'));
-        case '0_5beta':
-            $this->saveLogs('Execute 0_5beta');
-            $this->execSQL($this->getUpgradeFile('0.5'));
-        case '0_6beta':
-            $this->saveLogs('Execute 0_6beta');
-            $this->execSQL($this->getUpgradeFile('0.6'));
-        case '1_0beta':
-            $this->saveLogs('Execute 1_0beta');
-            $this->execSQL($this->getUpgradeFile('1.0.beta'));
-            $this->updateCompany();
-        case '1_0rc1':
-            $this->saveLogs('Execute 1_0rc1');
-            $this->execSQL($this->getUpgradeFile('1.0.rc1'));
-        case '1_0rc2': $this->saveLogs('Execute 1_0rc2');
-        case '1_0': $this->saveLogs('Execute 1_0');
-        case '1_0_1':
-            $this->saveLogs('Execute 1_0_1');
-            $this->execSQL($this->getUpgradeFile('1.0.1'));
-        case '1_1':
-            $this->saveLogs('Execute 1_1');
-            $this->execSQL($this->getUpgradeFile('1.1'));
-        case '1_2':
-            $this->saveLogs('Execute 1_2');
-            $this->execSQL($this->getUpgradeFile('1.2'));
-            $this->updateUBB();
-            $this->updateNL1_2();
-        case '1_3':
-            $this->saveLogs('Execute 1_3');
-            $this->execSQL($this->getUpgradeFile('1.3'));
-            $this->updateNL1_3();
-            $this->updateTasks();
-        case '1_4':
-            $this->saveLogs('Execute 1_4');
-            $this->execSQL($this->getUpgradeFile('1.4'));
-        case '1_5':
-            $this->saveLogs('Execute 1_5');
-            $this->execSQL($this->getUpgradeFile('1.5'));
-        case '2_0':
-            $this->saveLogs('Execute 2_0');
-            $this->execSQL($this->getUpgradeFile('2.0'));
-        case '2_1':
-            $this->saveLogs('Execute 2_1');
-            $this->execSQL($this->getUpgradeFile('2.1'));
-        case '2_2':
-            $this->saveLogs('Execute 2_2');
-            $this->execSQL($this->getUpgradeFile('2.2'));
-            $this->updateCases();
-            $this->updateActivatedCountOfBug();
-        case '2_3':
-            $this->saveLogs('Execute 2_3');
-            $this->execSQL($this->getUpgradeFile('2.3'));
-        case '2_4':
-            $this->saveLogs('Execute 2_4');
-            $this->execSQL($this->getUpgradeFile('2.4'));
-        case '3_0_beta1':
-            $this->saveLogs('Execute 3_0_beta1');
-            $this->execSQL($this->getUpgradeFile('3.0.beta1'));
-            $this->updateAction();
-            $this->setOrderData();
-        case '3_0_beta2': $this->saveLogs('Execute 3_0_beta2');
-        case '3_0': $this->saveLogs('Execute 3_0');
-        case '3_1':
-            $this->saveLogs('Execute 3_1');
-            $this->execSQL($this->getUpgradeFile('3.1'));
-            $this->appendExec('3_1');
-        case '3_2':
-            $this->saveLogs('Execute 3_2');
-            $this->execSQL($this->getUpgradeFile('3.2'));
-            $this->appendExec('3_2');
-        case '3_2_1':
-            $this->saveLogs('Execute 3_2_1');
-            $this->execSQL($this->getUpgradeFile('3.2.1'));
-            $this->appendExec('3_2_1');
-        case '3_3':
-            $this->saveLogs('Execute 3_3');
-            $this->execSQL($this->getUpgradeFile('3.3'));
-            $this->updateTaskAssignedTo();
-            $this->appendExec('3_3');
-        case '4_0_beta1':
-            $this->saveLogs('Execute 4_0_beta1');
-            $this->execSQL($this->getUpgradeFile('4.0.beta1'));
-            $this->appendExec('4_0_beta1');
-        case '4_0_beta2':
-            $this->saveLogs('Execute 4_0_beta2');
-            $this->execSQL($this->getUpgradeFile('4.0.beta2'));
-            $this->updateProjectType();
-            $this->updateEstimatePriv();
-            $this->appendExec('4_0_beta2');
-        case '4_0':
-            $this->saveLogs('Execute 4_0');
-            $this->execSQL($this->getUpgradeFile('4.0'));
-            $this->appendExec('4_0');
-        case '4_0_1':
-            $this->saveLogs('Execute 4_0_1');
-            $this->execSQL($this->getUpgradeFile('4.0.1'));
-            $this->addPriv4_0_1();
-            $this->appendExec('4_0_1');
-        case '4_1':
-            $this->saveLogs('Execute 4_1');
-            $this->execSQL($this->getUpgradeFile('4.1'));
-            $this->addPriv4_1();
-            $this->processTaskFinish();
-            $this->deleteCompany();
-            $this->appendExec('4_1');
-        case '4_2_beta':
-            $this->saveLogs('Execute 4_2_beta');
-            $this->execSQL($this->getUpgradeFile('4.2'));
-            $this->appendExec('4_2_beta');
-        case '4_3_beta':
-            $this->saveLogs('Execute 4_3_beta');
-            $this->execSQL($this->getUpgradeFile('4.3'));
-            $this->appendExec('4_3_beta');
-        case '5_0_beta1':
-            $this->saveLogs('Execute 5_0_beta1');
-            $this->appendExec('5_0_beta1');
-        case '5_0_beta2':
-            $this->saveLogs('Execute 5_0_beta2');
-            $this->appendExec('5_0_beta2');
-        case '5_0':
-            $this->saveLogs('Execute 5_0');
-            $this->appendExec('5_0');
-        case '5_1':
-            $this->saveLogs('Execute 5_1');
-            $this->appendExec('5_1');
-        case '5_2':
-            $this->saveLogs('Execute 5_2');
-            $this->appendExec('5_2');
-        case '5_2_1':
-            $this->saveLogs('Execute 5_2_1');
-            $this->mergeProjectGoalAndDesc();
-            $this->execSQL($this->getUpgradeFile('5.2.1'));
-            $this->appendExec('5_2_1');
-        case '5_3':
-            $this->saveLogs('Execute 5_3');
-            $this->appendExec('5_3');
-        case '6_0_beta1':
-            $this->saveLogs('Execute 6_0_beta');
-            $this->execSQL($this->getUpgradeFile('6.0.beta1'));
-            $this->toLowerTable();
-            $this->fixBugOSInfo();
-            $this->fixTaskFinishedBy();
-            $this->appendExec('6_0_beta1');
-        case '6_0':
-            $this->saveLogs('Execute 6_0');
-            $this->execSQL($this->getUpgradeFile('6.0'));
-            $this->fixDataIndex();
-            $this->appendExec('6_0');
-        case '6_1':
-            $this->saveLogs('Execute 6_1');
-            $this->execSQL($this->getUpgradeFile('6.1'));
-            $this->appendExec('6_1');
-        case '6_2':
-            $this->saveLogs('Execute 6_2');
-            $this->appendExec('6_2');
-        case '6_3':
-            $this->saveLogs('Execute 6_3');
-            $this->appendExec('6_3');
-        case '6_4':
-            $this->saveLogs('Execute 6_4');
-            $this->appendExec('6_4');
-        case '7_0':
-            $this->saveLogs('Execute 7_0');
-            $this->execSQL($this->getUpgradeFile('7.0'));
-            $this->appendExec('7_0');
-        case '7_1':
-            $this->saveLogs('Execute 7_1');
-            $this->execSQL($this->getUpgradeFile('7.1'));
-            $this->initOrder();
-            $this->appendExec('7_1');
-        case '7_2':
-            $this->saveLogs('Execute 7_2');
-            $this->appendExec('7_2');
-        case '7_2_4':
-            $this->saveLogs('Execute 7_2_4');
-            $this->execSQL($this->getUpgradeFile('7.2.4'));
-            $this->appendExec('7_2_4');
-        case '7_2_5':
-            $this->saveLogs('Execute 7_2_5');
-            $this->adjustOrder7_3();
-            $this->appendExec('7_2_5');
-        case '7_3':
-            $this->saveLogs('Execute 7_3');
-            $this->execSQL($this->getUpgradeFile('7.3'));
-            $this->adjustPriv7_4_beta();
-            $this->appendExec('7_3');
-        case '7_4_beta':
-            $this->saveLogs('Execute 7_4_beta');
-            $this->execSQL($this->getUpgradeFile('7.4.beta'));
-            $this->appendExec('7_4_beta');
-        case '8_0':
-            $this->saveLogs('Execute 8_0');
-            $this->appendExec('8_0');
-        case '8_0_1':
-            $this->saveLogs('Execute 8_0_1');
-            $this->execSQL($this->getUpgradeFile('8.0.1'));
-            $this->addPriv8_1();
-            $this->appendExec('8_0_1');
-        case '8_1':
-            $this->saveLogs('Execute 8_1');
-            $this->execSQL($this->getUpgradeFile('8.1'));
-            $this->appendExec('8_1');
-        case '8_1_3':
-            $this->saveLogs('Execute 8_1_3');
-            $this->execSQL($this->getUpgradeFile('8.1.3'));
-            $this->addPriv8_2_beta();
-            $this->adjustConfigSectionAndKey();
-            $this->appendExec('8_1_3');
-        case '8_2_beta':
-            $this->saveLogs('Execute 8_2_beta');
-            $this->appendExec('8_2_beta');
-        case '8_2':
-            $this->saveLogs('Execute 8_2');
-            $this->appendExec('8_2');
-        case '8_2_1':
-            $this->saveLogs('Execute 8_2_1');
-            $this->execSQL($this->getUpgradeFile('8.2.1'));
-            $this->appendExec('8_2_1');
-        case '8_2_2':
-            $this->saveLogs('Execute 8_2_2');
-            $this->appendExec('8_2_2');
-        case '8_2_3':
-            $this->saveLogs('Execute 8_2_3');
-            $this->appendExec('8_2_3');
-        case '8_2_4':
-            $this->saveLogs('Execute 8_2_4');
-            $this->appendExec('8_2_4');
-        case '8_2_5':
-            $this->saveLogs('Execute 8_2_5');
-            $this->appendExec('8_2_5');
-        case '8_2_6':
-            $this->saveLogs('Execute 8_2_6');
-            $this->execSQL($this->getUpgradeFile('8.2.6'));
-            $this->adjustDocModule();
-            $this->moveDocContent();
-            $this->adjustPriv8_3();
-            $this->appendExec('8_2_6');
-        case '8_3':
-            $this->saveLogs('Execute 8_3');
-            $this->appendExec('8_3');
-        case '8_3_1':
-            $this->saveLogs('Execute 8_3_1');
-            $this->execSQL($this->getUpgradeFile('8.3.1'));
-            $this->renameMainLib();
-            $this->adjustPriv8_4();
-            $this->appendExec('8_3_1');
-        case '8_4':
-            $this->saveLogs('Execute 8_4');
-            $this->appendExec('8_4');
-        case '8_4_1':
-            $this->saveLogs('Execute 8_4_1');
-            $this->execSQL($this->getUpgradeFile('8.4.1'));
-            $this->appendExec('8_4_1');
-        case '9_0_beta':
-            $this->saveLogs('Execute 9_0_beta');
-            $this->execSQL($this->getUpgradeFile('9.0.beta'));
-            $this->adjustPriv9_0();
-            $this->appendExec('9_0_beta');
-        case '9_0':
-            $this->saveLogs('Execute 9_0');
-            $this->fixProjectProductData();
-            $this->appendExec('9_0');
-        case '9_0_1':
-            $this->saveLogs('Execute 9_0_1');
-            $this->execSQL($this->getUpgradeFile('9.0.1'));
-            $this->addBugDeadlineToCustomFields();
-            $this->adjustPriv9_0_1();
-            $this->appendExec('9_0_1');
-        case '9_1':
-            $this->saveLogs('Execute 9_1');
-            $this->execSQL($this->getUpgradeFile('9.1'));
-            $this->appendExec('9_1');
-        case '9_1_1':
-            $this->saveLogs('Execute 9_1_1');
-            $this->execSQL($this->getUpgradeFile('9.1.1'));
-            $this->appendExec('9_1_1');
-        case '9_1_2':
-            $this->saveLogs('Execute 9_1_2');
-            $this->execSQL($this->getUpgradeFile('9.1.2'));
-            $this->processCustomMenus();
-            $this->adjustPriv9_2();
-            $this->appendExec('9_1_2');
-        case '9_2':
-            $this->saveLogs('Execute 9_2');
-            $this->appendExec('9_2');
-        case '9_2_1':
-            $this->saveLogs('Execute 9_2_1');
-            $this->appendExec('9_2_1');
-        case '9_3_beta':
-            $this->saveLogs('Execute 9_3_beta');
-            $this->execSQL($this->getUpgradeFile('9.3.beta'));
-            $this->appendExec('9_3_beta');
-        case '9_4':
-            $this->saveLogs('Execute 9_4');
-            $this->execSQL($this->getUpgradeFile('9.4'));
-            $this->adjustPriv9_4();
-            $this->appendExec('9_4');
-        case '9_5':
-            $this->saveLogs('Execute 9_5');
-            $this->execSQL($this->getUpgradeFile('9.5'));
-            $this->appendExec('9_5');
-        case '9_5_1':
-            $this->saveLogs('Execute 9_5_1');
-            $this->execSQL($this->getUpgradeFile('9.5.1'));
-            $this->initProjectStoryOrder();
-            $this->appendExec('9_5_1');
-        case '9_6':
-            $this->saveLogs('Execute 9_6');
-            $this->execSQL($this->getUpgradeFile('9.6'));
-            $this->fixDatatableColsConfig();
-            $this->appendExec('9_6');
-        case '9_6_1':
-            $this->saveLogs('Execute 9_6_1');
-            $this->addLimitedGroup();
-            $this->appendExec('9_6_1');
-        case '9_6_2':
-            $this->saveLogs('Execute 9_6_2');
-            $this->appendExec('9_6_2');
-        case '9_6_3':
-            $this->saveLogs('Execute 9_6_3');
-            $this->execSQL($this->getUpgradeFile('9.6.3'));
-            $this->changeLimitedName();
-            $this->adjustPriv9_7();
-            $this->changeStoryWidth();
-            $this->appendExec('9_6_3');
-        case '9_7':
-            $this->saveLogs('Execute 9_7');
-            $this->execSQL($this->getUpgradeFile('9.7'));
-            $this->changeTeamFields();
-            $this->moveData2Notify();
-            $this->appendExec('9_7');
-        case '9_8':
-            $this->saveLogs('Execute 9_8');
-            $this->fixTaskFinishedInfo();
-            $this->appendExec('9_8');
-        case '9_8_1':
-            $this->saveLogs('Execute 9_8_1');
-            $this->execSQL($this->getUpgradeFile('9.8.1'));
-            $this->fixTaskAssignedTo();
-            $this->fixProjectClosedInfo();
-            $this->resetProductLine();
-            $this->appendExec('9_8_1');
-        case '9_8_2':
-            $this->saveLogs('Execute 9_8_2');
-            $this->execSQL($this->getUpgradeFile('9.8.2'));
-            $this->addUniqueKeyToTeam();
-            $this->appendExec('9_8_2');
-        case '9_8_3':
-            $this->saveLogs('Execute 9_8_3');
-            $this->execSQL($this->getUpgradeFile('9.8.3'));
-            $this->adjustPriv10_0_alpha();
-            $this->appendExec('9_8_3');
-        case '10_0_alpha':
-            $this->saveLogs('Execute 10_0_alpha');
-            $this->execSQL($this->getUpgradeFile('10.0.alpha'));
-            $this->fixProjectStatisticBlock();
-            $this->appendExec('10_0_alpha');
-        case '10_0_beta':
-            $this->saveLogs('Execute 10_0_beta');
-            $this->execSQL($this->getUpgradeFile('10.0.beta'));
-            $this->appendExec('10_0_beta');
-        case '10_0':
-            $this->saveLogs('Execute 10_0');
-            $this->execSQL($this->getUpgradeFile('10.0'));
-            $this->fixStorySpecTitle();
-            $this->removeUnlinkPriv();//Remove unlink privilege for story, bug and testcase module.
-            $this->appendExec('10_0');
-        case '10_1':
-            $this->saveLogs('Execute 10_1');
-            $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
-            $this->execSQL($xuanxuanSql);
-            $executeXuanxuan = true;
-            $this->appendExec('10_1');
-        case '10_2':
-            $this->saveLogs('Execute 10_2');
-            $this->appendExec('10_2');
-        case '10_3':
-            $this->saveLogs('Execute 10_3');
-            $this->appendExec('10_3');
-        case '10_3_1':
-            $this->saveLogs('Execute 10_3_1');
-            $this->execSQL($this->getUpgradeFile('10.3.1'));
-            $this->removeCustomMenu();
-            $this->appendExec('10_3_1');
-        case '10_4':
-            $this->saveLogs('Execute 10_4');
-            $this->execSQL($this->getUpgradeFile('10.4'));
-            $this->changeTaskParentValue();
-            $this->appendExec('10_4');
-        case '10_5':
-            $this->saveLogs('Execute 10_5');
-            $this->appendExec('10_5');
-        case '10_5_1':
-            $this->saveLogs('Execute 10_5_1');
-            $this->execSQL($this->getUpgradeFile('10.5.1'));
-            $this->appendExec('10_5_1');
-        case '10_6':
-            $this->saveLogs('Execute 10_6');
-            if(!$executeXuanxuan)
+            $executedXuanxuan = false;
+
+            /* Execute open. */
+            if(str_replace('_', '.', $openVersion) == '10.1') $executedXuanxuan = true;
+
+            $this->saveLogs("Execute $openVersion");
+            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
+            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion);
+
+            /* Execute pro. */
+            foreach($chargedVersions['pro'] as $proVersion)
             {
-                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
+                $this->saveLogs("Execute $proVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
+                $this->executePro($proVersion);
+            }
+
+            /* Execute biz. */
+            foreach($chargedVersions['biz'] as $bizVersion)
+            {
+                $this->saveLogs("Execute $bizVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
+                $this->executeBiz($bizVersion, $executedXuanxuan);
+            }
+
+            /* Execute max. */
+            foreach($chargedVersions['max'] as $maxVersion)
+            {
+                $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
+                $this->saveLogs("Execute $maxVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
+                $this->executeMax($maxVersion);
+            }
+        }
+
+        /* Means open source/pro upgrade to biz or max. */
+        if($this->config->edition != 'open')
+        {
+            if($fromEdition == 'open' or $fromEdition == 'pro')
+            {
+                $this->importBuildinModules();
+                $this->importLiteModules();
+                $this->addSubStatus();
+            }
+        }
+    }
+
+    /**
+     * Process data for open source.
+     *
+     * @param  string $openVersion
+     * @param  string $fromEdition
+     * @param  bool   $executedXuanxuan
+     * @param  string $fromVersion
+     * @access public
+     * @return void
+     */
+    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion)
+    {
+        switch($openVersion)
+        {
+            case '1_0beta':
+                $this->updateCompany();
+                break;
+            case '1_2':
+                $this->updateUBB();
+                $this->updateNL1_2();
+                break;
+            case '1_3':
+                $this->updateNL1_3();
+                $this->updateTasks();
+                break;
+            case '2_2':
+                $this->updateCases();
+                $this->updateActivatedCountOfBug();
+                break;
+            case '3_0_beta1':
+                $this->updateAction();
+                $this->setOrderData();
+                break;
+            case '3_3':
+                $this->updateTaskAssignedTo();
+                break;
+            case '4_0_beta2':
+                $this->updateProjectType();
+                $this->updateEstimatePriv();
+                break;
+            case '4_0_1':
+                $this->addPriv4_0_1();
+                break;
+            case '4_1':
+                $this->addPriv4_1();
+                $this->processTaskFinish();
+                $this->deleteCompany();
+                break;
+            case '5_2_1':
+                $this->mergeProjectGoalAndDesc();
+                break;
+            case '6_0_beta1':
+                $this->toLowerTable();
+                $this->fixBugOSInfo();
+                $this->fixTaskFinishedBy();
+                break;
+            case '6_0':
+                $this->fixDataIndex();
+                break;
+            case '7_1':
+                $this->initOrder();
+                break;
+            case '7_3':
+                $this->adjustPriv7_4_beta();
+                break;
+            case '8_0_1':
+                $this->addPriv8_1();
+                break;
+            case '8_1_3':
+                $this->addPriv8_2_beta();
+                $this->adjustConfigSectionAndKey();
+                break;
+            case '8_2_6':
+                $this->adjustDocModule();
+                $this->moveDocContent();
+                $this->adjustPriv8_3();
+                break;
+            case '8_3_1':
+                $this->renameMainLib();
+                $this->adjustPriv8_4();
+                break;
+            case '9_0_beta':
+                $this->adjustPriv9_0();
+                break;
+            case '9_0':
+                $this->fixProjectProductData();
+                break;
+            case '9_0_1':
+                $this->addBugDeadlineToCustomFields();
+                $this->adjustPriv9_0_1();
+                break;
+            case '9_1_2':
+                $this->processCustomMenus();
+                $this->adjustPriv9_2();
+                break;
+            case '9_4':
+                $this->adjustPriv9_4();
+                break;
+            case '9_5_1':
+                $this->initProjectStoryOrder();
+                break;
+            case '9_6':
+                $this->fixDatatableColsConfig();
+                break;
+            case '9_6_1':
+                $this->addLimitedGroup();
+                break;
+            case '9_6_3':
+                $this->changeLimitedName();
+                $this->adjustPriv9_7();
+                $this->changeStoryWidth();
+                break;
+            case '9_7':
+                $this->changeTeamFields();
+                $this->moveData2Notify();
+                break;
+            case '9_8':
+                $this->fixTaskFinishedInfo();
+                break;
+            case '9_8_1':
+                $this->fixTaskAssignedTo();
+                $this->fixProjectClosedInfo();
+                $this->resetProductLine();
+                break;
+            case '9_8_2':
+                $this->addUniqueKeyToTeam();
+                break;
+            case '9_8_3':
+                $this->adjustPriv10_0_alpha();
+                break;
+            case '10_0_alpha':
+                $this->fixProjectStatisticBlock();
+                break;
+            case '10_0':
+                $this->fixStorySpecTitle();
+                $this->removeUnlinkPriv();//Remove unlink privilege for story, bug and testcase module.
+                break;
+            case '10_1':
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                 $this->execSQL($xuanxuanSql);
-                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
-                $this->execSQL($xuanxuanSql);
-            }
-            $this->initXuanxuan();
-            $this->appendExec('10_6');
-        case '11_0':
-            $this->saveLogs('Execute 11_0');
-            $this->appendExec('11_0');
-        case '11_1':
-            $this->saveLogs('Execute 11_1');
-            $this->execSQL($this->getUpgradeFile('11.1'));
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                $executedXuanxuan = true;
+            case '10_3_1':
+                $this->removeCustomMenu();
+                break;
+            case '10_4':
+                $this->changeTaskParentValue();
+                break;
+            case '10_6':
+                if(!$executedXuanxuan)
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                    $this->saveLogs('Execute 10_6');
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
                     $this->execSQL($xuanxuanSql);
                 }
-                $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
-                $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
-            }
-            $this->appendExec('11_1');
-        case '11_2':
-            $this->saveLogs('Execute 11_2');
-            $this->execSQL($this->getUpgradeFile('11.2'));
-            $this->processDocLibAcl();
-            $this->appendExec('11_2');
-        case '11_3':
-            $this->saveLogs('Execute 11_3');
-            $this->execSQL($this->getUpgradeFile('11.3'));
-            $this->addPriv11_4();
-            $this->appendExec('11_3');
-        case '11_4':
-            $this->saveLogs('Execute 11_4');
-            $this->execSQL($this->getUpgradeFile('11.4'));
-            $this->appendExec('11_4');
-        case '11_4_1':
-            $this->saveLogs('Execute 11_4_1');
-            $this->execSQL($this->getUpgradeFile('11.4.1'));
-            $this->addPriv11_5();
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                $this->initXuanxuan();
+                break;
+            case '11_1':
+                if(empty($this->config->isINT))
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
-                    $this->execSQL($xuanxuanSql);
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
+                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
                 }
-                $this->updateXX_11_5();
-            }
-            $this->appendExec('11_4_1');
-        case '11_5':
-            $this->saveLogs('Execute 11_5');
-            $this->execSQL($this->getUpgradeFile('11.5'));
-            $this->appendExec('11_5');
-        case '11_5_1':
-            $this->saveLogs('Execute 11_5_1');
-            $this->appendExec('11_5_1');
-        case '11_5_2':
-            $this->saveLogs('Execute 11_5_2');
-            $this->execSQL($this->getUpgradeFile('11.5.2'));
-            $this->appendExec('11_5_2');
-        case '11_6':
-            $this->saveLogs('Execute 11_6');
-            $this->execSQL($this->getUpgradeFile('11.6'));
-            $this->appendExec('11_6');
-        case '11_6_1':
-            $this->saveLogs('Execute 11_6_1');
-            $this->adjustWebhookType();
-            $this->adjustPriv11_6_2();
-            $this->appendExec('11_6_1');
-        case '11_6_2':
-            $this->saveLogs('Execute 11_6_2');
-            $this->appendExec('11_6_2');
-        case '11_6_3':
-            $this->saveLogs('Execute 11_6_3');
-            $this->adjustPriv11_6_4();
-            $this->appendExec('11_6_3');
-        case '11_6_4':
-            $this->saveLogs('Execute 11_6_4');
-            $this->execSQL($this->getUpgradeFile('11.6.4'));
-            $this->appendExec('11_6_4');
-        case '11_6_5':
-            $this->saveLogs('Execute 11_6_5');
-            $this->execSQL($this->getUpgradeFile('11.6.5'));
-            $this->fixGroupAcl();
-            $this->fixBugTypeList();
-            $this->adjustPriv11_7();
-            $this->rmEditorAndTranslateDir();
-            $this->setConceptSetted();
+                break;
+            case '11_2':
+                $this->processDocLibAcl();
+                break;
+            case '11_3':
+                $this->addPriv11_4();
+                break;
+            case '11_4_1':
+                $this->addPriv11_5();
+                if(empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                    $this->updateXX_11_5();
+                }
+                break;
+            case '11_6_1':
+                $this->adjustWebhookType();
+                $this->adjustPriv11_6_2();
+                break;
+            case '11_6_3':
+                $this->adjustPriv11_6_4();
+                break;
+            case '11_6_5':
+                $this->fixGroupAcl();
+                $this->fixBugTypeList();
+                $this->adjustPriv11_7();
+                $this->rmEditorAndTranslateDir();
+                $this->setConceptSetted();
 
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                if(empty($this->config->isINT))
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0.0-beta.1.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
-                    $this->execSQL($xuanxuanSql);
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0.0-beta.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
                 }
-            }
+                break;
+            case '11_7':
+                $this->adjustPriv12_0();
+                break;
+            case '12_0_1':
+                $this->importRepoFromConfig();
+                break;
+            case '12_1':
+                if(empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
+                break;
+            case '12_3_3':
+                $this->addPriv12_3_3();
+                $this->processImport2TaskBugs();  //Code for task #7552
+                break;
+            case '12_4_2':
+                $this->fixFromCaseVersion();
+                $this->initStoryOfPlan();
+                break;
+            case '12_4_4':
+                $this->adjustPriv12_5();
+                break;
+            case '12_5_3':
+                $this->adjustWhitelistOfProject();
+                $this->adjustWhitelistOfProduct();
+                $this->adjustPriv15_0();
+                break;
+            case '15_0_rc1':
+                $this->adjustUserView();
+                break;
+            case '15_0_rc3':
+                if(empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta2.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta3.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
+                $this->updateLibType();
+                $this->updateRunCaseStatus();
+                $this->fix4TaskLinkProject();
+                $this->fixExecutionTeam();
+                break;
+            case '15_0':
+                $this->adjustBugOfProject();
+                $this->processBuildTable();
+                $this->updateProductVersion();
+                break;
+            case '15_0_2':
+                $this->uniqueProjectAdmin();
+                break;
+            case '15_2':
+                $this->processGitlabRepo();
+                $this->processStoryFileType();
+                $this->processProductDoc();
+                $this->adjustPriv15_3();
+                break;
+            case '15_3':
+                $this->adjustBugRequired();
+                $this->processTesttaskDate();
+                $this->processDocTempContent();
+                break;
+            case '15_4':
+                if(empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
+                break;
+            case '15_5':
+                $this->addDefaultKanbanPri();
+                break;
+            case '15_7_1':
+                $this->updateObjectBranch();
+                $this->updateProjectStories();
+                $this->updateProjectLinkedBranch();
+                break;
+            case '16_0_beta1':
+                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
+                break;
+            case '16_1':
+                $this->moveKanbanData();
+                break;
+            case '16_2':
+                $this->updateSpaceTeam();
+                $this->updateDocField();
+                break;
+            case '16_4':
+                set_time_limit(0);
+                $this->updateActivatedDate();
 
-            $this->appendExec('11_6_5');
-        case '11_7':
-            $this->saveLogs('Execute 11_7');
-            $this->execSQL($this->getUpgradeFile('11.7'));
-            $this->adjustPriv12_0();
-            $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
-            $this->appendExec('11_7');
-        case '12_0':
-            $this->saveLogs('Execute 12_0');
-            $this->appendExec('12_0');
-        case '12_0_1':
-            $this->saveLogs('Execute 12_0_1');
-            $this->execSQL($this->getUpgradeFile('12.0.1'));
-            $this->importRepoFromConfig();
-            $this->appendExec('12_0_1');
-        case '12_1':
-            $this->saveLogs('Execute 12_1');
-            $this->execSQL($this->getUpgradeFile('12.1'));
+                if(!empty($this->config->isINT))
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $executedXuanxuan = true;
+                }
+                else
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
 
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                switch($fromEdition)
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
-                    $this->execSQL($xuanxuanSql);
+                    case 'open':
+                        $this->execSQL($this->getUpgradeFile('proinstall'));
+                    case 'pro':
+                        $this->execSQL($this->getUpgradeFile('bizinstall'));
+                    case 'biz':
+                        $this->execSQL($this->getUpgradeFile('maxinstall'));
+                        $this->execSQL($this->getUpgradeFile('functions'));
                 }
-            }
 
-            $this->appendExec('12_1');
-        case '12_2':
-            $this->saveLogs('Execute 12_2');
-            $this->execSQL($this->getUpgradeFile('12.2'));
-            $this->appendExec('12_2');
-        case '12_3':
-            $this->saveLogs('Execute 12_3');
-            $this->appendExec('12_3');
-        case '12_3_1':
-            $this->saveLogs('Execute 12_3_1');
-            $this->appendExec('12_3_1');
-        case '12_3_2':
-            $this->saveLogs('Execute 12_3_2');
-            $this->execSQL($this->getUpgradeFile('12.3.2'));
-            $this->appendExec('12_3_2');
-        case '12_3_3':
-            $this->saveLogs('Execute 12_3_3');
-            $this->execSQL($this->getUpgradeFile('12.3.3'));
-            $this->addPriv12_3_3();
-            $this->processImport2TaskBugs();  //Code for task #7552
-            $this->appendExec('12_3_3');
-        case '12_4':
-            $this->saveLogs('Execute 12_4');
-            $this->execSQL($this->getUpgradeFile('12.4'));
-            $this->appendExec('12_4');
-        case '12_4_1':
-            $this->saveLogs('Execute 12_4_1');
-            $this->execSQL($this->getUpgradeFile('12.4.1'));
-            $this->appendExec('12_4_1');
-        case '12_4_2':
-            $this->saveLogs('Execute 12_4_2');
-            $this->execSQL($this->getUpgradeFile('12.4.2'));
-            $this->fixFromCaseVersion();
-            $this->initStoryOfPlan();
-            $this->appendExec('12_4_2');
-        case '12_4_3':
-            $this->saveLogs('Execute 12_4_3');
-            $this->appendExec('12_4_3');
-        case '12_4_4':
-            $this->saveLogs('Execute 12_4_4');
-            $this->execSQL($this->getUpgradeFile('12.4.4'));
-            $this->adjustPriv12_5();
-            $this->appendExec('12_4_4');
-        case '12_5':
-            $this->saveLogs('Execute 12_5');
-            $this->appendExec('12_5');
-        case '12_5_1':
-            $this->saveLogs('Execute 12_5_1');
-            $this->appendExec('12_5_1');
-        case '12_5_2':
-            $this->saveLogs('Execute 12_5_2');
-            $this->appendExec('12_5_2');
-        case '12_5_3':
-            $this->saveLogs('Execute 12_5_3');
-            $this->execSQL($this->getUpgradeFile('12.5.3'));
-            $this->adjustWhitelistOfProject();
-            $this->adjustWhitelistOfProduct();
-            $this->adjustPriv15_0();
-            $this->appendExec('12_5_3');
-        case '15_0_rc1':
-            $this->saveLogs('Execute 15_0_rc1');
-            $this->adjustUserView();
-            $this->appendExec('15_0_rc1');
-        case '15_0_rc2':
-            $this->saveLogs('Execute 15_0_rc2');
-            $this->execSQL($this->getUpgradeFile('15.0.rc2'));
-            $this->appendExec('15_0_rc2');
-        case '15_0_rc3':
-            $this->saveLogs('Execute 15_0_rc3');
-            $this->execSQL($this->getUpgradeFile('15.0.rc3'));
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                $this->updateGroup4Lite();
+                break;
+            case '16_5':
+                $this->updateProjectStatus();
+                $this->updateStoryReviewer($fromVersion);
+                break;
+            case '17_0_beta1':
+                if(!$executedXuanxuan)
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta2.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta3.sql';
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
                     $this->execSQL($xuanxuanSql);
                 }
-            }
-            $this->updateLibType();
-            $this->updateRunCaseStatus();
-            $this->fix4TaskLinkProject();
-            $this->fixExecutionTeam();
-            $this->appendExec('15_0_rc3');
-        case '15_0':
-            $this->saveLogs('Execute 15_0');
-            $this->execSQL($this->getUpgradeFile('15.0'));
-            $this->adjustBugOfProject();
-            $this->processBuildTable();
-            $this->updateProductVersion();
-            $this->appendExec('15_0');
-        case '15_0_1':
-            $this->saveLogs('Execute 15_0_1');
-            $this->appendExec('15_0_1');
-        case '15_0_2':
-            $this->saveLogs('Execute 15_0_2');
-            $this->execSQL($this->getUpgradeFile('15.0.2'));
-            $this->uniqueProjectAdmin();
-            $this->appendExec('15_0_2');
-        case '15_0_3':
-            $this->saveLogs('Execute 15_0_3');
-            $this->execSQL($this->getUpgradeFile('15.0.3'));
-            $this->appendExec('15_0_3');
-        case '15_2':
-            $this->saveLogs('Execute 15_2');
-            $this->execSQL($this->getUpgradeFile('15.2'));
-            $this->processGitlabRepo();
-            $this->processStoryFileType();
-            $this->processProductDoc();
-            $this->adjustPriv15_3();
-            $this->appendExec('15_2');
-        case '15_3':
-            $this->saveLogs('Execute 15_3');
-            $this->execSQL($this->getUpgradeFile('15.3'));
-            $this->adjustBugRequired();
-            $this->processTesttaskDate();
-            $this->processDocTempContent();
-            $this->appendExec('15_3');
-        case '15_4':
-            $this->saveLogs('Execute 15_4');
-            $this->execSQL($this->getUpgradeFile('15.4'));
-            if(empty($this->config->isINT))
-            {
-                if(!$executeXuanxuan)
+                break;
+            case '17_0_beta2':
+                $this->changeStoryNeedReview();
+                break;
+            case '17_0':
+                $this->replaceSetLanePriv();
+                $this->updateProjectData();
+                break;
+            case '17_1':
+                if(!$executedXuanxuan)
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
                     $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
-                    $this->execSQL($xuanxuanSql);
+                    $this->xuanAddMessageIndexColumns();
+                    $this->xuanReindexMessages();
+                    $this->xuanUpdateLastReadMessageIndex();
+                    $this->xuanFixChatsWithoutLastRead();
                 }
-            }
-            $this->appendExec('15_4');
-        case '15_5':
-            $this->saveLogs('Execute 15_5');
-            $this->execSQL($this->getUpgradeFile('15.5'));
-            $this->appendExec('15_5');
-        case '15_6':
-            $this->saveLogs('Execute 15_6');
-            $this->execSQL($this->getUpgradeFile('15.6'));
-            $this->appendExec('15_6');
-        case '15_7':
-            $this->saveLogs('Execute 15_7');
-            $this->execSQL($this->getUpgradeFile('15.7'));
-            $this->appendExec('15_7');
-        case '15_7_1':
-            $this->saveLogs('Execute 15_7_1');
-            $this->execSQL($this->getUpgradeFile('15.7.1'));
-            $this->updateObjectBranch();
-            $this->updateProjectStories();
-            $this->updateProjectLinkedBranch();
-            $this->appendExec('15_7_1');
-        case '16_0_beta1':
-            $this->saveLogs('Execute 16_0_beta1');
-            $this->execSQL($this->getUpgradeFile('16.0.beta1'));
-            $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
-            $this->appendExec('16_0_beta1');
+                $this->moveProjectAdmins();
+                $this->addStoryViewPriv();
+                break;
+            case '17_3':
+                $this->processBugLinkBug();
+                break;
+            case '17_4':
+                $this->rebuildFULLTEXT();
+                $this->updateSearchIndex();
+                if(!$executedXuanxuan)
+                {
+                    $table  = $this->config->db->prefix . 'im_chat';
+                    $exists = $this->checkFieldsExists($table, 'adminInvite');
+                    if(!$exists)
+                    {
+                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+                    }
+                }
+                break;
+            case '17_5':
+                $this->updateOSAndBrowserOfBug();
+                $this->addURPriv();
+                $this->updateStoryStatus();
+                if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
+                break;
+            case '17_6':
+                $this->updateStoryFile();
+                $this->convertTaskteam();
+                $this->convertEstToEffort();
+                $this->fixWeeklyReport();
+                $this->xuanSetOwnedByForGroups();
+                $this->xuanRecoverCreatedDates();
+                $this->xuanSetPartitionedMessageIndex();
+                break;
+            case '17_6_1':
+                $this->updateProductView();
+                break;
         }
 
         $this->deletePatch();
         return true;
+    }
+
+    /**
+     * Process data for pro.
+     *
+     * @param  string $proVersion
+     * @access public
+     * @return void
+     */
+    public function executePro($proVersion)
+    {
+        switch($proVersion)
+        {
+            case 'pro1_1_1':
+                $this->execSQL($this->getUpgradeFile('pro1.1'));
+                break;
+            case 'pro3_2_1':
+                $this->recordFinished();
+                break;
+            case 'pro3_3':
+                $this->toLowerTable('pro');
+                break;
+            case 'pro4_0':
+                $this->fixRepo();
+                break;
+            case 'pro7_0_beta':
+                $this->fixReport();
+                break;
+            case 'pro8_3':
+                $this->execSQL($this->getUpgradeFile('pro8.2')); //Fix bug #1752.
+                break;
+            case 'pro8_8':
+                $this->checkURAndSR();
+                break;
+            case 'pro10_0_2':
+                $this->fixReportLang();
+                break;
+            case 'pro10_2':
+                $this->addDefaultKanbanPri();
+                break;
+        }
+    }
+
+    /**
+     * Process data for biz.
+     *
+     * @param  int   $bizVersion
+     * @param  bool  $executedXuanxuan
+     * @access public
+     * @return void
+     */
+    public function executeBiz($bizVersion, $executedXuanxuan)
+    {
+        switch($bizVersion)
+        {
+            case 'biz2_3_1':
+                $this->adjustFeedbackViewData();
+                break;
+            case 'biz3_0':
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
+                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
+                }
+                break;
+            case 'biz3_2_1':
+                if(!empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                    $this->updateXX_11_5();
+                }
+                break;
+            case 'biz3_4':
+                $this->importBuildinModules();
+                break;
+            case 'biz3_5_alpha':
+                $this->addSubStatus();
+            case 'biz3_5_beta':
+                $this->processSubTables();
+                break;
+            case 'biz3_6':
+                $this->addDefaultActions();
+                $this->importCaseLibModule();
+                $this->deleteBuildinFields();
+                break;
+            case 'biz3_6_1':
+                $this->addWorkflowActions();
+                $this->processWorkflowLayout();
+                $this->processWorkflowLabel();
+                $this->processWorkflowCondition();
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
+            case 'biz3_7':
+                $this->processWorkflowFields();
+                break;
+            case 'biz3_7_2':
+                $this->processFlowStatus();
+                break;
+            case 'biz4_0_1':
+                $this->addMailtoFields();
+                break;
+            case 'biz4_0_3':
+                $this->updateAttendStatus();
+                $this->initView4WorkflowDatasource();
+                break;
+            case 'biz5_0':
+                $this->adjustPrivBiz5_0_1();
+                break;
+            case 'biz5_0_1':
+                $this->updateWorkflow4Execution();
+                break;
+            case 'biz5_2':
+                $this->addDefaultKanbanPri();
+                break;
+            case 'biz5_3_1':
+                $this->processFeedbackField();
+                $this->addFileFields();
+                $this->addReportActions();
+                break;
+            case 'biz6_4':
+                $this->importLiteModules();
+                break;
+            case 'biz7_0_beta1':
+                $this->processViewFields();
+                break;
+            case 'biz7_0':
+                $this->processFlowPosition();
+                break;
+            case 'biz7_4':
+                $this->processCreatedInfo();
+                $this->processCreatedBy();
+                $this->updateApproval();
+                $this->addDefaultRuleToWorkflow();
+                $this->processReviewLinkages();
+                $this->addFlowActions('biz7.4');
+                $this->addFlowFields('biz7.4');
+                break;
+            case 'biz7_6':
+                //$this->processFeedbackModule();
+        }
+    }
+
+    /**
+     * Process data for max.
+     *
+     * @param  int   $maxVersion
+     * @access public
+     * @return void
+     */
+    public function executeMax($maxVersion)
+    {
+        switch($maxVersion)
+        {
+            case 'max2_2':
+                $this->addDefaultKanbanPri();
+                break;
+            case 'max3_0':
+                $this->moveResult2Node();
+                break;
+            case 'max3_3':
+                $this->addReviewIssusApprovalData();
+                break;
+        }
     }
 
     /**
@@ -757,7 +751,48 @@ class upgradeModel extends model
     public function getConfirm($fromVersion)
     {
         $confirmContent = '';
-        switch($fromVersion)
+        $openVersion    = $fromVersion;
+
+        if($fromVersion[0] == 'p')
+        {
+            $openVersion     = $this->config->upgrade->proVersion[$fromVersion];
+            $confirmContent .= $this->getProConfirm($fromVersion);
+        }
+        elseif($fromVersion[0] == 'b')
+        {
+            $openVersion     = $this->config->upgrade->bizVersion[$fromVersion];
+            $proVersion      = array_search($openVersion, $this->config->upgrade->proVersion);
+
+            $confirmContent .= $this->getProConfirm($proVersion);
+            $confirmContent .= $this->getBizConfirm($fromVersion);
+        }
+        elseif($fromVersion[0] == 'm')
+        {
+            $openVersion     = $this->config->upgrade->maxVersion[$fromVersion];
+            $proVersion      = array_search($openVersion, $this->config->upgrade->proVersion);
+            $bizVersion      = array_search($openVersion, $this->config->upgrade->bizVersion);
+
+            $confirmContent .= $this->getProConfirm($proVersion);
+            $confirmContent .= $this->getBizConfirm($bizVersion);
+            $confirmContent .= $this->getMaxConfirm($fromVersion);
+        }
+
+        $confirmContent = $this->getOpenConfirm($openVersion, $fromVersion) . $confirmContent;
+        return str_replace('zt_', $this->config->db->prefix, $confirmContent);
+    }
+
+    /**
+     * Get open source confirm contents.
+     *
+     * @param  string  $openVersion
+     * @param  string  $fromVersion
+     * @access public
+     * @return void
+     */
+    public function getOpenConfirm($openVersion, $fromVersion)
+    {
+        $confirmContent = '';
+        switch($openVersion)
         {
             case '0_3beta':    $confirmContent .= file_get_contents($this->getUpgradeFile('0.3'));
             case '0_4beta':    $confirmContent .= file_get_contents($this->getUpgradeFile('0.4'));
@@ -948,8 +983,291 @@ class upgradeModel extends model
             case '15_7': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7'));
             case '15_7_1': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7.1'));
             case '16_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0.beta1'));
+            case '16_0': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0'));
+            case '16_1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.1'));
+            case '16_2': $confirmContent .= file_get_contents($this->getUpgradeFile('16.2'));
+            case '16_3': $confirmContent .= file_get_contents($this->getUpgradeFile('16.3'));
+            case '16_4':
+                if(strpos($fromVersion, 'pro') === false and strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false)
+                {
+                    $confirmContent .= file_get_contents($this->getUpgradeFile('proinstall'));
+                }
+
+                if(strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false)
+                {
+                    $confirmContent .= file_get_contents($this->getUpgradeFile('bizinstall'));
+                }
+
+                if(strpos($fromVersion, 'max') === false)
+                {
+                    $confirmContent .= file_get_contents($this->getUpgradeFile('maxinstall'));
+                    $confirmContent .= file_get_contents($this->getUpgradeFile('functions'));
+                }
+
+                $confirmContent .= file_get_contents($this->getUpgradeFile('16.4'));
+
+            case '16_5_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5.beta1'));
+            case '16_5': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5'));
+            case '17_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta1'));
+            case '17_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta2'));
+            case '17_0': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0'));
+            case '17_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.2'));
+            case '17_3':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.3'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.0.1.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
+            case '17_5':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.5'));
+            case '17_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6'));
+            case '17_6_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6.1'));
         }
-        return str_replace('zt_', $this->config->db->prefix, $confirmContent);
+
+        return $confirmContent;
+    }
+
+    /**
+     * Get pro version confirm contents.
+     *
+     * @param  string $fromVersion
+     * @access public
+     * @return void
+     */
+    public function getProConfirm($fromVersion)
+    {
+        $confirmContent = '';
+        switch($fromVersion)
+        {
+            case 'pro1_0':   $confirmContent .= file_get_contents($this->getUpgradeFile('pro1.0'));
+            case 'pro1_1':
+            case 'pro1_1_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro1.1'));
+            case 'pro1_2':
+            case 'pro1_3':   $confirmContent .= file_get_contents($this->getUpgradeFile('pro1.3'));
+            case 'pro2_0':
+            case 'pro2_0_1':
+            case 'pro2_1':   $confirmContent .= file_get_contents($this->getUpgradeFile('pro2.1'));
+            case 'pro2_2_beta':
+            case 'pro2_3_beta':
+            case 'pro3_0_beta1':
+            case 'pro3_0':   $confirmContent .= file_get_contents($this->getUpgradeFile('pro3.0'));
+            case 'pro3_1':
+            case 'pro3_2':
+            case 'pro3_2_1':
+            case 'pro3_3':
+            case 'pro4_0_beta1':
+            case 'pro4_0': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.0'));
+            case 'pro4_1_beta':
+            case 'pro4_2': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.2'));
+            case 'pro4_3': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.3'));
+            case 'pro4_4': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.4'));
+            case 'pro4_5': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.5'));
+            case 'pro4_6': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.6'));
+            case 'pro4_7':
+            case 'pro4_7_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro4.7.1'));
+            case 'pro5_0':
+            case 'pro5_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro5.0.1'));
+            case 'pro5_1':
+            case 'pro5_1_3': $confirmContent .= file_get_contents($this->getUpgradeFile('pro5.1.3'));
+            case 'pro5_2':
+            case 'pro5_2_1':
+            case 'pro5_3':
+            case 'pro5_3_1':
+            case 'pro5_3_2':
+            case 'pro5_3_3':
+            case 'pro5_4':
+            case 'pro5_4_1':
+            case 'pro5_5':
+            case 'pro5_5_1':
+            case 'pro6_0_beta':
+            case 'pro6_0':
+            case 'pro6_0_1':
+            case 'pro6_1':
+            case 'pro6_2':
+            case 'pro6_3':
+            case 'pro6_3_1':
+            case 'pro6_4': $confirmContent .= file_get_contents($this->getUpgradeFile('pro6.4'));
+            case 'pro6_5':
+            case 'pro6_5_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro6.5.1'));
+            case 'pro6_6':
+            case 'pro6_6_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro6.6.1'));
+            case 'pro6_7':
+            case 'pro6_7_1':
+            case 'pro6_7_2':
+            case 'pro6_7_3':
+            case 'pro7_0_beta': $confirmContent .= file_get_contents($this->getUpgradeFile('pro7.0.beta'));
+            case 'pro7_1':
+            case 'pro7_2':
+            case 'pro7_3':
+            case 'pro7_4':
+            case 'pro7_5':
+            case 'pro7_5_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro7.5.1'));
+            case 'pro8_0':
+            case 'pro8_1':
+            case 'pro8_2': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.2'));
+            case 'pro8_3': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.3'));
+            case 'pro8_3_1':
+            case 'pro8_4': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.4'));
+            case 'pro8_5':
+            case 'pro8_5_1': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.5.1'));
+            case 'pro8_5_2':
+            case 'pro8_5_3':
+            case 'pro8_6': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.6'));
+            case 'pro8_7':
+            case 'pro8_8':
+            case 'pro8_8_1':
+            case 'pro8_8_2':
+            case 'pro8_8_3':
+            case 'pro8_9':
+            case 'pro8_9_1':
+            case 'pro8_9_2':
+            case 'pro8_9_3': $confirmContent .= file_get_contents($this->getUpgradeFile('pro8.9.3'));
+            case 'pro8_9_4':
+            case 'pro9_0':
+            case 'pro9_0_1':
+            case 'pro9_0_2':
+            case 'pro9_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('pro9.0.3'));
+            case 'pro10_0_rc1':
+            case 'pro10_0':
+            case 'pro10_0_1':
+            case 'pro10_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('pro10.0.2'));
+            case 'pro10_1':
+            case 'pro10_2':
+            case 'pro10_3':
+            case 'pro10_3_1':
+            case 'pro11_0_beta1':
+        }
+
+        return $confirmContent;
+    }
+
+    /**
+     * Get biz version confirm contents.
+     *
+     * @param  string $fromVersion
+     * @access public
+     * @return void
+     */
+    public function getBizConfirm($fromVersion)
+    {
+        $confirmContent = '';
+        switch($fromVersion)
+        {
+            case 'biz1_0': $confirmContent .= file_get_contents($this->getUpgradeFile('biz1.0'));
+            case 'biz1_1':
+            case 'biz1_1_1':
+            case 'biz1_1_2':
+            case 'biz1_1_3':
+            case 'biz1_1_4':
+            case 'biz2_0_beta':
+            case 'biz2_1':
+            case 'biz2_2': $confirmContent .= file_get_contents($this->getUpgradeFile('biz2.2'));
+            case 'biz2_3':
+            case 'biz2_3_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz2.3.1'));
+            case 'biz2_4': $confirmContent .= file_get_contents($this->getUpgradeFile('biz2.4'));
+            case 'biz3_0':
+                if(!empty($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
+            case 'biz3_1':
+            case 'biz3_2': $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.2'));
+            case 'biz3_2_1':
+            case 'biz3_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.3'));
+            case 'biz3_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.4'));
+            case 'biz3_5_alpha': $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.5.alpha'));
+            case 'biz3_5_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.5.beta'));
+            case 'biz3_5':
+            case 'biz3_5_1':
+            case 'biz3_6':
+            case 'biz3_6_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.6.1'));
+            case 'biz3_7':   $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.7'));
+            case 'biz3_7_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.7.1'));
+            case 'biz3_7_2': $confirmContent .= file_get_contents($this->getUpgradeFile('biz3.7.2'));
+            case 'biz4_0':   $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.0'));
+            case 'biz4_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.0.1'));
+            case 'biz4_0_2': $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.0.2'));
+            case 'biz4_0_3': $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.0.3'));
+            case 'biz4_0_4': $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.0.4'));
+            case 'biz4_1':
+            case 'biz4_1_1':
+            case 'biz4_1_2':
+            case 'biz4_1_3': $confirmContent .= file_get_contents($this->getUpgradeFile('biz4.1.3'));
+            case 'biz5_0_rc1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz5.0.rc1'));
+            case 'biz5_0':
+            case 'biz5_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz5.0.1'));
+            case 'biz5_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz5.1'));
+            case 'biz5_2':
+            case 'biz5_3':
+            case 'biz5_3_1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz5.3.1'));
+            case 'biz6_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('biz6.0.beta1'));
+            case 'biz6_0':
+            case 'biz6_1':
+        }
+
+        return $confirmContent;
+    }
+
+    /**
+     * Get max version confirm  contents.
+     *
+     * @param  string $fromVersion
+     * @access public
+     * @return void
+     */
+    public function getMaxConfirm($fromVersion)
+    {
+        $confirmContent = '';
+        if($fromVersion == 'max2_0_beta4' && $this->config->version != 'max2.0.rc1') $fromVersion = 'max2_0_rc1';
+
+        switch($fromVersion)
+        {
+            case 'max2_0_rc1':
+            case 'max2_0_beta4': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.0.beta4'));
+            case 'max2_0': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.0'));
+            case 'max2_1':
+            case 'max2_2': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.2'));
+            case 'max2_3':
+            case 'max2_3_1': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.3.1'));
+            case 'max2_4_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.4.beta1'));
+            case 'max2_4':
+        }
+
+        return $confirmContent;
+    }
+
+    /**
+     * Get edition by version.
+     *
+     * @param  string    $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersion($version)
+    {
+        $editions = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        return is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+    }
+
+    /**
+     * Get openVersion
+     *
+     * @param  int    $version.
+     * @access public
+     * @return string
+     */
+    public function getOpenVersion($version)
+    {
+        $edition = $this->getEditionByVersion($version);
+        return is_numeric($version[0]) ? $version : zget($this->config->upgrade->{$edition . 'Version'}, $version);
     }
 
     /**
@@ -993,18 +1311,22 @@ class upgradeModel extends model
     public function checkConsistency($version = '')
     {
         if(empty($version)) $version = $this->config->installedVersion;
+
+        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $version      = str_replace('.', '_', $version);
+        $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+        $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
+        $openVersion  = str_replace('_', '.', $openVersion);
+        $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
+
         $alterSQL    = '';
-        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
         $lines = file($standardSQL);
         if(empty($this->config->isINT))
         {
-            $xVersion = $version;
-            $version  = str_replace('.', '_', $version);
-            if(strpos($version, 'pro') !== false and isset($this->config->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->proVersion[$version]);
-            if(strpos($version, 'biz') !== false and isset($this->config->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->bizVersion[$version]);
-
+            $xVersion     = $openVersion;
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
             if(file_exists($xStandardSQL))
             {
@@ -1099,16 +1421,28 @@ class upgradeModel extends model
             {
                 if(isset($this->config->excludeFiles[$file])) continue;
 
-                $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
+                $fullPath = $basePath . str_replace('/', DS, $file);
                 if(file_exists($fullPath))
                 {
                     $isDir = is_dir($fullPath);
-                    if(($isDir  and !$zfile->removeDir($fullPath)) or
+                    if(!is_writable($fullPath) or ($isDir and !$zfile->removeDir($fullPath)) or
                        (!$isDir and !$zfile->removeFile($fullPath)))
                     {
                         $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
                     }
                 }
+            }
+        }
+
+        /* Delete all patch files when upgrade zentao. */
+        $patchPath = $this->app->getTmpRoot() . 'patch';
+        $isDir     = is_dir($patchPath);
+        if(file_exists($patchPath))
+        {
+            if(!is_writable($patchPath) or ($isDir and !$zfile->removeDir($patchPath)) or
+                (!$isDir and !$zfile->removeDir($patchPath)))
+            {
+                $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
             }
         }
 
@@ -2734,7 +3068,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'testsuite';
-            $newMethods   = array('batchCreateCase', 'exportTemplet', 'import', 'showImport');
+            $newMethods   = array('batchCreateCase', 'exportTemplate', 'import', 'showImport');
             foreach($newMethods as $method)
             {
                 $data->method = $method;
@@ -2899,22 +3233,26 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
-        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = 'process';
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
-            if(strpos($fromVersion, 'pro') !== false and version_compare($fromVersion, 'pro10.0', '<'))
+            if(strpos($fromVersion, 'pro') !== false)
             {
-                $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = 'notice';
             }
-            elseif(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz5.0', '<'))
+            elseif(strpos($fromVersion, 'biz') !== false)
             {
-                $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = 'notice';
             }
             elseif(version_compare($fromVersion, '15.0.rc1', '<'))
             {
-                $needProcess['search'] = true;
+                $needProcess['search'] = 'notice';
             }
         }
+
+        $openVersion = $this->getOpenVersion(str_replace('.', '_', $fromVersion));
+        if(version_compare($openVersion, '17_4', '<=')) $needProcess['changeEngine'] = 'notice';
+
         return $needProcess;
     }
 
@@ -3593,9 +3931,7 @@ class upgradeModel extends model
     public function initUserView()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
-        $this->loadModel('user');
-        foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
+        $this->dao->delete()->from(TABLE_USERVIEW)->exec();
         return true;
     }
 
@@ -3617,7 +3953,7 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
             $this->saveLogs($this->dao->get());
-            $this->setting->setItem('system.common.xuanxuan.turnon', '1');
+            $this->setting->setItem('system.common.xuanxuan.turnon', '0');
             $this->setting->setItem('system.common.xxserver.noticed', '1');
         }
 
@@ -3747,7 +4083,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('browse')->where('module')->eq('testsuite')->andWhere('method')->eq('library')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('create')->where('module')->eq('testsuite')->andWhere('method')->eq('createLib')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('view')->where('module')->eq('testsuite')->andWhere('method')->eq('libView')->exec();
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplet,import,showImport,batchCreateCase,createCase')->exec();
+        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplate,import,showImport,batchCreateCase,createCase')->exec();
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
@@ -4280,7 +4616,7 @@ class upgradeModel extends model
             }
         }
 
-        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage')->fetchAll('id', 'id');
+        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id', 'id');
         foreach($userViews as $account => $userView)
         {
             $projects = zget($accountProjects, $account, array());
@@ -4336,9 +4672,37 @@ class upgradeModel extends model
 
         if(isset($data->newProgram))
         {
-            if(!$this->post->longTime and !$this->post->end and isset($data->begin)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
+            if(!$this->post->longTime and !$this->post->end and isset($data->begin)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
-            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
+            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
+
+            if($data->projectType == 'project')
+            {
+                $projectPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                    ->where('deleted')->eq('0')
+                    ->andWhere('id')->in($projectIdList)
+                    ->fetchPairs();
+
+                $projectNames  = array();
+                $duplicateList = '';
+                foreach($projectPairs as $projectID => $projectName)
+                {
+                    if(isset($projectNames[$projectName]))
+                    {
+                        $duplicateList .= "$projectID,";
+                        $duplicateList .= "{$projectNames[$projectName]},";
+                        continue;
+                    }
+
+                    $projectNames[$projectName] = $projectID;
+                }
+
+                if($duplicateList)
+                {
+                    echo "<script>new parent.$.zui.ModalTrigger({url: parent.$.createLink('upgrade', 'renameObject', 'type=project&duplicateList=$duplicateList', '', 1), type: 'iframe', width:'40%'}).show();</script>";
+                    die;
+                }
+            }
 
             /* Insert program. */
             $program = new stdclass();
@@ -4353,6 +4717,7 @@ class upgradeModel extends model
             $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
             $program->PM            = $data->projectType == 'project' ? $data->PM : '';
+            $program->vision        = 'rnd';
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
@@ -4400,6 +4765,7 @@ class upgradeModel extends model
                 $line->order  = $maxOrder;
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
                 $lineID = $this->dao->lastInsertID();
+
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 
@@ -4417,7 +4783,7 @@ class upgradeModel extends model
 
         if(isset($data->newProject))
         {
-            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
+            if(!$this->post->longTime and !$this->post->end) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
             /* Create a project. */
             $this->loadModel('action');
@@ -4461,6 +4827,7 @@ class upgradeModel extends model
                     $data->begin         = $projects[$projectID]->begin;
                     $data->end           = $projects[$projectID]->end;
                     $data->projectStatus = $projects[$projectID]->status;
+                    $data->team          = $projects[$projectID]->team;
                     $data->PM            = $projects[$projectID]->PM;
                     $data->projectAcl    = $projects[$projectID]->acl == 'custom' ? 'private' : $projects[$projectID]->acl;
 
@@ -4585,24 +4952,24 @@ class upgradeModel extends model
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
-        $this->computeProductAcl($productIdList, $programID);
+        $this->computeProductAcl($productIdList, $programID, $lineID);
 
         /* No project is created when there are no sprints. */
         if(!$sprintIdList) return;
 
-        if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
+        if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
-        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
 
         /* Project linked objects. */
-        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
-        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
+        $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
 
         /* Put sprint stories into project story mdoule. */
         $sprintStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)
@@ -4724,10 +5091,11 @@ class upgradeModel extends model
      *
      * @param  array  $productIdList
      * @param  int    $programID
+     * @param  int    $lineID
      * @access public
      * @return void
      */
-    public function computeProductAcl($productIdList = array(), $programID = 0)
+    public function computeProductAcl($productIdList = array(), $programID = 0, $lineID = 0)
     {
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
@@ -4738,6 +5106,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+            $data->line    = $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
@@ -4752,7 +5121,7 @@ class upgradeModel extends model
     public function computeObjectMembers()
     {
         $this->app->loadLang('user');
-        $projects      = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $projects      = $this->dao->select('id,days,PM')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectIdList = array_keys($projects);
 
         /* Get product and sprint team. */
@@ -4805,7 +5174,9 @@ class upgradeModel extends model
 
             $projectMember = array_filter($projectMember);
             $project       = zget($projects, $projectID, '');
-            $members       = implode(',', $projectMember);
+
+            if(!empty($project) and !isset($projectMember[$project->PM])) $projectMember[$project->PM] = $project->PM;
+            $members = implode(',', $projectMember);
 
             $this->dao->update(TABLE_DOCLIB)
                 ->set('users')->eq($members)
@@ -4851,7 +5222,7 @@ class upgradeModel extends model
             $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
-        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
         $whitelistACL  = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
         foreach($customSprints as $sprint)
         {
@@ -4931,17 +5302,6 @@ class upgradeModel extends model
     {
         $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
         return true;
-    }
-
-    /**
-     * Append execute for pro and biz.
-     *
-     * @param  string $fromVersion
-     * @access public
-     * @return void
-     */
-    public function appendExec($zentaoVersion)
-    {
     }
 
     /**
@@ -5055,8 +5415,9 @@ class upgradeModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('acl')->eq('custom')->andWhere('type')->eq('sprint')->fetchAll();
         foreach($projects as $project)
         {
-            $groups   = explode(',', $project->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $project->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5067,9 +5428,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($project->id)->exec();
         }
 
         return true;
@@ -5086,8 +5449,9 @@ class upgradeModel extends model
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll();
         foreach($products as $product)
         {
-            $groups   = explode(',', $product->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $product->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5098,9 +5462,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->where('id')->eq($product->id)->exec();
+            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($product->id)->exec();
         }
 
         return true;
@@ -5361,6 +5727,102 @@ class upgradeModel extends model
     }
 
     /**
+     * Move kanban card data to kanbancell table.
+     *
+     * @access public
+     * @return void
+     *
+     */
+    public function moveKanbanData()
+    {
+        /* Move common kanban data. */
+        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
+
+        $cellGroup = array();
+        foreach($cards as $cardID => $card)
+        {
+            if(!$card->lane or !$card->column) continue;
+
+            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
+            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
+            $cellGroup[$key] = $cards;
+        }
+
+        foreach($cellGroup as $key => $cards)
+        {
+            $key = explode('-', $key);
+            if(!is_array($key)) continue;
+
+            $cell = new stdclass();
+            $cell->kanban = $key[0];
+            $cell->lane   = $key[1];
+            $cell->column = $key[2];
+            $cell->type   = 'common';
+            $cell->cards  = $cards;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+
+        /* Drop group kanban data. */
+        $groupLanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`groupby`')->ne('')->fetchPairs();
+        if(!empty($groupLanePairs))
+        {
+            $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->in($groupLanePairs)->exec();
+            $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($groupLanePairs)->exec();
+        }
+
+        /* Move execution kanban data. */
+        $executionKanban = $this->dao->select('t1.id as `lane`, t1.execution, t1.type, t2.id as `column`, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id = t2.lane')
+            ->where('t1.execution')->gt(0)
+            ->fetchGroup('lane');
+
+        foreach($executionKanban as $laneID => $laneGroup)
+        {
+            foreach($laneGroup as $colData)
+            {
+                if(!$laneID or !$colData->column) continue;
+
+                $cell = new stdclass();
+                $cell->kanban = $colData->execution;
+                $cell->lane   = $laneID;
+                $cell->column = $colData->column;
+                $cell->type   = $colData->type;
+                $cell->cards  = $colData->cards;
+
+                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+            }
+        }
+    }
+
+    /**
+     * Update kanban space team.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSpaceTeam()
+    {
+        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team, ',', whitelist) as users") ->from(TABLE_KANBAN)->fetchAll('space');
+        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team, ',', whitelist) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
+
+        foreach($kanbanUsers as $spaceID => $kanban)
+        {
+            $team = zget($spaceUsers, $spaceID)->users;
+            $team = $team . ',' . $kanban->users;
+            $team = explode(',', $team);
+            $team = array_filter($team);
+            $team = array_unique($team);
+            $team = implode(',', $team);
+            $team = trim($team, ',');
+
+            $this->dao->update(TABLE_KANBANSPACE)->set('`team`')->eq($team)->where('id')->eq($spaceID)->exec();
+        }
+        $this->dao->update(TABLE_KANBANSPACE)->set('`whitelist`')->eq('')->exec();
+        $this->dao->update(TABLE_KANBAN)->set('`whitelist`')->eq('')->exec();
+    }
+
+    /**
      * Adjust for bug required field.
      *
      * @access public
@@ -5390,15 +5852,16 @@ class upgradeModel extends model
      */
     public function updateObjectBranch()
     {
-        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->fetchPairs();
+        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->where('branch')->ne(0)->fetchPairs();
+        if(empty($moduleBranchPairs)) return true;
 
-        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->ne(0)->fetchPairs();
+        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->ne(0)->fetchPairs();
+        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->ne(0)->fetchPairs();
+        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
         return true;
@@ -5463,6 +5926,1640 @@ class upgradeModel extends model
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Document library for updating documents.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateDocField()
+    {
+        $hasModuleDocs = $this->dao->select('*')->from(TABLE_DOC)->where('module')->ne(0)->fetchAll('id');
+        $docModules    = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->fetchAll('id');
+        foreach($hasModuleDocs as $doc)
+        {
+            $libID = isset($docModules[$doc->module]->root) ? $docModules[$doc->module]->root : 0;
+            if(!$libID or $libID == $doc->lib) continue;
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('id')->eq($doc->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Update activated date by history action.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateActivatedDate()
+    {
+        $actions = $this->dao->select('objectID, objectType, max(date) as date')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->in('story, task, bug')->groupBy('objectID, objectType')->fetchAll();
+        foreach($actions as $action)
+        {
+            $table = TABLE_BUG;
+            if($action->objectType == 'story') $table = TABLE_STORY;
+            if($action->objectType == 'task') $table  = TABLE_TASK;
+
+            $this->dao->update($table)->set('activatedDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Update group date for lite.
+     *
+     * @access public
+     * @return bool
+     * */
+    public function updateGroup4Lite()
+    {
+        $privTable  = $this->config->db->prefix . 'grouppriv';
+        $adminPrivs = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('1')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $pmPrivs    = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('4')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $topPrivs   = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('9')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $liteGroup  = $this->dao->select('*')->from(TABLE_GROUP)->where('vision')->eq('lite')->fetchAll();
+
+        $sql = 'REPLACE INTO ' . TABLE_GROUPPRIV . ' VALUES ';
+        foreach($liteGroup as $group)
+        {
+            if($group->role == 'liteAdmin' and !empty($adminPrivs))
+            {
+                foreach($adminPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteProject' and !empty($pmPrivs))
+            {
+                foreach($pmPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteTeam' and !empty($topPrivs))
+            {
+                foreach($topPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+        }
+
+        $sql = rtrim($sql, ', ') . ';';
+
+        $this->dao->exec($sql);
+
+        return true;
+    }
+
+    /**
+     * Gets the extension file to be moved.
+     *
+     * @access public
+     * @return array
+     */
+    public function getExtFiles()
+    {
+        $files       = array();
+        $allModules  = glob($this->app->moduleRoot . '*');
+        $skipModules = $this->getEncryptedModules($allModules);
+
+        foreach($allModules as $modulePath)
+        {
+            $module = basename($modulePath);
+            if(in_array($module, $skipModules)) continue;
+
+            $dirRoot = in_array($module, $this->config->upgrade->openModules) ? $modulePath . DS . 'ext' : $modulePath;
+            $dirs    = glob($dirRoot . DS . '*');
+            foreach($dirs as $dirPath)
+            {
+                $dir      = basename($dirPath);
+                $realPath = is_file($dirPath) ? $dirRoot : $dirPath;
+                $path     = in_array($module, $this->config->upgrade->openModules) ? $module . DS . 'ext' . DS . $dir : $module . DS . $dir;
+                if(is_dir($realPath))
+                {
+                    $files += $this->getPluginFiles($module, $dir, $realPath, $path);
+                }
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Get modules that are not open source.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return array
+     */
+    public function getEncryptedModules($allModules)
+    {
+        $encryptModules = array();
+        foreach($allModules as $modulePath)
+        {
+            $customFiles = array();
+            $module      = basename($modulePath);
+            if(in_array($module, $this->config->upgrade->openModules))
+            {
+                $extRoot = $modulePath . DS . 'ext';
+                if(!is_dir($extRoot))
+                {
+                    $encryptModules[] = $module;
+                    continue;
+                }
+                else
+                {
+                    foreach(array('control', 'model') as $dir)
+                    {
+                        $realPath = $extRoot . DS . $dir;
+                        $path     = $module . DS . 'ext' . DS . $dir;
+                        if(!is_dir($realPath)) continue;
+                        $customFiles += $this->getPluginFiles($module, $dir, $realPath, $path);
+                    }
+                }
+            }
+            else
+            {
+                foreach(array('control.php', 'model.php') as $file)
+                {
+                    $filePath = $modulePath . DS . $file;
+                    if(!is_file($filePath)) continue;
+
+                    $customFiles += $this->getPluginFiles($module, $file, $modulePath, $module);
+                }
+            }
+
+            if(empty($customFiles) or $module == 'owt') $encryptModules[$module] = $module;
+        }
+        return $encryptModules;
+    }
+
+    /**
+     * Get plugin files.
+     *
+     * @param  string $module
+     * @param  string $dir
+     * @param  string $realPath
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getPluginFiles($module, $dir, $realPath, $path)
+    {
+        $pluginFiles = array();
+        $files       = is_file($realPath . DS . $dir) ? array($dir) : glob($realPath . DS . '*');
+        foreach($files as $file)
+        {
+            $file     = basename($file);
+            $filePath = $realPath . DS . $file;
+            $fileName = is_file($realPath . DS . $dir) ? $path : $path . DS . $file;
+
+            /* If you are currently pointing to a directory, the files in that directory are traversed. */
+            if(is_dir($filePath))
+            {
+                $pluginFiles += $this->getPluginFiles($module, $dir, $filePath, $fileName);
+            }
+            else
+            {
+                $handle = fopen($filePath, 'r');
+                $line   = fgets($handle);
+                $line   = fgets($handle);
+                fclose($handle);
+
+                /* Check whether the current file is encrypted. */
+                if(strpos($line, "extension_loaded('ionCube Loader')") === false)
+                {
+                    $systemFiles = file_get_contents('systemfiles.txt');
+                    $systemFiles = str_replace('/', DS, $systemFiles);
+                    if(strpos($systemFiles, ",$fileName,") !== false) continue;
+
+                    $pluginFiles[$fileName] = $fileName;
+                }
+            }
+        }
+
+        return $pluginFiles;
+    }
+
+    /**
+     * Get custom modules.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return array
+     */
+    public function getCustomModules($allModules)
+    {
+        $customModules = array();
+        $systemFiles   = file_get_contents('systemfiles.txt');
+        $systemFiles   = str_replace('/', DS, $systemFiles);
+        foreach($allModules as $modulePath)
+        {
+            $customFiles = array();
+            $module      = basename($modulePath);
+            if(!in_array($module, $this->config->upgrade->openModules) and !preg_match("#$module(/[a-z]*)*(/[a-z]+.[a-z]+)+#", $systemFiles)) $customModules[$module] = $module;
+        }
+        return $customModules;
+    }
+
+    /**
+     * Move extension files.
+     *
+     * @access public
+     * @return array
+     */
+    public function moveExtFiles()
+    {
+        $data       = fixer::input('post')->get();
+        $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
+        $response   = array('result' => 'success');
+
+        foreach($data->files as $file)
+        {
+            $dirRoot  = $customRoot . DS . dirname($file);
+            $fileName = basename($file);
+            $fromPath = $this->app->getModuleRoot() . $file;
+            $toPath   = $dirRoot . DS . $fileName;
+            if(!is_dir($dirRoot))
+            {
+                if(!mkdir($dirRoot, 0777, true))
+                {
+                    $response['result']  = 'fail';
+                    $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
+
+                    return $response;
+                }
+            }
+            copy($fromPath, $toPath);
+            $this->replaceIncludePath($toPath);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Remove encrypted directories.
+     *
+     * @access public
+     * @return array
+     */
+    public function removeEncryptedDir()
+    {
+        $allModules    = glob($this->app->moduleRoot . '*');
+        $skipModules   = $this->getEncryptedModules($allModules);
+        $customModules = $this->getCustomModules($allModules);
+        $modules       = $skipModules + $customModules;
+        $zfile         = $this->app->loadClass('zfile');
+        $response      = array('result' => 'success');
+        $command       = array();
+        foreach($modules as $module)
+        {
+            if(in_array($module, $this->config->upgrade->openModules)) continue;
+
+            $dirPath = $this->app->moduleRoot . $module;
+            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath;
+        }
+
+        if(!empty($command))
+        {
+            $response['result']  = 'fail';
+            $response['command'] = $command;
+         }
+
+        return $response;
+    }
+
+    /**
+     * Replace the load path of the file.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return void
+     */
+    public function replaceIncludePath($filePath)
+    {
+        $content = file_get_contents($filePath);
+        if(strpos(basename($filePath), 'html'))
+        {
+            $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/)(?!ext/)([a-z]+/)#', '$1' . '$app->getModuleRoot() . ' . '$2$5$6', $content);
+
+            $systemFiles = file_get_contents('systemfiles.txt');
+            $systemFiles = str_replace('/', DS, $systemFiles);
+
+            preg_match_all('#(include )(\'|")(../){2,}[a-z]+/ext/[a-z]+/(([a-z]+[.]?)+)#', $content, $matches);
+            foreach($matches[0] as $fileName)
+            {
+                $fileName = preg_replace("#(include )('|\")((../){2,})#", "", $fileName);
+                if(strpos($systemFiles, $fileName) !== false)
+                {
+                    $fileName = basename($fileName);
+                    $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/max/$5', $content);
+                }
+                else
+                {
+                    $fileName = basename($fileName);
+                    $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/custom/$5', $content);
+                }
+            }
+        }
+        else
+        {
+            $dirPath    = dirname($filePath);
+            $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
+            $moduleName = explode(DS,  $dir)[0];
+
+            $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
+            $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
+            $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
+        }
+        file_put_contents($filePath, $content);
+    }
+
+    /**
+     * Add groups default kanban private
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultKanbanPri()
+    {
+        /* Fix bug #17954. */
+        $hasKanbanPri = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('kanban')->fetch();
+        if(!$hasKanbanPri)
+        {
+            $this->app->loadLang('group');
+            $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->in('admin,pm,po')->fetchPairs('id');
+            foreach($groups as $groupID)
+            {
+                foreach($this->lang->resource->kanban as $method => $name)
+                {
+                    if(stripos($method, 'delete') === false)
+                    {
+                        $groupPriv = new stdclass();
+                        $groupPriv->group  = $groupID;
+                        $groupPriv->module = 'kanban';
+                        $groupPriv->method = $method;
+
+                        $this->dao->insert(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Update the story reviewer when 12 version to 15.
+     *
+     * @param  string  $fromVersion
+     * @access public
+     * @return void
+     */
+    public function updateStoryReviewer($fromVersion)
+    {
+        $isOldVersion = false;
+        $fromVersion  = str_replace('_', '.', $fromVersion);
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '12.5.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+        elseif($fromVersion[0] == 'p' and version_compare($fromVersion, 'pro9.0.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+        elseif($fromVersion[0] == 'b' and version_compare($fromVersion, 'biz4.1.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+
+        if(!$isOldVersion) return;
+
+        $stories = $this->dao->select('t1.*,t2.PO,t2.createdBy')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.status')->in('draft,changed')
+            ->fetchAll('id');
+
+        foreach($stories as $storyID => $story)
+        {
+            if(!empty($story->assignedTo))
+            {
+                $story->reviewer = $story->assignedTo;
+            }
+            elseif(!empty($story->PO))
+            {
+                $story->reviewer = $story->PO;
+            }
+            else
+            {
+                $story->reviewer = $story->createdBy;
+            }
+
+            $data = new stdclass();
+            $data->story      = $storyID;
+            $data->version    = $story->version;
+            $data->reviewer   = $story->reviewer;
+            $data->result     = '';
+            $data->reviewDate = '';
+
+            $this->dao->insert(TABLE_STORYREVIEW)->data($data)->exec();
+        }
+    }
+
+    /**
+     * Update the project status.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateProjectStatus()
+    {
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('doing')
+            ->andWhere('type')->eq('project')
+            ->andWhere('realBegan')->eq('0000-00-00')
+            ->fetchAll('id');
+
+        if(empty($projects)) return;
+
+        $projectIDList = array_keys($projects);
+
+        $executions = $this->dao->select('id,project,min(realBegan) as minBegan')->from(TABLE_EXECUTION)
+            ->where('status')->eq('doing')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('project')->in($projectIDList)
+            ->groupBy('project')
+            ->fetchAll();
+
+        if(empty($executions)) return;
+
+        foreach ($executions as $execution) $this->dao->update(TABLE_PROJECT)->set('realBegan')->eq($execution->minBegan)->where('id')->eq($execution->project)->exec();
+    }
+
+    /**
+     * Change story need Review.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeStoryNeedReview()
+    {
+        $this->loadModel('story');
+        $this->loadModel('setting');
+
+        $rndNeedReview  = $this->setting->getItem('owner=system&vision=rnd&module=story&section=&key=needReview');
+        $liteNeedReview = $this->setting->getItem('owner=system&vision=lite&module=story&section=&key=needReview');
+
+        $data = new stdclass();
+        $data->forceReview      = '';
+        $data->forceReviewDepts = '';
+        $data->forceReviewRoles = '';
+
+        if(!empty($rndNeedReview))  $this->setting->setItems("system.story@rnd", $data);
+        if(!empty($liteNeedReview)) $this->setting->setItems("system.story@lite", $data);
+
+        $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
+    }
+
+    /**
+     * The setlane permission is deleted. We need to replace setlane with editlanename and editlanecolor.
+     *
+     * @access public
+     * @return void
+     */
+    public function replaceSetLanePriv()
+    {
+        $groupIDList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('kanban')
+            ->andWhere('method')->eq('setLane')
+            ->fetchAll();
+
+        if(!empty($groupIDList))
+        {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('module')->eq('kanban')
+                ->andWhere('method')->eq('setLane')
+                ->exec();
+        }
+
+        foreach($groupIDList as $groupID)
+        {
+            $data = new stdClass();
+            $data->group  = $groupID->group;
+            $data->module = 'kanban';
+            $data->method = 'editLaneName';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'editLaneColor';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Update path and grade of program, project and execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProjectData()
+    {
+        /* Process programs. */
+        $programs = $this->dao->select('id,parent,grade,path')->from(TABLE_PROJECT)->where('type')->eq('program')->orderBy('parent_asc')->fetchAll('id');
+        foreach($programs as $program)
+        {
+            if(!$program->parent)
+            {
+                $program->grade = 1;
+                $program->path  = ",$program->id,";
+            }
+            else
+            {
+                $program->grade = $programs[$program->parent]->grade + 1;
+                $program->path  = $programs[$program->parent]->path . "$program->id,";
+            }
+
+            $this->dao->update(TABLE_PROGRAM)
+                ->set('path')->eq($program->path)
+                ->set('grade')->eq($program->grade)
+                ->where('id')->eq($program->id)->exec();
+        }
+
+        /* Process projects. */
+        $projects = $this->dao->select('id,project,parent,grade,path')->from(TABLE_PROJECT)->where('type')->eq('project')->orderBy('parent_asc')->fetchAll('id');
+        foreach($projects as $project)
+        {
+            if(!$project->parent)
+            {
+                $project->grade = 1;
+                $project->path  = ",$project->id,";
+            }
+            else
+            {
+                $project->grade = $programs[$project->parent]->grade + 1;
+                $project->path  = $programs[$project->parent]->path . "$project->id,";
+            }
+
+            $this->dao->update(TABLE_PROJECT)
+                ->set('path')->eq($project->path)
+                ->set('grade')->eq($project->grade)
+                ->where('id')->eq($project->id)->exec();
+        }
+
+        /* Process executions. */
+        $sprints = $this->dao->select('id,project,parent,grade,path')->from(TABLE_PROJECT)
+            ->where('type')->ne('project')
+            ->andWhere('type')->ne('program')
+            ->orderBy('parent_asc')->fetchAll('id');
+
+        foreach($sprints as $sprint)
+        {
+            if($sprint->parent == $sprint->project)
+            {
+                $sprint->grade = 1;
+                $sprint->path  = ",$sprint->project,$sprint->id,";
+            }
+            else
+            {
+                $sprint->grade = 2;
+                $sprint->path  = $sprints[$sprint->parent]->path . "$sprint->id,";
+            }
+
+            $this->dao->update(TABLE_EXECUTION)
+                ->set('path')->eq($sprint->path)
+                ->set('grade')->eq($sprint->grade)
+                ->where('id')->eq($sprint->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Move project admins to new table.
+     *
+     * @access public
+     * @return void
+     */
+    public function moveProjectAdmins()
+    {
+        $adminGroupID  = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
+        $projectAdmins = $this->dao->select('account, project')->from(TABLE_USERGROUP)->where('`group`')->eq($adminGroupID)->fetchPairs();
+
+        $i = 1;
+        foreach($projectAdmins as $account => $projects)
+        {
+            if(!$account or !$projects) continue;
+
+            $data = new stdclass();
+            $data->group    = $i;
+            $data->account  = $account;
+            $data->projects = $projects;
+
+            $this->dao->replace(TABLE_PROJECTADMIN)->data($data)->exec();
+
+            $i ++;
+        }
+
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($adminGroupID)->exec();
+    }
+
+    /*
+     * Insert story view of execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addStoryViewPriv()
+    {
+        $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('method')->eq('view')
+            ->fetchPairs('group');
+
+        foreach($groupIdList as $groupID)
+        {
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('`group`')->eq($groupID)
+                ->set('module')->eq('execution')
+                ->set('method')->eq('storyView')
+                ->exec();
+        }
+
+        return true;
+    }
+
+    /*
+     * Add review issue approval data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addReviewIssusApprovalData()
+    {
+        $reviewIssues = $this->dao->select('id,review,type')->from(TABLE_REVIEWISSUE)
+            ->where('type')->eq('review')
+            ->andWhere('approval')->eq(0)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('review');
+
+        if(empty($reviewIssues)) return false;
+
+        $reviewIds = array_unique(array_column($reviewIssues, 'review'));
+
+        $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
+            ->where('objectID')->in($reviewIds)
+            ->andWhere('objectType')->eq('review')
+            ->andWhere('result')->eq('fail')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('objectID')
+            ->fetchAll('objectID');
+
+        /* Add approval data. */
+        foreach($reviewIssues as $reviewIssue)
+        {
+            if(!isset($approvalsPairs[$reviewIssue->review]->approval)) continue;
+            $this->dao->update(TABLE_REVIEWISSUE)
+                ->set('approval')->eq($approvalsPairs[$reviewIssue->review]->approval)
+                ->where('review')->eq($reviewIssue->review)
+                ->andWhere('type')->eq('review')
+                ->andWhere('approval')->eq(0)
+                ->andWhere('deleted')->eq('0')
+                ->exec();
+        }
+    }
+
+    /**
+     * Xuan: Add `index` column to all message partition tables.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanAddMessageIndexColumns()
+    {
+        $prefix = $this->config->db->prefix;
+        $tables = $this->dbh->query("SHOW TABLES LIKE '{$prefix}im_message\_%'")->fetchAll();
+        $tables = array_filter(array_map(function($table) use ($prefix)
+        {
+            $tableName = current(array_values((array)$table));
+            if(!preg_match("/{$prefix}im_message_[a-z]+/", $tableName)) return $tableName;
+        },
+            $tables
+        ));
+        if(empty($tables)) return true;
+
+        $query = '';
+        foreach($tables as $table) $query .= "ALTER TABLE `$table` ADD `index` int(11) unsigned DEFAULT 0 AFTER `date`;";
+
+        $this->dbh->query($query);
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Re-index messages.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanReindexMessages()
+    {
+        /** @var array[] $chatTablePairs Associations of chats and partition tables, without main table. */
+        $chatTablePairs = array();
+
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        /* Fetch chat and message partition table associations. */
+        $chatTableData = $this->dao->select('gid,tableName')->from(TABLE_IM_CHAT_MESSAGE_INDEX)->orderBy('id_asc')->fetchAll();
+        foreach($chatTableData as $chatTable)
+        {
+            if(isset($chatTablePairs[$chatTable->gid]))
+            {
+                $chatTablePairs[$chatTable->gid][] = $chatTable->tableName;
+                continue;
+            }
+            $chatTablePairs[$chatTable->gid] = array($chatTable->tableName);
+        }
+
+        /* Append all non-partitioned chats. */
+        $allChats = $this->dao->select('gid')->from(TABLE_IM_CHAT)->fetchPairs();
+        $nonPartitionedChats = array_diff(array_values($allChats), array_keys($chatTablePairs));
+        foreach($nonPartitionedChats as $chat) $chatTablePairs[$chat] = array();
+
+        /* Do index. */
+        foreach($chatTablePairs as $chat => $tables)
+        {
+            $result = $this->xuanDoIndex($chat, $tables);
+            if(!$result) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Xuan: Index messages of chat in partition tables and main table.
+     *
+     * @param  string $chat
+     * @param  array  $tables
+     * @return bool
+     */
+    public function xuanDoIndex($chat, $tables)
+    {
+        $messageIndex = 0;
+        $tables[] = str_replace('`', '', TABLE_IM_MESSAGE);
+        foreach($tables as $table)
+        {
+            $idIndices = array();
+
+            $ids = $this->dao->select('id')->from("`$table`")->where('cgid')->eq($chat)->fetchAll('id');
+            $ids = array_keys($ids);
+            if(empty($ids)) continue;
+
+            for($index = 1; $index <= count($ids); $index++) $idIndices[$ids[$index - 1]] = $index + $messageIndex;
+
+            $queryData = array();
+            foreach($idIndices as $id => $index) $queryData[] = "WHEN $id THEN $index";
+
+            $query = "UPDATE `$table` SET `index` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $ids) . ");";
+            $this->dao->query($query);
+
+            $messageIndex = max(array_values($idIndices));
+        }
+        $this->dao->update(TABLE_IM_CHAT)->set('lastMessageIndex')->eq($messageIndex)->where('gid')->eq($chat)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Set lastReadMessageIndex into table im_chatuser.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanUpdateLastReadMessageIndex()
+    {
+        $lastReadMessages =  $this->dao->select('lastReadMessage')->from(TABLE_IM_CHATUSER)->where('lastReadMessage')->ne(0)->fetchAll('lastReadMessage');
+        $lastReadMessages = array_keys($lastReadMessages);
+        if(empty($lastReadMessages)) return true;
+
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        $messages = $this->loadModel('im')->messageGetList('', $lastReadMessages, null, '', '', false);
+        if(empty($messages)) return;
+
+        $queryData = array();
+        foreach($messages as $message) $queryData[] = "WHEN {$message->id} THEN {$message->index}";
+
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $lastReadMessages) . ");";
+        $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Fix chats without lastReadMessage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanFixChatsWithoutLastRead()
+    {
+        $zeroLastReadChats = $this->dao->select('cgid')->from(TABLE_IM_CHATUSER)->where('lastReadMessage')->eq(0)->fetchAll('cgid');
+        $zeroLastReadChats = array_keys($zeroLastReadChats);
+        if(empty($zeroLastReadChats)) return true;
+
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        $lastMessages = $this->dao->select('MAX(`index`), cgid')->from(TABLE_IM_MESSAGE)->where('cgid')->in($zeroLastReadChats)->groupBy('cgid')->fetchAll('cgid');
+        if(empty($lastMessages)) return true;
+
+        $maxIndex = 'MAX(`index`)';
+        $queryData = array();
+        foreach($lastMessages as $cgid => $lastMessage) $queryData[] = "WHEN '{$cgid}' THEN {$lastMessage->$maxIndex}";
+
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . join(' ', $queryData) . " END) WHERE `cgid` IN('" . join("','", array_keys($lastMessages)) . "');";
+        $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process bug link bug.
+     *
+     * @access public
+     * @return void
+     */
+    public function processBugLinkBug()
+    {
+        $bugs = $this->dao->select('id,linkBug')->from(TABLE_BUG)->where('linkBug')->ne('')->fetchPairs();
+        foreach($bugs as $bugID => $linkBugs)
+        {
+            $linkBugs = explode(',', $linkBugs);
+            $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(linkbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process created information.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCreatedInfo()
+    {
+        $objectTypes = array('productplan', 'release', 'testtask', 'build');
+
+        $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
+        foreach($actions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $action)
+            {
+                $this->dao->update($this->config->objectTables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update approval process in Workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateApproval()
+    {
+        /* Judge whether the action has opened the approval process before. */
+        /* 判断动作 看之前是否开启过审批流 */
+        $actions = $this->dao->select('id, module, action, createdDate')->from(TABLE_WORKFLOWACTION)
+            ->where('role')->eq('approval')
+            ->andWhere('action')->in('submit, cancel, review')
+            ->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $module     = $action->module;
+            $actionCode = $action->action;
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('action')->eq('approval' . $action->action)->where('id')->eq($id)->exec();
+            /* Change the approval action of the module that has already enabled the approval function */
+            /* 改原来已经开启过审批功能的模块的审批动作 */
+            if(isset($this->config->upgrade->recoveryActions->{$module}->{$actionCode}))
+            {
+                $data = array_merge($this->config->upgrade->defaultActions, $this->config->upgrade->recoveryActions->{$module}->{$actionCode});
+                if(isset($data['hasLite']) && $data['hasLite'] === true)
+                {
+                    unset($data['hasLite']);
+                    $liteData = $data;
+                    $liteData['vision'] = 'lite';
+                    $this->dao->insert(TABLE_WORKFLOWACTION)->data($liteData)->exec();
+                }
+                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+
+            /* Change history */
+            /* 改历史记录 */
+            $this->dao->update(TABLE_ACTION)->set('action')->eq('approval' . $action->action)->where('objectType')->eq($module)->andWhere('action')->eq($action->action)->andWhere('date')->gt($action->createdDate)->exec();
+
+            /* Change the action field of the workflowlayout table */
+            /* 改workflowlayout表的action字段 */
+            $this->dao->update(TABLE_WORKFLOWLAYOUT)->set('action')->eq('approval' . $action->action)->where('module')->eq($module)->andWhere('action')->eq($action->action)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process createdBy of conditions.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCreatedBy()
+    {
+        $this->app->loadLang('workflow');
+        $this->app->loadModuleConfig('workflow');
+
+        $modules = $this->dao->select('module')->from(TABLE_WORKFLOW)->where('buildin')->eq('1')->andWhere('approval')->eq('enabled')->andWhere('module')->in(array_keys($this->config->workflow->buildin->createdBy))->fetchPairs();
+        $actions = $this->dao->select('id, module, conditions')->from(TABLE_WORKFLOWACTION)->where('module')->in($modules)->andWhere('action')->in('submit, cancel, edit, delete')->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $conditions = json_decode($action->conditions);
+            if(empty($conditions)) continue;
+
+            foreach($conditions as $index => $condition)
+            {
+                foreach($condition->fields as $field)
+                {
+                    if($field->field == 'createdBy' && zget($this->config->workflow->buildin->createdBy, $action->module, '')) $field->field = zget($this->config->workflow->buildin->createdBy, $action->module);
+                }
+                $conditions[$index] = $condition;
+            }
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('conditions')->eq(json_encode($conditions))->where('id')->eq($id)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update story search index.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSearchIndex()
+    {
+        $requirementIds = $this->dao->select('t1.id')->from(TABLE_SEARCHINDEX)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t2.type')->eq('requirement')
+            ->fetchPairs('id');
+        $this->dao->update(TABLE_SEARCHINDEX)->set('objectType')->eq('requirement')->where('id')->in($requirementIds)->exec();
+    }
+
+    /**
+     * Add required rule to the built-in workflow status field.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultRuleToWorkflow()
+    {
+        $notemptyRule = $this->dao->select('id')->from(TABLE_WORKFLOWRULE)->where('rule')->eq('notempty')->fetch();
+        if(empty($notemptyRule)) return false;
+
+        $fields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('field')->eq('status')->andWhere('buildin')->eq(1)->fetchAll();
+
+        foreach($fields as $field)
+        {
+            if(strpos(',' . $field->rules . ',', ',' . $notemptyRule->id . ',') !== false) continue;
+
+            $rules = $notemptyRule->id;
+            if(!empty($field->rules)) $rules = $field->rules . ',' . $rules;
+
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('rules')->eq($rules)->where('id')->eq($field->id)->exec();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * Add workflow actions.
+     *
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function addFlowActions($version)
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $upgradeLang   = $this->lang->workflowaction->upgrade[$version];
+        $upgradeConfig = $this->config->workflowaction->upgrade[$version];
+        if(empty($upgradeLang) || empty($upgradeConfig)) return true;
+
+        $this->lang->workflowaction->upgrade   = new stdclass();
+        $this->config->workflowaction->upgrade = new stdclass();
+        foreach($upgradeLang as $module => $labels)
+        {
+            $this->lang->workflowaction->upgrade->actions = $labels;
+            foreach($upgradeConfig[$module] as $code => $config) $this->config->workflowaction->upgrade->$code = $config;
+
+            $flow = $this->workflow->getByModule($module);
+            $this->workflow->createActions($flow, 'upgrade');
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('none')->set('role')->eq('buildin')->where('module')->eq($module)->andWhere('action')->in(array_keys($labels))->exec();
+            foreach($labels as $method => $label)
+            {
+                $workflowAction = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($method)->fetch();
+                unset($workflowAction->id);
+                $workflowAction->vision = $workflowAction->vision == 'lite' ? 'rnd' : 'lite';
+                $this->dao->replace(TABLE_WORKFLOWACTION)->data($workflowAction)->exec();
+            }
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * Add flow fields.
+     *
+     * @param  int    $version
+     * @access public
+     * @return bool
+     */
+    public function addFlowFields($version)
+    {
+        $this->loadModel('workflowfield');
+
+        $upgradeLang   = $this->lang->workflowfield->upgrade[$version];
+        $upgradeConfig = $this->config->workflowfield->upgrade[$version];
+
+        $now = helper::now();
+        foreach($upgradeLang as $module => $fields)
+        {
+            $field = new stdclass();
+            $field->buildin     = '1';
+            $field->role        = 'buildin';
+            $field->module      = $module;
+            $field->createdBy   = $this->app->user->account;
+            $field->createdDate = $now;
+
+            foreach($fields as $code => $name)
+            {
+                $field->field = $code;
+                $field->name  = $name;
+
+                $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                foreach($fieldConfig as $key => $value) $field->$key = $value;
+
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process review linkages of approval.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processReviewLinkages()
+    {
+        $linkagePairs = $this->dao->select('id, linkages')->from(TABLE_WORKFLOWACTION)->where('action')->eq('approvalreview')->andWhere('role')->eq('approval')->fetchPairs();
+
+        $oldLinkages = array();
+        $oldLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $oldLinkages[0]['sources'][0]['operator'] = '==';
+        $oldLinkages[0]['sources'][0]['value']    = 'reject';
+        $oldLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $oldLinkages[0]['targets'][0]['status']   = 'show';
+
+        $newLinkages = array();
+        $newLinkages[0]['sources'][0]['field']    = 'reviewResult';
+        $newLinkages[0]['sources'][0]['operator'] = '==';
+        $newLinkages[0]['sources'][0]['value']    = 'pass';
+        $newLinkages[0]['targets'][0]['field']    = 'reviewOpinion';
+        $newLinkages[0]['targets'][0]['status']   = 'hide';
+
+        foreach($linkagePairs as $id => $linkages)
+        {
+            if(helper::jsonEncode($oldLinkages) == $linkages)
+            {
+                $this->dao->update(TABLE_WORKFLOWACTION)->set('linkages')->eq(helper::jsonEncode($newLinkages))->where('id')->eq($id)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update story status.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryStatus()
+    {
+        /* After cancel the review of changed story, the story status should be "changing". */
+        $this->dao->update(TABLE_STORY)->set('status')->eq('changing')->where('status')->eq('draft')->andWhere('version')->gt(1)->exec();
+
+        /* The draft story with reviewers should be "reviewing". */
+        $reviewingStories = $this->dao->select('story')->from(TABLE_STORYREVIEW)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id and t1.version = t2.version')
+            ->where('t2.status')->eq('draft')
+            ->andWhere('t2.version')->eq(1)
+            ->fetchPairs();
+        $this->dao->update(TABLE_STORY)->set('status')->eq('reviewing')->where('id')->in($reviewingStories)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Change FULLTEXT index for searchindex table.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildFULLTEXT()
+    {
+        try
+        {
+            $table   = TABLE_SEARCHINDEX;
+            $stmt    = $this->dao->query("show index from $table");
+            $indexes = array();
+            while($index = $stmt->fetch())
+            {
+                if($index->Index_type != 'FULLTEXT') continue;
+                $indexes[$index->Key_name] = $index->Key_name;
+            }
+
+            if(!isset($indexes['title_content'])) $this->dao->exec( "ALTER TABLE {$table} ADD FULLTEXT `title_content` (`title`, `content`)");
+            if(isset($indexes['title'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `title`");
+            if(isset($indexes['content'])) $this->dao->exec( "ALTER TABLE {$table} DROP INDEX `content`");
+        }
+        catch(PDOException $e){}
+
+        return true;
+    }
+
+    /**
+     * Check whether the field exists.
+     *
+     * @param  string  $table
+     * @param  string  $field
+     * @access public
+     * @return bool
+     */
+    public function checkFieldsExists($table, $field)
+    {
+        $result = $this->dbh->query("show columns from `$table` like '$field'");
+
+        return $result->rowCount() > 0;
+    }
+
+    /**
+     * Update OS and browser of bug.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateOSAndBrowserOfBug()
+    {
+        $existOSList        = $this->dao->select('distinct os')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $existBrowserList   = $this->dao->select('distinct browser')->from(TABLE_BUG)->where('os')->ne('')->fetchPairs();
+        $deletedOSList      = array('vista', 'win2012', 'win2008', 'win2003', 'win2000', 'wp8', 'wp7', 'symbian', 'freebsd');
+        $deletedBrowserList = array('ie7', 'ie6', 'firefox4', 'firefox3', 'firefox2', 'opera11', 'opera10', 'opera9', 'maxthon', 'uc');
+        $existList          = array_merge($existOSList, $existBrowserList);
+        $deletedList        = array_merge($deletedOSList, $deletedBrowserList);
+
+        foreach($deletedList as $deletedLang)
+        {
+            if(in_array($deletedLang, $existList)) continue;
+            $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('bug')->andWhere('`key`')->eq($deletedLang)->andWhere('`system`')->eq(1)->andWhere('vision')->eq('rnd')->exec();
+        }
+
+        $this->dao->update(TABLE_LANG)->set('value')->eq('Mac OS')->where('module')->eq('bug')->andWhere('`key`')->eq('osx')->andWhere('value')->eq('OS X')->exec();
+        $this->dao->update(TABLE_LANG)->set('value')->eq('Opera 系列')->where('module')->eq('bug')->andWhere('`key`')->eq('opera')->andWhere('value')->eq('opera 系列')->exec();
+        return true;
+    }
+
+    /**
+     * Add user requirement privilege when URAndSR is open.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addURPriv()
+    {
+        if(empty($this->config->URAndSR)) return true;
+
+        $sql = "REPLACE INTO " . TABLE_GROUPPRIV . " SELECT `group`,'requirement' as 'module',`method` FROM " . TABLE_GROUPPRIV . " WHERE `module` = 'story' AND `method` in ('create', 'batchEdit', 'edit', 'export', 'delete', 'view', 'change', 'review', 'batchReview', 'recall', 'close', 'batchClose', 'assignTo', 'batchAssignTo', 'activate', 'report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'linkStories', 'batchEdit', 'import', 'exportTemplate')";
+        $this->dbh->exec($sql);
+        return true;
+    }
+
+    /**
+     * Sync case to project|execution if case create from import.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncCase2Project()
+    {
+        $linkStoryCases   = $this->dao->select('id, story, version, product')->from(TABLE_CASE)->where('story')->ne('0')->fetchAll('id');
+        $linkProjectCases = $this->dao->select('`case`, project')->from(TABLE_PROJECTCASE)->where('`case`')->ne('0')->andWhere('project')->ne('0')->fetchGroup('case', 'project');
+
+        if(empty($linkStoryCases)) return true;
+
+        $projectList = $this->dao->select('t1.project, t1.story, t1.product')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t2.status')->ne('closed')
+            ->fetchGroup('story', 'project');
+
+        if(empty($projectList)) return true;
+
+        foreach($linkStoryCases as $caseID => $case)
+        {
+            /* If story unlink project continue. */
+            if(!isset($projectList[$case->story])) continue;
+
+            $storyProjects = $projectList[$case->story];
+
+            $lastOrder = 1;
+            foreach($storyProjects as $projectID => $value)
+            {
+                /* If case linked project continue.*/
+                if(isset($linkProjectCases[$caseID][$projectID])) continue;
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->product = $case->product;
+                $data->case    = $caseID;
+                $data->version = $case->version;
+                $data->order   = $lastOrder ++;
+                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            }
+        }
+    }
+
+    /**
+     * Update story file version.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryFile()
+    {
+        $storyFileList = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->in('story,requirement')->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        $storyFiles = array();
+        foreach($storyFileList as $file)
+        {
+            if(!is_numeric($file->extra)) continue;
+
+            if(!isset($storyFiles[$file->objectID])) $storyFiles[$file->objectID] = '';
+
+            $storyFiles[$file->objectID] .= "$file->id,";
+        }
+
+        foreach($storyFiles as $storyID => $files) $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($files)->where('story')->eq($storyID)->exec();
+
+        return true;
+    }
+
+    /**
+     * Process feedback module
+     *
+     * @access public
+     * @return void
+     */
+    public function processFeedbackModule()
+    {
+        $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
+        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
+        $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
+
+        $allProductRelation = array();
+        foreach($products as $product)
+        {
+            $productID = $product->id;
+            $relation  = array();
+            foreach($modules as $moduleID => $module)
+            {
+                unset($module->id);
+                $module->root = $productID;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $newModuleID = $this->dao->lastInsertID();
+                $relation[$moduleID] = $newModuleID;
+                $allProductRelation[$productID][$moduleID] = $newModuleID;
+                $newPaths = array();
+                foreach(explode(',', trim($module->path, ',')) as $path)
+                {
+                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
+                }
+                $newPaths = join(',', $newPaths);
+                $parent   = !empty($module->parent) and isset($relation[$module->parent]) ? $relation[$module->parent] : 0;
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
+            }
+        }
+
+        /* Update feedback module */
+        foreach($feedbacks as $feedback)
+        {
+            $moduleID = $feedback->module;
+            $product  = $feedback->product;
+            if(empty($moduleID)) continue;
+            $newModuleID = $allProductRelation[$product][$moduleID];
+            if(empty($newModuleID)) continue;
+
+            $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
+        }
+
+        /* Delete history module */
+        $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
+    }
+
+    /*
+     * Convert task team to table: zt_taskteam.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertTaskteam()
+    {
+        $oldTeamGroup = $this->dao->select('root as task, account, estimate, consumed, `left`')->from(TABLE_TEAM)->where('type')->eq('task')->fetchGroup('task');
+        foreach($oldTeamGroup as $taskID => $oldTeams)
+        {
+            $order = 0;
+            foreach($oldTeams as $oldTeam)
+            {
+                $oldTeam->order  = $order;
+                $oldTeam->status = 'wait';
+                if($oldTeam->consumed > 0 and $oldTeam->left > 0)  $oldTeam->status = 'doing';
+                if($oldTeam->consumed > 0 and $oldTeam->left == 0) $oldTeam->status = 'done';
+
+                $this->dao->insert(TABLE_TASKTEAM)->data($oldTeam)->exec();
+
+                $this->dao->update(TABLE_TASKESTIMATE)->set('`order`')->eq($order)->where('task')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldTeam->task)->andWhere('account')->eq($oldTeam->account)->exec();
+                $order ++;
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('type')->eq('task')->exec();
+    }
+
+    /**
+     * Convert estimate to effort.
+     *
+     * @access public
+     * @return void
+     */
+    public function convertEstToEffort()
+    {
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+
+        $this->app->loadLang('task');
+        $this->loadModel('action');
+        foreach($estimates as $estimate)
+        {
+            $relation = $this->action->getRelatedFields('task', $estimate->task);
+
+            $effort = new stdclass();
+            $effort->objectType = 'task';
+            $effort->objectID   = $estimate->task;
+            $effort->product    = $relation['product'];
+            $effort->project    = (int)$relation['project'];
+            $effort->account    = $estimate->account;
+            $effort->work       = empty($estimate->work) ? $this->lang->task->process : $estimate->work;
+            $effort->date       = $estimate->date;
+            $effort->left       = $estimate->left;
+            $effort->consumed   = $estimate->consumed;
+            $effort->vision     = $this->config->vision;
+            $effort->order      = $estimate->order;
+
+            $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
+            $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Xuan: Set ownedBy for group chats without it.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetOwnedByForGroups()
+    {
+        $this->dao->update(TABLE_IM_CHAT)->set('ownedBy = createdBy')->where('ownedBy')->eq('')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Recover created date for chats.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanRecoverCreatedDates()
+    {
+        $chats = $this->dao->select('gid, id')->from(TABLE_IM_CHAT)
+            ->where('createdDate')->eq('0000-00-00 00:00:00')
+            ->fetchPairs('gid');
+        if(empty($chats)) return true;
+
+        $createdDateData = array();
+
+        /* Try query earliest message date indexed. */
+        $indexedMinDates = $this->dao->select('gid, MIN(startDate)')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('gid')->in(array_keys($chats))
+            ->groupBy('gid')
+            ->fetchPairs('gid');
+
+        /* Then try query earliest message date non-indexed from master table. */
+        $queryChats = array_diff(array_keys($chats), array_keys($indexedMinDates));
+        $minDates = $this->dao->select('cgid, MIN(date)')->from(TABLE_IM_MESSAGE)
+            ->where('cgid')->in($queryChats)
+            ->groupBy('cgid')
+            ->fetchPairs('cgid');
+
+        $knownMinDates = array_merge($indexedMinDates, $minDates);
+
+        $remainingChats = $chats;
+        foreach($chats as $cgid => $cid)
+        {
+            if(isset($knownMinDates[$cgid]))
+            {
+                $createdDateData[$cid] = $knownMinDates[$cgid];
+                unset($remainingChats[$cgid]);
+            }
+        }
+
+        /* Use other dates for chats without messages. */
+        $chatDates = $this->dao->select('id, gid, editedDate, lastActiveTime, dismissDate')->from(TABLE_IM_CHAT)
+            ->where('gid')->in(array_keys($remainingChats))
+            ->fetchAll('gid');
+        $chatDates = array_map(function($chatDate)
+        {
+            $dates = array_filter(array($chatDate->editedDate, $chatDate->lastActiveTime, $chatDate->dismissDate), function($date)
+            {
+                return $date != '0000-00-00 00:00:00';
+            });
+            $minDate = min($dates);
+            return $minDate;
+        }, $chatDates);
+
+        $knownMinDates = array_merge($knownMinDates, $chatDates);
+        if(empty($knownMinDates)) return true;
+
+        $queryData = array();
+        foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
+
+        if(empty($queryData)) return true;
+
+        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
+        $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Set index range for chats in chat partition index table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetPartitionedMessageIndex()
+    {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        /* Fetch chat and message partition table associations with message range. */
+        $chatTableData = $this->dao->select('gid, tableName, start, end')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('startIndex')->eq(0)
+            ->orWhere('endIndex')->eq(0)
+            ->orderBy('id_asc')
+            ->fetchAll();
+        if(empty($chatTableData)) return true;
+
+        /* Sort ranges by table. */
+        $tableRanges = array();
+        foreach($chatTableData as $chatTable)
+        {
+            if(isset($tableRanges[$chatTable->tableName]))
+            {
+                $tableRanges[$chatTable->tableName]->start[] = $chatTable->start;
+                $tableRanges[$chatTable->tableName]->end[]   = $chatTable->end;
+                continue;
+            }
+            $tableRanges[$chatTable->tableName] = (object)array('start' => array($chatTable->start), 'end' => array($chatTable->end));
+        }
+
+        /* Query corresponding message indice. */
+        foreach($tableRanges as $tableName => $tableRange)
+        {
+            $ids = array_merge($tableRange->start, $tableRange->end);
+            $ids = array_unique($ids);
+            $indexPairs = $this->dao->select('id, `index`')->from("`$tableName`")
+                ->where('id')->in($ids)
+                ->fetchPairs('id');
+            $tableRanges[$tableName]->indexPairs = $indexPairs;
+        }
+
+        /* Set startIndice and endIndice. */
+        foreach($tableRanges as $tableRange)
+        {
+            $queryData = array();
+            foreach($tableRange->start as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . join(' ', $queryData) . " END) WHERE `start` IN(" . join(',', $tableRange->start) . ");";
+            $this->dao->query($query);
+
+            $queryData = array();
+            foreach($tableRange->end as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
+            $this->dao->query($query);
+        }
+    }
+
+    /**
+     * Fix weekly report.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWeeklyReport()
+    {
+        $this->loadModel('weekly');
+        $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
+
+        $today = helper::today();
+        foreach($projects as $projectID => $project)
+        {
+            if(helper::isZeroDate($project->begin) or helper::isZeroDate($project->end)) continue;
+
+            $begin = $project->begin;
+            $end   = $today > $project->end ? $project->end : $today;
+
+            $beginTimestame = strtotime($begin);
+            $endTimestame   = strtotime($end);
+            while($beginTimestame <= $endTimestame)
+            {
+                $this->weekly->save($projectID, $begin);
+
+                $beginTimestame += 7 * 24 * 3600;
+                $begin = date('Y-m-d', $beginTimestame);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Update the owner of the program into the product view.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProductView()
+    {
+        $programs = $this->dao->select('id,PM')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('PM')->ne('')->fetchPairs('id', 'PM');
+        if(empty($programs)) return true;
+
+        $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
+        if(empty($productGroup)) return true;
+
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        foreach($programs as $programID => $programPM)
+        {
+            if(empty($productGroup[$programID])) continue;
+            $canViewProducts = zget($productGroup, $programID);
+            $view            = $userView[$programPM]->products;
+            foreach($canViewProducts as $productID => $product)
+            {
+                if(strpos(",$view,", ",$productID,") === false) $view .= ',' . $productID;
+            }
+            $this->dao->update(TABLE_USERVIEW)->set('products')->eq($view)->where('account')->eq($programPM)->exec();
+        }
         return true;
     }
 }

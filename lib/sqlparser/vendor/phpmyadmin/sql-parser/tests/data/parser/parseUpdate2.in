@@ -1,0 +1,8 @@
+UPDATE
+    users
+SET
+    username = "Dan",
+    id=155
+WHERE
+    username = "Paul"
+LIMIT 1 OFFSET 2;

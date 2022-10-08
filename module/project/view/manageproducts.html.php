@@ -3,7 +3,7 @@
  * The manage prjmanageproducts view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id
@@ -37,7 +37,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked id='products{$productID}' $isDisabled>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' disabled='disabled'");?>
+              <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
           <?php if(!empty($isDisabled)) echo html::hidden("products[$i]", $productID);?>
@@ -61,7 +61,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control chosen'");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control chosen' data-drop_direction='down'");?>
             </div>
           </div>
           <?php $i++;?>
@@ -71,7 +71,6 @@
       <div class="detail text-center form-actions">
         <?php echo html::hidden("post", 'post');?>
         <?php echo html::submitButton();?>
-        <?php echo html::backButton();?>
       </div>
     </form>
   </div>

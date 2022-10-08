@@ -3,7 +3,7 @@
  * The action->dynamic view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: action->dynamic.html.php 1477 2011-03-01 15:25:50Z wwccss $
@@ -83,10 +83,10 @@
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
               <?php echo zget($accountPairs, $action->actor);?>
-              <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
+              <span class='label-action'><?php echo $action->actionLabel;?></span>
               <span class="text"><?php echo $action->objectLabel;?></span>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php if($action->objectName) echo html::a($action->objectLink, $action->objectName);?>
+              <span class="label label-id"><?php echo ($action->objectType == 'module' and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
+              <?php if($action->objectName) echo !empty($action->objectLink) ? html::a($action->objectLink, $action->objectName) : $action->objectName;?>
             </span>
           </div>
         </li>

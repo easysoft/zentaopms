@@ -3,7 +3,7 @@
  * The batch create view of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     story
  * @version     $Id$
@@ -38,16 +38,20 @@
       }
   }
   $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
+  $showVisionList = count($visionList) > 1;
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <div class="table-responsive">
       <table class="table table-form">
         <thead>
           <tr class='text-center'>
-            <th class='w-30px'><?php echo $lang->idAB;?></th> 
+            <th class='w-30px'><?php echo $lang->idAB;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden')?>'>         <?php echo $lang->user->dept;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->account;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->realname;?></th>
+            <?php if($showVisionList):?>
+              <th class='w-130px required'><?php echo $lang->user->visions;?></th>
+            <?php endif;?>
             <th class='w-120px'><?php echo $lang->user->role;?></th>
             <th class='w-120px'><?php echo $lang->user->type;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
@@ -71,8 +75,8 @@
         <?php $first = true;?>
         <?php foreach($users as $user):?>
         <?php
-        $dept  = ($first and empty($user->dept)) ? 0 : (empty($user->dept) ? 'ditto' : $user->dept); 
-        $role  = ($first and empty($user->role)) ? 0 : (empty($user->role) ? 'ditto' : $user->role); 
+        $dept  = ($first and empty($user->dept)) ? 0 : (empty($user->dept) ? 'ditto' : $user->dept);
+        $role  = ($first and empty($user->role)) ? 0 : (empty($user->role) ? 'ditto' : $user->role);
         $type  = empty($user->type) ? 'inside' : $user->type;
         $first = false;
         ?>
@@ -81,6 +85,11 @@
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control'");?></td>
           <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
+          <?php if($showVisionList):?>
+            <td class='text-left'><?php echo html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple");?></td>
+          <?php else:?>
+            <?php echo html::hidden("visions[$user->id][]", $this->config->vision);?>
+          <?php endif;?>
           <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
           <td><?php echo html::select("type[$user->id]",    $lang->user->typeList, $type, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
@@ -99,7 +108,7 @@
         </tr>
         <?php endforeach;?>
         <tr>
-          <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
+          <th colspan='4'><?php echo $lang->user->verifyPassword?></th>
           <td colspan='2'>
             <div class="required required-wrapper"></div>
             <input type='text'     style="display:none"> <!-- for disable autocomplete all browser -->
@@ -110,7 +119,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="<?php echo count($visibleFields) + 4;?>" class="text-center form-actions">
+            <td colspan="<?php echo count($visibleFields) + 6;?>" class="text-center form-actions">
               <?php echo html::submitButton($lang->save);?>
               <?php echo html::backButton();?>
             </td>

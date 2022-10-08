@@ -3,7 +3,7 @@
  * The edit file of case module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
  * @version     $Id: edit.html.php 5000 2013-07-03 08:20:57Z chencongzhi520@gmail.com $
@@ -19,6 +19,10 @@
 <?php js::set('caseID', $case->id);?>
 <?php js::set('executionID', $case->execution);?>
 <?php js::set('tab', $this->app->tab);?>
+<?php js::set('isLibCase', $isLibCase);?>
+<?php js::set('testtasks', $testtasks);?>
+<?php js::set('caseBranch', $case->branch);?>
+<?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
 <div id='mainContent' class='main-content'>
@@ -126,7 +130,10 @@
           </div>
           <div class="detail">
             <div class="detail-title"><?php echo $lang->files;?></div>
-            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+            <div class='detail-content'>
+              <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'false', 'object' => $case, 'method' => 'edit'));?>
+              <?php echo $this->fetch('file', 'buildform');?>
+            </div>
           </div>
           <div class='text-center detail form-actions'>
             <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
@@ -160,7 +167,7 @@
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadLibModules($libID)'");
+                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadLibModules($libID)'");
                       echo '</span>';
                   }
                   ?>
@@ -169,11 +176,11 @@
               </tr>
               <?php else:?>
               <tr>
-                <th class='w-85px'><?php echo $lang->testcase->product;?></th>
+                <th><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranch();' class='form-control'");?>
+                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranch($case->branch);' class='form-control'");?>
                   </div>
                 </td>
               </tr>
@@ -188,7 +195,7 @@
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' onclick='loadProductModules($productID)'");
 
                       echo '</span>';
                   }
@@ -200,7 +207,7 @@
               <?php if(!$isLibCase):?>
               <tr>
                 <th><?php echo $lang->testcase->story;?></th>
-                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control chosen"');?></div>
+                <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control picker-select"');?></div>
                 </td>
               </tr>
               <?php endif;?>
@@ -211,7 +218,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->stage;?></th>
-                <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control chosen' multiple='multiple'");?></td>
+                <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control picker-select' multiple='multiple'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->pri;?></th>
@@ -229,12 +236,13 @@
                 <th><?php echo $lang->testcase->keywords;?></th>
                 <td><?php echo html::input('keywords', $case->keywords, "class='form-control'");?></td>
               </tr>
-              <?php if(!$isLibCase):?>
+              <?php if(!$isLibCase and common::hasPriv('testcase', 'linkCases')):?>
               <tr>
                 <th><?php echo $lang->testcase->linkCase;?></th>
                 <td><?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?></td>
               </tr>
-              <tr>
+              <?php $class = isset($case->linkCaseTitles) ? '' : 'hide';?>
+              <tr class=<?php echo $class;?>>
                 <th></th>
                 <td>
                   <ul class='list-unstyled'>
@@ -243,14 +251,41 @@
                     {
                         foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li title='$linkCaseTitle'><div class='checkbox-primary'>";
                             echo "<input type='checkbox' checked='checked' name='linkCase[]' value=$linkCaseID />";
-                            echo "<label>#{$linkCaseID} {$linkCaseTitle}</label>";
+                            echo "<label class='linkCaseTitle'>#{$linkCaseID} {$linkCaseTitle}</label>";
                             echo '</div></li>';
                         }
                     }
                     ?>
                     <span id='linkCaseBox'></span>
+                  </ul>
+                </td>
+              </tr>
+              <?php endif;?>
+              <?php if(!$isLibCase and common::hasPriv('testcase', 'linkBugs')):?>
+              <tr>
+                <th><?php echo $lang->testcase->linkBug;?></th>
+                <td><?php echo html::a($this->createLink('testcase', 'linkBugs', "caseID=$case->id", '', true), $lang->testcase->linkBugs, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?></td>
+              </tr>
+              <?php $class = !empty($case->toBugs) ? '' : 'hide';?>
+              <tr class=<?php echo $class;?>>
+                <th></th>
+                <td>
+                  <ul class='list-unstyled'>
+                    <?php
+                    if(isset($case->toBugs))
+                    {
+                        foreach($case->toBugs as $bugID => $bugTitle)
+                        {
+                            echo "<li title='$bugTitle'><div class='checkbox-primary'>";
+                            echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$bugID />";
+                            echo "<label class='linkBugTitle'>#{$bugID} {$bugTitle}</label>";
+                            echo '</div></li>';
+                        }
+                    }
+                    ?>
+                    <span id='linkBugBox'></span>
                   </ul>
                 </td>
               </tr>
@@ -262,7 +297,7 @@
             <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->testcase->openedBy;?></th>
+                <th><?php echo $lang->testcase->openedBy;?></th>
                 <td><?php echo zget($users, $case->openedBy) . $lang->at . $case->openedDate;?></td>
               </tr>
               <tr>

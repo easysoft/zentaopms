@@ -23,9 +23,9 @@
 </div>
 <?php
 $userPrivs = array();
-$userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
-js::set('userPrivs',        $userPrivs);
+$userPrivs['kanban']    = common::hasPriv('execution', 'kanban');
+js::set('userPrivs', $userPrivs);
 js::set('kanbanGroup', $kanbanGroup);
 js::set('kanbanColumns', $lang->execution->kanbanColType);
 js::set('statusColorList', $lang->execution->statusColorList);

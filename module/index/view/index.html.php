@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Hao Sun <sunhao@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 1947 2011-06-29 11:58:03Z wwccss $
@@ -14,10 +14,11 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
+js::set('vision',        $config->vision);
 js::set('navGroup',      $lang->navGroup);
 js::set('appsLang',      $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
-js::set('defaultOpen',   $open);
+js::set('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 js::set('manualText',    $lang->manual);
 js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 js::set('showFeatures', $showFeatures);
@@ -25,6 +26,7 @@ js::set('showFeatures', $showFeatures);
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
+.icon-version:before {content:"";}
 .version-hr {margin-top: 15px; margin-bottom: 15px;}
 
 <?php if(empty($latestVersionList)):?>
@@ -38,7 +40,12 @@ js::set('showFeatures', $showFeatures);
 #menuMoreList > li.active:before {content: ' '; display: block; position: absolute; left: 100%; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent; border-right-color: #ff9800; width: 0; height: 0; top: 12px}
 #menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
 <?php endif;?>
+
+<?php if($this->config->vision == 'lite'):?>
+#searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
+<?php endif;?>
 </style>
+<?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false):?>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
@@ -71,16 +78,24 @@ js::set('showFeatures', $showFeatures);
     </ul>
   </div>
 </div>
+<?php endif;?>
 <div id='apps'>
 </div>
 <div id='appsBar'>
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
-      <a href='javascript:void(0)' id='proLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->proName;?></span> <i class='text-danger icon-pro-version'></i></a>
-      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'>
+      <?php if(trim($config->visions, ',') == 'lite'):?>
+      <?php $version     = $config->liteVersion;?>
+      <?php $versionName = $lang->liteName . $config->liteVersion;?>
+      <?php else:?>
+      <?php $version     = $config->version;?>
+      <?php $versionName = $lang->pmsName . $config->version;?>
+      <a href='javascript:void(0)' id='bizLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->bizName;?></span> <i class='text-danger icon-pro-version'></i></a>
+      <?php endif;?>
+      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $version;?>'>
         <i class="icon icon-zentao" style="font-size: 24px;"></i>
-        <span class='version'><?php echo $lang->pmsName . $config->version;?></span>
+        <span class='version'><?php echo $versionName;?></span>
       </a>
       <div id="globalSearchDiv">
         <div class="input-group">

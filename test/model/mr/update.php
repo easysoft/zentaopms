@@ -8,7 +8,7 @@ title=测试 mrModel::update();
 cid=0
 pid=0
 
-POST数据正确修改MR描述    >> success
+POST数据正确修改MR描述 >> success
 使用title为空的数据mr请求 >> 『名称』不能为空。
 
 */
@@ -19,7 +19,7 @@ $MRID    = 1;
 $_POST = array();
 $_POST['targetBranch']       = 'master';
 $_POST['title']              = 'Test MR';
-$_POST['description']        = date("Y-m-d H:i:s");
+$_POST['description']        = '2022-01-31 23:59:59';
 $_POST['repoID']             = 1;
 $_POST['assignee']           = '';
 $_POST['removeSourceBranch'] = '0';

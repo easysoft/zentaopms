@@ -1,1 +1,8 @@
 .chosen-container-single .chosen-single > span {max-width: 100%;}
+
+#plansBox .row {display: inline-table; width: 102%;}
+#plansBox .row .col-sm-4 {display: inline-block; float: none;}
+
+.chosen-container.chosen-highlight-selected .disabled-result.result-selected {background: none;}
+
+#dateRange {vertical-align: top; padding-top: 13px;}

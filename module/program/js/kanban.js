@@ -140,9 +140,10 @@ $(function()
         if(!$kanban.length) return;
         $kanban.kanban(
         {
-            data:          processKanbanData(key, programsData),
-            virtualize:    true,
-            calcColHeight: calcColHeight
+            data:            processKanbanData(key, programsData),
+            virtualize:      true,
+            virtualCardList: true,
+            calcColHeight:   calcColHeight
         });
     });
 });

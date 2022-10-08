@@ -1,1 +1,3 @@
 .alert-info > h5 > span {color: red;}
+.btn-back {margin-left: 25px;}
+.table tbody > tr > td div.text-danger.help-text {word-break: break-all;}

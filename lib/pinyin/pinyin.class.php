@@ -43,8 +43,7 @@ class pinyin
      */
     public function prepare($string)
     {
-        $string = preg_replace_callback('/[a-z0-9_-]+/i', array($this, 'prepareCallback'), $string);
-        return preg_replace("/[^\p{Han}\p{P}\p{Z}\p{M}\p{N}\p{L}\t]/u", '', $string);
+        return preg_replace_callback('/[a-z0-9_-]+/i', array($this, 'prepareCallback'), $string);
     }
 
     /**
@@ -64,8 +63,8 @@ class pinyin
 
     /**
      * The callback for prepare method.
-     * 
-     * @param  array    $matches 
+     *
+     * @param  array    $matches
      * @access public
      * @return string
      */

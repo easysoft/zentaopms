@@ -3,7 +3,7 @@
  * The model file of build module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: model.php 4970 2013-07-02 05:58:11Z wyd621@gmail.com $
@@ -56,22 +56,25 @@ class buildModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
+    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
+            ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 
@@ -119,21 +122,24 @@ class buildModel extends model
      * @param  string     $type      all|product|bysearch
      * @param  int|string $param     productID|buildQuery
      * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc')
+    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.execution')->eq((int)$executionID)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($executionID)->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 
@@ -175,6 +181,22 @@ class buildModel extends model
     }
 
     /**
+     * Get story builds.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryBuilds($storyID)
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(stories, ',')")->like("%,$storyID,%")
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get builds in pairs.
      *
      * @param int|array  $products
@@ -197,7 +219,9 @@ class buildModel extends model
         {
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
+                ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution')->andWhere('execution')->eq($objectID)->fi()
+                ->beginIF($objectType === 'project')->andWhere('project')->eq($objectID)->fi()
                 ->fetchPairs();
         }
 
@@ -241,9 +265,12 @@ class buildModel extends model
             foreach($releases as $buildID => $releaseName)
             {
                 $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
-                $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                if($allBuilds[$buildID]->productType != 'normal')
+                {
+                    $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                }
             }
-        } 
+        }
 
         return $sysBuilds + $builds + $selectedBuilds;
     }
@@ -286,6 +313,8 @@ class buildModel extends model
             ->setDefault('branch', 0)
             ->cleanInt('product,branch')
             ->add('execution', (int)$executionID)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels,uid')
             ->get();
@@ -295,6 +324,7 @@ class buildModel extends model
             ->autoCheck()
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -319,7 +349,8 @@ class buildModel extends model
         $buildID  = (int)$buildID;
         $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
-            ->setIF(!isset($this->post->branch), 'branch', $oldBuild->branch)
+            ->add('id', $buildID)
+            ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
             ->cleanInt('product,branch,execution')
             ->remove('allchecker,resolvedBy,files,labels,uid')
@@ -331,6 +362,7 @@ class buildModel extends model
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
             ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->checkFlow()
             ->exec();
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
@@ -497,7 +529,6 @@ class buildModel extends model
      */
     public function batchUnlinkBug($buildID)
     {
-
         $bugList = $this->post->unlinkBugs;
         if(empty($bugList)) return true;
 
@@ -509,5 +540,57 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+    }
+
+    /**
+     * Build action menu.
+     *
+     * @param  object $build
+     * @param  string $type
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($build, $type = 'view', $extra = '')
+    {
+        $extraParams = array();
+        if($extra) parse_str($extra, $extraParams);
+
+        $menu   = '';
+        $params = "buildID=$build->id";
+
+        global $app;
+        $tab = $app->tab;
+
+        if($type == 'browse')
+        {
+            $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
+            $execution   = $this->loadModel('execution')->getByID($executionID);
+            $testtaskApp = (!empty($execution->type) and $execution->type == 'kanban') ? 'data-app="qa"' : "data-app='{$tab}'";
+
+            if(common::hasPriv('build', 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu('build', 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
+
+            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
+
+            if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&branchID=all&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
+            if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban')      $menu .= $this->buildMenu('build', 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);
+
+            $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
+            $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+        }
+        else
+        {
+            $canBeChanged = common::canBeChanged('build', $build);
+            if($build->deleted || !$canBeChanged) return '';
+
+            $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
+
+            $editClickable   = $this->buildMenu('build', 'edit',   $params, $build, $type, '', '', '', '', '', '', false);
+            $deleteClickable = $this->buildMenu('build', 'delete',   $params, $build, $type, '', '', '', '', '', '', false);
+            if(common::hasPriv('build', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('build', 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
+            if(common::hasPriv('build', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('build', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
+        }
+
+        return $menu;
     }
 }

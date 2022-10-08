@@ -1,7 +1,7 @@
 /**
  * Confirm batch delete cases.
- * 
- * @param  string $actionLink 
+ *
+ * @param  string $actionLink
  * @access public
  * @return void
  */
@@ -21,4 +21,15 @@ $(function()
         $("#sidebarHeader").toggle("fast");
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
+
+    $('#importToLib').on('click', function()
+    {
+        var storyIdList = '';
+        $("input[name^='caseIDList']:checked").each(function()
+        {
+            storyIdList += $(this).val() + ',';
+            $('#caseIdList').val(storyIdList);
+        });
+    });
 });
+

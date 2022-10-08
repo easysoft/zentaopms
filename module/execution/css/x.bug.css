@@ -1,5 +1,5 @@
 body {margin-bottom: 0px !important;}
-#main {min-width: unset; overflow-y: overlay;}
+#main {min-width: unset; overflow-y: overlay; position: unset !important;}
 #main > .container {width: 100% !important;}
 #mainContent > .main-col {margin-top: 0px;}
 #mainMenu, #sidebar, .dropdown, .table-footer > .table-actions, .table-footer>.table-statistic, .pager > li > .pager-size-menu {display: none;}

@@ -6,13 +6,13 @@ fields:
     range: 1-1000
 
   - field: project
-    range: 131{5},132{2},0
+    range: 131{5},132{2},0,11-12
 
   - field: product
-    range: [1,41]{2!},1{2},42,2
+    range: [1,41]{2!},1{2},42,2,1-2
 
   - field: branch
-    range: [0,1]{2!},0{2},2,0
+    range: [0,1]{2!},0{2},2,0{3}
 
   - field: build
     range: 1-8
@@ -20,17 +20,18 @@ fields:
   - field: name
     fields:
       - field: name.1
-        range: [1,41]{2!},1{2},42,2
-        prefix: "产品"
+        range: 产品,项目
+      - field: name.2
+        range: [1,41]{2!},1{2},42,2,1-2
 
       - field: name.2
-        range: [正常的,停止维护的]{3!},[]{2}
+        range: [正常的,停止维护的]{3!},[]{4}
 
       - field: name.3
-        range: [,里程碑]{3},[]{2}
+        range: [,里程碑]{3},[]{4}
 
       - field: name.4
-        range: 发布{7},`发布!@#$$%^&*()测试发布的名称到底可以有多长asdlfkjla`
+        range: 发布{7},`发布!@#$$%^&*()测试发布的名称到底可以有多长asdlfkjla`,发布
 
       - field: name.5
         range: 1-1000
@@ -60,6 +61,10 @@ fields:
 
   - field: subStatus
     range: ' '
+
+  - field: notify
+    range: PO,PD
+    postfix: ","
 
   - field: deleted
     range: 0

@@ -3,7 +3,7 @@
  * The viewcard of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     kanban
  * @version     $Id: viewcard.html.php 4903 2021-12-13 16:25:59Z $
@@ -34,18 +34,25 @@
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php if(!$card->deleted and !$card->archived):?>
+        <?php if(!$card->deleted and !$card->archived and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
         <?php
         //common::printLink('kanban', 'assigntoCard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
         if($kanban->archived)
         {
-            common::printLink('kanban', 'archiveCard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->archive}'", true, true);
+            common::printLink('kanban', 'archiveCard', "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->archive}'", true, true);
 
             echo "<div class='divider'></div>";
         }
 
-        common::printLink('kanban', 'editCard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
-        common::printLink('kanban', 'copyCard',   "cardID=$card->id", '<i class="icon icon-copy"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'",  true, true);
+        common::printLink('kanban', 'editCard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
+
+        if($kanban->performable)
+        {
+            if($card->status == 'done') echo html::a(helper::createLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-magic"></i>', '', "class='btn btn-link' title='{$lang->kanban->activateCard}'");
+            if($card->status == 'doing') echo html::a(helper::createLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'");
+        }
+
+        //common::printLink('kanban', 'copyCard', "cardID=$card->id", '<i class="icon icon-copy"></i>', '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'", true, true);
         common::printLink('kanban', 'deleteCard', "cardID=$card->id", '<i class="icon icon-trash"></i>', 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->delete}'",true, true);
         ?>
         <?php endif;?>
@@ -75,8 +82,8 @@
                   <?php if(!empty($assignedToPairs)):?>
                     <div class='kanban-members pull-left'>
                       <?php foreach($assignedToPairs as $member):?>
-                      <div title="<?php echo $users[$member];?>">
-                        <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member)); ?>
+                      <div title="<?php echo zget($users, $member);?>">
+                        <?php echo zget($users, $member) . '&nbsp;&nbsp;';?>
                       </div>
                       <?php endforeach;?>
                     </div>
@@ -107,6 +114,12 @@
                   <th><?php echo $lang->kanbancard->estimate;?></th>
                   <td><?php echo round($card->estimate, 2) . ' ' . $lang->kanbancard->lblHour;?></td>
                 </tr>
+                <?php if($kanban->performable):?>
+                <tr>
+                  <th><?php echo $lang->kanbancard->progress;?></th>
+                  <td><?php echo round($card->progress, 2) . ' %';?></td>
+                </tr>
+                <?php endif;?>
               </tbody>
             </table>
           </div>

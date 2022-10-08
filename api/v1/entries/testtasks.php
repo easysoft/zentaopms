@@ -3,7 +3,7 @@
  * The testtasks entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -24,7 +24,7 @@ class testtasksEntry extends entry
 
         /* Get all testtasks. */
         $control   = $this->loadController('testtask', 'browse');
-        $productID = $this->param('productID', 0);
+        $productID = $this->param('product', 0);
         $control->browse($productID, $this->param('branch', ''), ($productID > 0 ? 'local' : 'all') . ',' . $this->param('status', 'totalStatus'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1), $this->param('begin', ''), $this->param('end', ''));
         $data = $this->getData();
 

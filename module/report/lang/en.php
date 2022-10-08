@@ -3,21 +3,23 @@
  * The report module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->index     = 'Report Home';
-$lang->report->list      = 'Report';
-$lang->report->item      = 'Item';
-$lang->report->value     = 'Value';
-$lang->report->percent   = '%';
-$lang->report->undefined = 'Undefined';
-$lang->report->query     = 'Query';
-$lang->report->annual    = 'Annual Summary';
-$lang->report->project   = 'Project';
+$lang->report->index              = 'Report Home';
+$lang->report->list               = 'Report';
+$lang->report->item               = 'Item';
+$lang->report->value              = 'Value';
+$lang->report->percent            = '%';
+$lang->report->undefined          = 'Undefined';
+$lang->report->query              = 'Query';
+$lang->report->annual             = 'Annual Summary';
+$lang->report->project            = 'Project';
+$lang->report->PO                 = 'PO';
+$lang->report->viewEveryoneAnnual = 'View everyone annual summary';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -45,8 +47,8 @@ $lang->report->workload         = 'Team Workload Summary';
 $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug reported from';
 $lang->report->beginAndEnd      = ' From';
-$lang->report->begin            = 'Begin';
-$lang->report->end              = 'End';
+$lang->report->begin            = ' Begin';
+$lang->report->end              = ' End';
 $lang->report->dept             = 'Department';
 $lang->report->deviationChart   = 'Project Deviation Chart';
 
@@ -108,8 +110,8 @@ $lang->report->mailTitle->todo     = " Todo (%s),";
 $lang->report->mailTitle->testTask = " Request (%s),";
 
 $lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
-$lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion    = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Try ZenTao Biz for more!</a>';
+$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/" target="_blank">Try ZenTao Biz for more!</a>';
 $lang->report->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
 For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 

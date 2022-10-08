@@ -3,7 +3,7 @@
  * The model file of projectStory module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     projectStory
  * @version     $Id
@@ -49,7 +49,7 @@ class projectstoryModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.story')->in($storyIdList)
-            ->andWhere('t3.type')->in('sprint,stage')
+            ->andWhere('t3.type')->in('sprint,stage,kanban')
             ->andWhere('t3.project')->eq($projectID)
             ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');

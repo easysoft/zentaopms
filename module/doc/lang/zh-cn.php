@@ -3,18 +3,52 @@
  * The doc module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: zh-cn.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
+$lang->doclib = new stdclass();
+$lang->doclib->name       = '文档库名称';
+$lang->doclib->control    = '访问控制';
+$lang->doclib->group      = '分组';
+$lang->doclib->user       = '用户';
+$lang->doclib->files      = '附件库';
+$lang->doclib->all        = '所有文档库';
+$lang->doclib->select     = '选择文档库';
+$lang->doclib->execution  = $lang->executionCommon . '库';
+$lang->doclib->product    = $lang->productCommon . '库';
+$lang->doclib->apiLibName = '接口库名称';
+
+$lang->doclib->aclListA = array();
+$lang->doclib->aclListA['default'] = '默认';
+$lang->doclib->aclListA['custom']  = '自定义';
+
+$lang->doclib->aclListB['open']    = '公开';
+$lang->doclib->aclListB['custom']  = '自定义';
+$lang->doclib->aclListB['private'] = '私有';
+
+$lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
+$lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
+$lang->doclib->create['custom']    = '创建自定义文档库';
+
+$lang->doclib->main['product']   = $lang->productCommon . '主库';
+$lang->doclib->main['project']   = '项目主库';
+$lang->doclib->main['execution'] = $lang->executionCommon . '主库';
+
+$lang->doclib->tabList['product']   = $lang->productCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
+$lang->doclib->tabList['custom']    = '自定义';
+
+$lang->doclib->nameList['custom'] = '自定义文档库名称';
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
-$lang->doc->id           = '编号';
+$lang->doc->id           = '文档编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = '所属项目';
-$lang->doc->execution    = '所属' . $lang->executionCommon;
+$lang->doc->execution    = '所属' . $lang->execution->common;
 $lang->doc->lib          = '所属文档库';
 $lang->doc->module       = '所属目录';
 $lang->doc->object       = '所属对象';
@@ -59,6 +93,8 @@ $lang->doc->collector    = '收藏者';
 $lang->doc->main         = '文档主库';
 $lang->doc->order        = '排序';
 $lang->doc->doc          = '文档';
+$lang->doc->updateOrder  = '更新排序';
+$lang->doc->nextStep     = '下一步';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -89,6 +125,7 @@ $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';
 $lang->doc->manageType       = '维护目录';
 $lang->doc->editType         = '编辑目录';
+$lang->doc->editChildType    = '维护子目录';
 $lang->doc->deleteType       = '删除目录';
 $lang->doc->addType          = '增加目录';
 $lang->doc->childType        = '子目录';
@@ -100,31 +137,38 @@ $lang->doc->menuTitle        = '目录';
 
 $lang->doc->collectAction = '收藏文档';
 
-$lang->doc->libName        = '文档库名称';
-$lang->doc->libType        = '文档库类型';
-$lang->doc->custom         = '自定义文档库';
-$lang->doc->customAB       = '自定义库';
-$lang->doc->createLib      = '创建文档库';
-$lang->doc->allLibs        = '文档库列表';
-$lang->doc->objectLibs     = "文档库文档详情";
-$lang->doc->showFiles      = '附件库';
-$lang->doc->editLib        = '编辑文档库';
-$lang->doc->deleteLib      = '删除文档库';
-$lang->doc->fixedMenu      = '固定到菜单栏';
-$lang->doc->removeMenu     = '从菜单栏移除';
-$lang->doc->search         = '搜索';
-$lang->doc->allCollections = '查看全部收藏文档';
-$lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
+$lang->doc->libName          = '文档库名称';
+$lang->doc->libType          = '文档库类型';
+$lang->doc->custom           = '自定义文档库';
+$lang->doc->customAB         = '自定义库';
+$lang->doc->createLib        = '创建文档库';
+$lang->doc->allLibs          = '文档库列表';
+$lang->doc->objectLibs       = "文档库文档详情";
+$lang->doc->showFiles        = '附件库';
+$lang->doc->editLib          = '编辑文档库';
+$lang->doc->deleteLib        = '删除文档库';
+$lang->doc->fixedMenu        = '固定到菜单栏';
+$lang->doc->removeMenu       = '从菜单栏移除';
+$lang->doc->search           = '搜索';
+$lang->doc->allCollections   = '查看全部收藏文档';
+$lang->doc->keywordsTips     = '多个关键字请用逗号分隔。';
+$lang->doc->sortLibs         = '文档库排序';
+$lang->doc->titlePlaceholder = '请输入标题';
+$lang->doc->confirm          = '确认';
 
 global $config;
 /* 查询条件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
+$lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '项目文档库';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文档库';
+$lang->doc->libTypeList['api']       = '接口库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
+
+$lang->doc->libGlobalList['api'] = '接口文档库';
 
 $lang->doc->libIconList['product']   = 'icon-product';
 $lang->doc->libIconList['execution'] = 'icon-stack';
@@ -194,7 +238,7 @@ $lang->doc->noArticle            = '暂时没有文章。';
 $lang->doc->noLib                = '暂时没有文档库。';
 $lang->doc->noBook               = 'WIKI库还未创建手册，请新建 ：）';
 $lang->doc->cannotCreateOffice   = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
-$lang->doc->notSetOffice         = "<p>创建%s文档，需要配置<a href='%s'>Office转换设置</a>。<p>";
+$lang->doc->notSetOffice         = "创建%s文档，需要配置<a href='%s'>Office转换设置</a>。";
 $lang->doc->noSearchedDoc        = '没有搜索到任何文档。';
 $lang->doc->noEditedDoc          = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc          = '您还没有创建任何文档。';
@@ -202,6 +246,7 @@ $lang->doc->noCollectedDoc       = '您还没有收藏任何文档。';
 $lang->doc->errorEmptyLib        = '文档库暂无数据。';
 $lang->doc->confirmUpdateContent = '检查到您有未保存的文档内容，是否继续编辑？';
 $lang->doc->selectLibType        = '请选择文档库类型';
+$lang->doc->noLibreOffice        = '您还没有office转换设置访问权限!';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = '有所选产品访问权限的用户可以访问。';
 $lang->doc->noticeAcl['lib']['product']['custom']    = '有所选产品访问权限或白名单里的用户可以访问。';
@@ -209,8 +254,11 @@ $lang->doc->noticeAcl['lib']['project']['default']   = "有所选项目访问权
 $lang->doc->noticeAcl['lib']['project']['open']      = "有所选项目访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['project']['private']   = "有所选项目访问权限或白名单里的用户可以访问。";
 $lang->doc->noticeAcl['lib']['project']['custom']    = "白名单的用户可以访问。";
-$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
-$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->execution->common}访问权限的用户可以访问。";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->execution->common}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['api']['open']          = '所有人都可以访问。';
+$lang->doc->noticeAcl['lib']['api']['custom']        = '白名单的用户可以访问。';
+$lang->doc->noticeAcl['lib']['api']['private']       = '只有创建者自己可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['open']       = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['custom']     = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['private']    = '只有创建者自己可以访问。';
@@ -225,35 +273,3 @@ $lang->doc->placeholder->url = '相应的链接地址';
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';
 $lang->doc->point   = '、';
-
-$lang->doclib = new stdclass();
-$lang->doclib->name      = '文档库名称';
-$lang->doclib->control   = '访问控制';
-$lang->doclib->group     = '分组';
-$lang->doclib->user      = '用户';
-$lang->doclib->files     = '附件库';
-$lang->doclib->all       = '所有文档库';
-$lang->doclib->select    = '选择文档库';
-$lang->doclib->execution = $lang->executionCommon . '库';
-$lang->doclib->product   = $lang->productCommon . '库';
-
-$lang->doclib->aclListA['default'] = '默认';
-$lang->doclib->aclListA['custom']  = '自定义';
-
-$lang->doclib->aclListB['open']    = '公开';
-$lang->doclib->aclListB['custom']  = '自定义';
-$lang->doclib->aclListB['private'] = '私有';
-
-$lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
-$lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
-$lang->doclib->create['custom']    = '创建自定义文档库';
-
-$lang->doclib->main['product']   = $lang->productCommon . '主库';
-$lang->doclib->main['project']   = '项目主库';
-$lang->doclib->main['execution'] = $lang->executionCommon . '主库';
-
-$lang->doclib->tabList['product']   = $lang->productCommon;
-$lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']    = '自定义';
-
-$lang->doclib->nameList['custom'] = '自定义文档库名称';

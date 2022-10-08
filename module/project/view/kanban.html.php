@@ -3,7 +3,7 @@
  * The html product kanban file of kanban method of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2021-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Hao Sun <sunhao@easycorp.ltd>
  * @package     ZenTaoPMS
  * @version     $Id
@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip cell">
   <p class="text-muted"><?php echo $lang->project->empty;?></p>
@@ -40,10 +41,10 @@ $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
 js::set('kanbanColumns',    array_values($kanbanColumns));
 js::set('userPrivs',        $userPrivs);
-js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);
 js::set('programPairs',     $programPairs);
 js::set('doingText',        $lang->project->statusList['doing']);
+js::set('delayText',        $lang->project->statusList['delay']);
 js::set('priv',
     array(
         'canStart'    => common::hasPriv('project', 'start'),

@@ -3,7 +3,7 @@
  * The library view file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     caselib
  * @version     $Id: library.html.php 5108 2013-07-12 01:59:04Z chencongzhi520@gmail.com $
@@ -40,13 +40,17 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-left'>
     <?php
-    if(common::hasPriv('caselib', 'browse'))
+    common::sortFeatureMenu();
+    if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['browse']['wait']);
+    foreach($lang->caselib->featureBar['browse'] as $featureType => $label)
     {
-        echo html::a($this->inlink('browse', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('browse', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span>", '', "id='waitTab' class='btn btn-link'");
+        $activeClass = $browseType == $featureType ? 'btn-active-text' : '';
+        echo html::a(inlink('browse', "libID=$libID&browseType=$featureType"), "<span class='text'>$label</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
+  </div>
+  <div class='btn-toolbar pull-right'>
     <?php
     if(common::hasPriv('caselib', 'view'))
     {
@@ -54,10 +58,8 @@ js::set('flow',          $config->global->flow);
         echo html::a($link, "<i class='icon icon-list-alt muted'> </i> " . $this->lang->caselib->view, '', "class='btn btn-link'");
     }
     ?>
-  </div>
-  <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='40%'");?>
+     <?php common::printLink('caselib', 'exportTemplate', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplate, '', "class='btn btn-link export' data-width='40%'");?>
      <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i> " . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>
     </div>
     <?php echo html::a($this->createLink('caselib', 'create'), "<i class='icon icon-plus'> </i> " . $lang->caselib->create, '', 'class="btn btn-secondary"');?>
@@ -124,7 +126,7 @@ js::set('flow',          $config->global->flow);
                 <?php endif;?>
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
               </th>
-              <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+              <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
               <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
               <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
@@ -153,19 +155,11 @@ js::set('flow',          $config->global->flow);
                 <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-              <td><?php echo zget($users, $case->openedBy);?></td>
+              <td title="<?php echo zget($users, $case->openedBy);?>"><?php echo zget($users, $case->openedBy);?></td>
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>
-                <?php
-                if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-                common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
-                if(common::hasPriv('testcase', 'delete'))
-                {
-                    $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
-                }
-                ?>
+                <?php echo $this->caselib->buildOperateMenu($case, 'browse');?>
               </td>
             </tr>
             <?php endforeach;?>

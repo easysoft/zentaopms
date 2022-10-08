@@ -4,7 +4,7 @@ version: "1.0"
 fields:
   - field: id
     range: 1
-  - field: gitlabID
+  - field: hostID
     range: 1
   - field: sourceProject
     range: 42
@@ -28,5 +28,9 @@ fields:
     range: 0
   - field: compileID
     range: 0
+  - field: createdBy
+    range: admin
+  - field: assignee
+    range: admin
   - field: deleted
     range: 0

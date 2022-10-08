@@ -3,7 +3,7 @@
  * The edit view of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -28,7 +28,7 @@
           <td><?php echo html::textarea('desc', htmlSpecialString($suite->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <?php $this->printExtendFields($suite, 'table');?>
-        <?php if($suite->type != 'library'):?>
+        <?php if($suite->type != 'library' and $suite->type != 'unit'):?>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>
           <td><?php echo html::radio('type', $lang->testsuite->authorList, $suite->type);?></td>

@@ -3,7 +3,7 @@
  * The zh-tw file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -332,6 +332,7 @@ $lang->block->availableBlocks->testtask  = '測試版本列表';
 $lang->block->availableBlocks->risk      = '我的風險';
 $lang->block->availableBlocks->issue     = '我的問題';
 $lang->block->availableBlocks->meeting   = '我的會議';
+$lang->block->availableBlocks->feedback  = '我的反饋';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '項目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -444,13 +445,14 @@ $lang->block->orderByList->story['status_desc'] = '狀態倒序';
 $lang->block->orderByList->story['stage_asc']   = '階段正序';
 $lang->block->orderByList->story['stage_desc']  = '階段倒序';
 
-$lang->block->todoCount    = '待辦數';
-$lang->block->taskCount    = '任務數';
-$lang->block->bugCount     = 'Bug數';
-$lang->block->riskCount    = '風險數';
-$lang->block->issueCount   = '問題數';
-$lang->block->storyCount   = '需求數';
-$lang->block->meetingCount = '會議數';
+$lang->block->todoCount     = '待辦數';
+$lang->block->taskCount     = '任務數';
+$lang->block->bugCount      = 'Bug數';
+$lang->block->riskCount     = '風險數';
+$lang->block->issueCount    = '問題數';
+$lang->block->storyCount    = '需求數';
+$lang->block->meetingCount  = '會議數';
+$lang->block->feedbackCount = '反饋數';
 
 $lang->block->typeList = new stdclass();
 

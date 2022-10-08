@@ -3,7 +3,7 @@
  * The browse view file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: browse.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -15,10 +15,16 @@
 <?php js::set('flow', $config->global->flow);?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
-    <a href class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->testsuite->browse?></span>
-      <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>
-    </a>
+    <?php
+    common::sortFeatureMenu();
+    foreach($lang->testsuite->featureBar['browse'] as $featureType => $label)
+    {
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        $label       = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        echo html::a(inlink('browse', "productID=$productID&type=$featureType"), $label, '',"class='btn btn-link $activeClass'");
+    }
+    ?>
   </div>
   <?php if(common::canModify('product', $product)):?>
   <div class="btn-toolbar pull-right">
@@ -39,7 +45,7 @@
   <?php else:?>
   <table class='table has-sort-head' id='suiteList'>
     <thead>
-    <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+    <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
         <th class='c-id text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->testsuite->name);?></th>
@@ -57,7 +63,7 @@
     <?php foreach($suites as $suite):?>
     <tr class='text-left'>
       <td><?php echo html::a(helper::createLink('testsuite', 'view', "suiteID=$suite->id"), sprintf('%03d', $suite->id));?></td>
-      <td class='text-left' title="<?php echo $suite->name?>">
+      <td class='text-left c-name' title="<?php echo $suite->name?>">
         <?php if($suite->type == 'public') echo "<span class='label label-success label-badge'>{$lang->testsuite->authorList['public']}</span> ";?>
         <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
         <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
@@ -70,11 +76,7 @@
       <td><?php echo $suite->addedDate;?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
-        <?php
-        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
-        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
-        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", $suite, 'list', 'trash', 'hiddenwin');
-        ?>
+        <?php echo $this->testsuite->buildOperateMenu($suite, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

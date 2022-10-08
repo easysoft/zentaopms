@@ -3,7 +3,7 @@
  * The browse view file of product dept of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: browse.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -13,6 +13,11 @@
 <?php
 include '../../common/view/header.html.php';
 ?>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('user', 'create', "dept=$deptID", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn' data-app='admin'");?>
+  </div>
+</div>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='user'></div>

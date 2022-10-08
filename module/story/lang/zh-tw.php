@@ -3,7 +3,7 @@
  * The story module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: zh-tw.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
@@ -11,8 +11,6 @@
  */
 global $config;
 $lang->story->create            = "提{$lang->SRCommon}";
-$lang->story->createStory       = "提{$lang->SRCommon}";
-$lang->story->createRequirement = "提{$lang->SRCommon}";
 
 $lang->story->requirement       = zget($lang, 'URCommon', "需求");
 $lang->story->story             = zget($lang, 'SRCommon', "故事");
@@ -128,6 +126,7 @@ $lang->story->rejectedReason = '拒絶原因';
 $lang->story->reviewedBy     = '由誰評審';
 $lang->story->reviewers      = '評審人員';
 $lang->story->reviewedDate   = '評審時間';
+$lang->story->activatedDate  = '激活日期';
 $lang->story->version        = '版本號';
 $lang->story->feedbackBy     = '反饋者';
 $lang->story->notifyEmail    = '通知郵箱';
@@ -137,9 +136,10 @@ $lang->story->comment        = '備註';
 $lang->story->children       = "子需求";
 $lang->story->childrenAB     = "子";
 $lang->story->linkStories    = "相關{$lang->SRCommon}";
-$lang->story->childStories   = "細分{$lang->SRCommon}";
-$lang->story->duplicateStory = "重複{$lang->SRCommon}ID";
+$lang->story->childStories   = "細分需求";
+$lang->story->duplicateStory = "重複需求ID";
 $lang->story->reviewResult   = '評審意見';
+$lang->story->reviewResultAB = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = "繼續添加{$lang->SRCommon}";
@@ -173,11 +173,12 @@ $lang->story->needNotReviewList[1] = '不需要評審';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已關閉';
-$lang->story->statusList['changed'] = '已變更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已關閉';
+$lang->story->statusList['changing']  = '變更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';
@@ -296,7 +297,8 @@ $lang->story->action->recalled              = array('main' => '$date, 由 <stron
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
 $lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>拒絶</strong>。');
-$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請變更後重新發起評審。');
+$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請編輯後重新發起評審。');
+$lang->story->action->reviewreverted        = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>撤銷變更</strong>。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到' . $lang->executionCommon . ' <strong>$extra</strong>。');

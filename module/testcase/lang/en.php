@@ -3,7 +3,7 @@
  * The testcase module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
  * @version     $Id: en.php 4966 2013-07-02 02:59:25Z wyd621@gmail.com $
@@ -31,9 +31,11 @@ $lang->testcase->precondition     = 'Prerequisite';
 $lang->testcase->pri              = 'Priority';
 $lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
+$lang->testcase->statusAB         = 'Status';
 $lang->testcase->subStatus        = 'Sub Status';
 $lang->testcase->steps            = 'Steps';
 $lang->testcase->openedBy         = 'CreatedBy';
+$lang->testcase->openedByAB       = 'Reporter';
 $lang->testcase->openedDate       = 'CreatedDate';
 $lang->testcase->lastEditedBy     = 'EditedBy';
 $lang->testcase->result           = 'Result';
@@ -43,6 +45,9 @@ $lang->testcase->files            = 'Files';
 $lang->testcase->linkCase         = 'Linked Cases';
 $lang->testcase->linkCases        = 'Link Case';
 $lang->testcase->unlinkCase       = 'Unlink Cases';
+$lang->testcase->linkBug          = 'Linked Bugs';
+$lang->testcase->linkBugs         = 'Link Bug';
+$lang->testcase->unlinkBug        = 'Unlink Bugs';
 $lang->testcase->stage            = 'Phase';
 $lang->testcase->scriptedBy       = 'ScriptedBy';
 $lang->testcase->scriptedDate     = 'ScriptedDate';
@@ -91,6 +96,7 @@ $lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
+$lang->testcase->executionStatus  = 'executionStatus';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -121,12 +127,13 @@ $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Types";
 $lang->testcase->browse                  = "Case List";
 $lang->testcase->groupCase               = "View By Group";
+$lang->testcase->zeroCase                = "Stories without cases";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->fileImport              = "Import CSV";
 $lang->testcase->importFromLib           = "Import From Library";
 $lang->testcase->showImport              = "Show Import";
-$lang->testcase->exportTemplet           = "Export Template";
+$lang->testcase->exportTemplate          = "Export Template";
 $lang->testcase->export                  = "Export Data";
 $lang->testcase->exportAction            = "Export Case";
 $lang->testcase->reportChart             = 'Report Chart';
@@ -139,6 +146,7 @@ $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Steps';
 $lang->testcase->stepChild               = 'Child Steps';
 $lang->testcase->viewAll                 = 'All Cases';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'New';
 
@@ -162,17 +170,18 @@ $lang->testcase->lblTypeValue   = 'Type Value';
 $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';
 
-$lang->testcase->legendBasicInfo    = 'Basic Information';
-$lang->testcase->legendAttatch      = 'Files';
-$lang->testcase->legendLinkBugs     = 'Bugs';
-$lang->testcase->legendOpenAndEdit  = 'Create/Edit';
-$lang->testcase->legendComment      = 'Comment';
+$lang->testcase->legendBasicInfo       = 'Basic Information';
+$lang->testcase->legendAttatch         = 'Files';
+$lang->testcase->legendLinkBugs        = 'Bugs';
+$lang->testcase->legendOpenAndEdit     = 'Create/Edit';
+$lang->testcase->legendComment         = 'Comment';
 
-$lang->testcase->summary            = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
-$lang->testcase->confirmDelete      = 'Do you want to delete this case?';
-$lang->testcase->confirmBatchDelete = 'Do you want to batch delete cases?';
-$lang->testcase->ditto              = 'Ditto';
-$lang->testcase->dittoNotice        = 'This Case is not linked to the Product as the last one is!';
+$lang->testcase->summary               = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
+$lang->testcase->confirmDelete         = 'Do you want to delete this case?';
+$lang->testcase->confirmBatchDelete    = 'Do you want to batch delete cases?';
+$lang->testcase->ditto                 = 'Ditto';
+$lang->testcase->dittoNotice           = 'This Case is not linked to the Product as the last one is!';
+$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'NO';
 $lang->testcase->reviewList[1] = 'YES';
@@ -219,16 +228,21 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
+$lang->testcase->whichLine        = 'Line No.%s : ';
+$lang->testcase->stepsEmpty       = 'Step %s cannot be empty.';
 $lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding are not found. You cannot convert the data to the encoding you want!';
 $lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
+$lang->testcase->noRequireTip     = "“%s”is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
 $lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage it now.</div>';
 $lang->testcase->noCase           = 'No cases yet. ';
+$lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
 
 $lang->testcase->searchStories = 'Enter to search for stories';
 $lang->testcase->selectLib     = 'Select Library';
+$lang->testcase->selectLibAB   = 'Select Library';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, imported by <strong>$actor</strong> from <strong>$extra</strong>.');
@@ -242,7 +256,7 @@ $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases
 $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = 'Group View';
-$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
+$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

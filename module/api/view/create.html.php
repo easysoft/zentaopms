@@ -3,7 +3,7 @@
  * The create view of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: create.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
@@ -130,18 +130,17 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                       <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                     </td>
                     <td class="w-50px">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" v-model="item.required">
-                        </label>
+                      <div class="checkbox-primary">
+                        <input type="checkbox" v-model="item.required">
+                        <label></label>
                       </div>
                     </td>
                     <td class="w-500px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>
-                      <button class="btn btn-link" type="button" @click="add(header, key, 'header')"><?php echo $lang->struct->add;?></button>
-                      <button class="btn btn-link" type="button" @click="del(header, key)"><?php echo $lang->delete;?></button>
+                      <button class="btn btn-link btn-icon btn-add" type="button" @click="add(header, key, 'header')"><i class="icon icon-plus"></i></button>
+                      <button class="btn btn-link btn-icon btn-delete" type="button" @click="del(header, key)"><i class="icon icon-close"></i></button>
                     </td>
                 </tbody>
               </table>
@@ -165,18 +164,17 @@ js::set('struct_paramsType', $lang->struct->paramsType);
                       <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                     </td>
                     <td class="w-50px">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" v-model="item.required">
-                        </label>
+                      <div class="checkbox-primary">
+                        <input type="checkbox" v-model="item.required">
+                        <label></label>
                       </div>
                     </td>
                     <td class="w-500px">
                       <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                     </td>
                     <td>
-                      <button class="btn btn-link" type="button" @click="add(queryP, key, 'query')"><?php echo $lang->struct->add;?></button>
-                      <button class="btn btn-link" type="button" @click="del(queryP, key)"><?php echo $lang->delete;?></button>
+                      <button class="btn btn-link btn-icon btn-add" type="button" @click="add(queryP, key, 'query')"><i class="icon icon-plus"></i></button>
+                      <button class="btn btn-link btn-icon btn-delete" type="button" @click="del(queryP, key)"><i class="icon icon-close"></i></button>
                     </td>
                 </tbody>
               </table>

@@ -3,7 +3,7 @@
  * The editcard of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: editcard.html.php 4903 2021-12-13 14:25:59Z $
@@ -48,7 +48,7 @@
               <table class="table table-form">
                 <tr>
                   <th><?php echo $lang->kanbancard->assignedTo;?></th>
-                  <td><?php echo html::select('assignedTo[]', $users, $card->assignedTo, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('assignedTo[]', $kanbanUsers, $card->assignedTo, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->begin;?></th>
@@ -59,13 +59,29 @@
                   <td><?php echo html::input('end', helper::isZeroDate($card->end) ? '' : $card->end, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->kanbancard->estimate;?></th>
-                  <td><?php echo html::input('estimate', $card->estimate, "class='form-control' placeholder='{$lang->kanbancard->lblHour}'");?></td>
-                </tr>
-                <tr>
                   <th><?php echo $lang->kanbancard->pri;?></th>
                   <td><?php echo html::select('pri', $lang->kanbancard->priList, $card->pri, "class='form-control'");?></td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->kanbancard->estimate;?></th>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input('estimate', $card->estimate, "class='form-control'");?>
+                      <span class='input-group-addon'>h</span>
+                    </div>
+                  </td>
+                </tr>
+                <?php if($kanban->performable):?>
+                <tr>
+                  <th><?php echo $lang->kanbancard->progress;?></th>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input('progress', $card->progress, "class='form-control'");?>
+                      <span class='input-group-addon'>%</span>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
               </table>
             </div>
           </div>

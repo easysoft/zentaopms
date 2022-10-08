@@ -12,7 +12,7 @@
         <tr class='text-center'>
           <th class='c-id'>    <?php echo $lang->idAB;?></th>
           <th class='w-p30'>   <?php echo $lang->testcase->title;?></th>
-          <th class='c-pri'>   <?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
           <th class='c-type'>  <?php echo $lang->testcase->type;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th class='c-user'>  <?php echo $lang->testcase->lastRunner;?></th>

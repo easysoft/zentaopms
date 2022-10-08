@@ -1,8 +1,9 @@
+body {margin-bottom: 25px;}
 .side-col .detail-content {padding-left: 10px; margin-top: 0px;}
 .side-col {padding-right: 20px; width: 18%;}
 #sidebar>.cell {width: 100%;}
 
-th.c-budget {text-align: right;}
+.c-budget {text-align: right; padding-right:16px !important;}
 td.c-actions {overflow: visible;}
 td.c-PM {white-space: nowrap; overflow: hidden;}
 .c-actions .btn {overflow: visible;}
@@ -11,8 +12,15 @@ td.c-PM {white-space: nowrap; overflow: hidden;}
 .icon-cards-view {padding-left: 7px; font-size: 16px;}
 .icon-list {padding-left: 7px;}
 .panel-actions {position: relative; padding: 0 0;}
-th.c-name {width: 360px !important;}
+th.c-name {min-width: 240px;}
 @media screen and (min-width: 1460px)
 {
     th.c-name {width: auto;}
 }
+[lang^='en'] .project-name > .label-warning {width: 55px !important;}
+[lang^='en'] .c-status {width: 100px !important;}
+
+.table-responsive {overflow: auto !important;}
+.checkbox-primary {margin-right: 10px;}
+#sidebar {padding: 0px; width: 200px;}
+#sidebar .cell {width: 180px;}

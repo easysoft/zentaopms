@@ -3,7 +3,7 @@
  * The create case view of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     caselib
  * @version     $Id: createcase.html.php 4904 2013-06-26 05:37:45Z wyd621@gmail.com $
@@ -33,7 +33,7 @@
                 <?php echo html::select('lib', $libraries, $libID, "onchange='loadLibModules(this.value);' class='form-control chosen'");?>
               </div>
             </td>
-            <td style='padding-left:15px;'>
+            <td style='padding-left:15px;'<?php echo strpos($config->testcase->create->requiredFields, 'module') ? ' class="required"' : '';?>>
               <div class='input-group' id='moduleIdBox'>
               <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
               <?php
@@ -41,7 +41,7 @@
               if(count($moduleOptionMenu) == 1)
               {
                   echo "<span class='input-group-btn'>";
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0", 'html', true), "<i class='icon icon-cog'></i>", '', "data-toggle='tooltip' class='btn iframe' title='{$lang->tree->manage}'");
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0", 'html', true), "<i class='icon icon-cog'></i>", '', "data-toggle='tooltip' class='btn iframe' data-width='95%' title='{$lang->tree->manage}'");
                   echo '</span>';
                   echo "<span class='input-group-btn'>";
                   echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn refresh' title='{$lang->refresh}' onclick='loadLibModules($libID)'");

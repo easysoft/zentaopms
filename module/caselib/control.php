@@ -3,7 +3,7 @@
  * The control file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
  * @version     $Id: control.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -92,7 +92,8 @@ class caselib extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "libID=$libID");
             return $this->send($response);
@@ -124,13 +125,14 @@ class caselib extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->caselib->libraryDelete, inlink('delete', "libID=$libID&confirm=yes")));
+            return print(js::confirm($this->lang->caselib->libraryDelete, inlink('delete', "libID=$libID&confirm=yes")));
         }
         else
         {
             $this->caselib->delete($libID);
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -147,7 +149,7 @@ class caselib extends control
                 }
                 return $this->send($response);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -249,23 +251,22 @@ class caselib extends control
         if(!empty($_POST))
         {
             $this->loadModel('testcase');
-            $this->config->testcase->create->requiredFields = $this->config->caselib->createcase->requiredFields;
             setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID = 0);
-            if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
+            if(!$caseResult or dao::isError()) return print(js::error(dao::getError()));
 
             $caseID = $caseResult['id'];
             if($caseResult['status'] == 'exists')
             {
                 echo js::alert(sprintf($this->lang->duplicate, $this->lang->testcase->common));
-                die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+                return print(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
             }
 
             $this->loadModel('action')->create('case', $caseID, 'Opened');
 
             /* If link from no head then reload. */
-            if(isonlybody()) die(js::reload('parent'));
-            die(js::locate($this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
+            if(isonlybody()) return print(js::reload('parent'));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
@@ -340,9 +341,9 @@ class caselib extends control
         if(!empty($_POST))
         {
             $caseID = $this->caselib->batchCreateCase($libID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('caselib', 'browse', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
         }
 
         $libraries = $this->caselib->getLibraries();
@@ -351,18 +352,12 @@ class caselib extends control
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $currentModuleID = (int)$moduleID;
-
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
         $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->currentModuleID  = (int)$moduleID;
 
         $this->display();
     }
@@ -378,7 +373,7 @@ class caselib extends control
     {
         $libID = (int)$libID;
         $lib   = $this->caselib->getById($libID, true);
-        if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!isset($lib->id)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
@@ -447,7 +442,7 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($libID)
+    public function exportTemplate($libID)
     {
         $this->loadModel('testcase');
         if($_POST)
@@ -555,12 +550,12 @@ class caselib extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) != count($header)) return print(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
 
-            die(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
+            return print(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
         }
         $this->display();
     }
@@ -589,11 +584,11 @@ class caselib extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "libID=$libID"), 'parent'));
+                return print(js::locate(inlink('browse', "libID=$libID"), 'parent'));
             }
             else
             {
-                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
+                return print(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -759,7 +754,7 @@ class caselib extends control
             unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
             echo js::alert($this->lang->error->noData);
-            die(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
         $allCount = count($caseData);
@@ -771,13 +766,13 @@ class caselib extends control
                 $this->view->allCount  = $allCount;
                 $this->view->maxImport = $maxImport;
                 $this->view->libID     = $libID;
-                die($this->display());
+                return print($this->display());
             }
 
             $allPager = ceil($allCount / $maxImport);
             $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
-        if(empty($caseData)) die(js::locate(inlink('browse', "libID=$libID")));
+        if(empty($caseData)) return print(js::locate(inlink('browse', "libID=$libID")));
 
         /* Judge whether the items is too large and set session. */
         $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);
@@ -799,5 +794,27 @@ class caselib extends control
         $this->view->maxImport  = $maxImport;
         $this->view->dataInsert = $insert;
         $this->display();
+    }
+
+    /**
+     * For lib sort
+     *
+     * @access public
+     * @return void
+     */
+    public function libSort()
+    {
+        $idList = explode(',', trim($this->post->caselib, ','));
+        $order  = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->in($idList)->andWhere('type')->eq('library')->orderBy('order_asc')->fetch('order');
+        $idList = array_reverse($idList);
+
+        /* Init Order. */
+        if(empty($order)) $order = 1;
+
+        foreach($idList as $caselibID)
+        {
+            $this->dao->update(TABLE_TESTSUITE)->set('`order`')->eq($order)->where('id')->eq($caselibID)->andWhere('type')->eq('library')->exec();
+            $order++;
+        }
     }
 }

@@ -13,7 +13,7 @@
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
-.table td.has-child > a:not(.task-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.table td.has-child > a:not(.task-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; white-space: nowrap;}
 .table td.has-child > .task-toggle {color: #838a9d; position: relative; top: 1px; line-height: 16px;}
 .table td.has-child > .task-toggle:hover {color: #006af1; cursor: pointer;}
 .table td.has-child > .task-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg); -webkit-transform: rotate(-90deg); transform: rotate(-90deg);}

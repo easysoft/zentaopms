@@ -3,7 +3,7 @@
  * The English file of design module.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: en.php 4729 2020-09-01 07:53:55Z tianshujie@easycorp.ltd $
@@ -37,12 +37,13 @@ $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
+$lang->design->more          = 'More';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';
 $lang->design->create       = 'Create Design';
 $lang->design->batchCreate  = 'Batch Create';
-$lang->design->edit         = 'Edit';
+$lang->design->edit         = 'Change';
 $lang->design->delete       = 'Delete';
 $lang->design->view         = 'View';
 $lang->design->browse       = 'List';

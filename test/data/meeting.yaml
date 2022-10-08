@@ -1,0 +1,83 @@
+title: table_meeting
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+
+  - field: project
+    range: 11-20
+
+  - field: execution
+    range: 101-110
+
+  - field: name
+    range: 1-100
+    prefix: "会议"
+
+  - field: type
+    range: ""
+
+  - field: begin
+    range: "(-1M)-(+1w)"
+    type: timestamp
+    format: "hh:mm:ss"
+
+  - field: end
+    range: "(-1M)-(+1w):1h"
+    type: timestamp
+    format: "hh:mm:ss"
+
+  - field: dept
+    range: 1-10
+
+  - field: mode
+    range: both,online,outline
+
+  - field: host
+    range: admin
+
+  - field: participant
+    range: admin
+    prefix: ","
+    postfix: ","
+
+  - field: date
+    range: "(-1M)-(+1w)"
+    type: timestamp
+    format: "YYYY-MM-DD"
+
+  - field: room
+    range: 1
+
+  - field: minutes
+    range: ""
+
+  - field: minutedBy
+    range: ""
+
+  - field: minutedDate
+    range: ""
+
+  - field: objectType
+    range: story,task,issue,bug
+
+  - field: objectID
+    range: 0
+
+  - field: createdBy
+    range: admin
+
+  - field: createdDate
+    range: "(-1M)-(+1w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+
+  - field: editedBy
+    range: ""
+
+  - field: editedDate
+    range: ""
+
+  - field: deleted
+    range: 0

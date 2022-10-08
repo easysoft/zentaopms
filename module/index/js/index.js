@@ -1,9 +1,9 @@
 (function()
 {
-    if(showFeatures)
+    if(showFeatures && vision == 'rnd')
     {
         /* Show features dialog. */
-        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 900, showHeader: false, backdrop: 'static'}).show();
+        new $.zui.ModalTrigger({url: $.createLink('misc', 'features'), type: 'iframe', width: 900, className: 'showFeatures', showHeader: false, backdrop: 'static'}).show();
     }
 
     /* Init variables */
@@ -32,6 +32,12 @@
         window.appsMenuItems.forEach(function(item)
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
+
+            /* Append tid param to app url */
+            if($.tabSession && item.url)
+            {
+                item.url = $.tabSession.convertUrlWithTid(item.url);
+            }
 
             var $link= $('<a data-pos="menu"></a>')
                 .attr('data-app', item.code)
@@ -115,7 +121,8 @@
                 return link.prj ? 'project' : 'report';
             }
         }
-        if(moduleName === 'story' && methodLowerCase === 'zerocase')
+        if(moduleName === 'story' && vision === 'lite') return 'project'
+        if(moduleName === 'testcase' && methodLowerCase === 'zerocase')
         {
             return link.params.from == 'project' ? 'project' : 'qa';
         }
@@ -180,7 +187,7 @@
      * @param {string} [appCode] The code of target app to open
      * @return {void}
      */
-    function openTab(url, appCode)
+    function openTab(url, appCode, forceReload)
     {
         /* Check params */
         if(!appCode)
@@ -193,7 +200,7 @@
             else
             {
                 appCode = getAppCodeFromUrl(url);
-                if(!appCode) return false;
+                if(!appCode) return openTab('my');
             }
         }
 
@@ -227,7 +234,7 @@
                     'style="width: 100%; height: 100%; left: 0px;"',
                 '/>'
             ].join(' '));
-            var $app = $('<div class="app-container" id="app-' + appCode + '"></div>')
+            var $app = $('<div class="app-container load-indicator" id="app-' + appCode + '"></div>')
                 .append($iframe)
                 .appendTo('#apps');
 
@@ -240,7 +247,7 @@
             var iframe = $iframe.get(0);
             iframe.onload = iframe.onreadystatechange = function(e)
             {
-                $app.trigger('loadapp', app);
+                $app.removeClass('loading').trigger('loadapp', app);
             };
         }
 
@@ -257,7 +264,13 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url, true);
+        var iframe = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+        if (url && (!isSameUrl || forceReload !== false))
+        {
+            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
+            reloadApp(appCode, url, true);
+        }
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
@@ -266,6 +279,7 @@
         var $bar  = $('#appBar-' + appCode);
         if(!$bar.length)
         {
+            if (typeof(app.text) == 'undefined') return false;
             var $link= $('<a data-pos="bar"></a>')
                 .attr('data-app', appCode)
                 .attr('class', 'show-in-app')
@@ -334,13 +348,14 @@
     function hideTab(appCode)
     {
         var app = openedApps[appCode];
-        if(!app || !app.show) return;
+        if(!app) return;
+        app.$app.trigger('hideapp', app);
+        if(!app.show) return;
 
         app.$app.hide();
         app.show = false;
         lastOpenedApp = null;
 
-        app.$app.trigger('hideapp', app);
 
         /* Active last app */
         var lastApp = getLastApp(true) || getLastApp();
@@ -426,11 +441,20 @@
         if(!app) return;
 
         if(url === true) url = app.url;
-        var iframe = app.$iframe[0];
+        else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
+
+        var iframe    = app.$iframe[0];
+        var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
+
+        /* Add hook to page before reload it */
+        if (iframe && iframe.contentWindow.beforeAppReload)
+        {
+            iframe.contentWindow.beforeAppReload({app: app, url: url});
+        }
 
         try
         {
-            if(url) iframe.contentWindow.location.assign(url);
+            if(url && !isSameUrl) iframe.contentWindow.location.assign(url);
             else iframe.contentWindow.location.reload(true);
         }
         catch(_)
@@ -439,6 +463,14 @@
         }
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
+
+        if(!isSameUrl) app.$app.addClass('loading');
+        if(app._loadTimer) clearTimeout(app._loadTimer);
+        app._loadTimer = setTimeout(function()
+        {
+            app.$app.removeClass('loading');
+            app._loadTimer = null;
+        }, 15000);
     }
 
     /**
@@ -633,9 +665,10 @@
 
         /* Redirect or open default app after document load */
         var defaultOpenUrl = window.defaultOpen;
-        if(!defaultOpenUrl && location.hash.indexOf('#app=') === 0)
+        if(location.hash.indexOf('#app=') === 0)
         {
-            defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
+            codeApp = decodeURIComponent(location.hash.substr(5));
+            defaultOpenUrl = !defaultOpenUrl ? codeApp : defaultOpenUrl + '#app=' + codeApp;
         }
 
         openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);
@@ -644,6 +677,27 @@
         $(window).on('resize', refreshMoreMenu);
         refreshMoreMenu();
         setTimeout(refreshMoreMenu, 500);
+
+        /* Fix bug #21331. */
+        var vibibleState  = '';
+        var visibleChange = '';
+        if(typeof document.visibilityState != 'undefined')
+        {
+            visibleChange = 'visibilitychange';
+            vibibleState  = 'visibilityState';
+        }
+        else if(typeof document.webkitVisibilityState != 'undefined')
+        {
+            visibleChange = 'webkitvisibilitychange';
+            vibibleState  = 'webkitVisibilityState';
+        }
+        if(visibleChange)
+        {
+            document.addEventListener(visibleChange, function()
+            {
+                if(document[vibibleState] == 'visible') showTab($('#bars>li.active').data('app'));
+            });
+        }
     });
 }());
 
@@ -689,7 +743,8 @@ $.extend(
             var reg = /[^0-9]/;
             if(reg.test(objectValue) || objectType == 'all')
             {
-                var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                var searchLink = createLink('search', 'index');
+                searchLink += (searchLink.indexOf('?') >= 0 ? '&' : '?') + 'words=' + objectValue;
                 $.apps.open(searchLink);
             }
             else
@@ -698,8 +753,8 @@ $.extend(
                 var searchModule = types[0];
                 var searchMethod = typeof(types[1]) == 'undefined' ? 'view' : types[1];
                 var searchLink   = createLink(searchModule, searchMethod, "id=" + objectValue);
-                var assetType    = 'story,issue,risk,opportunity,doc';
-                if(assetType.indexOf(searchModule) > -1)
+                var assetType    = ',story,issue,risk,opportunity,doc,';
+                if(assetType.indexOf(',' + searchModule + ',') > -1)
                 {
                     var link = createLink('index', 'ajaxGetViewMethod' , 'objectID=' + objectValue + '&objectType=' + searchModule);
                     $.get(link, function(data)
@@ -814,7 +869,7 @@ $(function()
         event.stopPropagation();
     });
 
-    $("#proLink").click(function(event)
+    $("#bizLink").click(function(event)
     {
         var $upgradeContent = $('#upgradeContent').toggle();
         if(!$upgradeContent.is(':hidden'))
@@ -852,6 +907,8 @@ function changeSearchObject()
     if(appPageModuleName == 'my' || appPageModuleName == 'user') var searchType = appPageMethodName;
 
     if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
+
+    if(vision == 'lite') var searchType = 'story';
 
     if(searchType == 'program')    var searchType = 'program-product';
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';

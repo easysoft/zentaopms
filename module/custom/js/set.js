@@ -36,7 +36,7 @@ $('[name*=unitList]').change(function()
 
 $('#submit').click(function()
 {
-    if(module == 'testcase' && field == 'review' && stopSubmit)
+    if(module == 'testcase' && field == 'review' && stopSubmit && oldNeedReview)
     {
         var needReview = $('input:radio[name="needReview"]:checked').val();
         stopSubmit     = false;

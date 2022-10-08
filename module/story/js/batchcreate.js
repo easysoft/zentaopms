@@ -1,7 +1,36 @@
 $(function()
 {
-    if($('#batchCreateForm table thead tr th.col-name').width() < 200) $('#batchCreateForm table thead tr th.col-name').width(200);
+    $name = $('#batchCreateForm table thead tr th.col-name');
+    if($name.width() < 200) $name.width(200);
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('batchCreateFields', 8, $name, 200);
+        return false;
+    });
+
+    $('#saveButton').on('click', function()
+    {
+        $('#saveButton').attr('disabled', true);
+        $('#saveDraftButton').attr('disabled', true);
+        $('#batchCreateForm').submit();
+    });
+
+    $('#saveDraftButton').on('click', function()
+    {
+        $('#saveButton').attr('disabled', true);
+        $('#saveDraftButton').attr('disabled', true);
+        $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', 'draft').appendTo('#batchCreateForm');
+        $('#batchCreateForm').submit();
+    });
 });
+
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');
@@ -85,4 +114,54 @@ function copyTitle(num)
 {
     var title = $('#title\\[' + num + '\\]').val();
     $('#spec\\[' + num + '\\]').val(title);
+}
+
+$(document).on('change', "[name*='reviewer']", function()
+{
+    toggleCheck($(this));
+})
+
+/**
+ * Toggle checkbox.
+ *
+ * @param  obj $obj
+ * @access public
+ * @return void
+ */
+function toggleCheck(obj)
+{
+    var $this  = $(obj);
+    var data   = $this.val();
+    var $ditto = $this.closest('div').find("input[name*='reviewDitto']");
+    if(data == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}
+
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
 }

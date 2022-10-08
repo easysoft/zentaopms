@@ -488,7 +488,7 @@ class baseHTML
         if(empty($label)) $label = $lang->goback;
 
         $gobackLink   = "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
-        $tab          = $_COOKIE['tab'];
+        $tab          = isset($_COOKIE['tab']) ? $_COOKIE['tab'] : '';
         $referer      = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         $refererParts = parse_url($referer);
 
@@ -509,7 +509,7 @@ class baseHTML
             setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 
-        return  "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
+        return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
     }
 
     /**
@@ -966,8 +966,9 @@ class baseJS
         {
             $cancleAction = "$cancleTarget.location = '$cancleURL';";
         }
-
-        $js .= <<<EOT
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false)
+        {
+            $js .= <<<EOT
 if(confirm("$message"))
 {
     $confirmAction
@@ -977,6 +978,12 @@ else
     $cancleAction
 }
 EOT;
+        }
+        else
+        {
+            $js .= $confirmAction;
+        }
+
         $js .= self::end();
         return $js;
     }
@@ -1019,12 +1026,14 @@ EOT;
         {
             $js .= "history.back(-1);\n";
         }
-        elseif(strpos($target, '$.apps.open') !== false)
+        elseif($target === 'app' or strpos($target, '$.apps.open') !== false)
         {
-            $js .= "$target('$url')";
+            $js .= "parent.$target('$url')";
         }
         else
         {
+            /* Can not locate the url that has '#app', so remove it. */
+            if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
             $js .= "$target.location='$url';\n";
         }
         return $js . self::end();
@@ -1165,6 +1174,9 @@ EOT;
         $jsConfig->runMode        = $runMode;
         $jsConfig->timeout        = isset($config->timeout) ? $config->timeout : '';
         $jsConfig->pingInterval   = isset($config->pingInterval) ? $config->pingInterval : '';
+        $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
+        $jsConfig->tabSession     = $config->tabSession;
+        if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
         $jsLang = new stdclass();
         $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
@@ -1219,7 +1231,8 @@ EOT;
             $viewOBJOut = true;
         }
 
-        if(is_numeric($value))
+        /* Fix value is '0123' error. */
+        if(is_numeric($value) and !preg_match('/^0[1-9]/', $value))
         {
             $js .= "{$prefix}{$key} = {$value};";
         }
@@ -1246,7 +1259,7 @@ EOT;
         else
         {
             $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value};'";
+            $js .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= self::end($newline = false);
         echo $js;

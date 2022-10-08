@@ -3,7 +3,7 @@
  * The edit of programplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: edit.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
@@ -55,7 +55,7 @@
           <tr>
             <th><?php echo $lang->project->acl;?> </th>
             <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
-            <td colspan='2'><?php echo html::select('acl', $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
+            <td colspan='2'><?php echo html::select('acl', $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->programplan->planDateRange;?> </th>

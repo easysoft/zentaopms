@@ -1,0 +1,130 @@
+title: table zt_testtask
+desc: "测试版本"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "测试单名称"
+    fields:
+      - field: name1
+        range: 测试单{50},单元测试{50}
+      - field: name2
+        range: 1-50,1-50
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1-50
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 11-60
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "所属执行"
+    range: 101-150
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: build
+    range: 11-20,0{40}
+    note: "版本"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: owner
+    note: "负责人"
+    range: 3-14
+    prefix: "user"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 1-4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: begin
+    note: "开始日期"
+    range: "(M)-(w):60"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+  - field: end
+    note: "结束日期"
+    range: "(+1w)-(M)"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+  - field: mailto
+    note: "抄送给"
+    range: ""
+    prefix: ","
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-1000
+    prefix: "这是测试单描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: report
+    note: "报告"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: wait,doing,done,blocked
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: auto
+    note: "自动"
+    range: no{50},unit{50}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: subStatus
+    note: "子状态"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

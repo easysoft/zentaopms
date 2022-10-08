@@ -13,7 +13,7 @@ fields:
     format: ""
   - field: root
     note: "项目/执行ID"
-    range: 121-130{100},241-250{100}
+    range: 11-300
     #range: 4{100},5{100}
     prefix: ""
     postfix: ""
@@ -21,7 +21,7 @@ fields:
     format: ""
   - field: type
     note: "项目类型"
-    range: project{100},execution{100}
+    range: project{90},execution{200}
     prefix: ""
     postfix: ""
     loop: 0
@@ -30,16 +30,16 @@ fields:
     note: "用户账号"
     fields:
       - field: account1
-        range: test,dev
+        range: admin,user{98},test{100},pm{100},po{100}
       - field: account2
-        range: 1-100
+        range: [],3-100,1-100,1-100,1-100
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: role
     note: "角色"
-    range: 研发{60},测试{30},项目经理{5},产品经理{5}
+    range: 研发{99},测试{100},项目经理{100},产品经理{5}
     prefix: ""
     postfix: ""
     loop: 0
@@ -59,14 +59,14 @@ fields:
     format: "YYYY-MM-DD"
   - field: days
     note: "可用工作日"
-    range: 1-50:R
+    range: 1-50
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: hours
     note: "可用工时/天"
-    range: 1-8:R
+    range: 1-8
     prefix: ""
     postfix: ""
     loop: 0

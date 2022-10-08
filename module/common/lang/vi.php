@@ -78,7 +78,7 @@ $lang->collapse        = 'Co lại';
 $lang->saveSuccess     = 'Đã lưu';
 $lang->importSuccess   = 'Đã lưu';
 $lang->fail            = 'Thất bại';
-$lang->addFiles        = 'Tập tin đã thêm';
+$lang->addFiles        = 'Tập tin đã thêm ';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Dán nhiều dòng';
 $lang->uploadImages    = 'Tải lên nhiều ảnh';
@@ -96,6 +96,7 @@ $lang->customMenu      = 'Tùy biến Menu';
 $lang->customField     = 'Tùy biến trường';
 $lang->lineNumber      = 'Số dòng';
 $lang->tutorialConfirm = 'Bạn đang sử dụng hướng dẫn ZenTao. Bạn có muốn thoát bây giờ？';
+$lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 
 $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
@@ -123,7 +124,10 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common = 'Module chung';
+$lang->common->common  = 'Module chung';
+$lang->devops->common  = 'DevOps';
+$lang->app->common     = 'APP';
+$lang->app->serverLink = 'Server Link';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
@@ -199,7 +203,7 @@ $lang->product->viewMenu->plan        = array('link' => "Plan|productplan|browse
 $lang->product->viewMenu->release     = array('link' => "Release|release|browse|productID=%s",  'subModule' => 'release');
 $lang->product->viewMenu->roadmap     = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->viewMenu->project     = "Project|product|project|status=all&productID=%s";
-$lang->product->viewMenu->track       = array('link' => "Track|story|track|productID=%s");
+$lang->product->viewMenu->track       = array('link' => "Track|product|track|productID=%s");
 $lang->product->viewMenu->doc         = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->viewMenu->dynamic     = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->viewMenu->set         = array('link' => 'Setting|product|view|productID=%s', 'subModule' => 'tree,branch', 'alias' => 'edit');
@@ -227,6 +231,13 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
+
+$lang->devops->compile  = 'Compile';
+$lang->devops->mr       = 'Merge Request';
+$lang->devops->repo     = 'Repo';
+$lang->devops->rules    = 'Rule';
+$lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

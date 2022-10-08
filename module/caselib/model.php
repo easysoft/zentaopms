@@ -3,7 +3,7 @@
  * The model file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
  * @version     $Id: model.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -27,6 +27,8 @@ class caselibModel extends model
         $products = $this->loadModel('product')->getPairs();
         if(!empty($products) and $this->session->product) $this->loadModel('qa')->setMenu($products, $this->session->product);
         if(empty($products)) $this->loadModel('qa')->setMenu(array(0 => ''), 0);
+
+        $this->lang->qa->menu->caselib['subModule'] .= ',testcase';
 
         if($libraries)
         {
@@ -94,6 +96,7 @@ class caselibModel extends model
         $oldLib = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
         $lib    = fixer::input('post')
             ->stripTags($this->config->caselib->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $libID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', helper::now())
             ->remove('uid')
@@ -102,7 +105,9 @@ class caselibModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($lib)
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($libID)
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -140,24 +145,26 @@ class caselibModel extends model
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
-            ->orderBy('id_desc')
+            ->orderBy('order_desc, id_desc')
             ->fetchPairs('id', 'name');
     }
 
     /**
      * Get library list.
      *
+     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($type = 'all', $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -186,6 +193,7 @@ class caselibModel extends model
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->caselib->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -214,13 +222,14 @@ class caselibModel extends model
         $browseType   = ($browseType == 'bymodule' and $this->session->libBrowseType and $this->session->libBrowseType != 'bysearch') ? $this->session->libBrowseType : $browseType;
 
         $cases = array();
-        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
+        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait' or $browseType == 'review')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
+                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($sort)->page($pager)->fetchAll('id');
         }
@@ -254,7 +263,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -278,7 +287,7 @@ class caselibModel extends model
         $this->config->testcase->search['params']['lib']['values']    = array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all);
         $this->config->testcase->search['params']['lib']['operator']  = '=';
         $this->config->testcase->search['params']['lib']['control']   = 'select';
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
@@ -389,7 +398,7 @@ class caselibModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)
@@ -499,7 +508,7 @@ class caselibModel extends model
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
                         $stepData->desc    = htmlSpecialString($desc);
-                        $stepData->expect  = htmlSpecialString(trim($data->expect[$key][$id]));
+                        $stepData->expect  = htmlSpecialString(trim($this->post->expect[$key][$id]));
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;
@@ -537,7 +546,7 @@ class caselibModel extends model
 
         foreach($cases->title as $i => $title)
         {
-            if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+            if(!empty($cases->title[$i]) and empty($cases->type[$i])) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
 
         $module = 0;
@@ -572,7 +581,8 @@ class caselibModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
-                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa') $data[$i]->project = $this->session->project;
+                $data[$i]->project      = 0;
+                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
@@ -581,13 +591,76 @@ class caselibModel extends model
 
                 if(dao::isError())
                 {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
+                    return helper::end(js::error(dao::getError()));
                 }
 
                 $caseID   = $this->dao->lastInsertID();
                 $actionID = $this->action->create('case', $caseID, 'Opened');
             }
         }
+    }
+
+    /**
+     * Build case lib menu.
+     *
+     * @param  object $object
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($object, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($object);
+    }
+
+    /**
+     * Build case lib view menu.
+     *
+     * @param  object $lib
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($lib)
+    {
+        if($lib->deleted) return '';
+
+        $menu   = '';
+        $params = "libID=$lib->id";
+        $menu  .= $this->buildFlowMenu('caselib', $lib, 'view', 'direct');
+        $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildMenu('caselib', 'edit', $params, $lib, 'view');
+        $menu  .= $this->buildMenu('caselib', 'delete', $params, $lib, 'view', 'trash', 'hiddenwin');
+
+        return $menu;
+    }
+
+    /**
+     * Build case lib browse menu.
+     *
+     * @param  object $case
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($case)
+    {
+        $menu   = '';
+        $params = "caseID=$case->id";
+
+        if($case->status == 'wait' and ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)))
+        {
+            $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
+        }
+        $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
+        $clickable = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
+        if(common::hasPriv('testcase', 'delete'))
+        {
+            $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
+            $class = 'btn';
+            if(!$clickable) $class .= ' disabled';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='{$class}'");
+        }
+
+        return $menu;
     }
 }

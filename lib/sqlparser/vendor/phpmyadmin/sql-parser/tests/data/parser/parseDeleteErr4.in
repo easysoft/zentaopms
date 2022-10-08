@@ -1,0 +1,1 @@
+DELETE QUICK FROM table1, table2.* table1 AS `t1` USING table2 AS `t2` WHERE 1=1 ORDER BY id ASC

@@ -3,7 +3,16 @@
 
 .ztf-logo {width: 30%;}
 .zendata-logo { width: 30%;}
-.block-zendata {height:230px;}
+.block-zendata {height:230px; padding: 30px 14px;}
+.block-details {padding: 30px 60px;}
+.block-details li {width: 50%; font-size :13px}
+.block-details-line li {width: 100%;}
+
+.zendata-download {width: 68%;}
+.ztf-download {width: 58%;}
+.ztf-download-trait {margin: 35px 0 6px 0;}
+.ztf-download-trait div {width: 47%;}
+.qr-code {padding: 20px 0 20px 32px;}
 
 @media screen and (max-height: 768px)
 {

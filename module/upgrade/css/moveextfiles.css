@@ -1,0 +1,10 @@
+.modal-dialog {margin-top: 10px; width: 864px;}
+.modal-header {padding-bottom: 10px;}
+.modal-body {overflow-y: scroll;}
+@media screen and (max-width: 1920px) {.modal-body {height:500px}}
+@media screen and (max-width: 1366px) {.modal-body {height:400px}}
+
+.modal-body .panel-heading {padding: 0px;}
+.modal-body #collapseOne {margin-left: 20px;} 
+.alert {padding: 5px; margin-top: 5px !important;}
+.alert > p {font-size: 10px;}

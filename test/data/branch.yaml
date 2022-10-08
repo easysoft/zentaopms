@@ -8,15 +8,16 @@ fields:
     range: 1-10000
   - field: product
     note: "所属产品"
-    range: 41-120{2},141-180{2}
+    range: 41-120{2},1-3{2}, 141-180{2}
   - field: name
     note: "名称"
-    range: 1-10000
     fields:
     - field: name1
       range: 分支
     - field: name2
       range: 1-10000
+  - field: status
+    range: active,closed
   - field: order
     note: "排序"
     range: 1-2

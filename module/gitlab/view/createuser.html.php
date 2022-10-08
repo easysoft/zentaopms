@@ -3,7 +3,7 @@
  * The create view file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     gitlab
  * @version     $Id$
@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('users', $users);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -80,8 +81,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php if(!isonlybody()) echo html::a(inlink('browseUser', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>

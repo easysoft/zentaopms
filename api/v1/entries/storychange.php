@@ -3,7 +3,7 @@
  * The bug change point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -22,7 +22,7 @@ class storyChangeEntry extends Entry
     {
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'reviewer,comment';
+        $fields = 'reviewer,comment,executions,bugs,cases,tasks,reviewedBy,uid';
         $this->batchSetPost($fields);
         $fields = 'title,spec,verify';
         $this->batchSetPost($fields, $oldStory);
@@ -35,7 +35,7 @@ class storyChangeEntry extends Entry
         }
 
         $control = $this->loadController('story', 'change');
-        $this->requireFields('title,spec,verify');
+        $this->requireFields('title');
 
         $control->change($storyID);
 

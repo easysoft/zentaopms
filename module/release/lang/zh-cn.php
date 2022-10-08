@@ -3,7 +3,7 @@
  * The release module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -24,7 +24,7 @@ $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
 
 $lang->release->confirmDelete      = "您确认删除该发布吗？";
-$lang->release->confirmLink        = "是否将版本中完成的{$lang->SRCommon}和已解决的bug关联到发布下？";
+$lang->release->confirmLink        = "是否将版本中完成的{$lang->SRCommon}和已解决的Bug关联到发布下？";
 $lang->release->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
 $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->release->existBuild         = '『版本』已经有『%s』这条记录了。您可以更改『发布名称』或者选择一个『版本』。';
@@ -42,6 +42,7 @@ $lang->release->name          = '发布名称';
 $lang->release->marker        = '里程碑';
 $lang->release->date          = '发布日期';
 $lang->release->desc          = '描述';
+$lang->release->files         = '附件';
 $lang->release->status        = '状态';
 $lang->release->subStatus     = '子状态';
 $lang->release->last          = '上次发布';
@@ -63,6 +64,9 @@ $lang->release->mailto        = '抄送给';
 $lang->release->mailContent   = '<p>尊敬的用户，您好！</p><p style="margin-left: 30px;">您反馈的如下需求和Bug已经在 %s版本中发布，请联系客户经理查看最新版本。</p>';
 $lang->release->storyList     = '<p style="margin-left: 30px;">需求列表：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug列表：%s。</p>';
+
+$lang->release->storyTitle = '需求名称';
+$lang->release->bugTitle   = 'Bug名称';
 
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
@@ -89,3 +93,8 @@ $lang->release->notifyList['QD'] = '测试负责人';
 $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
 $lang->release->notifyList['PT'] = "所在项目团队成员";
+$lang->release->notifyList['CT'] = "抄送给";
+
+$lang->release->featureBar['browse']['all']       = '全部';
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

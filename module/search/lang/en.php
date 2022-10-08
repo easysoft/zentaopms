@@ -3,7 +3,7 @@
  * The search module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -29,6 +29,8 @@ $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'No query is saved yet!';
 $lang->search->onMenuBar     = 'Show in Menu';
 $lang->search->custom        = 'Custom';
+$lang->search->setCommon     = 'Set as public query criteria';
+$lang->search->saveCondition = 'Save search options';
 
 $lang->search->account  = 'Account';
 $lang->search->module   = 'Module';
@@ -73,6 +75,7 @@ $lang->search->result            = 'Search Results';
 $lang->search->buildSuccessfully = 'Search index initialized.';
 $lang->search->executeInfo       = '%s search results for you in %s seconds.';
 $lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
+$lang->search->queryTips         = "Separate ids with comma";
 
 $lang->search->modules['all']         = 'All';
 $lang->search->modules['task']        = 'Task';
@@ -92,11 +95,13 @@ $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = $lang->executionCommon;
-$lang->search->modules['story']       = 'Story';
+$lang->search->modules['story']       = $lang->SRCommon;
+$lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = 'stage';
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['kanban']           = 'kanban';
 $lang->search->objectTypeList['commonIssue']      = 'Issue';
 $lang->search->objectTypeList['stakeholderIssue'] = 'Stakeholder Issue';

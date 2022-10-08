@@ -3,7 +3,7 @@
  * The index view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     doc
  * @version     $Id$
@@ -23,13 +23,18 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=byediteddate"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(empty($latestEditedDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
                 <tr>
                   <th class="c-name"><?php echo $lang->doc->title;?></th>
-                  <th class="c-num text-right"><?php echo $lang->doc->size;?></th>
-                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-num text-right" title="<?php echo $lang->doc->size?>"><?php echo $lang->doc->size;?></th>
+                  <th class="c-user" title="<?php echo $lang->doc->addedBy;?>"><?php echo $lang->doc->addedBy;?></th>
                   <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
                 </tr>
               </thead>
@@ -45,6 +50,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="col-sm-5">
@@ -129,6 +135,11 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(empty($myDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
@@ -151,6 +162,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="col-sm-5">
@@ -161,6 +173,11 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(empty($collectedDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
@@ -181,6 +198,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
     </div>

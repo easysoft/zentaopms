@@ -29,6 +29,14 @@ function changeByLibType(libType)
         $('table tr.execution').addClass('hidden');
         $('#execution').attr('disabled', true);
 
+        $('.normalLib').removeClass('hidden');
+        $('.normalLib input').attr('disabled', false);
+
+        $('table tr.apilib').addClass('hidden');
+        $('.apilib input, #desc, #baseUrl').attr('disabled', true);
+
+        $('form').removeAttr('action');
+
         changeDoclibAcl(libType);
     }
     else if(libType == 'project')
@@ -41,6 +49,14 @@ function changeByLibType(libType)
 
         $('table tr.execution').addClass('hidden');
         $('#execution').attr('disabled', true);
+
+        $('.normalLib').removeClass('hidden');
+        $('.normalLib input').attr('disabled', false);
+
+        $('table tr.apilib').addClass('hidden');
+        $('.apilib input, #desc, #baseUrl').attr('disabled', true);
+
+        $('form').removeAttr('action');
 
         changeDoclibAcl(libType);
     }
@@ -55,6 +71,35 @@ function changeByLibType(libType)
         $('table tr.project').addClass('hidden');
         $('#project').attr('disabled', true);
 
+        $('.normalLib').removeClass('hidden');
+        $('.normalLib input').attr('disabled', false);
+
+        $('table tr.apilib').addClass('hidden');
+        $('.apilib input, #desc, #baseUrl').attr('disabled', true);
+
+        $('form').removeAttr('action');
+
+        changeDoclibAcl(libType);
+    }
+    else if(libType == 'api')
+    {
+        $('table tr.product').addClass('hidden');
+        $('#product').attr('disabled', true);
+
+        $('table tr.project').addClass('hidden');
+        $('#project').attr('disabled', true);
+
+        $('table tr.execution').addClass('hidden');
+        $('#execution').attr('disabled', true);
+
+        $('.normalLib').addClass('hidden');
+        $('.normalLib input').attr('disabled', true);
+
+        $('table tr.apilib').removeClass('hidden');
+        $('.apilib input, #desc, #baseUrl').attr('disabled', false);
+
+        $('form').attr('action', createLink('api', 'createLib'));
+
         changeDoclibAcl(libType);
     }
     else
@@ -67,6 +112,14 @@ function changeByLibType(libType)
 
         $('table tr.execution').addClass('hidden');
         $('#execution').attr('disabled', true);
+
+        $('.normalLib').removeClass('hidden');
+        $('.normalLib input').attr('disabled', false);
+
+        $('table tr.apilib').addClass('hidden');
+        $('.apilib input, #desc, #baseUrl').attr('disabled', true);
+
+        $('form').removeAttr('action');
 
         changeDoclibAcl(libType);
     }

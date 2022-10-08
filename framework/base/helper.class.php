@@ -77,7 +77,12 @@ class baseHelper
 
         /* 处理$viewType和$vars。Set $viewType and $vars. */
         if(empty($viewType)) $viewType = $app->getViewType();
-        if(!is_array($vars)) parse_str($vars, $vars);
+        if(!is_array($vars))
+        {
+            /* Prevent + from converting to spaces. */
+            $vars = str_replace('+', '%2B', $vars);
+            parse_str($vars, $vars);
+        }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
         if($config->requestType == 'PATH_INFO')  $link = $config->webRoot . $appName;
@@ -160,9 +165,12 @@ class baseHelper
     public static function processOnlyBodyParam($link, $onlyBody = false)
     {
         global $config;
-        if(!$onlyBody and !self::inOnlyBodyMode()) return $link;
-        $onlybodyString = strpos($link, '?') === false ? "?onlybody=yes" : "&onlybody=yes";
-        return $link . $onlybodyString;
+
+        $sign = strpos($link, '?') === false ? "?" : "&";
+        $appendString = '';
+        if($onlyBody or self::inOnlyBodyMode()) $appendString = $sign . "onlybody=yes";
+        if(self::isWithTID() and strpos($link, 'tid=') === false) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
+        return $link . $appendString;
     }
 
     /**
@@ -175,6 +183,19 @@ class baseHelper
     public static function inOnlyBodyMode()
     {
         return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
+    }
+
+    /**
+     * Is with tid.
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isWithTID()
+    {
+        global $config;
+        return (!empty($config->tabSession) and isset($_GET['tid']));
     }
 
     /**
@@ -200,6 +221,21 @@ class baseHelper
         }
 
         return true;
+    }
+
+    /**
+     * 使用helper::importControl()来引入Control文件，不要直接使用include或者require.
+     * Using helper::importControl() to import a file, instead of include or require.
+     *
+     * @param string    $moduleName.
+     * @static
+     * @access public
+     * @return bool
+     */
+    static public function importControl($moduleName)
+    {
+        global $app;
+        return helper::import($app->getModulePath($moduleName) . 'control.php');
     }
 
     /**
@@ -282,9 +318,10 @@ class baseHelper
         if(!empty($config->encryptSecret) and $password)
         {
             $secret = $config->encryptSecret;
+            $iv     = str_repeat("\0", 8);
             if(function_exists('mcrypt_encrypt'))
             {
-                $encrypted = base64_encode(@mcrypt_encrypt(MCRYPT_DES, substr($secret, 0, 8), $password, MCRYPT_MODE_CBC));
+                $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_DES, substr($secret, 0, 8), $password, MCRYPT_MODE_CBC, $iv));
             }
             elseif(function_exists('openssl_encrypt'))
             {
@@ -292,7 +329,7 @@ class baseHelper
                 $oversize = strlen($password) % 8;
                 if($oversize != 0) $password .= str_repeat("\0", 8 - $oversize);
 
-                $encrypted = @openssl_encrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
+                $encrypted = openssl_encrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING, $iv);
             }
         }
         if(empty($encrypted)) $encrypted = $password;
@@ -316,13 +353,14 @@ class baseHelper
         if(!empty($config->encryptSecret) and $password)
         {
             $secret = $config->encryptSecret;
+            $iv     = str_repeat("\0", 8);
             if(function_exists('mcrypt_decrypt'))
             {
-                $decryptedPassword = @mcrypt_decrypt(MCRYPT_DES, substr($secret, 0, 8), base64_decode($password), MCRYPT_MODE_CBC);
+                $decryptedPassword = trim(mcrypt_decrypt(MCRYPT_DES, substr($secret, 0, 8), base64_decode($password), MCRYPT_MODE_CBC, $iv));
             }
             elseif(function_exists('openssl_decrypt'))
             {
-                $decryptedPassword = openssl_decrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
+                $decryptedPassword = trim(openssl_decrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING, $iv));
             }
 
             /* Check decrypted password. Judge whether there is garbled code. */
@@ -674,7 +712,7 @@ class baseHelper
      * @access public
      * @return string
      */
-    public static function getRemoteIp($proxy = false)
+    public static function getRemoteIp($proxy = true)
     {
         $ip = '';
         if(!empty($_SERVER["REMOTE_ADDR"])) $ip = $_SERVER["REMOTE_ADDR"];
@@ -901,4 +939,40 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
 {
     if(!$flags) $flags = defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 : ENT_QUOTES;
     return htmlspecialchars($string, $flags, $encoding);
+}
+
+if (!function_exists('array_column'))
+{
+    function array_column(array $input, $columnKey, $indexKey = null)
+    {
+        $output = array();
+
+        foreach ($input as $row) {
+            $key = $value = null;
+            $keySet = $valueSet = false;
+
+            if (null !== $indexKey && array_key_exists($indexKey, $row)) {
+                $keySet = true;
+                $key = (string) $row[$indexKey];
+            }
+
+            if (null === $columnKey) {
+                $valueSet = true;
+                $value = $row;
+            } elseif (\is_array($row) && \array_key_exists($columnKey, $row)) {
+                $valueSet = true;
+                $value = $row[$columnKey];
+            }
+
+            if ($valueSet) {
+                if ($keySet) {
+                    $output[$key] = $value;
+                } else {
+                    $output[] = $value;
+                }
+            }
+        }
+
+        return $output;
+    }
 }

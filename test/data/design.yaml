@@ -1,0 +1,134 @@
+title: table zt_design
+desc: "项目设计"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 41-70{4}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 31-60{4}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: commit
+    note: "相关提交"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "设计名称"
+    range: 1-10000
+    prefix: "这是一个设计"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "由谁创建"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "编辑者"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedTo
+    note: "指派给"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedBy
+    note: "由谁指派"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: assignedDate
+    note: "指派日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: story
+    note: "相关需求"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是设计描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: version
+    note: "版本号"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: HLDS,DDS,DBDS,ADS
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

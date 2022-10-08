@@ -3,7 +3,7 @@
  * The control file of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: control.php 4178 2013-01-20 09:32:11Z wwccss $
@@ -41,15 +41,18 @@ class release extends control
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
+    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy);
+        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
         $this->view->type       = $type;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -69,7 +72,8 @@ class release extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
@@ -77,18 +81,27 @@ class release extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
-        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($productID, $branch, 'notrunk|withbranch', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($productID, $branch);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
+        /* Get the builds of the linked stories or bugs. */
+        $notEmptyBuilds = array();
+        $buildList      = $this->build->getByList(array_keys($builds));
+        foreach($buildList as $build)
+        {
+            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
+        }
+
         $this->commonAction($productID, $branch);
-        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->position[]  = $this->lang->release->create;
-        $this->view->productID   = $productID;
-        $this->view->builds      = $builds;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->lastRelease = $this->release->getLast($productID, $branch);
+        $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->position[]     = $this->lang->release->create;
+        $this->view->productID      = $productID;
+        $this->view->builds         = $builds;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->lastRelease    = $this->release->getLast($productID, $branch);
+        $this->view->notEmptyBuilds = $notEmptyBuilds;
 
         $this->display();
     }
@@ -106,15 +119,16 @@ class release extends control
         {
             $changes = $this->release->update($releaseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $files = $this->loadModel('file')->saveUpload('release', $releaseID);
-            if($changes or $files)
+
+            if($changes)
             {
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
+                $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $this->executeHooks($releaseID);
+
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
@@ -126,7 +140,7 @@ class release extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'execution', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -139,7 +153,7 @@ class release extends control
         $this->view->release    = $release;
         $this->view->build      = $build;
         $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -162,7 +176,7 @@ class release extends control
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
@@ -174,28 +188,40 @@ class release extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
-                ->beginIF($type == 'story')->orderBy($orderBy)->fi()
-                ->page($storyPager)
-                ->fetchAll('id');
+        $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+            ->where('id')->in($release->stories)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'story')->orderBy($sort)->fi()
+            ->page($storyPager)
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('id')->in($release->bugs)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'bug')->orderBy($sort)->fi()
             ->page($bugPager)
             ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
-            ->beginIF($type == 'leftBug')->orderBy($orderBy)->fi()
+        if($type == 'leftBug' and strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
+
+        $leftBugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+            ->where('id')->in($release->leftBugs)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'leftBug')->orderBy($sort)->fi()
             ->page($leftBugPager)
             ->fetchAll();
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
         $this->commonAction($release->product);
@@ -224,8 +250,8 @@ class release extends control
 
     /**
      * Notify for release.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -235,7 +261,7 @@ class release extends control
         {
             if(isset($_POST['notify']))
             {
-                $notify = implode(',', $this->post->notify); 
+                $notify = implode(',', $this->post->notify);
                 $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
 
                 $this->release->sendmail($releaseID);
@@ -244,7 +270,7 @@ class release extends control
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
-    
+
         $this->view->release = $this->release->getById($releaseID);
         $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
@@ -263,7 +289,7 @@ class release extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
+            return print(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
         }
         else
         {
@@ -273,7 +299,8 @@ class release extends control
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
             if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -297,7 +324,7 @@ class release extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -404,7 +431,7 @@ class release extends control
             }
 
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
-            die($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
+            return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
         }
 
         $this->display();
@@ -427,7 +454,7 @@ class release extends control
         if(!empty($_POST['stories']))
         {
             $this->release->linkStory($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
@@ -512,7 +539,7 @@ class release extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -525,7 +552,7 @@ class release extends control
     public function batchUnlinkStory($releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent'));
+        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent');
     }
 
     /**
@@ -546,7 +573,7 @@ class release extends control
         if(!empty($_POST['bugs']))
         {
             $this->release->linkBug($releaseID, $type);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
@@ -643,7 +670,7 @@ class release extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -657,7 +684,7 @@ class release extends control
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
         $this->release->batchUnlinkBug($releaseID, $type);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent');
     }
 
     /**
@@ -671,8 +698,8 @@ class release extends control
     public function changeStatus($releaseID, $status)
     {
         $this->release->changeStatus($releaseID, $status);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 }

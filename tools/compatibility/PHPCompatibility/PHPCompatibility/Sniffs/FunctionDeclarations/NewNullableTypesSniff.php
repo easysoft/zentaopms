@@ -20,7 +20,7 @@ use PHP_CodeSniffer_Tokens as Tokens;
  *
  * PHP version 7.1
  *
- * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
+ * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullabel-types
  * @link https://wiki.php.net/rfc/nullable_types
  * @link https://www.php.net/manual/en/functions.arguments.php#example-146
  *

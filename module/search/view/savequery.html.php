@@ -3,7 +3,7 @@
  * The save query view file of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     search
  * @version     $Id$
@@ -14,6 +14,12 @@
 <form target='hiddenwin' method='post' style='padding: 15px 70px 15px 15px'>
   <div class='input-group'>
     <input name='title' id='title' class="form-control" autocomplete="off" type="text">
+    <span class='input-group-addon'>
+      <div class="checkbox-primary">
+        <input type="checkbox" name="common" value="1" id="common" />
+        <label for="common"><?php echo $lang->search->setCommon;?></label>
+      </div>
+    </span>
     <?php if($onMenuBar == 'yes'):?>
     <span class='input-group-addon'>
       <div class="checkbox-primary">

@@ -1,12 +1,12 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
       <tr>
         <th class='table-nest-title'>
-          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php echo $lang->nameAB;?>
+          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
         </th>
         <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='c-user'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
@@ -48,101 +48,73 @@
       $originOrders[] = $program->order;
       ?>
 
-      <tr <?php echo $trAttrs;?>>
-        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
+      <tr <?php echo $trAttrs;?> data-type="<?php echo $program->type;?>">
+        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix has-suffix' title='<?php echo $program->name?>'>
           <?php
           $icon = '';
           if($program->type == 'program') $icon = ' icon-program';
-          if($program->type == 'project') $icon = ' icon-common icon-' . (isset($this->config->maxVersion) ? $program->model : $program->type);
+          if($program->type == 'project') $icon = ' icon-common icon-' . $program->model;
           $class = $program->type == 'program' ? ' table-nest-toggle' : '';
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name);?>
+          &nbsp;<span class="icon icon-cards-view" style="color: #888fa1;"></span>
+          <?php echo ($app->user->admin or strpos(",{$app->user->view->programs},", ",$program->id,") !== false) ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
-          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name);?>
+          <?php $projectType = $lang->project->{$program->model};?>
+          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', "class='text-ellipsis text-primary' title='{$program->name} ($projectType)'");?>
+          <?php
+          if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
+          {
+              $delay = helper::diffDate(helper::today(), $program->end);
+              if($delay > 0) echo "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span>";
+          }
+          ?>
           <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
-        <td>
+        <td class="c-manager">
           <?php if(!empty($program->PM)):?>
-          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM)); ?>
-          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php $userName = zget($users, $program->PM);?>
+          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . zget($userIdPairs, $program->PM)); ?>
+          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
-        <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
+        <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
+        <td class='text-right c-budget'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
           <?php if(isset($progressList[$program->id])):?>
-          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo $progressList[$program->id]?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo $progressList[$program->id];?></div>
+          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($progressList[$program->id])?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo round($progressList[$program->id]);?></div>
           </div>
           <?php endif;?>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>
-          <?php if($program->type == 'program'):?>
-          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
-          <?php if($program->status == 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
-          <?php if($program->status == 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-
-          <?php if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->suspend);?>
-              <?php if($program->status != 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
-              <?php if($program->status != 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php common::printIcon('program', 'edit',   "programID=$program->id", '', 'list', 'edit');?>
-          <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', $program->status == 'closed' ? 'disabled' : '', $this->lang->program->children);?>
-          <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->delete}'");?>
-
-          <?php else:?>
-          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('project', 'start', "projectID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
-          <?php if($program->status == 'doing')  common::printIcon('project', 'close',    "projectID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
-          <?php if($program->status == 'closed') common::printIcon('project', 'activate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-          <?php if(common::hasPriv('project', 'suspend') || (common::hasPriv('project', 'close') && $program->status != 'doing') || (common::hasPriv('project', 'activate') && $program->status != 'closed')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('project', 'suspend', "projectID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
-              <?php if($program->status != 'doing')  common::printIcon('project', 'close',    "projectID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
-              <?php if($program->status != 'closed') common::printIcon('project', 'activate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true, '', '', $program->id);?>
-          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-app="project"', '', $program->id);?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-app="project"', '', $program->id);?>
-          <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', '', '', "data-app='project'", '', $program->id);?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', '', '', "data-app='project'", '', $program->id);?>
-              <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php endif;?>
+          <?php echo $this->program->buildOperateMenu($program, 'browse');?>
         </td>
       </tr>
       <?php endforeach;?>
     </tbody>
   </table>
+  <div class='table-footer <?php if($status == 'bySearch') echo 'hide';?>'>
+    <div id="programSummary" class="table-statistic">&nbsp;<?php echo $summary;?></div>
+    <?php if($status != 'bySearch') $pager->show('right', 'pagerjs');?>
+  </div>
 </form>
 <style>
+th.table-nest-title {padding-left: 12px !important;}
+th.table-nest-title > .table-nest-toggle-global {left: auto; right: 6px; font-size: 12px; color: #888fa1;}
+th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !important;}
+#programTableList td.c-name span.icon.table-nest-toggle {cursor: pointer;}
 #programTableList.sortable-sorting > tr {opacity: 0.7}
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
 #programList .c-actions {overflow: visible;}
+#programList .c-actions .btn-group:last-child {margin-left: -4px;}
 #programList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #programList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #programTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
@@ -150,6 +122,10 @@
 #programTableList .icon-project:before {content: '\e99c';}
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
+#programTableList .icon-kanban:before {content: '\e983';}
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
+#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
+#programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
@@ -167,6 +143,10 @@ $(function()
         selector: 'tr',
         dragCssClass: 'drag-row',
         trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        before: function(e)
+        {
+            if($(e.event.target).closest('a,.btn').length) return false;
+        },
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');

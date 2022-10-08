@@ -3,7 +3,7 @@
  * The sso module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     sso
  * @version     $Id$
@@ -30,10 +30,17 @@ $lang->sso->bindTypeList['bind'] = 'Existierenden Benutzer binden';
 $lang->sso->bindTypeList['add']  = 'Benutzer hinzufügen';
 
 $lang->sso->help = <<<EOD
-<p>1. Schnittstellenadresse wird benötigt. Bei Nutzung von PATH_INFO, ist es http://YOUR RANGER ADDRESS/sys/sso-check.html Bei GET ist es http://YOUR RANGER ADDRESS/sys/index.php?m=sso&f=check</p>
-<p>2. Code und Schlüssel müssen dem Bereich entsprechen.</p>
+<p>1. Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check</p>
+<p>2. Code and Secret Key must be the same as set in Zdoo.</p>
 EOD;
+$lang->sso->deny           = 'Access Limited';
 $lang->sso->bindNotice     = 'Nur hinzugefügte Benutzer haben keine Rechte. Der ZenTao Admin muss die REchte dem Benutzer zuweisen.';
 $lang->sso->bindNoPassword = 'Das Passwort darf nicht leer sein.';
 $lang->sso->bindNoUser     = 'Passwort oder Benutzer ist inkorrekt!';
 $lang->sso->bindHasAccount = 'Der Benutzer existiert bereits. Benutzer ändern oder verbinden.';
+
+$lang->sso->homeURL             = 'Feishu Page Config URL：';
+$lang->sso->redirectURL         = 'Feishu Redirect URL：';
+$lang->sso->feishuConfigEmpty   = 'Go to [Admin]-[Notification]-[Webhook] to set ( Feishu Work Notification)';
+$lang->sso->feishuResponseEmpty = 'Request response is empty';
+$lang->sso->unbound             = 'Current Feishu user is not bound in ZenTao-Wwebhook.';

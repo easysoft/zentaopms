@@ -1,0 +1,102 @@
+{
+    "query": "SELECT true, FalSe",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "PARSER_METHODS": [
+            "parseDelimiter",
+            "parseWhitespace",
+            "parseNumber",
+            "parseComment",
+            "parseOperator",
+            "parseBool",
+            "parseString",
+            "parseSymbol",
+            "parseKeyword",
+            "parseLabel",
+            "parseUnknown"
+        ],
+        "str": "SELECT true, FalSe",
+        "len": 18,
+        "last": 18,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "SELECT",
+                    "value": "SELECT",
+                    "keyword": "SELECT",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "true",
+                    "value": true,
+                    "keyword": null,
+                    "type": 5,
+                    "flags": 0,
+                    "position": 7
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "FalSe",
+                    "value": false,
+                    "keyword": null,
+                    "type": 5,
+                    "flags": 1,
+                    "position": 13
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 7,
+            "idx": 0
+        },
+        "DEFAULT_DELIMITER": ";",
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": null,
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

@@ -3,7 +3,7 @@ class devModel extends model
 {
     /**
      * Get All tables.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -30,8 +30,8 @@ class devModel extends model
 
     /**
      * Get fields of table.
-     * 
-     * @param  string $table 
+     *
+     * @param  string $table
      * @access public
      * @return void
      */
@@ -69,7 +69,7 @@ class devModel extends model
             $type     = substr($rawField->type, 0, $firstPOS > 0 ? $firstPOS : strlen($rawField->type));
             $type     = str_replace(array('big', 'small', 'medium', 'tiny'), '', $type);
             $field    = array();
-            $field['name'] = isset($this->lang->$module->{$rawField->field}) ? $this->lang->$module->{$rawField->field} : '';
+            $field['name'] = isset($this->lang->$module->{$rawField->field}) ? sprintf($this->lang->$module->{$rawField->field}, $this->lang->dev->tableList[$module]) : '';
             if((empty($field['name']) or !is_string($field['name'])) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
             if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
             if(!is_string($field['name'])) $field['name'] = '';
@@ -129,14 +129,23 @@ class devModel extends model
 
     /**
      * Get APIs of a module.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
     public function getAPIs($module)
     {
         $fileName = $this->app->getModuleRoot() . $module . DS . 'control.php';
+        if(!file_exists($fileName))
+        {
+            $extPaths = $this->getModuleExtPath();
+            foreach($extPaths as $extPath)
+            {
+                $fileName = $extPath . $module . DS . 'control.php';
+                if(file_exists($fileName)) break;
+            }
+        }
         if($module != 'common' and $module != 'dev') include $fileName;
 
         $classReflect = new ReflectionClass($module);
@@ -145,85 +154,79 @@ class devModel extends model
         foreach($methods as $method)
         {
             if($method->class == 'baseControl' or $method->class == 'control' or $method->name == '__construct') continue;
-            $api = array('name' => $method->name, 'post' => false, 'default' => array());
+            $api = array('name' => $method->name, 'post' => false, 'param' => array());
             $methodReflect = new ReflectionMethod($module, $method->name);
             foreach($methodReflect->getParameters() as $key => $param)
             {
-                try
-                {
-                    $api['default'][$param->getName()] = $param->getDefaultValue();
-                }catch(ReflectionException $e){}
+                $paramName = $param->getName();
+                $api['param'][$paramName] = array('var' => $paramName, 'type' => '', 'desc' => '');
             }
+
             $startLine = $methodReflect->getStartLine();
             $endLine   = $methodReflect->getEndLine();
             $comment   = $methodReflect->getDocComment();
 
-            $file = file($fileName);
-            for($i = $startLine - 1; $i <= $endLine; $i++)
+            if($startLine > 0)
             {
-                if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST'))
+                $file = file($fileName);
+                for($i = $startLine - 1; $i <= $endLine; $i++)
                 {
-                    $api['post'] = true;
+                    if(strpos($file[$i], '$this->post') or strpos($file[$i], 'fixer::input') or strpos($file[$i], '$_POST')) $api['post'] = true;
                 }
             }
 
-            // Strip the opening and closing tags of the docblock.
-            $comment = substr($comment, 3, -2);
-
-            // Split into arrays of lines.
-            $comment = preg_split('/\r?\n\r?/', $comment);
-
-            // Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
-            $comment = array_map(array('devModel', "trimSpace"), $comment);
-
-            // Group the lines together by @tags
-            $blocks = array();
-            $b = -1;
-            foreach ($comment as $line)
+            if($comment)
             {
-                if (isset($line[1]) && $line[0] == '@' && ctype_alpha($line[1]))
-                {
-                    $b++;
-                    $blocks[] = array();
-                }
-                else if($b == -1)
-                {
-                    $b = 0;
-                    $blocks[] = array();
-                }
-                $blocks[$b][] = $line;
-            }
+                // Strip the opening and closing tags of the docblock.
+                $comment = substr($comment, 3, -2);
 
-            // Parse the blocks
-            foreach ($blocks as $block => $body)
-            {
-                $body = trim(implode("\n", $body));
-                if($block == 0 && !(isset($body[1]) && $body[0] == '@' && ctype_alpha($body[1])))
+                // Split into arrays of lines.
+                $comment = preg_split('/\r?\n\r?/', $comment);
+
+                // Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
+                $comment = array_map(array('devModel', "trimSpace"), $comment);
+
+                // Group the lines together by @tags
+                $blocks = array();
+                $b = -1;
+                foreach($comment as $line)
                 {
-                    // This is the description block
-                    $api['desc'] = $body;
-                    continue;
+                    if(isset($line[1]) && $line[0] == '@' && ctype_alpha($line[1])) $b++;
+                    if($b == -1) $b = 0;
+
+                    if(!isset($blocks[$b])) $blocks[$b] = array();
+                    $blocks[$b][] = $line;
                 }
-                else
+
+                // Parse the blocks
+                foreach($blocks as $block => $body)
                 {
+                    $body = trim(implode("\n", $body));
+                    if($block == 0 && !(isset($body[1]) && $body[0] == '@' && ctype_alpha($body[1])))
+                    {
+                        // This is the description block
+                        $api['desc'] = $body;
+                        continue;
+                    }
+
                     // This block is tagged
                     if(preg_match('/^@[a-z0-9_]+/', $body, $matches))
                     {
                         $tag  = substr($matches[0], 1);
-                        $body = substr($body, strlen($tag)+2);
-                        if($tag == 'param')
-                        {
-                            $parts          = preg_split('/\s+/', trim($body), 3);
-                            $parts          = array_pad($parts, 3, null);
-                            $property       = array('type', 'var', 'desc');
-                            $param          = array_combine($property, $parts);
-                            $param['var']   = substr($param['var'], 1);
-                            $api['param'][] = $param;
-                        }
-                        else
+                        $body = substr($body, strlen($tag) + 2);
+                        if($tag != 'param')
                         {
                             $api[$tag][] = $body;
+                            continue;
                         }
+
+                        $parts        = preg_split('/\s+/', trim($body), 3);
+                        $parts        = array_pad($parts, 3, null);
+                        $property     = array('type', 'var', 'desc');
+                        $param        = array_combine($property, $parts);
+                        $paramName    = substr($param['var'], 1);
+                        $param['var'] = $paramName;
+                        if(isset($api['param'][$paramName])) $api['param'][$paramName] = $param;
                     }
                 }
             }
@@ -236,7 +239,7 @@ class devModel extends model
      * Get all modules.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getModules()
     {
@@ -249,15 +252,46 @@ class devModel extends model
             $module = basename($module);
             if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
             $group  = zget($this->config->dev->group, $module, 'other');
-            $modules[$group][] = $module;
+            $modules[$group][$module] = $module;
         }
+
+        $extPaths = $this->getModuleExtPath();
+        foreach($extPaths as $extPath)
+        {
+            if(empty($extPath)) continue;
+            foreach(glob($extPath . '*') as $path)
+            {
+                if(!file_exists($path . DS . 'control.php')) continue;
+
+                $module = basename($path);
+                if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
+                $group  = zget($this->config->dev->group, $module, 'other');
+                $modules[$group][$module] = $module;
+            }
+        }
+
         return $modules;
     }
 
     /**
+     * Get module ext path.
+     *
+     * @access public
+     * @return array
+     */
+    public function getModuleExtPath()
+    {
+        $extPaths = array();
+        if($this->config->edition != 'open') $extPaths['common'] = $this->app->getExtensionRoot() . $this->config->edition . DS;
+        $extPaths['xuan'] = $this->app->getExtensionRoot() . 'xuan' . DS;
+
+        return $extPaths;
+    }
+
+    /**
      * Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
-     * 
-     * @param  string    $line 
+     *
+     * @param  string    $line
      * @access public
      * @return string
      */

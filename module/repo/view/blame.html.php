@@ -31,7 +31,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     <div class="page-title">
       <strong>
         <?php
-        $base64BranchID = base64_encode($branchID);
+        $base64BranchID = helper::safe64Encode(base64_encode($branchID));
         echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
         $paths = explode('/', $entry);
         $fileName = array_pop($paths);
@@ -54,7 +54,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
   <div class='panel-heading'>
     <div class='panel-title'><?php echo $entry;?></div>
     <?php $encodePath = $this->repo->encodePath($entry);?>
-    <div class='panel-actions'>
+    <div class='panel-actions <?php echo isonlybody() ? "action-onlybody" : ""?>'>
       <div class='btn-group'>
         <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encoding) . "<span class='caret'></span>", "id='encoding' data-toggle='dropdown'", 'btn dropdown-toggle')?>
         <ul class='dropdown-menu' role='menu' aria-labelledby='encoding'>

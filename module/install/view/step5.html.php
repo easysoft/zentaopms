@@ -3,13 +3,14 @@
  * The html template file of step4 method of install module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: step4.html.php 4129 2013-01-18 01:58:14Z wwccss $
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('errorEmpty', $lang->install->errorEmpty);?>
 <style>.modal-body table tr th{text-align: right}</style>
 <div class='container'>
   <div class='modal-dialog'>
@@ -60,7 +61,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->install->password;?></th>
-            <td><?php echo html::input('password', '', "class='form-control'");?></td>
+            <td><?php echo html::input('password', '', "class='form-control' placeholder='{$lang->install->placeholder->password}' oninput=\"this.value = this.value.replace(/[^\\x00-\\xff]/g, '');\"");?></td>
           </tr>
           <tr>
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>

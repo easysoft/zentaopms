@@ -3,7 +3,7 @@
  * The set column file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Thanatos<xiawenlong@easycorp.ltd>
  * @package     kanban
  * @version     $Id: setcolumn.html.php 935 2021-10-26 16:24:24Z xiawenlong@easycorp.ltd $
@@ -21,7 +21,7 @@
     <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
       <table align='center' class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->columnName;?></th>
+          <th class='w-110px'><?php echo $lang->kanban->columnName;?></th>
           <td colspan='2'>
             <?php echo html::input('name', $column->name, "class='form-control'");?>
           </td>

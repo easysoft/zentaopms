@@ -3,7 +3,7 @@
  * The whitelist view of personnel module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     personnel
  * @version     $Id
@@ -51,13 +51,14 @@
           </td>
           <td><?php echo $user->realname;?></td>
           <td class='c-dept' title="<?php echo zget($depts, $user->dept);?>"><?php echo zget($depts, $user->dept);?></td>
-          <td><?php echo zget($lang->user->roleList, $user->role);?></td>
+          <td title="<?php echo zget($lang->user->roleList, $user->role)?>"><?php echo zget($lang->user->roleList, $user->role);?></td>
           <td title="<?php echo $user->phone;?>"><?php echo $user->phone;?></td>
           <td title="<?php echo $user->qq;?>"><?php echo $user->qq;?></td>
           <td title="<?php echo $user->weixin;?>"><?php echo $user->weixin;?></td>
           <td title="<?php echo $user->email;?>"><?php echo $user->email;?></td>
           <td class='c-actions'>
             <?php
+            if($this->app->tab == 'program') $module = 'program';
             if(common::hasPriv($module, 'unbindWhitelist')) echo html::a($this->createLink($module, 'unbindWhitelist', "id=$user->id&confirm=no"), '<i class="icon-unlink"></i>', 'hiddenwin', "title='{$lang->personnel->delete}' class='btn' $tab");
             ?>
           </td>

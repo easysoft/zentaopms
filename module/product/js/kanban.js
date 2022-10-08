@@ -95,7 +95,6 @@ function processKanbanData(key, programsData)
                 /* doing execution */
                 items.doingExecution = [];
                 var productExecutions = classicExecution[productID];
-                console.log('productExecutions', productID, productExecutions);
                 if(productExecutions)
                 {
                     $.each(productExecutions, function(_, execution)
@@ -148,6 +147,13 @@ $(function()
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
         var data = processKanbanData(key, programsData);
-        $kanban.kanban({data: data, noLaneName: isClassicMode, calcColHeight: calcColHeight});
+        $kanban.kanban(
+        {
+            data:            data,
+            noLaneName:      isClassicMode,
+            virtualize:      true,
+            virtualCardList: true,
+            calcColHeight:   calcColHeight
+        });
     });
 });

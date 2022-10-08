@@ -25,20 +25,67 @@ function setDuplicateAndChild(resolution, storyID)
     }
 }
 
-function loadBranches(product, branch, caseID)
+/**
+ * Load branches.
+ *
+ * @param  int    product
+ * @param  int    branch
+ * @param  int    caseID
+ * @param  int    oldBranch
+ * @access public
+ * @return void
+ */
+function loadBranches(product, branch, caseID, oldBranch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    var currentModuleID = $('#modules' + caseID).val();
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
-    $('#modules' + caseID).parent('td').load(moduleLink, function()
+    var result = true;
+    if(branch)
     {
-        $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
-    });
+        var endLoop = false;
+        for(index in testtasks)
+        {
+            if(endLoop) break;
+            if(index == caseID)
+            {
+                endLoop = true;
+                for(taskID in testtasks[index])
+                {
+                    if(branch != oldBranch && testtasks[index][taskID]['branch'] != branch)
+                    {
+                        var tip = confirmUnlinkTesttask.replace("%s", caseID);
+                        result  = confirm(tip);
+                        if(!result) $('#branches' + caseID).val(oldBranch).trigger("chosen:updated");
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    loadStories(product, 0, caseID);
+    if(result)
+    {
+        var currentModuleID = $('#modules' + caseID).val();
+        moduleLink          = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
+        $('#modules' + caseID).parent('td').load(moduleLink, function()
+        {
+            $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
+        });
+
+        loadStories(product, 0, caseID);
+    }
 }
+
+$(document).ready(function()
+{
+     /* Set secondary menu highlighting. */
+    if(isLibCase)
+    {
+      $('#navbar li[data-id=caselib]').addClass('active');
+      $('#navbar li[data-id=testcase]').removeClass('active');
+    }
+})
 
 $(function()
 {
@@ -52,20 +99,24 @@ $(function()
             var id        = $(this).attr('id');
             var num       = id.substring(5);
             var moduleID  = $('#modules' + num).val();
-            var branchID  = $('#branches' + num).val();
+            var branchID  = typeof($('#branches' + num).val()) == 'undefined' ? 0 : $('#branches' + num).val();
             var storyID   = $("#story" + num).val();
-            var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+            var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=' + storyID +'&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
             $.get(storyLink, function(stories)
             {
-                if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+                if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
                 $('#story' + num).replaceWith(stories);
                 $('#story' + num + "_chosen").remove();
                 $('#story' + num).next('.picker').remove();
-                $('#story' + num).attr('name', 'story[' + num + ']').chosen();
-                $('#story' + num).val(storyID).trigger('chosen:updated');
+                $('#story' + num).attr('name', 'story[' + num + ']').picker();
             });
         });
     }
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
 });
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.

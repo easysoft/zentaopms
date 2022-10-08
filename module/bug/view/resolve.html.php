@@ -3,7 +3,7 @@
  * The resolve file of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: resolve.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -38,19 +38,19 @@ js::set('productID' , $bug->product);
         </tr>
         <tr id='duplicateBugBox' class='hide'>
           <th><?php echo $lang->bug->duplicateBug;?></th>
-          <td class='required'><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->resolvedBuild;?></th>
-          <td id='newBuildExecutionBox' class='hidden'>
+          <td id='newBuildExecutionBox' class='hidden required'>
             <div class='input-group'>
-              <span class='input-group-addon'><?php echo $lang->build->execution;?></span>
-              <?php echo html::select('buildExecution', $executions, '', "class='form-control chosen'");?>
+              <span class='input-group-addon'><?php echo (!empty($execution) and $execution->type == 'kanban') ? $lang->bug->kanban : $lang->build->execution;?></span>
+              <?php echo html::select('buildExecution', $executions, $bug->execution, "class='form-control chosen'");?>
             </div>
           </td>
           <td>
             <div id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></div>
-            <div id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></div>
+            <div id='newBuildBox' class='hidden required'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></div>
           </td>
           <td>
             <?php if(common::hasPriv('build', 'create')):?>

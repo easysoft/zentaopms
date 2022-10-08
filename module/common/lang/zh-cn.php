@@ -3,7 +3,7 @@
  * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: zh-cn.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
@@ -29,6 +29,9 @@ $lang->and       = '和';
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
 $lang->proName        = '专业版';
+$lang->bizName        = '企业版';
+$lang->maxName        = '旗舰版';
+$lang->liteName       = '迅捷版';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
 $lang->logout         = '退出';
@@ -43,15 +46,17 @@ $lang->collapseMenu   = '收起导航';
 $lang->preference     = '个性化设置';
 $lang->tutorialAB     = '新手引导';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
-$lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
+$lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> 艾体验设计</a>";
 
 $lang->reset          = '重填';
 $lang->cancel         = '取消';
 $lang->refresh        = '刷新';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = '新建';
 $lang->edit           = '编辑';
 $lang->delete         = '删除';
+$lang->activate       = '激活';
 $lang->close          = '关闭';
 $lang->unlink         = '移除';
 $lang->import         = '导入';
@@ -77,6 +82,7 @@ $lang->retrack        = '收起';
 $lang->whitelist      = '访问白名单';
 $lang->globalSetting  = '全局设置';
 $lang->waterfallModel = '瀑布模型';
+$lang->scrumModel     = '敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
 
@@ -87,6 +93,7 @@ $lang->history         = '历史记录';
 $lang->attatch         = '附件';
 $lang->reverse         = '切换顺序';
 $lang->switchDisplay   = '切换显示';
+$lang->switchTo        = '切换到';
 $lang->expand          = '展开全部';
 $lang->collapse        = '收起';
 $lang->saveSuccess     = '保存成功';
@@ -111,6 +118,7 @@ $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
+$lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
 
 $lang->serviceAgreement = "服务协议";
 $lang->privacyPolicy    = "隐私政策";
@@ -142,6 +150,10 @@ $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 $lang->nameAB       = '名称';
+$lang->code         = '代号';
+
+$lang->pri     = '优先级';
+$lang->delayed = '已延期';
 
 $lang->common->common     = '公有模块';
 $lang->my->common         = '地盘';
@@ -157,6 +169,7 @@ $lang->repo->common       = '代码';
 $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
+$lang->story->common      = $lang->SRCommon;
 $lang->task->common       = '任务';
 $lang->bug->common        = 'Bug';
 $lang->testcase->common   = '用例';
@@ -183,6 +196,10 @@ $lang->stage->common      = '阶段';
 $lang->stage->list        = '阶段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->backup->common     = '备份';
+$lang->action->trash      = '回收站';
+$lang->app->common        = '应用';
+$lang->app->serverLink    = '服务器链接';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -213,8 +230,6 @@ $lang->module          = '模块';
 $lang->priv            = '权限';
 $lang->other           = '其他';
 $lang->estimation      = '估算';
-$lang->issue           = '问题';
-$lang->risk            = '风险';
 $lang->measure         = '度量';
 $lang->treeView        = '树状图';
 $lang->groupView       = '分组视图';
@@ -268,15 +283,19 @@ $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile  = '构建';
 $lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '版本库';
+$lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
+$lang->devops->set      = '设置';
 
-$lang->admin->system     = '系统';
-$lang->admin->entry      = '应用';
-$lang->admin->data       = '数据';
-$lang->admin->cron       = '定时';
-$lang->admin->buildIndex = '重建索引';
+$lang->admin->system      = '系统';
+$lang->admin->entry       = '应用';
+$lang->admin->data        = '数据';
+$lang->admin->cron        = '定时';
+$lang->admin->buildIndex  = '重建索引';
+$lang->admin->tableEngine = '表引擎';
+
+$lang->convert->importJira = '导入Jira数据';
 
 $lang->storyConcept = '需求概念';
 
@@ -316,6 +335,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
+$lang->visionList = array();
+$lang->visionList['rnd']  = '研发综合界面';
+$lang->visionList['lite'] = '迅捷界面';
+
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';
 $lang->createObjects['bug']         = 'Bug';
@@ -351,6 +374,7 @@ $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。"
 $lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且大于『%s』。");
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";
+$lang->error->repeat          = "『%s』已经有『%s』这条记录了。";
 $lang->error->gt              = "『%s』应当大于『%s』。";
 $lang->error->ge              = "『%s』应当不小于『%s』。";
 $lang->error->lt              = "『%s』应当小于『%s』。";
@@ -376,6 +400,7 @@ $lang->error->noData          = '没有数据';
 $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
+$lang->error->loginTimeout    = '登录已超时，请重新登入!';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();
@@ -407,6 +432,7 @@ $lang->colorPicker->errorTip = '不是有效的颜色值';
 $lang->downNotify     = "下载桌面提醒";
 $lang->clientName     = "客户端";
 $lang->downloadClient = "下载客户端";
+$lang->downloadMobile = "下载移动端";
 $lang->clientHelp     = "客户端使用说明";
 $lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
 $lang->website        = "https://www.zentao.net";
@@ -427,19 +453,21 @@ $lang->pasteImgFail      = "贴图失败，请稍后重试。";
 $lang->pasteImgUploading = "正在上传图片，请稍后...";
 
 /* 时间格式设置。*/
-if(!defined('DT_DATETIME1'))  define('DT_DATETIME1', 'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2'))  define('DT_DATETIME2', 'y-m-d H:i');
-if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
-if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n月d日 H:i');
-if(!defined('DT_DATE1'))      define('DT_DATE1', 'Y-m-d');
-if(!defined('DT_DATE2'))      define('DT_DATE2', 'Ymd');
-if(!defined('DT_DATE3'))      define('DT_DATE3', 'Y年m月d日');
-if(!defined('DT_DATE4'))      define('DT_DATE4', 'n月j日');
-if(!defined('DT_DATE5'))      define('DT_DATE5', 'j/n');
-if(!defined('DT_TIME1'))      define('DT_TIME1', 'H:i:s');
-if(!defined('DT_TIME2'))      define('DT_TIME2', 'H:i');
-if(!defined('LONG_TIME'))     define('LONG_TIME', '2059-12-31');
-if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
+if(!defined('DT_DATETIME1'))      define('DT_DATETIME1', 'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))      define('DT_DATETIME2', 'y-m-d H:i');
+if(!defined('DT_MONTHTIME1'))     define('DT_MONTHTIME1', 'n/d H:i');
+if(!defined('DT_MONTHTIME2'))     define('DT_MONTHTIME2', 'n月d日 H:i');
+if(!defined('DT_DATE1'))          define('DT_DATE1', 'Y-m-d');
+if(!defined('DT_DATE2'))          define('DT_DATE2', 'Ymd');
+if(!defined('DT_DATE3'))          define('DT_DATE3', 'Y年m月d日');
+if(!defined('DT_DATE4'))          define('DT_DATE4', 'n月j日');
+if(!defined('DT_DATE5'))          define('DT_DATE5', 'j/n');
+if(!defined('DT_TIME1'))          define('DT_TIME1', 'H:i:s');
+if(!defined('DT_TIME2'))          define('DT_TIME2', 'H:i');
+if(!defined('LONG_TIME'))         define('LONG_TIME', '2059-12-31');
+if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
+if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();

@@ -3,7 +3,7 @@
  * The model file of holiday module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     holiday
  * @version     $Id
@@ -13,7 +13,7 @@ class holidayModel extends model
 {
     /**
      * Get holiday by id.
-     * 
+     *
      * @param  int    $id
      * @access public
      * @return object
@@ -66,14 +66,16 @@ class holidayModel extends model
     {
         $holiday = fixer::input('post')->get();
         $holiday->year = substr($holiday->begin, 0, 4);
-        if(helper::isZeroDate($holiday->year)) return dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
-        if(helper::isZeroDate($holiday->end))  return dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
+        if($holiday->year and helper::isZeroDate($holiday->year)) return dao::$errors['begin'][] = sprintf($this->lang->error->date, $this->lang->holiday->begin);
+        if($holiday->end and helper::isZeroDate($holiday->end))  return dao::$errors['end'][]   = sprintf($this->lang->error->date, $this->lang->holiday->end);
 
         $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
             ->autoCheck()
             ->batchCheck($this->config->holiday->require->create, 'notempty')
             ->check('end', 'ge', $holiday->begin)
             ->exec();
+        $lastInsertID = $this->dao->lastInsertID();
+
         if(dao::isError()) return false;
 
         $beginDate = $this->post->begin;
@@ -87,7 +89,7 @@ class holidayModel extends model
         $this->updateTaskPlanDuration($beginDate, $endDate);
         $this->updateTaskRealDuration($beginDate, $endDate);
 
-        return $this->dao->lastInsertID();
+        return $lastInsertID;
     }
 
     /**
@@ -172,13 +174,16 @@ class holidayModel extends model
             ->andWhere('end')->ge($begin)
             ->fetchAll('id');
 
+        $naturalDays = $this->getDaysBetween($begin, $end);
+
         $workingDays = array();
         foreach($records as $record)
         {
-            $dates = $this->getDaysBetween($record->begin, $record->end);
+            $dates       = $this->getDaysBetween($record->begin, $record->end);
             $workingDays = array_merge($workingDays, $dates);
         }
-        return $workingDays;
+
+        return array_intersect($naturalDays, $workingDays);
     }
 
     /**
@@ -200,21 +205,19 @@ class holidayModel extends model
         $workingDays = $this->getWorkingDays($begin, $end);
         $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
 
+        $holidaysFlip    = array_flip($holidays);
+        $workingDaysFlip = array_flip($workingDays);
+
         /* When the start date and end date are the same. */
+        $beginTimestamp = strtotime($begin);
         if($begin == $end)
         {
-            if(in_array($begin, $workingDays)) return $actualDays[] = $begin;
-            if(in_array($begin, $holidays))    return $actualDays;
+            if(isset($workingDaysFlip[$begin])) return $actualDays[] = $begin;
+            if(isset($holidaysFlip[$begin]))    return $actualDays;
 
-            $w = date('w', strtotime($begin));
-            if($weekend == 2)
-            {
-                if($w == 0 or $w == 6) return $actualDays;
-            }
-            else
-            {
-                if($w == 0) return $actualDays;
-            }
+            $w = date('w', $beginTimestamp);
+            if($weekend == 2 and ($w == 0 or $w == 6)) return $actualDays;
+            if($weekend != 2 and $w == 0) return $actualDays;
 
             $actualDays[] = $begin;
             return $actualDays;
@@ -222,24 +225,21 @@ class holidayModel extends model
 
         for($i = 0; $currentDay < $end; $i ++)
         {
-            $currentDay = date('Y-m-d', strtotime("$begin + $i days"));
-            $w          = date('w', strtotime($currentDay));
+            $currentTimestamp = $beginTimestamp + ($i * 24 * 3600);
+            $currentDay = date('Y-m-d', $currentTimestamp);
 
-            if(in_array($currentDay, $workingDays))
+            if(isset($workingDaysFlip[$currentDay]))
             {
                 $actualDays[] = $currentDay;
                 continue;
             }
 
-            if(in_array($currentDay, $holidays)) continue;
-            if($weekend == 2)
-            {
-                if($w == 0 or $w == 6) continue;
-            }
-            else
-            {
-                if($w == 0) continue;
-            }
+            if(isset($holidaysFlip[$currentDay])) continue;
+
+            $w = date('w', $currentTimestamp);
+            if($weekend == 2 and ($w == 0 or $w == 6)) continue;
+            if($weekend != 2 and $w == 0) continue;
+
             $actualDays[] = $currentDay;
         }
 
@@ -261,7 +261,7 @@ class holidayModel extends model
         $days      = ($endTime - $beginTime) / 86400;
 
         $dateList  = array();
-        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+$i days", $beginTime));
+        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i *24 *3600));
 
         return $dateList;
     }
@@ -302,7 +302,7 @@ class holidayModel extends model
 
     /**
      * Update project plan duration.
-     * 
+     *
      * @param  string $beginDate
      * @param  string $endDate
      * @access public

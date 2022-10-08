@@ -3,7 +3,7 @@
  * The vi file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -67,8 +67,8 @@ $lang->block->createdDocs         = 'Docs Created';
 $lang->block->allExecutions       = 'All ' . $lang->executionCommon;
 $lang->block->doingExecution      = 'Doning ' . $lang->executionCommon;
 $lang->block->finishExecution     = 'Finish ' . $lang->executionCommon;
-$lang->block->estimatedHours      = 'Estimated Hours';
-$lang->block->consumedHours       = 'Consumed Hours';
+$lang->block->estimatedHours      = 'Estimated';
+$lang->block->consumedHours       = 'Cost';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->month               = 'Month';
@@ -93,15 +93,15 @@ $lang->block->cannotPlaceInLeft  = 'Khối này không thể được đặt ở
 $lang->block->cannotPlaceInRight = 'Khối này không thể được đặt ở bên phải.';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->SRCommon;
-$lang->block->totalBug     = 'The Total Bug';
+$lang->block->totalStory   = 'Total';
+$lang->block->totalBug     = 'Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
 $lang->block->totalInvestment = 'Total investment';
 $lang->block->totalPeople     = 'Total number';
 $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
-$lang->block->left            = 'Residuals';
+$lang->block->left            = 'Remain';
 
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
@@ -319,6 +319,7 @@ $lang->block->availableBlocks->testtask  = 'Yêu cầu';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
 $lang->block->availableBlocks->meeting   = 'My Meetings';
+$lang->block->availableBlocks->feedback  = 'My Feedbacks';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -431,13 +432,14 @@ $lang->block->orderByList->story['status_desc'] = 'Tình trạng câu chuyện g
 $lang->block->orderByList->story['stage_asc']   = 'Giai đoạn câu chuyện tăng dần';
 $lang->block->orderByList->story['stage_desc']  = 'Giai đoạn câu chuyện giảm dần';
 
-$lang->block->todoCount    = 'Việc làm';
-$lang->block->taskCount    = 'Nhiệm vụ';
-$lang->block->bugCount     = 'Bug';
-$lang->block->riskCount    = 'Risk';
-$lang->block->issueCount   = 'Issues';
-$lang->block->storyCount   = 'Stories';
-$lang->block->meetingCount = 'Meetings';
+$lang->block->todoCount     = 'Việc làm';
+$lang->block->taskCount     = 'Nhiệm vụ';
+$lang->block->bugCount      = 'Bug';
+$lang->block->riskCount     = 'Risk';
+$lang->block->issueCount    = 'Issues';
+$lang->block->storyCount    = 'Stories';
+$lang->block->meetingCount  = 'Meetings';
+$lang->block->feedbackCount = 'Feedbacks';
 
 $lang->block->typeList = new stdclass();
 

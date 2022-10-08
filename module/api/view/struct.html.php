@@ -3,7 +3,7 @@
  * The index view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Thanatos <thanatos915@163.com>
  * @package     doc
  * @version     $Id$
@@ -30,7 +30,7 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
           <tr>
-            <?php $vars = "libID={$libID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID={$libID}&releaseID=$releaseID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->api->structType);?></th>
             <th class='c-name'><?php echo $lang->api->structName;?></th>

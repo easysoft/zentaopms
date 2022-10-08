@@ -3,7 +3,7 @@
  * The model file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: $
@@ -14,6 +14,11 @@ class gitlabModel extends model
 {
 
     const HOOK_PUSH_EVENT = 'Push Hook';
+
+    /* Gitlab access level. */
+    public $noAccess         = 0;
+    public $developerAccess  = 30;
+    public $maintainerAccess = 40;
 
     /**
      * Get a gitlab by id.
@@ -56,15 +61,24 @@ class gitlabModel extends model
     /**
      * Get gitlab api base url by gitlab id.
      *
-     * @param  int $id
+     * @param  int    $gitlabID
+     * @param  bool   $sudo
      * @access public
      * @return string
      */
-    public function getApiRoot($id)
+    public function getApiRoot($gitlabID, $sudo = true)
     {
-        $gitlab = $this->getByID($id);
+        $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
+
+        $sudoParam = '';
+        if($sudo == true and !$this->app->user->admin)
+        {
+            $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if($openID) $sudoParam = "&sudo={$openID}";
+        }
+
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
     }
 
     /**
@@ -129,6 +143,23 @@ class gitlabModel extends model
             ->andWhere('providerID')->eq($gitlabID)
             ->andWhere('account')->eq($zentaoAccount)
             ->fetch('openID');
+    }
+
+    /**
+     * Get GitLab id list by user account.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getGitLabListByAccount($account = '')
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('account')->eq($account)
+            ->fetchPairs('providerID');
     }
 
     /**
@@ -438,6 +469,7 @@ class gitlabModel extends model
      *
      * @param  string $host
      * @param  string $token
+     * @param  bool   $rootCheck
      * @access public
      * @return array
      */
@@ -459,6 +491,7 @@ class gitlabModel extends model
     {
         /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
         $page     = 1;
+        $perPage  = 100;
         $response = array();
         $apiRoot  = $this->getApiRoot($gitlabID);
 
@@ -470,12 +503,14 @@ class gitlabModel extends model
         while(true)
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
-            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
-            $result   = json_decode(commonModel::http($url));
+            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page={$perPage}&active=true";
+            $httpData = commonModel::httpWithHeader($url);
+            $result   = json_decode($httpData['body']);
             if(!empty($result))
             {
                 $response = array_merge($response, $result);
                 $page += 1;
+                if($httpData['header']['X-Page'] == $httpData['header']['X-Total-Pages']) break;
             }
             else
             {
@@ -498,10 +533,10 @@ class gitlabModel extends model
             $user->id             = $gitlabUser->id;
             $user->realname       = $gitlabUser->name;
             $user->account        = $gitlabUser->username;
-            $user->email          = $gitlabUser->email;
+            $user->email          = zget($gitlabUser, 'email', '');
             $user->avatar         = $gitlabUser->avatar_url;
-            $user->createdAt      = $gitlabUser->created_at;
-            $user->lastActivityOn = $gitlabUser->last_activity_on;
+            $user->createdAt      = zget($gitlabUser, 'created_at', '');
+            $user->lastActivityOn = zget($gitlabUser, 'last_activity_on', '');
 
             $users[] = $user;
         }
@@ -512,15 +547,17 @@ class gitlabModel extends model
     /**
      * Get group members of one gitlab.
      *
-     * @param  int     $gitlabID
-     * @param  int     $groupID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  int    $userID
      * @access public
      * @return object
      */
-    public function apiGetGroupMembers($gitlabID, $groupID)
+    public function apiGetGroupMembers($gitlabID, $groupID, $userID = 0)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/$groupID/members/all");
+        if($userID) $url .= "&user_ids=$userID";
 
         $allResults = array();
         for($page = 1; true; $page++)
@@ -528,7 +565,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -552,7 +589,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -563,22 +600,37 @@ class gitlabModel extends model
      *
      * @param  int     $gitlabID
      * @param  string  $orderBy
+     * @param  string  $minRole
+     * @param  string  $keyword
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy)
+    public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '', $keyword = '')
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
-        list($order, $sort) = explode('_', $orderBy);
+        if($minRole == 'owner')
+        {
+            $url .= '&owned=true';
+        }
+        elseif(!empty($minRole) and isset($this->config->gitlab->accessLevel[$minRole]))
+        {
+            $url .= '&min_access_level=' . $this->config->gitlab->accessLevel[$minRole];
+        }
+
+        if($keyword) $url .= '&search=' . urlencode($keyword);
+
+        $order = 'id';
+        $sort  = 'desc';
+        if(strpos($orderBy, '_') !== false) list($order, $sort) = explode('_', $orderBy);
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -613,17 +665,16 @@ class gitlabModel extends model
      */
     public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy = 'id_desc', $pager = null)
     {
-        $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab) return array();
+        $apiRoot = $this->getApiRoot($gitlabID);
+        if(!$apiRoot) return array();
 
-        $host = rtrim($gitlab->url, '/');
-        $host .= '/api/v4/projects';
+        $url = sprintf($apiRoot, "/projects");
 
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
         $keyword = urlencode($keyword);
-        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $result  = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -633,32 +684,39 @@ class gitlabModel extends model
         return array('pager' => $pager, 'projects' => json_decode($result['body']));
     }
 
+
     /**
      * Get projects of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $simple
+     * @param  int    $minID
+     * @param  int    $maxID
+     * @param  bool   $sudo
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID)
+    public function apiGetProjects($gitlabID, $simple = 'true', $minID = 0, $maxID = 0, $sudo = true)
     {
-        $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab) return array();
+        $apiRoot = $this->getApiRoot($gitlabID, $sudo);
+        if(!$apiRoot) return array();
 
-        $host = rtrim($gitlab->url, '/');
-        $host .= '/api/v4/projects';
+        $url = sprintf($apiRoot, "/projects");
+        if($minID > 0) $url .= '&id_after=' . (intval($minID) - 1);
+        if($maxID > 0) $url .= '&id_before=' . (intval($maxID) + 1);
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
     }
+
 
     /**
      * Create a gitab project by api.
@@ -928,7 +986,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleProject($gitlabID, $projectID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        $url = sprintf($this->getApiRoot($gitlabID, false), "/projects/$projectID");
         return json_decode(commonModel::http($url));
     }
 
@@ -942,7 +1000,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleUser($gitlabID, $userID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/users/$userID");
+        $url = sprintf($this->getApiRoot($gitlabID, false), "/users/$userID");
         return json_decode(commonModel::http($url));
     }
 
@@ -1059,7 +1117,7 @@ class gitlabModel extends model
      */
     public function apiGetHooks($gitlabID, $projectID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/{$projectID}/hooks";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1078,7 +1136,7 @@ class gitlabModel extends model
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1104,7 +1162,7 @@ class gitlabModel extends model
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
 
         return json_decode(commonModel::http($url, $newHook));
@@ -1122,7 +1180,7 @@ class gitlabModel extends model
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
@@ -1145,7 +1203,7 @@ class gitlabModel extends model
         /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return array();
 
-        $result = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
+        $result = $this->apiCreateHook($repo->gitService, $repo->project, $hook);
 
         if(!empty($result->id)) return true;
         return false;
@@ -1160,7 +1218,7 @@ class gitlabModel extends model
      */
     public function isWebhookExists($repo, $url = '')
     {
-        $hookList = $this->apiGetHooks($repo->gitlab, $repo->project);
+        $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
         {
             if($hook->url == $url) return true;
@@ -1181,7 +1239,7 @@ class gitlabModel extends model
      */
     public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
 
         if(!isset($hook->url)) return false;
 
@@ -1457,10 +1515,19 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetBranches($gitlabID, $projectID)
+    public function apiGetBranches($gitlabID, $projectID, $pager = null)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
-        return json_decode(commonModel::http($url));
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
     }
 
     /**
@@ -1496,7 +1563,7 @@ class gitlabModel extends model
                 $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results)<100) break;
+                if(count($results) < 100) break;
             }
 
             return $allResults;
@@ -1554,7 +1621,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         $tags = array();
@@ -1590,7 +1657,7 @@ class gitlabModel extends model
     public function webhookCheckToken()
     {
         $gitlab = $this->getByID($this->get->gitlab);
-        if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) die('Token error.');
+        if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) echo 'Token error.';
     }
 
     /**
@@ -2482,58 +2549,49 @@ class gitlabModel extends model
     }
 
     /**
-     * Get single protct branch by API.
+     * Manage branch privs.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  string $branch
+     * @param  array  $protected
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
+    public function manageBranchPrivs($gitlabID, $projectID, $protected = array())
     {
-        if(empty($gitlabID)) return false;
-        $branch = urlencode($branch);
-        $url    = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
-        return json_decode(commonModel::http($url));
-    }
+        $data = (array)fixer::input('post')->get();
+        extract($data);
+        $failure = array();
 
-    /**
-     * Create gitlab potect branch.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $branch
-     * @access public
-     * @return bool
-     */
-    public function createBranchPriv($gitlabID, $projectID, $branch = '')
-    {
-        $priv = fixer::input('post')->get();
-        if(empty($priv->name))
+        /* Remove privs. */
+        foreach($protected as $name => $branch)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
-            return false;
+            if(!in_array($name, $branches))
+            {
+                $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
+                if($result and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
         }
 
-        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
-        if(empty($branch) && !empty($singleBranch->id))
+        $priv = new stdClass();
+        foreach($branches as $key => $name)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
-            return false;
+            /* Process exists data. */
+            if(isset($protected[$name]))
+            {
+                if($protected[$name]->pushAccess == $pushLevels[$key] and $protected[$name]->mergeAccess == $mergeLevels[$key]) continue;
+
+                $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
+
+            $priv->name               = $name;
+            $priv->push_access_level  = $pushLevels[$key];
+            $priv->merge_access_level = $mergeLevels[$key];
+            $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
+            if(isset($response->message) and substr($response->message, 0, 2) != '20') $failure[] = $name;
         }
-
-        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
-
-        if(!empty($response->id))
-        {
-            $action = empty($branch) ? 'created' : 'edited';
-            $this->loadModel('action')->create('gitlabbranchpriv', $response->id, $action, '', $response->name);
-            return true;
-        }
-
-        return $this->apiErrorHandling($response);
+        return array_unique($failure);
     }
 
     /**
@@ -2550,6 +2608,7 @@ class gitlabModel extends model
         if(empty($gitlabID))   return false;
         if(empty($projectID))  return false;
         if(empty($priv->name)) return false;
+        $priv->name = html_entity_decode($priv->name, ENT_QUOTES);
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
     }
@@ -2561,69 +2620,63 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object
+     * @return array
      */
     public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
     {
         if(empty($gitlabID)) return false;
+        $branch  = urlencode($branch);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
-     * Create gitlab protect tag.
+     * Manage tag privs.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  string $tag
+     * @param  array  $protected
      * @access public
-     * @return bool
+     * @return array
      */
-    public function createTagPriv($gitlabID, $projectID, $tag = '')
+    public function manageTagPrivs($gitlabID, $projectID, $protected = array())
     {
-        $priv = fixer::input('post')->get();
-        if(empty($priv->name))
+        $data = (array)fixer::input('post')->get();
+        extract($data);
+        $failure = array();
+
+        /* Remove privs. */
+        foreach($protected as $name => $tag)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->tag->emptyPrivNameError;
-            return false;
+            if(!in_array($name, $tags))
+            {
+                $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
+                if($result and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
         }
 
-        $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
-        if(empty($tag) && !empty($singleTag->id))
+        $priv = new stdClass();
+        foreach($tags as $key => $name)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
-            return false;
+            /* Process exists data. */
+            if(isset($protected[$name]))
+            {
+                if($protected[$name]->createAccess == $createLevels[$key]) continue;
+
+                $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
+
+            $priv->name                = $name;
+            $priv->create_access_level = $createLevels[$key];
+            $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
+            if(isset($response->message))
+            {
+                if(is_array($response->message) or (is_string($response->message) and substr($response->message, 0, 2) != '20')) $failure[] = $name;
+            }
         }
-
-        if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
-        $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
-
-        if(!empty($response->id))
-        {
-            $action = empty($tag) ? 'created' : 'edited';
-            $this->loadModel('action')->create('gitlabtagpriv', $response->id, $action, '', $response->name);
-            return true;
-        }
-
-        return $this->apiErrorHandling($response);
-    }
-
-    /**
-     * Get single protct tag by API.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $tag
-     * @access public
-     * @return object
-     */
-    public function apiGetSingleTagPriv($gitlabID, $projectID, $tag)
-    {
-        if(empty($gitlabID)) return false;
-        $tag = urlencode($tag);
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_tags/$tag");
-        return json_decode(commonModel::http($url));
+        return array_unique($failure);
     }
 
     /**
@@ -2652,21 +2705,18 @@ class gitlabModel extends model
      */
     public function checkAccessLevel($accessLevels)
     {
-        $noAccess         = 0;
-        $developerAccess  = 30;
-        $maintainerAccess = 40;
         if(is_array($accessLevels))
         {
             $levels = array();
             foreach($accessLevels as $level)
             {
                 if(is_array($level)) $level = (object)$level;
-                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $this->maintainerAccess;
             }
-            if(in_array($noAccess, $levels)) return $noAccess;
-            if(in_array($developerAccess, $levels)) return $developerAccess;
+            if(in_array($this->noAccess, $levels)) return $this->noAccess;
+            if(in_array($this->developerAccess, $levels)) return $this->developerAccess;
         }
-        return $maintainerAccess;
+        return $this->maintainerAccess;
     }
 
     /**
@@ -2715,5 +2765,134 @@ class gitlabModel extends model
         }
 
         return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Check user access.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  string $maxRole
+     * @access public
+     * @return bool
+     */
+    public function checkUserAccess($gitlabID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    {
+        if($this->app->user->admin) return true;
+
+        if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(!isset($project->id)) return false;
+
+        $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
+
+        if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
+        if(!empty($project->shared_with_groups))
+        {
+            if(empty($groupIDList))
+            {
+                $groups = $this->apiGetGroups($gitlabID, 'name_asc', $maxRole);
+                foreach($groups as $group) $groupIDList[] = $group->id;
+            }
+
+            foreach($project->shared_with_groups as $group)
+            {
+                if($group->group_access_level < $accessLevel) continue;
+                if(in_array($group->group_id, $groupIDList)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get gitlab version.
+     *
+     * @param  string $host
+     * @param  string $token
+     * @access public
+     * @return object
+     */
+    public function getVersion($host, $token)
+    {
+        $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        return $this->apiGet($host, '/version');
+    }
+
+    /**
+     * Check token access.
+     *
+     * @param  string $url
+     * @param  string $token
+     * @access public
+     * @return void
+     */
+    public function checkTokenAccess($url = '', $token = '')
+    {
+        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
+        $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
+        $httpData = commonModel::httpWithHeader($url);
+        $users    = json_decode($httpData['body']);
+        if(empty($users)) return false;
+        if(isset($users->message) or isset($users->error)) return null;
+
+        $apiRoot .= '&sudo=' . $users[0]->id;
+        return $this->apiGet($apiRoot, '/user');
+    }
+
+    /**
+     * Get gitlab menu.
+     *
+     * @param  int    $gitlabID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function getGitlabMenu($gitlabID = 0, $type = 'project')
+    {
+        $html = '<div class="btn-toolbar pull-left">';
+
+        /* Gitlab server list. */
+        $gitlabs = $this->getPairs();
+        $html   .= "<div class='btn-group'>";
+        $tips    = $gitlabID >0 ? zget($gitlabs, $gitlabID, $this->lang->gitlab->server) : $this->lang->gitlab->server;
+        $html   .=  html::a('javascript:;', $tips . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+        $html   .= "<ul class='dropdown-menu'>";
+        foreach($gitlabs as $id => $gitlab)
+        {
+            $html .= '<li' . ($gitlabID == $id ? " class='active'" : '') . '>';
+            $html .= html::a(helper::createLink('gitlab', zget($this->config->gitlab->menus, $type, 'project'), "gitlabID=$id"), $gitlab);
+        }
+        $html .= '</ul></div>';
+
+        /* Other route. */
+        foreach($this->config->gitlab->menus as $key => $method)
+        {
+            $lang   = 'browse' . ucwords($key);
+            $title  = $this->lang->gitlab->$lang;
+            $label  = "<span class='text'>$title</span>";
+            $active = $key == $type ? 'btn-active-text' : '';
+            $html  .= html::a(inlink($method, "gitlabID=$gitlabID"), $label, '', "id='{$key}' class='btn btn-link $active' title='$title'");
+        }
+
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * Get pipeline with api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object|array
+     */
+    public function apiGetPipeline($gitlabID, $projectID, $branch)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/$projectID/pipelines") . "&ref=$branch";
+        return json_decode(commonModel::http($url));
     }
 }

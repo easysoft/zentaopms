@@ -3,7 +3,7 @@
  * The model file of mail module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     mail
  * @version     $Id: model.php 4750 2013-05-05 00:22:53Z chencongzhi520@gmail.com $
@@ -48,6 +48,7 @@ class mailModel extends model
         if(!$config) $config = $this->getConfigByMXRR($domain, $username);
         if(!$config) $config = $this->getConfigByDetectingSMTP($domain, $username, 25);
         if(!$config) $config = $this->getConfigByDetectingSMTP($domain, $username, 465);
+        if(!$config) $config = new stdclass();
 
         /* Set default values. */
         $config->mta      = 'smtp';
@@ -55,9 +56,11 @@ class mailModel extends model
         $config->password = '';
         $config->debug    = 1;
         $config->charset  = 'utf-8';
-        if(!isset($config->host)) $config->host = '';
-        if(!isset($config->auth)) $config->auth = 1;
-        if(!isset($config->port)) $config->port = '25';
+        if(!isset($config->secure))   $config->secure   = '';
+        if(!isset($config->username)) $config->username = $username;
+        if(!isset($config->host))     $config->host = '';
+        if(!isset($config->auth))     $config->auth = 1;
+        if(!isset($config->port))     $config->port = '25';
 
         return $config;
    }
@@ -141,6 +144,7 @@ class mailModel extends model
     {
         $host = 'smtp.' . $domain;
         ini_set('default_socket_timeout', 3);
+        if(gethostbynamel($host) == false) return false;
         $connection = @fsockopen($host, $port);
         if(!$connection) return false;
         fclose($connection);
@@ -267,13 +271,14 @@ class mailModel extends model
      * @param  array   $ccList
      * @param  bool    $includeMe
      * @param  array   $emails
+     * @param  bool    $forceSync
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false)
     {
         if(!$this->config->mail->turnon) return;
-        if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
 
@@ -529,7 +534,7 @@ class mailModel extends model
         $data->ccList      = $ccList;
         $data->subject     = $subject;
         $data->data        = $body;
-        $data->createdBy   = $this->config->mail->fromName;
+        $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
     }
@@ -687,10 +692,11 @@ class mailModel extends model
         $action     = $this->action->getById($actionID);
         $history    = $this->action->getHistory($actionID);
         $objectType = $action->objectType;
-        $object     = $this->loadModel($objectType)->getByID($objectID);
+        $object     = $objectType == 'kanbancard' ? $this->loadModel('kanban')->getCardByID($objectID) : $this->loadModel($objectType)->getByID($objectID);
         $nameFields = $this->config->action->objectNameFields[$objectType];
         $title      = zget($object, $nameFields, '');
         $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $domain     = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : zget($this->config->mail, 'domain', common::getSysURL());
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
@@ -717,10 +723,12 @@ class mailModel extends model
             }
         }
 
-        if($objectType == 'meeting') $rooms = $this->loadmodel('meetingroom')->getpairs();
+        if($objectType == 'meeting') $rooms = $this->loadModel('meetingroom')->getpairs();
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         /* Get mail content. */
+        if($objectType == 'kanbancard') $objectType = 'kanban';
+
         $modulePath = $this->app->getModulePath($appName = '', $objectType);
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';

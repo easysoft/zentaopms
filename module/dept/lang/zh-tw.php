@@ -3,7 +3,7 @@
  * The dept module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -29,6 +29,7 @@ $lang->dept->dragAndSort = "拖動排序";
 
 $lang->dept->confirmDelete = " 您確定刪除該部門嗎？";
 $lang->dept->successSave   = " 修改成功。";
+$lang->dept->repeatDepart  = " 存在部門名稱重複，您確認添加嗎？";
 
 $lang->dept->error = new stdclass();
 $lang->dept->error->hasSons  = '該部門有子部門，不能刪除！';

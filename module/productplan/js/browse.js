@@ -15,7 +15,7 @@ $(function()
     {
         var $content = $(this).find('td.content');
         var content  = $content.find('div').html();
-        if(content.indexOf('<br') >= 0)
+        if(content.indexOf('<br') >= 0 || content.indexOf('<img') >= 0)
         {
             $content.append("<a href='###' class='more'><i class='icon icon-chevron-double-down'></i></a>");
         }
@@ -32,7 +32,7 @@ $(function()
         }
         else
         {
-            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'execution')
         }
         $('#projects').modal('hide');
     });
@@ -57,8 +57,8 @@ $(function()
         $('#kanban').kanban(
         {
             data:         kanbanData,
-            minColWidth:  290,
-            maxColWidth:  290,
+            minColWidth:  typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+            maxColWidth:  typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
             maxColHeight: 460,
             minColHeight: 190,
             cardHeight:   80,
@@ -67,10 +67,11 @@ $(function()
             droppable:
             {
                 target:      findDropColumns,
-                finish:      handleFinishDrop,
-                mouseButton: 'left'
+                finish:      handleFinishDrop
             }
         });
+
+        resetLaneHeight();
 
         $('#kanban').on('scroll', function()
         {
@@ -97,6 +98,27 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+    });
+
+    $('.execution-popover').on('click', function(e)
+    {
+        e.stopPropagation();
+        var showPopover = $(this).next().css('display') == 'block';
+        $('.popover.right').hide();
+        if(!showPopover) $(this).next().show();
+    });
+
+    $('.execution-link').on('click', function()
+    {
+        $('.popover.right').hide();
+    });
+
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover, .execution-popover');
+        if(!$toggle.length) $('.popover.right').hide();
     });
 });
 
@@ -152,7 +174,7 @@ function createCardMenu(options)
     if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
     if(privs.includes('start')) items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('activate')) items.push({label: productplanLang.activate, icon: 'magic', url: createLink('productplan', 'activate', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('delete')) items.push({label: productplanLang.delete, icon: 'trash', url: createLink('productplan', 'delete', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
 
@@ -213,6 +235,24 @@ function findDropColumns($element, $root)
         return colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
     });
 }
+
+/**
+ * Reset lane height according to window height.
+ */
+function resetLaneHeight()
+{
+    if(product.type == 'normal')
+    {
+        var windowHeight = $(window).height();
+        var mainHeader   = $('#mainHeader').outerHeight();
+        var marginMenu   = $('#mainMenu').outerHeight();
+        var headerHeight = $('#kanban > .kanban-board > .kanban-header').outerHeight();
+
+        maxHeight = windowHeight - headerHeight - mainHeader - marginMenu - 80;
+        $('.kanban-lane').css('height', maxHeight);
+    }
+}
+
 
 /**
  * Handle finish drop card.
@@ -277,10 +317,10 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     }
     else if(toColType == 'closed')
     {
-        if(fromColType == 'done')
+        if(fromColType != 'closed')
         {
-            link       = createLink('productplan', 'close', 'planID=' + objectID);
-            showIframe = false;
+            link       = createLink('productplan', 'close', 'planID=' + objectID, '', true);
+            showIframe = true;
         }
     }
 
@@ -336,7 +376,7 @@ function renderKanbanItem(item, $item)
     var today = new Date();
     var begin = $.zui.createDate(item.begin);
     var end   = $.zui.createDate(item.end);
-    if(end.getTime() < today.getTime() && (item.status == 'wait' || item.status == 'doing'))
+    if(item.delay && (item.status == 'wait' || item.status == 'doing'))
     {
         $expired = $titleBox.children('.expired');
         if(!$expired.length)
@@ -366,14 +406,37 @@ function renderKanbanItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
-    var $time = $dateBox.children('.time');
-    if(item.begin != '2030-01-01' && item.end != '2030-01-01')
+    var $time            = $dateBox.children('.time');
+    var beginTimeShort   = $.zui.formatDate(begin, 'MM-dd');
+    var beginTimeLong    = $.zui.formatDate(begin, 'yyyy-MM-dd');
+    var endTimeShort     = $.zui.formatDate(end, 'MM-dd');
+    var endTimeLong      = $.zui.formatDate(end, 'yyyy-MM-dd')
+    var to               = productplanLang.to;
+    var undetermined     = productplanLang.future;
+    var undetermindeDate = '2030-01-01';
+    if(item.begin != undetermindeDate && item.end != undetermindeDate)
     {
-        $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to + $.zui.formatDate(end, 'yyyy-MM-dd')).show();
+        $time.text(beginTimeShort + ' ' + to + ' ' + endTimeShort).attr('title', beginTimeLong + to + endTimeLong).show();
+    }
+    else if(item.begin != undetermindeDate && item.end == undetermindeDate)
+    {
+        $time.text(beginTimeShort +  ' ' + to  + ' ' + undetermined).attr('title', beginTimeLong + to).show();
+    }
+    else if(item.begin == undetermindeDate && item.end != undetermindeDate)
+    {
+        $time.text(undetermined +  ' ' + to  + ' ' + endTimeShort).attr('title', to + endTimeLong).show();
+    }
+    else if(item.begin != '2030-01-01' && item.end == '2030-01-01')
+    {
+        $time.text($.zui.formatDate(begin, 'MM-dd') +  ' ' + productplanLang.to  + ' ' + productplanLang.future).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to).show();
+    }
+    else if(item.begin == '2030-01-01' && item.end != '2030-01-01')
+    {
+        $time.text(productplanLang.future +  ' ' + productplanLang.to  + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + productplanLang.to).show();
     }
     else
     {
-        $time.text(productplanLang.future).attr('title', productplanLang.future).show();
+        $time.text(undetermined).attr('title', undetermined).show();
     }
 
     /* Output plan desc information. */
@@ -425,10 +488,10 @@ function getPlanID(obj, branch)
 if(!window.kanbanDropRules)
 {
     window.kanbanDropRules =
-    {    
-        wait:   ['doing'],
-        doing:  ['done'],
+    {
+        wait:   ['doing', 'closed'],
+        doing:  ['done', 'closed'],
         done:   ['doing', 'closed'],
         closed: ['doing']
-    }    
+    }
 }

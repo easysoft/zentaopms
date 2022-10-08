@@ -39,6 +39,18 @@ function processKanbanData()
     return {id: 'executions', columns: columns, lanes: lanes};
 }
 
+/* Define drag and drop rules */
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {
+        wait: ['doing', 'suspended', 'closed'],
+        doing: ['suspended', 'closed'],
+        suspended: ['doing', 'closed'],
+        closed: ['doing']
+    }
+}
+
 /*
 * Find drop columns
 * @param {JQuery} $element Drag element
@@ -50,7 +62,7 @@ function findDropColumns($element, $root)
     var col         = $col.data();
     var lane        = $col.closest('.kanban-lane').data();
     var kanbanID    = $root.data('id');
-    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane[data-id="' + lane.id + '"] .kanban-lane-col:not([data-type="project"],[data-type="' + col.type + '"])');
 
@@ -157,9 +169,10 @@ $(function()
 
     $('#kanban').kanban(
     {
-        data:          processKanbanData(),
-        laneNameWidth: 5,
-        virtualize:    true,
+        data:            processKanbanData(),
+        laneNameWidth:   5,
+        virtualize:      true,
+        virtualCardList: true,
         droppable:
         {
             selector:     '.kanban-item:not(.kanban-item-span)',

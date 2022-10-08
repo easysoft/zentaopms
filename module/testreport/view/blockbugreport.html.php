@@ -83,7 +83,7 @@
                 </thead>
                 <?php foreach($lang->bug->priList as $key => $value):?>
                 <tr class='text-center'>
-                <td class='chart-color c-icon'><i class="chart-color-dot pri-<?php echo $key;?>"></i> <?php echo $key == 0 ? $lang->null : $value;?></td>
+                  <td class='chart-color c-icon'><i class="chart-color-dot pri-<?php echo $key;?>"></i> <?php echo $key == 0 ? $lang->null : $value;?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['generated'];?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['legacy'];?></td>
                   <td class='chart-value'><?php echo $infoValue[$key]['resolved'];?></td>
@@ -177,7 +177,8 @@
                 }
                 if(empty($label) and empty($data)) continue;
                 ?>
-                <tr class='text-center'>
+                <?php $colorList = $infoKey == 'bugSeverityGroups' ? $config->bug->colorList->severity : array();?>
+                <tr class='text-center' data-color="<?php echo !empty($colorList) ? zget($colorList, $label, '#C0C0C0') : '';?>">
                   <td class='chart-color c-icon'><i class='chart-color-dot'></i></td>
                   <td class='chart-label'><?php echo $label;?></td>
                   <td class='chart-value'><?php echo $data;?></td>
@@ -201,6 +202,7 @@
 <?php js::set('bugStageGroups', $bugInfo['bugStageGroups']);?>
 <?php js::set('bugHandleGroups', $bugInfo['bugHandleGroups']);?>
 <?php js::set('dateGroups', !empty($bugInfo['bugHandleGroups']) ? array_keys($bugInfo['bugHandleGroups']['generated']) : '');?>
+<?php js::set('priColorList', $config->bug->colorList->pri);?>
 <script>
 var priList   = [];
 var stageList = [];
@@ -208,16 +210,17 @@ var colorList = ['#d5d9df', '#d50000', '#ff9800', '#2098ee', '#009688'];
 var colorKey  = 0;
 for(var key in bugPriList)
 {
-    $('.pri-' + key).css('background', colorList[colorKey]);
+    var currentColor = colorKey <= 7 ? priColorList[colorKey] : '#C0C0C0';
+    $('.pri-' + key).css('background', currentColor);
     var priName = key == 0 ? zeroPri : bugPriList[key];
     var pri = {
         label: priName,
-        color: colorList[colorKey],
+        color: currentColor,
+        fillColor: currentColor,
         data:  [bugStageGroups[key]['generated'], bugStageGroups[key]['legacy'], bugStageGroups[key]['resolved']]
     }
     priList.push(pri);
     colorKey++;
-    if(colorKey >= 5) colorKey -= 5;
 }
 var data = {
     labels: bugStageValueList,

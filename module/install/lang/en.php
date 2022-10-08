@@ -3,7 +3,7 @@
  * The install module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: en.php 4972 2013-07-02 06:50:10Z zhujinyonging@gmail.com $
@@ -23,9 +23,9 @@ $lang->install->start            = 'Start';
 $lang->install->keepInstalling   = 'Continue installing this version';
 $lang->install->seeLatestRelease = 'View the latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
-$lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->license          = 'License';
 $lang->install->desc             = <<<EOT
-ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
+ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
 ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by EasyCorp. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
@@ -45,26 +45,26 @@ $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
-  <h4>Dear users, welcome to ZenTao project management system.</h4>
-  <p>ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
+  <h4>Dear users,</h4>
+  <p>Welcome to ZenTao project management system. ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>Product</strong></p>
+      <p class='block-title'><i class='icon icon-product'></i> <strong>Product</strong></p>
       <p>Product is used to subdivide the company's strategy into requirements that can be developed, and the product manager can use it to make release plans.<p>
     </div>
     <div class='block-details'>
-      <p class='block-title'><i class='icon icon-project'></i><strong>Project</strong></p>
+      <p class='block-title'><i class='icon icon-project'></i> <strong>Project</strong></p>
       <p>Project is used to organize the manpower for development, track and manage the project process, and complete the project in a faster, better, and less costly way.</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-run'></i><strong>Execution</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i> <strong>Execution</strong></p>
       <p>Execution is used to decompose, assign, and track tasks to ensure that project goals can be implemented by manpower.<p>
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Document of introduction</a>
-    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video of introduction</a>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Introduction Document</a>
+    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Introduction Video</a>
   </div>
 </div>
 EOT;
@@ -116,7 +116,7 @@ $lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path.'
 $lang->install->mkdirWin     = '<p>%s directory has to be created.<br /> Run <code>mkdir %s</code> to create it.</p>';
 $lang->install->chmodWin     = ' "%s" privilege has to be changed.';
 $lang->install->mkdirLinux   = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
-$lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <code>chmod o=rwx -R %s</code> to change it.';
+$lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <code>chmod 777 -R %s</code> to change it.';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';
@@ -153,11 +153,83 @@ $lang->install->save2File          = '<div class="alert alert-warning">Copy the 
 $lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
 
+global $app;
+$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
+
 $lang->install->getPriv            = 'Set Admin';
 $lang->install->company            = 'Company Name';
 $lang->install->account            = 'Admin Account';
 $lang->install->password           = 'Admin Password';
-$lang->install->errorEmptyPassword = 'Password should not be blank.';
+
+$lang->install->placeholder = new stdclass();
+$lang->install->placeholder->password = 'The Password should be ≥ 6 characters, combination of uppercase, lowercase letters and numbers.';
+
+$lang->install->errorEmpty['company']  = "{$lang->install->company} should not be blank.";
+$lang->install->errorEmpty['account']  = "{$lang->install->account} should not be blank.";
+$lang->install->errorEmpty['password'] = "{$lang->install->password} should not be blank.";
+
+$lang->install->langList['1'] = array('module' => 'process', 'key' => 'support', 'value' => 'Support Process');
+$lang->install->langList['2'] = array('module' => 'process', 'key' => 'engineering', 'value' => 'Project Management');
+$lang->install->langList['3'] = array('module' => 'process', 'key' => 'project', 'value' => 'Engineering Process');
+
+$lang->install->processList['11'] = 'Project management';
+$lang->install->processList['12'] = 'Project planning';
+$lang->install->processList['13'] = 'Project monitoring';
+$lang->install->processList['14'] = 'Risk management';
+$lang->install->processList['15'] = 'Closing management';
+$lang->install->processList['16'] = 'Quantitative Project management';
+$lang->install->processList['17'] = 'Requirements development';
+$lang->install->processList['18'] = 'Design and development';
+$lang->install->processList['19'] = 'Implementation and testing';
+$lang->install->processList['20'] = 'System test';
+$lang->install->processList['21'] = 'Customer acceptance';
+$lang->install->processList['22'] = 'Quality assurance';
+$lang->install->processList['23'] = 'Configuration management';
+$lang->install->processList['24'] = 'Metric analysis';
+$lang->install->processList['25'] = 'Cause analysis and resolution';
+$lang->install->processList['26'] = 'Decision analysis';
+
+$lang->install->basicmeasList['2'] = array('name' => 'Initial size of project user requirements', 'unit' => 'Story points or function points', 'definition' => 'Sum of the size of the baseline version of the first CUSTOMER requirements specification for each product of the project');
+$lang->install->basicmeasList['3'] = array('name' => 'Initial scale of project software requirements', 'unit' => 'Story points or function points', 'definition' => 'Sum of the size of the first software requirements specification baseline release for each product of the project');
+$lang->install->basicmeasList['4'] = array('name' => 'Real-time scale of project user requirements', 'unit' => 'Story points or function points', 'definition' => 'The actual size of the project user requirements');
+$lang->install->basicmeasList['5'] = array('name' => 'Real-time scale of project software requirements', 'unit' => 'Story points or function points', 'definition' => 'The actual scale of the project software requirements');
+$lang->install->basicmeasList['6'] = array('name' => 'Estimated project size', 'unit' => 'Story points or function points', 'definition' => 'The estimated size of the project when it was originally estimated');
+$lang->install->basicmeasList['8'] = array('name' => 'Project requirements phase planning days', 'unit' => 'Day', 'definition' => 'The sum of planned days for all requirements phases under the project');
+$lang->install->basicmeasList['9'] = array('name' => 'Number of days planned during project design phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all design phases under the project');
+$lang->install->basicmeasList['10'] = array('name' => 'Planned number of days during project development phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all development phases under the project');
+$lang->install->basicmeasList['11'] = array('name' => 'Number of days planned for project test phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all test phases under the project');
+$lang->install->basicmeasList['12'] = array('name' => 'Actual days of project requirements phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all requirements phases under the project');
+$lang->install->basicmeasList['13'] = array('name' => 'Actual days of project design phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all design phases under the project');
+$lang->install->basicmeasList['14'] = array('name' => 'Actual number of days during the project development phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all r&d phases under the project');
+$lang->install->basicmeasList['15'] = array('name' => 'Actual number of days during the project test phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all test phases under the project');
+$lang->install->basicmeasList['26'] = array('name' => 'Plan days by product demand phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all requirements phases under the product');
+$lang->install->basicmeasList['27'] = array('name' => 'Plan days by product design stage', 'unit' => 'Day', 'definition' => 'The sum of planned days for all design phases under the product');
+$lang->install->basicmeasList['28'] = array('name' => 'Planned days by product development phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all development phases under the product');
+$lang->install->basicmeasList['29'] = array('name' => 'Plan days by product test phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all test phases under the product');
+$lang->install->basicmeasList['30'] = array('name' => 'Actual days of product demand stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all requirement phases under the product');
+$lang->install->basicmeasList['31'] = array('name' => 'Actual days of product design stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all design phases under the product');
+$lang->install->basicmeasList['32'] = array('name' => 'By actual days of product development stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all development phases under the product');
+$lang->install->basicmeasList['33'] = array('name' => 'By actual days of product test phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all testing phases under the product');
+$lang->install->basicmeasList['34'] = array('name' => 'Real-time estimated working hours of project tasks', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all tasks under the project');
+$lang->install->basicmeasList['35'] = array('name' => 'Total estimated real-time working hours of project requirements', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all requirements related tasks of the project');
+$lang->install->basicmeasList['36'] = array('name' => 'Total estimated time of project design work in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all design-related tasks of the project');
+$lang->install->basicmeasList['37'] = array('name' => 'Total estimated time of project development in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all development related tasks of the project');
+$lang->install->basicmeasList['38'] = array('name' => 'Total estimated time of project test work in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all test related tasks of the project');
+$lang->install->basicmeasList['39'] = array('name' => 'Actual man-hours consumed by project tasks', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed for all tasks under the project');
+$lang->install->basicmeasList['40'] = array('name' => 'The actual number of man-hours consumed by project demand work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all demand-related tasks of the project');
+$lang->install->basicmeasList['41'] = array('name' => 'The actual number of man-hours consumed by project design work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all design-related tasks of the project');
+$lang->install->basicmeasList['42'] = array('name' => 'The actual number of man-hours consumed by project development work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all development related tasks of the project');
+$lang->install->basicmeasList['43'] = array('name' => 'The actual number of man-hours consumed by the project testing work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all test related tasks of the project');
+$lang->install->basicmeasList['44'] = array('name' => 'Total estimated initial hours of project development work', 'unit' => 'Hour','definition' => 'The sum of the initial estimated work hours of all development related work in the first baseline release of the project plan');
+$lang->install->basicmeasList['45'] = array('name' => 'Total estimated initial hours of project design work', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all design-related work in the first baseline version of the project plan');
+$lang->install->basicmeasList['46'] = array('name' => 'Total estimated initial work hours for project testing', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all test-related work in the first baseline release of the project plan');
+$lang->install->basicmeasList['47'] = array('name' => 'Total estimated initial hours of work required for the project', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all requirements related work in the first baseline version of the project plan');
+$lang->install->basicmeasList['48'] = array('name' => 'Total estimated initial work hours for project tasks', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all tasks in the first baseline version of the project plan');
+$lang->install->basicmeasList['49'] = array('name' => 'The final estimated number of project development hours', 'unit' => 'Hour','definition' => 'The sum of the initial estimated work hours of all development-related tasks in the last baseline release of the project plan');
+$lang->install->basicmeasList['50'] = array('name' => 'Total estimated final work hours of project requirements', 'unit' => 'Hour','definition' => 'The sum of the initial estimated work hours of all requirements related tasks in the last baseline release of the project plan');
+$lang->install->basicmeasList['51'] = array('name' => 'The final estimated number of project testing hours', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all test related tasks in the last baseline release of the project plan');
+$lang->install->basicmeasList['52'] = array('name' => 'The final estimated total working hours of project design work', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all design-related tasks in the last baseline release of the project plan');
+$lang->install->basicmeasList['53'] = array('name' => 'Total estimated final work hours of project tasks', 'unit' => 'Hour', 'definition' => 'The sum of the initial estimated man-hours for all tasks in the last baseline release of the project plan');
 
 $lang->install->selectedMode     = 'Selection mode';
 $lang->install->selectedModeTips = 'You can go to the Admin - Custom - Mode to set it later.';
@@ -186,6 +258,12 @@ $lang->install->groupList['LIMITED']['name']      = 'Limited User';
 $lang->install->groupList['LIMITED']['desc']      = 'Users can only edit contents related to themselves.';
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
 $lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
+$lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Lite Admin';
+$lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Lite Rroject';
+$lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
+$lang->install->groupList['LITETEAM']['desc']     = 'Lite Team';
 
 $lang->install->cronList[''] = 'Monitor Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';

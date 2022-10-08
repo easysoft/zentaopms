@@ -3,7 +3,7 @@
  * The execution module zh-tw file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: zh-tw.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -107,7 +107,7 @@ $lang->execution->unfoldClosed     = '展開已結束';
 $lang->execution->editName         = '編輯名稱';
 $lang->execution->setWIP           = '在製品數量設置（WIP）';
 $lang->execution->sortColumn       = '看板列卡片排序';
-$lang->execution->batchCreateStroy = "批量新建{$lang->SRCommon}";
+$lang->execution->batchCreateStory = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask  = '批量建任務';
 
 /* Fields of zt_team. */
@@ -410,7 +410,7 @@ $lang->kanbanSetting->optionList['0'] = '隱藏';
 $lang->kanbanSetting->optionList['1'] = '顯示';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
+$lang->printKanban->common  = '打印看板';
 $lang->printKanban->content = '內容';
 $lang->printKanban->print   = '打印';
 

@@ -41,6 +41,7 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
+    if($(obj).hasClass('disabled')) return false;
     if($('#teamForm .table-form tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 }

@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -22,7 +22,7 @@
       </tr>
       <tr>
         <td><?php echo $lang->weekly->project;?></td>
-        <td><?php echo $project->name;?></td>
+        <td class='projectName' title='<?php echo $project->name;?>'><?php echo $project->name;?></td>
         <td><?php echo $lang->weekly->staff;?></td>
         <td><?php echo $staff;?></td>
       </tr>
@@ -88,6 +88,7 @@
           <td class='text-left'><?php echo zget($users, $task->finishedBy);?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='6' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($finished));?></tr>
       </tbody>
     </table>
 
@@ -120,6 +121,7 @@
           <td class='text-left'><?php echo $task->progress;?>%</td>
         </tr>
         <?php endforeach;?>
+        <td colspan='7' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($postponed));?></tr>
       </tbody>
     </table>
 
@@ -148,6 +150,7 @@
           <td class='text-left'><?php echo $task->deadline;?></td>
         </tr>
         <?php endforeach;?>
+        <td colspan='5' class='totalCount'><?php echo sprintf($lang->weekly->totalCount, count($nextWeek));?></tr>
       </tbody>
     </table>
 
@@ -180,7 +183,4 @@
     </table>
   </div>
 </div>
-<style>
-.main-table tbody>tr:nth-child(odd){ background-color:#fff;}
-</style>
 <?php include '../../common/view/footer.html.php';?>

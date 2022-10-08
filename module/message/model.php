@@ -3,7 +3,7 @@
  * The model file of message module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     message
  * @version     $Id$
@@ -59,11 +59,14 @@ class messageModel extends model
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
     {
+        $objectType     = strtolower($objectType);
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
 
@@ -72,8 +75,32 @@ class messageModel extends model
             $actions = $messageSetting['mail']['setting'];
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
-                $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-                $this->loadModel('mail')->sendmail($objectID, $actionID);
+                /* If it is an api call, get the request method set by the user. */
+                global $config;
+                $requestType = $config->requestType;
+                if(defined('RUN_MODE') and RUN_MODE == 'api')
+                {
+                    $configRoot = $this->app->getConfigRoot();
+                    if(file_exists($configRoot . 'my.php'))
+                    {
+                        include $configRoot . 'my.php';
+                    }
+                    else
+                    {
+                        include $configRoot . 'config.php';
+                    }
+                }
+
+                if($objectType == 'feedback')
+                {
+                    $this->loadModel('feedback')->sendmail($objectID, $actionID);
+                }
+                else
+                {
+                    $this->loadModel('mail')->sendmail($objectID, $actionID);
+                }
+
+                if(defined('RUN_MODE') and RUN_MODE == 'api') $config->requestType = $requestType;
             }
         }
 
@@ -127,9 +154,12 @@ class messageModel extends model
         if($isonlybody) unset($_GET['onlybody']);
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $space = common::checkNotCN() ? ' ' : '';
-        $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
-        $data .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
+        $moduleName = $objectType == 'kanbancard' ? 'kanban' : $objectType;
+        $space      = common::checkNotCN() ? ' ' : '';
+        $data       = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
+        $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+        $url        = helper::createLink($moduleName, 'view', "id=$dataID");
+        $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
@@ -165,12 +195,13 @@ class messageModel extends model
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
-            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build, $object->id);
+            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object);
 
             if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
         }
 
         if($toList == 'closed') $toList = '';
+        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         return $toList;
     }
 

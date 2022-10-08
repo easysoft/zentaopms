@@ -18,6 +18,25 @@ foreach(array('../module/') as $subModuleRoot)
             $targetLang  = str_replace('zh-cn', $langDesc, $defaultLang);
             file_put_contents($targetLangFile, $targetLang);
         }
+    }
+}
+
+$basePath = dirname(dirname(__FILE__));
+foreach(glob($basePath . '/extension/*') as $extType)
+{
+    foreach(glob($extType . '/*') as $moduleName)
+    {
+        $realModulePath  = realpath($moduleName);
+        $moduleLangPath  = $realModulePath . '/lang/';
+        $defaultLangFile = $moduleLangPath . 'zh-cn.php';
+        $targetLangFile  = $moduleLangPath . $langType . '.php';
+        if(file_exists($defaultLangFile))
+        {
+            system("cconv -f utf-8 -t UTF8-TW $defaultLangFile > $targetLangFile");
+            $defaultLang = file_get_contents($targetLangFile);
+            $targetLang  = str_replace('zh-cn', $langDesc, $defaultLang);
+            file_put_contents($targetLangFile, $targetLang);
+        }
 
         $extModuleLangPath  = $realModulePath . '/ext/lang/zh-cn/*.php';
         foreach(glob($extModuleLangPath) as $extModuleLang)

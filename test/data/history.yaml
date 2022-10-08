@@ -1,0 +1,47 @@
+title: table zt_history
+desc: "操作历史"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "关联日志"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: field
+    note: "字段"
+    range: "resolution,resolvedBuild,resolvedDate,status"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: old
+    note: "旧值"
+    range: [1,2,2020-01-01,doing]
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: new
+    note: "新值"
+    range: [2,3,2020-01-17,done]
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: diff
+    note: "不同"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

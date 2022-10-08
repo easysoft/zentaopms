@@ -3,7 +3,7 @@
  * The browse view file of tree module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: browse.html.php 4796 2013-06-06 02:21:59Z zhujinyonging@gmail.com $
@@ -19,6 +19,8 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 </style>
 <?php endif;?>
 <?php js::set('viewType', $viewType);?>
+<?php js::set('rootID', $rootID);?>
+<?php js::set('noSubmodule', $lang->tree->noSubmodule);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php
@@ -26,7 +28,7 @@ $name = $lang->tree->name;
 if($viewType == 'line') $name = $lang->tree->line;
 if($viewType == 'api')  $name = $lang->tree->dir;
 if($viewType == 'doc')  $name = $lang->doc->catalogName;
-if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->dir;
+if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
 if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
@@ -93,6 +95,11 @@ if($viewType == 'doc' or $viewType == 'api')
     <div class="panel">
       <div class="panel-heading">
         <div class="panel-title"><?php echo $childTitle;?></div>
+        <?php if($app->tab == 'product'):?>
+        <div class="panel-actions btn-toolbar">
+          <?php echo html::a($this->createLink('tree', 'viewHistory', "productID=$rootID", '', true), $lang->history,  '', "class='btn btn-sm btn-primary iframe'");?>
+        </div>
+        <?php endif;?>
       </div>
       <div class="panel-body">
         <ul id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
@@ -206,6 +213,7 @@ if($viewType == 'doc' or $viewType == 'api')
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
+    var orderModule = 0;
     var options =
     {
         initialState: 'preserve',
@@ -217,11 +225,15 @@ $(function()
             canMoveHere: function($ele, $target)
             {
                 if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+            },
+            start: function(e)
+            {
+                orderModule = e.element.data('id');
             }
         },
         itemCreator: function($li, item)
         {
-            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, branch)) + '" data-app="' + tab + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>&projectID=<?php echo isset($projectID) ? $projectID : 0; ?>'.format(item.id, branch)) + '" data-app="' + tab + '" title="' + item.name + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
@@ -271,7 +283,7 @@ $(function()
             {
                 hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
-            else if(action.type === 'sort')
+            else if(action.type === 'sort' && event.item == null)
             {
                 var orders = {};
                 $('#modulesTree').find('li:not(.tree-action-item)').each(function()
@@ -283,7 +295,7 @@ $(function()
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });
 
-                $.post('<?php echo $this->createLink('tree', 'updateOrder', "rootID=$rootID&viewType=$viewType");?>', orders, function(data)
+                $.post(createLink('tree', 'updateOrder', 'rootID=' + rootID + '&viewType=' + viewType +'&moduleID=' + orderModule), orders, function(data)
                 {
                     $('.main-col').load(location.href + ' .main-col .panel');
                 }).error(function()
@@ -323,7 +335,12 @@ $(function()
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
     if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
 });
+
+if("<?php $from == 'doc'?>") parent.$('#triggerModal .modal-content .modal-header .close').on('click', function(){parent.location.reload();});
 </script>
+<style>
+.module-name {display: inline-block; max-width: calc(100% - 85px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+</style>
 <?php
 if(strpos($viewType, 'doc') !== false)
 {

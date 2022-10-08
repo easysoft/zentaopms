@@ -3,7 +3,7 @@
  * The import view file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     task
  * @version     $Id$
@@ -13,10 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script>
-$(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('isonlybody', isonlybody());?>
 <style>#importBugForm .bug-pri {overflow: visible;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -37,14 +35,15 @@ var browseType = '<?php echo $browseType;?>';
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-severity'> <?php echo $lang->bug->severityAB;?></th>
-          <th class='c-pri'>      <?php echo $lang->priAB;?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>> <?php echo $lang->bug->severityAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
-          <th class='c-pri-box <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
+          <th class='c-pri-box <?php echo in_array('pri', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
           <th class='c-assigned-box <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='c-estimate-box  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
-          <th class='c-date-box <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
+          <th class='c-estimate-box  <?php echo in_array('estimate', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
+          <th class='c-date-box <?php echo in_array('estStarted', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estStarted;?></th>
+          <th class='c-date-box <?php echo in_array('deadline', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
         </tr>
       </thead>
       <tbody>
@@ -64,24 +63,27 @@ var browseType = '<?php echo $browseType;?>';
           <td class='bug-pri'><?php echo html::select("pri[$bug->id]", $lang->task->priList, zget($lang->task->priList, $bug->pri ? $bug->pri : 3, 3), "class='form-control chosen'");?></td>
           <td style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='form-control chosen'");?></td>
           <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="form-control"');?></td>
+          <td><?php echo html::input("estStarted[$bug->id]", '0000-00-00', 'size=4 class="form-control form-date"');?></td>
           <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $execution->begin) ? $bug->deadline : '0000-00-00';?>
           <td><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="form-control form-date"');?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($bugs):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always">
-        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn');?>
+        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn btn-primary');?>
       </div>
       <div class='btn-toolbar'>
-        <?php echo html::backButton('', '', 'btn');?>
+        <?php if(isonlybody()):?>
+        <?php echo html::commonButton('<i class="icon icon-sm"></i> ' . $lang->goback, "onclick='goback($executionID)'", 'btn');?>
+        <?php else:?>
+        <?php echo html::backButton('','','btn');?>
+        <?php endif;?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

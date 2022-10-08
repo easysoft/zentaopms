@@ -1,0 +1,96 @@
+title: table zt_kanbanspace
+desc: "看板空间"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    fields:
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: name
+    note: "名字"
+    fields:
+      - field: name1
+        range: 协作空间,私有空间,公共空间
+      - field: name2
+        range: 1-100,1-100,1-100
+  - field: type
+    note: "类型"
+    range: cooperation,private,public
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: team
+    note: "团队"
+    fields:
+      - field: team1
+        prefix: ","
+        range: user{10},test{10},pm{10},po{10},po{10}
+      - field: team2
+        range: 3-100,1-100,1-100,1-100,35-100
+        postfix: ","
+      - field: team3
+        range: po{10},pm{10},test{10},user[10],user{10}
+      - field: team4
+        range: 15-100,15-100,15-100,15-100,35-100
+        postfix: ","
+  - field: whitelist
+    note: "白名单"
+    fields:
+      - field: whitelist1
+        prefix: ","
+        range: user{10},test{10},pm{10},po{10},po{10}
+      - field: whitelist2
+        range: 3-100,1-100,1-100,1-100,35-100
+        postfix: ","
+      - field: whitelist3
+        range: po{10},pm{10},test{10},user[10],user{10}
+      - field: whitelist4
+        range: 15-100,15-100,15-100,15-100,35-100
+        postfix: ","
+  - field: owner
+    note: "所属者"
+    fields:
+      - field: account1
+        range: po{10},user{10},test{10},pm{10},po{10}
+      - field: account2
+        range: 15-100,3-100,1-100,1-100,1-100
+    prefix: ""
+    postfix: ""
+  - field: acl
+    note: "权限"
+    range: open,private
+    prefix: ""
+    postfix: ""
+  - field: createdBy
+    note: "创建者"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(+M):1D"
+    prefix: "\t"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: lastEditedDate
+    note: "最后编辑日期"
+    range: ""
+    prefix: ""
+    postfix: ""
+    tampoop: 0
+  - field: closedDate
+    note: "关闭时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+  - field: deleted
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""

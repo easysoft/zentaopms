@@ -3,7 +3,7 @@
  * The browse of programplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: browse.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
@@ -24,7 +24,7 @@
     </p>
   </div>
   <?php else:?>
-    <?php if($type == 'gantt') include './gantt.html.php';?>
+    <?php if($type == 'gantt' or $type == 'assignedTo') include './gantt.html.php';?>
     <?php if($type == 'lists') include './list.html.php';?>
   <?php endif;?>
 </div>
@@ -33,6 +33,7 @@ $('#subNavbar').find('ul li').each(function()
 {
     var that = $(this);
     if(that.attr('data-id') != browseType) that.removeClass('active');
+    if(that.attr('data-id') == 'gantt' && 'assignedTo' == browseType) that.addClass('active');
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

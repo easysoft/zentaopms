@@ -14,11 +14,11 @@
         <th class='c-status'><?php echo $lang->project->status;?></th>
         <?php if($longBlock):?>
         <th class='c-number'><?php echo $lang->project->teamCount;?></th>
-        <th class='c-number text-right'><?php echo $lang->task->consumed;?></th>
+        <th class='c-number text-right c-consumed'><?php echo $lang->task->consumed;?></th>
         <th class='c-budget text-right'><?php echo $lang->project->budget;?></th>
-        <th class='c-number'><?php echo $lang->project->leftStories;?></th>
-        <th class='c-number'><?php echo $lang->project->leftTasks;?></th>
-        <th class='c-number'><?php echo $lang->project->leftBugs;?></th>
+        <th class='c-number c-leftStories'><?php echo $lang->project->leftStories;?></th>
+        <th class='c-number c-leftTasks'><?php echo $lang->project->leftTasks;?></th>
+        <th class='c-number c-leftBugs'><?php echo $lang->project->leftBugs;?></th>
         <?php endif;?>
       </tr>
     </thead>

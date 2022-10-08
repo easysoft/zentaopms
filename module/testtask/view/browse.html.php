@@ -3,7 +3,7 @@
  * The browse view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: browse.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -20,7 +20,7 @@ $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', strtolower($status));?>
 <style>
-#action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
+#action-divider{display: inline-block; line-height: 0px;}
 </style>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
@@ -34,6 +34,7 @@ $status = $this->session->testTaskVersionStatus;
         ?>
       </ul>
     </div>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
     <?php $key = strtolower($key);?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
@@ -90,7 +91,7 @@ $status = $this->session->testTaskVersionStatus;
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
-      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
+      <td class='c-name' title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
       <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
@@ -102,20 +103,7 @@ $status = $this->session->testTaskVersionStatus;
       </td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $task) . "</td>";?>
       <td class='c-actions'>
-        <?php
-        echo '<div id="action-divider">';
-        common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-        common::printIcon('testtask',   'linkCase', "taskID=$task->id&type=all&param=myQueryID", $task, 'list', 'link');
-        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag');
-        echo '</div>';
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, "data-width='90%'");
-        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-        if(common::hasPriv('testtask', 'delete', $task))
-        {
-            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
-        }
-        ?>
+        <?php echo $this->testtask->buildOperateMenu($task, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

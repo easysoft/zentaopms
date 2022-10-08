@@ -30,7 +30,10 @@ $(function()
 
             }
             $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
-            $dropdown.append($dropmenu).appendTo($btnToolbar);
+            $dropdown.append($dropmenu)
+              .appendTo($btnToolbar)
+              .on('shown.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 11);})
+              .on('hidden.zui.dropdown', function(){$btnToolbar.closest('.table-header').css('z-index', 5);});
         }
     };
     $('#main .main-table').on('tableReload', addSettingButton);
@@ -92,13 +95,13 @@ $(function()
         <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $lang->datatable->displaySetting;?></h4>
       </div>
       <div class="modal-body">
-        <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
+        <form class="form-condensed not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
           <table class='table table-form'>
             <tr>
-              <td class='w-150px'><?php echo $lang->datatable->showModule;?></td>
-              <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></td>
+              <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>
+              <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '0');?></td>
             </tr>
-            <?php if($app->moduleName == 'execution' and $app->methodName == 'task'):?>
+            <?php if($app->moduleName == 'execution' and $app->methodName == 'task' and $this->config->vision != 'lite'):?>
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>

@@ -200,6 +200,14 @@ try {
                     }
                 }
             },
+            current:
+            {
+                type: Array
+            },
+            ckey:
+            {
+                type: Number
+            }
         },
         watch: {
             value: {
@@ -207,6 +215,14 @@ try {
                     this.$emit('update:value', val)
                 },
                 deep: true,
+            }
+        },
+        computed:
+        {
+            typeOptionsFilter: function()
+            {
+                if(this.current[this.ckey + 1] && this.current[this.ckey + 1].parentKey && this.current[this.ckey + 1].parentKey == this.current[this.ckey].key) return typeOptions.slice(0, 2);
+                return typeOptions;
             }
         },
         methods: {
@@ -229,13 +245,13 @@ try {
           </td>
           <td class="w-100px">
               <select class="form-control" v-model="value.paramsType">
-                <option v-for="item in typeOptions" :value="item.value">{{item.label}}</option>
+                <option v-for="item in typeOptionsFilter" :value="item.value">{{item.label}}</option>
               </select>
           </td>
           <td class="w-80px">
-              <div class="checkbox">
+              <div class="checkbox-primary">
+                <input type="checkbox" v-model="value.required">
                 <label>
-                  <input type="checkbox" v-model="value.required">
                 </label>
               </div>
           </td>
@@ -243,9 +259,9 @@ try {
             <input type="text" :placeholder="langDesc" autocomplete="off" class="form-control" v-model="value.desc">
           </td>
           <td>
-              <button class="btn btn-link" type="button" @click="addSub" v-if="value.structType != 'formData' && ['object', 'array'].indexOf(value.paramsType) != -1">${addSubField}</button>
-              <button class="btn btn-link" type="button" @click="add">${structAdd}</button>
-              <button class="btn btn-link" type="button" @click="del">${structDelete}</button>
+              <button class="btn btn-link btn-icon" type="button" @click="addSub" v-if="value.structType != 'formData' && ['object', 'array'].indexOf(value.paramsType) != -1"><i class="icon icon-split"></i></button>
+              <button class="btn btn-link btn-icon" type="button" @click="add"><i class="icon icon-plus"></i></button>
+              <button class="btn btn-link btn-icon" type="button" @click="del"><i class="icon icon-close"></i></button>
            </td>
         </tr>
     `
@@ -295,8 +311,6 @@ try {
             },
             current: {
                 handler(val) {
-                    // console.log(val)
-                    /* handle level field data. */
                     const attr = [];
                     val.forEach((item) => {
                         if (item.sub == 1) {
@@ -378,13 +392,11 @@ try {
                 })
             },
             addSub(current, key, s) {
-                sub = current.sub ? current.sub : 1;
-                sub += 1
+                sub = current.sub ? current.sub + 1 : 2;
                 if (s.sub) {
                     sub = s.sub + 1
                 }
                 fieldKey = s.key
-                // console.log('添加子字段', JSON.stringify(s), fieldKey)
                 const field = {
                     ...this.getInitField(),
                     parentKey: fieldKey,
@@ -392,15 +404,21 @@ try {
                 }
                 current.splice(key + 1, 0, field)
             },
-            add(data, sub) {
+            add(data, key, sub) {
                 const field = this.getInitField();
                 field.sub = sub.sub;
                 field.parentKey = sub.parentKey;
-                data.push({...field});
+                for(let index = key+1; index < data.length; index++) {
+                    if(data[index].sub <= field.sub) return data.splice(index, 0, field);
+                }
+                data.splice(data.length, 0, field)
             },
             del(data, index) {
                 if(data.length <= 1) return;
-                data.splice(index, 1)
+                for(let i = index+1; i < data.length; i++){
+                    if(data[i].sub == data[index].sub) return data.splice(index, i - index)
+                }
+                data.splice(index, data.length - index)
             },
             changeType() {
                 if (!this.params[this.structType] || this.params[this.structType].length > 0) {
@@ -408,7 +426,12 @@ try {
                         this.getInitField()
                     ];
                 }
-                this.current = this.params[this.structType];
+                this.current.structType = this.structType;
+                for(let key = this.current.length - 1; key >= 0; key--)
+                {
+                    this.current[key].structType = this.structType;
+                    if(this.structType == 'formData' && this.current[key].sub != 1) this.current.splice(key, 1);
+                }
             },
             getPadding(sub) {
                 var padding = 0;
@@ -435,7 +458,7 @@ try {
                   </thead>
                   <tbody>
                     <template v-for="(item,key) in current">
-                      <param-field :value.sync="item" @add="add(current, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
+                      <param-field :current="current" :ckey="key" :value.sync="item" @add="add(current, key, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
                     </template>
                   </tbody>
               </table>

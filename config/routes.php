@@ -16,6 +16,13 @@ $routes['/tabs/:module'] = 'tabs';
 $routes['/files']     = 'files';
 $routes['/files/:id'] = 'file';
 
+$routes['/feedbacks']            = 'feedbacks';
+$routes['/feedbacks/:id']        = 'feedback';
+$routes['/feedbacks/:id/assign'] = 'feedbackAssignto';
+$routes['/feedbacks/:id/close']  = 'feedbackClose';
+
+$routes['/options/:type'] = 'options';
+
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
 
@@ -45,12 +52,25 @@ $routes['/projects/:id/stories']   = 'projectStories';
 $routes['/executions/:id/stories'] = 'executionStories';
 $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
+$routes['/stories/:id/close']      = 'storyClose';
+$routes['/stories/:id/active']     = 'storyActive';
+$routes['/stories/:id/assign']     = 'storyAssignto';
+$routes['/stories/:id/estimate']   = 'storyRecordEstimate';
+$routes['/stories/:id/child']      = 'storyChild';
+$routes['/stories/:id/recall']     = 'storyRecall';
+$routes['/stories/:id/review']     = 'storyReview';
 
 $routes['/products/:id/bugs']   = 'bugs';
 $routes['/projects/:id/bugs']   = 'projectBugs';
 $routes['/executions/:id/bugs'] = 'executionBugs';
 $routes['/bugs']                = 'bugs';
 $routes['/bugs/:id']            = 'bug';
+$routes['/bugs/:id/close']      = 'bugClose';
+$routes['/bugs/:id/assign']     = 'bugAssign';
+$routes['/bugs/:id/confirm']    = 'bugConfirm';
+$routes['/bugs/:id/resolve']    = 'bugResolve';
+$routes['/bugs/:id/active']     = 'bugActive';
+$routes['/bugs/:id/estimate']   = 'bugRecordEstimate';
 
 $routes['/programs/:id/projects'] = 'projects';
 $routes['/products/:id/projects'] = 'productProjects';
@@ -61,12 +81,19 @@ $routes['/projects/:id/executions'] = 'executions';
 $routes['/executions']              = 'executions';
 $routes['/executions/:id']          = 'execution';
 
+$routes['/executions/:id/tasks/batchCreate'] = 'taskBatchCreate';
+$routes['/tasks/batchCreate']                = 'taskBatchCreate';
+
 $routes['/executions/:id/tasks'] = 'tasks';
 $routes['/tasks']                = 'tasks';
 $routes['/tasks/:id']            = 'task';
 $routes['/tasks/:id/assignto']   = 'taskAssignTo';
 $routes['/tasks/:id/start']      = 'taskStart';
+$routes['/tasks/:id/pause']      = 'taskPause';
 $routes['/tasks/:id/finish']     = 'taskFinish';
+$routes['/tasks/:id/close']      = 'taskClose';
+$routes['/tasks/:id/estimate']   = 'taskRecordEstimate';
+$routes['/tasks/:id/active']     = 'taskActive';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
@@ -95,8 +122,14 @@ $routes['/builds/:id']            = 'build';
 $routes['/products/:id/testcases']   = 'testcases';
 $routes['/projects/:id/testcases']   = 'projectCases';
 $routes['/executions/:id/testcases'] = 'executionCases';
+$routes['/executions/:id/members']   = 'executionMembers';
 $routes['/testcases']                = 'testcases';
 $routes['/testcases/:id']            = 'testcase';
+$routes['/testcases/:id/results']    = 'testresults';
+
+$routes['/products/:id/testsuites'] = 'testsuites';
+$routes['/testsuites']              = 'testsuites';
+$routes['/testsuites/:id']          = 'testsuite';
 
 $routes['/projects/:projectID/testtasks'] = 'testtasks';
 $routes['/testtasks']                     = 'testtasks';
@@ -120,6 +153,10 @@ $routes['/docs/:id']     = 'doc';
 
 $routes['/repos']       = 'repos';
 $routes['/repos/rules'] = 'reporules';
+$routes['/jobs']        = 'jobs';
+$routes['/mr']          = 'mr';
+
+$routes['/modules'] = 'modules';
 
 $routes['/reports'] = 'reports';
 
@@ -129,5 +166,7 @@ $routes['/z/files/:id']         = 'zfile';
 $routes['/z/files/:id/content'] = 'zfileContent';
 
 $routes['/gitlab/webhook'] = 'gitlabWebhook';
+
+$routes['/ciresults'] = 'ciresults';
 
 $config->routes = $routes;

@@ -3,7 +3,7 @@
  * The view file of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: view.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -13,16 +13,16 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('tab', $app->tab);?>
+<?php js::set('bugID', $bug->id);?>
+<?php js::set('branchID', $bug->branch);?>
+<?php js::set('errorNoExecution', $lang->bug->noExecution);?>
+<?php js::set('errorNoProject', $lang->bug->noProject);?>
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -73,7 +73,7 @@
           ?>
         </div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('bug', $bug);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");
@@ -96,29 +96,7 @@
         <?php common::printBack($browseLink);?>
         <?php if(!$bug->deleted):?>
         <div class='divider'></div>
-        <?php
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'ok', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-        common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
-        common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
-
-        if($this->app->tab != 'product')
-        {
-            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='product'", $lang->bug->toStory);
-            common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
-        }
-
-        echo $this->buildOperateMenu($bug, 'view');
-
-        echo "<div class='divider'></div>";
-        common::printIcon('bug', 'edit', $params, $bug);
-        if($this->app->tab != 'product')
-        {
-            common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-        }
-        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
-        ?>
+        <?php echo $this->bug->buildOperateMenu($bug, 'view');?>
         <?php endif;?>
       </div>
     </div>
@@ -239,7 +217,7 @@
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td>
                     <?php
-                    if($bug->deadline) echo  $bug->deadline;
+                    if($bug->deadline) echo helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
                     if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
                     ?>
                   </td>
@@ -254,11 +232,29 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                  <td>
+                  <?php $osList = explode(',', $bug->os);?>
+                  <?php if($osList):?>
+                  <p class='osContent'>
+                    <?php foreach($osList as $os):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->osList, $os) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                  <td>
+                  <?php $browserList = explode(',', $bug->browser);?>
+                  <?php if($browserList):?>
+                  <p class='browserContent'>
+                    <?php foreach($browserList as $browser):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>
@@ -266,7 +262,14 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
+                  <td>
+                  <?php
+                  if(!empty($bug->mailto))
+                  {
+                      foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account) echo ' ' . zget($users, $account);
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -281,7 +284,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-70px'><?php echo $lang->bug->execution;?></th>
+                  <th class='w-70px'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>
@@ -352,10 +355,10 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->resolution;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
-                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
+                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "title='{$bug->duplicateBugTitle}' class='iframe' data-width='80%'");
                     ?>
                   </td>
                 </tr>
@@ -390,7 +393,7 @@
                 <?php if($bug->case):?>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=" . ($bug->testtask ? "&from=testtask&taskID={$bug->testtask}" : ''), '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
+                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($bug->toCases):?>
@@ -446,12 +449,41 @@
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<div class="modal fade" id="toTask">
+  <div class="modal-dialog mw-500px select-project-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->bug->selectProjects;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <?php if($this->config->systemMode == 'new'):?>
+          <tr>
+            <th><?php echo $lang->bug->project;?></th>
+            <td class='required'><?php echo html::select('taskProjects', $projects, '', "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?></td>
+          </tr>
+          <tr>
+            <th id='executionHead'><?php echo $lang->bug->execution;?></th>
+            <td id='executionBox' class='required'><?php echo html::select('execution', '', '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php else:?>
+          <tr>
+            <th><?php echo $lang->execution->common;?></th>
+            <td><?php echo html::select('execution', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::commonButton($lang->bug->nextStep, "id='toTaskButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "id='cancelButton' data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -3,7 +3,7 @@
  * The control file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: control.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -32,7 +32,7 @@ class testsuite extends control
         parent::__construct($moduleName, $methodName);
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs();
-        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
+        if(empty($this->products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
     /**
@@ -50,6 +50,7 @@ class testsuite extends control
      * Browse test suites.
      *
      * @param  int    $productID
+     * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -57,7 +58,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testsuiteList', $this->app->getURI(true), 'qa');
@@ -73,15 +74,13 @@ class testsuite extends control
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+        $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         if(empty($suites) and $pageID > 1)
         {
-            $pager = pager::init(0, $recPerPage, 1);
-            $suites = $this->testsuite->getSuites($productID, $sort, $pager);
+            $pager  = pager::init(0, $recPerPage, 1);
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
-
-        $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites = $this->testsuite->getSuites($productID, $sort, $pager);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
@@ -91,6 +90,7 @@ class testsuite extends control
         $this->view->productName = $productName;
         $this->view->orderBy     = $orderBy;
         $this->view->suites      = $suites;
+        $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
@@ -120,7 +120,8 @@ class testsuite extends control
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
 
@@ -158,8 +159,8 @@ class testsuite extends control
 
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
-        if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+        if(!$suite) return print(js::error($this->lang->notFound) . js::locate('back'));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
@@ -223,13 +224,14 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($suiteID);
+            $messgae = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");
             return $this->send($response);
         }
 
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
@@ -256,16 +258,17 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
         }
         else
         {
             $suite = $this->testsuite->getById($suiteID);
-            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $this->testsuite->delete($suiteID);
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -282,7 +285,7 @@ class testsuite extends control
                 }
                 return $this->send($response);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -358,7 +361,7 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "rowID=$rowID&confirm=yes")));
         }
         else
         {
@@ -392,6 +395,6 @@ class testsuite extends control
                 ->exec();
         }
 
-        die(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
+        return print(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
     }
 }

@@ -63,7 +63,8 @@ $(function()
                 element: $('#' + markdownEditorID)[0],
                 status:  false,
                 spellChecker: false,
-                forceSync: true
+                forceSync: true,
+                renderingConfig: {markedOptions: {smartLists: false}}
             };
             var markdown = new SimpleMDE(options);
             if(!window.markdownEditor) window.markdownEditor = {};

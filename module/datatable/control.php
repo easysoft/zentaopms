@@ -67,6 +67,7 @@ class datatable extends control
             $this->app->loadConfig('testtask');
             $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
             $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+            $this->config->testcase->datatable->fieldList['status']['width']  = '90';
         }
         if($module == 'testcase')
         {
@@ -92,6 +93,10 @@ class datatable extends control
         {
             unset($cols['plan']);
             unset($cols['stage']);
+            unset($cols['taskCount']);
+            unset($cols['bugCount']);
+            unset($cols['caseCount']);
+            $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         }
 
         $this->view->cols    = $cols;
@@ -110,7 +115,7 @@ class datatable extends control
      */
     public function ajaxReset($module, $method, $system = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
 
         $account = $this->app->user->account;
         $target  = $module . ucfirst($method);
@@ -119,6 +124,6 @@ class datatable extends control
 
         $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
         if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 }

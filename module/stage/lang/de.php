@@ -3,7 +3,7 @@
  * The stage module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     stage
  * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
@@ -36,3 +36,7 @@ $lang->stage->typeList['other']   = 'Other';
 $lang->stage->viewList      = 'Stage List';
 $lang->stage->noStage       = 'No stage yet';
 $lang->stage->confirmDelete = 'Do you want to delete it?';
+
+$lang->stage->error              = new stdclass();
+$lang->stage->error->percentOver = 'The sum of "Workload %" cannot exceed 100%.';
+$lang->stage->error->notNum      = 'The workload ratio should be numerical';

@@ -1,20 +1,3 @@
-$(function()
-{
-    if(typeof acl != 'undefined' && acl != null) setWhite(acl);
-});
-
-/**
- * Set white list.
- *
- * @param  string $acl
- * @access public
- * @return void
- */
-function setWhite(acl)
-{
-    acl != 'private' ? $('#whitelistBox').addClass('hidden') : $('#whitelistBox').removeClass('hidden');
-}
-
 /**
  * Set mailto.
  *
@@ -25,18 +8,19 @@ function setWhite(acl)
  */
 function setMailto(field, value)
 {
-    var link = createLink('kanban', 'ajaxGetContactUsers', "listID=" + value);
+    var link = createLink('kanban', 'ajaxGetContactUsers', 'field=' + field + '&listID=' + value);
     $.post(link, function(data)
     {
-        $('#team').replaceWith(data);
-        $('#team_chosen').remove();
-        $('#team').chosen();
+        $('#' + field).replaceWith(data);
+        $('#' + field + '_chosen').remove();
+        $('#' + field).siblings('.picker').remove();
+        $('#' + field).picker();
     })
 }
 
 /**
- * Initialize custom color selector. 
- * 
+ * Initialize custom color selector.
+ *
  * @access public
  * @return void
  */
@@ -59,6 +43,108 @@ function initColorPicker()
         $('input[name=color]').val(color);
         $(this).addClass('checked');
         $(this).siblings().removeClass('checked');
-    }) 
+    })
 }
 
+/**
+ * Reload object list.
+ *
+ * @param  int $targetID
+ * @access public
+ * @return void
+ */
+function reloadObjectList(targetID)
+{
+    location.href = createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
+}
+
+/**
+ * Set target lane ID.
+ *
+ * @param  int $targetLaneID
+ * @access public
+ * @return void
+ */
+function setTargetLane(targetLaneID)
+{
+    $('#targetLane').val(targetLaneID);
+}
+
+/**
+ * Jump to the view page.
+ *
+ * @param  string $module
+ * @param  int    $objectID
+ * @access public
+ * @return void
+ */
+function locateView(module, objectID)
+{
+    var dataApp = 'kanban';
+    if(module == 'productplan' || module == 'release') dataApp = 'product';
+    if(module == 'execution') dataApp = 'execution';
+    if(module == 'build') dataApp = 'project';
+    parent.$.apps.open(createLink(module, 'view', 'objectID=' + objectID), dataApp);
+}
+
+/**
+ * When type change.
+ *
+ * @param  string type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    if(type == 'private')
+    {
+        $('#ownerBox').addClass('hidden');
+        $('#teamBox').addClass('hidden');
+        $('#whitelistBox').removeClass('hidden');
+    }
+    else
+    {
+        $('#ownerBox').removeClass('hidden');
+        $('#teamBox').removeClass('hidden');
+        $('#whitelistBox').addClass('hidden');
+    }
+}
+
+/**
+ * Load all users.
+ *
+ * @access public
+ * @return void
+ */
+function loadAllUsers()
+{
+    var link = createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('#owner').val() + "&type=all");
+
+    $.get(link, function(data)
+    {
+        $('#owner').replaceWith(data);
+        $('#owner' + "_chosen").remove();
+        $('#owner').next('.picker').remove();
+        $('#owner').chosen();
+    });
+}
+
+/**
+ * The owners that loads kanban.
+ *
+ * @oaram  int    spaceID
+ * @access public
+ * @return void
+ */
+function loadOwners(spaceID)
+{
+    var link = createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
+
+    $.get(link, function(data)
+    {
+        $('#owner').replaceWith(data);
+        $('#owner' + "_chosen").remove();
+        $('#owner').next('.picker').remove();
+        $('#owner').chosen();
+    });
+}

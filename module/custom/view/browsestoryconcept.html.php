@@ -3,7 +3,7 @@
  * The html template file of setstoryconcept method of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guangming Sun<sunguangming@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: browsestoryconcept.html.php 4129 2020-09-01 01:58:14Z sgm $
@@ -15,7 +15,7 @@
 </style>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-right'>
-    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe' data-width=50%");?>
+    <?php if(common::hasPriv('custom', 'setstoryconcept')) echo html::a($this->createLink('custom', 'setstoryconcept', '', '', true), $lang->custom->setStoryConcept, '', "class='btn btn-primary iframe' data-width=" . ($this->config->URAndSR ? "590px" : "405px"));?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>
@@ -45,7 +45,7 @@
             <td class='text-left SRBox'><?php echo $URSR['SRName'];?></td>
             <td class='c-actions'>
               <?php $disabled = $key == $config->custom->URSR ? "disabled=disabled" : '';?>
-              <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' data-width=50% title={$lang->edit}");?>
+              <?php if(common::hasPriv('custom', 'editStoryConcept'))   echo html::a($this->createLink('custom', 'editStoryConcept', "id=$key", '', true), "<i class='icon icon-edit'></i>", '', "class='btn iframe' data-width=" . ($this->config->URAndSR ? "480px" : "330px") . " title={$lang->edit}");?>
               <?php if(common::hasPriv('custom', 'deleteStoryConcept')) echo html::a($this->createLink('custom', 'deleteStoryConcept', "id=$key"), "<i class='icon icon-trash'></i>", 'hiddenwin', "class='btn' $disabled title={$lang->delete} data-group='admin'");?>
             </td>
           </tr>

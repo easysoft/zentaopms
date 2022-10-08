@@ -8,8 +8,10 @@ $app->loadLang('action');
 $app->loadLang('user');
 $config->company->dynamic = new stdclass();
 $config->company->dynamic->search['module']               = 'action';
-$config->company->dynamic->search['fields']['product']    = $lang->action->product;
-$config->company->dynamic->search['fields']['project']    = '项目';
+
+if($config->vision == 'rnd') $config->company->dynamic->search['fields']['product']    = $lang->action->product;
+
+if($config->systemMode == 'new') $config->company->dynamic->search['fields']['project'] = '项目';
 $config->company->dynamic->search['fields']['execution']  = $lang->action->execution;
 $config->company->dynamic->search['fields']['actor']      = $lang->action->actor;
 $config->company->dynamic->search['fields']['objectID']   = $lang->action->objectID;
@@ -17,7 +19,8 @@ $config->company->dynamic->search['fields']['objectType'] = $lang->action->objec
 $config->company->dynamic->search['fields']['date']       = $lang->action->date;
 $config->company->dynamic->search['fields']['action']     = $lang->action->action;
 
-$config->company->dynamic->search['params']['product']    = array('operator' => '=',  'control' => 'select', 'values' => '');
+if($config->vision == 'rnd') $config->company->dynamic->search['params']['product']    = array('operator' => '=',  'control' => 'select', 'values' => '');
+
 $config->company->dynamic->search['params']['project']    = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['execution']  = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['actor']      = array('operator' => '=',  'control' => 'select', 'values' => '');
@@ -34,6 +37,7 @@ $config->company->browse->search['fields']['dept']     = $lang->user->dept;
 $config->company->browse->search['fields']['account']  = $lang->user->account;
 $config->company->browse->search['fields']['role']     = $lang->user->role;
 $config->company->browse->search['fields']['phone']    = $lang->user->phone;
+$config->company->browse->search['fields']['visions']  = $lang->user->visions;
 $config->company->browse->search['fields']['join']     = $lang->user->join;
 $config->company->browse->search['fields']['id']       = $lang->user->id;
 $config->company->browse->search['fields']['commiter'] = $lang->user->commiter;
@@ -54,6 +58,7 @@ $config->company->browse->search['params']['account']  = array('operator' => 'in
 $config->company->browse->search['params']['role']     = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->roleList);
 $config->company->browse->search['params']['phone']    = array('operator' => 'include',  'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['join']     = array('operator' => '=',        'control' => 'input',  'values' => '', 'class' => 'date');
+$config->company->browse->search['params']['visions']  = array('operator' => 'include',  'control' => 'select', 'values' => $lang->visionList);
 $config->company->browse->search['params']['id']       = array('operator' => '=',        'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['commiter'] = array('operator' => 'include',  'control' => 'select', 'values' => '');
 $config->company->browse->search['params']['gender']   = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->genderList);

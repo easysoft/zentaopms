@@ -3,7 +3,7 @@
  * The project bugs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -24,7 +24,7 @@ class projectBugsEntry extends entry
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
         $control = $this->loadController('project', 'bug');
-        $control->bug($projectID, $this->param('product', 0), $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->bug($projectID, $this->param('product', 0), $this->param('branch', 0), $this->param('order', 'status,id_desc'), $this->param('build', 0), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
@@ -33,6 +33,7 @@ class projectBugsEntry extends entry
             $bugs   = $data->data->bugs;
             $pager  = $data->data->pager;
             $result = array();
+            $this->loadModel('product');
             foreach($bugs as $bug)
             {
                 $status = array('code' => $bug->status, 'name' => $this->lang->bug->statusList[$bug->status]);
@@ -41,6 +42,9 @@ class projectBugsEntry extends entry
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
                 $bug->status     = $status['code'];
                 $bug->statusName = $status['name'];
+
+                $product              = $this->product->getById($bug->product);
+                $bug->productStatus   = $product->status;
 
                 $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
             }

@@ -1,0 +1,27 @@
+title: table zt_kanbanlane
+desc: "看板泳道"
+author: automated export
+version: "1.0"
+fields:
+    - field: execution
+      range: 161-190{3},251-180{3},341-370{3},431-460{3},521-550{3},611-640{3}
+    - field: type
+      range: story,bug,task
+    - field: region
+      range: 101-280{3}
+    - field: group
+      range: 101-640
+    - field: groupby
+      range: ""
+    - field: extra
+      range: ""
+    - field: name
+      range: 研发需求,Bug,任务
+    - field: color
+      range: [#7ec5ff,#333,#2b529c]
+    - field: order
+      range: 5-15:5
+    - field: lastEditedTime
+      range: ""
+    - field: deleted
+      range: "0"

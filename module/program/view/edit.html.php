@@ -3,7 +3,7 @@
  * The edit view of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
  * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -12,9 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('LONG_TIME', LONG_TIME);?>
+<?php js::set('page', $this->app->getMethodName());?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('longTime', $lang->program->longTime);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
+<?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
@@ -23,6 +26,15 @@
 <?php js::set('exRateNotEmpty', sprintf($lang->error->notempty, $lang->program->exchangeRate));?>
 <?php js::set('exRateNum', sprintf($lang->error->float, $lang->program->exchangeRate));?>
 <?php js::set('exRateNotNegative', $lang->program->exRateNotNegative);?>
+<?php js::set('programID', $program->id);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->program->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('beginGreateChild', $lang->program->beginGreateChild);?>
+<?php js::set('endLetterChild', $lang->program->endLetterChild);?>
+<?php js::set('ignore', $lang->program->ignore);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -48,9 +60,9 @@
         <tr>
           <th><?php echo $lang->program->budget;?></th>
           <td>
-            <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+            <div id='budgetBox' class='input-group'>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
+              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' onchange='budgetOverrunTips()' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $program->budgetUnit);?></span>
               <?php else:?>
@@ -61,7 +73,7 @@
               <?php endif;?>
             </div>
           </td>
-          <td>
+          <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($program->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->project->future;?></label>
@@ -69,24 +81,25 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
-              <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
+            <div id='dateBox' class='input-group'>
+              <?php echo html::input('begin', $program->begin, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
                 $end = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
-                echo html::input('end', $end, "class='form-control form-date' placeholder='" . $lang->project->end . "' required");
+                echo html::input('end', $end, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
           </td>
           <?php $endValue = $program->end == LONG_TIME ? 999 : (strtotime($program->end) - strtotime($program->begin)) / 3600 / 24 + 1;?>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->realBegan;?></th>
           <td><?php echo html::input('realBegan', helper::isZeroDate($program->realBegan) ? '' : $program->realBegan, "class='form-control form-date'");?></td>
         </tr>
+        <?php $this->printExtendFields($program, 'table');?>
         <tr>
           <th><?php echo $lang->program->desc;?></th>
           <td colspan='3'>
@@ -101,7 +114,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control picker-select" multiple data-dropDirection="top"');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>
@@ -131,7 +144,7 @@
         <h4 class="modal-title"><?php echo $lang->program->changePRJUnit;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post'>
+        <form method='post' class='not-watch'>
           <table class='table table-form'>
             <tr>
               <td colspan='3'><div class='alert alert-info no-margin'><?php echo $lang->program->confirmChangePRJUint;?></div></td>

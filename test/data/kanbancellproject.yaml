@@ -1,0 +1,17 @@
+title: table zt_kanbancell
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 401-10000
+    - field: kanban
+      range: 161-190{27},251-180{27},341-370{27},431-460{27},521-550{27},611-640{27}
+    - field: lane
+      range: 1-100{4}
+    - field: column
+      range: 401-5260
+    - field: type
+      range: story{11},bug{9},task{7}
+    - field: cards
+      range: ""

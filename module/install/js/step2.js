@@ -4,4 +4,4 @@ $(document).ready(function()
     {
         $('#requestType').val('PATH_INFO');
     });
-});     
+});

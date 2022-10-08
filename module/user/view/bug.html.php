@@ -3,7 +3,7 @@
  * The bug view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: bug.html.php 4771 2013-05-05 07:41:02Z chencongzhi520@gmail.com $
@@ -39,8 +39,8 @@
       <thead>
         <tr class='text-center'>
           <th class='c-id'>        <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='c-severity'>  <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='c-pri'>       <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
           <th class='text-left'>   <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-user'>      <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>

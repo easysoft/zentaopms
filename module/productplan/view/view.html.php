@@ -3,7 +3,7 @@
  * The view of productplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: view.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
@@ -37,49 +38,13 @@
     </div>
   </div>
   <div class='btn-toolbar pull-right' id='actionsBox'>
-    <?php
-    if(!$plan->deleted && !isonlybody())
-    {
-        echo $this->buildOperateMenu($plan, 'view');
-
-        if($plan->parent >= 0)
-        {
-            $attr       = "target='hiddenwin'";
-            $isOnlyBody = false;
-            $class      = '';
-            if($plan->begin == $config->productplan->future or $plan->end == $config->productplan->future)
-            {
-                $class      = 'iframe';
-                $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
-                $isOnlyBody = true;
-            }
-            $class = $plan->status == 'wait' ? $class : 'disabled';
-            common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
-            $class = $plan->status == 'doing' ? '' : 'disabled';
-            common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
-            $class = $plan->status == 'done' ? '' : 'disabled';
-            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
-            $class = in_array($plan->status, array('closed', 'done')) ? '' : 'disabled';
-            common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->activate}'", '', false, $plan);
-        }
-
-        $class= (isset($branchStatus) and $branchStatus == 'closed') ? 'disabled' : '';
-        if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= 0) echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-split'></i> " . $this->lang->productplan->children , '', "class='btn btn-link {$class}' title='{$this->lang->productplan->children}'");
-        if(common::hasPriv('productplan', 'edit', $plan)) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('productplan', 'delete', $plan) and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
-    }
-    ?>
+    <?php if(!$plan->deleted && !isonlybody()) echo $this->productplan->buildOperateMenu($plan, 'view'); ?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
     <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
-    <div class="linkButton" onclick="handleLinkButtonClick()">
-      <span title="<?php echo $lang->viewDetails;?>">
-        <i class="icon icon-import icon-rotate-270"></i>
-      </span>
-    </div>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -108,7 +73,7 @@
     <?php endif;?>
     <div class='tab-content'>
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
-        <?php $canOrder = common::hasPriv('project', 'storySort');?>
+        <?php $canOrder = common::hasPriv('execution', 'storySort');?>
         <div class='actions'>
           <?php if(!$plan->deleted and $plan->parent >= 0 and $canBeChanged):?>
           <div class="btn-group">
@@ -118,7 +83,7 @@
               $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
               echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
               ?>
-              <ul class='dropdown-menu'>
+              <ul class='dropdown-menu pull-right'>
                 <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
                 <li <?php echo $disabled?>>
                   <?php
@@ -157,9 +122,9 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <th class='w-70px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                 <?php else:?>
                 <th class='c-id text-left'>
                   <?php if($planStories && $canBatchAction):?>
@@ -172,7 +137,7 @@
                 <?php if($canOrder):?>
                 <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-150px text-left'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -220,11 +185,11 @@
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                 <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
+                <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title);
+                  echo html::a($viewLink , $story->title, '', "style='color: $story->color'");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -240,8 +205,8 @@
                   <?php
                   if($canBeChanged and common::hasPriv('productplan', 'unlinkStory'))
                   {
-                      $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id&confirm=yes");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkStory}'");
+                      $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->productplan->unlinkStory}'");
                   }
                   ?>
                 </td>
@@ -452,7 +417,7 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <?php else:?>
@@ -464,7 +429,7 @@
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
@@ -508,8 +473,8 @@
                   <?php
                   if($canBeChanged and common::hasPriv('productplan', 'unlinkBug'))
                   {
-                      $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");
+                      $unlinkURL = $this->createLink('productplan', 'unlinkBug', "bugID=$bug->id&planID=$plan->id");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->productplan->unlinkBug}'");
                   }
                   ?>
                 </td>
@@ -614,6 +579,10 @@
                 <?php endif;?>
                 <?php $this->printExtendFields($plan, 'table', 'inForm=0');?>
                 <tr>
+                  <th><?php echo $lang->productplan->status;?></th>
+                  <td><?php echo $lang->productplan->statusList[$plan->status];?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
                 </tr>
@@ -633,12 +602,6 @@
 <?php js::set('type', $type)?>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <script>
-function handleLinkButtonClick()
-{
-    var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-    window.open(xxcUrl, '_blank');
-}
-
 $(function()
 {
     function handleClientReady()

@@ -3,7 +3,7 @@
  * The caselib module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     caselib
  * @version     $Id: zh-tw.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -21,7 +21,7 @@ $lang->caselib->createCase       = '創建用例';
 $lang->caselib->delete           = "刪除";
 $lang->caselib->linkVersion      = "版本";
 $lang->caselib->deleted          = '已刪除';
-$lang->caselib->exportTemplet    = '導出模板';
+$lang->caselib->exportTemplate   = '導出模板';
 $lang->caselib->batchCreateCase  = '批量創建用例';
 $lang->caselib->import           = '導入';
 $lang->caselib->showImport       = '顯示導入數據';

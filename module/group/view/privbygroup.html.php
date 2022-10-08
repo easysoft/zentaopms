@@ -3,7 +3,7 @@
  * The manage privilege by group view of group module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: managepriv.html.php 1517 2011-03-07 10:02:57Z wwccss $
@@ -17,7 +17,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
     <table class='table table-hover table-striped table-bordered'>
       <thead>
         <tr class='text-center'>
@@ -53,11 +53,20 @@
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
 
-    <?php foreach($lang->mainNav as $module => $title):?>
-    <?php if(!is_string($title)) continue;?>
-    <?php $active = $menu == $module ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'")?>
-    <?php endforeach;?>
+    <?php
+    $i = 0;
+    foreach($lang->mainNav as $module => $title)
+    {
+        if(!is_string($title)) continue;
+        $i++;
+        if($i == $config->group->maxToolBarCount) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">' . $lang->group->more . '<span class="caret"></span></a><ul class="dropdown-menu">';
+        $active = $menu == $module ? 'btn-active-text' : '';
+        if($i >= $config->group->maxToolBarCount) echo '<li>';
+        echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'");
+        if($i >= $config->group->maxToolBarCount) echo '</li>';
+        if($i == count($lang->mainNav->menuOrder) and $i >= $config->group->maxToolBarCount) echo '</ul></div>';
+    }
+    ?>
 
     <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>

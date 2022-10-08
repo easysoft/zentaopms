@@ -1,5 +1,8 @@
 #dept_chosen    .chosen-single {width: 220px;}
+#dept + .picker {width: 220px;}
 #project_chosen .chosen-single {width: 220px;}
+#project + .picker {width: 220px;}
+#mainMenu .picker-has-value {float: left;}
 .c-days {width: 100px;}
 .c-hours {width: 90px;}
 .c-limited {width: 110px;}

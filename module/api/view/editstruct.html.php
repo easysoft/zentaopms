@@ -3,7 +3,7 @@
  * The create struct view of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Thanatos <thanatos@915.com>
  * @package     doc
  * @link        http://www.zentao.net
@@ -48,7 +48,7 @@ js::set('struct', $struct);
             <tr>
               <td class="w-110px"></td>
               <td colspan="2">
-                <body-field @change="changeAttr" :attr="struct.attribute" :struct-type="struct.type"></body-field>
+                <body-field @change="changeAttr" :attr="struct.attribute" :struct-type="struct.structType"></body-field>
                 <input type="hidden" name="attribute" v-model="attr">
               </td>
             </tr>

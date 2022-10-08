@@ -1,3 +1,14 @@
 .table-footer .table-actions {width: auto; visibility: visible; opacity: 1;}
 .table-footer .table-actions .text {line-height: 28px;}
-table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#mainContent table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+#mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff}
+
+.dropdown-menu .btn-active-text:hover .text:after {border-bottom: 0px;}
+#querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: 0px;}
+.flex span.label-danger {margin-left: 5px; min-width: 50px;}
+[lang^=en] .flex span.label-danger {min-width: 52px;}
+[lang^=de] .flex span.label-danger {min-width: 58px;}
+[lang^=fr] .flex span.label-danger {min-width: 63px;}
+.c-name > .text-ellipsis {text-overflow: clip;}

@@ -3,7 +3,7 @@
  * The control file of webhook module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
  * @version     $Id$
@@ -67,6 +67,8 @@ class webhook extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
+
+        unset($this->lang->webhook->typeList['']);
 
         $this->app->loadLang('action');
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
@@ -181,16 +183,16 @@ class webhook extends control
         if($_POST)
         {
             $this->webhook->bind($id);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $webhook = $this->webhook->getById($id);
         if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
         {
             echo js::alert($this->lang->webhook->note->bind);
-            die(js::locate($this->createLink('webhook', 'browse')));
+            return print(js::locate($this->createLink('webhook', 'browse')));
         }
         $webhook->secret = json_decode($webhook->secret);
 
@@ -226,11 +228,11 @@ class webhook extends control
             if($response['message'] == 'nodept')
             {
                 echo js::error($this->lang->webhook->error->noDept);
-                die(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
+                return print(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
             }
 
             echo js::error($response['message']);
-            die(js::locate($this->createLink('webhook', 'browse')));
+            return print(js::locate($this->createLink('webhook', 'browse')));
         }
 
         $oauthUsers  = $response['data'];
@@ -278,7 +280,7 @@ class webhook extends control
         if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
         {
             echo js::alert($this->lang->webhook->note->bind);
-            die(js::locate($this->createLink('webhook', 'browse')));
+            return print(js::locate($this->createLink('webhook', 'browse')));
         }
         $webhook->secret = json_decode($webhook->secret);
 
@@ -289,17 +291,12 @@ class webhook extends control
             $response = $dingapi->getDeptTree();
         }
 
-        if($webhook->type == 'feishuuser')
-        {
-            $this->app->loadClass('feishuapi', true);
-            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
-            $response  = $feishuApi->getDeptTree();
-        }
+        if($webhook->type == 'feishuuser') $response = array('result' => 'success', 'data' => array());
 
         if($response['result'] == 'fail')
         {
             echo js::error($response['message']);
-            die(js::locate($this->createLink('webhook', 'browse')));
+            return print(js::locate($this->createLink('webhook', 'browse')));
         }
 
         if($response['result'] == 'selected')
@@ -307,15 +304,38 @@ class webhook extends control
             $locateLink  = $this->createLink('webhook', 'bind', "id={$id}");
             $locateLink .= strpos($locateLink, '?') !== false ? '&' : '?';
             $locateLink .= 'selectedDepts=' . join(',', $response['data']);
-            die(js::locate($locateLink));
+            return print(js::locate($locateLink));
         }
 
         $this->view->title      = $this->lang->webhook->chooseDept;
         $this->view->position[] = $this->lang->webhook->chooseDept;
 
-        $this->view->deptTree  = $response['data'];
-        $this->view->webhookID = $id;
+        $this->view->webhookType = $webhook->type;
+        $this->view->deptTree    = $response['data'];
+        $this->view->webhookID   = $id;
         $this->display();
+    }
+
+    public function ajaxGetFeishuDeptList($webhookID)
+    {
+        $webhook = $this->webhook->getById($webhookID);
+        $webhook->secret = json_decode($webhook->secret);
+
+        if($_POST)
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi    = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $departmentID = $_POST['departmentID'] ? $_POST['departmentID'] : '';
+            $depts        = $feishuApi->getChildDeptTree($departmentID);
+            echo json_encode($depts, true);
+        }
+        else
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $depts  = $feishuApi->getDeptTree();
+            echo json_encode($depts, true);
+        }
     }
 
     /**

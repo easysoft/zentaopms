@@ -3,7 +3,7 @@
  * The view of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: view.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
@@ -15,10 +15,7 @@
 <?php echo css::internal($keTableCSS);?>
 <style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse', 'browseType=byediteddate');?>
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
+<?php $sessionString = session_name() . '=' . session_id();?>
 <?php
 js::set('fullscreen', $lang->fullscreen);
 js::set('retrack', $lang->retrack);
@@ -89,7 +86,7 @@ js::set('docID', $doc->id);
       <div class="detail no-padding">
         <div class="detail-content article-content no-margin no-padding">
           <?php
-          if($doc->type == 'url')
+          if($doc->type == 'url' and $autoloadPage)
           {
               $url = $doc->content;
               if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
@@ -117,6 +114,10 @@ js::set('docID', $doc->id);
                   echo "</div></div>";
               }
           }
+          elseif($doc->contentType == 'markdown')
+          {
+              echo "<textarea id='markdownContent'></textarea>";
+          }
           else
           {
               echo $doc->content;
@@ -130,7 +131,15 @@ js::set('docID', $doc->id);
               <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'download')) echo html::a($this->createLink('file', 'download', 'fileID=' . $file->id) . $sessionString, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");?>
+              <?php
+              if(common::hasPriv('file', 'download'))
+              {
+                  $downloadLink  = $this->createLink('file', 'download', 'fileID=' . $file->id);
+                  $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+                  $downloadLink .= $sessionString;
+                  echo html::a($downloadLink, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");
+              }
+              ?>
               <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
             </span>
           </div>
@@ -232,4 +241,19 @@ js::set('docID', $doc->id);
 </div>
 <?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(String(markdownText));
+    simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

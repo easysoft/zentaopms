@@ -3,7 +3,7 @@
  * The stakeholder view of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: browse.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->project->confirmDelete);?>
+<style>.unlinkBtn {float: left; margin-right: 10px;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($this->createLink('program', 'stakeholder', "programID=$programID"), '<span class="text">' . $lang->program->stakeholder . '</span>', '', 'class="btn btn-link btn-active-text"');?>
@@ -51,7 +52,7 @@
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
           <?php $title = $stakeholder->key ? $lang->program->isStakeholderKey : '';?>
           <td title="<?php echo $title;?>"><?php echo $stakeholder->realname . $isKey;?></td>
-          <td title='<?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?>'><?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?></td>
+          <td title='<?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?>'><?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?></td>
           <td><?php echo zget($lang->user->roleList, $stakeholder->role, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>
@@ -72,7 +73,8 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions">
           <?php $actionLink = $this->createLink('program', 'batchUnlinkStakeholders', "programID=$programID");?>
-          <?php echo html::commonButton($lang->program->unlink, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");?>
+          <?php echo html::commonButton($lang->program->unlink, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"", "btn unlinkBtn");?>
+          <div class="table-statistic"></div>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

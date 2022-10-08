@@ -1,0 +1,28 @@
+title: table zt_module
+desc: "产品线"
+author: zt
+version: "1.0"
+fields:
+  - field: root
+    note: "所属项目集"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "产品线名称"
+    range: 1-10000
+    prefix: "产品线"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    range: line
+  - field: short
+    note: "模块简称"
+    range: 1-10000
+    prefix: "产品线"
+    postfix: ""
+    loop: 0
+    format: ""

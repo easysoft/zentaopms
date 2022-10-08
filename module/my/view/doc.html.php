@@ -3,7 +3,7 @@
  * The project view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     my
  * @version     $Id
@@ -20,19 +20,23 @@
     echo html::a(inlink($app->rawMethod, "mode=doc&type=editedbyme"), "<span class='text'>{$lang->doc->editedByMe}</span>" . ($type == 'editedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'editedbyme' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
-<div id="mainContent" class='main-table'>
+<div id="mainContent">
   <?php if(empty($docs)):?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'contributeDoc';?>></div>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
     </p>
   </div>
   <?php else:?>
-  <form id='projectForm' method='post' data-ride='table' data-checkable='false'>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'contributeDoc';?>></div>
+  <form id='projectForm' class="main-table" method='post' data-ride='table' data-checkable='false'>
     <table class='table table-fixed' id='docList'>
       <thead>
         <tr>
+          <th class="c-id"><?php echo $lang->doc->id;?></th>
           <th class="c-name"><?php echo $lang->doc->title;?></th>
           <th class="c-name c-object"><?php echo $lang->doc->object;?></th>
           <th class="c-num"><?php echo $lang->doc->size;?></th>
@@ -49,6 +53,7 @@
         <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <tr>
+          <td class="c-id"><?php echo $doc->id;?></td>
           <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0&from={$lang->navGroup->doc}", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
           <td class='c-name'>
             <?php if(!empty($doc->objectType)):?>

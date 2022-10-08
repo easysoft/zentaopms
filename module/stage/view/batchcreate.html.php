@@ -3,7 +3,7 @@
  * The batchCreate view of stage module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     stage
  * @version     $Id: batchCreate.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>.c-percent, .c-type {width:150px;}</style>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2><?php echo $lang->stage->batchCreate;?></h2>
@@ -19,10 +20,10 @@
     <table class="table table-form">
       <thead>
         <tr>
-          <th class='w-50px'><?php echo $lang->stage->id;?></th>
-          <th><?php echo $lang->stage->name;?></th>
-          <th class='w-200px'><?php echo $lang->stage->percent;?></th>
-          <th class='w-200px'><?php echo $lang->stage->type;?></th>
+          <th class='c-id'><?php echo $lang->stage->id;?></th>
+          <th class='required'><?php echo $lang->stage->name;?></th>
+          <th class='c-percent required'><?php echo $lang->stage->percent;?></th>
+          <th class='c-type required'><?php echo $lang->stage->type;?></th>
         </tr>
       </thead>
       <tbody>
@@ -31,7 +32,7 @@
           <td><?php echo $i;?></td>
           <td><?php echo html::input("name[$i]", '',  "class='form-control'");?></td>
           <td><?php echo html::input("percent[$i]", '',  "class='form-control'");?></td>
-          <td><?php echo html::select("type[$i]", $lang->stage->typeList, '',  "class='form-control chosen'");?></td>
+          <td><?php echo html::select("type[$i]", array('' => '') + $lang->stage->typeList, '',  "class='form-control chosen'");?></td>
         </tr>
         <?php endfor;?>
         <tr>

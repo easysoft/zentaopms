@@ -3,7 +3,7 @@
  * The release module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -42,6 +42,7 @@ $lang->release->name          = 'Name';
 $lang->release->marker        = 'Milestone';
 $lang->release->date          = 'Release Date';
 $lang->release->desc          = 'Description';
+$lang->release->files         = 'Files';
 $lang->release->status        = 'Status';
 $lang->release->subStatus     = 'Sub Status';
 $lang->release->last          = 'Last Release';
@@ -63,6 +64,9 @@ $lang->release->mailto        = 'Mailto';
 $lang->release->mailContent   = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
 $lang->release->storyList     = '<p style="margin-left: 30px;">Story List：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug List：%s。</p>';
+
+$lang->release->storyTitle = 'Story Name';
+$lang->release->bugTitle   = 'Bug Name';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Path : ';
@@ -89,3 +93,8 @@ $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
+$lang->release->notifyList['CT'] = "Copy To";
+
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

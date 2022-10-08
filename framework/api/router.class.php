@@ -200,7 +200,7 @@ class api extends router
         $entry = new $entryName();
 
         if($this->action == 'options') return $entry->send(204);
-        call_user_func_array(array($entry, $this->action), $this->params);
+        call_user_func_array(array($entry, $this->action), array_values($this->params));
     }
 
     /**

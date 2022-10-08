@@ -3,7 +3,7 @@
  * The model file of programplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
@@ -150,6 +150,7 @@ class programplanModel extends model
     public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
+        $this->loadModel('execution');
 
         $plans = $this->getStage($executionID, $productID);
         if($baselineID)
@@ -169,42 +170,49 @@ class programplanModel extends model
         }
 
         $datas       = array();
-        $planIDList  = array();
+        $planIdList  = array();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         $stageIndex  = array();
         foreach($plans as $plan)
         {
-            $planIDList[$plan->id] = $plan->id;
+            $planIdList[$plan->id] = $plan->id;
 
-            $start = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
-            $end   = helper::isZeroDate($plan->end)   ? '' : $plan->end;
+            $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
+            $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
+            $realBegan = helper::isZeroDate($plan->realBegan) ? '' : $plan->realBegan;
+            $realEnd   = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
 
             $data = new stdclass();
-            $data->id         = $plan->id;
-            $data->type       = 'plan';
-            $data->text       = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
-            $data->percent    = $plan->percent;
-            $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
-            $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
-            $data->begin      = $start;
-            $data->deadline   = $end;
-            $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : substr($plan->realBegan, 0, 10);
-            $data->realEnd    = helper::isZeroDate($plan->realEnd)   ? '' : substr($plan->realEnd, 0, 10);
-            $data->parent     = $plan->grade == 1 ? 0 :$plan->parent;
-            $data->open       = true;
-            $data->start_date = $data->realBegan ? $data->realBegan : $data->begin;
-            $data->endDate    = $data->realEnd ? $data->realEnd : $data->deadline;
-            $data->duration   = 0;
+            $data->id            = $plan->id;
+            $data->type          = 'plan';
+            $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone ;
+            $data->percent       = $plan->percent;
+            $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
+            $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->owner_id      = $plan->PM;
+            $data->status        = $this->processStatus('execution', $plan);
+            $data->begin         = $start;
+            $data->deadline      = $end;
+            $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';;
+            $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->open          = true;
+            $data->start_date    = $realBegan ? $realBegan : $start;
+            $data->endDate       = $realEnd ? $realEnd : $end;
+            $data->duration      = 1;
+            $data->color         = $this->lang->execution->gantt->stage->color;
+            $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+            $data->textColor     = $this->lang->execution->gantt->stage->textColor;
+            $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
-            if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+            if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
+            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
-            $datas['data'][] = $data;
-            $stageIndex[]    = array('planID' => $plan->id, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
+            $datas['data'][$plan->id] = $data;
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0));
         }
 
-        $taskSign = "<span>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
@@ -215,11 +223,9 @@ class programplanModel extends model
 
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
-        $tasks = array();
-        if(strpos($selectCustom, 'task') !== false)
-        {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIDList)->fetchAll('id');
-        }
+        $tasks     = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+        $taskTeams = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
+        $users     = $this->loadModel('user')->getPairs('noletter');
 
         if($baselineID)
         {
@@ -236,43 +242,78 @@ class programplanModel extends model
 
         foreach($tasks as $task)
         {
-            $start = helper::isZeroDate($task->estStarted) ? '' : $task->estStarted;
-            $end   = helper::isZeroDate($task->deadline)   ? '' : $task->deadline;
-
-            $realBegan = helper::isZeroDate($task->realStarted)  ? '' : substr($task->realStarted, 0, 10);
-            $realEnd   = helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate, 0, 10);
+            $execution = zget($plans, $task->execution, array());
             $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
+            $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
+            $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
+            $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
+            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
+
+            $start = $realBegan ? $realBegan : $estStart;
+            $end   = $realEnd   ? $realEnd   : $estEnd;
+            if(empty($start) and $execution) $start = $execution->begin;
+            if(empty($end)   and $execution) $end   = $execution->end;
+            if($start > $end) $end = $start;
+
             $data = new stdclass();
-            $data->id           = $task->execution . '-' . $task->id;
-            $data->type         = 'task';
-            $data->text         = $taskSign . $priIcon . $task->name;
-            $data->percent      = '';
-            $data->attribute    = '';
-            $data->milestone    = '';
-            $data->begin        = $start;
-            $data->deadline     = $end;
-            $data->realBegan    = $realBegan;
-            $data->realEnd      = $realEnd;
-            $data->parent       = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
-            $data->open         = true;
-            $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) * 100 : 0;
-            $data->taskProgress = $progress . '%';
-            $data->start_date   = $data->realBegan ? $data->realBegan : $data->begin;
-            $data->endDate      = $data->realEnd ? $data->realEnd : $data->deadline;
-            $data->duration     = 0;
+            $data->id            = $task->execution . '-' . $task->id;
+            $data->type          = 'task';
+            $data->text          = $priIcon . $task->name;
+            $data->percent       = '';
+            $data->status        = $this->processStatus('task', $task);
+            $data->owner_id      = $task->assignedTo;
+            $data->attribute     = '';
+            $data->milestone     = '';
+            $data->begin         = $start;
+            $data->deadline      = $end;
+            $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
+            $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
+            $data->pri           = $task->pri;
+            $data->parent        = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
+            $data->open          = true;
+            $progress            = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+            $data->progress      = $progress;
+            $data->taskProgress  = ($progress * 100) . '%';
+            $data->start_date    = $start;
+            $data->endDate       = $end;
+            $data->duration      = 1;
+            $data->estimate      = $task->estimate;
+            $data->consumed      = $task->consumed;
+            $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+            $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+            $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
+            $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
-            if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+            /* If multi task then show the teams. */
+            if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
+            {
+                $teams     = array_keys($taskTeams[$task->id]);
+                $assigneds = array();
+                foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
+                $data->owner_id = join(',', $assigneds);
+            }
+
+            if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
+            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
-            $datas['data'][] = $data;
+            if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
                 {
+                    $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
                     $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
+
+                    $parent = $stage['parent'];
+                    if(isset($stageIndex[$parent]))
+                    {
+                        $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
+                        $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    }
                 }
             }
         }
@@ -280,10 +321,237 @@ class programplanModel extends model
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
         {
-            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3) * 100;
-            $progress .= '%';
+            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3);
+            $datas['data'][$index]->progress = $progress;
+
+            $progress = ($progress * 100) . '%';
             $datas['data'][$index]->taskProgress = $progress;
+            $datas['data'][$index]->estimate = $stage['progress']['totalEstimate'];
+            $datas['data'][$index]->consumed = $stage['progress']['totalConsumed'];
         }
+
+        $datas['links'] = array();
+        if($this->config->edition != 'open')
+        {
+            $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+            foreach($relations as $relation)
+            {
+                $link['source']   = $relation->execution . '-' . $relation->pretask;
+                $link['target']   = $relation->execution . '-' . $relation->task;
+                $link['type']     = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
+                $datas['links'][] = $link;
+            }
+        }
+
+        $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
+        return $returnJson ? json_encode($datas) : $datas;
+    }
+
+    /**
+     * Get gantt data group by assigned.
+     *
+     * @param  int     $executionID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
+     * @access public
+     * @return string
+     */
+    public function getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
+    {
+        $plans = $this->getStage($executionID, $productID);
+
+        $datas       = array();
+        $planIdList  = array();
+        $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
+        $stageIndex  = array();
+
+        foreach($plans as $plan) $planIdList[$plan->id] = $plan->id;
+
+        $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
+
+        /* Judge whether to display tasks under the stage. */
+        $owner   = $this->app->user->account;
+        $module  = 'programplan';
+        $section = 'browse';
+        $object  = 'stageCustom';
+        if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+
+        $tasksGroup = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchGroup('assignedTo','id');
+        $users      = $this->loadModel('user')->getPairs('noletter');
+
+        $tasksMap   = array();
+        $multiTasks = array();
+        foreach($tasksGroup as $group => $tasks)
+        {
+            foreach($tasks as $id => $task)
+            {
+                if($task->mode == 'multi') $multiTasks[$id] = $group;
+                $tasksMap[$task->id] = $task;
+            }
+        }
+
+        if($multiTasks)
+        {
+            $taskTeams = $this->dao->select('t1.*,t2.realname')->from(TABLE_TASKTEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+                ->where('t1.task')->in(array_keys($multiTasks))
+                ->orderBy('t1.order')
+                ->fetchGroup('task', 'id');
+            foreach($taskTeams as $taskID => $team)
+            {
+                $group = $multiTasks[$taskID];
+                foreach($team as $member)
+                {
+                    $account = $member->account;
+                    if($account == $group) continue;
+                    if(!isset($taskGroups[$account])) $taskGroups[$account] = array();
+
+                    $taskGroups[$account][$taskID] = clone $tasksMap[$taskID];
+                    $taskGroups[$account][$taskID]->id         = $taskID . '_' . $account;
+                    $taskGroups[$account][$taskID]->realID     = $taskID;
+                    $taskGroups[$account][$taskID]->assignedTo = $account;
+                    $taskGroups[$account][$taskID]->realname   = $member->realname;
+                }
+            }
+        }
+
+        $groupID = 0;
+        foreach($tasksGroup as $group => $tasks)
+        {
+            $groupID --;
+            $groupName = $group;
+            $groupName = zget($users, $group);
+            $dataGroup             = new stdclass();
+            $dataGroup->id         = $groupID;
+            $dataGroup->type       = 'group';
+            $dataGroup->text       = $groupName;
+            $dataGroup->percent    = '';
+            $dataGroup->attribute  = '';
+            $dataGroup->milestone  = '';
+            $dataGroup->owner_id   = $group;
+            $dataGroup->status     = '';
+            $dataGroup->begin      = '';
+            $dataGroup->deadline   = '';
+            $dataGroup->realBegan  = '';
+            $dataGroup->realEnd    = '';
+            $dataGroup->parent     = 0;
+            $dataGroup->open       = true;
+            $dataGroup->progress   = '';
+            $dataGroup->taskProgress  = '';
+            $dataGroup->color         = $this->lang->execution->gantt->stage->color;
+            $dataGroup->progressColor = $this->lang->execution->gantt->stage->progressColor;
+            $dataGroup->textColor     = $this->lang->execution->gantt->stage->textColor;
+            $dataGroup->bar_height    = $this->lang->execution->gantt->bar_height;
+
+            $groupKey = $groupID . $group;
+            $datas['data'][$groupKey] = $dataGroup;
+
+            $realStartDate = array();
+            $realEndDate   = array();
+            $totalTask = count($tasks);
+            foreach($tasks as $taskID => $task)
+            {
+                $execution = zget($plans, $task->execution, array());
+
+                $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+
+                $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
+                $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
+                $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
+                $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
+
+                $start = $realBegan ? $realBegan : $estStart;
+                $end   = $realEnd   ? $realEnd   : $estEnd;
+                if(empty($start) and $execution) $start = $execution->begin;
+                if(empty($end)   and $execution) $end   = $execution->end;
+                if($start > $end) $end = $start;
+
+                $data = new stdclass();
+                $data->id           = $task->id;
+                $data->type         = 'task';
+                $data->text         = $priIcon . $task->name;
+                $data->percent      = '';
+                $data->status       = $this->processStatus('task', $task);
+                $data->owner_id     = $task->assignedTo;
+                $data->attribute    = '';
+                $data->milestone    = '';
+                $data->begin        = $start;
+                $data->deadline     = $end;
+                $data->realBegan    = $realBegan ? substr($realBegan, 0, 10) : '';
+                $data->realEnd      = $realEnd ? substr($realEnd, 0, 10) : '';
+                $data->pri          = $task->pri;
+                $data->parent       = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
+                $data->open         = true;
+                $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+                $data->progress     = $progress;
+                $data->taskProgress = ($progress * 100) . '%';
+                $data->start_date   = $start;
+                $data->endDate      = $end;
+                $data->duration     = 1;
+                $data->estimate     = $task->estimate;
+                $data->consumed     = $task->consumed;
+                $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+                $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+                $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
+                $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+                if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+
+                if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+                if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
+
+                if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
+
+                if(!empty($start)) $realStartDate[] = strtotime($start);
+                if(!empty($end)) $realEndDate[] = strtotime($end);
+
+                if(isset($stageIndex[$groupKey]['totalConsumed']))
+                {
+                    $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
+                    $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
+                    $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
+                }
+                else
+                {
+                    $stageIndex[$groupKey]['totalConsumed'] = $task->consumed;
+                    $stageIndex[$groupKey]['totalReal']     = $task->left + $task->consumed;
+                    $stageIndex[$groupKey]['totalEstimate'] = $task->estimate;
+                }
+            }
+
+            /* Calculate group realBegan and realEnd. */
+            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
+            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
+        }
+
+        /* Calculate the progress of the phase. */
+        foreach($stageIndex as $index => $stage)
+        {
+            $progress  = empty($stage['totalReal']) ? 0 : round($stage['totalConsumed'] / $stage['totalReal'], 3);
+            $datas['data'][$index]->progress = $progress;
+
+            $progress = ($progress * 100) . '%';
+            $datas['data'][$index]->taskProgress = $progress;
+            $datas['data'][$index]->estimate     = $stage['totalEstimate'];
+            $datas['data'][$index]->consumed     = $stage['totalConsumed'];
+        }
+
+        $datas['links'] = array();
+        if($this->config->edition != 'open')
+        {
+            $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+            foreach($relations as $relation)
+            {
+                $link['source']   = $relation->execution . '-' . $relation->pretask;
+                $link['target']   = $relation->execution . '-' . $relation->task;
+                $link['type']     = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
+                $datas['links'][] = $link;
+            }
+        }
+
+        $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
 
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -409,6 +677,12 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
+        if(!$this->checkNameUnique($names))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+            return false;
+        }
+
         $datas = array();
         foreach($names as $key => $name)
         {
@@ -516,7 +790,7 @@ class programplanModel extends model
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $data->planDuration = $this->getDuration($data->begin, $data->end);
                 $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
@@ -539,6 +813,25 @@ class programplanModel extends model
                     ->checkIF($plan->percent != '', 'percent', 'float')
                     ->where('id')->eq($stageID)
                     ->exec();
+
+                /* Add PM to stage teams and project teams. */
+                if(!empty($data->PM))
+                {
+                    $team = $this->user->getTeamMemberPairs($stageID, 'execution');
+                    if(isset($team[$data->PM])) continue;
+
+                    $roles  = $this->user->getUserRoles($data->PM);
+                    $member = new stdclass();
+                    $member->root    = $stageID;
+                    $member->account = $data->PM;
+                    $member->role    = zget($roles, $data->PM, '');
+                    $member->join    = $now;
+                    $member->type    = 'execution';
+                    $member->days    = $data->days;
+                    $member->hours   = $this->config->execution->defaultWorkhours;
+                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    $this->execution->addProjectMembers($data->project, array($data->PM => $member));
+                }
 
                 if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
@@ -592,17 +885,27 @@ class programplanModel extends model
                     $lib->acl       = 'default';
                     $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-                    /* Add creators to stage teams and execution teams. */
-                    $member = new stdclass();
-                    $member->root    = $stageID;
-                    $member->account = $account;
-                    $member->role    = $this->lang->user->roleList[$this->app->user->role];
-                    $member->join    = $now;
-                    $member->type    = $data->type;
-                    $member->days    = $data->days;
-                    $member->hours   = $this->config->execution->defaultWorkhours;
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->execution->addProjectMembers($data->project, array($member));
+                    /* Add creators and PM to stage teams and project teams. */
+                    $teamMembers = array();
+                    $members     = array($this->app->user->account, $data->PM);
+                    $roles       = $this->user->getUserRoles(array_values($members));
+                    $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
+                    foreach($members as $account)
+                    {
+                        if(empty($account) or isset($team[$account]) or isset($teamMembers[$account])) continue;
+
+                        $member = new stdclass();
+                        $member->root    = $stageID;
+                        $member->account = $account;
+                        $member->role    = zget($roles, $account, '');
+                        $member->join    = $now;
+                        $member->type    = 'execution';
+                        $member->days    = $data->days;
+                        $member->hours   = $this->config->execution->defaultWorkhours;
+                        $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                        $teamMembers[$account] = $member;
+                    }
+                    $this->execution->addProjectMembers($data->project, $teamMembers);
 
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
@@ -627,7 +930,7 @@ class programplanModel extends model
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
         }
     }
 
@@ -679,6 +982,10 @@ class programplanModel extends model
         /* Judgment of required items. */
         if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
+        if(dao::isError()) return false;
+
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
+        if(dao::isError()) return false;
 
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
@@ -710,7 +1017,7 @@ class programplanModel extends model
         }
 
         /* Set planDuration and realDuration. */
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
             $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
@@ -719,11 +1026,15 @@ class programplanModel extends model
         if($planChanged)  $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
 
+        /* Fix bug #22030. Reset field name for show dao error. */
+        $this->lang->project->name = $this->lang->programplan->name;
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
+            ->checkIF((!empty($plan->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project}")
             ->where('id')->eq($planID)
             ->exec();
 
@@ -779,7 +1090,7 @@ class programplanModel extends model
             if($id == 'actions') $class .= ' c-actions';
 
             echo "<td class='{$class}' {$title}>";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
             switch($id)
             {
             case 'id':
@@ -864,7 +1175,9 @@ class programplanModel extends model
      */
     public function isCreateTask($planID)
     {
-        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->limit(1)->fetch();
+        if(empty($planID)) return true;
+
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->andWhere('deleted')->eq('0')->limit(1)->fetch();
         return empty($task) ? true : false;
     }
 
@@ -883,6 +1196,20 @@ class programplanModel extends model
 
         if($action == 'create' and $plan->grade > 1) return false;
 
+        return true;
+    }
+
+    /**
+     * Check name unique.
+     *
+     * @param  array  $names
+     * @access public
+     * @return bool
+     */
+    public function checkNameUnique($names)
+    {
+        $names = array_filter($names);
+        if(count(array_unique($names)) != count($names)) return false;
         return true;
     }
 
@@ -908,14 +1235,16 @@ class programplanModel extends model
      * Get milestone by product.
      *
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getMilestoneByProduct($productID)
+    public function getMilestoneByProduct($productID, $projectID)
     {
         return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
+            ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)

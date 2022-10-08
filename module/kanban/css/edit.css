@@ -1,1 +1,9 @@
+#mainContent .table-form>tbody>tr>th {width: 105px;}
 #mainContent {padding-left: 0px;}
+#mainContent .laneHeightBox .radio-inline+.radio-inline, #mainContent .importBox .radio-inline+.radio-inline {margin-left: 20px;}
+[lang^='en'] .columnWidth {width: 120px;}
+[lang^='zh-cn'] .columnWidth {width: 80px;}
+#team ~ #contactListMenu_chosen {vertical-align: top;}
+#whitelist ~ #contactListMenu_chosen {vertical-align: bottom;}
+#team ~ #contactListMenu_chosen > .chosen-drop {top: 32px;}
+#whitelist ~ #contactListMenu_chosen > .chosen-drop {bottom: 32px;}

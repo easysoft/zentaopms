@@ -3,7 +3,7 @@
  * The create view of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -16,6 +16,11 @@
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php js::set('idvalue', $todo->idvalue);?>
+<?php js::set('defaultType', $todo->type);?>
+<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
+<?php js::set('vision', $config->vision);?>
+<?php js::set('noOptions', $lang->todo->noOptions);?>
+<?php js::set('chosenType', $lang->todo->typeList);?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
@@ -106,7 +111,7 @@
             </div>
           </div>
           <?php echo html::hidden('config[type]', $todo->config->type)?>
-          <div class='input-group' style='width:250px; padding-top:5px;'>
+          <div class='input-group beforeDaysBox'>
           <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', $todo->config->beforeDays, "class='form-control'"));?>
           </div>
         </div>
@@ -121,18 +126,24 @@
       <?php if($todo->type != 'cycle'):?>
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
-        <div class="col-sm-2">
-          <?php echo html::select('type', $lang->todo->typeList, $todo->type, 'onchange="loadList(this.value);" class="form-control"');?>
+        <div class="col-sm-4 dateWidth">
+          <?php echo html::select('type', $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, \"\", \"{$todo->type}\", {$todo->idvalue})' class='form-control'");?>
         </div>
       </div>
       <?php endif;?>
       <div class="row form-group">
-        <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
+        <label class="col-sm-1"><?php echo $lang->todo->assignTo;?></label>
+        <div class="col-sm-4 dateWidth">
+          <?php echo html::select('assignedTo', $users, $todo->assignedTo, "class='form-control chosen'");?>
+        </div>
+      </div>
+      <div class="row form-group">
+        <label id='nameBoxLabel' class="col-sm-1"><?php echo ($todo->type == 'custom' or $config->vision == 'rnd') ? $lang->todo->name : $lang->todo->idvalue;?></label>
         <div class="col-sm-10">
           <div id='nameBox' class='hidden'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
             <div class='input-group title-group required'>
               <div class='nameBox'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
-              <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
+              <span class="input-group-addon fix-border br-0"><?php echo $lang->todo->pri;?></span>
               <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo $todo->pri;?>"><?php echo $todo->pri;?></span></span> &nbsp;<span class="caret"></span>
@@ -158,10 +169,10 @@
       </div>
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->beginAndEnd;?></label>
-        <div class="col-sm-2" style='padding-right:0px'>
+        <div class="col-sm-2 beginBox">
           <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control chosen" data-drop_direction="up"')?>
         </div>
-        <div class="col-sm-2" style='padding-left:0px'>
+        <div class="col-sm-2 endBox">
           <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen" data-drop_direction="up"');?>
         </div>
         <div class="col-sm-4">

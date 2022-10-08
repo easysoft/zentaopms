@@ -63,9 +63,7 @@ function computeWorkDays(currentID)
     isBactchEdit = false;
     if(currentID)
     {
-        index = currentID.replace('begins[', '');
-        index = index.replace('ends[', '');
-        index = index.replace(']', '');
+        index = currentID.replace(/\w*\[|\]/g, '');
         if(!isNaN(index)) isBactchEdit = true;
     }
 
@@ -124,22 +122,10 @@ function computeEndDate(delta)
  */
 function loadBranches(product)
 {
-    $("#productsBox select[name^='products']").each(function()
-    {
-        var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
-        {
-            alert(errorSameProducts);
-            $product.val(0);
-            $product.trigger("chosen:updated");
-            return false;
-        }
-    });
-
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
+        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html().replace('required', '') + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
         $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
@@ -153,19 +139,25 @@ function loadBranches(product)
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var projectID = (typeof(systemMode) != 'undefined' && systemMode == 'new') ? $('#project').val() : 0;
+    if(typeof(projectID) == 'undefined') projectID = 0;
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active&projectID=" + projectID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
     {
         if(data)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
 
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 }
 
 /**
@@ -184,12 +176,12 @@ function loadPlans(product, branchID)
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index     = $(product).attr('id').replace('products', '');
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=noclosed,unexpired&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
             if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + ']').attr('id', 'plans' + productID).chosen();
+            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
 
             adjustPlanBoxMargin();
         }
@@ -257,3 +249,15 @@ $(function()
     adjustProductBoxMargin();
     adjustPlanBoxMargin();
 });
+
+/**
+ * Set card count.
+ *
+ * @param  string $heightType
+ * @access public
+ * @return void
+ */
+function setCardCount(heightType)
+{
+    heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
+}

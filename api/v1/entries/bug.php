@@ -3,7 +3,7 @@
  * The bug entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -32,8 +32,9 @@ class bugEntry extends entry
 
         $bug = $data->data->bug;
 
-        /* Set product name */
-        $bug->productName = $data->data->product->name;
+        /* Set product name and status */
+        $bug->productName   = $data->data->product->name;
+        $bug->productStatus = $data->data->product->status;
 
         /* Set module title */
         $moduleTitle = '';
@@ -92,7 +93,7 @@ class bugEntry extends entry
         $oldBug = $this->loadModel('bug')->getByID($bugID);
 
         /* Set $_POST variables. */
-        $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,closedBy,resolution,product,plan,task';
+        $fields = 'uid,title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,closedBy,resolution,product,plan,task,module,steps,mailto,keywords';
         $this->batchSetPost($fields, $oldBug);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 

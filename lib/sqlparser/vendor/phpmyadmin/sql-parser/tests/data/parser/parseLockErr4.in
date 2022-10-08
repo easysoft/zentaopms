@@ -1,0 +1,2 @@
+-- missing TABLES keyword
+LOCK table1 READ LOCAL

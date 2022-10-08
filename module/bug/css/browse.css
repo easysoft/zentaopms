@@ -1,9 +1,9 @@
+.table-footer {z-index: 1;}
 .closed, .closed a {color: gray; text-decoration:line-through;}
 .resolved, .resolved a {color: #8EC21F; text-decoration: none;}
 .tree .closed, .tree .closed a {color: #003366; text-decoration: none;}
-.confirm0 {color: gray;}
-.confirm1 {color: green;}
 td.delayed {color: #fff; background: #e84e0f !important;}
+#bugForm .setting {height: 25px;}
 
 .datatable-wrapper .table-datatable .datatable-row td {height: 37px;}
 
@@ -31,3 +31,5 @@ body {margin-bottom: 25px;}
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+#bugForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
+[lang^='de'] th.c-confirmed {width: 100px !important;}

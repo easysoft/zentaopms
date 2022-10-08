@@ -58,7 +58,7 @@
         }
     }
 
-    echo "<li id='kanbanTab'>"; common::printLink('execution', 'kanban', "executionID=$executionID", $lang->execution->kanban); echo '</li>';
+    echo "<li id='kanbanTab'>"; common::printLink('execution', 'taskKanban', "executionID=$executionID", $lang->execution->kanban); echo '</li>';
     if($execution->type == 'sprint' or $execution->type == 'waterfall')
     {
         echo "<li id='burnTab'>";

@@ -3,7 +3,7 @@
  * The viewarchivedcolumn file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: viewarchivedcolumn.html.php 935 2021-12-22 10:49:24Z $
@@ -35,7 +35,7 @@
     <div class="item-body">
       <div class="item parent-item hr" data-archived='<?php echo $column->archived;?>' data-id="<?php echo $column->id;?>">
         <div class="title text-ellipsis"><?php echo $column->name;?></div>
-        <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $column->archived == '1') echo html::a(inlink('restoreColumn', "columnID={$column->id}"), $lang->kanban->restore, '', "class='btn btn-primary' target='hiddenwin'");?>
+        <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $column->archived == '1' && !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')) echo html::a(inlink('restoreColumn', "columnID={$column->id}"), $lang->kanban->restore, '', "class='btn btn-primary' target='hiddenwin'");?>
       </div>
       <?php if(!empty($column->child) && $column->archived == '0'):?>
       <?php $count = 1;?>
@@ -43,7 +43,7 @@
         <?php $class = $count == count($column->child) ? 'hr' : '';?>
         <div class="item child-item <?php echo $class;?>" data-id="<?php echo $childColumn->id;?>" data-archived='<?php echo $childColumn->archived;?>'>
           <div class="title text-ellipsis"><label class="label label-child"><?php echo $lang->kanban->child;?></label><?php echo $childColumn->name;?></div>
-          <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $childColumn->archived == '1') echo html::a(inlink('restoreColumn', "columnID={$childColumn->id}"), $lang->kanban->restore, '', "class='btn btn-primary' target='hiddenwin'");?>
+          <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $childColumn->archived == '1' && !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')) echo html::a(inlink('restoreColumn', "columnID={$childColumn->id}"), $lang->kanban->restore, '', "class='btn btn-primary' target='hiddenwin'");?>
       </div>
       <?php $count ++;?>
       <?php endforeach;?>

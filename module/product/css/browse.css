@@ -9,6 +9,7 @@
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
+#productStoryForm .setting {height: 25px;}
 
 .pl-5px {padding-left: 5px;}
 .popoverStage {position: relative;}
@@ -27,6 +28,7 @@ a.removeModule:hover {color: red;}
 .table td.has-child > .story-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
 .table td.c-estimate {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+.table-footer {z-index: 1;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 
 #batchUnlinkStoryTip .modal-body {padding-top: 10px; max-height: 400px; overflow: auto;}
@@ -36,3 +38,5 @@ a.removeModule:hover {color: red;}
 #batchUnlinkStoryTip .table td {border-bottom: 0px;}
 #batchUnlinkStoryTip .table th:first-child {width: 460px;}
 #mainMenu .dropdown-menu>li>a>.icon {top: 4px;}
+#productStoryForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
+.c-span {margin-left: 19px;}

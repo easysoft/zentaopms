@@ -2,7 +2,7 @@
 /**
  * The product view file of custom module of ZenTaoPMS.
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Liyuchun <liyuchun@cnezsoft.com>
  * @package     custom
  * @version     $Id$
@@ -21,7 +21,13 @@
           <label class="radio-inline"><input type="radio" name="product" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="product<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-        <td><div class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfProduct;?></div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="2" id="readOnlyOfProduct">
+          <i class="icon-exclamation-sign"></i>&nbsp;<?php echo $lang->custom->notice->readOnlyOfProduct;?>
+        </td>
       </tr>
       <tr>
         <th></th>

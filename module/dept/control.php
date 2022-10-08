@@ -3,7 +3,7 @@
  * The control file of dept module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: control.php 4157 2013-01-20 07:09:42Z wwccss $
@@ -56,7 +56,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $this->dept->updateOrder($_POST['orders']);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -72,7 +72,7 @@ class dept extends control
         {
             $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -89,7 +89,7 @@ class dept extends control
         {
             $this->dept->update($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::alert($this->lang->dept->successSave) . js::reload('parent'));
+            return print(js::alert($this->lang->dept->successSave) . js::reload('parent'));
         }
 
         $dept  = $this->dept->getById($deptID);
@@ -105,7 +105,7 @@ class dept extends control
         $childs = $this->dept->getAllChildId($deptID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -124,23 +124,23 @@ class dept extends control
         if($sons)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
-            die(js::alert($this->lang->dept->error->hasSons));
+            return print(js::alert($this->lang->dept->error->hasSons));
         }
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
-            die(js::alert($this->lang->dept->error->hasUsers));
+            return print(js::alert($this->lang->dept->error->hasUsers));
         }
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
+            return print(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
         }
         else
         {
             $this->dept->delete($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -149,12 +149,13 @@ class dept extends control
      *
      * @param  int    $dept
      * @param  string $user
+     * @param  string $key  id|account
      * @access public
      * @return void
      */
-    public function ajaxGetUsers($dept, $user = '')
+    public function ajaxGetUsers($dept, $user = '', $key = 'account')
     {
-        $users = array('' => '') + $this->dept->getDeptUserPairs($dept);
-        die(html::select('user', $users, $user, "class='form-control chosen'"));
+        $users = array('' => '') + $this->dept->getDeptUserPairs($dept, $key);
+        return print(html::select('user', $users, $user, "class='form-control chosen'"));
     }
 }

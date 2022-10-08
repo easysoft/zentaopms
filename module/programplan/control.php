@@ -3,7 +3,7 @@
  * The control file of programplan currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
@@ -83,7 +83,29 @@ class programplan extends control
             $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
-            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID);
+            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        }
+
+        if($type == 'assignedTo')
+        {
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
         }
 
         if($type == 'lists')
@@ -103,7 +125,7 @@ class programplan extends control
         $this->view->selectCustom = $selectCustom;
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->ganttType    = $type;
         $this->display();
     }
 
@@ -125,7 +147,7 @@ class programplan extends control
             $this->programplan->create($projectID, $this->productID, $planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -184,7 +206,13 @@ class programplan extends control
     public function edit($planID = 0, $projectID = 0)
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $plan = $this->programplan->getByID($planID);
+
+        global $lang;
+        $lang->executionCommon = $lang->execution->stage;
+        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
         if($_POST)
         {
             $changes = $this->programplan->update($planID, $projectID);
@@ -230,5 +258,46 @@ class programplan extends control
         $response['result']  = 'success';
         $response['message'] = '';
         return $this->send($response);
+    }
+
+    /**
+     * Response gantt drag event.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttDragEvent()
+    {
+        if(!empty($_POST))
+        {
+            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+            $objectID =  $_POST['id'];
+
+            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * Response gantt move event.
+     *
+     * @access public
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttMoveEvent()
+    {
+        if(!empty($_POST))
+        {
+            $idList = explode('-', $_POST['id']);
+            $taskID = $idList[1];
+
+            $this->loadModel('task')->updateOrderByGantt();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action')->create('task', $taskID, 'ganttMove');
+            return $this->send(array('result' => 'success'));
+        }
     }
 }

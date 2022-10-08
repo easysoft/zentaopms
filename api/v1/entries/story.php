@@ -3,7 +3,7 @@
  * The story entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -36,8 +36,9 @@ class storyEntry extends Entry
         if(isset($story->planTitle)) $story->planTitle = array_values((array)$story->planTitle);
         if($story->parent > 0) $story->parentPri = $this->dao->select('pri')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch('pri');
 
-        /* Set product name */
-        $story->productName = $data->data->product->name;
+        /* Set product name and status*/
+        $story->productName   = $data->data->product->name;
+        $story->productStatus = $data->data->product->status;
 
         /* Set module title */
         $moduleTitle = '';
@@ -59,16 +60,16 @@ class storyEntry extends Entry
             foreach($executionTasks as $task)
             {
                 if(!isset($data->data->executions->{$task->execution})) continue;
-                $storyTasks[] = $this->filterFields($task, 'id,name,type');
+                $storyTasks[] = $this->filterFields($task, 'id,name,type,status,assignedTo');
             }
         }
-        $story->tasks = $storyTasks;
+        $story->tasks = $this->format($storyTasks, 'assignedTo:user');
 
         $story->bugs = array();
-        foreach($data->data->bugs as $bug) $story->bugs[] = $this->filterFields($bug, 'id,title');
+        foreach($data->data->bugs as $bug) $story->bugs[] = $this->filterFields($bug, 'id,title,status,pri,severity');
 
         $story->cases = array();
-        foreach($data->data->cases as $case) $story->cases[] = $this->filterFields($case, 'id,title');
+        foreach($data->data->cases as $case) $story->cases[] = $this->filterFields($case, 'id,title,pri,status');
 
         $story->requirements = array();
         foreach($data->data->relations as $relation) $story->requirements[] = $this->filterFields($relation, 'id,title');
@@ -95,14 +96,17 @@ class storyEntry extends Entry
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         /* Set $_POST variables. */
-        $fields = 'type';
+        $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail';
         $this->batchSetPost($fields, $oldStory);
-        $this->setPost('parent', 0);
 
         $control = $this->loadController('story', 'edit');
         $control->edit($storyID);
 
-        $this->getData();
+        $data = $this->getData();
+
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!isset($data->status)) return $this->sendError(400, 'error');
+
         $story = $this->story->getByID($storyID);
         $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }

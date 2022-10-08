@@ -3,7 +3,7 @@
  * The control file of admin module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: control.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
@@ -47,10 +47,10 @@ class admin extends control
      */
     public function ignore()
     {
+        $account = $this->app->user->account;
         $this->loadModel('setting');
-        $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
         $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-        $this->setting->setItem('system.common.global.community', 'na');
+        $this->setting->setItem("$account.common.global.community", 'na');
         echo js::locate(inlink('index'), 'parent');
     }
 
@@ -354,5 +354,113 @@ class admin extends control
         $date = date(DT_DATE1, strtotime("-{$this->config->admin->log->saveDays} days"));
         $this->dao->delete()->from(TABLE_LOG)->where('date')->lt($date)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Reset password setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function resetPWDSetting()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->admin->resetPWDSetting;
+        $this->display();
+    }
+
+    /**
+     * Show table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function tableEngine()
+    {
+        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->tableEngines = $this->loadModel('misc')->getTableEngines();
+        $this->display();
+    }
+
+    /**
+     * Ajax change table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxChangeTableEngine()
+    {
+        $response = array();
+        $response['result']    = 'success';
+        $response['message']   = '';
+        $response['thisTable'] = '';
+        $response['nextTable'] = '';
+
+        $tableEngines = $this->loadModel('misc')->getTableEngines();
+
+        $thisTable = '';
+        $nextTable = '';
+        foreach($tableEngines as $table => $engine)
+        {
+            if($engine == 'InnoDB') continue;
+            if(strpos(",{$this->session->errorTables},", ",{$table},") !== false) continue;
+
+            if(stripos($table, 'searchindex') !== false)
+            {
+                $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+                if($mysqlVersion < 5.6) continue;
+            }
+
+            if($thisTable and empty($nextTable)) $nextTable = $table;
+            if(empty($thisTable)) $thisTable = $table;
+            if($thisTable and $nextTable) break;
+        }
+
+        if(empty($thisTable))
+        {
+            unset($_SESSION['errorTables']);
+            $response['result'] = 'finished';
+            return print(json_encode($response));
+        }
+
+        try
+        {
+            /* Check process this table or not. */
+            $dbProcesses = $this->dbh->query("SHOW PROCESSLIST")->fetchAll();
+            foreach($dbProcesses as $dbProcess)
+            {
+                if($dbProcess->db != $this->config->db->name) continue;
+                if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                {
+                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
+                    return print(json_encode($response));
+                }
+            }
+        }
+        catch(PDOException $e){}
+
+        $response['thisTable'] = $thisTable;
+        $response['nextTable'] = $nextTable;
+
+        try
+        {
+            $sql = "ALTER TABLE `$thisTable` ENGINE='InnoDB'";
+            $this->dbh->exec($sql);
+            $response['message'] = sprintf($this->lang->admin->changeSuccess, $thisTable);
+        }
+        catch(PDOException $e)
+        {
+            $this->session->set('errorTables', $this->session->errorTables . ',' . $thisTable);
+
+            $response['result']  = 'fail';
+            $response['message'] = sprintf($this->lang->admin->changeFail, $thisTable, htmlspecialchars($e->getMessage()));
+        }
+
+        return print(json_encode($response));
     }
 }

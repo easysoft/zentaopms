@@ -3,7 +3,7 @@
  * The bug module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: zh-tw.php 4536 2013-03-02 13:39:37Z wwccss $
@@ -283,8 +283,8 @@ $lang->bug->statusList['resolved'] = '已解決';
 $lang->bug->statusList['closed']   = '已關閉';
 
 $lang->bug->confirmedList[''] = '';
-$lang->bug->confirmedList[1]  = '是';
-$lang->bug->confirmedList[0]  = '否';
+$lang->bug->confirmedList[1]  = '已確認';
+$lang->bug->confirmedList[0]  = '未確認';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';

@@ -3,7 +3,7 @@
  * The control file of install currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: control.php 4297 2013-01-27 07:51:45Z wwccss $
@@ -19,7 +19,7 @@ class install extends control
      */
     public function __construct()
     {
-        if(!defined('IN_INSTALL')) die();
+        if(!defined('IN_INSTALL')) helper::end();
         parent::__construct();
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
@@ -93,6 +93,18 @@ class install extends control
             $this->view->sessionInfo   = $sessionInfo;
         }
 
+        $notice = '';
+        if($this->config->framework->filterCSRF)
+        {
+            $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
+            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
+
+            $httpHost = zget($_SERVER, 'HTTP_HOST', '');
+            if(empty($httpHost) or strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $notice = $this->lang->install->CSRFNotice;
+        }
+
+        $this->view->notice = $notice;
         $this->display();
     }
 
@@ -104,7 +116,22 @@ class install extends control
      */
     public function step2()
     {
+        $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
+
+        /* Get mysql env in docker container. */
+        if(getenv('MYSQL_HOST'))     $dbHost     = getenv('MYSQL_HOST');
+        if(getenv('MYSQL_PORT'))     $dbPort     = getenv('MYSQL_PORT');
+        if(getenv('MYSQL_DB'))       $dbName     = getenv('MYSQL_DB');
+        if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
+        if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
+
         $this->view->title = $this->lang->install->setConfig;
+
+        $this->view->dbHost     = $dbHost ? $dbHost : '127.0.0.1';
+        $this->view->dbPort     = $dbPort ? $dbPort : '3306';
+        $this->view->dbName     = $dbName ? $dbName : 'zentao';
+        $this->view->dbUser     = $dbUser ? $dbUser : 'root';
+        $this->view->dbPassword = $dbPassword ? $dbPassword : '';
         $this->display();
     }
 
@@ -178,13 +205,21 @@ class install extends control
         if(!empty($_POST))
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
-            die(js::locate(inlink('step5'), 'parent'));
+            return print(js::locate(inlink('step5'), 'parent'));
         }
 
-        $this->app->loadLang('upgrade');
+        if(!isset($this->config->installed) or !$this->config->installed)
+        {
+            $this->view->error = $this->lang->install->errorNotSaveConfig;
+            $this->display();
+        }
+        else
+        {
+            $this->app->loadLang('upgrade');
 
-        $this->view->title = $this->lang->install->introduction;
-        $this->display();
+            $this->view->title = $this->lang->install->introduction;
+            $this->display();
+        }
     }
 
     /**
@@ -198,18 +233,24 @@ class install extends control
         if(!empty($_POST))
         {
             $this->install->grantPriv();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $this->install->updateLang();
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
-            if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
+            if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData));
 
-            $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
-            $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
-            $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
-            $this->loadModel('setting')->setItem('system.common.global.cron', 1);
-            $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
-            die(js::locate(inlink('step6'), 'parent'));
+            $this->loadModel('setting');
+            $this->setting->updateVersion($this->config->version);
+            $this->setting->setSN();
+            $this->setting->setItem('system.common.global.flow', $this->post->flow);
+            $this->setting->setItem('system.common.safe.mode', '1');
+            $this->setting->setItem('system.common.safe.changeWeak', '1');
+            $this->setting->setItem('system.common.global.cron', 1);
+
+            if(strpos($this->app->getClientLang(), 'zh') === 0) $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
+            return print(js::locate(inlink('step6'), 'parent'));
         }
 
         $this->app->loadLang('upgrade');

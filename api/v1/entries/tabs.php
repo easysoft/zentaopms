@@ -3,7 +3,7 @@
  * The tabs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -28,7 +28,8 @@ class tabsEntry extends baseEntry
 
             foreach($tabs as $menuKey)
             {
-                if(!common::hasPriv('my', $menuKey)) continue;
+                if(!isset($this->lang->my->$menuKey)) continue;
+                if(!common::hasPriv('my', 'work')) continue;
                 $label = $this->lang->my->$menuKey;
                 if($menuKey == 'calendar') $label = $this->lang->my->calendarAction;
 
@@ -49,7 +50,10 @@ class tabsEntry extends baseEntry
                 if($menuKey == 'requirement' and empty($this->config->URAndSR)) continue;
                 if(isset($this->lang->product->menu->$menuKey))
                 {
-                    list($label, $module, $method) = explode('|', $this->lang->product->menu->$menuKey['link']);
+                    $menuName = $this->lang->product->menu->$menuKey;
+                    if(!isset($menuName['link'])) continue;
+
+                    list($label, $module, $method) = explode('|', $menuName['link']);
                     if(!common::hasPriv($module, $method)) continue;
                 }
                 else

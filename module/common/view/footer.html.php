@@ -7,7 +7,7 @@ $.initSidebar();
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
 <?php if($onlybody != 'yes' and $app->viewType != 'xhtml'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
-<div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
+<div id="noticeBox"><?php if($config->vision != 'lite') echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
 <?php $this->app->loadConfig('message');?>
 <?php if($config->message->browser->turnon):?>
@@ -16,11 +16,12 @@ needPing = false;
 $(function()
 {
     var windowBlur = false;
-    if(window.Notification)
+    if(window.Notification && Notification.permission == 'granted')
     {
         window.onblur  = function(){windowBlur = true;}
         window.onfocus = function(){windowBlur = false;}
     }
+
     setInterval(function()
     {
         $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
@@ -60,10 +61,31 @@ if($this->loadModel('cron')->runable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
 /* Load hook files for current page. */
-$extPath      = $this->app->getModuleRoot() . '/common/ext/view/';
-$extHookRule  = $extPath . 'footer.*.hook.php';
+$extensionRoot = $this->app->getExtensionRoot();
+if($this->config->vision != 'open')
+{
+    $extHookRule  = $extensionRoot . $this->config->edition . '/common/ext/view/footer.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
+if($this->config->vision == 'lite')
+{
+    $extHookRule  = $extensionRoot . $this->config->vision . '/common/ext/view/footer.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
+$extHookRule  = $extensionRoot . 'custom/common/ext/view/footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
+<?php if($config->debug > 2 and $config->tabSession): ?>
+<div id="tid" style="position:fixed;right:0;bottom:0;z-index:10000">
+<code class="bg-red">tsid=<?php if(empty($_GET['tid'])) echo session_id(); else echo md5(session_id() . $_GET['tid']);?></code>
+<?php if(!empty($_GET['tid'])): ?>
+<code class="bg-yellow">servertid=<?php echo $_GET['tid'];?></code>
+<?php endif; ?>
+<code class="bg-green">sid=<?php echo session_id();?></code>
+</div>
+<?php endif; ?>
 </body>
 </html>

@@ -1,7 +1,8 @@
 $(document).ready(function()
 {
     removeDitto();//Remove 'ditto' in first row.
-    if($('#batchCreateForm table thead tr th.c-title').width() < 150) $('#batchCreateForm table thead tr th.c-title').width('150');
+    var $title = $('#batchCreateForm table thead tr th.c-title');
+    if($title.width() < 170) $title.width('170');
 
     $(document).keydown(function(event)
     {
@@ -26,39 +27,16 @@ $(document).ready(function()
             inputFocusJump('down');
         }
     });
-});
 
-/**
- * Set modules.
- *
- * @param  int     $branchID
- * @param  int     $productID
- * @param  int     $num
- * @access public
- * @return void
- */
-function setModules(branchID, productID, num)
-{
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=story&branch=' + branchID + '&num=' + num);
-    $.get(moduleLink, function(modules)
+    $('#customField').click(function()
     {
-        if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
-        $('#module' + num).replaceWith(modules);
-        $("#module" + num + "_chosen").remove();
-        $("#module" + num).next('.picker').remove();
-        $("#module" + num).attr('onchange', "loadStories("+ productID + ", this.value, " + num + ")").chosen();
+        hiddenRequireFields();
     });
 
-    loadStories(productID, 0, num);
-
-    /* If the branch of the current row is inconsistent with the one below, clear the module and story of the nex row. */
-    var nextBranchID = $('#branch' + (num + 1)).val();
-    if(nextBranchID != branchID)
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
     {
-        $('#module' + (num + 1)).find("option[value='ditto']").remove();
-        $('#module' + (num + 1)).trigger("chosen:updated");
-
-        $('#plan' + (num + 1)).find("option[value='ditto']").remove();
-        $('#plan' + (num + 1)).trigger("chosen:updated");
-    }
-}
+        saveCustomFields('batchCreateFields', 8, $title, 170);
+        return false;
+    });
+});

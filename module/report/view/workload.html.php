@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
+<?php if($this->config->edition != 'open'):?>
 <style>#mainContent > .side-col.col-lg{width: 210px}</style>
 <style>.hide-sidebar #sidebar{width: 0 !important}</style>
 <?php endif;?>
@@ -89,7 +89,7 @@
               <?php if(!isset($users[$account])) continue;?>
               <tr class="text-center">
                 <?php $userTimes = 1; $userCount = 0;?>
-                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $userCount ++;?> 
+                <?php foreach($load['task']['project'] as $projectName => $info) foreach($info['execution'] as $executionName => $executionInfo) $userCount ++;?>
                 <td class="<?php echo $class;?>" rowspan="<?php echo $userCount;?>"><?php echo $users[$account];?></td>
                 <?php foreach($load['task']['project'] as $projectName => $info):?>
                 <?php $projectTimes = 1; $projectCount = 0;?>

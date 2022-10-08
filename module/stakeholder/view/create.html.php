@@ -3,7 +3,7 @@
  * The view view of stakeholder module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: browse.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -23,7 +23,7 @@
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-120px'><?php echo $lang->stakeholder->from;?></th>
+            <th class='c-from'><?php echo $lang->stakeholder->from;?></th>
             <td><?php echo html::radio('from', $lang->stakeholder->fromList, "team");?></td>
             <td></td>
             <td></td>

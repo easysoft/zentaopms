@@ -3,7 +3,7 @@
  * The html template file of PGMBrowse method of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id
@@ -15,18 +15,22 @@
 <?php js::set('orderBy', $orderBy);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
+<?php js::set('hasProject', $hasProject);?>
+<?php js::set('checkedProjects', $lang->program->checkedProjects);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if($programType == 'bygrid'):?>
-<style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
+<style>#mainMenu{padding-left: 10px; padding-right: 10px;}</style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->program->featureBar as $key => $label):?>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->program->featureBar['browse'] as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
-    <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid') echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
+    <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true) echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='pull-right'>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');?>
@@ -35,14 +39,16 @@
 </div>
 <div id='mainContent' class='main-row'>
   <?php if(empty($programs)):?>
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='program'></div>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
-      <?php common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
+      <?php if($status == 'all') common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
     </p>
   </div>
   <?php else:?>
   <div class='main-col'>
+    <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='program'></div>
     <?php
     if($programType == 'bygrid')
     {

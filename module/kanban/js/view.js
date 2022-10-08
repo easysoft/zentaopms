@@ -13,10 +13,28 @@ function loadMore(type, regionID)
     var link     = createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
-        var windowHeight = $(window).height();
-        $(selector + ' .panel-body').css('height', windowHeight - 100);
+        var windowHeight  = $(window).height();
+        var affixedHeight = $('#regionTabs.affixed').height() + $('#kanbanContainer .kanban-affixed .kanban-cols').height();
+        $(selector + ' .panel-body').css('height', windowHeight - affixedHeight);
+        $(selector).css('top', affixedHeight);
         $(selector).animate({right: 0}, 500);
     });
+}
+
+/**
+ * Hide kanban actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $('.action').hide();
+    $('.kanban-group-header').hide();
+    $(".title").attr("disabled", true).css("pointer-events", "none");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+    window.sortableDisabled = true;
 }
 
 /**
@@ -36,10 +54,7 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
-            $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
-            $(".title").attr("disabled", true).css("pointer-events", "none");
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         };
 
@@ -75,12 +90,16 @@ function fullScreen()
  */
 function exitFullScreen()
 {
+    $('.region-actions > div > .action').show();
+    $(".title").attr("disabled", false).css("pointer-events", "auto");
+    if(!CRKanban && kanban.status == 'closed') return;
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
     $('.action').show();
     $('.kanban-group-header').show();
-    $(".title").attr("disabled", false).css("pointer-events", "auto");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 30px');
+    window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
 
@@ -111,7 +130,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 {
     /* Render group header. */
     var privs       = kanbanData.actions;
-    var columnPrivs = kanbanData.columns[0].actions;
+    var columnPrivs = $column.data().col.actions;
 
     if(privs.includes('sortGroup'))
     {
@@ -128,10 +147,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
-    var regionID     = $column.closest('.kanban').data('id');
-    var groupID      = $column.closest('.kanban-board').data('id');
     var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
-    var columnID     = $column.closest('.kanban-col').data('id');
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('createColumn') || columnPrivs.includes('copyColumn') || columnPrivs.includes('archiveColumn') || columnPrivs.includes('deleteColumn') || columnPrivs.includes('splitColumn'));
 
     /* Render more menu. */
@@ -142,15 +158,37 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
         var $actions = $column.children('.actions');
-
-        if(columnPrivs.includes('createCard') && column.parent != -1)
+        if(column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+            addItemBtn  = ['<button data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="btn btn-link">', '<i class="icon icon-expand-alt text-primary"></i>', '</button>'].join('');
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
-        $actions.html(addItemBtn + moreAction);
+        if(CRKanban || kanban.status != 'closed') $actions.html(addItemBtn + moreAction);
+
+    }
+    if(columnPrivs.includes('sortColumn'))
+    {
+        if($column.hasClass('kanban-header-parent-col'))
+        {
+            $column.children('.kanban-header-col').addClass('sort');
+        }
+        else
+        {
+          $column.addClass('sort');
+        }
+    }
+
+    if(alignment == 'left')
+    {
+        if($column.hasClass('kanban-header-parent-col'))
+        {
+            $column.children('.kanban-header-col').addClass('left');
+        }
+        else
+        {
+            $column.addClass('left');
+        }
     }
 }
 
@@ -173,29 +211,43 @@ function renderCount($count, count, column)
 
     if(column.limit != -1 && column.limit < count)
     {
-        $count.parents('.title').parent('.kanban-header-col').css('background-color', '#F6A1A1');
+        $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
-        $count.css('color', '#E33030');
-        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-help' title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.css({'color': '#FF5D5D', 'opacity': '1'});
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-exclamation-sign' data-toggle='tooltip' data-original-title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.parents('.title').find('.text-grey').css({'color': '#FF5D5D', 'opacity': '1'});
     }
     else
     {
         $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 120);
-        $count.css('color', '#8B91A2');
+        $count.css({'color': '#8b91a2', 'opacity': '0.5'});
         $count.parent().find('.error').remove();
+        $count.parents('.title').find('.text-grey').css({'color': '#8b91a2', 'opacity': '0.5'});
     }
 }
 
+/**
+ * Render lane name.
+ *
+ * @param  object $lane
+ * @param  object lane
+ * @param  object $kanban
+ * @param  object columns
+ * @param  object kanban
+ * @access public
+ * @return void
+ */
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
-    var canSet    = lane.actions.includes('setLane');
-    var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
-    var canDelete = lane.actions.includes('deleteLane');
+    var canEditLaneColor = lane.actions.includes('editLaneColor');
+    var canEditLaneName  = lane.actions.includes('editLaneName');
+    var canSort          = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
+    var canDelete        = lane.actions.includes('deleteLane');
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete))
+    if(!$lane.children('.actions').length && (canEditLaneColor || canEditLaneName || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -205,6 +257,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
           '</div>'
         ].join('')).appendTo($lane);
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -214,8 +267,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function renderUsersAvatar(users, itemID, size)
 {
-    var avatarSizeClass = 'avatar-' + (size || 'sm');
-    //var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
+    var avatarSizeClass = 'avatar-' + (size || 'md');
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
@@ -240,6 +292,7 @@ function renderUsersAvatar(users, itemID, size)
 
         if(typeof user === 'string') user = {account: user};
         if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+        if(!user.name && window.users && window.users[user.account]) user.name = window.users[user.account];
 
         assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe"></div>').avatar({user: user}));
     }
@@ -255,88 +308,442 @@ function renderUsersAvatar(users, itemID, size)
  */
 function renderKanbanItem(item, $item)
 {
-    var $title       = $item.children('.title');
+    var whiteStyle = null;
+    if(item.color == '#2a5f29' || item.color == '#b10b0b' || item.color == '#cfa227') whiteStyle = 'style="color:#FFFFFF"';
+
     var privs        = item.actions;
     var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
-    if(!$title.length)
-    {
-        if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
-        if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
-    }
-
-    $title.text(item.name).attr('title', item.name);
-
-    if(printMoreBtn)
+    var $actions     = $item.children('.actions');
+    var $title       = $item.children('.title');
+    if(printMoreBtn && !$actions.length && (CRKanban || kanban.status != 'closed'))
     {
         $(
         [
             '<div class="actions" title="' + kanbanLang.more + '">',
-              '<a data-contextmenu="card" data-id="' + item.id + '">',
+              '<a data-contextmenu="card"' + whiteStyle + 'data-id="' + item.id + '">',
                 '<i class="icon icon-ellipsis-v"></i>',
               '</a>',
             '</div>'
         ].join('')).appendTo($item);
     }
 
-    var $info = $item.children('.info');
-    if(!$info.length) $info = $(
-    [
-        '<div class="info">',
-            '<span class="pri"></span>',
-            '<span class="estimate label label-light"></span>',
-            '<span class="time label label-light"></span>',
-            '<div class="user"></div>',
-        '</div>'
-    ].join('')).appendTo($item);
+    if(item.fromType == 'execution')
+    {
+        renderExecutionItem(item, $item);
+    }
+    else if(item.fromType == 'release')
+    {
+        renderReleaseItem(item, $item);
+    }
+    else if(item.fromType == 'build')
+    {
+        renderBuildItem(item, $item);
+    }
+    else if(item.fromType == 'productplan')
+    {
+        renderProductplanItem(item, $item);
+    }
+    else
+    {
+        if(!$title.length)
+        {
+            if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
+            if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
+        }
+        $title.text(item.name).attr('title', item.name);
 
-    $item.data('card', item);
+        var $info = $item.children('.info');
+        if(!$info.length) $info = $(
+        [
+            '<div class="info">',
+                '<span class="pri"></span>',
+                '<span class="estimate label label-light"></span>',
+                '<span class="time label label-light"></span>',
+                '<div class="user"></div>',
+            '</div>'
+        ].join('')).appendTo($item);
 
-    $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
-    if(item.estimate == 0) $info.children('.estimate').hide();
+        $item.data('card', item);
 
-    $info.children('.pri')
-        .attr('class', 'pri label-pri label-pri-' + item.pri)
-        .text(item.pri);
+        $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
+        if(item.estimate == 0) $info.children('.estimate').hide();
 
+        $info.children('.pri')
+            .attr('class', 'pri label-pri label-pri-' + item.pri)
+            .text(item.pri);
+
+        var $time = $info.children('.time');
+        if(item.end == '0000-00-00' && item.begin == '0000-00-00')
+        {
+            $time.hide();
+        }
+        else
+        {
+            var today      = new Date();
+            var begin      = $.zui.createDate(item.begin);
+            var end        = $.zui.createDate(item.end);
+            var needRemind = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
+            if(item.end == '0000-00-00' && item.begin != '0000-00-00')
+            {
+                $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + ' ' +kanbancardLang.beginAB).show();
+            }
+            else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
+            {
+                $time.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
+            }
+            else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
+            {
+                $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM/dd')).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + kanbancardLang.to + $.zui.formatDate(end, 'yyyy/MM/dd')).show();
+            }
+
+            if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
+            if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
+            if(!needRemind) $time.css('background-color', 'rgba(0, 0, 0, 0.15)');
+        }
+
+        /* Display avatars of assignedTo. */
+        var assignedTo = item.assignedTo.split(',');
+        var $user = $info.children('.user');
+        var title = [];
+        for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
+        $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
+    }
+
+    if(kanban.performable == 1 && (item.fromType == '' || item.fromType == 'execution'))
+    {
+        var $progress = $item.children('.progress-box');
+        if(!$progress.length) $progress = $('<div class="progress-box"><div class="progress"><div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + item.progress + '%;"></div></div><div class="progress-number">' + item.progress + '%</div></div>').appendTo($item);
+        $progress.find('.progress-bar').css('width', item.progress + '%');
+        $progress.find('.progress-number').html(item.progress + '%');
+    }
     $item.css('background-color', item.color);
     $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
     $item.find('.info > .label-light').css('background-color', item.color);
 
-    var $time = $info.children('.time');
-    if(item.end == '0000-00-00' && item.begin == '0000-00-00')
+    $title = item.fromType == 'execution' ? $item.children('.header').children('.executionName').children('.title') : $item.children('.title');
+    if(!$title.children('.label-finish').length) $title.prepend('<div class="label label-finish">' + kanbanLang.finished + '</div>');
+    var name = item.title ? item.title : item.name;
+    if(kanban.performable == 1 && item.status == 'done' )
     {
-        $time.hide();
+        var finishColor = '#2a5f29';
+        if(item.color == '#2a5f29') finishColor  = '#FFFFFF';
+        $title.css('color', finishColor);
+        $title.children('.label-finish').show();
+        if(item.color == '#2a5f29')
+        {
+            $item.children('.label-finish').css({'background-color':'#FFFFFF','color':'#2a5f29'});
+        }
+        else
+        {
+            $item.children('.label-finish').css({'background-color':'','color':'#FFFFFF'});
+        }
     }
     else
     {
-        var today = new Date();
-        var begin = $.zui.createDate(item.begin);
-        var end   = $.zui.createDate(item.end);
-        var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
-        if(item.end == '0000-00-00' && item.begin != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + ' ' +kanbancardLang.beginAB).show();
-        }
-        else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
-        }
-        else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM/dd')).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + kanbancardLang.to + $.zui.formatDate(end, 'yyyy/MM/dd')).show();
-        }
+        $title.css('color', '');
+        $title.children('.label-finish').hide();
+    }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
+}
 
-        if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
-        if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
-        if(!needRemind) $time.css('background-color', 'rgba(0, 0, 0, 0.15)');
+/**
+ * Render execution item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderExecutionItem(item, $item)
+{
+    /* Output header information. */
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
+    var $header = $item.children('.header');
+    if(!$header.length) $header = $(
+    [
+        '<div class="header">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $titleBox = $header.children('.executionName');
+    if(!$titleBox.length) $titleBox = $(
+    [
+        '<div class="executionName">',
+        '</div>'
+    ].join('')).appendTo($header);
+
+    /* Print execution name. */
+    var $title = $titleBox.children('.title');
+    var name   = item.title ? item.title : item.name;
+    if(!$title.length)
+    {
+        var icon = mode == 'new' ? 'run' : 'project';
+        var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
+        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
+        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
+    }
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-run"></i>' + item.title);
+    }
+    $title.attr('title', name);
+
+    if(item.delay)
+    {
+        $delayed = $titleBox.children('.delayed');
+        if(!$delayed.length)
+        {
+            $('<span class="delayed label label-danger label-badge">' + executionLang.delayed + '</span>').appendTo($titleBox);
+        }
     }
 
-    /* Display avatars of assignedTo. */
-    var assignedTo = item.assignedTo.split(',');
+    $item.data('card', item);
+
+    var $info = $item.children('.execInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="execInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.execStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="execStatus label label-' + item.objectStatus + '">' + executionLang.statusList[item.objectStatus] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="execStatus label label-deleted">' + executionLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display deadline of execution. */
+    var $date     = $info.children('.date');
+    var end       = $.zui.createDate(item.end);
+    var today     = new Date();
+    var labelType = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+
+    /* Display avatars of PM. */
     var $user = $info.children('.user');
-    var title = [];
-    for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
-    $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
+    var user  = [item.PM];
+    if(users[item.PM])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.PM]);
+    }
+}
+
+/**
+ * Render plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderReleaseItem(item, $item)
+{
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
+    /* Print name. */
+    var $title = $item.children('.releaseTitle');
+    var name   = item.title ? item.title : item.name;
+    if(!$title.length)
+    {
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle title"><i class="icon icon-publish"></i>' + name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<div class="releaseTitle"><i class="icon icon-publish"></i>' + name + '</div>').appendTo($item);
+    }
+    if(!$title.children('i').length)
+    {
+        $title.prepend('<i class="icon icon-publish"></i>');
+    }
+    $title.attr('title', name);
+
+    var $info = $item.children('.releaseInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="releaseInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.releaseStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="releaseStatus label label-' + item.objectStatus + '">' + releaseLang.statusList[item.objectStatus] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="releaseStatus label label-deleted">' + releaseLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display release date. */
+    var $date       = $info.children('.date');
+    var releaseDate = $.zui.createDate(item.date);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(releaseDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(releaseDate, 'yyyy-MM-dd')).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render product plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderProductplanItem(item, $item)
+{
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
+    /* Print name. */
+    var $title = $item.children('.productplanTitle');
+    var name   = item.title ? item.title : item.name;
+    if(!$title.length)
+    {
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle title"><i class="icon icon-delay"></i>' + name + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<div class="productplanTitle"><i class="icon icon-delay"></i>' + name + '</div>').appendTo($item);
+    }
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-delay"></i>' + name);
+    }
+    $title.attr('title', item.title);
+
+    var $info = $item.children('.productplanInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="productplanInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $descBox = $info.children('.productplanDesc');
+    if(!$descBox.length)
+    {
+        $descBox = $('<div class="productplanDesc cardDesc" title="' + item.desc + '">' + item.desc + '</div>').appendTo($info);
+    }
+
+    var $statusBox = $info.children('.productplanStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="productplanStatus label label-' + item.objectStatus + '">' + productplanLang.statusList[item.objectStatus] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="productplanStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display date of product plan. */
+    var $date      = $info.children('.date');
+    var begin      = $.zui.createDate(item.begin);
+    var end        = $.zui.createDate(item.end);
+    var today      = new Date();
+    var labelType  = (item.begin <= $.zui.formatDate(today, 'yyyy-MM-dd') && item.end >= $.zui.formatDate(today, 'yyyy-MM-dd')) ? 'danger' : 'wait';
+    var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
+
+    if((item.begin == '2030-01-01' || item.end == '2030-01-01'))
+    {
+        labelType  = 'future';
+        labelTitle = productplanLang.future;
+    }
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    $date.text(labelTitle).attr('title', labelTitle).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render build item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderBuildItem(item, $item)
+{
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
+    /* Print name. */
+    var $title = $item.children('.buildTitle');
+    var name   = item.title ? item.title : item.name;
+    if(!$title.length)
+    {
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle title" data-app="project"><i class="icon icon-ver"></i>' + name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle title"><i class="icon icon-ver"></i>' + name + '</div>').appendTo($item);
+    }
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-ver"></i>' + item.title);
+    }
+    $title.attr('title', name);
+
+    var $descBox = $item.children('.buildDesc');
+    if(!$descBox.length)
+    {
+        $descBox = $('<div class="buildDesc cardDesc" title="' + item.desc + '">' + item.desc + '</div>').appendTo($item);
+    }
+
+    var $info = $item.children('.info');
+    if(!$info.length) $info = $(
+    [
+        '<div class="info">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.buildStatus');
+    if(!$statusBox.length && item.deleted == '1')
+    {
+        $statusBox = $('<span class="buildStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+    }
+
+    /* Display build date. */
+    var $date     = $info.children('.date');
+    var buildDate = $.zui.createDate(item.date);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(buildDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(buildDate, 'yyyy-MM-dd')).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.builder];
+    if(users[item.builder])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.builder]);
+    }
 }
 
 /**
@@ -374,21 +781,25 @@ function showErrorMessager(message)
  * Move a card.
  *
  * @param  int    $cardID
+ * @param  int    $fromColID
  * @param  int    $toColID
+ * @param  int    $fromLaneID
+ * @param  int    $toLaneID
  * @param  int    $kanbanID
  * @param  int    $regionID
  * @access public
  * @return string
  */
-function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
+function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, regionID)
 {
     if(!cardID) return false;
-    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
+    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&fromColID='+ fromColID + '&toColID=' + toColID + '&fromLaneID='+ fromLaneID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
     return $.ajax(
     {
         method:   'post',
         dataType: 'json',
         url:       url,
+        async:     false,
         success: function(data)
         {
             regions = data;
@@ -402,6 +813,7 @@ function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
                 $('.kanban-group-header').hide();
                 $(".title").attr("disabled", true).css("pointer-events", "none");
             }
+            setToolTip();
         },
         error: function(xhr, status, error)
         {
@@ -432,12 +844,36 @@ function setCardColor(cardID, color, kanbanID, regionID)
         url:       url,
         success: function(data)
         {
-            regions = data;
             updateRegion(regionID, data[regionID]);
         },
         error: function(xhr, status, error)
         {
             showErrorMessager(error || lang.timeout);
+        }
+    });
+}
+
+/**
+ * Finish a card.
+ *
+ * @param  int $cardID
+ * @param  int $kanbanID
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function finishCard(cardID, kanbanID, regionID)
+{
+    if(!cardID) return false;
+    var url = createLink('kanban', 'finishCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       url,
+        success: function(data)
+        {
+            updateRegion(regionID, data[regionID]);
         }
     });
 }
@@ -450,17 +886,75 @@ function setCardColor(cardID, color, kanbanID, regionID)
  * @access public
  * @return boolean
  */
-function updateRegion(regionID, regionData = [])
+function updateRegion(regionID, regionData)
 {
+    if(typeof(regionData) == 'undefined') regionData = [];
     if(!regionID) return false;
 
     var $region = $('#kanban'+ regionID).kanban();
 
     if(!$region.length) return false;
-    if(!regionData) regionData = regions[regionID];
+    regions[regionID] = regionData ? regionData : regions[regionID];
 
-    $region.data('zui.kanban').render(regionData.groups);
+    $region.data('zui.kanban').render(regions[regionID].groups);
+    resetRegionHeight('open');
     return true;
+}
+
+/**
+ * Update region name.
+ *
+ * @param  int    $regionID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateRegionName(regionID, name)
+{
+    $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').attr('title', name);
+    $('#regionNavTabs li[data-id="' + regionID + '"]').find('a > span').text(name);
+    initRegionTabs();
+}
+
+/**
+ * Update lane name.
+ *
+ * @param  int    $laneID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateLaneName(laneID, name)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name).attr('title', name);
+}
+
+/**
+ * Update lane color.
+ *
+ * @param  int    $laneID
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateLaneColor(laneID, color)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name').css('background-color', color);
+}
+
+/**
+ * Update column name.
+ *
+ * @param  int    $columnID
+ * @param  string $name
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateColumnName(columnID, name, color)
+{
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**
@@ -485,7 +979,7 @@ function openAddTaskForm($element)
     var laneID   = $element.closest('.kanban-lane').data('id');
     var columnID = $element.closest('.kanban-col').data('id');
     var status   = $element.closest('.kanban-col').data('type');
-    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
     $.zui.modalTrigger.show(
     {
         url: modalUrl,
@@ -555,6 +1049,7 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
+        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanbanInfo.status == 'closed')) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
         var $newLane = $newCol.closest('.kanban-lane');
@@ -583,10 +1078,11 @@ function handleDropTask($element, event, kanban)
     var regionID = $card.closest('.region').data('id');
     var kanbanID = $card.closest('#kanban').data('id');
 
+    if(!oldCol || !newCol || !newLane || !oldLane) return false;
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID = $card.data().id;
-    moveCard(cardID, newCol.id, newLane.id, kanbanID, regionID);
+    moveCard(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, kanbanID, regionID);
 }
 
 /**
@@ -640,19 +1136,20 @@ function handleKanbanAction(action, $element, event, kanban)
 
 function processMinusBtn()
 {
-    var columnCount = $('#splitTable .child-column').size();
+    var $table = $('#splitTable');
+    var columnCount = $table.find('.child-column').length;
     if(columnCount > 2 && columnCount < 10)
     {
-        $('#splitTable .btn-plus').show();
-        $('#splitTable .btn-close').show();
+        $table.find('.btn-plus').show();
+        $table.find('.btn-close').show();
     }
     else if(columnCount <= 2)
     {
-        $('#splitTable .btn-close').hide();
+        $table.find('.btn-close').hide();
     }
     else if(columnCount >= 10)
     {
-        $('#splitTable .btn-plus').hide();
+        $table.find('.btn-plus').hide();
     }
 }
 
@@ -669,9 +1166,12 @@ function createLaneMenu(options)
     var privs = lane.actions;
     if(!privs.length) return [];
 
-    var items = [];
-    if(privs.includes('setLane')) items.push({label: kanbanLang.setLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
-    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
+    var items    = [];
+    var regionID = lane.$kanbanData.region;
+    var kanbanID = lane.$kanbanData.kanban;
+    if(privs.includes('editLaneName')) items.push({label: kanbanLang.editLaneName, icon: 'edit', url: createLink('kanban', 'editLaneName', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('editLaneColor')) items.push({label: kanbanLang.editLaneColor, icon: 'color', url: createLink('kanban', 'editLaneColor', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'regionID=' + regionID + '&kanbanID=' + kanbanID + '&lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -692,10 +1192,38 @@ function createCardMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+    if(kanban.performable == 1 && card.fromType == '')
+    {
+        if(card.status == 'done')
+        {
+            items.push({label: kanbanLang.activateCard, icon: 'magic', url: createLink('kanban', 'activateCard', 'cardID=' + card.id + '&kanbanID=' + card.kanban, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        }
+        else
+        {
+            items.push({label: kanbanLang.finishCard, icon: 'checked', onClick: function(){finishCard(card.id, card.kanban, card.region);}});
+        }
+    }
+    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}, onClick:function(){$('#archivedCards').replaceWith("<div id='archivedCards'></div>");}});
+
+    var editCardAction    = (privs.includes('editCard') && card.fromType == '') ? true : false;
+    var deleteCardAction  = privs.includes('deleteCard');
+    var archiveCardAction = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
+
+    var performable  = kanban.performable == 1 ? true : false;
+
+    var moveCardAction     = privs.includes('moveCard');
+    var setCardColorAction = privs.includes('setCardColor');
+
+    var basicActions = (editCardAction || deleteCardAction || archiveCardAction) ? true : false;
+    var otherActions = (moveCardAction || setCardColorAction) ? true : false;
+
+    if((performable || basicActions) && otherActions)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('moveCard'))
     {
         var moveCardItems = [];
@@ -714,18 +1242,19 @@ function createCardMenu(options)
         {
             if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
             if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
-            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.lane, card.kanban, card.region);}});
+            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, card.column, moveColumns[i].id, card.lane, card.lane, card.kanban, card.region);}});
         }
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
     }
+
     if(privs.includes('setCardColor'))
     {
         var cardColoritems = [];
-        if(!card.color) color = "#fff";
+        if(!card.color) card.color = "#fff";
         for(let i = 0 ; i < colorList.length ; i ++ )
         {
-            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 5px"></i>' : '';
             var border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
             cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
                 onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
@@ -747,6 +1276,15 @@ function createColumnMenu(options)
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+
+    var basicActions  = (privs.includes('setColumn') || privs.includes('setWIP')) ? true : false;
+    var columnActions = (privs.includes('splitColumn') || privs.includes('createColumn') || privs.includes('copyColumn')) ? true : false;
+
+    if(basicActions && columnActions)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
@@ -754,12 +1292,87 @@ function createColumnMenu(options)
         items.push({label: kanbanLang.createColumnOnRight, icon: 'col-add-right', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     }
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('archiveColumn') && kanban.archived == '1' && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('deleteColumn') && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
+
+    var otherActions = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
+    if(columnActions && otherActions) items.push({type: 'divider'});
+
+    if(privs.includes('archiveColumn') && kanban.archived == '1') items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}, onClick:function(){$('#archivedColumns').replaceWith("<div id='archivedColumns'></div>");}});
+    if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
     return items;
+}
+
+/**
+ * Create create menu for column.
+ *
+ * @param  object $options
+ * @access public
+ * @return object
+ */
+function createColumnCreateMenu(options)
+{
+    var col      = options.$trigger.closest('.kanban-col').data('col');
+    var privs    = col.actions;
+    var items    = [];
+    var regionID = col.region;
+    var groupID  = col.group;
+    var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var columnID = col.id;
+
+    if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
+    if(kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
+
+    return items;
+}
+
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight, kanban)
+{
+    if(!isMultiLanes) return 0;
+
+    var options = kanban.options;
+
+    var fontSize        = 13;
+    var moreLabelHeight = 20;
+    var laneNameHeight  = lane.name.length * fontSize;
+
+    if(!options.displayCards) return laneNameHeight > colHeight ? laneNameHeight + 2 * moreLabelHeight : colHeight;
+    var displayCards = +(options.displayCards || 2);
+
+    if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
+    return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
+}
+
+/** Handle sort cards */
+function handleSortCards(event)
+{
+    var newLaneID = event.element.closest('.kanban-lane').data('id');
+    var newColID  = event.element.closest('.kanban-col').data('id');
+    var cards     = event.element.closest('.kanban-lane-items').data('cards');
+    var orders    = cards.map(function(card){return card.id});
+    var fromID    = String(event.element.data('id'));
+    var toID      = String(event.target.data('id'));
+
+    orders.splice(orders.indexOf(fromID), 1);
+    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    $.getJSON(url, function(response)
+    {
+        if(response.result === 'fail')
+        {
+            if(typeof response.message === 'string' && response.message.length)
+            {
+                bootbox.alert(response.message);
+            }
+            setTimeout(function(){return location.reload()}, 3000);
+        }
+    });
 }
 
 /* Define menu creators */
@@ -767,7 +1380,8 @@ window.menuCreators =
 {
     card: createCardMenu,
     lane: createLaneMenu,
-    column: createColumnMenu
+    column: createColumnMenu,
+    columnCreate: createColumnCreateMenu
 };
 
 /**
@@ -775,30 +1389,38 @@ window.menuCreators =
  */
 function initKanban($kanban)
 {
-    var id = $kanban.data('id');
-    var region = regions[id];
+    var id         = $kanban.data('id');
+    var region     = regions[id];
+    var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
 
     $kanban.kanban(
     {
-        data:              region.groups,
-        maxColHeight:      510,
-        fluidBoardWidth:   false,
-        minColWidth:       300,
-        maxColWidth:       300,
-        createColumnText:  kanbanLang.createColumn,
-        addItemText:       '',
-        itemRender:        renderKanbanItem,
-        onAction:          handleKanbanAction,
-        onRenderKanban:    adjustAddBtnPosition,
-        onRenderLaneName:  renderLaneName,
-        onRenderHeaderCol: renderHeaderCol,
-        onRenderCount:     renderCount,
+        data:                  region.groups,
+        maxColHeight:          510,
+        calcColHeight:         calcColHeight,
+        fluidBoardWidth:       fluidBoard,
+        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
+        cardHeight:            cardHeight,
+        displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
+        createColumnText:      kanbanLang.createColumn,
+        addItemText:           '',
+        itemRender:            renderKanbanItem,
+        onAction:              handleKanbanAction,
+        onRenderKanban:        adjustAddBtnPosition,
+        onRenderLaneName:      renderLaneName,
+        onRenderHeaderCol:     renderHeaderCol,
+        onRenderCount:         renderCount,
+        showCount:             kanban.showWIP == '1' ? true : false,
+        sortable:              handleSortCards,
+        virtualize:            true,
+        virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
+        virtualCardList:       true,
         droppable:
         {
             target:       findDropColumns,
-            finish:       handleFinishDrop,
-            mouseButton: 'left'
-        }
+            finish:       handleFinishDrop
+        },
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
@@ -806,6 +1428,13 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 }
 
 /**
@@ -813,7 +1442,11 @@ function initKanban($kanban)
  */
 $(function()
 {
-    if($.cookie('isFullScreen') == 1) fullScreen();
+    $(document).find('main#main').css('padding-top', '16px');
+
+    window.isMultiLanes = laneCount > 1;
+
+    $.cookie('isFullScreen', 0);
 
     /* Init first kanban */
     $('.kanban').each(function()
@@ -821,14 +1454,17 @@ $(function()
         initKanban($(this));
     });
 
-    $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
+    if(navigator.userAgent.toLowerCase().indexOf("qqbrowser") > -1) $('.region .kanban-header-col > .actions').css('top', '30%');
+
+    $('.icon-angle-top,.icon-angle-down').on('click', function()
     {
-        $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
+        $(this).toggleClass('icon-angle-top icon-angle-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
+        resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
-    $('.region-header').on('click', '.action', hideKanbanAction);
+    $('#regionTabs, .region-header').on('click', '.action', hideKanbanAction);
     $('#TRAction').on('click', '.btn', hideKanbanAction);
 
     /* Hide action box when user click document */
@@ -856,12 +1492,29 @@ $(function()
         if(!items || !items.length) return;
 
         $.zui.ContextMenu.show(items, items.$options || {event: event});
+
+        $('.parentDivider').parent().addClass('divider');
+        $('.import').parent().addClass('dropdown-submenu top');
+
+        var regionID = $(this).closest('.kanban').data('id');
+        var groupID  = $(this).closest('.kanban-board').data('id');
+        var columnID = $(this).closest('.kanban-col').data('id');
+
+        /* The submenu of import. */
+        var importPlanLink      = kanban.object.indexOf('plans') != -1 ? "<li><a class='iframe' data-toggle='modal'' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
+        var importReleaseLink   = kanban.object.indexOf('releases') != -1 ? "<li><a class='iframe' data-toggle='modal'' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
+        var importExecutionLink = kanban.object.indexOf('executions') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
+        var importBuildLink     = kanban.object.indexOf('builds') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
+        var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
+        $('.import').parent().append(importSubmenu);
+
     });
 
     /* Adjust the add button position on window resize */
     $(window).on('resize', function(a)
     {
         adjustAddBtnPosition();
+        initRegionTabs();
     });
 
     resetLaneHeight();
@@ -870,6 +1523,7 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+        if($('#regionTabs').length > 0) updateRegionTabAffixState();
     });
 
     $(document).on('click', '#splitTable .btn-plus', function()
@@ -903,113 +1557,455 @@ $(function()
     });
 
     /* Init sortable */
-    var sortType = '';
-    var $cards   = null;
+    initSortable();
+
+    resetRegionHeight('open');
+    if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+
+    setToolTip();
+
+    distance    = 0;
+    radiusWidth = 10;
+    initRegionTabs();
+
+    $('.leftBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'left');
+    });
+
+    $('.rightBtn').click(function()
+    {
+        if($(this).hasClass('disabled')) return;
+        swipeRegionNavTabs($('#regionNavTabs').find('ul'), 'right');
+    });
+
+    if(Object.values(regions).length <= 1) $('#kanbanBox').removeClass('hidden');
+});
+
+/**
+ * Init sortable.
+ *
+ * @access public
+ * @return void
+ */
+function initSortable()
+{
+    var sortType  = '';
+    var $cards    = null;
+    if(!CRKanban && kanbanInfo.status == 'closed') return;
     $('#kanban').sortable(
     {
-        selector: '.region, .kanban-board, .kanban-lane',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-header-col.sort',
+        dropOnMouseleave: true,
         container: function($ele)
         {
             return $ele.parent();
         },
         targetSelector: function($ele)
         {
-            /* Sort regions */
+            var $parent = $ele.parent();
+            /* Sort regions. */
             if($ele.hasClass('region'))
             {
                 sortType = 'region';
-                return $ele.parent().children('.region');
+                return $parent.children('.region');
             }
 
-            /* Sort boards */
+            /* Sort boards. */
             if($ele.hasClass('kanban-board'))
             {
                 sortType = 'board';
-                return $ele.parent().children('.kanban-board');
+                return $parent.children('.kanban-board');
             }
 
-            /* Sort lanes */
+            /* Sort lanes. */
             if($ele.hasClass('kanban-lane'))
             {
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                return $ele.parent().children('.kanban-lane');
+                return $parent.children('.kanban-lane');
             }
 
-            /* Sort lanes */
-            if($ele.hasClass('kanban-item'))
+            /* Sort columns. */
+            if($ele.hasClass('kanban-col'))
             {
-                sortType = 'item';
-                return $ele.parent().children('.kanban-item');
+                sortType = 'column';
+                return $parent.children('.kanban-col');
             }
+        },
+        before: function() {
+            return !window.sortableDisabled;
         },
         start: function(e)
         {
             if(sortType == 'region')
             {
                 showRegionIdList = '';
-                $('.icon-chevron-double-up').each(function()
+                $('.icon-angle-top').each(function()
                 {
                     showRegionIdList += $(this).attr('data-id') + ',';
-                    $(this).attr('class', 'icon-chevron-double-down');
+                    $(this).attr('class', 'icon-angle-down');
                 });
 
                 $('.region').find('.kanban').hide();
                 hideKanbanAction();
             }
+            else if(sortType === 'column')
+            {
+                e.element.closest('.kanban-board').addClass('kanban-cols-sorting');
+            }
+            $('#kanban').attr('data-sort-by', sortType);
         },
         finish: function(e)
         {
-            var url = '';
-            var orders = [];
-            e.list.each(function(index, data)
-            {
-                orders.push(data.item.data('id'));
-            });
+            if(!e.changed) return;
+
+            var url      = '';
+            var orders   = [];
+            var regionID = '';
 
             if(sortType == 'region')
             {
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('region') && data.item.hasClass('sort')) orders.push(data.item.data('id'));
+                });
+
                 $('.region').each(function()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
                     {
-                        $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
+                        $(this).find('.icon-angle-down').attr('class', 'icon-angle-top');
                         $(this).find('.kanban').show();
                     }
                 })
 
                 url = createLink('kanban', 'sortRegion', 'regions=' + orders.join(','));
             }
-            if(sortType == 'board')
+            else if(sortType == 'board')
             {
-                var region = e.element.parent().data('id');
-                url = createLink('kanban', 'sortGroup', 'region=' + region + '&groups=' + orders.join(','));
+                regionID = e.element.closest('.region').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-board') && data.item.hasClass('sort') && regionID == data.item.parent().data().id) orders.push(data.item.data('id'));
+                });
+
+                url = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
-            if(sortType == 'lane')
+            else if(sortType == 'lane')
             {
-                var region = e.element.parent().parent().data('id');
-                url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
+                var groupID = e.element.closest('.kanban-board').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-lane') && data.item.hasClass('sort') && groupID == data.item.data().lane.group) orders.push(data.item.data('id'));
+                });
+
+                regionID = e.element.closest('.region').data('id');
+                url      = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'item')
+            else if(sortType == 'column')
             {
-                url = createLink('task', 'sort', 'kanbanID=' + kanbanID + '&tasks=' + orders.join(','));
+                var groupID = e.element.closest('.kanban-board').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-col') && (data.item.hasClass('sort') || data.item.children().hasClass('sort')) && groupID == data.item.data().col.group) orders.push(data.item.data('id'));
+                });
+
+                regionID = e.element.closest('.region').data('id');
+                url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
             if(!url) return true;
 
             $.getJSON(url, function(response)
             {
-                if(response.result == 'fail' && response.message.length)
+                if(response.result == 'fail')
                 {
-                    bootbox.alert(response.message);
+                    if(typeof response.message === 'string' && response.message.length)
+                    {
+                        bootbox.alert(response.message);
+                    }
                     setTimeout(function(){return location.reload()}, 3000);
+                }
+                else if (sortType == 'column')
+                {
+                    updateRegion(regionID, response[regionID]);
                 }
             });
         },
         always: function(e)
         {
             if(sortType == 'lane') $cards.show();
+            $('#kanban').find('.kanban-cols-sorting').removeClass('kanban-cols-sorting');
         }
     });
+}
+
+/**
+ * Reset region height according to window height.
+ *
+ * @param  string fold
+ * @access public
+ * @return void
+ */
+function resetRegionHeight(fold)
+{
+    var regionCount = 0;
+    if($.isEmptyObject(regions)) return false;
+    for(var i in regions)
+    {
+        regionCount += 1;
+        if(regionCount > 1) return false;
+    }
+
+    var regionID   = Object.keys(regions)[0];
+    var region     = regions[regionID].groups;
+    var groupCount = 0;
+
+    if($.isEmptyObject(region)) return false;
+    for(var j in region)
+    {
+        groupCount += 1;
+        if(groupCount > 1) return false;
+    }
+
+    var group     = region[0];
+    var laneCount = 0;
+
+    if($.isEmptyObject(group.lanes)) return false;
+    for(var h in group.lanes)
+    {
+        laneCount += 1;
+        if(laneCount > 1) return false;
+    }
+
+    var regionHeaderHeight = $('.region-header').outerHeight();
+    if(fold == 'open')
+    {
+        var windowHeight  = $(window).height();
+        var headerHeight  = $('#mainHeader').outerHeight();
+        var mainPadding   = $('#main').css('padding-top');
+        var panelBorder   = $('.panel').css('border-top-width');
+        var bodyPadding   = $('.panel-body').css('padding-top');
+        var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
+        var regionPadding = $('.kanban').css('padding-bottom');
+        var columnHeight  = $('.kanban-header').outerHeight();
+
+        $('.region').css('min-height', height);
+        $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+    }
+    else
+    {
+        $('.region').css('height', regionHeaderHeight);
+    }
+}
+
+$(document).on('click', '.dropdown-menu', function()
+{
+    $.zui.ContextMenu.hide();
+});
+
+/**
+ * Alerts for exceeding the limit.
+ *
+ * @access public
+ * @return void
+ */
+function setToolTip()
+{
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+}
+
+/**
+ * Update kanban affix state for all boards in page.
+ *
+ * @access public
+ * @return void
+ */
+function updateRegionTabAffixState()
+{
+    var $kanbanContainer = $('#kanbanContainer');
+    var kanbanContainer  = $kanbanContainer[0].getBoundingClientRect();
+    var $regionTabs      = $('#regionTabs');
+    var regionTabs       = $regionTabs[0].getBoundingClientRect();
+    if(regionTabs.top <= 0 && !$regionTabs.hasClass('affixed'))
+    {
+        $regionTabs.addClass('affixed');
+        $regionTabs.find('#region-tab-actions').addClass('hidden');
+    }
+    else if($regionTabs.hasClass('affixed') && kanbanContainer.top >= 0)
+    {
+        $regionTabs.removeClass('affixed');
+        $regionTabs.find('#region-tab-actions').removeClass('hidden');
+    }
+
+    initRegionTabs();
+}
+
+/**
+ * Swipe region navigation tabs.
+ *
+ * @param  object $object
+ * @param  string $direction
+ * @access public
+ * @return bool
+ */
+function swipeRegionNavTabs($object, direction)
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    var offsetWidth    = $regionNavTabs[0].offsetWidth;
+    var objectWidth    = $object[0].offsetWidth;
+
+    $object.find('li').each(function()
+    {
+        /* Get the offset of the item. */
+        var $item      = $(this);
+        var itemLeft   = $item[0].offsetLeft;
+        var itemWidth  = $item[0].offsetWidth;
+        var itemOffset = itemLeft + itemWidth;
+        var radius     = $item.hasClass('active') ? radiusWidth : 0;
+
+        /* Calculate the offset after sliding. */
+        if(direction == 'left' && (itemOffset + distance + radius) >= -5)
+        {
+            /* If you swipe left, the distance is equal to the item's left. */
+            distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
+            /* tab overlap width */
+            distance += 20;
+            if($item.prev().length == 0)
+            {
+                distance = 0;
+                $('.leftBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
+
+            /* If the width of regionNavTabs plus offsetWidth is less than the width of object, change rightBtn to clickable. */
+            if(offsetWidth - distance < objectWidth) $('.rightBtn').removeClass('disabled');
+            return false;
+        }
+
+        var nextRadius = $item.next().hasClass('active') ? radiusWidth : 0;
+        if(direction == 'right' && itemOffset > (offsetWidth - distance + nextRadius + radiusWidth * 2))
+        {
+            /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
+            distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
+            distance += 20;
+            if($item.next().length == 0)
+            {
+                distance = - objectWidth + offsetWidth - radiusWidth * 2;
+                $('.rightBtn').addClass('disabled');
+            }
+            $object[0].style.transform = 'translateX(' + distance + 'px)';
+
+            /* If distance is less than 0, change leftBtn to clickable. */
+            if(distance < 0) $('.leftBtn').removeClass('disabled');
+            return false;
+        }
+    });
+}
+
+/**
+ * Init region tabs.
+ *
+ * @access public
+ * @return void
+ */
+function initRegionTabs()
+{
+    var $regionNavTabs = $('#regionNavTabs');
+    if($regionNavTabs.length == 0) return;
+
+    /* Set the width of regionTab. */
+    $('#regionTabs').width($('#kanban').outerWidth());
+
+    var regionTabsWidth  = $regionNavTabs[0].offsetWidth;
+    var regionTabULWidth = $regionNavTabs.find('ul')[0].offsetWidth;
+    var $acitiveItem     = $('#regionNavTabs > ul > li.active');
+    var acitiveItemWidth = $acitiveItem[0].offsetWidth;
+    var acitiveItemLeft  = $acitiveItem[0].offsetLeft;
+
+    /* Print left and right button. */
+    if(regionTabULWidth > regionTabsWidth) $('.leftBtn, .rightBtn').removeClass('hidden');
+
+    if(acitiveItemLeft + distance < 0)
+    {
+        distance = - acitiveItemLeft;
+        distance += 20;
+        if($acitiveItem.prev().length == 0)
+        {
+            distance = 0;
+            $('.leftBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+    else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
+    {
+        distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft + (distance != 0 ? - radiusWidth * 2 : radiusWidth);
+        distance += 20;
+        if($acitiveItem.next().length == 0)
+        {
+            distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
+            $('.rightBtn').addClass('disabled');
+        }
+        $('#regionNavTabs > ul')[0].style.transform = 'translateX(' + distance + 'px)';
+    }
+
+    if(distance < 0) $('#regionTabs').find('.leftBtn').removeClass('disabled');
+    if($acitiveItem.next().length != 0 && regionTabULWidth > regionTabsWidth) $('#regionTabs').find('.rightBtn').removeClass('disabled');
+    $('#kanbanBox').removeClass('hidden');
+}
+
+$('[data-tab]').on('shown.zui.tab', function(e)
+{
+    /* Init vars. */
+    var $current       = $(e.target);
+    var $prev          = $(e.relatedTarget);
+    var $regionActions = $('#region-tab-actions');
+    var $regions       = $('.region');
+    var contentID      = $current.attr('href');
+    var regionID       = $current.parent().attr('data-id');
+    var hasActions     = $regionActions.hasClass('active');
+
+    /* Highlight the currently selected tab. */
+    $current.addClass('btn-active-text');
+    $current.parent().addClass('active');
+    $prev.removeClass('btn-active-text');
+    $prev.parent().removeClass('active');
+
+    /* Dynamic display and hidden of regions. */
+    if(contentID == 'all')
+    {
+        $regions.addClass('active').removeClass('notAll');
+        if(hasActions) $regionActions.removeClass('active');
+        $regions.each(function()
+        {
+            var isFold = $(this).find('.region-header i').hasClass('icon-angle-down');
+            if(isFold) $(this).find('.kanban').css('display', 'none');
+        });
+    }
+    else
+    {
+        var $currentRegion = $(contentID);
+        $regions.removeClass('active');
+        $currentRegion.addClass('active notAll');
+        $currentRegion.find('.kanban').css('display', 'block');
+        if(!hasActions) $regionActions.addClass('active');
+
+        /* Replace the link of the region actions button with the ID of the current region. */
+        $regionActions.find('li').each(function()
+        {
+            if($(this).hasClass('editRegion')) $(this).find('a').attr('href', createLink('kanban', 'editRegion', 'regionID=' + regionID, '', true));
+            if($(this).hasClass('createLane')) $(this).find('a').attr('href', createLink('kanban', 'createLane', 'kanbanID=' + kanbanID + '&regionID=' + regionID, '', true));
+            if($(this).hasClass('deleteRegion')) $(this).find('a').attr('href', createLink('kanban', 'deleteRegion', 'regionID=' + regionID));
+            if($(this).hasClass('archivedCard')) $(this).find('a').attr('href', "javascript:loadMore(\"Card\", " + regionID + ')');
+            if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
+        });
+    }
+     window.scrollTo(0, 0);
+
+    /* To manually refresh stay under the current tab, save the ID of the current region. */
+    var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);
+    $.get(url);
 });

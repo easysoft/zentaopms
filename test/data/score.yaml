@@ -1,0 +1,67 @@
+title: table zt_score
+desc: "积分"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户账号"
+    range: admin,test10,dev10,top10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: module
+    note: "模块"
+    range: execution{2},task{3},story{2},bug{2},doc{1}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: method
+    note: "动作"
+    range: create,close,create,close,finish,create,close,create,resolve,create
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这里是分值描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: before
+    note: "之前"
+    range: 1-10000:10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: score
+    note: "分值"
+    range: 10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: after
+    note: "之后"
+    range: 11-10000:10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: time
+    note: "时间"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    loop: 0

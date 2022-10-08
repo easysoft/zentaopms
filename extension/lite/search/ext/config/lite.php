@@ -1,0 +1,13 @@
+<?php
+unset($config->search->fields->bug);
+unset($config->search->fields->product);
+unset($config->search->fields->build);
+unset($config->search->fields->case);
+unset($config->search->fields->productplan);
+unset($config->search->fields->release);
+unset($config->search->fields->testtask);
+unset($config->search->fields->testsuite);
+unset($config->search->fields->effort);
+unset($config->search->fields->caselib);
+unset($config->search->fields->testreport);
+unset($config->search->fields->program);

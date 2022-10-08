@@ -3,7 +3,7 @@
  * The linkcase view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: linkcase.html.php 4411 2013-02-22 00:56:04Z chencongzhi520@gmail.com $
@@ -14,7 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <?php
     $lang->testtask->linkCase = $lang->testtask->linkByStory;
@@ -35,7 +35,7 @@
         {
             $suiteName = $suite->name;
             if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName, '', "data-app='$app->tab'") . "</li>";
         }
     }
     else
@@ -53,7 +53,7 @@
     {
         foreach($testTask as $tmpID => $tmpTitle)
         {
-            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle, '', "data-app='{$app->tab}'") . "</li>";
         }
     }
     else
@@ -77,14 +77,14 @@
         <tr>
           <th class='c-id'>
             <?php if($cases):?>
-            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+            <div class="checkbox-primary check-all tablesorter-noSort" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-version text-center'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title='<?php echo $lang->pri;?>'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='c-type'><?php echo $lang->testcase->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>

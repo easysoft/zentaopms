@@ -3,7 +3,7 @@
  * The set WIP file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     kanban
  * @version     $Id: setwip.html.php 935 2021-10-25 10:56:24Z liyuchun@easycorp.ltd $
@@ -44,7 +44,7 @@
           <td colspan='2'>
             <div class="table-col">
               <?php $attr = $column->limit == -1 ? 'disabled' : '';?>
-              <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control' $attr onchange='wipValueChange(this.value)'");?>
+              <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control' $attr");?>
             </div>
             <div class="table-col w-50px">
               <?php echo html::hidden('limit', $column->limit, "class='form-control'");?>

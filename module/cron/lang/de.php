@@ -1,5 +1,7 @@
 <?php
 $lang->cron->common       = 'Geplante Tasks';
+$lang->cron->id           = 'ID';
+$lang->cron->buildin      = 'Build In';
 $lang->cron->index        = 'Home';
 $lang->cron->list         = 'Tasks';
 $lang->cron->create       = 'Hinzufügen';
@@ -39,11 +41,11 @@ $lang->cron->toggleList['stop']  = 'Deaktivieren';
 $lang->cron->confirmDelete = 'Möchten Sie den geplanten Task löschen?';
 $lang->cron->confirmTurnon = 'Möchten Sie die geplanten Tasks abschalten?';
 $lang->cron->introduction  = <<<EOD
-<p>Geplante Tasks können geplante Aufganben ausführen, wie z.B. die Akzualisierung des Burndown Charts, Backups und andere Aufgaben.</p>
-<p>Diese Funktionalität bedarf noch einigen Verbessungen und ist daher im Standard deaktiviert.</p>
+<p>Cron is set to do scheduled actions, such as update burndown chart, backup, etc.</p>
+<p>Features of Cron need to be improved, so it is turned off by default.</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
-<p>Möchten Sie die geplanten Tasks aktivieren?<a href="%s" target='hiddenwin'><strong>Geplante Tasks einschalten<strong></a></p>
+<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Cron<strong></a></p>
 EOD;
 
 $lang->cron->notice = new stdclass();

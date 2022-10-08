@@ -3,7 +3,7 @@
  * The control file of cron of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     cron
  * @version     $Id$
@@ -13,7 +13,7 @@ class cron extends control
 {
     /**
      * Index page.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -27,22 +27,22 @@ class cron extends control
     }
 
     /**
-     * Turnon cron. 
-     * 
+     * Turnon cron.
+     *
      * @access public
      * @return void
      */
     public function turnon($confirm = 'no')
     {
         $turnon = empty($this->config->global->cron) ? 1 : 0;
-        if(!$turnon and $confirm == 'no') die(js::confirm($this->lang->cron->confirmTurnon, inlink('turnon', "confirm=yes")));
+        if(!$turnon and $confirm == 'no') return print(js::confirm($this->lang->cron->confirmTurnon, inlink('turnon', "confirm=yes")));
         $this->loadModel('setting')->setItem('system.common.global.cron', $turnon);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
      * Open cron process.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -52,8 +52,8 @@ class cron extends control
     }
 
     /**
-     * Create cron. 
-     * 
+     * Create cron.
+     *
      * @access public
      * @return void
      */
@@ -62,8 +62,8 @@ class cron extends control
         if($_POST)
         {
             $this->cron->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('index'), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::locate(inlink('index'), 'parent'));
         }
         $this->view->title      = $this->lang->cron->create . $this->lang->cron->common;
         $this->view->position[] = html::a(inlink('index'), $this->lang->cron->common);
@@ -73,9 +73,9 @@ class cron extends control
     }
 
     /**
-     * Edit cron. 
-     * 
-     * @param  int    $cronID 
+     * Edit cron.
+     *
+     * @param  int    $cronID
      * @access public
      * @return void
      */
@@ -84,8 +84,8 @@ class cron extends control
         if($_POST)
         {
             $this->cron->update($cronID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('index'), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::locate(inlink('index'), 'parent'));
         }
         $this->view->title      = $this->lang->cron->edit . $this->lang->cron->common;
         $this->view->position[] = html::a(inlink('index'), $this->lang->cron->common);
@@ -96,49 +96,52 @@ class cron extends control
     }
 
     /**
-     * Toggle run cron. 
-     * 
-     * @param  int    $cronID 
-     * @param  int    $status 
+     * Toggle run cron.
+     *
+     * @param  int    $cronID
+     * @param  int    $status
      * @access public
      * @return void
      */
     public function toggle($cronID, $status)
     {
         $this->cron->changeStatus($cronID, $status);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
-     * Delete cron. 
-     * 
-     * @param  int    $cronID 
-     * @param  string $confirm 
+     * Delete cron.
+     *
+     * @param  int    $cronID
+     * @param  string $confirm
      * @access public
      * @return void
      */
     public function delete($cronID, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->cron->confirmDelete, inlink('delete', "cronID=$cronID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->cron->confirmDelete, inlink('delete', "cronID=$cronID&confirm=yes")));
 
         $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cronID)->exec();
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
      * Ajax exec cron.
-     * 
-     * @param  bool    $restart 
+     *
+     * @param  bool    $restart
      * @access public
      * @return void
      */
     public function ajaxExec($restart = false)
     {
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
+        if ('cli' !== PHP_SAPI)
+        {
+            ignore_user_abort(true);
+            set_time_limit(0);
+            session_write_close();
+        }
         /* Check cron turnon. */
-        if(empty($this->config->global->cron)) die();
+        if(empty($this->config->global->cron)) return;
 
         /* Create restart tag file. */
         $restartTag = $this->app->getCacheRoot() . 'restartcron';
@@ -166,7 +169,7 @@ class cron extends control
             if(!$this->cron->getTurnon()) break;
 
             /* Die old process when restart. */
-            if(file_exists($restartTag) and !$restart) die(unlink($restartTag));
+            if(file_exists($restartTag) and !$restart) return unlink($restartTag);
             $restart = false;
 
             /* Run crons. */
@@ -183,11 +186,21 @@ class cron extends control
                 /* Skip cron that status is running and run time is less than max. */
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
                 /* Skip cron that last time is more than this cron time. */
-                if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) die();
+                if ('cli' === PHP_SAPI)
+                {
+                    if($cronInfo->lastTime >= $cron['time']->format(DT_DATETIME1)) continue;
+                }
+                else
+                {
+                    if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) return;
+                }
 
                 if($now > $cron['time'])
                 {
-                    $this->cron->changeStatus($id, 'running');
+                    if (!$this->cron->changeStatusRunning($id, $cronInfo->lastTime))
+                    {
+                        continue;
+                    }
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
                     /* Execution command. */
@@ -239,11 +252,12 @@ class cron extends control
             sleep($sleepTime);
 
             /* Break while. */
-            if(connection_status() != CONNECTION_NORMAL) break;
+            if('cli' !== PHP_SAPI && connection_status() != CONNECTION_NORMAL) break;
             if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
         /* Revert cron status to stop. */
         $this->cron->markCronStatus('stop', $configID);
     }
+
 }

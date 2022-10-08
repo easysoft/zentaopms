@@ -4,8 +4,13 @@ $(function()
     {
         if(executions.length == 0)
         {
-            alert(createExecution);
-            location.href = createLink('execution', 'create', 'projectID=' + projectID);
+            var message = noDevStage;
+            if(allExecutions.length == 0) message = createExecution;
+            alert(message);
+
+            var link = createLink('execution', 'create', 'projectID=' + projectID);
+
+            window.parent.$.apps.open(link, 'execution');
             return false;
         }
     });

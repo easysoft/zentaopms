@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
-<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
+<?php if($this->config->edition != 'open'):?>
 <style>#mainContent > .side-col.col-lg{width: 235px}</style>
 <style>.hide-sidebar #sidebar{width: 0 !important}</style>
 <?php endif;?>
@@ -49,7 +49,9 @@
             <thead>
               <tr class='colhead'>
                 <th class='c-id'><?php echo $lang->report->id;?></th>
+                <?php if($this->config->systemMode == 'new'):?>
                 <th><?php echo $lang->report->project;?></th>
+                <?php endif;?>
                 <th><?php echo $lang->report->execution;?></th>
                 <th class="c-hours"><?php echo $lang->report->estimate;?></th>
                 <th class="c-hours"><?php echo $lang->report->consumed;?></th>
@@ -61,7 +63,9 @@
               <?php foreach($executions as $id  =>$execution):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>
+                <?php if($this->config->systemMode == 'new'):?>
                 <td class="text-left" title="<?php echo $execution->projectName;?>"><?php echo $execution->projectName;?></td>
+                <?php endif;?>
                 <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
                 <td><?php echo round($execution->estimate, 2);?></td>
                 <td><?php echo round($execution->consumed, 2);?></td>

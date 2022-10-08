@@ -4,7 +4,7 @@
  * The control file of tree module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: control.php 5002 2013-07-03 08:25:39Z chencongzhi520@gmail.com $
@@ -50,10 +50,15 @@ class tree extends control
         if(strpos('story|bug|case', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if(empty($product)) $this->locate($this->createLink('product', 'create'));
+            if(empty($product))
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
+                $this->locate($this->createLink('product', 'create'));
+            }
+
             if(!empty($product->type) && $product->type != 'normal')
             {
-                $branches = $this->loadModel('branch')->getPairs($product->id);
+                $branches = $this->loadModel('branch')->getPairs($product->id, 'withClosed');
                 if($currentModuleID)
                 {
                     $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
@@ -131,6 +136,7 @@ class tree extends control
             $this->view->root       = $root;
 
             $title      = $this->lang->tree->manageFeedback;
+            $this->lang->feedback->menu->browse['subMenu'] = new stdclass();
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
         }
         elseif($viewType == 'case')
@@ -202,6 +208,17 @@ class tree extends control
             $title      = $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
+        elseif($viewType == 'dashboard')
+        {
+            $root       = new stdclass();
+            $root->name = $this->lang->dashboard->common;
+
+            $this->view->root       = $root;
+            $this->lang->tree->menu = $this->lang->report->menu;
+
+            $title      = $this->lang->tree->manageDashboard;
+            $position[] = $this->lang->tree->manageDashboard;
+        }
         elseif($viewType == 'trainskill')
         {
             $this->lang->tree->menu = $this->lang->trainskill->menu;
@@ -223,6 +240,49 @@ class tree extends control
 
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
+        }
+        elseif(strpos($viewType, 'datasource') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $datasourceID = $params[1];
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+                $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
+                if($datasource)
+                {
+                    $this->app->rawModule = 'workflowdatasource';
+
+                    $title      = $datasource->name;
+                    $position[] = $datasource->name;
+
+                    $this->lang->tree->$manageChild = $title;
+
+                    $root = new stdclass();
+                    $root->name = $title;
+                    $this->view->root = $root;
+                }
+            }
+        }
+        /* viewType is workflow building category. */
+        else if(strpos($viewType, '_') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $this->app->rawModule = $params[0];
+
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+
+                $title      = $this->lang->tree->common;
+                $position[] = $this->lang->tree->common;
+
+                $this->lang->tree->$manageChild = $title;
+
+                $root = new stdclass();
+                $root->name = $title;
+                $this->view->root = $root;
+            }
         }
 
         $parentModules               = $this->tree->getParents($currentModuleID);
@@ -311,14 +371,14 @@ class tree extends control
 
         if($type == 'task')
         {
-            $optionMenu             = $this->tree->getTaskOptionMenu($module->root);
-            $this->view->optionMenu = $optionMenu;
+            $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
-        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
+
+        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
 
         $this->view->module = $module;
         $this->view->type   = $type;
@@ -330,7 +390,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
         }
@@ -339,7 +399,7 @@ class tree extends control
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -353,20 +413,25 @@ class tree extends control
     public function fix($root, $type)
     {
         $this->tree->fixModulePath($root, $type);
-        die(js::alert($this->lang->tree->successFixed) . js::reload('parent'));
+        echo js::alert($this->lang->tree->successFixed) . js::reload('parent');
     }
 
     /**
      * Update modules' orders.
      *
+     * @param  int    $root
+     * @param  string $viewType
+     * @param  int    $moduleID
+     *
      * @access public
      * @return void
      */
-    public function updateOrder()
+    public function updateOrder($rootID = 0, $viewType = '', $moduleID = 0)
     {
         if(!empty($_POST))
         {
             $this->tree->updateOrder($_POST['orders']);
+            if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->loadModel('action')->create('module', $rootID, 'moved', '', $moduleID);
             die(js::reload('parent'));
         }
     }
@@ -384,9 +449,10 @@ class tree extends control
         if(!empty($_POST))
         {
             $moduleIDList = $this->tree->manageChild($rootID, $viewType);
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
-            if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent.parent'));
+            if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent'));
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
 
             die(js::reload('parent'));
@@ -417,7 +483,7 @@ class tree extends control
         else
         {
             $result = $this->tree->delete($moduleID);
-            if(!$result) die();
+            if(!$result) return;
 
             die(js::reload('parent'));
         }
@@ -462,7 +528,8 @@ class tree extends control
             else
             {
                 $changeFunc = '';
-                if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+                if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+                if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
                 $field = $fieldID ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);
@@ -474,7 +541,7 @@ class tree extends control
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     $output .= '&nbsp; ';
-                    $output .= html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
+                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "class='refresh' onclick='loadProductModules($rootID)'");
                     $output .= '</span>';
                 }
             }
@@ -484,7 +551,8 @@ class tree extends control
         if($returnType == 'mhtml')
         {
             $changeFunc = '';
-            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+            if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+            if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
             $field  = $fieldID ? "modules[$fieldID]" : 'module';
             $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
             die($output);
@@ -531,19 +599,20 @@ class tree extends control
      * @param  int    $branchID
      * @param  int    $number
      * @param  int    $currentModuleID
+     * @param  string $from showImport
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules($productID, $viewType = 'story', $branchID = 0, $number = 0, $currentModuleID = 0)
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID = 0, $number = 0, $currentModuleID = 0, $from = '')
     {
         $currentModule   = $this->tree->getById($currentModuleID);
         $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
 
-        $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
+        $moduleName = ($viewType == 'bug' and $from != 'showImport') ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
-        die(html::select($moduleName, $modules, $currentModuleID, 'class=form-control'));
+        echo html::select($moduleName, $modules, $currentModuleID, 'class=form-control');
     }
 
     /**
@@ -563,6 +632,20 @@ class tree extends control
             ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-        die(json_encode($modules));
+        echo json_encode($modules);
+    }
+
+    /**
+     * View module histories.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function viewHistory($productID)
+    {
+        $this->view->actions = $this->loadModel('action')->getList('module', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
     }
 }

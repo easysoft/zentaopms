@@ -1,3 +1,6 @@
 body.body-modal {padding-bottom: 20px; min-height: 400px;}
-.side-col {padding-right: 40px; padding-top: 25px;}
+.side-col {padding-right: 40px;}
 .btn-block {display: block; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.contactListTitle {margin-left: 45px !important;}
+.createBtn {width: 100%; margin-bottom: 5px;}
+.main-col .main-header .title {margin-left: 17px !important;}

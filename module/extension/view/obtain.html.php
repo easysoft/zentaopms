@@ -3,7 +3,7 @@
  * The obtain view file of extension module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
  * @version     $Id$
@@ -30,12 +30,12 @@
           ?>
       </div>
     </div>
-    <div class='panel panel-sm'>
-      <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
-      <div class='panel-body'>
-        <?php $moduleTree ? print($moduleTree) : print($lang->extension->errorGetModules);?>
+    <?php if($moduleTree):?>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
+        <div class='panel-body'><?php print($moduleTree);?></div>
       </div>
-    </div>
+    <?php endif;?>
   </div>
   <div class='main-col main-content'>
     <div class='cell'>
@@ -49,8 +49,8 @@
         <div class='detail'>
           <div class='detail-title'>
             <small class='pull-right text-important'>
-              <?php 
-              if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
+              <?php
+              if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion)
               {
                   printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible);
               }?>
@@ -67,7 +67,7 @@
               echo "{$lang->extension->author}:     {$extension->author} ";
               echo "{$lang->extension->downloads}:  {$extension->downloads} ";
               echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
-    
+
               echo " {$lang->extension->depends}: ";
               if(!empty($currentRelease->depends))
               {

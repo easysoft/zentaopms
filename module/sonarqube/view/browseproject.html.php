@@ -3,7 +3,7 @@
  * The browse view file of sonarqube module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Zeng <liugang@cnezsoft.com>
  * @package     sonarqube
  * @version     $Id$
@@ -26,8 +26,8 @@
       </form>
     </div>
   </div>
-  <div class="btn-toolbar pull-right hide">
-    <?php if(common::hasPriv('sonarqube', 'createProject')) common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($sonarqubeProjectList)):?>
@@ -35,7 +35,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and common::hasPriv('sonarqube', 'createProject')):?>
-    <?php //echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
+    <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
@@ -49,7 +49,7 @@
           <th class='c-key text-left'><?php common::printOrderLink('key', $orderBy, $vars, $lang->sonarqube->projectKey);?></th>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->projectName);?></th>
           <th class='text-left'><?php common::printOrderLink('lastAnalysisDate', $orderBy, $vars, $lang->sonarqube->projectlastAnalysis);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +67,7 @@
             {
                 $jobID = $projectJobPairs[$sonarqubeProject->key];
                 common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin');
+                if(in_array($jobID, $successJobs)) common::printIcon('sonarqube', 'reportView', "jobID=$jobID", '', 'list', 'audit', '', 'iframe', true);
             }
             ?>
           </td>

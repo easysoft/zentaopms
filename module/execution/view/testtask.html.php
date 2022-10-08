@@ -3,7 +3,7 @@
  * The browse view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: browse.html.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
@@ -86,7 +86,7 @@
             <?php printf('%03d', $task->id);?>
             <?php endif;?>
           </td>
-          <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
+          <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
           <td><?php echo zget($users, $task->owner);?></td>
           <td><?php echo $task->begin?></td>
@@ -103,7 +103,7 @@
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
                 if(common::hasPriv('execution', 'testreport'))
                 {
-                    echo html::a($this->createLink('execution', 'testreport', "executionID=$executionID&objctType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="execution"');
+                    echo html::a($this->createLink('execution', 'testreport', "executionID=$executionID&objctType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="execution"');
                 }
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');

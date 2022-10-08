@@ -3,7 +3,7 @@
  * The viewCommit view of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: viewcommit.html.php 4903 2020-09-02 09:32:59Z tianshujie@easycorp.ltd $
@@ -11,10 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>
-#mainContent .pull-right{margin-bottom: 10px}
-.table{border: 1px solid #ddd;}
-</style>
+<?php js::set('repos', $repos);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainContent">
   <div class='main-header'>
     <h2>
@@ -24,7 +22,7 @@
     </h2>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '_blank', "class='btn btn-primary'");?>
+    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '', "class='btn btn-primary' id='linkCommit'");?>
   </div>
   <?php if(empty($design->commit)):?>
   <div class="table-empty-tip">

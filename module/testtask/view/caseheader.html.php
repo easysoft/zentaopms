@@ -30,9 +30,20 @@
         echo html::a($this->createLink('testtask', 'groupCase', "taskID=$taskID&groupBy=story"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$app->tab}'");
         echo '</div>';
     }
-
-    if($this->methodName == 'cases') echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";
     ?>
+
+    <?php if($this->methodName == 'cases'):?>
+    <div class='btn-group'>
+      <?php $active = $suiteName == $lang->testtask->browseBySuite ? '' : 'btn-active-text';?>
+      <a href='javascript:;' class='btn btn-link btn-limit <?php echo $active;?>' data-toggle='dropdown'><span class='text' title='<?php echo $suiteName;?>'><?php echo $suiteName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          foreach($suites as $key => $name) echo "<li>" . html::a(inlink('cases', "taskID=$taskID&browseType=bysuite&param=$key"), $name) . "</li>";
+        ?>
+      </ul>
+    </div>
+    <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i> {$lang->testcase->bySearch}</a>";?>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php

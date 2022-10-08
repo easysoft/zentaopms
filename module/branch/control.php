@@ -3,7 +3,7 @@
  * The control file of branch of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     branch
  * @version     $Id$
@@ -25,7 +25,10 @@ class branch extends control
      */
     public function manage($productID, $browseType = 'active', $orderBy = 'order', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('product')->setMenu($productID);
+        $product = $this->loadModel('product')->getById($productID);
+        if($product->type == 'normal') $this->locate($this->createLink('product', 'view', "productID=$productID"));
+
+        $this->product->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
         $this->branch->changeBranchLanguage($productID);
 
@@ -62,10 +65,10 @@ class branch extends control
         if($_POST)
         {
             $branchID = $this->branch->create($productID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('action')->create('branch', $branchID, 'Opened');
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->product = $this->loadModel('product')->getById($productID);
@@ -84,10 +87,10 @@ class branch extends control
         if($_POST)
         {
             $changes = $this->branch->update($branchID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes) $this->loadModel('action')->create('branch', $branchID, 'Edited');
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->product = $this->loadModel('product')->getById($productID);
@@ -116,12 +119,12 @@ class branch extends control
                 if($change) $this->action->create('branch', $branchID, 'Edited', '', $extra);
             }
 
-            die(js::locate($this->session->branchManage, 'parent'));
+            return print(js::locate($this->session->branchManage, 'parent'));
         }
 
         $branchList   = $this->branch->getList($productID, 0, 'all');
         $branchIDList = $this->post->branchIDList;
-        if(empty($branchIDList)) die(js::locate($this->session->branchManage, 'parent'));
+        if(empty($branchIDList)) return print(js::locate($this->session->branchManage, 'parent'));
 
         foreach($branchList as $branch)
         {
@@ -148,14 +151,14 @@ class branch extends control
 
         if($confirm == 'no')
         {
-            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmClose), inlink('close', "branchID=$branchID&confirm=yes")));
+            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmClose), inlink('close', "branchID=$branchID&confirm=yes")));
         }
 
         $this->branch->close($branchID);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $this->loadModel('action')->create('branch', $branchID, 'Closed');
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -173,14 +176,14 @@ class branch extends control
 
         if($confirm == 'no')
         {
-            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate), inlink('activate', "branchID=$branchID&confirm=yes")));
+            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate), inlink('activate', "branchID=$branchID&confirm=yes")));
         }
 
         $this->branch->activate($branchID);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $this->loadModel('action')->create('branch', $branchID, 'Activated');
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -208,7 +211,10 @@ class branch extends control
     public function ajaxGetDropMenu($productID, $branch, $module, $method, $extra = '')
     {
         parse_str($extra, $output);
-        $branches   = $this->branch->getPairs($productID, 'all', isset($output['projectID']) ? $output['projectID'] : 0);
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,', ",$method,") !== false and !empty($productID)) ? true : false;
+        $param      = $isQaModule ? $extra : 0;
+        $param      = isset($output['projectID']) ? $output['projectID'] : $param;
+        $branches   = $this->branch->getPairs($productID, 'all', $param);
         $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
 
         $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
@@ -236,14 +242,14 @@ class branch extends control
     {
         $this->app->loadLang('product');
         $productType = $this->branch->getProductType($branchID);
-        if(!$this->branch->checkBranchData($branchID)) die(js::alert(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->canNotDelete)));
+        if(!$this->branch->checkBranchData($branchID)) return print(js::alert(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->canNotDelete)));
         if($confirm == 'no')
         {
-            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
+            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
         }
 
         $this->branch->delete(TABLE_BRANCH, $branchID);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -253,24 +259,28 @@ class branch extends control
      * @param  int    $oldBranch
      * @param  string $param
      * @param  int    $projectID
+     * @param  bool   $withMainBranch
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $param = '', $projectID = 0)
+    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0, $withMainBranch = true)
     {
-        $param   = $param ? $param : 'all';
         $product = $this->loadModel('product')->getById($productID);
-        if(empty($product) or $product->type == 'normal') die();
+        if(empty($product) or $product->type == 'normal') return;
 
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param);
-        $branchOption    = array();
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param, 'order', null, $withMainBranch);
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        die(html::select('branch', strpos($param, 'active') !== false ? $branchOption : $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
+        if(is_numeric($oldBranch) and !isset($branchTagOption[$oldBranch]))
+        {
+            $branch = $this->branch->getById($oldBranch, $productID, '');
+            $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+        }
+
+        return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
     }
 
     /**
@@ -288,14 +298,14 @@ class branch extends control
         {
             $this->app->loadLang('product');
             $productType = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('type');
-            die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
+            return print(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault), inlink('setDefault', "productID=$productID&branchID=$branchID&confirm=yes")));
         }
 
         $this->branch->setDefault($productID, $branchID);
 
         $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
 
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**

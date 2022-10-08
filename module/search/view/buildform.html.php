@@ -3,7 +3,7 @@
  * The buildform view of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: buildform.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -17,6 +17,7 @@ include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 ?>
 <style>
+#save-query .text {font-weight: 400; font-size: 14px;}
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
@@ -51,7 +52,7 @@ $formId = 'searchForm-' . uniqid('');
 #userQueries .label:hover {background-color: #aaa; color: #fff;}
 #userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
-@media (max-width: 1050px) {#userQueries {display: none}}
+@media (max-width: 1050px) {#userQueries, #toggle-queries {display: none}}
 <?php if($style == 'simple'):?>
 #<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 100px;}
 #queryBox.show {min-height: 66px;}
@@ -63,6 +64,11 @@ $formId = 'searchForm-' . uniqid('');
 .operatorWidth {width: 110px !important;}
 html[lang^='zh-'] .fieldWidth {width: 110px !important;}
 html[lang^='zh-'] .operatorWidth {width: 90px !important;}
+.table tbody tr td input {display: block !important;}
+
+#save-query {float: unset !important; position: absolute; right: 50px;}
+#save-query .text {top: 0px;}
+#save-query .text:after {border-bottom: 0px solid #0c64eb;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
@@ -120,26 +126,29 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' max_drop_width='400'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
                     $fieldValue = $formSession["value$fieldNO"];
                     $extraClass = isset($param['class']) ? $param['class'] : '';
 
+                    $placeholder = '';
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$fieldValue}'";
                     }
-                    else
+                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
+
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
                 }
                 echo '</td>';
 
@@ -181,7 +190,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -198,14 +207,17 @@ foreach($fieldParams as $fieldName => $param)
                     $fieldValue = $formSession["value$fieldNO"];
                     $extraClass = isset($param['class']) ? $param['class'] : '';
 
+                    $placeholder = '';
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
+                        $placeholder = "placeholder='{$fieldValue}'";
                     }
-                    else
+                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
+
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
                 }
                 echo '</td>';
 
@@ -220,9 +232,9 @@ foreach($fieldParams as $fieldName => $param)
       <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>
-          <?php foreach($queries as $queryID => $queryName):?>
-          <?php if(empty($queryID)) continue;?>
-          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
+          <?php foreach($queries as $query):?>
+          <?php if(empty($query->id)) continue;?>
+          <li><?php echo html::a("javascript:executeQuery($query->id)", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'");?></li>
           <?php endforeach;?>
         </ul>
       </td>
@@ -235,12 +247,9 @@ foreach($fieldParams as $fieldName => $param)
         echo html::hidden('actionURL',  $actionURL);
         echo html::hidden('groupItems', $groupItems);
         echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
-        if($style != 'simple')
-        {
-            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary iframe'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
-        }
+        if($style != 'simple') echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
+        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<span class="text"><i class="icon-bug-confirmBug icon-save"></i> ' . $lang->search->saveCondition . '</span>', '', "class='btn-save-form btn btn-link btn-active-text text iframe' id='save-query'");
         echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
@@ -249,6 +258,7 @@ foreach($fieldParams as $fieldName => $param)
 </table>
 </form>
 <?php js::set('searchCustom', $lang->search->custom);?>
+<?php js::set('canSaveQuery', !empty($_SESSION[$module . 'Query']));?>
 <script>
 var dtOptions =
 {
@@ -276,14 +286,32 @@ function executeQuery(queryID)
 
 $(function()
 {
+    if(!canSaveQuery)
+    {
+        $('.btn-save-form').attr('disabled', 'disabled');
+        $('.btn-save-form').css('pointer-events', 'none');
+    }
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
     {
         var $this = $(this);
         var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
         var $drop = $chosen.find('.chosen-drop');
-        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+        if($this.data('drop_direction') === 'auto') $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
+
+    $searchForm.find('.picker-select').each(function()
+    {
+        var $select = $(this);
+        var pickerOptions = {chosenMode: true}
+        if($select.attr('data-pickertype') == 'remote') pickerOptions.remote = $select.attr('data-pickerremote');
+        $select.picker(pickerOptions);
+    });
+
+    $('#queryBox select, #queryBox input').change(function()
+    {
+        $('#save-query').attr("disabled", "disabled");
+    })
 
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
@@ -294,14 +322,30 @@ $(function()
             $('#toggle-queries .icon').removeClass('icon-angle-left');
             $('#toggle-queries .icon').addClass('icon-angle-right');
             $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
         }
         else
         {
             $('#toggle-queries .icon').removeClass('icon-angle-right');
             $('#toggle-queries .icon').addClass('icon-angle-left');
             $('#toggle-queries').css('right', '0px');
+            $('#save-query').css('right', 50);
         }
     });
+
+    $('.sidebar-toggle').click(function()
+    {
+        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').click();
+    })
+
+    $(window).resize(function()
+    {
+        if(!$('#userQueries').hasClass('hidden'))
+        {
+            $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
+        }
+    })
 
     /*
      * Load queries form
@@ -314,7 +358,7 @@ $(function()
             if($('#mainMenu .btn-toolbar.pull-left #query').size() == 0)
             {
                 var html = '<div class="btn-group" id="query"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 2px;">' + searchCustom + ' <span class="caret"></span></a><ul class="dropdown-menu"></ul></div>';
-                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -5px; display: block; width: 20px; text-align: center; } </style>';
+                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -3px; display: block; width: 20px; text-align: center; } </style>';
                 html += "<script> function removeQueryFromMenu(obj) { var $obj = $(obj); var link = createLink('search', 'ajaxRemoveMenu', 'queryID=' + $obj.data('id')); $.get(link, function() { $obj.closest('li').remove(); if($('#mainMenu #query.btn-group').find('li').length == 0) $('#mainMenu #query.btn-group').remove(); })}<\/script>";
                 $('#mainMenu .btn-toolbar.pull-left #bysearchTab').before(html);
             }
@@ -353,7 +397,6 @@ $(function()
     var setDateField = function(query, fieldNO)
     {
         var $period = $('#selectPeriod');
-        if($period.length) $period.remove();
 
         <?php
         $selectPeriod  = "<ul id='selectPeriod' class='dropdown-menu'>";
@@ -374,13 +417,12 @@ $(function()
                 if(target.next('input[type=hidden]').length)
                 {
                     target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
-                    target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 }
                 else
                 {
                     target.val($(this).attr('href').replace('#', '$'));
                 }
-
+                target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
@@ -392,7 +434,7 @@ $(function()
         {
             var $e = $(e.target);
             var ePos = $e.offset();
-            $period.css({'left': ePos.left + 211, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).data('fieldNO', fieldNO).find('li.active').removeClass('active');
+            $period.css({'left': ePos.left - 120, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).data('fieldNO', fieldNO).find('li.active').removeClass('active');
             if($e.attr('placeholder'))
             {
                 $period.find("li > a[href='" + $e.attr('placeholder').replace('$', '#') + "']").closest('li').addClass('active');
@@ -430,9 +472,11 @@ $(function()
         var params    = moduleparams;
         var $obj      = $(obj);
         var fieldName = $obj.val();
+
         $searchForm.find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
         $searchForm.find('#valueBox' + fieldNO).html($searchForm.find('#box' + fieldName).children().clone());
         $searchForm.find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
+        if(fieldName == 'id') setPlaceHolder(fieldNO);
 
         if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
         {
@@ -460,15 +504,45 @@ $(function()
                 $searchForm.find("#value" + fieldNO).picker(
                 {
                     chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: 350,
                     remote: $searchForm.find("#value" + fieldNO).attr('data-pickerremote')
                 });
             }
             else
             {
-                $searchForm.find("#value" + fieldNO).picker({chosenMode: true});
+                $searchForm.find("#value" + fieldNO).picker(
+                {
+                    chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: 350
+                });
             }
         }
     };
+
+    /**
+     * When the value of the operator select changed, set the placeholder for the valueBox.
+     *
+     * @param  int    $fieldNO
+     * @access public
+     * @return void
+     */
+    var setPlaceHolder = window.setPlaceHolder = function(fieldNO)
+    {
+        var operator  = $('#operator' + fieldNO).val();
+        var fieldName = $('#field' + fieldNO).val();
+        if(operator == '=' && fieldName == 'id')
+        {
+            $('#value' + fieldNO).attr("placeholder","<?php echo $lang->search->queryTips;?>");
+        }
+        else
+        {
+            $('#value' + fieldNO).attr("placeholder","");
+        }
+    }
 
     /*
      * Reset form
@@ -477,8 +551,9 @@ $(function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
-            $searchForm.find('#value' + i).val('').trigger('chosen:updated');
-            $searchForm.find('#dateValue' + i).val('').attr('placeholder','');
+            if(!$searchForm.find('#value' + i).hasClass('picker-select')) $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).hasClass('picker-select'))  $searchForm.find('#value' + i).data('zui.picker').setValue('');
+            $searchForm.find('#value' + i + '.date').val('').attr('placeholder', '');
         }
     };
 
@@ -513,6 +588,7 @@ $(function()
     if($('#formType').val() == 'more') expandForm(true);
     $searchForm.on('click', '.user-query .icon-close', function(e)
     {
+        e.preventDefault(); // Fix bug #21572.
         var $query = $(this).closest('.user-query');
         var queryId = $query.data('queryId');
         var deleteQueryLink = $.createLink('search', 'deleteQuery', 'queryID=' + queryId);

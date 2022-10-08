@@ -3,7 +3,7 @@
  * The testtask module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: en.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -14,7 +14,7 @@ $lang->testtask->create           = "Submit Request";
 $lang->testtask->reportChart      = 'Report';
 $lang->testtask->delete           = "Delete Request";
 $lang->testtask->importUnitResult = "Import Unit Result";
-$lang->testtask->importunitresult = "Import Unit Result"; //Fix bug custom required testtask.
+$lang->testtask->importUnit       = "Import Unit Result"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "Unit Test List";
 $lang->testtask->unitCases        = "Unit Test Cases";
 $lang->testtask->view             = "Request Detail";
@@ -128,6 +128,7 @@ $lang->testtask->linkByBuild   = 'Copy from build';
 $lang->testtask->linkByStory   = 'Link by Story';
 $lang->testtask->linkByBug     = 'Link by Bug';
 $lang->testtask->linkBySuite   = 'Link by Suite';
+$lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Pass All';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
@@ -179,18 +180,12 @@ $lang->testtask->report->common = 'Report';
 $lang->testtask->report->select = 'Select Report Type';
 $lang->testtask->report->create = 'Create Report';
 
+$lang->testtask->report->testTaskPerRunResultTip = 'There are %s usecase, including %s passed,%s not executed, and %s failed';
+
 $lang->testtask->report->charts['testTaskPerRunResult'] = 'Test Case Result';
 $lang->testtask->report->charts['testTaskPerType']      = 'Test Case Type';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Test Case Module';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'Test Case RunBy';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug Severity Distribution';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Bug Status Distribution';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug ReportedBy Distribution';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug ResolvedBy Distribution';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug Resolution Distribution';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Bug Module Distribution';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug importance stage distribution';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

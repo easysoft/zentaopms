@@ -3,7 +3,7 @@
  * The closespace file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: closespace.html.php 935 2021-12-15 11:22:24Z $
@@ -23,11 +23,11 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6'");?></td>
+          <th class='c-comment'><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center form-actions'>
+          <td colspan='2' class='text-center form-actions'>
             <?php echo html::submitButton($lang->kanban->closeSpace);?>
           </td>
         </tr>

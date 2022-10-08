@@ -1,2 +1,4 @@
 #fromproject_chosen .chosen-single {width: 220px;}
-.c-name {width: 150px;}
+.c-name {min-width: 200px;}
+.c-hour {width: 80px;}
+#importTaskForm {min-height: 350px;}

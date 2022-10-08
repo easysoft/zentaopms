@@ -3,7 +3,7 @@
  * The view view of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: view.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -61,7 +61,7 @@
             <ul class="timeline timeline-tag-left no-margin">
               <?php foreach($dynamics as $action):?>
               <li <?php if($action->major) echo "class='active'";?>>
-                <div class='text-ellipsis'>
+                <div>
                   <span class="timeline-tag"><?php echo $action->date;?></span>
                   <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . "<span class='label-action'>{$action->actionLabel}</span>" . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
                 </div>
