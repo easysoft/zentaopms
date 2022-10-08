@@ -5,7 +5,7 @@ $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pag
     $('#showData > tbody').append(data);
     if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
     $('#showData tbody').find('.picker-select').picker({chosenMode: true});
-    $('.form-date').datetimepicker('update');
+    $('.form-date').datetimepicker({minView: 2, format: "yyyy-mm-dd"});
     $('.form-datetime').datetimepicker('update');
     $('#showData > tbody').removeClass('load-indicator loading');
 })
@@ -37,7 +37,7 @@ function loadData($showmore)
         $showmore.after(data);
         if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
         $('#showData tbody').find('.picker-select').picker({chosenMode: true}).removeClass('nopicker');
-        $('.form-date').datetimepicker('update');
+        $('.form-date').datetimepicker({minView: 2, format: "yyyy-mm-dd"});
         $('.form-datetime').datetimepicker('update');
     })
 }

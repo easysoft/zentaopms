@@ -80,10 +80,13 @@ $(function()
         modalTrigger.show();
     });
 
-    $('#duplicateStory').picker(
+    if($('#duplicateStory').length > 0)
     {
-        disableEmptySearch : true,
-        dropWidth : 'auto',
-        maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
-    });
+        $('#duplicateStory').picker(
+        {
+            disableEmptySearch : true,
+            dropWidth : 'auto',
+            maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
+        });
+    }
 })
