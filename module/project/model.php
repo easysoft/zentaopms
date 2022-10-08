@@ -1568,6 +1568,14 @@ class projectModel extends model
             $oldProject->linkedProducts = implode(',', $linkedProducts);
             $project->linkedProducts    = implode(',', $_POST['products']);
 
+            /* Activate or close the shadow product of the project. */
+            if(!$oldProject->hasProduct && $oldProject->status != $project->status && strpos('doing,closed', $project->status) !== false)
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+                if($project->status == 'doing') $this->product->activate($productID);
+                if($project->status == 'closed') $this->product->close($productID);
+            }
+
             return common::createChanges($oldProject, $project);
         }
     }
@@ -1803,6 +1811,8 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
+        if(dao::isError()) return false;
+
         /* Readjust task. */
         if($this->post->readjustTime and $this->post->readjustTask)
         {
@@ -1838,7 +1848,14 @@ class projectModel extends model
             }
         }
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        /* Activate the shadow product of the project. */
+        if(!$oldProject->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+            $this->product->activate($productID);
+        }
+
+        return common::createChanges($oldProject, $project);
     }
 
     /**
@@ -1881,13 +1898,22 @@ class projectModel extends model
             ->exec();
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
-
-        if(!dao::isError())
+        if(dao::isError())
         {
-            $this->loadModel('score')->create('project', 'close', $oldProject);
-            return common::createChanges($oldProject, $project);
+           if(count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+
+           return false;
         }
+
+        /* Close the shadow product of the project. */
+        if(!$oldProject->hasProduct)
+        {
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+            $this->product->close($productID);
+        }
+
+        $this->loadModel('score')->create('project', 'close', $oldProject);
+        return common::createChanges($oldProject, $project);
     }
 
     /**
