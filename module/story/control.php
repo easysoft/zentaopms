@@ -554,7 +554,7 @@ class story extends control
             }
 
             /* Project or execution linked stories. */
-            if($executionID)
+            if($executionID and $storyType == 'story')
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;

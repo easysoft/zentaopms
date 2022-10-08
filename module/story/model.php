@@ -300,7 +300,7 @@ class storyModel extends model
             }
 
             /* Project or execution linked story. */
-            if($executionID != 0)
+            if($executionID != 0 and $story->type == 'story')
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
