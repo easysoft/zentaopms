@@ -1,7 +1,8 @@
 $(document).ready(function()
 {
     removeDitto();//Remove 'ditto' in first row.
-    if($('#batchCreateForm table thead tr th.c-title').width() < 170) $('#batchCreateForm table thead tr th.c-title').width('170');
+    var $title = $('#batchCreateForm table thead tr th.c-title');
+    if($title.width() < 170) $title.width('170');
 
     $(document).keydown(function(event)
     {
@@ -29,16 +30,13 @@ $(document).ready(function()
 
     $('#customField').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-        {
-            var field    = ',' + $(this).val() + ',';
-            var required = ',' + requiredFields + ',';
-            if(required.indexOf(field)  >= 0) $(this).attr('disabled', 'disabled');
-        });
+        hiddenRequireFields();
     });
 
+    /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
+        saveCustomFields('batchCreateFields', 8, $title, 170);
+        return false;
     });
 });

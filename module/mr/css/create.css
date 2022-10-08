@@ -1,1 +1,3 @@
 #mrForm table tbody th {width: 145px;}
+.branch-btn {width: 105px; height: 32px; line-height: 22px; float: right; text-align: left;}
+[lang^='zh-'] .branch-btn {width: 70px;}

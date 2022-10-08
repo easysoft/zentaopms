@@ -47,6 +47,8 @@ $lang->program->realDuration   = 'RealDuration';
 $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
+$lang->program->childProgram   = 'Child Program';
+$lang->program->ignore         = 'Ignore';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -99,18 +101,22 @@ $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed';
 $lang->program->tips               = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
-$lang->program->beginLetterParent  = "Parent begin date: %s, begin date should be >                  = parent begin date.";
-$lang->program->endGreaterParent   = "Parent end date: %s, end date should be <                      = parent end date.";
-$lang->program->beginGreateChild   = "Child earliest begin: %s, parent begin date <                  = child earliest begin date.";
-$lang->program->endLetterChild     = "Child latest end: %s, parent end date >                        = child latest end date.";
+$lang->program->beginLetterParent  = 'The start date of the program is less than the start date of the parent program:';
+$lang->program->endGreaterParent   = 'The finish date of the program is greater than the finish date of the parent program:';
+$lang->program->dateExceedParent   = 'The start and finish date of the program was greater than the start and finish date of the parent program:';
+$lang->program->beginGreateChild   = 'The start date of the program is greater than the minimum start date of the subprogram or project:';
+$lang->program->endLetterChild     = 'The finish date of the program is less than the maximum finish date of the subprogram or project:';
+$lang->program->dateExceedChild    = 'The start and finish date of the program no longer include the date scope of the subprogram or project:';
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'The program has a child program or the project exists and can not be deleted.';
 $lang->program->hasProduct         = 'The program has products exist and can not be deleted.';
 $lang->program->confirmDelete      = 'Do you want to delete the \"%s\" Program?';
-$lang->program->unlinkStakeholder  = 'Do you want to remove the Stakeholder?';
+$lang->program->confirmUnlink      = 'Do you want to remove the Stakeholder?';
 $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
+$lang->program->checkedProjects    = 'Seleted %s items';
+$lang->program->budgetOverrun      = "The program's budget exceeds the remaining budget of the parent program:";
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
@@ -137,7 +143,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all'] = 'All';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'Waiting';
+$lang->program->featureBar['browse']['doing']     = 'Doing';
+$lang->program->featureBar['browse']['suspended'] = 'Suspended';
+$lang->program->featureBar['browse']['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

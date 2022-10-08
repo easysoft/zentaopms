@@ -11,6 +11,7 @@
  */
 $lang->product->index            = $lang->productCommon . '主页';
 $lang->product->browse           = "{$lang->SRCommon}列表";
+$lang->product->requirement      = "{$lang->URCommon}列表";
 $lang->product->dynamic          = $lang->productCommon . '动态';
 $lang->product->view             = "{$lang->productCommon}概况";
 $lang->product->edit             = "编辑{$lang->productCommon}";
@@ -34,6 +35,10 @@ $lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集�
 $lang->product->changeProgramTip = "%s > 修改项目集";
 $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
+$lang->product->track            = "查看需求矩阵";
+$lang->product->checkedProducts  = '已选择%s项产品';
+$lang->product->pageSummary      = '本页共%s个产品。';
+$lang->product->lineSummary      = '本页共%s个产品线，%s个产品。';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";
@@ -67,6 +72,8 @@ $lang->product->changedStories        = "已变更{$lang->SRCommon}";
 $lang->product->changedStoriesTitle   = "已变更{$lang->SRCommon}";
 $lang->product->draftStories          = "草稿{$lang->SRCommon}";
 $lang->product->draftStoriesTitle     = "草稿{$lang->SRCommon}";
+$lang->product->reviewingStories      = "评审中{$lang->SRCommon}";
+$lang->product->reviewingStoriesTitle = "评审中{$lang->SRCommon}";
 $lang->product->closedStories         = "已关闭{$lang->SRCommon}";
 $lang->product->closedStoriesTitle    = "已关闭{$lang->SRCommon}";
 $lang->product->storyCompleteRate     = "{$lang->SRCommon}完成率";
@@ -131,21 +138,22 @@ $lang->product->createdDate    = '创建日期';
 $lang->product->createdVersion = '创建版本';
 $lang->product->mailto         = '抄送给';
 
-$lang->product->searchStory  = '搜索';
-$lang->product->assignedToMe = '指给我';
-$lang->product->openedByMe   = '我创建';
-$lang->product->reviewedByMe = '我评审';
-$lang->product->reviewByMe   = '待我评审';
-$lang->product->closedByMe   = '我关闭';
-$lang->product->draftStory   = '草稿';
-$lang->product->activeStory  = '激活';
-$lang->product->changedStory = '已变更';
-$lang->product->willClose    = '待关闭';
-$lang->product->closedStory  = '已关闭';
-$lang->product->unclosed     = '未关闭';
-$lang->product->unplan       = "未计划";
-$lang->product->viewByUser   = '按用户查看';
-$lang->product->assignedByMe = '我指派';
+$lang->product->searchStory    = '搜索';
+$lang->product->assignedToMe   = '指给我';
+$lang->product->openedByMe     = '我创建';
+$lang->product->reviewedByMe   = '我评审';
+$lang->product->reviewByMe     = '待我评审';
+$lang->product->closedByMe     = '我关闭';
+$lang->product->draftStory     = '草稿';
+$lang->product->activeStory    = '激活';
+$lang->product->changingStory  = '变更中';
+$lang->product->reviewingStory = '评审中';
+$lang->product->willClose      = '待关闭';
+$lang->product->closedStory    = '已关闭';
+$lang->product->unclosed       = '未关闭';
+$lang->product->unplan         = "未计划";
+$lang->product->viewByUser     = '按用户查看';
+$lang->product->assignedByMe   = '我指派';
 
 /* Product Kanban. */
 $lang->product->myProduct             = '我负责的' . $lang->productCommon;
@@ -182,7 +190,7 @@ $lang->product->statusList['closed'] = '结束';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的干系人、相关联项目的团队成员和干系人可访问)";
+    $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的负责人及干系人、相关联项目的团队成员和干系人可访问)";
 }
 else
 {
@@ -203,7 +211,7 @@ $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
-$lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featureBar['browse']['allstory']     = '全部';
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
@@ -212,13 +220,14 @@ $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByM
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 
-$lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
+$lang->product->featureBar['all']['all']      = '全部' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['assignedbyme'] = $lang->product->assignedByMe;
-$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
-$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
-$lang->product->moreSelects['willclose']    = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;
+$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;

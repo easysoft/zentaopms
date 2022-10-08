@@ -127,6 +127,7 @@ $lang->execution->lifeTimeList['ops']   = "DevOps";
 $lang->team = new stdclass();
 $lang->team->account    = 'Người dùng';
 $lang->team->role       = 'Vai trò';
+$lang->team->roleAB     = 'Vai trò của tôi';
 $lang->team->join       = 'Đã tham gia';
 $lang->team->hours      = 'Giờ/ngày';
 $lang->team->days       = 'Ngày';
@@ -314,7 +315,7 @@ $lang->execution->linkAllStoryTip     = "({$lang->SRCommon} has never been linke
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Bạn có muốn xóa {$lang->executionCommon}[%s] này?";
 $lang->execution->confirmUnlinkMember         = "Bạn có muốn hủy liên kết người dùng này từ {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?;"
+$lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the project?";
 $lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the project. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
@@ -337,6 +338,8 @@ $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} h
 $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
+$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' should be ≥ the start date of project : %s.';
+$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -415,6 +418,11 @@ $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList[
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
+
+$lang->execution->featureBar['bug']['all']        = 'All';
+$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+
+$lang->execution->featureBar['build']['all'] = 'Build List';
 
 $lang->execution->myExecutions = 'Tôi tham gia';
 $lang->execution->doingProject = 'Hiện trường';

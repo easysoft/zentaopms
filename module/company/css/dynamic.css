@@ -10,7 +10,7 @@
 .dynamic .timeline-tag {left: -75px; font-size: 14px; color: #838A9D;}
 .dynamic .timeline-text {color: #3C4353;}
 .dynamic .text-muted {color: #838A9D;}
-.dynamic .label-id {top: -1px;}
+.dynamic .label-id {top: -1px; border: 1px solid rgba(131,138,157,0.25); color: #838A9D;}
 .dynamic.active .timeline,
 .dynamic.active .dynamic-date {border-color: #00a9fc;}
 .dynamic.active .dynamic-date:before {background-color: #00a9fc;}
@@ -21,3 +21,12 @@
 .c-project, .c-product, .c-execution {width: 110px !important; overflow: unset;}
 .c-user, .c-order {width: 96px !important; overflow: unset;}
 .c-date {width: 200px;}
+
+.timeline>li:before {left: -26px;}
+.timeline>li+li:after {left: -23px;}
+.timeline-text {margin-left: -18px;}
+.label-action {padding: 0 4px;}
+.label-id {margin-left: 4px;}
+.timeline>li.active:before {left: -30px;}
+.timeline>li>div:after {left: -27px;}
+.timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

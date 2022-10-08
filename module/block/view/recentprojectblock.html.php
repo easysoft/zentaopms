@@ -17,12 +17,12 @@
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 10px;}
-#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px; padding-left: 10px;}
+#cards .project-detail {position: absolute; bottom: 27px; left: 16px; right: 16px; font-size: 12px; padding-left: 10px;}
 #cards .project-detail > p {margin-bottom: 8px;}
 #cards .project-detail .progress {height: 4px;}
 #cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
 #cards .panel-heading {cursor: pointer;}
-#cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 46px; overflow-x: auto; position: relative;}
+#cards .project-stages-container {margin: 0 0 -16px 0; padding: 0 4px; height: 40px; overflow-x: auto; position: relative;}
 #cards .project-stages:after {content: ' '; width: 30px; display: block; right: -5px; top: 16px; bottom: -5px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
 #cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
 #cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
@@ -33,6 +33,7 @@
 #cards .project-stage-item.is-going::before {background-color: #0C64EB;}
 #dashboard .block-recentproject .panel-body {padding: 0;}
 .execution-name {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.scrollbar::-webkit-scrollbar:horizontal {height: 5px;}
 </style>
 <div class="panel-body">
   <?php if(empty($projects)):?>
@@ -83,7 +84,7 @@
             <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
             <?php else: ?>
             <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
-            <div class='project-stages-container scrollbar-hover'>
+            <div class='project-stages-container scrollbar-hover scrollbar'>
               <div class='project-stages-row'>
                 <?php foreach ($projectProjects as $project):?>
                 <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going';?>'>

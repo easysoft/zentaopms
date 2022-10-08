@@ -23,6 +23,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->execution->edit;?></small>
       </h2>
     </div>
+    <?php if($config->systemMode == 'new') echo html::hidden('project', $project->id);?>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <?php if($config->systemMode == 'new' and isset($project)):?>
@@ -39,12 +40,14 @@
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->execution->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->execution->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $execution->begin, "class='form-control form-date' onchange='computeWorkDays()' required placeholder='" . $lang->execution->begin . "'");?>
@@ -176,6 +179,9 @@
           <td id="plansBox" colspan="2">
             <div class='row'>
               <?php $i = 0;?>
+              <?php if(empty($linkedProducts)):?>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[][][]", $productPlans, '', "class='form-control chosen' multiple");?></div>
+              <?php else:?>
               <?php foreach($linkedProducts as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
@@ -183,6 +189,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
+              <?php endif;?>
             </div>
           </td>
         </tr>
@@ -191,7 +198,7 @@
         <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->desc;?></th>
@@ -207,7 +214,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

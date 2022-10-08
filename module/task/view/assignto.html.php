@@ -14,12 +14,12 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
+    <?php if(!empty($task->members) and strpos('wait,doing,pause', $task->status) !== false and (!isset($task->members[$app->user->account]) or $task->mode == 'linear')):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
-        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->transfer);?></p>
+        <?php if($task->mode == 'linear'):?>
+        <p><?php echo $lang->task->transferNotice;?></p>
         <?php else:?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->transfer);?></p>
         <?php endif;?>
@@ -38,14 +38,14 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
-          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, empty($task->team) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
-        </tr>  
+          <th class='w-80px'><?php echo (empty($task->team) or strpos('done,cencel,closed', $task->status) !== false) ? $lang->task->assign : $lang->task->transferTo;?></th>
+          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, (empty($task->team) or strpos('done,cencel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
+        </tr>
         <?php if($task->status != 'done' and $task->status != 'closed' and $task->parent >= 0):?>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
-        </tr>  
+        </tr>
         <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>

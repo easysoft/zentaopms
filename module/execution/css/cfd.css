@@ -1,0 +1,37 @@
+.main-content > h2 {font-size: 16px;}
+#mainContent h2 .icon-help {font-size: 16px; vertical-align: text-bottom;}
+.tooltip-inner {font-size: 13px; letter-spacing: 1px; line-height: 22px; max-width: 400px !important; text-align: left;}
+.container {max-width: 1700px !important}
+
+.pull-left .input-control {margin-right: 10px;}
+
+#cfdWrapper {max-width: 1450px; padding: 25px 0px 10px; position: relative}
+#cfdChart {margin: 0 auto;}
+@media screen and (max-width: 1920px)
+{
+#cfdChart {width:1400px !important; height:600px !important}
+#mainContent {min-width: 1400px !important;}
+#burnStatistics {left: 1400px !important;}
+}
+@media screen and (max-width: 1680px)
+{
+#cfdChart {width:1150px !important; height:500px !important}
+#mainContent {min-width: 1150px !important;}
+#burnStatistics {left: 1150px !important;}
+}
+@media screen and (max-width: 1366px)
+{
+#cfdChart {width:1000px !important; height:400px !important}
+#mainContent {min-width: 1000px !important;}
+#burnStatistics {left: 1000px !important;}
+}
+
+#mainContent {min-width: 1200px;}
+#burnStatistics {position: absolute; width: 180px; left: 1200px; height: 200px; top: 20%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px; border: 1px solid #dcdcdc; background-color: #F8F8F8; padding: 15px 20px; color: #3c4353; border-radius: 8px;}
+#burnStatistics .bg-primary {margin-right: 5px;}
+#burnStatistics .icon-help {color: black;}
+#burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}
+
+#cfdDateSelect {float: left;}
+#cfdDateSelect .input-group {width: 300px; float: left;}
+#datePreview {float: left; margin-left: 10px;}

@@ -10,6 +10,9 @@ title=测试 compileModel->getListByJobID();
 cid=1
 pid=1
 
+检查是否能拿到数据 >> 这是一个Job1
+检查传一个不存在的jobid会返回什么 >> 0
+
 */
 
 $compile = new compileTest();

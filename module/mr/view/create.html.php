@@ -10,6 +10,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::import($jsRoot . 'misc/base64.js');?>
+<?php js::set('hosts', $hosts);?>
+<?php js::set('repo', $repo);?>
+<?php js::set('mrLang', $lang->mr);?>
+<?php js::set('branchPrivs', array());?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -19,15 +24,15 @@
       <form id='mrForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->common;?></th>
-            <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control chosen'");?></td>
+            <th><?php echo $lang->mr->server;?></th>
+            <td class='required'><?php echo html::select('hostID', array('') + $hostPairs, zget($repo, 'gitService', ''), "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
             <td>
               <div class='input-group required'>
                 <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
-                <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
+                <span class='input-group-addon fix-border branch-btn'><?php echo $lang->mr->sourceBranch ?></span>
                 <?php echo html::select('sourceBranch', array(''), '', "class='form-control chosen'");?>
               </div>
             </td>
@@ -37,7 +42,7 @@
             <td>
               <div class='input-group required'>
                 <?php echo html::select('targetProject', array(''), '', "class='form-control chosen'");?>
-                <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>
+                <span class='input-group-addon fix-border branch-btn'><?php echo $lang->mr->targetBranch ?></span>
                 <?php echo html::select('targetBranch', array(''), '', "class='form-control chosen'");?>
               </div>
             </td>
@@ -57,7 +62,7 @@
           <tr>
             <th><?php echo $lang->mr->removeSourceBranch;?></th>
             <td colspan='1'>
-              <div class="checkbox-primary">
+              <div class="checkbox-primary" title="<?php echo $lang->mr->notDelbranch;?>">
                 <input type="checkbox" name="removeSourceBranch" value="1" id="removeSourceBranch">
                 <label for="removeSourceBranch"></label>
               </div>

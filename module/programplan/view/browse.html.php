@@ -24,7 +24,7 @@
     </p>
   </div>
   <?php else:?>
-    <?php if($type == 'gantt') include './gantt.html.php';?>
+    <?php if($type == 'gantt' or $type == 'assignedTo') include './gantt.html.php';?>
     <?php if($type == 'lists') include './list.html.php';?>
   <?php endif;?>
 </div>
@@ -33,6 +33,7 @@ $('#subNavbar').find('ul li').each(function()
 {
     var that = $(this);
     if(that.attr('data-id') != browseType) that.removeClass('active');
+    if(that.attr('data-id') == 'gantt' && 'assignedTo' == browseType) that.addClass('active');
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

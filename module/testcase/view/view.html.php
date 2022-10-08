@@ -18,7 +18,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary' data-app={$this->app->tab}");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -106,7 +106,7 @@
         <div class="detail-content article-content"><?php echo nl2br(htmlSpecialString($case->xml));?></div>
       </div>
       <?php endif;?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case, 'method' => 'view', 'showDelete' => false));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='main-actions'>
@@ -127,6 +127,20 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php if($isLibCase):?>
+            <tr>
+              <th><?php echo $lang->testcase->fromCase;?></th>
+              <td>
+                <?php
+                if(isset($case->linkCaseTitles))
+                {
+                    foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                    {
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                    }
+                }
+                ?>
+              </td>
+            </tr>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
               <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
@@ -186,7 +200,17 @@
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
                 $param = $this->app->tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                if(isset($case->storyTitle))
+                {
+                    if(common::hasPriv('story', 'view'))
+                    {
+                        echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                    }
+                    else
+                    {
+                        echo "#$case->story:$case->storyTitle";
+                    }
+                }
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -233,7 +257,7 @@
                     if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
-                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
+                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask' and !empty($case->product))
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
                     if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
@@ -260,13 +284,13 @@
             <?php if(!$isLibCase):?>
             <tr>
               <th><?php echo $lang->testcase->linkCase;?></th>
-              <td>
+              <td class='linkCaseTitles'>
                 <?php
                 if(isset($case->linkCaseTitles))
                 {
                     foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                     {
-                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%' title='$linkCaseTitle'") . '<br />';
                     }
                 }
                 ?>
@@ -290,11 +314,11 @@
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <td>
+              <td class='linkBugTitles'>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
               {
-                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
+                  echo html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%' title='$bugTitle'") . '<br />';
               }
               ?>
               </td>
@@ -342,14 +366,6 @@
 <?php
 js::set('fullscreen', $lang->fullscreen);
 js::set('retrack', $lang->retrack);
+js::set('isLibCase', $isLibCase);
 ?>
-<?php if(!$isLibCase):?>
-<script>
-$(function()
-{
-    $('#subNavbar [data-id=testcase]').addClass('active');
-    $('#navbar [data-id=testcase]').addClass('active');
-})
-</script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

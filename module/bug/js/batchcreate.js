@@ -4,6 +4,18 @@ $(function()
 
     var $titleCol = $('#batchCreateForm table thead tr th.c-title');
     if($titleCol.width() < 150) $titleCol.width(150);
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+     /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('batchCreateFields', 10, $titleCol, 150);
+        return false;
+    });
 })
 
 /**

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/webhook.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -92,4 +93,4 @@ r($result7)  && p('sendType:0') && e('『发送方式』不符合格式，应当
 r($result8)  && p()             && e('12');                                                //测试不传products的情况
 r($result9)  && p()             && e('13');                                                //测试不传executions的情况
 R($result10) && p()             && e('14');                                                //测试不传desc的情况
-system("./ztest init");
+$db->restoreDB();

@@ -31,6 +31,8 @@ class testtaskModel extends model
         $task = fixer::input('post')
             ->setDefault('build', '')
             ->setIF($this->config->systemMode == 'new', 'project', $projectID)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -74,11 +76,13 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t3.name), t3.name)" : 't3.name';
+        return $this->dao->select("t1.*, t2.name AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
 
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
@@ -86,10 +90,19 @@ class testtaskModel extends model
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(strtolower($scopeAndStatus[1]) != 'totalstatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
+            ->beginIF($branch == BRANCH_MAIN)
+            ->orWhere('(t1.build')->eq('trunk')
+            ->andWhere('t1.product')->eq((int)$productID)
+            ->markRight(1)
+            ->fi()
+            ->beginIF($scopeAndStatus[1] == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -283,11 +296,15 @@ class testtaskModel extends model
      */
     public function getByUser($account, $pager = null, $orderBy = 'id_desc', $type = '')
     {
-        return $this->dao->select('t1.*, t2.name AS executionName, t3.name AS buildName')
+        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t2.name), t2.name)" : 't2.name';
+        return $this->dao->select("t1.*, $executionNameField AS executionName, t3.name AS buildName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t2.project = t5.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.owner')->eq($account)
             ->andWhere('t2.id')->in($this->app->user->view->sprints)
@@ -733,9 +750,12 @@ class testtaskModel extends model
      */
     public function update($taskID)
     {
-        $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
+        $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->add('id', $taskID)
+            ->setDefault('type', '')
+            ->setDefault('mailto', '')
+            ->setDefault('deleteFiles', array())
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
@@ -743,7 +763,7 @@ class testtaskModel extends model
             ->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
-        $this->dao->update(TABLE_TESTTASK)->data($task)
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
@@ -753,8 +773,7 @@ class testtaskModel extends model
 
         if(!dao::isError())
         {
-            $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
-            $this->file->saveUpload('testtask', $taskID);
+            $this->file->processFile4Object('testtask', $oldTask, $task);
             return common::createChanges($oldTask, $task);
         }
     }
@@ -1102,8 +1121,10 @@ class testtaskModel extends model
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftjoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.owner')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
@@ -1434,7 +1455,13 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'runcase' and isset($testtask->auto) and $testtask->auto == 'unit')  return false;
-        if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
+
+        if($action == 'runcase')
+        {
+            if(isset($testtask->caseStatus)) return $testtask->version < $testtask->caseVersion ? $testtask->caseStatus == 'wait' : $testtask->caseStatus != 'wait';
+            return $testtask->status != 'wait';
+        }
+
         return true;
     }
 
@@ -1522,7 +1549,7 @@ class testtaskModel extends model
                 foreach(explode(',', trim($run->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     echo "<span title='{$this->lang->testcase->changed}' class='warning'>{$this->lang->testcase->changed}</span>";
                 }
@@ -1564,7 +1591,7 @@ class testtaskModel extends model
                 echo zget($users, $run->lastRunner);
                 break;
             case 'lastRunDate':
-                if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
+                echo helper::isZeroDate($run->lastRunDate) ? '' : substr($run->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
                 $lastRunResultText = $run->lastRunResult ? zget($this->lang->testcase->resultList, $run->lastRunResult, $run->lastRunResult) : $this->lang->testcase->unexecuted;
@@ -1575,7 +1602,10 @@ class testtaskModel extends model
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
                 break;
             case 'assignedTo':
-                echo zget($users, $run->assignedTo);
+                $btnTextClass = '';
+                if($run->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+                if(!empty($run->assignedTo) and $run->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
+                echo "<span class='$btnTextClass'>" . zget($users, $run->assignedTo) . '</span>';
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
@@ -1587,7 +1617,7 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                if($caseChanged)
+                if($run->caseStatus != 'wait' and $caseChanged)
                 {
                     common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
                     break;
@@ -1595,8 +1625,8 @@ class testtaskModel extends model
 
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
-                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
@@ -2085,8 +2115,9 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
+            if(!empty($caseResult->id)) $case->id = $caseResult->id;
             $case->product    = $productID;
-            $case->title      = $caseResult->title;
+            if(empty($caseResult->id)) $case->title = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'unit';
             $case->stage      = 'unittest';
@@ -2094,7 +2125,7 @@ class testtaskModel extends model
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = $now;
             $case->version    = 1;
-            $case->auto       = 'unit';
+            if(empty($caseResult->id)) $case->auto = 'unit';
             $case->frame      = $frame;
 
             $result = new stdclass();
@@ -2271,7 +2302,7 @@ class testtaskModel extends model
         $menu .= '<div id="action-divider">';
         $menu .= $this->buildMenu('testtask',   'cases',    $params, $task, 'browse', 'sitemap');
         $menu .= $this->buildMenu('testtask',   'linkCase', "$params&type=all&param=myQueryID", $task, 'browse', 'link');
-        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'flag');
+        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'summary');
         $menu .= '</div>';
         $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
         $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');
@@ -2284,5 +2315,75 @@ class testtaskModel extends model
             $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='{$class}'");
         }
         return $menu;
+    }
+
+    /**
+     * Set menu.
+     *
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $taskID
+     * @access public
+     * @return void
+     */
+    public function setMenu($products, $productID, $branch = '', $taskID = 0)
+    {
+        if($this->session->branch) $branch = $this->session->branch;
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->app->loadLang('product');
+            return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        }
+
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        $product = $this->loadModel('product')->getById($productID);
+        if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+        $selectHtml = $this->product->getSwitcher($productID, $taskID, $branch);
+
+        if($taskID and $this->app->viewType != 'mhtml')
+        {
+            $testtask     = $this->getById($taskID);
+            $module       = $this->app->rawModule;
+            $method       = $this->app->rawMethod;
+            $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=$branch&taskID=$taskID&module=$module&method=$method");
+            $selectHtml  .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $selectHtml .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $selectHtml .= "</div></div>";
+        }
+
+        $this->lang->switcherMenu = $selectHtml;
+        common::setMenuVars('qa', $productID);
+    }
+
+    /**
+     * Create the select code of testtasks.
+     *
+     * @param  int    $productID
+     * @param  int    $testtaskID
+     * @param  string $objectType execution|project
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function select($productID, $testtaskID, $objectType = '', $objectID = 0)
+    {
+        $output        = '';
+        $currentModule = $this->app->rawModule;
+        $currentMethod = $this->app->rawMethod;
+        if($testtaskID and $this->app->viewType != 'mhtml')
+        {
+            $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=&taskID=$testtaskID&module=$currentModule&method=$currentMethod&objectType=$objectType&objectID=$objectID");
+            $testtask     = $this->getById($testtaskID);
+
+            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+        }
+        $output .= '</div>';
+        return $output;
     }
 }

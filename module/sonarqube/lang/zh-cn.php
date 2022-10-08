@@ -16,6 +16,7 @@ $lang->sonarqube->desc              = '描述';
 $lang->sonarqube->reportView        = "SonarQube报告";
 $lang->sonarqube->browseIssue       = "SonarQube问题列表";
 $lang->sonarqube->createBug         = "转bug";
+$lang->sonarqube->delError          = "该服务器下有绑定的构建，请删除关联之后操作";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "服务器名称";
@@ -51,6 +52,7 @@ $lang->sonarqube->notAdminer           = "请填写具有Administrator权限的S
 $lang->sonarqube->projectKey          = '项目标识';
 $lang->sonarqube->projectName         = '项目名称';
 $lang->sonarqube->projectlastAnalysis = '最后执行时间';
+$lang->sonarqube->serverList          = '服务器列表';
 
 $lang->sonarqube->report = new stdclass();
 $lang->sonarqube->report->bugs                       = 'Bugs';

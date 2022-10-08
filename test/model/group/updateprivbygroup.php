@@ -10,6 +10,8 @@ title=测试 groupModel->updatePrivByGroup();
 cid=1
 pid=1
 
+
+
 */
 
 $group = new groupTest();

@@ -139,6 +139,7 @@ $lang->story->linkStories    = "相關{$lang->SRCommon}";
 $lang->story->childStories   = "細分需求";
 $lang->story->duplicateStory = "重複需求ID";
 $lang->story->reviewResult   = '評審意見';
+$lang->story->reviewResultAB = '評審結果';
 $lang->story->preVersion     = '之前版本';
 $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = "繼續添加{$lang->SRCommon}";
@@ -172,11 +173,12 @@ $lang->story->needNotReviewList[1] = '不需要評審';
 $lang->story->useList[0] = '不使用';
 $lang->story->useList[1] = '使用';
 
-$lang->story->statusList['']        = '';
-$lang->story->statusList['draft']   = '草稿';
-$lang->story->statusList['active']  = '激活';
-$lang->story->statusList['closed']  = '已關閉';
-$lang->story->statusList['changed'] = '已變更';
+$lang->story->statusList['']          = '';
+$lang->story->statusList['draft']     = '草稿';
+$lang->story->statusList['reviewing'] = '评审中';
+$lang->story->statusList['active']    = '激活';
+$lang->story->statusList['closed']    = '已關閉';
+$lang->story->statusList['changing']  = '變更中';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';
@@ -295,7 +297,8 @@ $lang->story->action->recalled              = array('main' => '$date, 由 <stron
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 關閉，原因為 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>確認通過</strong>。');
 $lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系統</strong> 關閉，原因為 <strong>拒絶</strong>。');
-$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請變更後重新發起評審。');
+$lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>有待明確</strong>，請編輯後重新發起評審。');
+$lang->story->action->reviewreverted        = array('main' => '$date, 由 <strong>系統</strong> 判定，結果為 <strong>撤銷變更</strong>。');
 $lang->story->action->linked2plan           = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到' . $lang->executionCommon . ' <strong>$extra</strong>。');

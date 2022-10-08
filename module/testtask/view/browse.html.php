@@ -20,7 +20,7 @@ $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', strtolower($status));?>
 <style>
-#action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
+#action-divider{display: inline-block; line-height: 0px;}
 </style>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
@@ -34,6 +34,7 @@ $status = $this->session->testTaskVersionStatus;
         ?>
       </ul>
     </div>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
     <?php $key = strtolower($key);?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>

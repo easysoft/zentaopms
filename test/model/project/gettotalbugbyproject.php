@@ -9,7 +9,8 @@ title=测试 projectModel->getTotalBugByProject();
 cid=1
 pid=1
 
-状态一致时正常打印id为11的项目bug数量 >> 3
+获取id为11的项目下激活的bug数量 >> 4
+获取id为27的项目下激活的bug数量 >> 1
 
 */
 
@@ -17,6 +18,7 @@ global $tester;
 $tester->loadModel('project');
 
 $projectIdList = array(11, 12, 13, 14, 15, 16, 27);
+$result = $tester->project->getTotalBugByProject($projectIdList, 'active');
 
-r($tester->project->getTotalBugByProject($projectIdList, 'active')) && p('11') && e('4'); //获取id为11的项目下激活的bug数量
-r($tester->project->getTotalBugByProject($projectIdList, 'active')) && p('27') && e('');  //获取id为27的项目下激活的bug数量
+r($result[11]) && p('allBugs') && e('4');  //获取id为11的项目下激活的bug数量
+r($result[27]) && p('allBugs') && e('1');  //获取id为27的项目下激活的bug数量

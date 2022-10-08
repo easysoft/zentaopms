@@ -45,7 +45,7 @@
       <strong><?php echo $lang->install->getPriv;?></strong>
     </div>
     <div class='modal-body'>
-      <form method='post'>
+      <form method='post' target='hiddenwin'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
             <th class='c-company'><?php echo $lang->install->company;?></th>
@@ -61,7 +61,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->install->password;?></th>
-            <td><?php echo html::input('password', '', "class='form-control'");?></td>
+            <td><?php echo html::input('password', '', "class='form-control' placeholder='{$lang->install->placeholder->password}' oninput=\"this.value = this.value.replace(/[^\\x00-\\xff]/g, '');\"");?></td>
           </tr>
           <tr>
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>

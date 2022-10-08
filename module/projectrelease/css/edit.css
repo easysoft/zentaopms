@@ -1,4 +1,4 @@
 .table-form > tbody > tr > td > .row > [class*="col-"] .panel-heading {line-height: 16px;}
 .contentDiv {height: 190px; overflow-y: auto; margin-bottom: 10px !important;}
 .contentDiv .panel-heading {line-height: 14px;}
-.checkbox-primary {display: inline-block; margin-left: 10px;}
+#markerBox {display: inline-block; margin-left: 10px;}

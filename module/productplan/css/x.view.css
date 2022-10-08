@@ -1,6 +1,6 @@
 #mainMenu, .actions, .pager-size-menu, .tab-btn-container ul li span {display: none;}
-#main {min-width: unset; overflow-y: overlay;}
-.main-content {padding: 0; }
+#main {min-width: unset; overflow-y: overlay; position: unset !important;}
+.main-content {padding: 0;}
 .main-table {margin-bottom: 40px;}
 .main-content, .main-table > .table, .main-table > .table-footer, .main-table > .table-header, .main-table > .table-responsive {box-shadow: none!important;}
 .table-footer {position: fixed; width: 100%; bottom: 0;}

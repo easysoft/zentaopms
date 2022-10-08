@@ -1,0 +1,3 @@
+.c-limited {width: 100px;}
+[lang^=de] .c-limited {width: 175px !important;}
+.c-actions-1 {width: 80px;}

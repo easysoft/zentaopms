@@ -4,4 +4,9 @@
 .side-col .cell {padding: 0px;}
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
 .btn-edit-comment {z-index: 100;}
-.modal-body {right: 15px;}
+.select-project-modal .modal-body {right: 15px;}
+.osContent, .browserContent {margin: 0 0 5px;}
+.browserContent {margin-left: -4px;}
+.resolution {white-space: nowrap; overflow: hidden;}
+.link-commit {overflow: hidden; white-space: nowrap; margin-right: 5px;}
+.main-actions .btn-toolbar{display: inline-flex; flex-wrap: wrap;}

@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->type;?></th>
-          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->owner;?></th>
@@ -77,7 +77,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows=10 class='form-control'");?></td>
+          <td colspan='2'>
+            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=testtask&link=desc');?>
+            <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows=10 class='form-control'");?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
@@ -85,13 +88,16 @@
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>
-          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='3'>
+            <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'false', 'object' => $task, 'method' => 'edit'));?>
+            <?php echo $this->fetch('file', 'buildform');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control chosen'");?>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control picker-select'");?>
               <?php echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>

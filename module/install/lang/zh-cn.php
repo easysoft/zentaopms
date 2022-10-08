@@ -48,17 +48,17 @@ $lang->install->introductionContent = <<<EOT
   <h4>尊敬的用户您好，欢迎您使用禅道项目管理系统。</h4>
   <p> 禅道自15系列开始提供了两种使用模式，一种是经典管理模式，功能较为精简，主要提供了产品和项目两个核心功能；另一种是全新项目集管理模式，增加了项目集和执行的概念。下面是全新项目集管理模式的介绍：</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>产品</strong></p>
+      <p class='block-title'><i class='icon icon-product'></i> <strong>产品</strong></p>
       <p>产品用来将公司的战略细分为可以进行研发的需求，产品经理可以用来做产品的发布计划。<p>
     </div>
     <div class='block-details'>
-      <p class='block-title'><i class='icon icon-project'></i><strong>项目</strong></p>
+      <p class='block-title'><i class='icon icon-project'></i> <strong>项目</strong></p>
       <p>项目用来组织相应的人力进行研发，做好项目过程的跟踪管理，多快好省地完成项目。</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-run'></i><strong>执行</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i> <strong>执行</strong></p>
       <p>执行用来做任务的分解、指派和跟踪，保证项目目标可以落实到人来执行。<p>
     </div>
   </div>
@@ -154,12 +154,15 @@ $lang->install->saved2File         = '配置信息已经成功保存到" <strong
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
 global $app;
-$lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->moduleRoot}config/config.php文件中手动关闭。";
+$lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->basePath}config/config.php文件中手动关闭。";
 
 $lang->install->getPriv            = '设置帐号';
 $lang->install->company            = '公司名称';
 $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
+
+$lang->install->placeholder = new stdclass();
+$lang->install->placeholder->password = '6位及以上，包含大小写字母，数字。';
 
 $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";

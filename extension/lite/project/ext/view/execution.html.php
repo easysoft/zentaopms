@@ -14,7 +14,7 @@
 <div class='clearfix' id='mainMenu'>
   <div class='btn-toolbar pull-left'>
     <?php
-      foreach($lang->project->featureBar as $label => $labelName)
+      foreach($lang->project->featureBar['browse'] as $label => $labelName)
       {
           $active = $status == $label ? 'btn-active-text' : '';
           echo html::a($this->createLink('project', 'execution', "status=$label&projectID=$projectID"), '<span class="text">' . $labelName . '</span> ' . ($status == $label ? "<span class='label label-light label-badge'>" . (int)count($kanbanList) . '</span>' : ''), '', "class='btn btn-link $active'");
@@ -30,7 +30,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
-      <?php if(common::hasPriv('execution', 'create')):?>
+      <?php if(common::hasPriv('execution', 'create') and $allExecutionsNum):?>
       <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->project->createKanban, '', "class='btn btn-info' data-app='project'");?>
       <?php endif;?>
     </p>
@@ -108,7 +108,7 @@
                   <?php if(count($teams) > 3):?>
                   <?php $lastMember = end($teams);?>
                   <div title="<?php echo $lastMember->realname;?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account, 'name' => $lastMember->realname), 'avatar-circle avatar-' . key($lastMember)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account, 'name' => $lastMember->realname), 'avatar-circle avatar-' . key((array)$lastMember)); ?>
                   </div>
                   <?php endif;?>
                 </div>

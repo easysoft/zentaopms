@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
+$db->switchDB();
 
 /**
 
@@ -28,5 +29,5 @@ r($plan->updateParentStatus($parentid[0])) && p() && e('0'); //将id为1的计�
 r($plan->updateParentStatus($parentid[1])) && p() && e('1'); //将id为2的计划改为doing状态
 r($plan->updateParentStatus($parentid[2])) && p() && e('1'); //将id为3的计划改为closed状态
 r($plan->updateParentStatus($parentid[3])) && p() && e('1'); //将id为4的计划改为done状态
-system("./ztest init");
 ?>
+$db->restoreDB();

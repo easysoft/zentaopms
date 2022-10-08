@@ -1,0 +1,25 @@
+-- create first view
+CREATE VIEW withclause AS
+
+WITH cte AS (
+  SELECT p.name, p.shape
+  FROM gis_all as p
+)
+
+SELECT cte.*
+FROM cte
+CROSS JOIN gis_all;
+-- create second view
+CREATE VIEW withclause2 AS
+
+WITH cte AS (
+  SELECT p.name, p.shape
+  FROM gis_all as p
+), cte2 AS (
+  SELECT p.name as n2, p.shape as sh2
+  FROM gis_all as p
+)
+
+SELECT cte.*,cte2.*
+FROM cte,cte2
+CROSS JOIN gis_all;

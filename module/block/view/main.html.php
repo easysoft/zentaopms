@@ -10,6 +10,7 @@
  * @link        http://www.zentao.pms
  */
 $viewDir      = dirname(__FILE__);
-$file2Include = file_exists(dirname($viewDir) . "/ext/view/{$code}block.html.php") ? dirname($viewDir) . "/ext/view/{$code}block.html.php" : "{$viewDir}/{$code}block.html.php";
+$extFire      = $app->getExtensionRoot() . $config->edition . "/block/ext/view/{$code}block.html.php";
+$file2Include = file_exists($extFire) ? $extFire : "{$viewDir}/{$code}block.html.php";
 include $file2Include;
 ?>

@@ -892,23 +892,32 @@ class user extends control
                     }
 
                     /* Get the module and method of the referer. */
+                    $module = $this->config->default->module;
+                    $method = $this->config->default->method;
                     if($this->config->requestType == 'PATH_INFO')
                     {
+                        $requestFix = $this->config->requestFix;
+
                         $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
                         $path = rtrim($path, '.html');
-                        if(empty($path)) $path = $this->config->requestFix;
-                        list($module, $method) = explode($this->config->requestFix, $path);
+                        if($path and strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
                     }
                     else
                     {
                         $url   = html_entity_decode($this->post->referer);
                         $param = substr($url, strrpos($url, '?') + 1);
 
-                        $module = $this->config->default->module;
-                        $method = $this->config->default->method;
                         if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
                         $module = str_replace('m=', '', $module);
                         $method = str_replace('f=', '', $method);
+                    }
+
+                    /* Check parsed name of module and method from referer. */
+                    if(empty($module) or !$this->app->checkModuleName($module, $exit = false) or
+                       empty($method) or !$this->app->checkMethodName($module, $exit = false))
+                    {
+                        $module = $this->config->default->module;
+                        $method = $this->config->default->method;
                     }
 
                     $response['result']  = 'success';
@@ -955,11 +964,14 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
+                if(dao::isError()) $response['message'] = dao::getError();
                 return $this->send($response);
             }
         }
         else
         {
+            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
+
             $this->loadModel('misc');
             $this->loadModel('extension');
             $this->view->noGDLib       = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
@@ -970,6 +982,7 @@ class user extends control
             $this->view->rand          = $this->user->updateSessionRandom();
             $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
             $this->view->plugins       = $this->extension->getExpiringPlugins(true);
+            $this->view->loginExpired  = $loginExpired;
             $this->display();
         }
     }
@@ -991,7 +1004,9 @@ class user extends control
         $this->view->method            = $method;
         $this->view->denyPage          = $this->referer;        // The denied page.
         $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        $this->app->loadLang($module);
+        if($module == 'requirement') $this->app->loadLang('story');
+        if($module != 'requirement') $this->app->loadLang($module);
+
         $this->app->loadLang('my');
 
         /* Check deny type. */
@@ -1055,15 +1070,14 @@ class user extends control
 
         if($_POST)
         {
-            if($needCreateFile) return print(js::reload('parent'));
+            if($needCreateFile) return $this->send(array('result' => 'success', 'locate' => 'reload'));
 
             $result = $this->user->resetPassword();
-            if(dao::isError()) return print(js::error(dao::getError()));
-            if(!$result) return print(js::alert($this->lang->user->resetFail));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
-            echo js::alert($this->lang->user->resetSuccess);
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return print(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
         }
 
         /* Remove the real path for security reason. */
@@ -1074,6 +1088,94 @@ class user extends control
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
+
+        $this->display();
+    }
+
+    /**
+     * Forget password.
+     *
+     * @access public
+     * @return void
+     */
+    public function forgetPassword()
+    {
+        $this->app->loadLang('admin');
+        $this->loadModel('mail');
+
+        if(!empty($_POST))
+        {
+            /* Check account and email. */
+            $account = $_POST['account'];
+            $email   = $_POST['email'];
+            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
+            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+
+            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
+
+            $code = uniqid();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+
+            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
+        }
+
+        $this->view->title = $this->lang->user->resetPassword;
+        $this->display();
+    }
+
+    /**
+     * Reset password.
+     *
+     * @param  string  $code
+     * @access public
+     * @return void
+     */
+    public function resetPassword($code)
+    {
+        $expired = true;
+        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"' . $code . '"%')->fetch();
+        if($user)
+        {
+            $resetToken = json_decode($user->resetToken);
+            if($resetToken->endTime >= time()) $expired = false;
+        }
+
+        if(!empty($_POST))
+        {
+            if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
+
+            $this->user->resetPassword();
+            if(dao::isError())
+            {
+                if(empty($_POST['password2'])) dao::$errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+
+                return $this->send($response);
+            }
+
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($this->post->account)->exec();
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = inlink('login');
+
+            return $this->send($response);
+        }
+
+        $this->view->title   = $this->lang->user->resetPWD;
+        $this->view->expired = $expired;
+        $this->view->user    = empty($user) ? '' : $user;
+        $this->view->rand    = $this->user->updateSessionRandom();
 
         $this->display();
     }
@@ -1193,13 +1295,13 @@ class user extends control
     public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
+        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}' data-drop-direction='bottom'" : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
-        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
+        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control picker-select' multiple $attr"));
     }
 
     /**

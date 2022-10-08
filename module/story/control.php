@@ -40,11 +40,11 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $storyType = 'story')
     {
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -59,7 +59,7 @@ class story extends control
             if(!empty($project)) $productID = key($product);
         }
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
@@ -114,6 +114,8 @@ class story extends control
             $this->view->$fromObjectName  = $fromObject;
         }
 
+        $copyStoryID = $storyID;
+
         if(!empty($_POST))
         {
             $response['result'] = 'success';
@@ -135,7 +137,7 @@ class story extends control
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
                 if($objectID == 0)
                 {
-                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}");
+                    $response['locate'] = $this->createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType=$storyType");
                 }
                 else
                 {
@@ -162,12 +164,14 @@ class story extends control
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
+                    if($this->config->systemMode == 'new') $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+
                     $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                    $this->loadModel('action')->create('story', $storyID, $actionType, '', $objectID);
+                    $this->action->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {
-                    $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                    $this->action->create('story', $storyID, 'linked2project', '', $objectID);
                 }
             }
 
@@ -175,16 +179,52 @@ class story extends control
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+
+                if($this->config->edition == 'biz' || $this->config->edition == 'max')
+                {
+                    $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                    if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                }
             }
 
             $message = $this->executeHooks($storyID);
             if($message) $this->lang->saveSuccess = $message;
-            $response['message'] = $this->lang->saveSuccess;
+            $response['message'] = $this->post->status == 'draft' ? $this->lang->story->saveDraftSuccess : $this->lang->saveSuccess;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution')
+                {
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+                    if($execution->type == 'kanban')
+                    {
+                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                        $kanbanData    = json_encode($kanbanData);
+
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                    }
+                    else
+                    {
+                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+                        $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData      = $kanbanData[$kanbanType];
+                        $kanbanData      = json_encode($kanbanData);
+                        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban(\"story\", $kanbanData)"));
+                    }
+                }
+                else
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                }
+            }
 
             if($this->post->newStory)
             {
@@ -198,8 +238,20 @@ class story extends control
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
-                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
-                if($this->session->storyList) $response['locate'] = $this->session->storyList;
+                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
+                if($this->session->storyList)
+                {
+                    /* When copying story in the product plan, return to different pages for story#32949. */
+                    if($copyStoryID and strpos($this->session->storyList, 'productplan') !== false)
+                    {
+                        $storyInfo = $this->story->getByList(array($storyID, $copyStoryID));
+                        if($storyInfo[$storyID]->plan == $storyInfo[$copyStoryID]->plan or $storyInfo[$storyID]->product != $storyInfo[$copyStoryID]->product) $response['locate'] = $this->session->storyList;
+                    }
+                    else
+                    {
+                        $response['locate'] = $this->session->storyList;
+                    }
+                }
             }
             else
             {
@@ -277,7 +329,7 @@ class story extends control
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
             $pri       = !empty($oldBug->pri) ? $oldBug->pri : '3';
-            if(strpos($oldBug->mailto, $oldBug->openedBy) === false)
+            if($oldBug->mailto and strpos($oldBug->mailto, $oldBug->openedBy) === false)
             {
                 $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
             }
@@ -332,7 +384,7 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -368,9 +420,9 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $type == 'story' ? $this->story->getRequirements($productID) : '';
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
-        $this->view->type             = $type;
+        $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
+        $this->view->type             = $storyType;
 
         $this->display();
     }
@@ -384,12 +436,12 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $executionID
      * @param  int    $plan
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $storyType = 'story', $extra = '')
     {
         /* Set menu. */
         if($executionID)
@@ -436,7 +488,7 @@ class story extends control
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->story->replaceURLang($type);
+        $this->story->replaceURLang($storyType);
 
         /* Check can subdivide or not. */
         if($storyID)
@@ -447,7 +499,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->story->batchCreate($productID, $branch, $type);
+            $mails = $this->story->batchCreate($productID, $branch, $storyType);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $stories = array();
@@ -464,8 +516,8 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -477,11 +529,41 @@ class story extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
 
-            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            if(isonlybody())
+            {
+                $executionID = $executionID ? $executionID : $this->session->execution;
+                $execution   = $this->execution->getByID($executionID);
+                if($this->app->tab == 'execution')
+                {
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+
+                    if($execution->type == 'kanban')
+                    {
+                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                        $kanbanData    = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    }
+                    else
+                    {
+                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+                        $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData      = $kanbanData[$kanbanType];
+                        $kanbanData      = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    }
+                }
+                else
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
 
             if($storyID)
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
             elseif($executionID)
             {
@@ -494,7 +576,7 @@ class story extends control
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
+                $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
                 return print(js::locate($locateLink, 'parent'));
             }
         }
@@ -520,11 +602,11 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Init vars. */
         $planID   = $plan;
-        $pri      = 0;
+        $pri      = 3;
         $estimate = '';
         $title    = '';
         $spec     = '';
@@ -571,7 +653,7 @@ class story extends control
             $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
             $showFields = trim($showFields, ',');
         }
-        if($type == 'requirement')
+        if($storyType == 'requirement')
         {
             unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
@@ -601,11 +683,11 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = isset($story->title) ? $story->title : '';
         $this->view->spec             = $spec;
-        $this->view->type             = $type;
+        $this->view->type             = $storyType;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $executionID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? 0 : 1;
         $this->view->forceReview      = $this->story->checkForceReview();
         $this->view->executionID      = $executionID;
 
@@ -659,37 +741,48 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function edit($storyID, $kanbanGroup = '')
+    public function edit($storyID, $kanbanGroup = 'default', $storyType = 'story')
     {
+        $this->loadModel('file');
+        $this->app->loadLang('bug');
+        $story = $this->story->getById($storyID, 0, true);
+        $this->commonAction($storyID);
+
         if(!empty($_POST))
         {
-            $changes = $this->story->update($storyID);
+            $this->story->update($storyID);
             if(dao::isError()) return print(js::error(dao::getError()));
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $action   = !empty($changes) ? 'Edited' : 'Commented';
-                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-
-                $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                if(isset($_POST['reviewer'])) $this->story->recordReviewAction($story);
-            }
 
             $this->executeHooks($storyID);
 
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                if($this->app->tab == 'execution')
                 {
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    if($execution->type == 'kanban')
+                    {
+                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                        $kanbanData    = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    }
+                    else
+                    {
+                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+                        $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData      = $kanbanData[$kanbanType];
+                        $kanbanData      = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    }
                 }
                 else
                 {
@@ -697,10 +790,9 @@ class story extends control
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
+            $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
-
-        $this->commonAction($storyID);
 
         /* Sort products. */
         $myProducts     = array();
@@ -716,22 +808,12 @@ class story extends control
         $products = $myProducts + $othersProducts;
 
         /* Assign. */
-        $story   = $this->story->getById($storyID, 0, true);
         $product = $this->product->getById($story->product);
         $stories = $this->story->getParentStoryPairs($story->product, $story->parent);
         if(isset($stories[$storyID])) unset($stories[$storyID]);
 
         /* Get users. */
         $users = $this->user->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
-
-        $isShowReviewer = false;
-        $reviewerList   = $this->story->getReviewerPairs($story->id, $story->version);
-        $reviewerList   = array_keys($reviewerList);
-        $reviewedBy     = explode(',', trim($story->reviewedBy, ','));
-        if(array_diff($reviewerList, $reviewedBy) and strpos('draft,changed', $story->status) !== false) $isShowReviewer = true;
-
-        $reviewedReviewer = array();
-        foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
@@ -750,12 +832,21 @@ class story extends control
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
+        /* Get story reviewers. */
+        $reviewedReviewer = array();
+        $reviewerList     = $this->story->getReviewerPairs($story->id, $story->version);
+        $reviewedBy       = explode(',', trim($story->reviewedBy, ','));
+        foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
+
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
+
+        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
@@ -765,12 +856,13 @@ class story extends control
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch == 0 ? 'all' : $story->branch, 'skipParent');
         $this->view->products         = $products;
+        $this->view->productStories   = $productStories;
         $this->view->branchOption     = $branchOption;
         $this->view->branchTagOption  = $branchTagOption;
-        $this->view->reviewers        = implode(',', $reviewerList);
+        $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
-        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
-        $this->view->isShowReviewer   = $isShowReviewer;
+        $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
+
         $this->display();
     }
 
@@ -928,7 +1020,8 @@ class story extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Append module when change product type. */
-        $moduleList = array(0 => '/');
+        $moduleList       = array(0 => '/');
+        $productStoryList = array();
         foreach($stories as $story)
         {
             if(isset($modules[$story->product][$story->branch]))
@@ -938,6 +1031,13 @@ class story extends control
             else
             {
                 $moduleList[$story->id] = $modules[$story->product][0] + $this->tree->getModulesName($story->module);
+            }
+
+            if($story->status == 'closed')
+            {
+                $storyProduct = $products[$story->product];
+                $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+                if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
             }
         }
 
@@ -960,6 +1060,7 @@ class story extends control
         $this->view->executionID       = $executionID;
         $this->view->branchTagOption   = $branchTagOption;
         $this->view->moduleList        = $moduleList;
+        $this->view->productStoryList  = $productStoryList;
         $this->display();
     }
 
@@ -967,11 +1068,14 @@ class story extends control
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  string $from
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function change($storyID)
+    public function change($storyID, $from = '', $storyType = 'story')
     {
+        $this->loadModel('file');
         if(!empty($_POST))
         {
             $changes = $this->story->change($storyID);
@@ -980,18 +1084,11 @@ class story extends control
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
                 return print(js::error(dao::getError()));
             }
-            $story   = $this->story->getByID($storyID);
-            $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
-            $files   = $this->loadModel('file')->saveUpload($story->type, $storyID, $version);
 
-            if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
-
-            if($this->post->comment != '' or !empty($changes) or !empty($files))
+            if($this->post->comment != '' or !empty($changes))
             {
-                $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
+                $action   = !empty($changes) ? 'Changed' : 'Commented';
+                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -999,10 +1096,39 @@ class story extends control
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution')
+                {
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    if($execution->type == 'kanban')
+                    {
+                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                        $kanbanData    = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    }
+                    if($from == 'taskkanban')
+                    {
+                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+                        $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData      = $kanbanData[$kanbanType];
+                        $kanbanData      = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    }
+                }
+                else
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1012,19 +1138,19 @@ class story extends control
         $this->app->loadLang('testcase');
         $this->app->loadLang('execution');
 
-        $story    = $this->story->getById($storyID);
+        $story    = $this->view->story;
         $reviewer = $this->story->getReviewerPairs($storyID, $story->version);
         $product  = $this->loadModel('product')->getByID($story->product);
 
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
-        $this->view->needReview       = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
 
@@ -1035,10 +1161,11 @@ class story extends control
      * Activate a story.
      *
      * @param  int    $storyID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function activate($storyID)
+    public function activate($storyID, $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1058,11 +1185,11 @@ class story extends control
                 $execution = $this->execution->getByID($this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
+                    $execLaneType    = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                    $kanbanData      = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $taskSearchValue);
+                    $kanbanData      = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
@@ -1071,14 +1198,14 @@ class story extends control
                     return print(js::closeModal('parent.parent', 'this'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         $this->commonAction($storyID);
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->closedBy);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
@@ -1089,17 +1216,22 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $version
      * @param  int    $param
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function view($storyID, $version = 0, $param = 0)
+    public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri . "#app={$this->app->tab}", 'product');
-        $this->session->set('productPlanList', $uri, 'product');
+        $uri        = $this->app->getURI(true);
+        $tab        = $this->app->tab;
+        $buildApp   = $tab == 'product' ?   'project' : $tab;
+        $releaseApp = $tab == 'execution' ? 'product' : $tab;
+        $this->session->set('productList', $uri . "#app={$tab}", 'product');
+        $this->session->set('buildList',   $uri, $buildApp);
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
+        $version = empty($version) ? $story->version : $version;
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
@@ -1107,15 +1239,17 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
-        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $bugs         = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
-        $modulePath   = $this->tree->getParents($story->module);
-        $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
+        $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $linkedCommits = $this->loadModel('repo')->getCommitsByObject($storyID, 'story');
+        $modulePath    = $this->tree->getParents($story->module);
+        $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
+        $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
 
         /* Set the menu. */
         $from = $this->app->tab;
@@ -1159,6 +1293,7 @@ class story extends control
         $this->view->cases              = $cases;
         $this->view->story              = $story;
         $this->view->linkedMRs          = $linkedMRs;
+        $this->view->linkedCommits      = $linkedCommits;
         $this->view->track              = $this->story->getTrackByID($story->id);
         $this->view->users              = $this->user->getPairs('noletter');
         $this->view->reviewers          = $reviewers;
@@ -1168,10 +1303,13 @@ class story extends control
         $this->view->actions            = $this->action->getList('story', $storyID);
         $this->view->storyModule        = $storyModule;
         $this->view->modulePath         = $modulePath;
-        $this->view->version            = $version == 0 ? $story->version : $version;
+        $this->view->storyProducts      = $storyProducts;
+        $this->view->version            = $version;
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
         $this->view->param              = $param;
+        $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
 
         $this->display();
     }
@@ -1180,19 +1318,20 @@ class story extends control
      * Delete a story.
      *
      * @param  int    $storyID
-     * @param  string $confirm  yes|no
-     * @param  string $from taskkanban
+     * @param  string $confirm   yes|no
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no', $from = '')
+    public function delete($storyID, $confirm = 'no', $from = '', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
         if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from"), ''));
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType"), ''));
         }
         else
         {
@@ -1209,7 +1348,17 @@ class story extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-            if($this->app->tab == 'execution' and $from == 'taskkanban') return print(js::reload('parent'));
+            if($this->app->tab == 'execution' and $from == 'taskkanban')
+            {
+                $execLaneType    = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+                $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                $kanbanData      = $kanbanData[$kanbanType];
+                $kanbanData      = json_encode($kanbanData);
+                return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+            }
 
             if(isonlybody()) return print(js::reload('parent.parent'));
 
@@ -1222,31 +1371,56 @@ class story extends control
      * Review a story.
      *
      * @param  int    $storyID
-     * @param  string $from product|project
+     * @param  string $from      product|project
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function review($storyID, $from = 'product')
+    public function review($storyID, $from = 'product', $storyType = 'story')
     {
         if(!empty($_POST))
         {
-            $changes = $this->story->review($storyID);
+            $this->story->review($storyID);
             if(dao::isError()) return print(js::error(dao::getError()));
-
-            if($changes)
-            {
-                $story    = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-                $actionID = $this->story->recordReviewAction($story, $this->post->result, $this->post->closedReason);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution')
+                {
+                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
+
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    if($execution->type == 'kanban')
+                    {
+                        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                        $kanbanData    = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    }
+                    if($from == 'taskkanban')
+                    {
+                        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+                        $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData      = $kanbanData[$kanbanType];
+                        $kanbanData      = json_encode($kanbanData);
+                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    }
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                }
+            }
 
             $module = $from == 'project' ? 'projectstory' : 'story';
             if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            $params = $module == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
+            return print(js::locate($this->createLink($module, 'view', $params), 'parent'));
         }
 
         /* Get story and product. */
@@ -1273,21 +1447,23 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->lang->story->resultList = $this->lang->story->reviewResultList;
 
-        if($story->status == 'draft' and $story->version == 1) unset($this->lang->story->resultList['revert']);
-
-        if($story->status == 'changed') unset($this->lang->story->resultList['reject']);
-
-        if(count($reviewers) > 1) unset($this->lang->story->resultList['revert']);
+        if($story->status == 'reviewing')
+        {
+            if($story->version == 1) unset($this->lang->story->resultList['revert']);
+            if($story->version > 1)  unset($this->lang->story->resultList['reject']);
+        }
 
         $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->review;
 
-        $this->view->product = $product;
-        $this->view->story   = $story;
-        $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted', "$story->lastEditedBy,$story->openedBy");
+        $this->view->product   = $product;
+        $this->view->story     = $story;
+        $this->view->actions   = $this->action->getList('story', $storyID);
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
+        $this->view->reviewers = $reviewers;
+        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) == 1 ? true : false;
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
@@ -1304,10 +1480,11 @@ class story extends control
      *
      * @param  string $result
      * @param  string $reason
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchReview($result, $reason = '')
+    public function batchReview($result, $reason = '', $storyType = 'story')
     {
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1320,31 +1497,102 @@ class story extends control
     }
 
     /**
-     * Recall the story review.
+     * Recall the story review or story change.
      *
      * @param  int    $storyID
+     * @param  string $from      list
+     * @param  string $confirm   no|yes
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function recall($storyID)
+    public function recall($storyID, $from = 'list', $confirm = 'no', $storyType = 'story')
     {
         $story = $this->story->getById($storyID);
-        $this->story->recall($storyID);
-        $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
-        $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-        echo js::locate($locateLink, 'parent');
+        if($confirm == 'no')
+        {
+            $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
+            return print(js::confirm($confirmTips, $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType")));
+        }
+        else
+        {
+            if($story->status == 'changing')  $this->story->recallChange($storyID);
+            if($story->status == 'reviewing') $this->story->recallReview($storyID);
+
+            $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
+            $this->loadModel('action')->create('story', $storyID, $action);
+
+            if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+
+            $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
+            return print(js::locate($locateLink, 'parent'));
+        }
+    }
+
+    /**
+     * Submit review.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType story|requirement
+     * @access public
+     * @return void
+     */
+    public function submitReview($storyID, $storyType = 'story')
+    {
+        if($_POST)
+        {
+            $changes = $this->story->submitReview($storyID);
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('story', $storyID, 'submitReview');
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+        }
+
+        /* Get story and product. */
+        $story   = $this->story->getById($storyID);
+        $product = $this->product->getById($story->product);
+
+        /* Set menu. */
+        $this->product->setMenu($story->product, $story->branch);
+
+        /* Get reviewers. */
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
+
+        /* Get story reviewer. */
+        $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
+        $story->reviewer = array_keys($reviewerList);
+
+        $this->view->story      = $story;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
+        $this->view->needReview = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+
+        $this->display();
     }
 
     /**
      * Close a story.
      *
      * @param  int    $storyID
+     * @param  string $from      taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function close($storyID)
+    public function close($storyID, $from = '', $storyType = 'story')
     {
+        $this->app->loadLang('bug');
+        $story = $this->story->getById($storyID);
+
         if(!empty($_POST))
         {
             $changes = $this->story->close($storyID);
@@ -1353,7 +1601,11 @@ class story extends control
 
             if($changes)
             {
-                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
+                $preStatus = $story->status;
+                $isChanged = $story->changedBy ? true : false;
+                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+
+                $actionID  = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -1361,17 +1613,26 @@ class story extends control
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
+                $execution    = $this->execution->getByID($this->session->execution);
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
-                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                    $kanbanData    = json_encode($kanbanData);
+                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
 
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
+                    $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData      = $kanbanData[$kanbanType];
+                    $kanbanData      = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
                 }
                 else
                 {
@@ -1385,13 +1646,12 @@ class story extends control
             }
             else
             {
-                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
             }
         }
 
         /* Get story and product. */
-        $story   = $this->story->getById($storyID);
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
 
         $this->story->replaceURLang($story->type);
 
@@ -1399,19 +1659,24 @@ class story extends control
         $this->product->setMenu($product->id, $story->branch);
 
         /* Set the closed reason options and remove subdivided options. */
-        if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);
-        unset($this->lang->story->reasonList['subdivided']);
+        $reasonList = $this->lang->story->reasonList;
+        if($story->status == 'draft') unset($reasonList['cancel']);
+        unset($reasonList['subdivided']);
+
+        $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
 
         $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->close;
 
-        $this->view->product    = $product;
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getPairs();
-        $this->view->reasonList = $this->lang->story->reasonList;
+        $this->view->product        = $product;
+        $this->view->story          = $story;
+        $this->view->productStories = $productStories;
+        $this->view->actions        = $this->action->getList('story', $storyID);
+        $this->view->users          = $this->loadModel('user')->getPairs();
+        $this->view->reasonList     = $reasonList;
         $this->display();
     }
 
@@ -1427,30 +1692,17 @@ class story extends control
      */
     public function batchClose($productID = 0, $executionID = 0, $storyType = 'story', $from = '')
     {
-        if($this->post->comments)
-        {
-            $data       = fixer::input('post')->get();
-            $allChanges = $this->story->batchClose();
-
-            if($allChanges)
-            {
-                foreach($allChanges as $storyID => $changes)
-                {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
-                    $this->action->logHistory($actionID, $changes);
-                }
-            }
-
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            return print(js::locate($this->session->storyList, 'parent'));
-        }
-
+        $this->app->loadLang('bug');
         if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
+        $this->story->replaceURLang($storyType);
+
         /* Get edited stories. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
+        $stories = $this->story->getByList($storyIdList);
+        $productStoryList = array();
+        $productList      = array();
         foreach($stories as $story)
         {
             if($story->parent == -1)
@@ -1463,6 +1715,32 @@ class story extends control
                 $closedStory[] = $story->id;
                 unset($stories[$story->id]);
             }
+
+            $storyProduct = isset($productList[$story->product]) ? $productList[$story->product] : $this->product->getByID($story->product);
+            $branch       = $storyProduct->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
+            if(!isset($productStoryList[$story->product][$story->branch])) $productStoryList[$story->product][$story->branch] = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+        }
+
+        if($this->post->comments)
+        {
+            $data       = fixer::input('post')->get();
+            $allChanges = $this->story->batchClose();
+
+            if($allChanges)
+            {
+                foreach($allChanges as $storyID => $changes)
+                {
+                    $preStatus = $stories[$storyID]->status;
+                    $isChanged = $stories[$storyID]->changedBy ? true : false;
+                    if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
+
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : '') . "|$preStatus");
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+            return print(js::locate($this->session->storyList, 'parent'));
         }
 
         $errorTips = '';
@@ -1524,6 +1802,7 @@ class story extends control
         $this->view->storyIdList      = $storyIdList;
         $this->view->storyType        = $storyType;
         $this->view->reasonList       = $this->lang->story->reasonList;
+        $this->view->productStoryList = $productStoryList;
 
         $this->display();
     }
@@ -1532,10 +1811,11 @@ class story extends control
      * Batch change the module of story.
      *
      * @param  int    $moduleID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeModule($moduleID)
+    public function batchChangeModule($moduleID, $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1555,29 +1835,54 @@ class story extends control
      * Batch stories convert to tasks.
      *
      * @param  int    $executionID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function batchToTask($executionID = 0)
+    public function batchToTask($executionID = 0, $projectID = 0)
     {
-        if(!empty($_POST))
+        if(!empty($_POST['name']))
         {
             $response['result']  = 'success';
             $response['message'] = $this->lang->story->successToTask;
 
-            $tasks = $this->story->batchToTask($executionID, $this->session->project);
-
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
+            $tasks = $this->story->batchToTask($executionID, $projectID);
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $tasks));
-            $response['locate'] = $this->createLink('execution', 'task', "executionID=$executionID");
-            return $this->send($response);
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID"), 'parent'));
         }
+
+        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+
+        $stories    = $this->story->getByList($_POST['storyIdList']);
+        $storyGroup = array();
+        foreach($stories as $story)
+        {
+            if(strpos('draft,reviewing,changing,closed', $story->status) !== false)
+            {
+                unset($stories[$story->id]);
+                continue;
+            }
+
+            if(isset($storyGroup[$story->module])) continue;
+            $storyGroup[$story->module] = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $story->module, 'short', 'active');
+        }
+
+        if(empty($stories)) return print(js::error($this->lang->story->noStoryToTask) . js::locate($this->session->storyList));
+
+        $this->view->title          = $this->lang->story->batchToTask;
+        $this->view->executionID    = $executionID;
+        $this->view->syncFields     = empty($_POST['fields']) ? array() : $_POST['fields'];
+        $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0 : $_POST['hourPointValue'];
+        $this->view->taskType       = empty($_POST['type']) ? '' : $_POST['type'];
+        $this->view->stories        = $stories;
+        $this->view->storyGroup     = $storyGroup;
+        $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');
+        $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
+
+        $this->display();
     }
 
     /**
@@ -1609,10 +1914,11 @@ class story extends control
      * @param  int    $branchID
      * @param  string $confirm  yes|no
      * @param  string $storyIdList
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '')
+    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '', $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
         $storyIdList = $this->post->storyIdList;
@@ -1647,8 +1953,8 @@ class story extends control
                 $normalStotyIdList = array_diff($storyIdList, $conflictStoryArray);
                 $normalStotyIdList = implode(',', $normalStotyIdList);
                 $storyIdList       = implode(',', $storyIdList);
-                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
-                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
+                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList&storyType=$storyType");
+                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList&storyType=$storyType");
                 return print(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
             }
         }
@@ -1697,10 +2003,12 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
+     * @param  string $from taskkanban
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = '')
+    public function assignTo($storyID, $kanbanGroup = 'default', $from = '', $storyType = 'story')
     {
         if(!empty($_POST))
         {
@@ -1716,22 +2024,31 @@ class story extends control
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
+                $execution    = $this->execution->getByID($this->session->execution);
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
-
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                    $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
+                    $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData      = $kanbanData[$kanbanType];
+                    $kanbanData      = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban('$execLaneType', $kanbanData)"));
                 }
                 else
                 {
                     return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
                 }
             }
-            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
         }
 
         /* Get story and product. */
@@ -1744,6 +2061,7 @@ class story extends control
         $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
+        $this->view->storyType  = $storyType;
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->users      = ($this->config->vision == 'lite') ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
         $this->display();
@@ -1752,10 +2070,11 @@ class story extends control
     /**
      * Batch assign to.
      *
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchAssignTo()
+    public function batchAssignTo($storyType = 'story')
     {
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
@@ -1769,61 +2088,6 @@ class story extends control
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         echo js::locate($this->session->storyList, 'parent');
-    }
-
-    /**
-     * Story track.
-     *
-     * @param  int         $productID
-     * @param  int|string  $branch
-     * @param  int         $projectID
-     * @param  int         $recTotal
-     * @param  int         $recPerPage
-     * @param  int         $pageID
-     * @access public
-     * @return void
-     */
-    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        /* Set menu. The projectstory module does not execute. */
-        if(!$projectID)
-        {
-            $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
-            $this->product->products = $this->product->saveState($productID, $products);
-            $this->product->setMenu($productID, $branch);
-        }
-
-        /* Save session. */
-        $this->session->set('storyList',    $this->app->getURI(true), 'product');
-        $this->session->set('taskList',     $this->app->getURI(true), 'execution');
-        $this->session->set('designList',   $this->app->getURI(true), 'project');
-        $this->session->set('bugList',      $this->app->getURI(true), 'qa');
-        $this->session->set('caseList',     $this->app->getURI(true), 'qa');
-        $this->session->set('revisionList', $this->app->getURI(true), 'repo');
-
-        /* Load pager and get tracks. */
-        $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $tracks = $this->story->getTracks($productID, $branch, $projectID, $pager);
-
-        if($projectID)
-        {
-            $this->loadModel('project')->setMenu($projectID);
-            $projectProducts = $this->product->getProducts($projectID);
-        }
-
-        $this->view->title      = $this->lang->story->track;
-        $this->view->position[] = $this->lang->story->track;
-
-        $this->view->tracks          = $tracks;
-        $this->view->pager           = $pager;
-        $this->view->productID       = $productID;
-        $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
-        $this->display();
     }
 
     /**
@@ -1877,70 +2141,17 @@ class story extends control
     }
 
     /**
-     * Show zero case story.
-     *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
-    {
-        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
-        $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
-        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
-
-        $this->loadModel('testcase');
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($this->session->project);
-            $this->app->rawModule = 'qa';
-            $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
-            $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', "projectID=$projectID", $branchID);
-        }
-        else
-        {
-            $products  = $this->product->getPairs();
-            $productID = $this->product->saveState($productID, $products);
-            $this->loadModel('qa');
-            $this->app->rawModule = 'testcase';
-            foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->qa->setMenu($products, $productID, $branchID);
-        }
-
-        /* Append id for secend sort. */
-        $sort = common::appendOrder($orderBy);
-
-        $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $products[$productID]);
-        $this->view->position[] = $this->lang->story->zeroCase;
-
-        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projectID  = $projectID;
-        $this->view->productID  = $productID;
-        $this->view->branchID   = $branchID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->browseType = '';
-        $this->view->product    = $this->product->getByID($productID);
-        $this->display();
-    }
-
-    /**
      * If type is linkStories, link related stories else link child stories.
      *
      * @param  int    $storyID
      * @param  string $type
      * @param  string $browseType
-     * @param  int    $param
+     * @param  int    $queryID
+     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0)
+    public function linkStory($storyID, $type = 'linkStories', $linkedStoryID = 0, $browseType = '', $queryID = 0, $storyType = 'story')
     {
         $this->commonAction($storyID);
 
@@ -1974,7 +2185,7 @@ class story extends control
         }
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         /* Get stories to link. */
@@ -1989,6 +2200,68 @@ class story extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
+    }
+
+    /**
+     * Link related stories.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Get story, product, products, and queryID. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
+        $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
+
+        /* Build search form. */
+        $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+
+        $this->view->story        = $story;
+        $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
+        $this->view->products     = $products;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * Link related requirements.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkRequirements($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+
+        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -2185,6 +2458,7 @@ class story extends control
         $storyInfo['estimate'] = $story->estimate;
         $storyInfo['pri']      = $story->pri;
         $storyInfo['spec']     = html_entity_decode($story->spec, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
+        $storyInfo['status']   = $story->status;
 
         echo json_encode($storyInfo);
     }
@@ -2245,272 +2519,36 @@ class story extends control
      * @param  string $orderBy
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $type requirement|story
+     * @param  string $storyType requirement|story
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $type = 'story')
+    public function export($productID, $orderBy, $executionID = 0, $browseType = '', $storyType = 'story')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
-            $this->loadModel('file');
-            $this->loadModel('branch');
-            $storyLang   = $this->lang->story;
-            $storyConfig = $this->config->story;
-
+            $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);
-            foreach($fields as $key => $fieldName)
+            if(!$productID)
             {
-                $fieldName = trim($fieldName);
-                $fields[$fieldName] = isset($storyLang->$fieldName) ? $storyLang->$fieldName : $fieldName;
-                unset($fields[$key]);
+                $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = 'story';
+
+                $this->config->story->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->story->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+
+                $productIdList = implode(',', array_flip($this->session->exportProductList));
+
+                $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
-            /* Get stories. */
-            $stories = array();
-            if($this->session->storyOnlyCondition)
-            {
-                if($this->post->exportType == 'selected')
-                {
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
-                }
-                else
-                {
-                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
-                }
-            }
-            else
-            {
-                $field = $executionID ? 't2.id' : 't1.id';
-                if($this->post->exportType == 'selected')
-                {
-                    $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
-                }
-                else
-                {
-                    $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
-                }
-                while($row = $stmt->fetch()) $stories[$row->id] = $row;
-            }
-            $storyIdList = array_keys($stories);
-
-            if($stories)
-            {
-                $children = array();
-                foreach($stories as $story)
-                {
-                    if($story->parent > 0 and isset($stories[$story->parent]))
-                    {
-                        $children[$story->parent][$story->id] = $story;
-                        unset($stories[$story->id]);
-                    }
-                }
-
-                if(!empty($children))
-                {
-                    $reorderStories = array();
-                    foreach($stories as $story)
-                    {
-                        $reorderStories[$story->id] = $story;
-                        if(isset($children[$story->id]))
-                        {
-                            foreach($children[$story->id] as $childrenID => $childrenStory)
-                            {
-                                $reorderStories[$childrenID] = $childrenStory;
-                            }
-                        }
-                        unset($stories[$story->id]);
-                    }
-                    $stories = $reorderStories;
-                }
-            }
-
-            /* Get users, products and relations. */
-            $users     = $this->loadModel('user')->getPairs('noletter');
-            $products  = $this->product->getPairs('nocode');
-            $relations = $this->story->getStoryRelationByIds($storyIdList, $type);
-
-            /* Get related objects id lists. */
-            $relatedProductIdList = array();
-            $relatedStoryIdList   = array();
-            $relatedPlanIdList    = array();
-            $relatedBranchIdList  = array();
-            $relatedStoryIds      = array();
-
-            foreach($stories as $story)
-            {
-                $relatedProductIdList[$story->product] = $story->product;
-                $relatedPlanIdList[$story->plan]       = $story->plan;
-                $relatedBranchIdList[$story->branch]   = $story->branch;
-                $relatedStoryIds[$story->id]           = $story->id;
-
-                if(isset($relations[$story->id])) $story->childStories = $story->childStories . ',' . $relations[$story->id];
-
-                /* Process related stories. */
-                $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
-                $relatedStories = explode(',', $relatedStories);
-                foreach($relatedStories as $storyID)
-                {
-                    if($storyID) $relatedStoryIdList[$storyID] = trim($storyID);
-                }
-            }
-
-            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
-            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
-            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
-
-            /* Get related objects title or names. */
-            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-            $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($type)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-            $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs();
-
-            foreach($stories as $story)
-            {
-                $story->spec   = '';
-                $story->verify = '';
-                if(isset($relatedSpecs[$story->id]))
-                {
-                    $storySpec     = $relatedSpecs[$story->id][0];
-                    $story->title  = $storySpec->title;
-                    $story->spec   = $storySpec->spec;
-                    $story->verify = $storySpec->verify;
-                }
-
-                if($this->post->fileType == 'csv')
-                {
-                    $story->spec = htmlspecialchars_decode($story->spec);
-                    $story->spec = str_replace("<br />", "\n", $story->spec);
-                    $story->spec = str_replace('"', '""', $story->spec);
-                    $story->spec = str_replace('&nbsp;', ' ', $story->spec);
-
-                    $story->verify = htmlspecialchars_decode($story->verify);
-                    $story->verify = str_replace("<br />", "\n", $story->verify);
-                    $story->verify = str_replace('"', '""', $story->verify);
-                    $story->verify = str_replace('&nbsp;', ' ', $story->verify);
-                }
-                /* fill some field with useful value. */
-                if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
-                if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
-                if(isset($story->plan))
-                {
-                    $plans = '';
-                    foreach(explode(',', $story->plan) as $planID)
-                    {
-                        if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID])) $plans .= $this->post->fileType == 'word' ? $relatedPlans[$planID] : $relatedPlans[$planID] . "(#$planID)";
-                    }
-                    $story->plan = $plans;
-                }
-                if(isset($relatedStories[$story->duplicateStory]) and $story->closedReason != 'duplicate') $story->duplicateStory = $relatedStories[$story->duplicateStory];
-
-                if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
-                if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
-                if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
-                if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
-                if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
-                if(isset($storyLang->sourceList[$story->sourceNote]))   $story->sourceNote   = $storyLang->sourceList[$story->sourceNote];
-
-                if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
-                if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo] . "(#$story->assignedTo)";
-                if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
-                if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy];
-
-                if(isset($storyTasks[$story->id]))     $story->taskCountAB = $storyTasks[$story->id];
-                if(isset($storyBugs[$story->id]))      $story->bugCountAB  = $storyBugs[$story->id];
-                if(isset($storyCases[$story->id]))     $story->caseCountAB = $storyCases[$story->id];
-
-                $story->openedDate     = substr($story->openedDate, 0, 10);
-                $story->assignedDate   = substr($story->assignedDate, 0, 10);
-                $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
-                $story->closedDate     = substr($story->closedDate, 0, 10);
-
-                if($story->linkStories)
-                {
-                    $tmpLinkStories    = array();
-                    $linkStoriesIdList = explode(',', $story->linkStories);
-                    foreach($linkStoriesIdList as $linkStoryID)
-                    {
-                        $linkStoryID = trim($linkStoryID);
-                        $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
-                    }
-                    $story->linkStories = join("; \n", $tmpLinkStories);
-                }
-
-                if($story->childStories)
-                {
-                    $tmpChildStories = array();
-                    $childStoriesIdList = explode(',', $story->childStories);
-                    foreach($childStoriesIdList as $childStoryID)
-                    {
-                        if(empty($childStoryID)) continue;
-
-                        $childStoryID = trim($childStoryID);
-                        $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
-                    }
-                    $story->childStories = join("; \n", $tmpChildStories);
-                }
-
-                /* Set related files. */
-                $story->files = '';
-                if(isset($relatedFiles[$story->id]))
-                {
-                    foreach($relatedFiles[$story->id] as $file)
-                    {
-                        $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID=$file->id");
-                        $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
-                    }
-                }
-
-                $story->mailto = trim(trim($story->mailto), ',');
-                $mailtos = explode(',', $story->mailto);
-                $story->mailto = '';
-                foreach($mailtos as $mailto)
-                {
-                    $mailto = trim($mailto);
-                    if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
-                }
-                $story->mailto = rtrim($story->mailto, ',');
-
-                $story->reviewedBy = trim(trim($story->reviewedBy), ',');
-                $reviewedBys = explode(',', $story->reviewedBy);
-                $story->reviewedBy = '';
-                foreach($reviewedBys as $reviewedBy)
-                {
-                    $reviewedBy = trim($reviewedBy);
-                    if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
-                }
-                $story->reviewedBy = rtrim($story->reviewedBy, ',');
-
-                /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
-            }
-
-            if($executionID)
-            {
-                $header = new stdclass();
-                $header->name      = 'execution';
-                $header->tableName = TABLE_EXECUTION;
-
-                $this->post->set('header', $header);
-            }
-            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
-
-            if($this->config->edition != 'open') list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
-
-            $this->post->set('fields', $fields);
-            $this->post->set('rows', $stories);
-            $this->post->set('kind', 'story');
-            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+            $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
+            $this->fetch('port', 'export', 'model=story');
         }
 
-        $fileName = $type == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         if($executionID)
         {
             $executionName = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch('name');
@@ -2532,7 +2570,7 @@ class story extends control
         }
 
         $this->view->fileName        = $fileName;
-        $this->view->allExportFields = $this->config->story->list->exportFields;
+        $this->view->allExportFields = $this->config->story->exportFields;
         $this->view->customExport    = true;
         $this->display();
     }
@@ -2579,9 +2617,9 @@ class story extends control
         {
             $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
             $status   = $oldStory->status;
-            if($params['changed'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changed';
-            if($params['changed'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changed';
-            if($params['changed'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
+            if($params['changing'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changing';
+            if($params['changing'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changing';
+            if($params['changing'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
         }
         elseif($method == 'review')
         {
@@ -2590,5 +2628,70 @@ class story extends control
             if($params['result'] == 'revert') $status = 'active';
         }
         echo $status;
+    }
+
+    /**
+     * Ajax get story assignee.
+     *
+     * @param  string $type create|review|change
+     * @param  int    $storyID
+     * @param  array  $assignees
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAssignedTo($type = '', $storyID = 0, $assignees = '')
+    {
+        $users = $this->loadModel('user')->getPairs('noclosed');
+
+        if($type == 'create')
+        {
+            $selectUser = is_array($assignees) ? current($assignees) : '';
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        if($type == 'review')
+        {
+            $story           = $this->story->getByID($storyID);
+            $reviewers       = $this->story->getReviewerPairs($storyID, $story->version);
+            $isChanged       = $story->changedBy ? true : false;
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+
+            if(count($reviewers) == 1)
+            {
+                $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+            }
+            else
+            {
+                unset($reviewers[$this->app->user->account]);
+                foreach($reviewers as $account => $result)
+                {
+                    if(!$reviewers[$account])
+                    {
+                        $selectUser = $account;
+                        break;
+                    }
+                    else
+                    {
+                        $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+                    }
+                }
+            }
+
+            if($isSuperReviewer !== false) $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        if($type == 'change')
+        {
+            $selectUser = is_array($assignees) ? current($assignees) : '';
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        return false;
+
     }
 }

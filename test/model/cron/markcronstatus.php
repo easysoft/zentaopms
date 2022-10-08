@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/cron.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +30,4 @@ $tester->dao->update(TABLE_CONFIG)->set('id')->eq($id)->where( 'id')->eq($config
 r($config1) && p('value') && e('stop'); //修改配置项之后查看更新信息
 r($config2) && p('value') && e('run');  //修改配置项之后查看更新信息
 
-system('./ztest init');
+$db->restoreDB();

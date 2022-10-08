@@ -24,7 +24,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanbanregion->style;?></th>
-          <td><?php echo html::radio('region', $regions, 'custom');?></td>
+          <td><?php echo html::select('region', $regions, 'custom', "class='form-control chosen' data-drop_direction='up'");?></td>
         </tr>
         <tr>
           <td colspan='2' class='form-actions text-center'>

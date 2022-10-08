@@ -10,6 +10,8 @@ title=测试 tutorialModel->getExecutionStories();
 cid=1
 pid=1
 
+检查是否获取到数据 >> wait
+
 */
 
 $tutorial = new tutorialTest();

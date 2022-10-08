@@ -21,13 +21,19 @@
     </div>
   </div>
 </div>
+<style>
+#importNoticeModal .modal-dialog {top: 15% !important; max-height: 450px; overflow-y: auto;}
+</style>
 <script>
 function submitForm(type)
 {
     $('.modal-body #insert').val(type == 'insert' ? 1 : 0);
     $('#importNoticeModal .form-actions .btn').addClass('disabled');
     $("button[data-target='#importNoticeModal']").closest('form').submit();
-
-    setTimeout(function(){$('#importNoticeModal .form-actions .btn').removeClass('disabled');}, 1000);
 }
+
+$('#importNoticeModal .close').click(function()
+{
+    $('#importNoticeModal .form-actions .btn').removeClass('disabled');
+})
 </script>

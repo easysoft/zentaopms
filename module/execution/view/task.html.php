@@ -59,6 +59,7 @@ body {margin-bottom: 25px;}
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
         if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;
@@ -174,11 +175,6 @@ body {margin-bottom: 25px;}
   <strong>
   <?php echo $projectName;?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -198,7 +194,7 @@ body {margin-bottom: 25px;}
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-        <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
+        <?php if($canBeChanged and common::hasPriv('task', 'create') and empty($allTasks)):?>
         <?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -475,12 +471,6 @@ $(function()
 });
 
 <?php if($this->app->getViewType() == 'xhtml'):?>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
-
 $(function()
 {
     function handleClientReady()

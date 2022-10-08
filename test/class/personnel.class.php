@@ -60,43 +60,6 @@ class personnelTest
         return $objects;
     }
 
-    public function getRiskInvestTest($accounts, $projectID)
-    {
-        global $tester;
-        $projects  = $tester->personnel->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectID)->fetchAll('id');
-        $objects = $this->objectModel->getRiskInvest($accounts, $projects);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getIssueInvestTest($accounts, $projects)
-    {
-        $objects = $this->objectModel->getIssueInvest($accounts, $projects);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get bug and story invest test
-     *
-     * @param  array mixed $accounts
-     * @param  int   mixed $programID
-     * @access public
-     * @return void
-     */
-    public function getBugAndStoryInvestTest($accounts, $programID)
-    {
-        $objects = $this->objectModel->getBugAndStoryInvest($accounts, $programID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getInvolvedProjectsTest($projects)
     {
         global $tester;
@@ -191,41 +154,6 @@ class personnelTest
         return $objects;
     }
 
-    public function getUserHoursTest($userTasks)
-    {
-        $objects = $this->objectModel->getUserHours($userTasks);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getSprintAndStageTest($projects)
-    {
-        $objects = $this->objectModel->getSprintAndStage($projects);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get copied objects test
-     *
-     * @param  int    mixed $objectID
-     * @param  string mixed $objectType
-     * @access public
-     * @return array
-     */
-    public function getCopiedObjectsTest($objectID, $objectType)
-    {
-        $objects = $this->objectModel->getCopiedObjects($objectID, $objectType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Get whitelist test
      *
@@ -280,7 +208,7 @@ class personnelTest
      * @access public
      * @return void
      */
-    public function addWhitelistTest($objectType = '', $objectID = 0, $user)
+    public function addWhitelistTest($objectType = '', $objectID = 0, $user = '')
     {
         $users = array('accounts' => $user);
         foreach($users as $key => $value) $_POST[$key] = $value;
@@ -389,24 +317,6 @@ class personnelTest
         $this->addWhitelistTest($objectType, $objectID, $users);
         $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
         $objects = $this->objectModel->deleteWhitelist($users, $objectType, $objectID, $groupID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function createMemberLinkTest($dept = 0, $programID = 0)
-    {
-        $objects = $this->objectModel->createMemberLink($dept, $programID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function buildSearchFormTest($queryID = 0, $actionURL = '')
-    {
-        $objects = $this->objectModel->buildSearchForm($queryID, $actionURL);
 
         if(dao::isError()) return dao::getError();
 

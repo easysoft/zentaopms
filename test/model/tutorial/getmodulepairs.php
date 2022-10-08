@@ -10,6 +10,8 @@ title=测试 tutorialModel->getModulePairs();
 cid=1
 pid=1
 
+测试是否能拿到数据 >> Test module
+
 */
 
 $tutorial = new tutorialTest();

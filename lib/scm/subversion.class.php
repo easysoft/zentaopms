@@ -9,25 +9,28 @@ class Subversion
     public $remote;
     public $encoding;
     public $svnVersion;
+    public $repo;
 
     /**
-     * Construct 
-     * 
-     * @param  string $client 
-     * @param  string $root 
-     * @param  string $account 
-     * @param  string $password 
-     * @param  string $encoding 
+     * Construct
+     *
+     * @param  string $client
+     * @param  string $root
+     * @param  string $account
+     * @param  string $password
+     * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $account, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $account, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
         $this->root     = str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode(rtrim($root, '/')));
         $this->account  = $account;
         $this->password = $password;
         $this->encoding = $encoding;
+        $this->repo     = $repo;
         $this->ssh      = (stripos($this->root, 'svn') === 0 or stripos($this->root, 'https') === 0) ? true : false;
         $this->remote   = !(stripos($this->root, 'file') === 0);
         $this->client   = $this->remote ? $client . " --username @account@ --password @password@" : $client;
@@ -37,10 +40,10 @@ class Subversion
     }
 
     /**
-     * List files. 
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     * List files.
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -91,10 +94,10 @@ class Subversion
 
     /**
      * Get tags.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
-     * @param  bool   $onlyDir 
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  bool   $onlyDir
      * @access public
      * @return array
      */
@@ -129,7 +132,7 @@ class Subversion
 
     /**
      * Get branch.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -140,9 +143,9 @@ class Subversion
 
     /**
      * Get last log.
-     * 
-     * @param  string $path 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -170,8 +173,8 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $log = new stdclass();
-            $log->committer = (string)$entry->author; 
-            $log->revision  = (int)$entry['revision']; 
+            $log->committer = (string)$entry->author;
+            $log->revision  = (int)$entry['revision'];
             $log->comment   = trim((string)$entry->msg);
             $log->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $log->change    = array();
@@ -188,12 +191,12 @@ class Subversion
 
     /**
      * Get log.
-     * 
-     * @param  string $path 
-     * @param  int    $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
-     * @param  bool   $quiet 
+     *
+     * @param  string $path
+     * @param  int    $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
+     * @param  bool   $quiet
      * @access public
      * @return array
      */
@@ -229,17 +232,17 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $log = new stdclass();
-            $log->committer = (string)$entry->author; 
-            $log->revision  = (int)$entry['revision']; 
+            $log->committer = (string)$entry->author;
+            $log->revision  = (int)$entry['revision'];
             $log->comment   = trim((string)$entry->msg);
             $log->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $log->change    = array();
             if(!empty($entry->paths))
             {
-                foreach($entry->paths->path as $path) 
+                foreach($entry->paths->path as $path)
                 {
                     $pathInfo = array();
-                    foreach($path->attributes() as $attr => $value) $pathInfo[$attr] = (string)$value;    
+                    foreach($path->attributes() as $attr => $value) $pathInfo[$attr] = (string)$value;
                     $log->change[(string)$path] = $pathInfo;
                 }
             }
@@ -257,9 +260,9 @@ class Subversion
 
     /**
      * Blame file.
-     * 
-     * @param  string $path 
-     * @param  int    $revision 
+     *
+     * @param  string $path
+     * @param  int    $revision
      * @access public
      * @return array
      */
@@ -298,15 +301,19 @@ class Subversion
         {
             foreach($parsedResult->target->entry as $line)
             {
-                if($line->commit['revision'] != $revision) 
+                if($line->commit['revision'] != $revision)
                 {
                     $blame = array();
                     $blame['revision']  = (int)$line->commit['revision'];
                     $blame['committer'] = (string)$line->commit->author;
-                    $blame['time']      = substr($line->commit->date, 0, 10);
+                    $blame['time']      = date('Y-m-d H:i:s', strtotime($line->commit->date));
                     $blame['line']      = (int)$line['line-number'];
                     $blame['lines']     = 1;
                     $blame['content']   = $content[$blame['line'] - 1];
+
+                    $log = $this->log('', $blame['revision'], 'HEAD', 1);
+                    $blame['message'] = $log[0]->comment;
+
                     $revision         = $blame['revision'];
                     $revLine          = $blame['line'];
                     $blames[$revLine] = $blame;
@@ -315,7 +322,7 @@ class Subversion
                 {
                     $blame            = array();
                     $blame['line']    = (int)$line['line-number'];
-                    $blame['content'] = $content[$blame['line'] - 1];
+                    $blame['content'] = zget($content, $blame['line'] - 1, '');
 
                     $blames[$blame['line']] = $blame;
                     $blames[$revLine]['lines'] ++;
@@ -327,10 +334,10 @@ class Subversion
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  int    $fromRevision 
-     * @param  int    $toRevision 
+     *
+     * @param  string $path
+     * @param  int    $fromRevision
+     * @param  int    $toRevision
      * @access public
      * @return array
      */
@@ -355,9 +362,9 @@ class Subversion
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
@@ -380,9 +387,9 @@ class Subversion
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -421,8 +428,8 @@ class Subversion
 
     /**
      * Exec svn cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return array
      */
@@ -434,8 +441,8 @@ class Subversion
 
     /**
      * Parse diff.
-     * 
-     * @param  array  $lines 
+     *
+     * @param  array  $lines
      * @access public
      * @return array
      */
@@ -514,9 +521,9 @@ class Subversion
 
     /**
      * Get commit count.
-     * 
-     * @param  int    $commits 
-     * @param  int    $lastVersion 
+     *
+     * @param  int    $commits
+     * @param  int    $lastVersion
      * @access public
      * @return int
      */
@@ -547,7 +554,7 @@ class Subversion
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -561,7 +568,7 @@ class Subversion
 
     /**
      * Get latest revision.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -573,9 +580,9 @@ class Subversion
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
+     *
+     * @param  string $version
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -608,8 +615,8 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $parsedLog            = new stdClass();
-            $parsedLog->committer = (string)$entry->author; 
-            $parsedLog->revision  = (int)$entry['revision']; 
+            $parsedLog->committer = (string)$entry->author;
+            $parsedLog->revision  = (int)$entry['revision'];
             $parsedLog->comment   = trim((string)$entry->msg);
             $parsedLog->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $logs['commits'][$parsedLog->revision] = $parsedLog;
@@ -632,8 +639,8 @@ class Subversion
 
     /**
      * Replace svn auth.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return string
      */
@@ -643,11 +650,11 @@ class Subversion
     }
 
     /**
-     * Build command. 
-     * 
-     * @param  string $path 
-     * @param  string $action 
-     * @param  string $param 
+     * Build command.
+     *
+     * @param  string $path
+     * @param  string $action
+     * @param  string $param
      * @access public
      * @return string
      */
@@ -668,8 +675,8 @@ class Subversion
 
     /**
      * Get SVN version.
-     * 
-     * @param  string $client 
+     *
+     * @param  string $client
      * @access public
      * @return string
      */
@@ -680,5 +687,84 @@ class Subversion
         if($versionResult) return false;
 
         return end($versionOutput);
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
+    {
+        global $app, $config;
+
+        /* Get repo name. */
+        $pathList = explode('/', trim($this->root, '/'));
+        $repoDir  = $savePath . DS . end($pathList);
+        execCmd($this->replaceAuth(escapeCmd("$this->client export $this->root $repoDir")));
+
+        $fileName = $savePath . DS . "{$this->repo->name}.zip";
+        $app->loadClass('pclzip', true);
+        $zip = new pclzip($fileName);
+        $zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir);
+
+        $zfile = $app->loadClass('zfile');
+        $zfile->removeDir($repoDir);
+        return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . $this->repo->name . '.zip';
+    }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+
+        $resourcePath = $path;
+        $path         = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
+        $cmd          = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
+        $list         = execCmd($cmd, 'string', $result);
+        if($result)
+        {
+            $path = '"' . $this->root . '/' . $resourcePath . '"';
+            $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'ls', "-r $revision --xml")));
+            $list = execCmd($cmd, 'string', $result);
+            if($result) $list = '';
+        }
+        $listObject = simplexml_load_string($list);
+        if(!empty($list) and empty($listObject))
+        {
+            $list = helper::convertEncoding($list, $this->encoding, 'utf-8');
+            $listObject = simplexml_load_string($list);
+        }
+        if(!empty($listObject->list->entry)) $listObject = $listObject->list->entry;
+        $infos = array();
+        if(empty($listObject)) return $infos;
+
+        foreach($listObject as $list)
+        {
+            $kind     = (string)$list['kind'];
+            $pathName = ltrim($path . DIRECTORY_SEPARATOR . (string)$list->name, DIRECTORY_SEPARATOR);
+            if($kind == 'dir')
+            {
+                $this->getAllFiles($pathName, $revision, $lists);
+            }
+            else
+            {
+                $lists[] = rtrim($pathName, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $lists;
     }
 }

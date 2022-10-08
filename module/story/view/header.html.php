@@ -64,7 +64,7 @@ function loadBranch()
  */
 function loadProductBranches(productID)
 {
-    var param = '';
+    var param = 'all';
     if(page == 'create') param = 'active';
     $('#branch').remove();
     $('#branch_chosen').remove();

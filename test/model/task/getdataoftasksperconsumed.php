@@ -20,7 +20,6 @@ pid=1
 
 */
 
-
 $task = new taskTest();
 r($task->getDataOfTasksPerConsumedTest()) && p('3:name,value') && e('3,90'); //统计消耗工时为3的任务数量
 r($task->getDataOfTasksPerConsumedTest()) && p('4:name,value') && e('4,90'); //统计消耗工时为4的任务数量

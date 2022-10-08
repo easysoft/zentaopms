@@ -36,8 +36,8 @@
         <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
-            <?php echo html::select('team[]', $users, $team, "class='form-control chosen' multiple data-drop_direction='down'");?>
-            <?php echo $this->fetch('my', 'buildContactLists');?>
+            <?php echo html::select('team[]', $users, $team, "class='form-control picker-select' multiple data-drop-direction='bottom'");?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=team");?>
           </div>
         </td>
       </tr>
@@ -49,7 +49,7 @@
       </tr>
       <tr id="whitelistBox" class="<?php echo $space->type == 'private' ? '' : 'hidden';?>">
         <th><?php echo $lang->whitelist;?></th>
-        <td><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control chosen" multiple');?></td>
+        <td colspan='2'><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control picker-select" multiple data-drop-direction="top"');?></td>
       </tr>
       <tr>
         <td colspan='3' class='text-center form-actions'>

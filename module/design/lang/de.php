@@ -21,7 +21,7 @@ $lang->design->assignedTo    = 'AssignedTo';
 $lang->design->actions       = 'Actions';
 $lang->design->byQuery       = 'Search';
 $lang->design->products      = 'Linked Product';
-$lang->design->story         = 'Linked Story';
+$lang->design->story         = 'Story';
 $lang->design->file          = 'File';
 $lang->design->desc          = 'Description';
 $lang->design->range          = 'Impact';
@@ -37,6 +37,7 @@ $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
+$lang->design->more          = 'Mehr';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';
@@ -52,6 +53,8 @@ $lang->design->unlinkCommit = 'Unlink Commit';
 $lang->design->submit       = 'Submit Review';
 $lang->design->assignTo     = 'Assign';
 $lang->design->revision     = 'Linked Code';
+
+$lang->design->browseAction = 'Design List';
 
 /* 字段取值. */
 $lang->design->typeList         = array();

@@ -37,7 +37,7 @@ $('#toStoryLink').click(function()
 $('#toStoryButtonByProject').click(function()
 {
     var onlybody  = config.onlybody == 'yes';
-    var projectID = $('#projectToStory').val();    
+    var projectID = $('#projectToStory').val();
     var link      = createLink('story', 'create', 'productID=0&branch=0&moduleID=0&storyID=0&projectID=' + projectID + '&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
 
     if(!onlybody) window.parent.$.apps.open(link, 'project');

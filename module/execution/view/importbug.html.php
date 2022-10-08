@@ -73,11 +73,11 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always">
-        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn');?>
+        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn btn-primary');?>
       </div>
       <div class='btn-toolbar'>
         <?php if(isonlybody()):?>
-        <?php echo html::commonButton('<i class="icon icon-sm"></i> ' . $lang->goback, 'onclick="goback()"', 'btn');?>
+        <?php echo html::commonButton('<i class="icon icon-sm"></i> ' . $lang->goback, "onclick='goback($executionID)'", 'btn');?>
         <?php else:?>
         <?php echo html::backButton('','','btn');?>
         <?php endif;?>

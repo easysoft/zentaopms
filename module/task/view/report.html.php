@@ -62,7 +62,7 @@
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->task->report->$chartType->item;?></th>
                   <th class='w-60px text-right'><?php echo $lang->task->report->value;?></th>
-                  <th class='w-60px'><?php echo $lang->report->percent;?></th>
+                  <th class='w-60px text-right'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <tbody>
@@ -71,7 +71,9 @@
                 <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
                 <td class='chart-label text-left'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>
-                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
+                <?php $percent = $data->percent * 100;?>
+                <?php $percent = sprintf("%.2f", $percent);?>
+                <td class='text-right'><?php echo $percent . '%';?></td>
               </tr>
               <?php endforeach;?>
               </tbody>

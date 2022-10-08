@@ -10,9 +10,9 @@ title=bugModel->checkDelayBug();
 cid=1
 pid=1
 
-检查deadline在1天前 resolvedDate不存在 状态为未解决的bug是否延期  >> 1
-检查deadline在1天前 resolvedDate不存在 状态为已解决的bug是否延期  >> 1
-检查deadline在1天前 resolvedDate不存在 状态为已关闭的bug是否延期  >> 1
+检查deadline在1天前 resolvedDate不存在 状态为未解决的bug是否延期 >> 1
+检查deadline在1天前 resolvedDate不存在 状态为已解决的bug是否延期 >> 1
+检查deadline在1天前 resolvedDate不存在 状态为已关闭的bug是否延期 >> 1
 检查deadline在3天前 resolvedDate在1天前 状态为未解决的bug是否延期 >> 2
 检查deadline在3天前 resolvedDate在1天前 状态为已解决的bug是否延期 >> 2
 检查deadline在3天前 resolvedDate在1天前 状态为已关闭的bug是否延期 >> 2

@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->extension->common           = 'Erweiterung';
+$lang->extension->id               = 'ID';
 $lang->extension->browse           = 'Durchsuchen';
 $lang->extension->install          = 'Installieren';
 $lang->extension->installAuto      = 'Auto Install';
@@ -29,11 +30,13 @@ $lang->extension->eraseAction      = 'Erase Extension';
 $lang->extension->upgrade          = 'Erweiterung Upgraden';
 $lang->extension->agreeLicense     = 'Lizenz';
 
-$lang->extension->structure       = 'Struktur';
-$lang->extension->structureAction = 'Struktur';
-$lang->extension->installed       = 'Installiert';
-$lang->extension->deactivated     = 'Deaktiviert';
-$lang->extension->available       = 'Heruntergeladen';
+$lang->extension->browseAction = 'Extension List';
+
+$lang->extension->structure        = 'Struktur';
+$lang->extension->structureAction  = 'Struktur';
+$lang->extension->installed        = 'Installiert';
+$lang->extension->deactivated      = 'Deaktiviert';
+$lang->extension->available        = 'Heruntergeladen';
 
 $lang->extension->name             = 'Erweiterungsname';
 $lang->extension->code             = 'Code';
@@ -89,13 +92,14 @@ $lang->extension->viewInstalled            = 'Installiert';
 $lang->extension->viewAvailable            = 'Verfügbar';
 $lang->extension->viewDeactivated          = 'Deactiviert';
 $lang->extension->backDBFile               = 'Erweiterungsdaten wurden gesichert nach %s!';
-$lang->extension->noticeOkFile             = '<h5>Aus Sicherheitsgründen muss Ihr Adminkonto bestätigt werden.</h5>
-    <h5>Bitte melden Sie sich an und erstellen Sie %s.</h5>
-    <p>Hinweis</p>
+$lang->extension->noticeOkFile             = "<h5>For security reasons, your Admin account has to be confirmed.</h5>
+    <h5>Plese login your ZenTao server and create %s.</h5>
+    <p>Execute command: echo '' > %s</p>
+    <p>Note</p>
     <ol>
-    <li>1. Die Datei die Sie erstellen wird leer sein.</li>
-    <li>2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.</li>
-    </ol>'; 
+    <li>The file you will create is empty.</li>
+    <li>If such file exists, delete it first, and then create one.</li>
+    </ol>"; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Installieren';

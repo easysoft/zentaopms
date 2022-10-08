@@ -1,5 +1,4 @@
 <?php
-$lang->gitlab = new stdclass;
 $lang->gitlab->common            = 'GitLab';
 $lang->gitlab->browse            = '瀏覽GitLab';
 $lang->gitlab->search            = '搜索';

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +29,4 @@ r($kanban->createDefaultLaneTest($regionIDList[1], $groupIDList[1])) && p('name,
 r($kanban->createDefaultLaneTest($regionIDList[2], $groupIDList[2])) && p('name,group,region,type') && e('默认泳道,3,3,common'); // 创建region 3 group 3的默认泳道
 r($kanban->createDefaultLaneTest($regionIDList[3], $groupIDList[3])) && p('name,group,region,type') && e('默认泳道,4,4,common'); // 创建region 4 group 4的默认泳道
 r($kanban->createDefaultLaneTest($regionIDList[4], $groupIDList[4])) && p('name,group,region,type') && e('默认泳道,5,5,common'); // 创建region 5 group 5的默认泳道
-system("./ztest init");
+$db->restoreDB();

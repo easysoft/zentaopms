@@ -10,6 +10,10 @@ title=测试 testtaskModel->getDataOfTestTaskPerRunner();
 cid=1
 pid=1
 
+获取测试单0的执行人分组 >> 0
+获取测试单1执行人分组，查看各个执行人的执行数量 >> 未执行,4
+获取测试单2执行人分组，查看各个执行人的执行数量 >> 未执行,4
+
 */
 
 global $tester;

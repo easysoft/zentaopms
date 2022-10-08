@@ -124,3 +124,7 @@ $config->gitlab->accessLevel['owner']      = 50;
 
 /* Minimum compatible version. */
 $config->gitlab->minCompatibleVersion = '9.0';
+
+$config->gitlab->menus['project'] = 'browseProject';
+$config->gitlab->menus['group']   = 'browseGroup';
+$config->gitlab->menus['user']    = 'browseUser';

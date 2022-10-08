@@ -8,11 +8,11 @@ title=测试 gitlabModel::apiCreateBranch();
 cid=1
 pid=1
 
-使用空的gitlabID、projectID、分支对象创建GitLab分支       >> return false
-使用空的gitlabID、projectID，正确的分支对象创建GitLab分支 >> return null
-使用正确的gitlabID、分支信息，错误的projectID创建分支     >> 404 Project Not Found
-使用正确的gitlabID,projectID，分支对象创建GitLab分支      >> 1
-使用重复的分支信息创建分支                                >> Branch already exists
+使用空的gitlabID,projectID,分支对象创建GitLab分支 >> return false
+使用空的gitlabID、projectID,正确的分支对象创建GitLab分支 >> return null
+使用正确的gitlabID、分支信息，错误的projectID创建分支 >> 404 Project Not Found
+通过gitlabID,projectID,分支对象正确创建GitLab分支 >> 1
+使用重复的分支信息创建分支 >> Branch already exists
 
 */
 

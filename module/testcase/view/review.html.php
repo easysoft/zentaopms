@@ -30,7 +30,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->testcase->reviewResultAB;?></th>
-        <td><?php echo html::select('result', $lang->testcase->reviewResultList, '', 'class=form-control');?></td><td></td>
+        <td><?php echo html::select('result', $lang->testcase->reviewResultList, '', 'class=form-control required');?></td><td></td>
       </tr>
       <tr class='hide'>
         <th><?php echo $lang->testcase->status;?></th>

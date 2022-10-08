@@ -11,6 +11,7 @@
  */
 $lang->product->index            = $lang->productCommon . ' Home';
 $lang->product->browse           = 'Story List';
+$lang->product->requirement      = 'Requirement List';
 $lang->product->dynamic          = 'Dynamics';
 $lang->product->view             = "{$lang->productCommon} Detail";
 $lang->product->edit             = "Edit {$lang->productCommon}";
@@ -34,6 +35,10 @@ $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the s
 $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Unbind Whitelist';
+$lang->product->track            = 'View Stories Matrix';
+$lang->product->checkedProducts  = '%s products selected';
+$lang->product->pageSummary      = 'Total products: %s.';
+$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Close {$lang->productCommon}";
@@ -67,6 +72,8 @@ $lang->product->changedStories        = 'Changed [S]';
 $lang->product->changedStoriesTitle   = 'Changed Stories';
 $lang->product->draftStories          = 'Draft [S]';
 $lang->product->draftStoriesTitle     = 'Draft Stories';
+$lang->product->reviewingStories      = "Reviewing [S]";
+$lang->product->reviewingStoriesTitle = "Reviewing Stories";
 $lang->product->closedStories         = 'Closed [S]';
 $lang->product->closedStoriesTitle    = 'Closed Stories';
 $lang->product->storyCompleteRate     = "{$lang->SRCommon} Completion rate";
@@ -131,21 +138,22 @@ $lang->product->createdDate    = 'createdDate';
 $lang->product->createdVersion = 'Created Version';
 $lang->product->mailto         = 'Mailto';
 
-$lang->product->searchStory  = 'Search';
-$lang->product->assignedToMe = 'AssignedToMe';
-$lang->product->openedByMe   = 'CreatedByMe';
-$lang->product->reviewedByMe = 'ReviewedByMe';
-$lang->product->reviewByMe   = 'ReviewByMe';
-$lang->product->closedByMe   = 'ClosedByMe';
-$lang->product->draftStory   = 'Draft';
-$lang->product->activeStory  = 'Activated';
-$lang->product->changedStory = 'Changed';
-$lang->product->willClose    = 'ToBeClosed';
-$lang->product->closedStory  = 'Closed';
-$lang->product->unclosed     = 'Open';
-$lang->product->unplan       = 'Unplanned';
-$lang->product->viewByUser   = 'By User';
-$lang->product->assignedByMe = 'AssignedByMe';
+$lang->product->searchStory    = 'Search';
+$lang->product->assignedToMe   = 'AssignedToMe';
+$lang->product->openedByMe     = 'CreatedByMe';
+$lang->product->reviewedByMe   = 'ReviewedByMe';
+$lang->product->reviewByMe     = 'ReviewByMe';
+$lang->product->closedByMe     = 'ClosedByMe';
+$lang->product->draftStory     = 'Draft';
+$lang->product->activeStory    = 'Activated';
+$lang->product->changingStory  = 'Changing';
+$lang->product->reviewingStory = 'Reviewing';
+$lang->product->willClose      = 'ToBeClosed';
+$lang->product->closedStory    = 'Closed';
+$lang->product->unclosed       = 'Open';
+$lang->product->unplan         = 'Unplanned';
+$lang->product->viewByUser     = 'By User';
+$lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
 $lang->product->myProduct             = 'Products Ownedbyme';
@@ -182,7 +190,7 @@ $lang->product->statusList['closed'] = 'Closed';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {
@@ -216,9 +224,10 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['assignedbyme'] = $lang->product->assignedByMe;
-$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
-$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
-$lang->product->moreSelects['willclose']    = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;
+$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;

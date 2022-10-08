@@ -67,6 +67,7 @@ class datatable extends control
             $this->app->loadConfig('testtask');
             $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
             $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+            $this->config->testcase->datatable->fieldList['status']['width']  = '90';
         }
         if($module == 'testcase')
         {
@@ -95,18 +96,7 @@ class datatable extends control
             unset($cols['taskCount']);
             unset($cols['bugCount']);
             unset($cols['caseCount']);
-        }
-
-        if($module == 'execution' and $method == 'all')
-        {
-            if($extra == 'execution' or $extra == 'project')
-            {
-                unset($cols['percent']);
-                unset($cols['attribute']);
-                unset($cols['actions']);
-            }
-
-            if($extra == 'project' or $extra == 'stage') unset($cols['project']);
+            $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         }
 
         $this->view->cols    = $cols;

@@ -15,6 +15,8 @@
 <?php
 $dittoNotice = sprintf($this->lang->task->dittoNotice, $lang->executionCommon);
 js::set('dittoNotice', $dittoNotice);
+js::set('showFields', $showFields);
+js::set('requiredFields', $config->task->edit->requiredFields);
 ?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
@@ -97,8 +99,8 @@ js::set('dittoNotice', $dittoNotice);
             $taskMembers = array();
             if(isset($teams[$taskID]))
             {
-                $teamAccounts = array_keys($teams[$taskID]);
-                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount] = $users[$teamAccount];
+                $teamAccounts = $teams[$taskID];
+                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount->account] = $users[$teamAccount->account];
             }
             else
             {

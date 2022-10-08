@@ -33,7 +33,7 @@
     <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->allTasks}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->featureBar['task']['all']}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -226,6 +226,16 @@
         <td colspan='13'>
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
+          <?php if($groupBy == 'assignedTo' and $task->assignedTo and !isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), '0.0');?>
+          <?php if($groupBy == 'assignedTo' and empty($task->assignedTo)):?>
+            <div class="table-col">
+              <div class="clearfix segments">
+                <div class="segment">
+                  <div class="segment-title"><?php echo $groupName;?></div>
+                </div>
+              </div>
+            </div>
+          <?php endif;?>
           <?php printf($lang->execution->countSummary, $groupSum, $groupDoing, $groupWait);?>
           <?php printf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit);?>
           </div>

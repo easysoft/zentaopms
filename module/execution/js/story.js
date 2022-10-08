@@ -27,12 +27,12 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            parent.location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID);
         }
     })
 
     /* Get checked stories. */
-    $('#batchToTaskButton').on('click', function()
+    $(document).on('click', '#batchToTaskButton', function()
     {
         storyIdList      = '';
         linedTaskIdList  = '';
@@ -49,10 +49,34 @@ $(function()
             }
             storyIdList += $(this).val() + ',';
         });
+
+        $('#type').val('').trigger("chosen:updated");
+        $('#hourPointValue').val('');
+        $('input[name^=fields]').prop('checked', true);
     });
 
     $('#submit').click(function()
     {
+        var taskType  = $('#type').val();
+        var hourPoint = $('#hourPointValue').val();
+        if(taskType.length == 0)
+        {
+            alert(typeNotEmpty);
+            return false;
+        }
+
+        if(hourPoint == 0)
+        {
+            alert(hourPointNotEmpty);
+            return false;
+        }
+        else if(typeof(hourPoint) != 'undefined' && (isNaN(hourPoint) || hourPoint < 0))
+        {
+            alert(hourPointNotError);
+            return false;
+        }
+        hourPoint = typeof(hourPoint) == 'undefined' ? 0 : hourPoint;
+
         if(linedTaskIdList)
         {
             confirmStoryToTask = confirmStoryToTask.replace('%s', linedTaskIdList);
@@ -62,6 +86,8 @@ $(function()
             }
             else
             {
+                if(!unlinkTaskIdList) return false;
+
                 $('#storyIdList').val(unlinkTaskIdList);
             }
         }

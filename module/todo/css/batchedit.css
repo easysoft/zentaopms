@@ -3,6 +3,8 @@
 div[id*="ends"] .chosen-single {border-left: none;}
 
 .c-id {width: 40px;}
-.c-pri {width: 100px;}
-.c-status {width: 120px;}
-.c-date {width: 300px;}
+.c-pri, .c-date {width: 100px;}
+.c-status, .c-assignedTo {width: 120px;}
+.c-beginAndEnd{width: 300px;}
+.c-assignedTo {padding-left: 0px !important;}
+.visible {overflow: visible;}

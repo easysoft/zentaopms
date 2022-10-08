@@ -11,21 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('allExecutions', $allExecutions)?>
 <?php js::set('executions', $executions)?>
 <?php js::set('projectID', $projectID)?>
+<?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->execution->build}</span>";
-    $active = '';
-    if($type == 'all')
+    common::sortFeatureMenu();
+    foreach($lang->project->featureBar['build'] as $featureType => $label)
     {
-        $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        $label       = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
-    echo html::a(inlink('build', "projectID=$projectID&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>

@@ -10,6 +10,8 @@ title=测试 scoreModel->reset();
 cid=1
 pid=1
 
+重置积分成功 >> finish,0
+
 */
 
 $score = new scoreTest();

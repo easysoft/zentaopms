@@ -211,7 +211,10 @@ class branch extends control
     public function ajaxGetDropMenu($productID, $branch, $module, $method, $extra = '')
     {
         parse_str($extra, $output);
-        $branches   = $this->branch->getPairs($productID, 'all', isset($output['projectID']) ? $output['projectID'] : 0);
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,', ",$method,") !== false and !empty($productID)) ? true : false;
+        $param      = $isQaModule ? $extra : 0;
+        $param      = isset($output['projectID']) ? $output['projectID'] : $param;
+        $branches   = $this->branch->getPairs($productID, 'all', $param);
         $statusList = $this->dao->select('id,status')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchPairs();
 
         $this->view->link            = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
@@ -271,7 +274,7 @@ class branch extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(!isset($branchTagOption[$oldBranch]))
+        if(is_numeric($oldBranch) and !isset($branchTagOption[$oldBranch]))
         {
             $branch = $this->branch->getById($oldBranch, $productID, '');
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));

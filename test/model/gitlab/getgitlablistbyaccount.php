@@ -8,6 +8,10 @@ title=测试 gitlabModel::getGitLabListByAccount();
 cid=1
 pid=1
 
+默认admin用户查询绑定的gitlab服务器 >> 0
+使用已绑定一个gitlab服务器的用户查询 >> 1
+使用未绑定gitlab服务器的用户查询 >> 0
+
 */
 
 $gitlab = $tester->loadModel('gitlab');

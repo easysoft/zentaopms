@@ -10,10 +10,10 @@ title=测试 groupModel->getMenuModules();
 cid=1
 pid=1
 
-// 测试查询 product 菜单的模块 >> product,branch,story
-// 测试查询 my 菜单的模块      >> my,todo
-// 测试查询 qa 菜单的模块      >> qa,bug,caselib
-// 测试查询 project 菜单的模块 >> design,projectbuild,projectstory
+测试查询 product 菜单的模块 >> product,branch,story
+测试查询 my 菜单的模块 >> my,todo
+测试查询 qa 菜单的模块 >> qa,bug,caselib
+测试查询 project 菜单的模块 >> design,projectbuild,projectstory
 
 */
 

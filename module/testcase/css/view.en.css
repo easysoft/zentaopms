@@ -1,2 +1,3 @@
 .thWidth {width: 90px !important;}
 .lifeThWidth {width: 100px !important;}
+#mainContent .table-data tbody>tr>th {width: 85px;}

@@ -10,6 +10,9 @@ title=测试 tutorialModel->getStories();
 cid=1
 pid=1
 
+测试是否能拿到数据 >> 1
+测试是否能拿到数据 >> 3
+
 */
 
 $tutorial = new tutorialTest();

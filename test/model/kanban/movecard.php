@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +33,4 @@ r($kanban->moveCardTest($cardIDList[2], $columnIDList[1], $columnIDList[2], $lan
 r($kanban->moveCardTest($cardIDList[3], $columnIDList[1], $columnIDList[2], $laneID, $laneID, $kanbanID)) && p('cards') && e(',5,6,805,3,4,');  // 将卡片4从泳道1 列2转移到泳道1 列3
 r($kanban->moveCardTest($cardIDList[4], $columnIDList[2], $columnIDList[0], $laneID, $laneID, $kanbanID)) && p('cards') && e(',801,5,');        // 将卡片5从泳道1 列3转移到泳道1 列1
 r($kanban->moveCardTest($cardIDList[5], $columnIDList[2], $columnIDList[0], $laneID, $laneID, $kanbanID)) && p('cards') && e(',801,5,6,');      // 将卡片6从泳道1 列3转移到泳道1 列1
-system("./ztest init");
+$db->restoreDB();

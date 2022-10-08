@@ -46,24 +46,23 @@ class fileModel extends model
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->andWhere('extra')->ne('editor')
-            ->andWhere('deleted')->eq('0')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('id')
             ->fetchAll('id');
 
         foreach($files as $file)
         {
-            if($objectType != 'traincourse' and $objectType != 'traincontents')
-            {
-                $realPathName   = $this->getRealPathName($file->pathname);
-                $file->realPath = $this->savePath . $realPathName;
-                $file->webPath  = $this->webPath . $realPathName;
-            }
-            else
+            if($objectType == 'traincourse' or  $objectType == 'traincontents')
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
                 $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
             }
+
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
         }
 
         return $files;
@@ -80,31 +79,50 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
-        {
-            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-            $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
-        }
 
-        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
-        {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
-        }
-        else
+        if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
         {
             $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
             $file->webPath  = 'data/course/' . $file->pathname;
+
+            return $file;
         }
 
+        $realPathName   = $this->getRealPathName($file->pathname);
+        $file->realPath = $this->savePath . $realPathName;
+        $file->webPath  = $this->webPath . $realPathName;
+
         return $file;
+    }
+
+    /**
+     * Get files by ID list.
+     *
+     * @param  int    $fileIdList
+     * @access public
+     * @return array
+     */
+    public function getByIdList($fileIdList)
+    {
+        if(empty($fileIdList)) return array();
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIdList)->orderBy('id')->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            if($file->objectType == 'traincourse' or $file->objectType == 'traincontents')
+            {
+                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+                $file->webPath  = 'data/course/' . $file->pathname;
+                continue;
+            }
+
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
+        }
+
+        return $files;
     }
 
     /**
@@ -166,6 +184,8 @@ class fileModel extends model
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
+
+        if(!is_array($_FILES[$htmlTagName]['error']) and $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
@@ -523,6 +543,58 @@ class fileModel extends model
         {
             return false;
         }
+    }
+
+    /**
+     * Check file priv.
+     *
+     * @param  int    $file
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($file)
+    {
+        if($this->app->user->admin) return true;
+
+        $objectType = $file->objectType;
+        $objectID   = $file->objectID;
+
+        $projectObjects   = array('design', 'issue', 'risk');
+        $productObjects   = array('story', 'bug', 'testcase', 'productplan');
+        $executionObjects = array('task', 'build');
+
+        $table = $this->config->objectTables[$objectType];
+        if(!$table) return true;
+
+        if(in_array($objectType, $projectObjects))
+        {
+            $projectID = $this->dao->findByID($objectID)->from($table)->fetch('project');
+        }
+        elseif(in_array($objectType, $productObjects))
+        {
+            $productID = $this->dao->findByID($objectID)->from($table)->fetch('product');
+        }
+        elseif(in_array($objectType, $executionObjects))
+        {
+            $executionID = $this->dao->findByID($objectID)->from($table)->fetch('execution');
+        }
+        elseif($objectType == 'doc')
+        {
+            $doc = $this->dao->findById($objectID)->from(TABLE_DOC)->fetch();
+            return $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+        elseif($objectType == 'feedback')
+        {
+            $productID     = $this->dao->findById($objectID)->from(TABLE_FEEDBACK)->fetch('product');
+            $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+            return in_array($productID, array_keys($grantProducts));
+        }
+
+        if(isset($projectID)   and strpos(",{$this->app->user->view->projects},", ",$projectID,")  === false) return false;
+        if(isset($productID)   and strpos(",{$this->app->user->view->products},", ",$productID,")  === false) return false;
+        if(isset($executionID) and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false) return false;
+
+        return true;
     }
 
 	/**
@@ -1017,7 +1089,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return getimagesize($file->realPath);
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
         }
         else if($this->config->file->storageType == 's3')
         {
@@ -1043,7 +1115,56 @@ class fileModel extends model
     {
         return $this->dao->select("id,$value")->from(TABLE_FILE)
             ->where('id')->in($IDs)
-            ->andWhere('deleted')->eq('0')
             ->fetchPairs();
+    }
+
+    /**
+     * Update test case version.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function updateTestcaseVersion($file)
+    {
+        $oldCase   = $this->loadModel('testcase')->getByID($file->objectID);
+        $isLibCase = ($oldCase->lib and empty($oldCase->product));
+        if($isLibCase)
+        {
+            $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');
+            $fromcaseVersion += 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
+        }
+    }
+
+    /**
+     * Process file info for object.
+     *
+     * @param  string    $objectType
+     * @param  object    $oldObject
+     * @param  object    $newObject
+     * @access public
+     * @return void
+     */
+    public function processFile4Object($objectType, $oldObject, $newObject)
+    {
+        $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
+        $deleteFiles = $newObject->deleteFiles;
+        if(!empty($deleteFiles))
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
+            foreach($deleteFiles as $fileID)
+            {
+                @unlink($oldObject->files[$fileID]->realPath);
+                $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+            }
+        }
+
+        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
+
+        $newObject->files = trim($oldFiles . $addedFiles, ',');
+        $oldObject->files = join(',', array_keys($oldObject->files));
     }
 }

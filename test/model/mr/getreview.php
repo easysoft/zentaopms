@@ -8,8 +8,8 @@ title=测试 mrModel::getReview();
 cid=1
 pid=1
 
-使用空的repoID, MRID, revision         >> return null
-使用正确的repoID, MRID                 >> return normal
+使用空的repoID, MRID, revision >> return null
+使用正确的repoID, MRID >> return normal
 使用正确的repoID, MRID, 错误的revision >> return null
 
 */

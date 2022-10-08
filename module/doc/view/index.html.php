@@ -33,8 +33,8 @@
               <thead>
                 <tr>
                   <th class="c-name"><?php echo $lang->doc->title;?></th>
-                  <th class="c-num text-right"><?php echo $lang->doc->size;?></th>
-                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-num text-right" title="<?php echo $lang->doc->size?>"><?php echo $lang->doc->size;?></th>
+                  <th class="c-user" title="<?php echo $lang->doc->addedBy;?>"><?php echo $lang->doc->addedBy;?></th>
                   <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
                 </tr>
               </thead>

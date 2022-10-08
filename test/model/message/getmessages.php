@@ -10,6 +10,9 @@ title=测试 messageModel->getMessages();
 cid=1
 pid=1
 
+拿取status为wait的数据信息 >> 1
+拿取status为wait的数据信息 >> 114
+
 */
 
 $message = new messageTest();

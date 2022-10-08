@@ -90,7 +90,8 @@ js::set('suiteID',        $suiteID);
       $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
-      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
+      $canImportToLib             = common::hasPriv('testcase', 'importToLib');
+      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
@@ -113,6 +114,7 @@ js::set('suiteID',        $suiteID);
           <tr data-id='<?php echo $case->id?>'>
             <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tr>
+          <?php $caseProductIds[$case->product] = $case->product;?>
           <?php endforeach;?>
         </tbody>
       </table>
@@ -125,11 +127,12 @@ js::set('suiteID',        $suiteID);
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
-            $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
+            $actionLink    = $this->createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch");
+            $misc          = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -144,7 +147,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->reviewResultList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -165,7 +168,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->typeList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -173,7 +176,7 @@ js::set('suiteID',        $suiteID);
               if($canBatchConfirmStoryChange)
               {
                   $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
-                  $misc       = "onclick=\"setFormAction('$actionLink')\"";
+                  $misc       = "onclick=\"setFormAction('$actionLink', '', '#caseList')\"";
                   echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
               }
               ?>
@@ -200,7 +203,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeBranch', "branchID=$branchID");
-                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"");
                 }
                 ?>
               </div>
@@ -229,7 +232,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "title='$module' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $module, '', "title='$module' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"");
                 }
                 ?>
               </div>
@@ -237,12 +240,43 @@ js::set('suiteID',        $suiteID);
           </div>
           <?php endif;?>
           <?php endif;?>
+          <?php
+          if($canImportToLib)
+          {
+              $actionLink = '#importToLib';
+              echo html::a($actionLink, $lang->testcase->importToLib, '', "class='btn btn-primary' data-toggle='modal'");
+          }
+          ?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
+  </div>
+</div>
+<div class="modal fade" id="importToLib">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->testcase->importToLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax not-watch' action='<?php echo $this->createLink('testcase', 'importToLib');?>'>
+          <table class='table table-form'>
+            <tr>
+              <td class='select-lib'><?php echo $lang->testcase->selectLibAB;?></td>
+              <td class='required'><?php echo html::select('lib', $libraries, '', "class='form-control chosen' id='lib'");?></td>
+            </tr>
+            <tr>
+              <?php echo html::hidden('caseIdList', '');?>
+              <td colspan='2' class='text-center'><?php echo html::submitButton($lang->testcase->import);?></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 <script>

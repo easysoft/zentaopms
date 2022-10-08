@@ -179,6 +179,7 @@ $lang->project->linkStoryByPlanTips    = "此操作會將所選計划下面的{$
 $lang->project->createExecution        = "該項目下沒有{$lang->executionCommon}，請先創建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "該用戶參與了%s%s%s個{$lang->execution->common}，是否同時將其移除？（該用戶所產生的數據不會受影響。）";
 $lang->project->unlinkExecutionMembers = "移除的團隊成員還參與了項目下的執行，是否同步從執行團隊中移除？";
+$lang->project->noDevStage             = '該項目下沒有研發類型的階段，或者您沒有權限訪問，暫時不支持創建版本。';
 
 $lang->project->tenThousand = '萬';
 

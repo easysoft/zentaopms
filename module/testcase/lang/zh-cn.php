@@ -31,9 +31,11 @@ $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
 $lang->testcase->type             = '用例类型';
 $lang->testcase->status           = '用例状态';
+$lang->testcase->statusAB         = '状态';
 $lang->testcase->subStatus        = '子状态';
 $lang->testcase->steps            = '用例步骤';
 $lang->testcase->openedBy         = '由谁创建';
+$lang->testcase->openedByAB       = '创建者';
 $lang->testcase->openedDate       = '创建日期';
 $lang->testcase->lastEditedBy     = '最后修改者';
 $lang->testcase->result           = '测试结果';
@@ -94,6 +96,7 @@ $lang->testcase->mailto           = '抄送给';
 $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
 $lang->testcase->suite            = '套件';
+$lang->testcase->executionStatus  = '执行状态';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -124,12 +127,13 @@ $lang->testcase->batchConfirmStoryChange = "批量确认变更";
 $lang->testcase->batchCaseTypeChange     = "批量修改类型";
 $lang->testcase->browse                  = "用例列表";
 $lang->testcase->groupCase               = "分组浏览用例";
+$lang->testcase->zeroCase                = "零用例{$lang->SRCommon}";
 $lang->testcase->import                  = "导入";
 $lang->testcase->importAction            = "导入用例";
 $lang->testcase->fileImport              = "导入CSV";
 $lang->testcase->importFromLib           = "从用例库中导入";
 $lang->testcase->showImport              = "显示导入内容";
-$lang->testcase->exportTemplet           = "导出模板";
+$lang->testcase->exportTemplate          = "导出模板";
 $lang->testcase->export                  = "导出数据";
 $lang->testcase->exportAction            = "导出用例";
 $lang->testcase->reportChart             = '报表统计';
@@ -142,6 +146,7 @@ $lang->testcase->groupName               = '分组名称';
 $lang->testcase->step                    = '步骤';
 $lang->testcase->stepChild               = '子步骤';
 $lang->testcase->viewAll                 = '查看所有';
+$lang->testcase->importToLib             = "导入用例库";
 
 $lang->testcase->new = '新增';
 
@@ -233,9 +238,11 @@ $lang->testcase->noLibrary        = "现在还没有用例库，请先创建！"
 $lang->testcase->mustChooseResult = '必须选择评审结果';
 $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->testcase->noCase           = '暂时没有用例。';
+$lang->testcase->importedCases    = 'ID为 %s 的用例在相同模块已经导入，已忽略。';
 
 $lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';
+$lang->testcase->selectLibAB   = '选择用例库';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
@@ -245,11 +252,11 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <st
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
-$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['all']         = '全部';
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
-$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['browseunits'] = '单元测试';
+$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

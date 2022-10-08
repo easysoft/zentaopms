@@ -186,7 +186,9 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.logout';
 $config->openMethods[] = 'user.deny';
 $config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.checktable';
 $config->openMethods[] = 'misc.qrcode';
@@ -219,6 +221,10 @@ $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
 $config->openMethods[] = 'admin.ignore';
 $config->openMethods[] = 'personnel.unbindwhitelist';
+$config->openMethods[] = 'tree.viewhistory';
+$config->openMethods[] = 'doc.createbasicinfo';
+$config->openMethods[] = 'project.createguide';
+$config->openMethods[] = 'task.editteam';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -240,6 +246,11 @@ define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testtask`');
 define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');
 define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
+define('TABLE_ZAHOST',        '`' . $config->db->prefix . 'host`');
+
+if(!defined('TABLE_ASSET')) define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
+if(!defined('TABLE_VMTEMPLATE')) define('TABLE_VMTEMPLATE', '`' . $config->db->prefix . 'vmtemplate`');
+if(!defined('TABLE_VM')) define('TABLE_VM', '`' . $config->db->prefix . 'vm`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
@@ -260,13 +271,16 @@ define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
 define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
+define('TABLE_TASKTEAM',      '`' . $config->db->prefix . 'taskteam`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
+define('TABLE_PROJECTADMIN',  '`' . $config->db->prefix . 'projectadmin`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
 define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
+define('TABLE_CFD',           '`' . $config->db->prefix . 'cfd`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
@@ -326,53 +340,64 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
-$config->objectTables['product']      = TABLE_PRODUCT;
-$config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
-$config->objectTables['story']        = TABLE_STORY;
-$config->objectTables['requirement']  = TABLE_STORY;
-$config->objectTables['release']      = TABLE_RELEASE;
-$config->objectTables['program']      = TABLE_PROJECT;
-$config->objectTables['project']      = TABLE_PROJECT;
-$config->objectTables['execution']    = TABLE_PROJECT;
-$config->objectTables['task']         = TABLE_TASK;
-$config->objectTables['build']        = TABLE_BUILD;
-$config->objectTables['bug']          = TABLE_BUG;
-$config->objectTables['case']         = TABLE_CASE;
-$config->objectTables['testcase']     = TABLE_CASE;
-$config->objectTables['testtask']     = TABLE_TESTTASK;
-$config->objectTables['testsuite']    = TABLE_TESTSUITE;
-$config->objectTables['testreport']   = TABLE_TESTREPORT;
-$config->objectTables['user']         = TABLE_USER;
-$config->objectTables['api']          = TABLE_API;
-$config->objectTables['doc']          = TABLE_DOC;
-$config->objectTables['doclib']       = TABLE_DOCLIB;
-$config->objectTables['todo']         = TABLE_TODO;
-$config->objectTables['custom']       = TABLE_LANG;
-$config->objectTables['branch']       = TABLE_BRANCH;
-$config->objectTables['module']       = TABLE_MODULE;
-$config->objectTables['caselib']      = TABLE_TESTSUITE;
-$config->objectTables['entry']        = TABLE_ENTRY;
-$config->objectTables['webhook']      = TABLE_WEBHOOK;
-$config->objectTables['stakeholder']  = TABLE_STAKEHOLDER;
-$config->objectTables['job']          = TABLE_JOB;
-$config->objectTables['team']         = TABLE_TEAM;
-$config->objectTables['pipeline']     = TABLE_PIPELINE;
-$config->objectTables['mr']           = TABLE_MR;
-$config->objectTables['kanban']       = TABLE_KANBAN;
-$config->objectTables['kanbanspace']  = TABLE_KANBANSPACE;
-$config->objectTables['kanbanregion'] = TABLE_KANBANREGION;
-$config->objectTables['kanbancolumn'] = TABLE_KANBANCOLUMN;
-$config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
-$config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
-$config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
-$config->objectTables['kanbancard']   = TABLE_KANBANCARD;
-$config->objectTables['sonarqube']    = TABLE_PIPELINE;
-$config->objectTables['gitlab']       = TABLE_PIPELINE;
-$config->objectTables['jebkins']      = TABLE_PIPELINE;
-$config->objectTables['stage']        = TABLE_STAGE;
-$config->objectTables['apistruct']    = TABLE_APISTRUCT;
+define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
+define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
+define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+
+$config->objectTables['product']       = TABLE_PRODUCT;
+$config->objectTables['productplan']   = TABLE_PRODUCTPLAN;
+$config->objectTables['story']         = TABLE_STORY;
+$config->objectTables['requirement']   = TABLE_STORY;
+$config->objectTables['release']       = TABLE_RELEASE;
+$config->objectTables['program']       = TABLE_PROJECT;
+$config->objectTables['project']       = TABLE_PROJECT;
+$config->objectTables['execution']     = TABLE_PROJECT;
+$config->objectTables['task']          = TABLE_TASK;
+$config->objectTables['build']         = TABLE_BUILD;
+$config->objectTables['bug']           = TABLE_BUG;
+$config->objectTables['case']          = TABLE_CASE;
+$config->objectTables['testcase']      = TABLE_CASE;
+$config->objectTables['testtask']      = TABLE_TESTTASK;
+$config->objectTables['testsuite']     = TABLE_TESTSUITE;
+$config->objectTables['testreport']    = TABLE_TESTREPORT;
+$config->objectTables['user']          = TABLE_USER;
+$config->objectTables['api']           = TABLE_API;
+$config->objectTables['doc']           = TABLE_DOC;
+$config->objectTables['doclib']        = TABLE_DOCLIB;
+$config->objectTables['todo']          = TABLE_TODO;
+$config->objectTables['custom']        = TABLE_LANG;
+$config->objectTables['branch']        = TABLE_BRANCH;
+$config->objectTables['module']        = TABLE_MODULE;
+$config->objectTables['caselib']       = TABLE_TESTSUITE;
+$config->objectTables['entry']         = TABLE_ENTRY;
+$config->objectTables['webhook']       = TABLE_WEBHOOK;
+$config->objectTables['stakeholder']   = TABLE_STAKEHOLDER;
+$config->objectTables['job']           = TABLE_JOB;
+$config->objectTables['team']          = TABLE_TEAM;
+$config->objectTables['pipeline']      = TABLE_PIPELINE;
+$config->objectTables['mr']            = TABLE_MR;
+$config->objectTables['kanban']        = TABLE_KANBAN;
+$config->objectTables['kanbanspace']   = TABLE_KANBANSPACE;
+$config->objectTables['kanbanregion']  = TABLE_KANBANREGION;
+$config->objectTables['kanbancolumn']  = TABLE_KANBANCOLUMN;
+$config->objectTables['kanbanlane']    = TABLE_KANBANLANE;
+$config->objectTables['kanbanorder']   = TABLE_KANBANORDER;
+$config->objectTables['kanbangroup']   = TABLE_KANBANGROUP;
+$config->objectTables['kanbancard']    = TABLE_KANBANCARD;
+$config->objectTables['sonarqube']     = TABLE_PIPELINE;
+$config->objectTables['gitea']         = TABLE_PIPELINE;
+$config->objectTables['gogs']          = TABLE_PIPELINE;
+$config->objectTables['gitlab']        = TABLE_PIPELINE;
+$config->objectTables['jebkins']       = TABLE_PIPELINE;
+$config->objectTables['stage']         = TABLE_STAGE;
+$config->objectTables['apistruct']     = TABLE_APISTRUCT;
+$config->objectTables['repo']          = TABLE_REPO;
+$config->objectTables['zahost']        = TABLE_ZAHOST;
+$config->objectTables['executionnode'] = TABLE_VM;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+
+$config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
@@ -380,3 +405,8 @@ $config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
+
+$config->showMainMenu = true;
+$config->maxPriValue  = '256';
+
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');

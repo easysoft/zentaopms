@@ -60,37 +60,10 @@ class projectModel extends model
         if($action == 'close')    return $project->status != 'closed';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
         if($action == 'activate') return $project->status == 'done' or $project->status == 'closed';
+        if($action == 'whitelist') return $project->acl != 'open';
+        if($action == 'group') return $project->model != 'kanban';
 
         return true;
-    }
-
-    /**
-     * Check has content for project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasContent($projectID)
-    {
-        $count  = 0;
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('count');
-        $count += (int)$this->dao->select('count(*) as count')->from(TABLE_TASK)->where('project')->eq($projectID)->fetch('count');
-
-        return $count > 0;
-    }
-
-    /**
-     * Check has children project.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return bool
-     */
-    public function checkHasChildren($projectID)
-    {
-        $count = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($projectID)->fetch('count');
-        return $count > 0;
     }
 
     /**
@@ -190,7 +163,7 @@ class projectModel extends model
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->eq($projectID)
-            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('`type`')->in($type)->fi()
             ->fetch();
 
         if(!$project) return false;
@@ -217,9 +190,11 @@ class projectModel extends model
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
-        $teams = $this->dao->select('root, count(*) as count')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->groupBy('root')
+        $teams = $this->dao->select('t1.root, count(t1.id) as count')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
             ->fetchAll('root');
 
         $condition = $this->config->systemMode == 'classic' ? 't2.id as project' : 't2.parent as project';
@@ -238,7 +213,7 @@ class projectModel extends model
         {
             $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
             $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
-            $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
+            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $this->getParentProgram($project);
@@ -257,7 +232,7 @@ class projectModel extends model
     {
         if($project->parent == 0) return '';
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
@@ -296,9 +271,11 @@ class projectModel extends model
         if(empty($projects)) return array();
         $projectIdList = array_keys($projects);
 
-        $teams = $this->dao->select('root, count(*) as teams')->from(TABLE_TEAM)
-            ->where('root')->in($projectIdList)
-            ->andWhere('type')->eq('project')
+        $teams = $this->dao->select('t1.root, count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq(0)
             ->groupBy('root')->fetchPairs();
 
         $hours = $this->dao->select('t2.parent as project, ROUND(SUM(t1.consumed), 1) AS consumed, ROUND(SUM(t1.estimate), 1) AS estimate')->from(TABLE_TASK)->alias('t1')
@@ -310,48 +287,27 @@ class projectModel extends model
             ->groupBy('t2.project')
             ->fetchAll('project');
 
-        $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.project')->in($projectIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait,doing,pause')
-            ->groupBy('t2.project')
-            ->fetchPairs();
-
-        $this->loadModel('product');
-        foreach($projectIdList as $projectID)
-        {
-            $productIdList = $this->product->getProductIDByProject($projectID, false);
-
-            $allStories[$projectID]  = $this->getTotalStoriesByProject($projectID, $productIdList, 'story');
-            $doneStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'closed');
-            $leftStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'active');
-        }
-
-        $leftBugs = $this->getTotalBugByProject($projectIdList, 'active');
-        $allBugs  = $this->getTotalBugByProject($projectIdList, 'all');
-        $doneBugs = $this->getTotalBugByProject($projectIdList, 'resolved');
-
-        $leftTasks = $this->getTotalTaskByProject($projectIdList, 'undone');
-        $allTasks  = $this->getTotalTaskByProject($projectIdList, 'all');
-        $doneTasks = $this->getTotalTaskByProject($projectIdList, 'done');
+        $storySummary = $this->getTotalStoriesByProject($projectIdList);
+        $taskSummary  = $this->getTotalTaskByProject($projectIdList);
+        $bugSummary   = $this->getTotalBugByProject($projectIdList);
 
         foreach($projects as $projectID => $project)
         {
-            $project->consumed    = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
-            $project->estimate    = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
-            $project->teamCount   = isset($teams[$projectID]) ? $teams[$projectID] : 0;
-            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
-            $project->leftBugs    = isset($leftBugs[$projectID])  ? $leftBugs[$projectID]  : 0;
-            $project->allBugs     = isset($allBugs[$projectID])   ? $allBugs[$projectID]   : 0;
-            $project->doneBugs    = isset($doneBugs[$projectID])  ? $doneBugs[$projectID]  : 0;
-            $project->allStories  = $allStories[$projectID];
-            $project->doneStories = $doneStories[$projectID];
-            $project->leftStories = $leftStories[$projectID];
-            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
-            $project->allTasks    = isset($allTasks[$projectID])  ? $allTasks[$projectID]  : 0;
-            $project->doneTasks   = isset($doneTasks[$projectID]) ? $doneTasks[$projectID] : 0;
+            $project->consumed      = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
+            $project->estimate      = isset($hours[$projectID]) ? (float)$hours[$projectID]->estimate : 0;
+            $project->teamCount     = isset($teams[$projectID]) ? $teams[$projectID] : 0;
+            $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs : 0;
+            $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs : 0;
+            $project->doneBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->doneBugs : 0;
+            $project->allStories    = isset($storySummary[$projectID]) ? $storySummary[$projectID]->allStories: 0;
+            $project->doneStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->doneStories: 0;
+            $project->leftStories   = isset($storySummary[$projectID]) ? $storySummary[$projectID]->leftStories: 0;
+            $project->leftTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->leftTasks : 0;
+            $project->allTasks      = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->allTasks : 0;
+            $project->waitTasks     = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->waitTasks : 0;
+            $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks : 0;
+            $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks : 0;
+            $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks : 0;
 
             if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
             if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
@@ -363,25 +319,136 @@ class projectModel extends model
     /**
      * Get the number of stories associated with the project.
      *
-     * @param  int     $projectID
-     * @param  array   $productIdList
-     * @param  string  $type          story|requirement
-     * @param  string  $status        all|closed|active
+     * @param  array   $projectIdList
      * @access public
      * @return int
      */
-    public function getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all')
+    public function getTotalStoriesByProject($projectIdList = 0)
     {
-        return $this->dao->select('count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t1.project')->eq($projectID)
-            ->andWhere('t2.type')->eq($type)
-            ->andWhere('t2.product')->in($productIdList)
-            ->beginIF($status == 'active')->andWhere('t2.status')->in('active,changed')->fi()
-            ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
-            ->beginIF($status == 'closed')->andWhere('t2.closedReason')->eq('done')->fi()
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t2.type')->eq('story')
             ->andWhere('deleted')->eq('0')
-            ->fetch('stories');
+            ->groupBy('project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * Get associated bugs by project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalBugByProject($projectIdList)
+    {
+        return $this->dao->select("project, count(id) as allBugs, count(if(status = 'active', 1, null)) as leftBugs, count(if(status = 'resolved', 1, null)) as doneBugs")->from(TABLE_BUG)
+            ->where('project')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * Get associated tasks by project.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTotalTaskByProject($projectIdList)
+    {
+        return $this->dao->select("t1.project, count(t1.id) as allTasks, count(if(t1.status = 'wait', 1, null)) as waitTasks, count(if(t1.status = 'doing', 1, null)) as doingTasks, count(if(t1.status = 'done', 1, null)) as doneTasks, count(if(t1.status = 'wait' or t1.status = 'pause' or t1.status = 'cancel', 1, null)) as leftTasks, count(if(t1.status = 'done' or t1.status = 'closed', 1, null)) as litedoneTasks")->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+    }
+
+    /**
+     * Get waterfall project progress.
+     *
+     * @param  array  $projectIDList
+     * @access public
+     * @return int
+     */
+    public function getWaterfallProgress($projectIDList)
+    {
+        $projectList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.type')->in('stage')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.project')->in($projectIDList)
+            ->andWhere('t2.model')->eq('waterfall')
+            ->fetchGroup('project', 'id');
+
+        $totalHour = $this->dao->select('t1.project, t1.execution, ROUND(SUM(if(t1.status !="closed" && t1.status !="cancel", `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in(array_keys($projectList))
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
+            ->groupBy('t1.execution')
+            ->fetchGroup('project', 'execution');
+
+        $progressList = array();
+        foreach($projectList as $projectID => $stageList)
+        {
+            $progress = 0;
+            foreach($stageList as $stageID => $stage)
+            {
+                if($stage->project != $projectID) continue;
+
+                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
+                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
+
+                $stageProgress = ($stageTotalConsumed + $stageTotalLeft) ? floor($stageTotalConsumed / ($stageTotalConsumed + $stageTotalLeft) * 1000) / 1000 * 100 : 0;
+
+                $progress += $stageProgress * ($stage->percent / 100);
+            }
+            $progressList[$projectID] = $progress;
+        }
+
+        return is_numeric($projectIDList) ? (empty($progressList) ? 0 : $progressList[$projectIDList]) : $progressList;
+    }
+
+    /**
+     * Get waterfall general PV and EV.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getWaterfallPVEVAC($projectID)
+    {
+        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
+
+        $PV = 0;
+        $EV = 0;
+        $AC = 0;
+        while($task = $stmt->fetch())
+        {
+            if(empty($task->estimate)) continue;
+
+            $PV += $task->estimate;
+            $AC += $task->consumed;
+            if($task->status == 'done' or $task->closedReason == 'done')
+            {
+                $EV += $task->estimate;
+            }
+            else
+            {
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
+                $EV += round($task->estimate * $task->progress / 100, 2);
+            }
+        }
+
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
     }
 
     /**
@@ -444,8 +511,8 @@ class projectModel extends model
     {
         $projects = array();
 
-        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_TASKESTIMATE)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+        $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->beginIF($time == 'THIS_YEAR')->andWhere('LEFT(t1.`date`, 4)')->eq(date('Y'))->fi()
             ->andWhere('t2.deleted')->eq(0)
@@ -633,6 +700,10 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
+            elseif($module == 'programplan')
+            {
+                $link = helper::createLink('project', 'execution', "type=all&projectID=%s");
+            }
         }
 
         return $link;
@@ -687,19 +758,21 @@ class projectModel extends model
      * @param  bool   $isQueryAll
      * @param  string $orderBy
      * @param  string $excludedModel
+     * @param  string $model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '')
+    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($programID !== '')->andWhere('path')->like("%,$programID,%")->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
+            ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -735,16 +808,17 @@ class projectModel extends model
     /**
      * Get project by id list.
      *
-     * @param  array    $projectIdList
+     * @param  array  $projectIdList
+     * @param  string $mode all
      * @access public
      * @return object
      */
-    public function getByIdList($projectIdList = array())
+    public function getByIdList($projectIdList = array(), $mode = '')
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('id')->in($projectIdList)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchAll('id');
     }
 
@@ -765,43 +839,6 @@ class projectModel extends model
             ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in($mode)->fi()
             ->fetchPairs('id', 'name');
-    }
-
-    /**
-     * Get associated bugs by project.
-     *
-     * @param  array  $projectIdList
-     * @param  string $status   active|resolved|all
-     * @access public
-     * @return array
-     */
-    public function getTotalBugByProject($projectIdList, $status)
-    {
-        return $this->dao->select('project, count(*) as bugs')->from(TABLE_BUG)
-            ->where('project')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->groupBy('project')
-            ->fetchPairs('project');
-    }
-
-    /**
-     * Get associated tasks by project.
-     *
-     * @param  array  $projectIdList
-     * @param  string $status all|done|undone
-     * @access public
-     * @return array
-     */
-    public function getTotalTaskByProject($projectIdList, $status)
-    {
-        return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
-            ->where('project')->in($projectIdList)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
-            ->beginIF($status == 'undone')->andWhere('status')->in('wait,pause,cancel')->fi()
-            ->groupBy('project')
-            ->fetchPairs('project');
     }
 
     /**
@@ -848,6 +885,10 @@ class projectModel extends model
     {
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['actionURL'] = $actionURL;
+
+        $statusList = $this->lang->project->statusList;
+        unset($statusList['delay']);
+        $this->config->project->search['params']['status']['values'] = $statusList;
 
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
@@ -1068,6 +1109,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
+        if(isset($this->config->setCode) and $this->config->setCode == 0) unset($project->code);
 
         $linkedProductsCount = 0;
         if(isset($_POST['products']))
@@ -1082,29 +1124,11 @@ class projectModel extends model
         if($project->parent)
         {
             $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
-            $project->budgetUnit = $program->budgetUnit;
-            if(isset($project->budget) and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($availableBudget > 0 and $project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
 
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
-                dao::$errors[] = $this->lang->project->productNotEmpty;
+                dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
             }
         }
@@ -1146,7 +1170,8 @@ class projectModel extends model
             }
             else
             {
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+                $programID        = isset($project->parent) ? $project->parent : 0;
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->andWhere('program')->eq($programID)->fetch('name');
                 if(!empty($existProductName))
                 {
                     dao::$errors['productName'] = $this->lang->project->existProductName;
@@ -1164,12 +1189,13 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();
@@ -1342,28 +1368,17 @@ class projectModel extends model
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
-        if($project->parent)
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
+            ->where('project')->eq($project->id)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll();
+        if(!empty($executionsCount))
         {
-            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent project. */
-            $project->budgetUnit = $program->budgetUnit;
-            if($project->budget != 0 and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
+            $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+            $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+            if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+            if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
+            if(dao::isError()) return false;
         }
 
         /* Judge products not empty. */
@@ -1397,14 +1412,15 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -1496,35 +1512,22 @@ class projectModel extends model
         {
             $projectID   = (int)$projectID;
             $projectName = $data->names[$projectID];
-            $projectCode = $data->codes[$projectID];
+            if(isset($data->codes)) $projectCode = $data->codes[$projectID];
 
             $projects[$projectID] = new stdClass();
             if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
-            $projects[$projectID]->code           = $projectCode;
+            $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
-            $projects[$projectID]->days           = $data->dayses[$projectID];
+            $projects[$projectID]->end            = $data->ends[$projectID] == $this->lang->project->longTime ? LONG_TIME : $data->ends[$projectID];
+            $projects[$projectID]->days           = $data->ends[$projectID] == $this->lang->project->longTime ? 0 : $data->dayses[$projectID];
             $projects[$projectID]->acl            = $data->acls[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
-            if($projects[$projectID]->parent)
-            {
-                $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
-
-                if($parentProject)
-                {
-                    /* Child project begin cannot less than parent. */
-                    if($projects[$projectID]->begin < $parentProject->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
-
-                    /* When parent set end then child project end cannot greater than parent. */
-                    if($parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end) dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $parentProject->end);
-
-                }
-            }
+            if(isset($data->codes)) $projects[$projectID]->code = $projectCode;
 
             foreach($extendFields as $extendField)
             {
@@ -1534,8 +1537,9 @@ class projectModel extends model
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
             }
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -1543,17 +1547,27 @@ class projectModel extends model
 
             $this->dao->update(TABLE_PROJECT)->data($project)
                 ->autoCheck($skipFields = 'begin,end')
-                ->batchCheck($this->config->project->edit->requiredFields , 'notempty')
+                ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}'")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}'")
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}' and `deleted` = '0'")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($projectID)
                 ->exec();
 
-            if(dao::isError()) helper::end(js::error('project#' . $projectID . dao::getError(true)));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                foreach($errors as $key => $error)
+                {
+                    dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
+                }
+
+                return false;
+            }
+
             if(!dao::isError())
             {
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
@@ -1868,9 +1882,7 @@ class projectModel extends model
         $projectType = 'project';
         $accounts    = array_unique($accounts);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
-        $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1885,6 +1897,14 @@ class projectModel extends model
                 dao::$errors['message'][]  = $this->lang->project->errorHours;
                 return false;
             }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
+
+        $projectMember = array();
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
 
             $member          = new stdclass();
             $member->role    = $roles[$key];
@@ -1955,11 +1975,14 @@ class projectModel extends model
                 $class .= ' c-name';
                 $title  = "title={$project->code}";
             }
-
-            if($id == 'name')
+            elseif($id == 'name')
             {
                 $class .= ' text-left';
-                $title  = "title='{$project->name}'";
+                $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
+            }
+            elseif($id == 'PM')
+            {
+                $class .= ' c-manager';
             }
 
             if($id == 'end')
@@ -1998,9 +2021,6 @@ class projectModel extends model
                 case 'name':
                     $prefix = '';
                     $suffix = '';
-                    if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                    if($project->model === 'scrum') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
-                    if($project->model === 'kanban') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->kanban}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
@@ -2012,10 +2032,12 @@ class projectModel extends model
                     echo $project->code;
                     break;
                 case 'PM':
-                    $user     = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID   = !empty($user) ? $user->id : '';
-                    $PMLink   = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    $userName = zget($users, $project->PM);
+                    $user       = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID     = !empty($user) ? $user->id : '';
+                    $userAvatar = !empty($user) ? $user->avatar : '';
+                    $PMLink     = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    $userName   = zget($users, $project->PM);
+                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}");
                     echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':
@@ -2025,7 +2047,7 @@ class projectModel extends model
                     echo $project->end;
                     break;
                 case 'status':
-                    echo "<span class='status-task status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
+                    echo "<span class='status-task text-center  status-{$project->status}'> " . zget($this->lang->project->statusList, $project->status) . "</span>";
                     break;
                 case 'budget':
                     echo $budgetTitle;
@@ -2220,6 +2242,26 @@ class projectModel extends model
     }
 
     /**
+     * Get team member group.
+     *
+     * @param  array|string $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberGroup($projectIdList)
+    {
+        if(empty($projectIdList)) return array();
+
+        return $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname, t1.root as project")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->fetchGroup('project', 'account');
+    }
+
+    /**
      * Get members of a project who can be imported.
      *
      * @param  int    $projectID
@@ -2240,149 +2282,6 @@ class projectModel extends model
     }
 
     /**
-     * Get project stats.
-     *
-     * @param  int     $projectID
-     * @param  string  $status
-     * @param  int     $productID
-     * @param  int     $itemCounts
-     * @param  string  $orderBy
-     * @param  object  $pager
-     * @access public
-     * @return array
-     */
-    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
-    {
-        if(empty($productID))
-        {
-            $myExecutionIDList = array();
-            if($status == 'involved')
-            {
-                $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
-                    ->where('account')->eq($this->app->user->account)
-                    ->andWhere('type')->eq('execution')
-                    ->fetchPairs();
-            }
-
-            $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.type')->in('sprint,stage,kanban')
-                ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
-                ->beginIF($projectID == 0 and $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-                ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
-                ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.deleted')->eq('0')
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        else
-        {
-            $executions = $this->dao->select('t2.*,t3.name projectName, t3.model as projectModel')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-                ->where('t1.product')->eq($productID)
-                ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-                ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-                ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t2.vision')->eq($this->config->vision)
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-
-        $hours     = $this->computerProgress($executions);
-        $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-
-        /* Get burndown charts datas. */
-        $burns = $this->dao->select('execution, date AS name, `left` AS value')
-            ->from(TABLE_BURN)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('task')->eq(0)
-            ->orderBy('date desc')
-            ->fetchGroup('execution', 'name');
-
-        $this->loadModel('execution');
-        foreach($burns as $executionID => $executionBurns)
-        {
-            /* If executionBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
-            $begin = $executions[$executionID]->begin;
-            $end   = $executions[$executionID]->end;
-            if(helper::isZeroDate($begin)) $begin = $executions[$executionID]->openedDate;
-            $executionBurns = $this->execution->processBurnData($executionBurns, $itemCounts, $begin, $end);
-
-            /* Shorter names. */
-            foreach($executionBurns as $executionBurn)
-            {
-                $executionBurn->name = substr($executionBurn->name, 5);
-                unset($executionBurn->execution);
-            }
-
-            ksort($executionBurns);
-            $burns[$executionID] = $executionBurns;
-        }
-
-        /* Process executions. */
-        $parents  = array();
-        $children = array();
-        foreach($executions as $key => $execution)
-        {
-            /* Process the end time. */
-            $execution->end = date(DT_DATE1, strtotime($execution->end));
-
-            /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
-            {
-                $delay = helper::diffDate(helper::today(), $execution->end);
-                if($delay > 0) $execution->delay = $delay;
-            }
-
-            /* Process the burns. */
-            $execution->burns = array();
-            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
-            foreach($burnData as $data) $execution->burns[] = $data->value;
-
-            /* Process the hours. */
-            $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-
-            $execution->children = array();
-            $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
-        }
-
-        /* In the case of the waterfall model, calculate the sub-stage. */
-        if($projectID == 0)
-        {
-            foreach($executions as $key => $execution)
-            {
-                if($execution->type == 'stage')
-                {
-                    $execution->children = isset($children[$execution->id]) ? $children[$execution->id] : array();
-                    unset($children[$execution->id]);
-                }
-            }
-        }
-        $project = $this->getByID($projectID);
-        if($project and $project->model == 'waterfall')
-        {
-            foreach($parents as $id => $execution)
-            {
-                $execution->children = isset($children[$id]) ? $children[$id] : array();
-                unset($children[$id]);
-            }
-        }
-
-        $orphan = array();
-        foreach($children as $child) $orphan = array_merge($child, $orphan);
-
-        return array_merge($parents, $orphan);
-    }
-
-    /**
      * Get stats for project kanban.
      *
      * @access public
@@ -2393,7 +2292,7 @@ class projectModel extends model
         $this->loadModel('program');
 
         $projects   = $this->program->getProjectStats(0, 'all', 0, 'order_asc');
-        $executions = $this->getStats(0, 'doing');
+        $executions = $this->loadModel('execution')->getStatData(0, 'doing');
 
         $doingExecutions  = array();
         $latestExecutions = array();
@@ -2523,14 +2422,15 @@ class projectModel extends model
      *
      * @param  int    $objectID  projectID
      * @access public
-     * @return void
+     * @return int
      */
     public function setMenu($objectID)
     {
         global $lang;
-        $project = $this->getByID($objectID);
 
-        $model = 'scrum';
+        $model    = 'scrum';
+        $objectID = (empty($objectID) and $this->session->project) ? $this->session->project : $objectID;
+        $project  = $this->getByID($objectID);
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
@@ -2555,17 +2455,23 @@ class projectModel extends model
         if(isset($project->model) and $project->model == 'waterfall')
         {
             global $lang;
+            $lang->project->createExecution = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
 
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+        $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
 
+        if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
+
         common::setMenuVars('project', $objectID);
+        return $objectID;
     }
 
     /**
@@ -2655,8 +2561,8 @@ class projectModel extends model
         $menu .= $this->buildFlowMenu('project', $project, 'view', 'direct');
         $menu .= "<div class='divider'></div>";
 
-        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view", $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
-        $menu .= $this->buildMenu('project', 'delete', "project=$project->id",           $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
+        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view",            $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
+        $menu .= $this->buildMenu('project', 'delete', "project=$project->id&confirm=no&from=view", $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
 
         return $menu;
     }
@@ -2694,25 +2600,24 @@ class projectModel extends model
         }
 
         $from     = $project->from == 'project' ? 'project' : 'pgmproject';
-        $iframe   = ($this->app->tab == 'program' || $project->model == 'kanban') ? 'iframe' : '';
-        $onlyBody = ($this->app->tab == 'program' || $project->model == 'kanban') ? true : '';
+        $iframe   = $this->app->tab == 'program' ? 'iframe' : '';
+        $onlyBody = $this->app->tab == 'program' ? true : '';
         $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
-        $attr     = $project->model == 'kanban' ? " disabled='disabled'" : '';
 
         $menu .= $this->buildMenu($moduleName, 'edit', $params, $project, 'browse', 'edit', '', $iframe, $onlyBody, $dataApp);
 
         if($this->config->vision != 'lite')
         {
-            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp . $attr, $this->lang->execution->team);
-            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp . $attr);
+            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp, $this->lang->execution->team);
+            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp);
 
             if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params, $project, 'browse', 'link', '', 'btn-action', '', $attr, $this->lang->project->manageProducts);
-                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
+                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
+                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
                 $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
                 $menu .= "</ul>";
                 $menu .= "</div>";

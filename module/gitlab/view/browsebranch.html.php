@@ -37,7 +37,7 @@
       <?php $vars = "gitlabID={$gitlabID}&projectID={$projectID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
+          <th class='c-name text'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
           <th class='text-left'><?php echo $lang->gitlab->branch->lastCommitter;?></th>
           <th class='text-left'><?php common::printOrderLink('lastCommittedDate', $orderBy, $vars, $lang->gitlab->branch->lastCommittedDate);?></th>
         </tr>

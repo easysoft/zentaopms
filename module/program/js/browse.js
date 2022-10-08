@@ -1,12 +1,5 @@
 $(function()
 {
-    $('input[name^="showClosed"]').click(function()
-    {
-        var showClosed = $(this).is(':checked') ? 1 : 0;
-        $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});
-        window.location.reload();
-    });
-
     $('input#editProject1').click(function()
     {
         var editProject = $(this).is(':checked') ? 1 : 0;
@@ -28,6 +21,22 @@ $(function()
             $('.table-footer #checkAll').prop('checked', false);
             $('#programForm').removeClass('has-row-checked');
         }
+
+        var summary = checkedProjects.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
+        var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
+        if(checkedLength > 0)
+        {
+            $('#programSummary').addClass('hidden');
+            $('#projectsSummary').remove();
+            $('.editCheckbox').after(statistic);
+        }
+        else
+        {
+            $('#programSummary').removeClass('hidden');
+            $('#projectsSummary').addClass('hidden');
+        }
+
     });
 
     $(document).on('click', ".table-footer #checkAll", function()
@@ -36,13 +45,34 @@ $(function()
         {
             $(":checkbox[name^='projectIdList']").prop('checked', true);
             $('#programForm').addClass('has-row-checked');
+            var checkedLength = $(":checkbox[name^='projectIdList']:checked").length;
+            var summary = checkedProjects.replace('%s', checkedLength);
+            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
+            var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
+            $('#programSummary').addClass('hidden');
+            $('#projectsSummary').remove();
+            $('.editCheckbox').after(statistic);
+            $(this).next('label').addClass('hover');
         }
         else
         {
             $(":checkbox[name^='projectIdList']").prop('checked', false);
             $('#programForm').removeClass('has-row-checked');
+            $('#programSummary').removeClass('hidden');
+            $('#projectsSummary').addClass('hidden');
+            $(this).next('label').removeClass('hover');
         }
     });
+
+    /* Solve the problem that clicking the browser back button causes the checkbox to be selected by default. */
+    setTimeout(function()
+    {
+        $(":checkbox[name^='projectIdList']").each(function()
+        {
+            $(this).prop('checked', false);
+        });
+        $('.table-footer #checkAll').prop('checked', false);
+    }, 10);
 });
 
 function showEditCheckbox(show)
@@ -76,6 +106,9 @@ function showEditCheckbox(show)
     }
     else
     {
+        $('#programForm').removeClass('has-row-checked');
+        $('#projectsSummary').addClass('hidden');
+        $('#programSummary').removeClass('hidden');
         $('#programForm').find('.editCheckbox').remove();
         if($('#programForm .pager').length == 0) $('.table-footer').hide();
         $('#programForm').removeAttr('action');

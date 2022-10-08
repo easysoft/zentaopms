@@ -1,0 +1,8 @@
+#mainContent tr > th{width: 66px;}
+[lang^='en'] #mainContent tr > th, [lang^='de'] #mainContent tr > th, [lang^='fr'] #mainContent tr > th{width: 105px;}
+
+#mainContent .table-form > tbody > tr > th {vertical-align: top; padding-right: 5px;}
+#mainContent .radio-inline {display: block;}
+#mainContent .radio-inline+.radio-inline {margin-left: 0px; padding-top: 8px;}
+#mainContent label > .tip {color: #999;}
+#mainContent #cardBox th {vertical-align: middle;}

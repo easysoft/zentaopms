@@ -7,10 +7,14 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->file = new stdclass();
 $lang->file->common        = 'Fichier';
+$lang->file->id            = 'ID';
+$lang->file->objectType    = 'Object Type';
+$lang->file->objectID      = 'Object ID';
+$lang->file->deleted       = 'Deleted';
 $lang->file->uploadImages  = 'Charger Images en Lot';
 $lang->file->download      = 'Télécharger Fichiers';
 $lang->file->uploadDate    = 'Chargé le';
@@ -32,6 +36,7 @@ $lang->file->addFile       = 'Ajouter';
 $lang->file->beginUpload   = 'Clic pour Charger';
 $lang->file->uploadSuccess = 'Chargé !';
 $lang->file->batchExport   = 'Export in batches';
+$lang->file->downloadFile  = 'Download';
 
 $lang->file->pathname  = 'Nom Chemin';
 $lang->file->title     = 'Titre';
@@ -51,6 +56,7 @@ $lang->file->uploadImagesExplain = "Note : Chargez images au format .jpg, .jpeg,
 $lang->file->saveAndNext         = 'Enregistrer et poursuivre';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> de <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  Vous pouvez avoir <strong>%s</strong> items/page, vous devez donc importer <strong id='times'>%s</strong> fois.";
+$lang->file->accessDenied        = 'Access denied to this file!';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' non trouvé.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' non inscriptible. Changez les permissions. Entrez la commande <span class='code'>sudo chmod -R 777 '%s'</span></span> sous Linux.";
@@ -64,3 +70,9 @@ $lang->file->errorSuffix      = 'Format incorrect. Fichiers .zip SEULEMENT !';
 $lang->file->errorExtract     = "Echec de l'extraction des fichiers. Les fichiers peuvent être endommagé ou il y a un fichier invalide dans le zip.";
 $lang->file->fileNotFound     = 'Fichier non trouvé. Le fichier physique a peut-être été supprimé par innadvertance !';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
+
+$lang->file->uploadError[1] = 'The uploaded filesize exceeds the limit. Please change the upload_max_filesize and post_max_size options in php.ini';
+$lang->file->uploadError[2] = 'The size of the uploaded file exceeds the value specified by the MAX_FILE_SIZE option in the HTML form';
+$lang->file->uploadError[3] = 'Only part of the file has been uploaded, please re-upload';
+$lang->file->uploadError[4] = 'No files have been uploaded';
+$lang->file->uploadError[5] = 'The size of the file is 0. Please upload the file again';

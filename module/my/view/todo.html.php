@@ -35,6 +35,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if($config->edition != 'open' and !empty($app->user) and common::hasPriv('todo', 'calendar')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('todo', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->todo->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'todo', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->todo->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export' data-width='600px'");?>
     <?php if(common::hasPriv('todo', 'create') or common::hasPriv('todo', 'batchCreate')):?>
     <div class='btn-group dropdown'>
@@ -81,15 +87,15 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class="c-date">     <?php common::printOrderLink('date',       $orderBy, $vars, $lang->todo->date);?></th>
-          <th class="c-type">     <?php common::printOrderLink('type',       $orderBy, $vars, $lang->todo->type);?></th>
+          <th class="c-date text-center"><?php common::printOrderLink('date',       $orderBy, $vars, $lang->todo->date);?></th>
+          <th class="c-type"><?php common::printOrderLink('type',       $orderBy, $vars, $lang->todo->type);?></th>
           <?php $style = $this->app->clientLang == 'en' ? "style='width:80px'" : '';?>
           <th class="c-pri" <?php echo $style;?> title=<?php echo $lang->todo->pri;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
-          <th class="c-name">     <?php common::printOrderLink('name',       $orderBy, $vars, $lang->todo->name);?></th>
-          <th class="c-user">     <?php common::printOrderLink('assignedBy', $orderBy, $vars, $lang->todo->assignedBy);?></th>
-          <th class="c-begin">    <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
-          <th class="c-end">      <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
-          <th class="c-status">   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->todo->status);?></th>
+          <th class="c-name">   <?php common::printOrderLink('name',       $orderBy, $vars, $lang->todo->name);?></th>
+          <th class="c-user">   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->todo->assignedTo);?></th>
+          <th class="c-begin">  <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
+          <th class="c-end">    <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
+          <th class="c-status"> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->todo->status);?></th>
           <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -105,11 +111,11 @@
             <?php endif;?>
             <?php echo $todo->id?>
           </td>
-          <td class="c-date"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
+          <td class="c-date text-center"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
           <td class="c-type"><?php echo zget($lang->todo->typeList, $todo->type, '');?></td>
           <td class="c-pri"><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
           <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-width='80%' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
-          <td><?php echo zget($users, $todo->assignedBy);?></td>
+          <td><?php echo zget($users, $todo->assignedTo);?></td>
           <td class="c-begin"><?php echo $todo->begin;?></td>
           <td class="c-end"><?php echo $todo->end;?></td>
           <td class="c-status"><span class="status-todo status-<?php echo $todo->status;?>"><?php echo $lang->todo->statusList[$todo->status];?></span></td>
@@ -172,9 +178,9 @@
           $actionLink = $this->createLink('todo', 'import2Today');
           echo "<div class='input-control has-icon-right space'>";
           echo '<input type="text" name="date" id="importDate" value="' . date('Y-m-d') . '" class="form-control form-date">';
-          echo '<label for="importDate" class="input-control-icon-right"><i class="icon icon-delay"></i></label>';
+          echo '<label for="importDate" class="input-control-icon-right iconCenter"><i class="icon icon-delay"></i></label>';
           echo '</div>';
-          echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
+          echo html::commonButton($lang->todo->changeDate, "onclick=\"setFormAction('$actionLink')\"");
       }
       ?>
       </div>

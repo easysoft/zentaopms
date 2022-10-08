@@ -52,7 +52,7 @@
         <td>
           <?php if($programs):?>
           <div class='input-group'>
-            <?php echo html::select("actions[programs][]", $programs, isset($group->acl['programs']) ? join(',', $group->acl['programs']) : '', "class='form-control chosen' multiple")?>
+            <?php echo html::select("actions[programs][]", $programs, isset($group->acl['programs']) ? join(',', $group->acl['programs']) : '', "class='form-control picker-select' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
@@ -65,7 +65,7 @@
         <td>
           <?php if($products):?>
           <div class='input-group'>
-            <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?>
+            <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control picker-select' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
@@ -78,7 +78,7 @@
         <td>
           <?php if($projects):?>
           <div class='input-group'>
-            <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
+            <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control picker-select' data-dropDirection='bottom' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>
@@ -91,7 +91,7 @@
         <td>
           <?php if($executions):?>
           <div class='input-group'>
-            <?php echo html::select("actions[sprints][]", $executions, isset($group->acl['sprints']) ? join(',', $group->acl['sprints']) : '', "class='form-control chosen' drop_direction='down' multiple")?>
+            <?php echo html::select("actions[sprints][]", $executions, isset($group->acl['sprints']) ? join(',', $group->acl['sprints']) : '', "class='form-control picker-select' data-dropDirection='bottom' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
           <?php else:?>

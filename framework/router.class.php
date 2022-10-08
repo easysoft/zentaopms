@@ -47,6 +47,15 @@ class router extends baseRouter
     public $isFlow = false;
 
     /**
+     * Fetch的模块名。
+     * The fetched module name.
+     *
+     * @var string
+     * @access public
+     */
+    public $fetchModule;
+
+    /**
      * Get the $moduleRoot var.
      *
      * @param  string $appName

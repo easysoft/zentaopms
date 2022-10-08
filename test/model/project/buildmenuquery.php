@@ -9,6 +9,9 @@ title=测试 projectModel->buildMenuQuery();
 cid=1
 pid=1
 
+获取构建的查询项目的sql的字符串长度 >> 231
+获取构建的查询项目的sql的字符串长度 >> 233
+
 */
 
 global $tester;

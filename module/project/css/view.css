@@ -2,5 +2,11 @@
 .block-team div.col-xs-6 {white-space: nowrap; overflow: hidden;}
 .cell .detail .row-grid {display: block;}
 
-.block-dynamic .label-action {margin-left: 12px;}
-.block-dynamic .label-action + a {color: #838A9D;}
+.timeline>li:before {left: -26px;}
+.timeline>li+li:after {left: -23px;}
+.timeline-text {margin-left: -18px;}
+.block-dynamic .label-action {padding: 0 6px;}
+.block-dynamic .label-action + a {padding-left: 6px;}
+.timeline>li.active:before {left: -30px;}
+.timeline>li>div:after {left: -27px;}
+.timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

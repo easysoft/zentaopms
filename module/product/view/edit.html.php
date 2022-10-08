@@ -51,10 +51,12 @@
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
+          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
@@ -69,7 +71,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->reviewer;?></th>
-            <td><?php echo html::select('reviewer[]', $users, $product->reviewer, "class='form-control chosen' multiple");?></td><td></td>
+            <td><?php echo html::select('reviewer[]', $users, $product->reviewer, "class='form-control picker-select' multiple");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
@@ -92,7 +94,7 @@
             <th><?php echo $lang->whitelist;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control chosen" multiple');?>
+                <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control picker-select" multiple');?>
                 <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
               </div>
             </td>

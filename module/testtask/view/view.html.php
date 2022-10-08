@@ -15,7 +15,7 @@
 <?php $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $task->id;?></span>
@@ -33,7 +33,7 @@
         <div class="detail-title"><?php echo $lang->testtask->desc;?></div>
         <div class="detail-content article-content"><?php echo !empty($task->desc) ? $task->desc : $lang->noData;?></div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true', 'object' => $task, 'method' => 'view', 'showDelete' => false));?>
       <?php if($task->report):?>
       <div class="detail">
         <div class="detail-title"><?php echo $lang->testtask->report;?></div>
@@ -97,7 +97,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->pri;?></th>
-              <td><?php echo $task->pri;?></td>
+              <td><?php echo zget($lang->testtask->priList, $task->pri);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->begin;?></th>

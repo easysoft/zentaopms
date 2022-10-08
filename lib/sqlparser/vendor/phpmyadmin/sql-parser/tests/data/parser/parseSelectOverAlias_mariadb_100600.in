@@ -1,0 +1,1 @@
+select `products`.`pid` AS `pid`, `products`.`pname` as `name`, rank() over( partition by `products`.`pvalue` order by `products`.`pid` desc) AS `myrank` from `products` 

@@ -10,6 +10,8 @@ title=测试 mailModel->sendmail();
 cid=1
 pid=1
 
+测试为dev4用户发送邮件通知 >> 0
+
 */
 
 $mail = new mailTest();

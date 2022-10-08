@@ -37,12 +37,13 @@ $lang->design->createdDate   = 'CreatedDate';
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
+$lang->design->more          = 'More';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';
 $lang->design->create       = 'Create Design';
 $lang->design->batchCreate  = 'Batch Create';
-$lang->design->edit         = 'Edit';
+$lang->design->edit         = 'Change';
 $lang->design->delete       = 'Delete';
 $lang->design->view         = 'View';
 $lang->design->browse       = 'List';

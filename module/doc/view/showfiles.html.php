@@ -21,13 +21,13 @@
           <tr>
             <?php $this->app->rawMethod = 'showfiles';?>
             <?php $vars = "type=$type&objectID=$objectID&viewType=$viewType&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
-            <th class="w-60px"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
+            <th class="c-id"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
             <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->fileTitle);?></th>
-            <th class="w-300px"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
-            <th class="w-100px"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
-            <th class="w-100px"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
-            <th class="w-100px"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
-            <th class="w-100px"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+            <th class="c-source"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
+            <th class="c-size"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
+            <th class="c-size"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
+            <th class="c-size"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
+            <th class="c-size"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class="c-actions-1"><?php echo $lang->actions;?></th>
           </tr>
         </thead>
@@ -45,9 +45,20 @@
                 <?php echo str_replace('.' . $file->extension, '', $file->title);?>
               </td>
               <td class='c-name'>
-                <?php echo ($file->objectType == 'requirement' ? $lang->URCommon : $lang->{$file->objectType}->common) . ' : ';?>
-                <a title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'>
-                  <?php echo $sourcePairs[$file->objectType][$file->objectID];?>
+                <?php
+                if($file->objectType == 'requirement')
+                {
+                    $commonTitle = $lang->URCommon . ' : ';
+                }
+                else
+                {
+                    if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
+                    $commonTitle = $lang->{$file->objectType}->common . ' : ';
+                }
+                echo $commonTitle;
+                ?>
+                <a title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' class='iframe' data-width='90%'>
+                  <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                 </a>
               </td>
               <td><?php echo $file->extension;?></td>
@@ -101,9 +112,20 @@
                 </a>
                 <div class='file-name' title='<?php echo $file->title;?>'><?php echo $file->title;?></a></div>
                 <div class='file-name text-muted'>
-                  <?php echo ($file->objectType == 'requirement' ? $lang->URCommon : $lang->{$file->objectType}->common) . ' : ';?>
-                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'>
-                    <?php echo $sourcePairs[$file->objectType][$file->objectID];?>
+                  <?php
+                  if($file->objectType == 'requirement')
+                  {
+                      $commonTitle = $lang->URCommon . ' : ';
+                  }
+                  else
+                  {
+                      if(!isset($lang->{$file->objectType}->common)) $app->loadLang($file->objectType);
+                      $commonTitle = $lang->{$file->objectType}->common . ' : ';
+                  }
+                  echo $commonTitle;
+                  ?>
+                  <a href='<?php echo $this->createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID=$file->objectID", '', true);?>' title='<?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>' class='iframe' data-width='90%'>
+                    <?php if(isset($sourcePairs[$file->objectType][$file->objectID])) echo $sourcePairs[$file->objectType][$file->objectID];?>
                   </a>
                 </div>
               </div>

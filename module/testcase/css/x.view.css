@@ -1,5 +1,5 @@
 .side-col.col-4 {display: none;}
-#main {margin-bottom: 40px;}
+#main {margin-bottom: 40px; position: unset !important;}
 #mainMenu {margin-top: 0px;}
 #mainMenu .btn {display: none;}
 #mainMenu .divider {display: none;}

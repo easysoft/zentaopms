@@ -15,7 +15,7 @@ class scm
         $className = $repo->SCM;
         if($className == 'Git') $className = 'GitRepo';
         if(!class_exists($className)) require(strtolower($className) . '.class.php');
-        $this->engine  = new $className($repo->client, $repo->path, $repo->account, $repo->password, $repo->encoding);
+        $this->engine = new $className($repo->client, $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
     }
 
     /**
@@ -221,6 +221,30 @@ class scm
     }
 
     /**
+     * Get commits by MR branches.
+     *
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return array
+     */
+    public function getMRCommits($sourceBranch, $targetBranch)
+    {
+        return $this->engine->getMRCommits($sourceBranch, $targetBranch);
+    }
+
+    /**
+     * Get clone url.
+     *
+     * @access public
+     * @return void
+     */
+    public function getCloneUrl()
+    {
+        return $this->engine->getCloneUrl();
+    }
+
+    /**
      * Check revision
      *
      * @param  int|string $revision
@@ -232,6 +256,45 @@ class scm
     {
         if(preg_match('/[^a-z0-9\-_\.\^\w][\x{4e00}-\x{9fa5}]/ui', $revision)) return false;
         return true;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
+    {
+        return $this->engine->getDownloadUrl($branch, $savePath, $ext);
+    }
+
+    /**
+     * Get all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @access public
+     * @return string
+     */
+    public function getAllFiles($path = '', $revision = 'HEAD')
+    {
+        return $this->engine->getAllFiles($path, $revision);
+    }
+
+    /**
+     * Get files by commit.
+     *
+     * @param  string  $commit
+     * @access public
+     * @return array
+     */
+    public function getFilesByCommit($revision)
+    {
+        return $this->engine->getFilesByCommit($revision);
     }
 }
 

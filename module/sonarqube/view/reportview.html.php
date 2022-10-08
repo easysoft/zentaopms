@@ -44,13 +44,13 @@
     </thead>
     <tbody>
       <tr class="text-center">
-        <td><?php echo $measures['bugs'];?></td>
-        <td><?php echo $measures['vulnerabilities'];?></td>
-        <td><?php echo $measures['security_hotspots_reviewed'];?></td>
-        <td><?php echo $measures['code_smells'];?></td>
-        <td><?php echo $measures['coverage'];?></td>
-        <td><?php echo $measures['duplicated_lines_density'];?></td>
-        <td><?php echo $measures['ncloc'];?></td>
+        <td><?php echo zget($measures, 'bugs', 0);?></td>
+        <td><?php echo zget($measures, 'vulnerabilities', 0);?></td>
+        <td><?php echo zget($measures, 'security_hotspots_reviewed', '0.0%');?></td>
+        <td><?php echo zget($measures, 'code_smells', 0);?></td>
+        <td><?php echo zget($measures, 'coverage', '0.0%');?></td>
+        <td><?php echo zget($measures, 'duplicated_lines_density', '0.0%');?></td>
+        <td><?php echo zget($measures, 'ncloc', 0);?></td>
       </tr>
     </tbody>
   </table>

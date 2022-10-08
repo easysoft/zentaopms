@@ -12,10 +12,11 @@ public function __construct($appName = '')
  * @param  int    $browseType
  * @param  int    $groupBy
  * @param  string $searchValue
+ * @param  string $orderBy
  * @access public
  * @return array
  */
-public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
+public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
 {
     /* Get card  data. */
     $cardList = array();
@@ -23,7 +24,8 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
     if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
     if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
-    $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
+    if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+    $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
     if(empty($lanes)) return array();
 
     $execution = $this->loadModel('execution')->getByID($executionID);
@@ -69,6 +71,33 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
         $laneData['order']           = $lane->order;
         $laneData['type']            = $browseType;
         $laneData['defaultCardType'] = $browseType;
+
+        if($browseType == 'task' and $groupBy == 'story')
+        {
+            $columnData[0]['id']         = 0;
+            $columnData[0]['type']       = 'story';
+            $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+            $columnData[0]['color']      = '#333';
+            $columnData[0]['limit']      = '-1';
+            $columnData[0]['laneType']   = $browseType;
+            $columnData[0]['asParent']   = false;
+            $columnData[0]['parentType'] = '';
+            $columnData[0]['actions']    = array();
+
+            if(empty($searchValue) or strpos($lane->name, $searchValue) !== false)
+            {
+                $cardData = array();
+                $cardData['id']         = $laneID;
+                $cardData['title']      = $lane->name;
+                $cardData['order']      = 1;
+                $cardData['pri']        = $lane->pri;
+                $cardData['estimate']   = '';
+                $cardData['assignedTo'] = $lane->assignedTo;
+                $cardData['deadline']   = '';
+                $cardData['severity']   = '';
+                $laneData['cards']['story'][] = $cardData;
+            }
+        }
 
         /* Construct kanban column data. */
         foreach($columns as $column)

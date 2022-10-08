@@ -29,7 +29,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->reviewResult;?></th>
-          <td class = 'required'><?php echo html::select('result', $lang->story->resultList, '', 'class=form-control onchange="switchShow(this.value)"');?></td><td></td>
+          <td class='required'><?php echo html::select('result', $lang->story->resultList, '', 'class="form-control chosen" onchange="switchShow(this.value)"');?></td><td></td>
+        </tr>
+        <tr id='assignedToBox' <?php echo $isLastOne ? '' : "class='hide'";?>>
+          <th><?php echo $lang->story->assignedTo;?></th>
+          <td><?php echo html::select('assignedTo', $users, $story->assignedTo, "class='form-control picker-select'");?></td><td></td>
         </tr>
         <tr id='rejectedReasonBox' class='hide'>
           <th><?php echo $lang->story->rejectedReason;?></th>
@@ -51,12 +55,6 @@
           <th><?php echo $lang->story->childStories;?></th>
           <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
         </tr>
-        <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
-        <tr id='preVersionBox' class='hide'>
-          <th><?php echo $lang->story->preVersion;?></th>
-          <td colspan='2'><?php echo html::radio('preVersion', array_combine(range($story->version - 1, 1), range($story->version - 1, 1)), $story->version - 1);?></td>
-        </tr>
-        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>
@@ -85,4 +83,6 @@
 <?php js::set('storyID', $story->id);?>
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('isMultiple', count($reviewers) == 1 ? false : true);?>
+<?php js::set('isLastOne', $isLastOne);?>
 <?php include '../../common/view/footer.html.php';?>

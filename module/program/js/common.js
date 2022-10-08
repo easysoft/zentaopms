@@ -1,3 +1,8 @@
+window.ignoreTips = {
+    'beyondBudgetTip' : false,
+    'dateTip'         : false
+};
+
 /**
  * Access rights are equal to private, and the white list settings are displayed.
  *
@@ -93,6 +98,7 @@ function computeWorkDays(currentID)
     {
         computeEndDate();
     }
+    outOfDateTip();
 }
 
 /**
@@ -111,6 +117,7 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
+        outOfDateTip();
         return false;
     }
 
@@ -276,6 +283,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
         }
         else
         {
@@ -291,18 +299,22 @@ $(function()
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(programID)
+function setBudgetTipsAndAclList(parentID)
 {
-    if(programID != 0)
+    var selectedProgramID = $('#parent').val();
+
+    if(parentID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + programID), function(budgetLeft)
+        $.get(createLink('project', 'ajaxGetObjectInfo', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
-            parentProgram = programList[programID];
+            var data      = JSON.parse(data);
+            parentProgram = programList[parentID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
+            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + data.availableBudget) : '';
             $('#budget').attr('placeholder', budgetNotes);
+            refreshBudgetUnit(data);
         });
         $('.aclBox').html($('#subPGMAcl').html());
     }
@@ -311,4 +323,158 @@ function setBudgetTipsAndAclList(programID)
         $('#budget').removeAttr('placeholder');
         $('.aclBox').html($('#PGMAcl').html());
     }
+
+    if(typeof(programID) == 'undefined') programID = 0;
+    budgetOverrunTips();
+    outOfDateTip();
+}
+
+/**
+ * compare childlish date.
+ *
+ * @access public
+ * @return void
+ */
+function compareChildDate()
+{
+    if(window.ignoreTips['dateTip']) return;
+    if(page == 'create') return;
+
+    var end               = $('#end').val();
+    var begin             = $('#begin').val();
+    var selectedProgramID = $('#parent').val();
+    if($('#dateTip').length > 0) $('#dateTip').remove();
+
+    if(end == longTime) end = LONG_TIME;
+    if(end.length > 0 && begin.length > 0)
+    {
+        var programEnd   = new Date(end);
+        var programBegin = new Date(begin);
+
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + '&selectedProgramID=' + selectedProgramID), function(data)
+        {
+            var childInfo = JSON.parse(data);
+            if(childInfo.maxChildEnd == '' || childInfo.minChildBegin == '') return;
+
+            var childBegin = new Date(childInfo.minChildBegin);
+            var childEnd   = new Date(childInfo.maxChildEnd);
+            if(programBegin <= childBegin && programEnd >= childEnd) return;
+
+            var dateTip = '';
+            if(programBegin > childBegin)
+            {
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + beginGreateChild + childInfo.minChildBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
+            }
+            else if(programEnd < childEnd)
+            {
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + endLetterChild + childInfo.maxChildEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
+            }
+
+            $('#dateBox').parent().parent().after(dateTip);
+            $('#dateTip').parent().css('line-height', '0');
+        });
+    }
+}
+
+/**
+ * The date is out of the range of the parent project set, and a prompt is given.
+ *
+ * @access public
+ * @return void
+ */
+function outOfDateTip()
+{
+    if(window.ignoreTips['dateTip']) return;
+
+    var end   = $('#end').val();
+    var begin = $('#begin').val();
+    if($('#dateTip').length > 0) $('#dateTip').parent().parent().remove();
+
+    if(end == longTime) end = LONG_TIME;
+    if(end.length > 0 && begin.length > 0)
+    {
+        var selectedProgramID = $('#parent').val();
+        var programEnd        = new Date(end);
+        var programBegin      = new Date(begin);
+
+        if(selectedProgramID == 0)
+        {
+            compareChildDate();
+            return;
+        }
+
+        if(typeof(programID) == 'undefined') programID = 0;
+        $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+        {
+            var dateTip     = '';
+            var data        = JSON.parse(data);
+            var parentEnd   = new Date(data.selectedProgramEnd);
+            var parentBegin = new Date(data.selectedProgramBegin);
+
+            if(programBegin >= parentBegin && programEnd <= parentEnd)
+            {
+                compareChildDate();
+                return;
+            }
+
+            if(programBegin < parentBegin)
+            {
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + beginLetterParent + data.selectedProgramBegin + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
+            }
+            else if(programEnd > parentEnd)
+            {
+                dateTip = "<tr><td></td><td colspan='2'><span id='dateTip' class='text-remind'><p>" + endGreaterParent + data.selectedProgramEnd + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>";
+            }
+
+            $('#dateBox').parent().parent().after(dateTip);
+            $('#dateTip').parent().css('line-height', '0');
+        });
+    }
+}
+
+/**
+ * Append prompt when the budget exceeds the parent project set.
+ *
+ * @access public
+ * @return void
+ */
+function budgetOverrunTips()
+{
+    if(window.ignoreTips['beyondBudgetTip']) return;
+
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+    if(selectedProgramID == 0)
+    {
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        return false;
+    }
+
+    if(typeof(programID) == 'undefined') programID = 0;
+    $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+    {
+        var data = JSON.parse(data);
+
+        var tip = "";
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<tr><td></td><td colspan='2'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>"
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        $('#budgetBox').parent().parent().after(tip);
+        $('#beyondBudgetTip').parent().css('line-height', '0');
+    });
+}
+
+/**
+ * Make this prompt no longer appear.
+ *
+ * @param  string  $obj
+ * @access public
+ * @return void
+ */
+function ignoreTip(obj)
+{
+    var parentID = obj.parentNode.id;
+    $('#' + parentID).addClass('hidden');
+
+    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
+    if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }

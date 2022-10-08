@@ -9,7 +9,11 @@ title=测试 storyModel->getZeroCase();
 cid=1
 pid=1
 
-
+获取产品1下的零用例需求数量 >> 1
+获取产品2下的零用例需求数量 >> 1
+获取产品0下的零用例需求数量 >> 0
+获取产品1下的零用例需求详情 >> 软件需求4,active,story,planned
+获取产品2下的零用例需求详情 >> 软件需求8,active,story,developing
 
 */
 

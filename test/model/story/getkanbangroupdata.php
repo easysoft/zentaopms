@@ -9,7 +9,10 @@ title=测试 storyModel->getKanbanGroupData();
 cid=1
 pid=1
 
-
+传入stories数据，获取按照stage分组后的结果数量 >> 2
+传入stories数据，获取按照stage分组后的结果数量 >> 2
+传入stories数据，获取按照stage分组后的结果详情 >> 软件需求2,story,wait
+传入stories数据，获取按照stage分组后的结果详情 >> 软件需求6,story,projected
 
 */
 

@@ -42,6 +42,7 @@ $lang->release->name          = '发布名称';
 $lang->release->marker        = '里程碑';
 $lang->release->date          = '发布日期';
 $lang->release->desc          = '描述';
+$lang->release->files         = '附件';
 $lang->release->status        = '状态';
 $lang->release->subStatus     = '子状态';
 $lang->release->last          = '上次发布';
@@ -63,6 +64,9 @@ $lang->release->mailto        = '抄送给';
 $lang->release->mailContent   = '<p>尊敬的用户，您好！</p><p style="margin-left: 30px;">您反馈的如下需求和Bug已经在 %s版本中发布，请联系客户经理查看最新版本。</p>';
 $lang->release->storyList     = '<p style="margin-left: 30px;">需求列表：%s。</p>';
 $lang->release->bugList       = '<p style="margin-left: 30px;">Bug列表：%s。</p>';
+
+$lang->release->storyTitle = '需求名称';
+$lang->release->bugTitle   = 'Bug名称';
 
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
@@ -90,3 +94,7 @@ $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
 $lang->release->notifyList['PT'] = "所在项目团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
+
+$lang->release->featureBar['browse']['all']       = '全部';
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

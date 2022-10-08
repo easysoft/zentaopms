@@ -535,7 +535,7 @@ class baseEntry
 
             /* Format array. */
             $value = array();
-            if(is_array($object->$key))
+            if(is_array($object->$key) or is_object($object->$key))
             {
                 foreach($object->$key as $v) $value[] = $this->cast($v, $type);
             }

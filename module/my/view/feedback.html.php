@@ -32,7 +32,7 @@
   <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workFeedback'></div>
   <?php if(empty($feedbacks)):?>
   <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+    <p><span class="text-muted"><?php echo $lang->feedback->noFeedback;?></span></p>
   </div>
   <?php else:?>
   <?php

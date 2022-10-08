@@ -18,7 +18,7 @@
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
-  if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
+  if(!empty($task->members) and (!isset($task->members[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
   ?>
   <div class="alert with-icon">
     <i class="icon-exclamation-sign"></i>
@@ -43,10 +43,19 @@
     </div>
     <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start') echo "onsubmit='return checkLeft();'"?>>
       <table class='table table-form'>
-        <tr>
+        <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'>
-            <?php echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");?>
+            <?php
+            if($task->mode == 'linear')
+            {
+                echo zget($members, $assignedTo) . html::hidden('assignedTo', $assignedTo);
+            }
+            else
+            {
+                echo html::select('assignedTo', $members, $assignedTo, "class='form-control chosen'");
+            }
+            ?>
           </td>
           <td></td>
         </tr>
@@ -56,19 +65,33 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->consumed;?></th>
+          <?php
+          $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+          $consumed    = !empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed;
+          $lblConsumed = $lang->task->consumed;
+          $readonly    = '';
+          if($app->rawMethod == 'restart' and !empty($currentTeam))
+          {
+              $lblConsumed = $lang->task->myConsumed;
+              $readonly    = 'readonly';
+          }
+          elseif($app->rawMethod == 'start' and $task->mode == 'linear')
+          {
+              $lblConsumed = $lang->task->myConsumed;
+          }
+          ?>
+          <th><?php echo $lblConsumed;?></th>
           <td>
             <div class='input-group'>
-              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->consumed : $task->consumed;?>
-              <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+              <?php echo html::input('consumed', $consumed, "class='form-control' $readonly");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td>
             <div class='input-group'>
-              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->left : $task->left;?>
+              <?php $left = !empty($currentTeam) ? (float)$currentTeam->left : $task->left;?>
               <?php echo html::input('left', $left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
@@ -77,7 +100,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'doing');?></td>
         </tr>
-        <?php $this->printExtendFields($task, 'table', 'columns=2');?> 
+        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($kanban->createDefaultColumnsTest($regionIDList[2], $groupIDList[2])) && p() &
 r($kanban->createDefaultColumnsTest($regionIDList[3], $groupIDList[3])) && p() && e('8');  // 创建region 4 group 4的默认泳道列
 r($kanban->createDefaultColumnsTest($regionIDList[4], $groupIDList[4])) && p() && e('8');  // 创建region 5 group 5的默认泳道列
 r($kanban->createDefaultColumnsTest($regionIDList[0], $groupIDList[0])) && p() && e('12'); // 重复创建region 1 group 1的默认泳道列
-system("./ztest init");
+$db->restoreDB();

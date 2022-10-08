@@ -2,15 +2,17 @@
 $lang->webhook->common     = 'Webhook';
 $lang->webhook->list       = 'Liste de Flux';
 $lang->webhook->api        = 'API';
-$lang->webhook->entry      = 'Entrée';
+$lang->webhook->entry      = 'EntrÃ©e';
 $lang->webhook->log        = 'Log';
 $lang->webhook->bind       = 'Bind User';
 $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'Assign';
-$lang->webhook->setting    = 'Paramétrages';
+$lang->webhook->setting    = 'ParamÃ©trages';
+
+$lang->webhook->logAction = 'Webhook Log';
 
 $lang->webhook->browse = 'Consulter';
-$lang->webhook->create = 'Créer';
+$lang->webhook->create = 'CrÃ©er';
 $lang->webhook->edit   = 'Modifier';
 $lang->webhook->delete = 'Supprimer';
 
@@ -24,22 +26,28 @@ $lang->webhook->sendType    = "Type d'envoi";
 $lang->webhook->secret      = 'Secret';
 $lang->webhook->product     = "{$lang->productCommon}";
 $lang->webhook->execution   = "{$lang->executionCommon}";
-$lang->webhook->params      = 'Paramètres';
-$lang->webhook->action      = 'Action capturée';
+$lang->webhook->params      = 'ParamÃ¨tres';
+$lang->webhook->action      = 'Action capturÃ©e';
 $lang->webhook->desc        = 'Description';
-$lang->webhook->createdBy   = 'Créé par';
-$lang->webhook->createdDate = 'Date Création';
-$lang->webhook->editedby    = 'Modifié par';
+$lang->webhook->createdBy   = 'CrÃ©Ã© par';
+$lang->webhook->createdDate = 'Date CrÃ©ation';
+$lang->webhook->editedby    = 'ModifiÃ© par';
 $lang->webhook->editedDate  = 'DateEditedDate';
 $lang->webhook->date        = 'Date envoi';
-$lang->webhook->data        = 'Donnée';
-$lang->webhook->result      = 'Résultat';
+$lang->webhook->data        = 'DonnÃ©e';
+$lang->webhook->result      = 'RÃ©sultat';
+$lang->webhook->products    = $lang->productCommon;
+$lang->webhook->executions  = $lang->execution->common;
+$lang->webhook->actions     = 'Log';
+$lang->webhook->deleted     = 'Deleted';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = 'Dingding Robot';
 $lang->webhook->typeList['dinguser']    = 'Dingding Notifier';
 $lang->webhook->typeList['wechatgroup'] = 'Enterprise WeChat Robot';
 $lang->webhook->typeList['wechatuser']  = 'Enterprise WeChat Notifier';
+$lang->webhook->typeList['feishugroup'] = 'Feishu Robot';
+$lang->webhook->typeList['feishuuser']  = 'Feishu Notifier';
 $lang->webhook->typeList['default']     = 'Others';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchrone';
@@ -58,6 +66,11 @@ $lang->webhook->wechatAgentId    = 'Agent ID';
 $lang->webhook->wechatUserid     = 'Wechat Userid';
 $lang->webhook->wechatBindStatus = 'Bind Status';
 
+$lang->webhook->feishuAppId       = 'Feishu App ID';
+$lang->webhook->feishuAppSecret   = 'Feishu App Secret';
+$lang->webhook->feishuUserid      = 'Feishu Users';
+$lang->webhook->feishuBindStatus  = 'Feishu Bind Status';
+
 $lang->webhook->zentaoUser  = 'Zentao User';
 
 $lang->webhook->dingBindStatusList['0'] = 'No';
@@ -74,23 +87,26 @@ $lang->webhook->paramsList['comment']    = 'Commentaire';
 $lang->webhook->paramsList['text']       = "Description de l'Action";
 
 $lang->webhook->confirmDelete = 'Voulez-vous vraiment supprimer ce flux ?';
+$lang->webhook->friendlyTips  = 'Friendly reminder: Click on a department to expand the sub-departments under the department.';
+$lang->webhook->loadPrompt    = 'There is a lot of data and the loading is slow, please wait.';
 
 $lang->webhook->trimWords = '';
 
 $lang->webhook->note = new stdClass();
-$lang->webhook->note->async     = "Si le type d'envoi est asynchrone, vous devez aller dans la console d'administration pour lancer la tâche cron.";
+$lang->webhook->note->async     = "Si le type d'envoi est asynchrone, vous devez aller dans la console d'administration pour lancer la tÃ¢che cron.";
 $lang->webhook->note->bind      = "Lier l'utilisateur n'est requis que pour Dingding Notifier.";
-$lang->webhook->note->product   = "Toutes les actions vont déclencher le flux si {$lang->productCommon} est vide, ou seulement les actions du {$lang->productCommon} sélectionné vont le déclencher.";
-$lang->webhook->note->execution = "Toutes les actions vont déclencher le flux si {$lang->executionCommon} est vide, ou seulement les actions du {$lang->executionCommon} sélectionné vont le déclencher.";
+$lang->webhook->note->product   = "Toutes les actions vont dÃ©clencher le flux si {$lang->productCommon} est vide, ou seulement les actions du {$lang->productCommon} sÃ©lectionnÃ© vont le dÃ©clencher.";
+$lang->webhook->note->execution = "Toutes les actions vont dÃ©clencher le flux si {$lang->executionCommon} est vide, ou seulement les actions du {$lang->executionCommon} sÃ©lectionnÃ© vont le dÃ©clencher.";
 
 $lang->webhook->note->dingHelp   = " <a href='https://www.zentao.pm/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 $lang->webhook->note->wechatHelp = " <a href='https://www.zentao.pm/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = "Ajout d'un bot a ZenTao dans bearychat et obtenez l'url du flux.";
-$lang->webhook->note->typeList['dingding']  = "Ajout d'un bot personnalisé dans dingding et obtenez l'url du flux.";
-$lang->webhook->note->typeList['weixin']    = "Ajoutez un bot personnalisé dans WeChat et obtenez l'url du webhook.";
+$lang->webhook->note->typeList['dingding']  = "Ajout d'un bot personnalisÃ© dans dingding et obtenez l'url du flux.";
+$lang->webhook->note->typeList['weixin']    = "Ajoutez un bot personnalisÃ© dans WeChat et obtenez l'url du webhook.";
 $lang->webhook->note->typeList['default']   = "Obtenir les url d'autres flux webhook.";
 
-$lang->webhook->error = new stdclass();
-$lang->webhook->error->curl   = 'Chargez php-curl dans php.ini.';
-$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';
+$lang->webhook->error               = new stdclass();
+$lang->webhook->error->curl         = 'Chargez php-curl dans php.ini.';
+$lang->webhook->error->noDept       = 'There is no department selected. Please choose department first.';
+$lang->webhook->error->requestError = 'Request error!';

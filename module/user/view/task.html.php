@@ -41,15 +41,15 @@
       <?php $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'><?php echo $lang->idAB;?></th>
+          <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th class='w-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-70px hours'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-70px hours'><?php echo $lang->task->consumedAB;?></th>
-          <th class='w-hour hours'><?php echo $lang->task->leftAB;?></th>
-          <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-          <th class='w-70px'><?php echo $lang->statusAB;?></th>
+          <th class='w-70px hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='w-70px hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='w-hour hours'><?php common::printOrderLink('left', $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='w-date'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='w-70px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>
@@ -61,7 +61,11 @@
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
+            <?php
+            $onlybody = $task->executionType == 'kanban' ? true : '';
+            $class    = $task->executionType == 'kanban' ? 'iframe' : '';
+            ?>
+            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");?>
           </td>
           <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
           <td class='hours' title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . $lang->execution->workHourUnit;?></td>

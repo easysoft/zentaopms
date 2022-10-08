@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Tạm ngưng';
 $lang->task->view                = "Chi tiết nhiệm vụ";
 $lang->task->logEfforts          = "Chấm công";
 $lang->task->record              = "Dự tính";
+$lang->task->recordedBy          = "Recorded By";
 $lang->task->start               = "Bắt đầu";
 $lang->task->startAction         = "Bắt đầu nhiệm vụ";
 $lang->task->restart             = "Tiếp tục";
@@ -47,11 +48,12 @@ $lang->task->case                = 'Tình huống liên kết';
 $lang->task->confirmStoryChange  = "Xác nhận thay đổi";
 $lang->task->storyChange         = "Câu chuyện đã thay đổi";
 $lang->task->progress            = 'Tiến độ';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Tiến độ';
 $lang->task->progressTips        = 'Đã làm/(Đã làm + Còn lại)';
 $lang->task->copy                = 'Copy nhiệm vụ';
 $lang->task->waitTask            = 'Đang đợi nhiệm vụ';
 $lang->task->allModule           = 'Tất cả Module';
+$lang->task->replace             = 'Replace';
 
 $lang->task->common           = 'Nhiệm vụ';
 $lang->task->id               = 'ID';
@@ -118,6 +120,7 @@ $lang->task->editEstimate     = 'Sửa dự tính';
 $lang->task->deleteEstimate   = 'Xóa dự tính';
 $lang->task->colorTag         = 'Màu';
 $lang->task->files            = 'Files';
+$lang->task->my               = 'My ';
 $lang->task->hasConsumed      = 'Đã làm';
 $lang->task->multiple         = 'Nhiều người dùng';
 $lang->task->multipleAB       = 'M';
@@ -142,6 +145,8 @@ $lang->task->noFinished        = 'Chưa kết thúc';
 $lang->task->noClosed          = 'Chưa đóng';
 $lang->task->yesterdayFinished = 'Kết thúc hôm qua';
 $lang->task->allTasks          = 'Nhiệm vụ';
+$lang->task->linkMR            = 'Related MRs';
+$lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = 'Đang đợi';
@@ -202,6 +207,10 @@ $lang->task->createDenied           = 'Tạo nhiệm vụ bị từ chối trong
 $lang->task->cannotDeleteParent     = 'Không thể xóa nhiệm vụ cha';
 $lang->task->addChildTask           = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 
+$lang->task->action = new stdclass();
+$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber    = '"Giờ làm" phải là số.';
@@ -223,7 +232,7 @@ $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
 $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
-$lang->task->error->date              = 'The date should be >= today.';
+$lang->task->error->date              = 'The date should be <= today.';
 
 /* Report. */
 $lang->task->report = new stdclass();

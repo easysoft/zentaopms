@@ -69,11 +69,11 @@
               <td>
                 <div id='groupBox' class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-                  <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
+                  <?php echo html::select('groups[]', $groups, '', "class='form-control picker-select' multiple")?>
                 </div>
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-                  <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+                  <?php echo html::select('users[]', $users, '', "class='form-control picker-select' multiple")?>
                 </div>
               </td>
             </tr>

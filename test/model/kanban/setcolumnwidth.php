@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +33,4 @@ r($kanban->setColumnWidthTest($kanbanIDList[2], $fluidBoard))                 &&
 r($kanban->setColumnWidthTest($kanbanIDList[3], $fluidBoard, $fromExecution)) && p('name,fluidBoard') && e('迭代1,1');     // 测试修改看板4的fluidBoard值
 r($kanban->setColumnWidthTest($kanbanIDList[4], $fluidBoard, $fromExecution)) && p('name,fluidBoard') && e('迭代2,1');     // 测试修改看板5的fluidBoard值
 r($kanban->setColumnWidthTest($kanbanIDList[5], $fluidBoard))                 && p('name,fluidBoard') && e('0');            // 测试修改不存在的看板的fluidBoard值
-system("./ztest init");
+$db->restoreDB();

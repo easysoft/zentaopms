@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -75,4 +76,4 @@ r($kanban->createTest($kanban3)) && p('name,space,type,owner,whitelist') && e('�
 r($kanban->createTest($kanban4)) && p('name:0')                          && e('『看板名称』不能为空。');           // 创建没有名字的公共空间
 r($kanban->createTest($kanban5)) && p('space:0')                         && e('『所属空间』不能为空。');           // 创建没有空间公共空间
 r($kanban->createTest($kanban6)) && p('name:0')                          && e('『看板名称』已经有『测试创建公共看板』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 创建重名公共空间
-system("./ztest init");
+$db->restoreDB();

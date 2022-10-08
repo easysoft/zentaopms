@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -10,29 +11,29 @@ title=测试bugModel->batchChangeModule();
 cid=1
 pid=1
 
-修改bug1 2模块为0             >> module,1821,0
-修改bug1 2模块为8             >> module,0,8
-修改bug1 2模块为9             >> module,8,9
-修改bug1 2模块为10            >> module,9,10
-修改bug1 2模块为11            >> module,10,11
+修改bug1 2模块为0 >> module,1821,0
+修改bug1 2模块为8 >> module,0,8
+修改bug1 2模块为9 >> module,8,9
+修改bug1 2模块为10 >> module,9,10
+修改bug1 2模块为11 >> module,10,11
 修改bug1 2模块为11 未发生变化 >> 0
-修改bug1 3模块为0             >> module,11,0
-修改bug1 3模块为8             >> module,0,8
-修改bug1 3模块为9             >> module,8,9
-修改bug1 3模块为10            >> module,9,10
-修改bug1 3模块为11            >> module,10,11
+修改bug1 3模块为0 >> module,11,0
+修改bug1 3模块为8 >> module,0,8
+修改bug1 3模块为9 >> module,8,9
+修改bug1 3模块为10 >> module,9,10
+修改bug1 3模块为11 >> module,10,11
 修改bug1 3模块为11 未发生变化 >> 0
-修改bug1 4模块为0             >> module,11,0
-修改bug1 4模块为8             >> module,0,8
-修改bug1 4模块为9             >> module,8,9
-修改bug1 4模块为10            >> module,9,10
-修改bug1 4模块为11            >> module,10,11
+修改bug1 4模块为0 >> module,11,0
+修改bug1 4模块为8 >> module,0,8
+修改bug1 4模块为9 >> module,8,9
+修改bug1 4模块为10 >> module,9,10
+修改bug1 4模块为11 >> module,10,11
 修改bug1 4模块为11 未发生变化 >> 0
-修改bug2 3模块为0             >> module,11,0
-修改bug2 3模块为8             >> module,0,8
-修改bug2 3模块为9             >> module,8,9
-修改bug2 3模块为10            >> module,9,10
-修改bug2 3模块为11            >> module,10,11
+修改bug2 3模块为0 >> module,11,0
+修改bug2 3模块为8 >> module,0,8
+修改bug2 3模块为9 >> module,8,9
+修改bug2 3模块为10 >> module,9,10
+修改bug2 3模块为11 >> module,10,11
 修改bug2 3模块为11 未发生变化 >> 0
 
 */
@@ -43,7 +44,6 @@ $bugIDList3 = array('1', '4');
 $bugIDList4 = array('2', '3');
 
 $moduleList = array('0', '8', '9', '10', '11');
-
 
 $bug = new bugTest();
 r($bug->batchChangeModuleTest($bugIDList1, $moduleList[0], $bugIDList1[0])) && p('0:field,old,new') && e('module,1821,0');// 修改bug1 2模块为0
@@ -70,4 +70,4 @@ r($bug->batchChangeModuleTest($bugIDList4, $moduleList[2], $bugIDList4[0])) && p
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[3], $bugIDList4[1])) && p('0:field,old,new') && e('module,9,10');  // 修改bug2 3模块为10
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[4], $bugIDList4[0])) && p('0:field,old,new') && e('module,10,11'); // 修改bug2 3模块为11
 r($bug->batchChangeModuleTest($bugIDList4, $moduleList[4], $bugIDList4[1])) && p()                  && e('0');            // 修改bug2 3模块为11 未发生变化
-system("./ztest init");
+$db->restoreDB();

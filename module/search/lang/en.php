@@ -30,6 +30,7 @@ $lang->search->noQuery       = 'No query is saved yet!';
 $lang->search->onMenuBar     = 'Show in Menu';
 $lang->search->custom        = 'Custom';
 $lang->search->setCommon     = 'Set as public query criteria';
+$lang->search->saveCondition = 'Save search options';
 
 $lang->search->account  = 'Account';
 $lang->search->module   = 'Module';
@@ -94,7 +95,8 @@ $lang->search->modules['productplan'] = 'Plan';
 $lang->search->modules['program']     = 'Program';
 $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = $lang->executionCommon;
-$lang->search->modules['story']       = 'Story';
+$lang->search->modules['story']       = $lang->SRCommon;
+$lang->search->modules['requirement'] = $lang->URCommon;
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;

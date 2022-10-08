@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +29,4 @@ r($kanban->createGroupTest($kanbanIDList[1], $regionIDList[1])) && p('kanaban,re
 r($kanban->createGroupTest($kanbanIDList[2], $regionIDList[2])) && p('kanaban,region,orde') && e(',3,'); // 测试创建看板3 区域3的看板组
 r($kanban->createGroupTest($kanbanIDList[3], $regionIDList[3])) && p('kanaban,region,orde') && e(',4,'); // 测试创建看板4 区域4的看板组
 r($kanban->createGroupTest($kanbanIDList[4], $regionIDList[4])) && p('kanaban,region,orde') && e(',5,'); // 测试创建看板5 区域5的看板组
-system("./ztest init");
+$db->restoreDB();

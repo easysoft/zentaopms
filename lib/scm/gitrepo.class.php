@@ -3,6 +3,7 @@ class GitRepo
 {
     public $client;
     public $root;
+    public $repo;
 
     /**
      * Construct
@@ -12,16 +13,25 @@ class GitRepo
      * @param  string $username
      * @param  string $password
      * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
-        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
+
+        $branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
+        if($branch)
+        {
+            $branches = $this->branch();
+            if(isset($branches[$branch])) $branch = "origin/$branch";
+        }
+        $this->branch = $branch;
+        $this->repo   = $repo;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -107,11 +117,17 @@ class GitRepo
         $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
+
+        foreach($list as $key => $tag)
+        {
+            if(!$tag) unset($list[$key]);
+        }
+
         return $list;
     }
 
     /**
-     * Get branch
+     * Get branch.
      *
      * @access public
      * @return array
@@ -121,20 +137,30 @@ class GitRepo
         chdir($this->root);
 
         /* Get local branch. */
-        $cmd  = escapeCmd("$this->client branch");
+        $cmd  = escapeCmd("$this->client branch -a");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
+
+        /* Get default branch. */
+        $defaultBranch = execCmd("$this->client symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'");
+        $defaultBranch = trim($defaultBranch);
 
         $branches = array();
         foreach($list as $localBranch)
         {
+            $localBranch = trim($localBranch);
+            if(substr($localBranch, 0, 19) == 'remotes/origin/HEAD') continue;
             if(substr($localBranch, 0, 1) == '*') $localBranch = substr($localBranch, 1);
+            if(substr($localBranch, 0, 15) == 'remotes/origin/') $localBranch = substr($localBranch, 15);
 
             $localBranch = trim($localBranch);
             if(empty($localBranch))continue;
-            $branches[$localBranch] = $localBranch;
+            if($localBranch != $defaultBranch) $branches[$localBranch] = $localBranch;
         }
+
         asort($branches);
+        if($defaultBranch) $branches = array($defaultBranch => $defaultBranch) + $branches;
+
         return $branches;
     }
 
@@ -172,6 +198,8 @@ class GitRepo
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
+
+        execCmd(escapeCmd("$this->client pull"));
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
@@ -237,6 +265,9 @@ class GitRepo
                 $blame['line']      = $matches[5];
                 $blame['lines']     = 1;
                 $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
+
+                $log = $this->log('', '', '', 1);
+                $blame['message'] = $log[0]->comment;
 
                 $revision         = $matches[1];
                 $revLine          = $matches[5];
@@ -516,11 +547,20 @@ class GitRepo
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch)
+        {
+            $revision = $branch;
+        }
+        elseif(is_numeric($revision))
+        {
+            $revision = "--skip=$revision $branch";
+        }
+        $count = $count == 0 ? '' : "-n $count";
+
 
         chdir($this->root);
+        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);
 
@@ -552,17 +592,40 @@ class GitRepo
             else
             {
                 $file = explode(' ', $commit);
-                $file = end($file);
-                list($action, $path) = explode("\t", $file);
+                $file = explode("\t", end($file));
+                if(!isset($file[1])) $file[1] = '';
+                list($action, $path) = $file;
+
                 $parsedFile = new stdclass();
                 $parsedFile->revision = $hash;
                 $parsedFile->path     = '/' . trim($path);
+                $parsedFile->oldPath  = isset($file[2]) ? '/' . trim($file[2]) : '';
                 $parsedFile->type     = 'file';
                 $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
+                $logs['files'][$hash][] = $parsedFile;
             }
         }
         return $logs;
+    }
+
+    /**
+     * Get clone url.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCloneUrl()
+    {
+        $url      = new stdclass();
+        $remote   = execCmd(escapeCmd("$this->client remote -v"), 'array');
+        if(strpos($remote[0], 'oauth2:')) $remote[0] = preg_replace('/oauth2.*@/', '', $remote[0]);
+        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*(\.git)?/';
+        $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+
+        if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];
+        if(preg_match($pregSSH,  $remote[0], $matches)) $url->ssh  = $matches[0];
+
+        return $url;
     }
 
     /**
@@ -610,12 +673,14 @@ class GitRepo
             }
             elseif(strpos($line, "\t") !== false)
             {
-                list($action, $entry) = explode("\t", $line);
+                $lineList = explode("\t", $line);
+                list($action, $entry) = $lineList;
                 $entry = '/' . trim($entry);
                 $pathInfo = array();
-                $pathInfo['action'] = $action;
-                $pathInfo['kind']   = 'file';
-                $changes[$entry]    = $pathInfo;
+                $pathInfo['action']  = $action;
+                $pathInfo['kind']    = 'file';
+                $pathInfo['oldPath'] = isset($lineList[2]) ? '/' . trim($lineList[2]) : '';
+                $changes[$entry]     = $pathInfo;
             }
         }
 
@@ -627,5 +692,75 @@ class GitRepo
         }
 
         return $parsedLogs;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
+    {
+        global $app, $config;
+        $gitDir = scandir($this->root);
+        $files  = '';
+        foreach($gitDir as $path)
+        {
+            if(!in_array($path, array('.', '..', '.git'))) $files .= $this->root . DS . "$path,";
+        }
+
+        $app->loadClass('pclzip', true);
+        $fileName = $savePath . DS . "{$this->repo->name}_$branch.zip";
+        $zip      = new pclzip($fileName);
+        $zip->create($files, PCLZIP_OPT_REMOVE_PATH, $this->root);
+
+        return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . "{$this->repo->name}_$branch.zip";
+    }
+
+    /**
+     * List all files.
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  array  $lists
+     * @access public
+     * @return array
+     */
+    public function getAllFiles($path, $revision = 'HEAD', &$lists = array())
+    {
+        if(!scm::checkRevision($revision)) return array();
+
+        $path = ltrim($path, DIRECTORY_SEPARATOR);
+        $sub  = '';
+        chdir($this->root);
+        if(!empty($path)) $sub = ":$path";
+        if(!empty($this->branch))$revision = $this->branch;
+        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
+        $list = execCmd($cmd . ' 2>&1', 'array', $result);
+        if($result) return array();
+
+        $infos   = array();
+        foreach($list as $entry)
+        {
+            list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
+
+            /* Get commit info. */
+            $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
+            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
+            if($kind == 'tree')
+            {
+                $this->getAllFiles($pathName, $revision, $lists);
+            }
+            else
+            {
+                $lists[] = rtrim($pathName, DIRECTORY_SEPARATOR);
+            }
+        }
+
+        return $lists;
     }
 }

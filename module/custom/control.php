@@ -118,6 +118,18 @@ class custom extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
+            $postArray = fixer::input('post');
+            $keys      = array();
+            if(isset($postArray->data->keys))
+            {
+                foreach($postArray->data->keys as $key)
+                {
+                    if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
+                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                    $keys[] = $key;
+                }
+            }
+
             if($module == 'project' and $field == 'unitList')
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();
@@ -128,6 +140,10 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')
+                    ->setDefault('forceReview', '')
+                    ->setDefault('forceNotReview', '')
+                    ->setDefault('forceReviewRoles', '')
+                    ->setDefault('forceNotReviewRoles', '')
                     ->setDefault('forceReviewDepts', '')
                     ->setDefault('forceNotReviewDepts', '')
                     ->join('forceReview', ',')
@@ -149,16 +165,14 @@ class custom extends control
             }
             elseif($module == 'story' and $field == 'reviewRules')
             {
-                $data = fixer::input('post')->join('superReviewers', ',')->get();
+                $data = fixer::input('post')->setDefault('superReviewers', '')->join('superReviewers', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
-                if($review->needReview)  $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
-                if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
-                if(!isset($data->forceReview))    $data->forceReview    = '';
-                if(!isset($data->forceNotReview)) $data->forceNotReview = '';
+                if($review->needReview)  $data = fixer::input('post')->setDefault('forceNotReview', '')->join('forceNotReview', ',')->remove('forceReview')->get();
+                if(!$review->needReview) $data = fixer::input('post')->setDefault('forceReview', '')->join('forceReview', ',')->remove('forceNotReview')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
 
                 $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
@@ -229,9 +243,12 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
-                $data = fixer::input('post')->get();
+                $data     = fixer::input('post')->get();
+                $emptyKey = false;
                 foreach($data->keys as $index => $key)
                 {
+                    if(!$key && $emptyKey) continue;
+
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
 
                     $value  = $data->values[$index];
@@ -239,6 +256,8 @@ class custom extends control
                     if($key and trim($value) === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
 
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+
+                    if(!$key) $emptyKey = true;
                 }
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -662,14 +681,17 @@ class custom extends control
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {
-            $fields  = $this->post->fields;
+            $fields = $this->post->fields;
             if(is_array($fields)) $fields = join(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
+            if(in_array($module, array('task', 'testcase', 'story')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
+            if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
         }
         else
         {
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
+
         return print(js::reload('parent'));
     }
 
@@ -825,5 +847,24 @@ class custom extends control
 
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
         return print(js::reload('parent.parent'));
+    }
+
+    /**
+     * Set code.
+     *
+     * @access public
+     * @return void
+     */
+    public function code()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->custom->code;
+
+        $this->display();
     }
 }

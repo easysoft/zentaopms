@@ -63,9 +63,7 @@ function computeWorkDays(currentID)
     isBactchEdit = false;
     if(currentID)
     {
-        index = currentID.replace('begins[', '');
-        index = index.replace('ends[', '');
-        index = index.replace(']', '');
+        index = currentID.replace(/\w*\[|\]/g, '');
         if(!isNaN(index)) isBactchEdit = true;
     }
 
@@ -141,19 +139,25 @@ function loadBranches(product)
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var projectID = (typeof(systemMode) != 'undefined' && systemMode == 'new') ? $('#project').val() : 0;
+    if(typeof(projectID) == 'undefined') projectID = 0;
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active&projectID=" + projectID + "&withMainBranch="), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=&param=active&projectID=" + projectID + "&withMainBranch=true"), function(data)
     {
         if(data)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
 
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 }
 
 /**
@@ -220,35 +224,6 @@ function adjustPlanBoxMargin()
     }
 }
 
-/**
- * Make the selected product non clickable.
- *
- * @return void
- */
-function nonClickableSelectedProduct()
-{
-    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
-
-    var selectedVal = [];
-    $("select[id^='products']").each(function()
-    {
-        var selectedProduct = $(this).val();
-        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
-    })
-
-    $("select[id^='products']").each(function()
-    {
-        var selectedProduct = $(this).val();
-        $(this).find('option').each(function()
-        {
-            var optionVal = $(this).attr('value');
-            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
-        })
-    })
-
-    $("select[id^=products]").trigger('chosen:updated');
-}
-
 /* Auto compute the work days. */
 $(function()
 {
@@ -274,3 +249,15 @@ $(function()
     adjustProductBoxMargin();
     adjustPlanBoxMargin();
 });
+
+/**
+ * Set card count.
+ *
+ * @param  string $heightType
+ * @access public
+ * @return void
+ */
+function setCardCount(heightType)
+{
+    heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
+}

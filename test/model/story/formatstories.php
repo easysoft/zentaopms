@@ -9,7 +9,14 @@ title=测试 storyModel->formatStories();
 cid=1
 pid=1
 
-
+获取处理title之前的需求列表数量 >> 2
+获取处理title之前的需求列表数量 >> 2
+获取处理title之前的需求title >> 软件需求2
+获取处理title之前的需求title >> 软件需求6
+获取处理title之后的需求列表数量 >> 3
+获取处理title之后的需求列表数量 >> 3
+获取处理title之后的需求title >> 2:软件需求2 (优先级:2,预计工时:20)
+获取处理title之后的需求title >> 6:软件需求6 (优先级:2,预计工时:17)
 
 */
 

@@ -10,17 +10,17 @@ title=bugModel->getModuleOwner();
 cid=1
 pid=1
 
-查询模块1821 产品1的owner               >> test1
-查询模块1821 产品2的owner               >> test2
-查询模块1821 产品3的owner               >> test3
+查询模块1821 产品1的owner >> test1
+查询模块1821 产品2的owner >> test2
+查询模块1821 产品3的owner >> test3
 查询模块1821 不存在的产品1000001的owner >> 0
-查询模块1821 产品1的owner               >> test1
-查询模块1821 产品2的owner               >> test2
-查询模块1821 产品3的owner               >> test3
+查询模块1821 产品1的owner >> test1
+查询模块1821 产品2的owner >> test2
+查询模块1821 产品3的owner >> test3
 查询模块1821 不存在的产品1000001的owner >> 0
-查询模块1821 产品1的owner               >> test1
-查询模块1821 产品2的owner               >> test2
-查询模块1821 产品3的owner               >> test3
+查询模块1821 产品1的owner >> test1
+查询模块1821 产品2的owner >> test2
+查询模块1821 产品3的owner >> test3
 查询模块1821 不存在的产品1000001的owner >> 0
 
 */

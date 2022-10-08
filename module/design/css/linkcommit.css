@@ -3,6 +3,7 @@
 .searchBox .srearch-date{float: left; width: 20%}
 .searchBox h4{float:left;display: inline-block}
 .searchBox span{float:left;line-height:30px}
+.body-modal .main-header {z-index: 5;}
 #logForm .table thead th{background: #efefef}
 #begin{margin-right:5px}
 #end{margin-left:5px}

@@ -79,7 +79,7 @@
                         <?php foreach($design->tasks as $task):?>
                         <tr class='text-center'>
                           <td><?php $task->id?></td>
-                          <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>;
+                          <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
                           <td><?php echo zget($users, $task->assignedTo);?></td>
                           <td><span class='status-task status-<?php echo $task->status;?>'><?php $this->processStatus('task', $task);?></span></td>
                           <td><?php echo $task->consumed;?></td>

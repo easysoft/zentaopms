@@ -7,8 +7,8 @@ XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 #RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
 XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
-BUILD_PATH    := /home/z/ci/build/
-RELEASE_PATH  := /home/z/ci/release/
+BUILD_PATH    := /home/z/ci/pip_build/
+RELEASE_PATH  := /home/z/ci/pip_release/
 
 all:
 	make clean
@@ -102,6 +102,11 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
+	sed -i "s/\$$accountAdmin = \$$this->dao->select('account, admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();/\$$accountAdmin = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$accountAdmin->admin = in_array(\$$accountAdmin->account, \$$adminArray) ? 'super' : '';\n/" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "/->on('tc.ownedBy=tu.account')/{ N ; s/type/tc.type/}" zentaoxx/extension/xuan/im/model/chat.php
+	sed -i "s/\$$super = \$$this->dao->select('admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('admin');/\$$account = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch('account');\n\$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$adminArray = explode(',', \$$admins);\n\$$super = in_array(\$$account, \$$adminArray) ? 'super' : '';/g" zentaoxx/extension/xuan/im/control.php
+	sed -i "/foreach(\$$users as \$$user)/i \$$admins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\$$adminArray = explode(',', \$$admins);" zentaoxx/extension/xuan/im/model/user.php
+	sed -i "/if(\!isset(\$$user->signed)) \$$user->signed  = 0;/a \$$user->admin = in_array(\$$user->account, \$$adminArray) ? 'super' : '';" zentaoxx/extension/xuan/im/model/user.php
 	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/_0_xuanxuan.php
 	sed -i 's/site,//' zentaoxx/extension/xuan/im/model/user.php
@@ -143,9 +148,10 @@ zentaoxx:
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
+	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
-	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
+	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
 	rm -rf zentaoxx/tools
 	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	#rm -rf xuan.zip xuan zentaoxx

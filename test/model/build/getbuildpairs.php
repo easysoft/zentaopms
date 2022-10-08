@@ -14,8 +14,8 @@ pid=1
 单长产品执行版本查询 >> 执行版本版本11
 项目执行版本查询 >> 主干
 数组产品执行版本查询统计 >> 6
-单长产品执行版本查询统计 >> 5
-项目执行版本查询统计 >> 4
+单长产品执行版本查询统计 >> 4
+项目执行版本查询统计 >> 1
 
 */
 
@@ -34,5 +34,5 @@ r($build->getBuildPairsTest($count[0], $products, $branch, $params[0], $objectID
 r($build->getBuildPairsTest($count[0], $products[1], $branch, $params[1], $objectID[0], $objectType[0], $buildIdList,$replace[0])) && p('11')    && e('执行版本版本11');//单长产品执行版本查询
 r($build->getBuildPairsTest($count[0], $products, $branch, $params[2], $objectID[1], $objectType[1], $buildIdList,$replace[0]))    && p('trunk') && e('主干');          //项目执行版本查询
 r($build->getBuildPairsTest($count[1], $products, $branch, $params[0], $objectID[0], $objectType[0], '',$replace[0]))              && p()        && e('6');             //数组产品执行版本查询统计
-r($build->getBuildPairsTest($count[1], $products[1], $branch, $params[1], $objectID[0], $objectType[0], $buildIdList,$replace[0])) && p()        && e('5');             //单长产品执行版本查询统计
-r($build->getBuildPairsTest($count[1], $products, $branch, $params[2], $objectID[1], $objectType[1], $buildIdList,$replace[0]))    && p()        && e('4');             //项目执行版本查询统计
+r($build->getBuildPairsTest($count[1], $products[1], $branch, $params[1], $objectID[0], $objectType[0], $buildIdList,$replace[0])) && p()        && e('4');             //单长产品执行版本查询统计
+r($build->getBuildPairsTest($count[1], $products, $branch, $params[2], $objectID[1], $objectType[1], $buildIdList,$replace[0]))    && p()        && e('1');             //项目执行版本查询统计

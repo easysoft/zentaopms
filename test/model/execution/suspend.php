@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($execution->suspendTest($executionIDList[3])) && p('0:field,old,new') && e('st
 r($execution->suspendTest($executionIDList[4])) && p('0:field,old,new') && e('status,wait,suspended');  // wait看板执行挂起
 r($execution->suspendTest($executionIDList[5])) && p('0:field,old,new') && e('status,doing,suspended'); // doing看板执行挂起
 r($execution->suspendTest($executionIDList[0])) && p()                  && e('0');                      // 挂起后再次挂起
-system("./ztest init");
+$db->restoreDB();

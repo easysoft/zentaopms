@@ -36,7 +36,8 @@ function adjustPriBoxWidth()
     var boxWidth   = $('#ownerAndPriBox').width();
     var beginWidth = $("input[name='begin']").outerWidth();
     var addonWidth = $('#ownerAndPriBox .input-group-addon').outerWidth();
-    $('#pri,#pri_chosen .chosen-single').css('width', boxWidth - beginWidth -addonWidth);
+    var width      = boxWidth - beginWidth - addonWidth;
+    $('#pri,#pri_chosen .chosen-single').css('width', width > 0 ? width : '160px');
 }
 
 /**

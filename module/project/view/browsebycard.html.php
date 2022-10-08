@@ -27,7 +27,9 @@
 #cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
 #cards .project-infos > span + span {margin-left: 15px;}
 #cards .project-infos > .budget {max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#cards .project-infos > .budget, #cards .project-infos > .date {background: #F8F8F8; border: unset;}
 #cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
+#cards .project-detail .statistics-title {color: #5B606E;}
 #cards .project-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
 #cardsFooter .pager {margin: 0; float: right;}
 #cardsFooter .pager .btn {border: none; padding-top: 4px;}
@@ -37,7 +39,7 @@
 #cards .panel .label-closed {background: #D4F7F9 !important; color: #00A78E;}
 #cards .panel .label-delay {background: #F85A40 !important; color: #FFF;}
 #cards .project-infos .text-red {color: #F85A40 !important;}
-#cards .project-detail  .leftTasks, .totalLeft {display:block; margin-top: 8px;}
+#cards .project-detail  .leftTasks, .totalLeft {display:block; font-size: 18px; font-weight: bold; color: #3C4353;}
 #cards .project-members {float: left; height: 24px; line-height: 24px;}
 #cards .project-members > a {display: inline-block; height: 24px;}
 #cards .project-members > a + a {margin-left: -5px;}
@@ -55,8 +57,10 @@
 </style>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
-    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}' data-drop_width='450' data-max_drop_width='0'");?></div>
-    <?php foreach($lang->project->featureBar as $key => $label):?>
+    <?php $excludedEmptyPrograms = array_filter($programs);?>
+    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}' data-drop_width='" . (empty($excludedEmptyPrograms) ? 170 : 450) . "' data-max_drop_width='0'");?></div>
+    <?php common::sortFeatureMenu();?>
+    <?php foreach($lang->project->featureBar['browse'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
@@ -72,7 +76,7 @@
     </div>
     <?php common::printLink('project', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
     <?php if(!defined('TUTORIAL')):?>
-    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn" data-toggle="modal"');?>
     <?php else:?>
     <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary create-project-btn"');?>
     <?php endif;?>
@@ -86,7 +90,7 @@
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(!defined('TUTORIAL')):?>
-        <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
+        <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
         <?php else:?>
         <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
@@ -120,20 +124,20 @@
             $canActions = (common::hasPriv('project','edit') or common::hasPriv('project','start') or common::hasPriv('project','activate') or common::hasPriv('project','suspend') or common::hasPriv('project','close'));
             ?>
             <span title="<?php echo $budgetTitle;?>" class='label label-outline budget'><?php echo $budgetTitle;?></span>
-            <span title="<?php echo $project->date;?>" class="label label-outline <?php echo $status == 'delay' ? 'text-red' : '';?>"><?php echo $project->date;?></span>
+            <span title="<?php echo $project->date;?>" class="label label-outline date <?php echo $status == 'delay' ? 'text-red' : '';?>"><?php echo $project->date;?></span>
           </div>
           <div class='project-detail'>
             <div class='row'>
               <div class='col-xs-4'>
-                <div><?php echo $lang->project->progress;?></div>
+                <div><span class='statistics-title'><?php echo $lang->project->progress;?></span></div>
                 <?php echo html::ring($project->hours->progress); ?>
               </div>
               <div class='col-xs-4'>
-                <span><?php echo $lang->project->leftTasks;?></span>
+                <span class='statistics-title'><?php echo $lang->project->leftTasks;?></span>
                 <span class='leftTasks' title="<?php echo $project->leftTasks;?>"><?php echo $project->leftTasks;?></span>
               </div>
               <div class='col-xs-4'>
-                <span><?php echo $lang->project->leftHours;?></span>
+                <span class='statistics-title'><?php echo $lang->project->leftHours;?></span>
                 <span class='totalLeft' title="<?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHour;?>"><?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHourUnit;?></span>
               </div>
             </div>

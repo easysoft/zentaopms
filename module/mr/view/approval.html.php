@@ -18,7 +18,7 @@
     <div class='main-header'>
       <span class='label label-id'><?php echo $MR->id; ?></span>
       <h2>
-        <?php echo isonlybody() ? ("<span title='$MR->title'>" . $MR->title . ' - ' . zget($lang->mr->approvalResultList, $action) . '</span>') : html::a($this->createLink('mr', 'view', 'MR=' . $MR->id), $MR->title); ?>
+        <?php echo isonlybody() ? ("<span title='$MR->title'>" . $MR->title . ' - ' . zget($lang->mr->approvalResultList, $action) . '</span>') : html::a($this->createLink('mr', 'view', 'MRID=' . $MR->id), $MR->title); ?>
         <?php if(!isonlybody()): ?>
           <small><?php echo $lang->arrow . $lang->mr->approval; ?></small>
         <?php endif; ?>

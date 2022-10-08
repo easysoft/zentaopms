@@ -50,7 +50,7 @@
           <th><?php echo $lang->kanbanlane->color;?></th>
           <td colspan='3'>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#7ec5ff', "class='hidden'");?>
+            <?php echo html::input('color', '#3C4353', "class='hidden'");?>
           </td>
         </tr>
         <tr>

@@ -1,6 +1,6 @@
 body {margin-bottom: 0px !important;}
 #main {min-width: unset; overflow-y: overlay;}
-#main > .container {width: 100% !important;}
+#main > .container {width: 100% !important; position: unset !important;}
 #mainContent > .main-col {margin-top: 0px;}
 #mainMenu, #sidebar, .dropdown, .c-sort, .c-category, .c-user, .c-estimate, .c-stage, .c-count, .c-actions-7, .c-actions, .table-footer > .table-statistic, .table-footer > .table-actions, .pager > li > .pager-size-menu {display: none;}
 #storyList > thead > tr > .c-status, #storyList > thead > tr > .c-pri, #storyList > tbody > tr > .c-status, #storyList > tbody > tr > .c-pri {display: table-cell !important;}

@@ -38,6 +38,7 @@ class html extends baseHTML
         if(empty($target)) $target = '_self';
         if($target != '_self')  $misc .= " target='$target'";
         if($target == '_blank') $misc .= " rel='noopener noreferrer'";
+        if(strpos($misc, 'disabled')) $href = '#';
         return parent::a($href, $title, $misc, $newline);
     }
 
@@ -56,6 +57,7 @@ class html extends baseHTML
     {
         $id = "id='$name'";
         if(strpos($attrib, 'id=') !== false) $id = '';
+        if(is_null($value)) $value = '';
         $value = str_replace("'", '&#039;', $value);
         $autocomplete = $autocomplete ? 'autocomplete="on"' : 'autocomplete="off"';
         return "<input type='text' name='$name' {$id} value='$value' $attrib $autocomplete />\n";

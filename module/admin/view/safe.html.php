@@ -10,7 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<style>.table-form>tbody>tr>th{width:118px !important;}</style>
+<style>
+.table-form>tbody>tr>th {width:118px !important;}
+.icon-exclamation-sign.icon {color:#2667E3; margin-right: 8px;}
+.notice {color:#2667E3; margin-left: 12px;}
+</style>
+<?php js::set('adminLang', $lang->admin);?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -23,7 +28,8 @@
       <div class='list-group'>
         <?php
         echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set, '', "class='active'");
-        echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
+        if(common::hasPriv('admin', 'checkWeak')) echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
+        if(common::hasPriv('admin', 'resetPWDSetting')) echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting);
         ?>
       </div>
     </div>
@@ -35,15 +41,21 @@
           <tr>
             <th class='thWidth'><?php echo $lang->admin->safe->password?></th>
             <td class='w-250px'><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
-            <td><?php echo $lang->admin->safe->noticeMode?></td>
+            <td class='notice'><?php echo !empty($config->safe->changeWeak) ? $lang->admin->safe->noticeWeakMode : $lang->admin->safe->noticeMode;?></td>
           </tr>
           <tr id='mode1Rule' class='hidden'>
             <th></th>
-            <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong;?></span></td>
+            <td colspan='2'>
+              <i class="icon icon-exclamation-sign"></i>
+              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><?php echo $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong;?></span>
+            </td>
           </tr>
           <tr id='mode2Rule' class='hidden'>
             <th></th>
-            <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span></td>
+            <td colspan='2'>
+              <i class="icon icon-exclamation-sign"></i>
+              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->weak?></th>
@@ -51,7 +63,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->changeWeak?></th>
-            <td colspan='2'><?php echo html::radio('changeWeak', $lang->admin->safe->modifyPasswordList, isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0)?></td>
+            <td colspan='2'><?php echo html::radio('changeWeak', $lang->admin->safe->modifyPasswordList, isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0, "onchange='changeWeakChange(this.value)'")?></td>
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->modifyPasswordFirstLogin?></th>

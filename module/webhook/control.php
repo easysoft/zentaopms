@@ -291,12 +291,7 @@ class webhook extends control
             $response = $dingapi->getDeptTree();
         }
 
-        if($webhook->type == 'feishuuser')
-        {
-            $this->app->loadClass('feishuapi', true);
-            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
-            $response  = $feishuApi->getDeptTree();
-        }
+        if($webhook->type == 'feishuuser') $response = array('result' => 'success', 'data' => array());
 
         if($response['result'] == 'fail')
         {
@@ -315,9 +310,32 @@ class webhook extends control
         $this->view->title      = $this->lang->webhook->chooseDept;
         $this->view->position[] = $this->lang->webhook->chooseDept;
 
-        $this->view->deptTree  = $response['data'];
-        $this->view->webhookID = $id;
+        $this->view->webhookType = $webhook->type;
+        $this->view->deptTree    = $response['data'];
+        $this->view->webhookID   = $id;
         $this->display();
+    }
+
+    public function ajaxGetFeishuDeptList($webhookID)
+    {
+        $webhook = $this->webhook->getById($webhookID);
+        $webhook->secret = json_decode($webhook->secret);
+
+        if($_POST)
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi    = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $departmentID = $_POST['departmentID'] ? $_POST['departmentID'] : '';
+            $depts        = $feishuApi->getChildDeptTree($departmentID);
+            echo json_encode($depts, true);
+        }
+        else
+        {
+            $this->app->loadClass('feishuapi', true);
+            $feishuApi = new feishuapi($webhook->secret->appId, $webhook->secret->appSecret);
+            $depts  = $feishuApi->getDeptTree();
+            echo json_encode($depts, true);
+        }
     }
 
     /**

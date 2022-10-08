@@ -9,18 +9,17 @@ title=bugModel->getDataOfBugsPerType();
 cid=1
 pid=1
 
-获取类型为codeerror的数据    >> 代码错误,49
-获取类型为config的数据       >> 配置相关,34
-获取类型为install的数据      >> 安装部署,34
-获取类型为security的数据     >> 安全相关,33
-获取类型为performance的数据  >> 性能问题,33
-获取类型为standard的数据     >> 标准规范,33
-获取类型为automation的数据   >> 测试脚本,33
+获取类型为codeerror的数据 >> 代码错误,49
+获取类型为config的数据 >> 配置相关,34
+获取类型为install的数据 >> 安装部署,34
+获取类型为security的数据 >> 安全相关,33
+获取类型为performance的数据 >> 性能问题,33
+获取类型为standard的数据 >> 标准规范,33
+获取类型为automation的数据 >> 测试脚本,33
 获取类型为designdefect的数据 >> 设计缺陷,33
-获取类型为others的数据       >> 其他,33
+获取类型为others的数据 >> 其他,33
 
 */
-
 
 $bug=new bugTest();
 r($bug->getDataOfBugsPerTypeTest()) && p('codeerror:name,value')    && e('代码错误,49');   // 获取类型为codeerror的数据

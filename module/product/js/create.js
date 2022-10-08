@@ -1,7 +1,7 @@
 $(function()
 {
-    if(manageLinePriv && (programID || systemMode == 'classic')) $('#line_chosen').addClass('hidden');
     $('#lineName').css('border-left-color', '');
+    $('[name=newLine]').change();
 })
 /**
   * Load product Lines.

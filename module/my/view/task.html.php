@@ -44,8 +44,15 @@
   </div>
   <?php else:?>
   <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
-    <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
-    <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
+    <?php
+    $canBatchEdit      = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');
+    $canBatchClose     = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');
+    $canFinish         = common::hasPriv('task', 'finish');
+    $canClose          = common::hasPriv('task', 'close');
+    $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+    $canEdit           = common::hasPriv('task', 'edit');
+    $canBatchCreate    = common::hasPriv('task', 'batchCreate');
+    ?>
     <div class="table-responsive">
       <table class="table has-sort-head table-fixed" id='taskTable'>
         <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -73,13 +80,13 @@
             <?php endif;?>
             <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <?php if($type != 'assignedTo'): ?>
-            <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
+            <th class='c-user assigned-title'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedBy);?></th>
             <?php endif;?>
-            <th class='c-hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
-            <th class='c-hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+            <th class='c-hours estimate'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+            <th class='c-hours consumed'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='c-hours'><?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->leftAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
             <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
@@ -108,7 +115,9 @@
               }
               else
               {
-                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color'");
+                  $onlybody = $task->executionType == 'kanban' ?  true : '';
+                  $class    = $task->executionType == 'kanban' ? 'iframe' : '';
+                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");
               }
               ?>
               <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
@@ -126,7 +135,7 @@
             <?php endif;?>
             <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
             <?php if($type != 'assignedTo'): ?>
-            <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($task, $users);?></td>
+            <td class="c-assignedTo has-btn" title="<?php echo zget($users, $task->assignedTo);?>"> <?php $this->task->printAssignedHtml($task, $users);?></td>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
@@ -149,11 +158,18 @@
                   }
                   else
                   {
-                      $attr = isset($kanbanList[$task->execution]) ? "disabled" : '';
+                      $attr       = isset($kanbanList[$task->execution]) ? "disabled" : '';
+                      $canStart   = ($task->status != 'pause' and common::hasPriv('task', 'start'));
+                      $canRestart = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
                       if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                       if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                      common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                       common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                      common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+                      if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+                      {
+                          echo "<div class='dividing-line'></div>";
+                      }
 
                       common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                       common::printIcon('task', 'edit', "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='95%'");
@@ -196,7 +212,7 @@
               <?php endif;?>
               <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
               <?php if($type != 'assignedTo'): ?>
-              <td class="c-assignedTo has-btn"> <?php $this->task->printAssignedHtml($child, $users);?></td>
+              <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
               <?php endif;?>
               <?php if($type != 'finishedBy'): ?>
               <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>
@@ -219,10 +235,17 @@
                     }
                     else
                     {
+                        $canStart   = ($child->status != 'pause' and common::hasPriv('task', 'start'));
+                        $canRestart = ($child->status == 'pause' and common::hasPriv('task', 'restart'));
                         if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                         if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                        common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                         common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                        common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+
+                        if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+                        {
+                            echo "<div class='dividing-line'></div>";
+                        }
 
                         common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
                         common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'");

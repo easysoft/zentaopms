@@ -163,7 +163,7 @@ $lang->product->menu->release  = array('link' => "{$lang->release->common}|relea
 $lang->product->menu->roadmap  = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 if($config->systemMode == 'new')     $lang->product->menu->project  = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
 if($config->systemMode == 'classic') $lang->product->menu->project  = array('link' => "{$lang->execution->common}|product|project|status=all&productID=%s");
-$lang->product->menu->track    = array('link' => "{$lang->track}|story|track|productID=%s");
+$lang->product->menu->track    = array('link' => "{$lang->track}|product|track|productID=%s");
 $lang->product->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
 $lang->product->menu->dynamic  = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
@@ -201,7 +201,7 @@ if($config->systemMode == 'new') $lang->project->homeMenu->kanban = array('link'
 /* Scrum menu. */
 $lang->scrum->menu            = new stdclass();
 $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s", 'exclude' => 'execution-testreport');
+$lang->scrum->menu->execution = array('link' => "$lang->executionCommon|project|execution|status=all&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
 $lang->scrum->menu->story     = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->qa        = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport,execution', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
@@ -245,7 +245,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
-$lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s", 'subModule' => 'programplan');
+$lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s", 'subModule' => 'programplan,task');
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory,tree', 'exclude' => 'projectstory-track');
 $lang->waterfall->menu->design      = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
@@ -291,15 +291,24 @@ $lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->d
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 /* Kanban project menu. */
-$lang->kanbanProject              = new stdclass();
-$lang->kanbanProject->menu        = new stdclass();
-$lang->kanbanProject->menu->index = array('link' => "{$lang->kanban->common}|project|index|project=%s");
-$lang->kanbanProject->menu->build = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->kanbanProject                 = new stdclass();
+$lang->kanbanProject->menu           = new stdclass();
+$lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s");
+$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
-$lang->kanbanProject->menuOrder   = array();
-$lang->kanbanProject->menuOrder[5] = 'index';
-$lang->kanbanProject->menuOrder[10] = 'build';
 $lang->kanbanProject->dividerMenu = '';
+
+$lang->kanbanProject->menuOrder     = array();
+$lang->kanbanProject->menuOrder[5]  = 'index';
+$lang->kanbanProject->menuOrder[10] = 'build';
+$lang->kanbanProject->menuOrder[15] = 'settings';
+
+$lang->kanbanProject->menu->settings['subMenu']              = new stdclass();
+$lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
+$lang->kanbanProject->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
+$lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
+$lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
@@ -311,7 +320,10 @@ $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execut
 $lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
-$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
+
+if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
+
+$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
 $lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
@@ -323,17 +335,18 @@ if($config->systemMode == 'new') $lang->execution->menu->more = array('link' => 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
 $lang->execution->menuOrder[10] = 'kanban';
-$lang->execution->menuOrder[15] = 'burn';
-$lang->execution->menuOrder[20] = 'view';
-$lang->execution->menuOrder[25] = 'story';
-$lang->execution->menuOrder[30] = 'qa';
-$lang->execution->menuOrder[35] = 'repo';
-$lang->execution->menuOrder[40] = 'devops';
-$lang->execution->menuOrder[45] = 'doc';
-$lang->execution->menuOrder[50] = 'build';
-$lang->execution->menuOrder[55] = 'release';
-$lang->execution->menuOrder[60] = 'action';
-$lang->execution->menuOrder[65] = 'settings';
+$lang->execution->menuOrder[15] = 'CFD';
+$lang->execution->menuOrder[20] = 'burn';
+$lang->execution->menuOrder[25] = 'view';
+$lang->execution->menuOrder[30] = 'story';
+$lang->execution->menuOrder[35] = 'qa';
+$lang->execution->menuOrder[40] = 'repo';
+$lang->execution->menuOrder[45] = 'devops';
+$lang->execution->menuOrder[50] = 'doc';
+$lang->execution->menuOrder[55] = 'build';
+$lang->execution->menuOrder[60] = 'release';
+$lang->execution->menuOrder[65] = 'action';
+$lang->execution->menuOrder[70] = 'settings';
 
 $lang->execution->menu->doc['subMenu'] = new stdclass();
 
@@ -370,7 +383,7 @@ $lang->qa->menu->testsuite  = array('link' => "{$lang->testcase->testsuite}|test
 $lang->qa->menu->testtask   = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
 $lang->qa->menu->report     = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib    = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
-$lang->qa->menu->automation = array('link' => "{$lang->automation->common}|automation|browse|productID=%s", 'subModule' => 'automation', 'alias' => '');
+$lang->qa->menu->zahost     = array('link' => "{$lang->automation->common}|zahost|browse", 'subModule' => 'zahost,executionnode', 'alias' => 'browse');
 
 /* QA menu order. */
 $lang->qa->menuOrder[5]  = 'product';
@@ -381,10 +394,14 @@ $lang->qa->menuOrder[25] = 'testsuite';
 $lang->qa->menuOrder[30] = 'testtask';
 $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
-$lang->qa->menuOrder[45] = 'automation';
+$lang->qa->menuOrder[45] = 'zahost';
+
+$lang->qa->menu->zahost['subMenu'] = new stdclass();
+$lang->qa->menu->zahost['subMenu']->browse        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
+$lang->qa->menu->zahost['subMenu']->executionnode = array('link' => "{$lang->executionnode->common}|executionnode|browse", 'subModule' => 'executionnode');
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
-// $lang->qa->menu->automation['subMenu']->browse      = array('link' => "{$lang->intro}|automation|browse|productID=%s", 'alias' => '');
+// $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
 // $lang->qa->menu->automation['subMenu']->framework   = array('link' => '框架|automation|framework|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->data        = array('link' => '数据|automation|date|productID=%s', 'alias' => '');
 // $lang->qa->menu->automation['subMenu']->interface   = array('link' => '接口|automation|interface|productID=%s', 'alias' => '');
@@ -393,24 +410,29 @@ $lang->qa->menuOrder[45] = 'automation';
 $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 
 /* DevOps menu. */
-$lang->devops->menu            = new stdclass();
-$lang->devops->menu->code      = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
-$lang->devops->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->menu->mr        = array('link' => "{$lang->devops->mr}|mr|browse");
-$lang->devops->menu->gitlab    = array('link' => "GitLab|gitlab|browse", 'alias' => 'create,edit');
-$lang->devops->menu->sonarqube = array('link' => "SonarQube|sonarqube|browse");
-$lang->devops->menu->jenkins   = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
-$lang->devops->menu->maintain  = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
-$lang->devops->menu->rules     = array('link' => "{$lang->devops->rules}|repo|setrules");
+$lang->devops->menu          = new stdclass();
+$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->app     = array('link' => "{$lang->app->common}|app|serverlink|%s");
+$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit');
 
 $lang->devops->menuOrder[5]  = 'code';
-$lang->devops->menuOrder[10] = 'compile';
-$lang->devops->menuOrder[15] = 'mr';
-$lang->devops->menuOrder[20] = 'gitlab';
-$lang->devops->menuOrder[25] = 'sonarqube';
-$lang->devops->menuOrder[30] = 'jenkins';
-$lang->devops->menuOrder[35] = 'maintain';
-$lang->devops->menuOrder[40] = 'rules';
+$lang->devops->menuOrder[10] = 'mr';
+$lang->devops->menuOrder[15] = 'compile';
+$lang->devops->menuOrder[20] = 'app';
+$lang->devops->menuOrder[25] = 'set';
+
+$lang->devops->dividerMenu = ',set,';
+
+$lang->devops->menu->set['subMenu'] = new stdclass();
+$lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
+$lang->devops->menu->set['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
+$lang->devops->menu->set['subMenu']->gogs      = array('link' => 'Gogs|gogs|browse', 'subModule' => 'gogs');
+$lang->devops->menu->set['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
+$lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => '');
+$lang->devops->menu->set['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
+$lang->devops->menu->set['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
@@ -483,7 +505,7 @@ $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
@@ -491,14 +513,20 @@ $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|i
 
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
+
+if($config->edition == 'max') $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+
 if($config->systemMode == 'new')
 {
-    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting');
+    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 }
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
-$lang->admin->menu->allModel['menuOrder'][5] = 'storyConcept';
+$lang->admin->menu->allModel['subMenu']->code         = array('link' => "{$lang->code}|custom|code|");
+
+$lang->admin->menu->allModel['menuOrder'][5]  = 'storyConcept';
+$lang->admin->menu->allModel['menuOrder'][30] = 'code';
 
 $lang->admin->menu->waterfall['subMenu'] = new stdclass();
 $lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');
@@ -544,10 +572,11 @@ $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 $lang->admin->menu->system['subMenu']              = new stdclass();
 $lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
 $lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
-$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
+$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak,resetpwdsetting');
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+$lang->admin->menu->system['subMenu']->tableEngine = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if(version_compare(phpversion(), 5.6) > 0) $lang->admin->menu->system['subMenu']->convertJira = array('link' => "{$lang->convert->importJira}|convert|convertjira|", 'subModule' => 'convert');
 
 $lang->admin->dividerMenu = ',company,message,system,';
@@ -582,6 +611,7 @@ $lang->navGroup->productplan = 'product';
 $lang->navGroup->release     = 'product';
 $lang->navGroup->branch      = 'product';
 $lang->navGroup->story       = 'product';
+$lang->navGroup->requirement = 'product';
 
 $lang->navGroup->project     = 'project';
 $lang->navGroup->deploy      = 'project';
@@ -621,16 +651,17 @@ $lang->navGroup->api    = 'doc';
 
 $lang->navGroup->report = 'report';
 
-$lang->navGroup->qa         = 'qa';
-$lang->navGroup->bug        = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-$lang->navGroup->automation = 'qa';
-$lang->navGroup->testreport = 'qa';
-$lang->navGroup->testcase   = 'qa';
-$lang->navGroup->testtask   = 'qa';
-$lang->navGroup->testsuite  = 'qa';
-$lang->navGroup->caselib    = 'qa';
+$lang->navGroup->qa            = 'qa';
+$lang->navGroup->bug           = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->zahost        = 'qa';
+$lang->navGroup->executionnode = 'qa';
+$lang->navGroup->testreport    = 'qa';
+$lang->navGroup->testcase      = 'qa';
+$lang->navGroup->testtask      = 'qa';
+$lang->navGroup->testsuite     = 'qa';
+$lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
@@ -638,12 +669,15 @@ $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
 $lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->gogs             = 'devops';
+$lang->navGroup->gitea            = 'devops';
 $lang->navGroup->sonarqube        = 'devops';
 $lang->navGroup->sonarqubeproject = 'devops';
 $lang->navGroup->compile          = 'devops';
 $lang->navGroup->ci               = 'devops';
 $lang->navGroup->svn              = 'devops';
 $lang->navGroup->git              = 'devops';
+$lang->navGroup->app              = 'devops';
 
 $lang->navGroup->company = 'system';
 

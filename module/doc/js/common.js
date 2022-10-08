@@ -41,6 +41,7 @@ function toggleAcl(acl, type)
     else
     {
         $('#whiteListBox').addClass('hidden');
+        if(type == 'doc') loadWhitelist(libID);
     }
 
     if(type == 'lib')
@@ -49,7 +50,7 @@ function toggleAcl(acl, type)
         var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
         $('#noticeAcl').html(notice);
 
-        if((libType == 'custom' || libType == 'api') && acl == 'private') $('#whiteListBox').addClass('hidden');
+        if((libType == 'custom' || libType == 'api' || libType == 'book') && acl == 'private') $('#whiteListBox').addClass('hidden');
 
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
@@ -57,8 +58,8 @@ function toggleAcl(acl, type)
             $.get(link, function(users)
             {
                 $('#users').replaceWith(users);
-                $('#users_chosen').remove();
-                $('#users').chosen();
+                $('#users').next('.picker').remove();
+                $('#users').picker();
             })
         }
     }

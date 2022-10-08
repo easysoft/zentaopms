@@ -19,9 +19,11 @@
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$objectID"), 'btn btn-link');?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent">
   <div class="cell space-sm">
@@ -55,7 +57,7 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+      <?php $storyLink = $this->createLink('execution', 'storyView', "storyID=$story->id", '', true);?>
       <tr>
         <td class='cell-id'>
           <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
@@ -64,8 +66,15 @@
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
         <td class='text-left nobr' title="<?php echo $story->title?>">
           <?php
-          if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-          echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
+          if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
+          if(common::hasPriv('execution', 'storyView'))
+          {
+              echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
+          }
+          else
+          {
+              echo '<a>' . $story->title . '</a>';
+          }
           ?>
         </td>
         <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>

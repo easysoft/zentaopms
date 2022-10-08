@@ -10,6 +10,10 @@ title=测试 userModel::getUserDetailsForAPI();
 cid=1
 pid=1
 
+获取admin用户的url >> guser-profile-1.
+获取test2用户的真实姓名 >> 测试2
+获取user10的头像信息 >> http:///home/z/tmp/10.png
+
 */
 $user = new userTest();
 $userList = array('admin', 'test2', 'user10', '');

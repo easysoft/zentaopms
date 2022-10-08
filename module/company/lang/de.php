@@ -18,6 +18,7 @@ $lang->company->browse   = "Benutzerliste";
 $lang->company->dynamic  = "Verlauf";
 $lang->company->orgView  = 'Ansehen';
 
+$lang->company->id       = 'ID';
 $lang->company->name     = 'Name';
 $lang->company->phone    = 'Telefon';
 $lang->company->fax      = 'Fax';
@@ -27,11 +28,16 @@ $lang->company->website  = 'Webseite';
 $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Gast Login';
 $lang->company->admins   = 'Administratoren';
+$lang->company->deleted  = 'Deleted';
 
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = 'Project';
 $lang->company->execution = 'Execution';
 $lang->company->user      = 'Benutzer';
+$lang->company->empty     = 'No Dynamic';
 
 $lang->company->guestOptions[0] = 'Verweigern';
 $lang->company->guestOptions[1] = 'Erlauben';
+
+$lang->company->order['date_desc'] = 'Descending';
+$lang->company->order['date_asc']  = 'Ascending';

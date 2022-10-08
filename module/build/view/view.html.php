@@ -20,6 +20,7 @@
 #stories .action {display: none;}
 #bugs .action {display: none;}
 tbody tr td:first-child input {display: none;}
+.page-title .dropdown-menu {top: 40px; left: 70px;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
@@ -28,8 +29,8 @@ tbody tr td:first-child input {display: none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'>
-      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <span title='<?php echo $build->name;?>'>
+      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='text btn btn-link btn-active-text'");?>
       <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
@@ -63,7 +64,7 @@ tbody tr td:first-child input {display: none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkStory')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkStory') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
@@ -91,9 +92,7 @@ tbody tr td:first-child input {display: none;}
               </tr>
             </thead>
             <tbody class='text-center'>
-              <?php $objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -105,8 +104,19 @@ tbody tr td:first-child input {display: none;}
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
-                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-                  echo html::a($storyLink,$story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
+                  if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
+                  {
+                      echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  elseif($this->app->tab == 'project' and common::hasPriv('projectstory', 'view'))
+                  {
+                      echo html::a($this->createLink('projectstory', 'view', "storyID=$story->id&version=0&param=$build->project", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  else
+                  {
+                      echo $story->title;
+                  }
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -122,7 +132,7 @@ tbody tr td:first-child input {display: none;}
                   if($canBeChanged and common::hasPriv('build', 'unlinkStory'))
                   {
                       $unlinkURL = inlink('unlinkStory', "buildID=$build->id&story=$story->id");
-                      echo html::a("###", '<i class="icon-unlink"></i>', '', "onclick='ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)' class='btn' title='{$lang->build->unlinkStory}'");
+                      echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->build->unlinkStory}'");
                   }
                   ?>
                 </td>
@@ -149,7 +159,7 @@ tbody tr td:first-child input {display: none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkBug')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkBug') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
@@ -195,9 +205,9 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
                 <td class='c-actions'>
                   <?php
                   if($canBeChanged and common::hasPriv('build', 'unlinkBug'))
@@ -277,9 +287,9 @@ tbody tr td:first-child input {display: none;}
                   </span>
                 </td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
-                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);?></td>
                 <td><?php echo zget($users, $bug->resolvedBy);?></td>
-                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                <td><?php echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);?></td>
               </tr>
               <?php endforeach;?>
             </tbody>
@@ -335,7 +345,7 @@ tbody tr td:first-child input {display: none;}
                 <?php $this->printExtendFields($build, 'table', 'inForm=0');?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
-                  <td>
+                  <td class='article-content'>
                     <?php if($build->desc):?>
                     <?php echo $build->desc;?>
                     <?php else:?>

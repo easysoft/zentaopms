@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +34,4 @@ r($branch->createTest($productID, $branch2))     && p('name,desc') && e('新建�
 r($branch->createTest($productID, $repeatName1)) && p()            && e('分支名称已存在');            // 测试新建 重名新建分支1
 r($branch->createTest($productID, $repeatName2)) && p()            && e('分支名称已存在');            // 测试新建 重名分支1
 r($branch->createTest($productID, $emptyName))   && p()            && e('『名称』不能为空。');        // 测试新建 名称为空的分支
-system("./ztest init");
+$db->restoreDB();

@@ -516,6 +516,15 @@ class installModel extends model
             }
         }
 
+        $this->loadModel('user');
+        $this->app->loadConfig('admin');
+        /* Check password. */
+        if(!validater::checkReg($this->post->password, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
+        if($this->user->computePasswordStrength($this->post->password) < 1) dao::$errors['password'][] = $this->lang->user->placeholder->passwordStrengthCheck[1];
+        if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+        if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+        if(dao::isError()) return false;
+
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $data->company;

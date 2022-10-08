@@ -21,6 +21,9 @@ class project extends control
             if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
         }
 
+        $allExecution = $this->execution->getList($projectID, 'all', 'all');
+        $this->view->allExecutionsNum = empty($allExecution);
+
         $this->view->title            = $this->lang->project->kanban;
 
         $this->view->kanbanList       = array_values($kanbanList);

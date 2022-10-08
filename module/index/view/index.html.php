@@ -45,6 +45,7 @@ js::set('showFeatures', $showFeatures);
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>
+<?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false):?>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
@@ -77,6 +78,7 @@ js::set('showFeatures', $showFeatures);
     </ul>
   </div>
 </div>
+<?php endif;?>
 <div id='apps'>
 </div>
 <div id='appsBar'>

@@ -8,7 +8,7 @@ title=测试 projectModel::getBudgetUnitList();
 cid=1
 pid=1
 
-检查翻译 >> 1
+获取系统中的货币单位 >> 人民币,美元
 
 */
 

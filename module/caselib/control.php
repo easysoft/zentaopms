@@ -352,18 +352,12 @@ class caselib extends control
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $currentModuleID = (int)$moduleID;
-
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
         $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->currentModuleID  = (int)$moduleID;
 
         $this->display();
     }
@@ -448,7 +442,7 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function exportTemplet($libID)
+    public function exportTemplate($libID)
     {
         $this->loadModel('testcase');
         if($_POST)
@@ -800,5 +794,27 @@ class caselib extends control
         $this->view->maxImport  = $maxImport;
         $this->view->dataInsert = $insert;
         $this->display();
+    }
+
+    /**
+     * For lib sort
+     *
+     * @access public
+     * @return void
+     */
+    public function libSort()
+    {
+        $idList = explode(',', trim($this->post->caselib, ','));
+        $order  = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->in($idList)->andWhere('type')->eq('library')->orderBy('order_asc')->fetch('order');
+        $idList = array_reverse($idList);
+
+        /* Init Order. */
+        if(empty($order)) $order = 1;
+
+        foreach($idList as $caselibID)
+        {
+            $this->dao->update(TABLE_TESTSUITE)->set('`order`')->eq($order)->where('id')->eq($caselibID)->andWhere('type')->eq('library')->exec();
+            $order++;
+        }
     }
 }

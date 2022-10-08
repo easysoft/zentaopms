@@ -9,6 +9,9 @@ title=测试 programModel::getTopPairs();
 cid=1
 pid=1
 
+传入一个path，返回最顶级path >> 2
+传入一个path，返回最顶级path >> 100
+
 */
 
 global $tester;

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/block.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -58,4 +59,4 @@ r($dataList[6]) && p("blockData:module;blockData:type") && e('qa;');            
 r($dataList[7]) && p("blockInited;blockversion")        && e('1;2');               // 获取空区块版本
 r($dataList[7]) && p("blockData")                       && e('0');                 // 获取空区块数据
 
-system("./ztest init");
+$db->restoreDB();

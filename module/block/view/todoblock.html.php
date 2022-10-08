@@ -18,22 +18,27 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
-.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto; overflow-x:hidden}
+.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -10px; max-height: 350px; overflow: auto; overflow-x:hidden}
 .block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
-.block-todoes .todo-title {padding: 5px 15px 5px 5px;}
-.titleBox {max-width: 700px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
+.block-todoes .todo-title {padding: 0px;}
+.titleBox {max-width: 1440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .block-todoes .todo-pri {margin: 0 5px;}
-.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 95px;}
+.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 95px; min-width: 95px;}
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
 .block-todoes .todo-check:hover {border-color: #8e939a;}
 .block-todoes .active > .todo-check {color: #00da88; background: transparent;border: none;}
-.block-todoes .todoes-form {position: absolute; top: -45px; right: 0; left: 0; z-index: 1011; max-width: 500px; padding: 12px 20px 20px; visibility: hidden; background: #fff; -webkit-box-shadow: 0 0 20px 0 #bdc9d8; box-shadow: 0 0 20px 0 #bdc9d8; opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1); transition: .4s cubic-bezier(.175, .885, .32, 1); -webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility; transition-property: opacity, visibility;}
+.block-todoes .todoes-form {position: absolute; top: -45px; right: 0; left: 0; z-index: 1011; max-width: 100%; padding: 12px 20px 20px; visibility: hidden; background: #fff; -webkit-box-shadow: 0 0 20px 0 #bdc9d8; box-shadow: 0 0 20px 0 #bdc9d8; opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1); transition: .4s cubic-bezier(.175, .885, .32, 1); -webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility; transition-property: opacity, visibility;}
 .block-todoes .todoes-form .form-group > label {padding-left: 0;}
 .block-todoes .todoes-form .form-group > label.text-center {text-align: center!important;}
 .block-todoes .todoes-form > .form-group:last-child {margin-bottom: 0;}
 .block-todoes .todoes-form > h3 {padding: 0 20px 15px; margin: 0 -20px 5px; font-size: 14px; line-height: 20px;}
 .block-todoes.show-form .todoes-form {visibility: visible; opacity: 1;}
+.block-todoes .todo-flexbetween {display: flex; justify-content: space-between;}
+.block-todoes #todoList {display: flex; overflow: hidden;}
+.block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
+.block-todoes .todo-title.text-ellipsis {text-overflow: unset;}
+[lang^='en'] .block-todoes .todo-pri {width: 60px; min-width: 60px;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
@@ -89,26 +94,31 @@ if(!$selfCall) die(include('./todolist.html.php'));
         </div>
       </form>
     </div>
-    <ul class="todoes">
-      <?php foreach($todos as $id => $todo):?>
-      <?php
-      $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-      $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", 'html', true);
-      ?>
-      <li data-id='<?php echo $todo->id?>' class='titleBox'>
-        <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
-          <?php if ($todo->date == '2030-01-01') :?>
-          <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
-          <?php else:?>
-          <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
-          <?php endif;?>
-          <span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span>
-          <span class="todo-title" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></span>
-        </a>
-      </li>
-      <?php endforeach;?>
-    </ul>
+    <div class='table-row'>
+      <ul class="todoes">
+        <?php foreach($todos as $id => $todo):?>
+        <?php
+        $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+        $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", 'html', true);
+        ?>
+        <li data-id='<?php echo $todo->id?>' class='titleBox'>
+          <span class="todo-check icon icon-check-circle"></span>
+          <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe todo-flexbetween' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
+            <div id='todoList'>
+              <?php if ($todo->date == '2030-01-01') :?>
+              <div class="todo-time"><?php echo $lang->todo->periods['future'] ?></div>
+              <?php else:?>
+              <div class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></div>
+              <?php endif;?>
+              <div class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></div>
+              <div class="todo-title text-ellipsis" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></div>
+            </div>
+            <span class="label label-id label-todo hidden"><?php echo $lang->block->done;?></span>
+          </a>
+        </li>
+        <?php endforeach;?>
+      </ul>
+    </div>
   </div>
   <script>
   $(function()
@@ -143,6 +153,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
                   $block.on('click', '.todo-form-trigger', function()
                   {
                       toggleForm($(this).data('trigger'));
+                      $('.block-todoes .commitButton').removeClass('disabled');
                   });
                   $form.timeSpanControl(
                   {
@@ -166,6 +177,15 @@ if(!$selfCall) die(include('./todolist.html.php'));
               if(!isFinished) $liTag.addClass('active');
               if(isFinished) $liTag.removeClass('active');
           });
+
+          if(isFinished)
+          {
+              $(this).next().find('.label-todo').addClass('hidden');
+          }
+          else
+          {
+              $(this).next().find('.label-todo').removeClass('hidden');
+          }
       });
   });
 

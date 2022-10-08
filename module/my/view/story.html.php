@@ -50,6 +50,11 @@
       $canBatchReview   = common::hasPriv('story', 'batchReview');
       $canBatchAssignTo = common::hasPriv('story', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
+      $canChange        = common::hasPriv('story', 'change');
+      $canRecall        = common::hasPriv('story', 'recall');
+      $canEdit          = common::hasPriv('story', 'edit');
+      $canCreateCase    = common::hasPriv('testcase', 'create');
+      $canClose         = common::hasPriv('story', 'close');
       ?>
       <thead>
         <tr>
@@ -89,11 +94,11 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-          <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
-            <?php echo html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'");?>
+          <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>' title='<?php echo $story->title;?>'>
+            <?php echo common::hasPriv('story', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product'") : $story->title;?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';;?>
           </td>
-          <td class='c-product'><?php echo $story->productTitle;?></td>
+          <td class='c-product' title='<?php echo $story->productTitle;?>'><?php echo $story->productTitle;?></td>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
@@ -105,11 +110,32 @@
             {
                 $vars = "story={$story->id}";
                 echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
-                echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+
+                if(strpos('draft,changing', $story->status) !== false)
+                {
+                    echo common::buildIconButton('story', 'submitReview', $vars, $story, 'list', 'confirm', 'confirm', 'iframe', true);
+                }
+                else
+                {
+                    echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
+                }
+
                 echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
-                echo common::buildIconButton('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+
+                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview'));
+                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review'));
+
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and ($canCreateCase or $canClose))
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+
+                echo common::buildIconButton('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+
+                if($canCreateCase and $canClose) echo "<div class='dividing-line'></div>";
+
+                echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>
@@ -132,9 +158,9 @@
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
-            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product'");?>
+            <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">' . $this->lang->story->childrenAB . '</span> ' . html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product' title='$child->title'");?>
           </td>
-          <td class='c-product'><?php echo $child->productTitle;?></td>
+          <td class='c-product' title='<?php echo $child->productTitle;?>'><?php echo $child->productTitle;?></td>
           <td class='c-plan'><?php echo $child->planTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
@@ -145,11 +171,32 @@
             if($canBeChanged)
             {
                 $vars = "story={$child->id}";
-                common::printIcon('story', 'change',     $vars, $child, 'list', 'alter', '', 'iframe', true);
-                common::printIcon('story', 'review',     $vars, $child, 'list', 'search', '', 'iframe', true);
-                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
+                common::printIcon('story', 'change', $vars, $child, 'list', 'alter', '', 'iframe', true);
+
+                if(strpos('draft,changing', $child->status) !== false)
+                {
+                    common::printIcon('story', 'submitReview', $vars, $child, 'list', 'confirm', '', 'iframe', true);
+                }
+                else
+                {
+                    common::printIcon('story', 'review', $vars, $child, 'list', 'search', '', 'iframe', true);
+                }
+                common::printIcon('story', 'recall',     $vars, $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 common::printIcon('story', 'edit',       $vars, $child, 'list', '', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+
+                $canSubmitReview = (strpos('draft,changing', $child->status) !== false and common::hasPriv('story', 'submitReview'));
+                $canReview       = (strpos('draft,changing', $child->status) === false and common::hasPriv('story', 'review'));
+
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and ($canCreateCase or $canClose))
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+
+                common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&$vars", $child, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
+
+                if($canCreateCase and $canClose) echo "<div class='dividing-line'></div>";
+
+                common::printIcon('story', 'close',      $vars, $child, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>

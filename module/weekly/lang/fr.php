@@ -28,7 +28,7 @@ $lang->weekly->master  = 'Project Manager ';
 $lang->weekly->staff   = 'Weekly Effort';
 
 $lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
-$lang->weekly->progress       = 'Progress of the project';
+$lang->weekly->progress       = 'Progress';
 $lang->weekly->analysisResult = 'Analysis';
 $lang->weekly->cost           = 'Project Cost';
 
@@ -37,3 +37,5 @@ $lang->weekly->ev = 'Earned Value(EV)';
 $lang->weekly->ac = 'Actual Cost(AC)';
 $lang->weekly->sv = 'Schedule Variance(SV%)';
 $lang->weekly->cv = 'Cost Variance(CV%)';
+
+$lang->weekly->totalCount = 'Total : %u tasks';

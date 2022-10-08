@@ -11,6 +11,7 @@
 include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
+<?php js::set('loginTimeoutTip', $lang->user->error->loginTimeoutTip);?>
 <main id="main" class="fade no-padding">
   <div class="container" id="login">
     <div id="loginPanel">
@@ -33,6 +34,9 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           <form method='post' target='hiddenwin'>
             <table class='table table-form'>
               <tbody>
+                <?php if($loginExpired):?>
+                <p class='text-red'><?php echo $lang->user->loginExpired;?></p>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->user->account;?></th>
                   <td><input class='form-control' type='text' name='account' id='account' autocomplete='off' autofocus /></td>
@@ -63,7 +67,8 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
-                  echo html::a(inlink('reset'), $lang->user->resetPassword);
+                  $resetLink = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
+                  echo html::a($resetLink, $lang->user->resetPassword);
                   ?>
                   </td>
                 </tr>
@@ -92,8 +97,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
       $demoPassword = '123456';
       $md5Password  = md5('123456');
       $demoUsers    = 'productManager,projectManager,dev1,dev2,dev3,tester1,tester2,tester3,testManager';
-      if($this->app->getClientLang() == 'en') $demoUsers = 'thePO,pm1,pm2,pg1,pg2,pg3,thePM,qa1,theQS';
-      $demoUsers = $this->dao->select('account,password,realname')->from(TABLE_USER)->where('account')->in($demoUsers)->andWhere('deleted')->eq(0)->andWhere('password')->eq($md5Password)->fetchAll('account');
+      $demoUsers    = $this->dao->select('account,password,realname')->from(TABLE_USER)->where('account')->in($demoUsers)->andWhere('deleted')->eq(0)->andWhere('password')->eq($md5Password)->fetchAll('account');
       ?>
       <footer>
         <span><?php echo $lang->user->loginWithDemoUser;?></span>

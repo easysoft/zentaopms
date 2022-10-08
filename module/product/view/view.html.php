@@ -19,7 +19,8 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
+            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
             <div class="detail-content article-content">
               <p><?php echo $product->desc;?></p>
             </div>
@@ -72,6 +73,7 @@
             <div class="detail-content">
               <table class="table table-data data-basic">
                 <tbody>
+                <?php if(!$hiddenCode):?>
                   <tr>
                     <th class="c-code"><?php echo $lang->product->code;?></th>
                     <td><strong><?php echo $product->code;?></strong></td>
@@ -90,6 +92,24 @@
                     <th class="c-acl"><?php echo $lang->product->acl;?></th>
                     <td <?php echo empty($product->code) ? "colspan='4'" : "colspan='2'";?>><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
                   </tr>
+                  <?php else:?>
+                  <tr>
+                    <th><?php echo $lang->product->type;?></th>
+                    <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
+                    <th class="c-openedBy"><?php echo $lang->story->openedBy?></th>
+                    <td colspan="2"><strong><?php echo zget($users, $product->createdBy);?></strong></td>
+                  </tr>
+                  <tr>
+                    <th class="c-type"><?php echo $lang->productCommon . $lang->product->status;?></th>
+                    <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
+                    <th><?php echo $lang->story->openedDate?></th>
+                    <td colspan="2"><strong><?php echo formatTime($product->createdDate, DT_DATE1);?></strong></td>
+                  </tr>
+                  <tr>
+                    <th class="c-acl"><?php echo $lang->product->acl;?></th>
+                    <td colspan='4'><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
+                  </tr>
+                  <?php endif;?>
                   <?php if($product->acl == 'custom'):?>
                   <tr>
                     <th><?php echo $lang->product->whitelist;?></th>
@@ -122,14 +142,6 @@
                     <td><strong><?php echo $product->bugs?></strong></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->story->statusList['changed']  . $space . $lang->story->common;?></th>
-                    <td><strong><?php echo $product->stories['changed']?></strong></td>
-                    <th><?php echo $lang->product->releases?></th>
-                    <td><strong><?php echo $product->releases?></strong></td>
-                    <th><?php echo $lang->product->cases?></th>
-                    <td><strong><?php echo $product->cases?></strong></td>
-                  </tr>
-                  <tr>
                     <th><?php echo $lang->story->statusList['draft']  . $space . $lang->story->common;?></th>
                     <td><strong><?php echo $product->stories['draft']?></strong></td>
                     <th><?php echo $lang->product->builds?></th>
@@ -138,8 +150,16 @@
                     <td><strong><?php echo $product->docs?></strong></td>
                   </tr>
                   <tr>
-                    <th><?php echo $lang->story->statusList['closed']  . $space . $lang->story->common;?></th>
-                    <td><strong><?php echo $product->stories['closed']?></strong></td>
+                    <th><?php echo $lang->story->statusList['changing']  . $space . $lang->story->common;?></th>
+                    <td><strong><?php echo $product->stories['changing']?></strong></td>
+                    <th><?php echo $lang->product->releases?></th>
+                    <td><strong><?php echo $product->releases?></strong></td>
+                    <th><?php echo $lang->product->cases?></th>
+                    <td><strong><?php echo $product->cases?></strong></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->story->statusList['reviewing']  . $space . $lang->story->common;?></th>
+                    <td><strong><?php echo $product->stories['reviewing']?></strong></td>
                     <?php if($config->systemMode == 'new'):?>
                     <th><?php echo $lang->product->projects?></th>
                     <td><strong><?php echo $product->projects?></strong></td>

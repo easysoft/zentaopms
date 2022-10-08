@@ -38,7 +38,12 @@
       <?php unset($lang->testcase->typeList['']);?>
       <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
       <?php
-      if($i != 0) $currentModuleID = 'ditto';
+      if($i != 0)
+      {
+          $currentModuleID = 'ditto';
+          $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
+      }
+
       if($i != 0) $lang->testcase->typeList['ditto'] = $lang->testcase->ditto;
       if($i != 0) $lang->testcase->priList['ditto']  = $lang->testcase->ditto;
       $type = $i == 0 ? 'feature' : 'ditto';

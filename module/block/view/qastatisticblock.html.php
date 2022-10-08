@@ -13,7 +13,8 @@
 .product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
 .product-info .type-value,
-.product-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.product-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #838A9D;}
+.progress-pie .progress-info>small {color: #838A9D;}
 .product-info .type-value {font-size: 14px;}
 .product-info .type-value > strong {font-size: 20px; color: #3C4353;}
 .product-info .actions {position: absolute; left: 10px; top: 14px;}

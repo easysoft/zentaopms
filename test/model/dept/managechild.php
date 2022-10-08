@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/dept.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +29,4 @@ r($dept->manageChildTest('', $depts, $count[0]))                      && p('1') 
 r($dept->manageChildTest('', $depts, $count[1]))                      && p()    && e('3');   //无父级部门下添加子级部门统计
 r($dept->manageChildTest($parentDeptID, $depts = array(), $count[0])) && p()    && e('0');   //无部门名称
 
-system("./ztest init");
+$db->restoreDB();

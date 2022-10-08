@@ -1,0 +1,5 @@
+#readOnlyOfCode {font-size: 13px; color: #5e626d; display: flex; width: 200%;}
+#readOnlyOfCode i {font-size: 14px; color: #0075ff; margin-right: 3px;}
+.c-setCode {width: 150px !important;}
+[lang^=en] .c-setCode, [lang^=de] .c-setCode {width: 160px !important;}
+[lang^=fr] .c-setCode {width: 200px !important;}

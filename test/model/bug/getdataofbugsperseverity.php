@@ -16,7 +16,6 @@ pid=1
 
 */
 
-
 $bug=new bugTest();
 r($bug->getDataOfBugsPerSeverityTest()) && p('1:name,value') && e('1,79');   // 获取严重程度1数据
 r($bug->getDataOfBugsPerSeverityTest()) && p('2:name,value') && e('2,79');   // 获取严重程度2数据

@@ -8,7 +8,7 @@ tbody > tr > td > .btn-icon {margin-right: 4px;}
 #batchToTask .checkbox-primary {display: inline-block; margin-left: 10px;}
 th.c-pri{width:50px;}
 .c-estimate {width: 50px;}
-.c-status, .c-user {width: 70px;}
+.c-user {width: 70px;}
 .c-assignedTo {width: 100px;}
 .c-category {width: 75px;}
 .c-actions-7 {width: 195px;}
@@ -19,3 +19,5 @@ th.c-pri{width:50px;}
 .panel-actions {position: relative; padding: 0;}
 .switchBtn {background-color: #fff !important;}
 .switchBtn > i {padding-left: 7px;}
+#main>.container {padding: 0 20px 20px 23px;}
+#executionStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}

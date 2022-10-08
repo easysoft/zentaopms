@@ -22,7 +22,7 @@ class feedbacksEntry extends entry
         if(strpos(strtolower($this->param('fields')), 'moduleandproduct') !== false) return $this->getModuleAndProduct();
 
         $control = $this->loadController('feedback', 'admin');
-        $control->admin($this->param('solution', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -54,8 +54,10 @@ class feedbacksEntry extends entry
      */
     public function post()
     {
-        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid';
+        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notify,uid';
         $this->batchSetPost($fields);
+
+        $this->setPost('notifyEmail', $this->request('notifyEmail', ''));
 
         $control = $this->loadController('feedback', 'create');
         $this->requireFields('title,product');

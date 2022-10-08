@@ -65,6 +65,19 @@ $app->setDebug();
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(($config->version[0] == $config->installedVersion[0] or (is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]))) and version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
 
+/* If run in container, upgrade automatically. */
+if($app->isContainer())
+{
+    $upgradeModel = $common->loadModel('upgrade');
+    $alterSQL     = $upgradeModel->checkConsistency();
+    if(!empty($alterSQL)) $upgradeModel->dao->query("SET @@sql_mode= '';" . $alterSQL);
+
+    $config->set('default.method', 'execute');
+    $app->session->set('upgrading', true);
+    $app->session->set('step', '');
+    $app->post->set('fromVersion', str_replace( '.', '_', strtolower($config->installedVersion)));
+}
+
 /* Run it. */
 $app->parseRequest();
 if($common->checkUpgradeStatus()) $app->loadModule();

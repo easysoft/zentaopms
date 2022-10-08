@@ -9,7 +9,8 @@ title=测试 storyModel->unlinkStory();
 cid=1
 pid=1
 
-
+删除用户需求25的关联关系之前，获取关联关系数量 >> 1
+删除用户需求25的关联关系之后，获取关联关系数量 >> 0
 
 */
 
@@ -22,4 +23,4 @@ $afterRelation = $tester->story->getRelation(25, 'requirement');
 
 r(count($beforeRelation)) && p() && e('1'); //删除用户需求25的关联关系之前，获取关联关系数量
 r(count($afterRelation))  && p() && e('0'); //删除用户需求25的关联关系之后，获取关联关系数量
-system("./ztest init");
+$db->restoreDB();

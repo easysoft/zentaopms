@@ -39,16 +39,14 @@ function loadList(type, id, defaultType, idvalue)
     if(moduleList.indexOf(type) !== -1)
     {
         link = createLink(type, objectsMethod[type], param);
-    }
 
-    if(moduleList.indexOf(type) !== -1)
-    {
         $.get(link, function(data, status)
         {
             if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
-                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).html(data).find('select').val(idvalue).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).find('select').val(idvalue).trigger('chosen:updated');
+                if($(divClass + " select").val() == null) $(divClass + " select").attr("data-placeholder", noOptions.replace("%s", chosenType[type])).trigger('chosen:updated');
             }
             else
             {

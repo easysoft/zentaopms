@@ -4,3 +4,5 @@
 #plansBox .row .col-sm-4 {display: inline-block; float: none;}
 
 .chosen-container.chosen-highlight-selected .disabled-result.result-selected {background: none;}
+
+#dateRange {vertical-align: top; padding-top: 13px;}

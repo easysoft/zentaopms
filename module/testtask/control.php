@@ -100,6 +100,7 @@ class testtask extends control
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
+        $this->session->set('branch', $branch, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -318,14 +319,16 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         elseif($this->app->tab == 'qa')
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         $this->executeHooks($taskID);
@@ -481,14 +484,16 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
@@ -612,14 +617,16 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $branchID, $taskID);
         }
         unset($this->lang->testtask->report->charts['bugStageGroups']);
         unset($this->lang->testtask->report->charts['bugHandleGroups']);
@@ -676,14 +683,16 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         /* Determines whether an object is editable. */
@@ -1062,14 +1071,16 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         /* Load pager. */
@@ -1221,7 +1232,7 @@ class testtask extends control
                 /* set cookie for ajax load caselist when close colorbox. */
                 setcookie('selfClose', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-                if($preAndNext->next)
+                if($preAndNext->next and $this->app->tab != 'my')
                 {
                     $nextRunID   = $runID ? $preAndNext->next->id : 0;
                     $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
@@ -1244,13 +1255,13 @@ class testtask extends control
 
         $preCase  = array();
         $nextCase = array();
-        if($preAndNext->pre)
+        if($preAndNext->pre and $this->app->tab != 'my')
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
             $preCase['caseID']  = $runID ? $preAndNext->pre->case : $preAndNext->pre->id;
             $preCase['version'] = $preAndNext->pre->version;
         }
-        if($preAndNext->next)
+        if($preAndNext->next and $this->app->tab != 'my')
         {
             $nextCase['runID']   = $runID ? $preAndNext->next->id : 0;
             $nextCase['caseID']  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
@@ -1316,19 +1327,23 @@ class testtask extends control
             if($this->app->tab == 'project')
             {
                 $this->loadModel('project')->setMenu($this->session->project);
+                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                    ->where('t2.id')->in($caseIDList)
+                    ->fetchAll('id');
             }
             else
             {
                 $this->lang->testtask->menu = $this->lang->my->menu->work;
                 $this->lang->my->menu->work['subModule'] = 'testtask';
+
+                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                    ->where('t1.id')->in($caseIDList)
+                    ->fetchAll('id');
             }
 
             $this->view->title = $this->lang->testtask->batchRun;
-
-            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                ->where('t2.id')->in($caseIDList)
-                ->fetchAll('id');
         }
 
         /* Set modules. */
@@ -1362,6 +1377,7 @@ class testtask extends control
         $this->view->title      = $this->lang->testtask->batchRun;
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->batchRun;
+        $this->view->from       = $from;
         $this->display();
     }
 
@@ -1526,5 +1542,37 @@ class testtask extends control
         /* Testreport list. */
         $pairs = $this->loadModel('testreport')->getPairs($productID);
         return print(html::select('testreport', array('') + $pairs, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Drop menu page.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $taskID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
+    {
+        $scope     = empty($objectType) ? 'local' : 'all';
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($scope, 'totalStatus'));
+        $namePairs = array_column($testtasks, 'name');
+
+        $this->view->currentTaskID   = $taskID;
+        $this->view->testtasks       = $testtasks;
+        $this->view->module          = $module;
+        $this->view->method          = $method;
+        $this->view->productID       = $productID;
+        $this->view->branch          = $branch;
+        $this->view->objectType      = $objectType;
+        $this->view->objectID        = $objectID;
+        $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
+
+        $this->display();
     }
 }

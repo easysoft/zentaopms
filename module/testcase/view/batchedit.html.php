@@ -17,6 +17,7 @@
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('requiredFields', $config->testcase->edit->requiredFields)?>
+<?php js::set('showFields', $showFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -96,7 +97,7 @@
             </td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]", $stories, $cases[$caseID]->story, "class='form-control chosen'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]", $stories, $cases[$caseID]->story, "class='form-control picker-select'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">

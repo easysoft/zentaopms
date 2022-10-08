@@ -16,7 +16,7 @@
 <?php js::set('projectID', $design->project);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
+    <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "projectID=$design->project");?>
     <?php if(!isonlybody()) echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
@@ -42,7 +42,10 @@
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($this->session->designList);?>
+        <?php
+        $backLink = $this->createLink('design', 'browse', "projectID=$design->project");
+        common::printBack($app->session->designList != false ? $app->session->designList : $backLink);
+        ?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$design->deleted):?>
         <?php

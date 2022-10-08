@@ -14,5 +14,7 @@ fields:
     range: admin
   - field: createdDate
     range: [2022-03-07 10:44:23]
+  - field: registerDate
+    range: [2022-03-07 10:44:23]
   - field: deleted
     range: 0

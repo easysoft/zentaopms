@@ -10,8 +10,8 @@ $lang->stakeholder->delete       = 'Remove Stakeholder';
 $lang->stakeholder->createdBy    = 'CreatedBy';
 $lang->stakeholder->createdDate  = 'CreatedDate';
 $lang->stakeholder->search       = 'Search';
-$lang->stakeholder->browse       = 'List';
-$lang->stakeholder->view         = 'User Info';
+$lang->stakeholder->browse       = 'Stakeholder List';
+$lang->stakeholder->view         = 'Stakeholder Details';
 $lang->stakeholder->basicInfo    = 'Basic Info';
 $lang->stakeholder->add          = 'Create';
 $lang->stakeholder->communicate  = 'Communications';
@@ -26,6 +26,9 @@ $lang->stakeholder->issue        = 'Issue Management';
 $lang->stakeholder->viewIssue    = 'Active Issues';
 $lang->stakeholder->userIssue    = 'Stakeholder Issues';
 $lang->stakeholder->deleted      = 'Deleted';
+
+$lang->stakeholder->viewAction      = 'View Stakeholder';
+$lang->stakeholder->viewIssueAction = 'Issue List';
 
 /* Fields. */
 $lang->stakeholder->id          = 'ID';

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/execution.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($execution->addProjectMembersTest($projectIDList[2], $executionIDList[2], $cou
 r($execution->addProjectMembersTest($projectIDList[0], $executionIDList[0], $count[1])) && p()                 && e('2');           // 敏捷项目根据执行添加团队信息统计
 r($execution->addProjectMembersTest($projectIDList[1], $executionIDList[1], $count[1])) && p()                 && e('1');           // 瀑布项目根据执行添加团队信息统计
 r($execution->addProjectMembersTest($projectIDList[2], $executionIDList[2], $count[1])) && p()                 && e('1');           // 看板项目根据执行添加团队信息统计
-system("./ztest init");
+$db->restoreDB();

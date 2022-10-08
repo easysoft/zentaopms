@@ -103,3 +103,4 @@ ol, ul {margin-bottom: 0}
 .fullscreen-close {top: 8px !important;}
 
 #subHeader .list-group>a.selected {color: #e9f2fb !important; background-color: #0c64eb !important;}
+#pageNav #dropMenu .table-col .list-group .icon-move {display:block; float: left; font-size: 12px; padding: 3px 4px 3px 1px;}

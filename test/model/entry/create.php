@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/entry.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +31,4 @@ r($result_name['name'][0]) && p() && e('『名称』不能为空');       // 测
 r($result_code['code'][0]) && p() && e('『代号』不能为空');       // 测试创建应用code为空报错
 r($entry->createObject($e_name)) && p('name') && e('name_test');  // 测试创建应用name为name_test
 r($entry->createObject($e_code)) && p('code') && e('code_test');  // 测试创建应用code为code_test
-system("./ztest init");
+$db->restoreDB();

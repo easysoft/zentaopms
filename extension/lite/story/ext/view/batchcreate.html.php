@@ -46,7 +46,7 @@
             <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
             <th class='c-pri<?php echo zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='c-estimate<?php echo zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
-            <th style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
+            <th class="<?php if($forceReview) echo ' required'?>" style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
             <th class='c-keywords<?php echo zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
@@ -85,7 +85,8 @@
         <tfoot>
           <tr>
             <td colspan="7" class="text-center form-actions">
-              <?php echo html::submitButton($lang->save);?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->story->saveDraft, "id='saveDraftButton'", 'btn btn-secondary btn-wide');?>
               <?php echo html::backButton();?>
             </td>
           </tr>

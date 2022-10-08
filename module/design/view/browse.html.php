@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('type', strtolower($type));?>
+<?php js::set('projectID', $projectID);?>
+<?php js::set('productID', $productID);?>
 <style>
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}

@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +27,4 @@ r(count($stories)) && p()           && e('3'); // 批量修改需求的所属分
 r($stories)        && p('2:branch') && e('2'); // 批量修改需求的所属分支，判断需求2修改后的分支ID
 r($stories)        && p('4:branch') && e('2'); // 批量修改需求的所属分支，判断需求4修改后的分支ID
 r($stories)        && p('6:branch') && e('2'); // 批量修改需求的所属分支，判断需求6修改后的分支ID
-system("./ztest init");
+$db->restoreDB();

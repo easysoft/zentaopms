@@ -1,0 +1,15 @@
+SELECT * FROM film WHERE film_id = 10 OR film_id >= 20;
+SELECT * FROM film WHERE (film_id < 10) || (film_id > 20);
+SELECT * FROM film WHERE `film_id` != 10 AND `film_id` <= 20;
+SELECT * FROM film WHERE `film`.`film_id` <> 10 && `film`.`film_id` <= 20;
+SELECT * FROM film WHERE film.film_id < 20 XOR film.rating = 'PG-13';
+SELECT * FROM film WHERE /* film_id = */ film_id = 10;
+SELECT * FROM film WHERE NOT film_id > 10;
+SELECT * FROM film WHERE ! (film_id > 10);
+SELECT * FROM film WHERE description IS NULL;
+SELECT * FROM film WHERE description IS NOT NULL;
+SELECT * FROM film WHERE film_id BETWEEN 10 AND 20;
+SELECT * FROM film WHERE film_id NOT BETWEEN 10 AND 20;
+SELECT * FROM film WHERE film_id IN (3,5,7);
+SELECT * FROM film WHERE rating = UPPER('pg');
+SELECT * FROM film WHERE rating SOUNDS LIKE 'PG';

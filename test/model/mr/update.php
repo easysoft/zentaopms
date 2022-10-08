@@ -8,7 +8,7 @@ title=测试 mrModel::update();
 cid=0
 pid=0
 
-POST数据正确修改MR描述    >> success
+POST数据正确修改MR描述 >> success
 使用title为空的数据mr请求 >> 『名称』不能为空。
 
 */

@@ -163,6 +163,7 @@ $lang->score->common      = '我的積分';
 $lang->build->common      = '版本';
 $lang->testreport->common = '測試報告';
 $lang->automation->common = '自動化';
+$lang->zahost->common     = '宿主機';
 $lang->team->common       = '團隊';
 $lang->user->common       = '用戶';
 $lang->custom->common     = '自定義';
@@ -181,6 +182,8 @@ $lang->stage->common      = '階段';
 $lang->stage->list        = '階段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->app->common        = '應用';
+$lang->app->serverLink    = '服務器鏈接';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';

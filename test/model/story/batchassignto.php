@@ -2,6 +2,7 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
+$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +36,4 @@ r($stories)        && p('4:assignedTo') && e('test20'); // 批量指派6个需�
 r($stories)        && p('5:assignedTo') && e('test20'); // 批量指派6个需求，查看修改成功的需求指派人
 r($stories)        && p('6:assignedTo') && e('test20'); // 批量指派6个需求，查看修改成功的需求指派人
 
-system("./ztest init");
+$db->restoreDB();

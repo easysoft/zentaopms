@@ -31,9 +31,11 @@ $lang->testcase->precondition     = 'Prerequisite';
 $lang->testcase->pri              = 'Priority';
 $lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
+$lang->testcase->statusAB         = 'Status';
 $lang->testcase->subStatus        = 'Sub Status';
 $lang->testcase->steps            = 'Steps';
 $lang->testcase->openedBy         = 'CreatedBy';
+$lang->testcase->openedByAB       = 'Reporter';
 $lang->testcase->openedDate       = 'CreatedDate';
 $lang->testcase->lastEditedBy     = 'EditedBy';
 $lang->testcase->result           = 'Result';
@@ -94,6 +96,7 @@ $lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
+$lang->testcase->executionStatus  = 'executionStatus';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -124,12 +127,13 @@ $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Types";
 $lang->testcase->browse                  = "Case List";
 $lang->testcase->groupCase               = "View By Group";
+$lang->testcase->zeroCase                = "Stories without cases";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->fileImport              = "Import CSV";
 $lang->testcase->importFromLib           = "Import From Library";
 $lang->testcase->showImport              = "Show Import";
-$lang->testcase->exportTemplet           = "Export Template";
+$lang->testcase->exportTemplate          = "Export Template";
 $lang->testcase->export                  = "Export Data";
 $lang->testcase->exportAction            = "Export Case";
 $lang->testcase->reportChart             = 'Report Chart';
@@ -142,6 +146,7 @@ $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Steps';
 $lang->testcase->stepChild               = 'Child Steps';
 $lang->testcase->viewAll                 = 'All Cases';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'New';
 
@@ -233,9 +238,11 @@ $lang->testcase->noLibrary        = "No library exists. Please create one first.
 $lang->testcase->mustChooseResult = 'Review result is required.';
 $lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage it now.</div>';
 $lang->testcase->noCase           = 'No cases yet. ';
+$lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
 
 $lang->testcase->searchStories = 'Enter to search for stories';
 $lang->testcase->selectLib     = 'Select Library';
+$lang->testcase->selectLibAB   = 'Select Library';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, imported by <strong>$actor</strong> from <strong>$extra</strong>.');
@@ -249,7 +256,7 @@ $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases
 $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = 'Group View';
-$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
+$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

@@ -25,8 +25,8 @@
           <tr>
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
-            <td class='muted'>
-              <div class='checkbox-primary'>
+            <td>
+              <div id='markerBox' class='checkbox-primary'>
                 <input id='marker' name='marker' value='1' type='checkbox' />
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>
@@ -65,7 +65,7 @@
             <th><?php echo $lang->release->mailto;?></th>
             <td colspan='2'>
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, '', "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, '', "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               </div>
             </td>
           </tr>
@@ -85,10 +85,4 @@
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $(".form-date").datetimepicker('setEndDate', '<?php echo date(DT_DATE1)?>');
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

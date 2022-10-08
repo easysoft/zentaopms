@@ -7,3 +7,5 @@
 .nameBox {display: grid;}
 .pri-selector > .btn {padding: 5px 12px;}
 #assignedTo_chosen.chosen-container .chosen-results {max-height: 180px;}
+.inputGroupWidth {padding-top: 5px;}
+.nameBox + span {border-radius: 0px;}

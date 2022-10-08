@@ -271,13 +271,14 @@ class mailModel extends model
      * @param  array   $ccList
      * @param  bool    $includeMe
      * @param  array   $emails
+     * @param  bool    $forceSync
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false)
     {
         if(!$this->config->mail->turnon) return;
-        if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
 
@@ -533,7 +534,7 @@ class mailModel extends model
         $data->ccList      = $ccList;
         $data->subject     = $subject;
         $data->data        = $body;
-        $data->createdBy   = $this->config->mail->fromName;
+        $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
     }

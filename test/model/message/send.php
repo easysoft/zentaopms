@@ -10,6 +10,9 @@ title=测试 messageModel->send();
 cid=1
 pid=1
 
+通过拿取todo表的第一条数据并且将actor赋值admin获取返回值 >> 0
+通过拿取todo表的第0条数据并且将actor赋值admin获取返回值 >> 0
+
 */
 
 $message = new messageTest();

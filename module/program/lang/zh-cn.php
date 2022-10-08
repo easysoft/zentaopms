@@ -47,6 +47,8 @@ $lang->program->realDuration   = '实际周期天数';
 $lang->program->openedVersion  = '创建版本';
 $lang->program->lastEditedBy   = '最后编辑人';
 $lang->program->lastEditedDate = '最后编辑日期';
+$lang->program->childProgram   = '子项目集';
+$lang->program->ignore         = '忽略';
 
 /* Actions. */
 $lang->program->common                  = '项目集';
@@ -99,18 +101,22 @@ $lang->program->noProgram          = '暂时没有项目集';
 $lang->program->showClosed         = '显示已关闭';
 $lang->program->tips               = '选择了父项目集，则可关联该父项目集下的产品。如果项目未选择任何项目集，则系统会默认创建一个和该项目同名的产品并关联该项目。';
 $lang->program->confirmBatchUnlink = "您确定要批量移除这些干系人吗？";
-$lang->program->beginLetterParent  = "父项目集的开始日期：%s，开始日期不能小于父项目集的开始日期";
-$lang->program->endGreaterParent   = "父项目集的完成日期：%s，完成日期不能大于父项目集的完成日期";
-$lang->program->beginGreateChild   = "子项目集的最小开始日期：%s，父项目集的开始日期不能大于子项目集的最小开始日期";
-$lang->program->endLetterChild     = "子项目的最大完成日期：%s，父项目的完成日期不能小于子项目的最大完成日期";
+$lang->program->beginLetterParent  = '项目集的开始日期小于了父项目集的开始日期：';
+$lang->program->endGreaterParent   = '项目集的完成日期大于了父项目集的完成日期：';
+$lang->program->dateExceedParent   = '项目集的起止日期已超出父项目集的起止日期';
+$lang->program->beginGreateChild   = '项目集的开始日期大于了子项目集或项目的最小开始日期：';
+$lang->program->endLetterChild     = '项目集的完成日期小于了子项目集或项目的最大完成日期：';
+$lang->program->dateExceedChild    = '项目集的起止日期已不包含子项目集或项目的日期范围';
 $lang->program->closeErrorMessage  = '存在子项目集或项目为未关闭状态';
 $lang->program->hasChildren        = '该项目集有子项目集或项目存在，不能删除。';
 $lang->program->hasProduct         = '该项目集有产品存在，不能删除。';
 $lang->program->confirmDelete      = '您确定要删除\“%s\”项目集吗？';
-$lang->program->unlinkStakeholder  = '您确定要移除干系人吗？';
+$lang->program->confirmUnlink      = '您确定要移除干系人吗？';
 $lang->program->readjustTime       = '重新调整项目集起止时间';
 $lang->program->accessDenied       = '你无权访问该项目集';
 $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
+$lang->program->checkedProjects    = '已选择%s项';
+$lang->program->budgetOverrun      = '项目集的预算超出了父项目集的剩余预算：';
 
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
@@ -137,7 +143,12 @@ $lang->program->statusList['doing']     = '进行中';
 $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
-$lang->program->featureBar['all'] = '所有';
+$lang->program->featureBar['browse']['all']       = '全部';
+$lang->program->featureBar['browse']['unclosed']  = '未关闭';
+$lang->program->featureBar['browse']['wait']      = '未开始';
+$lang->program->featureBar['browse']['doing']     = '进行中';
+$lang->program->featureBar['browse']['suspended'] = '已挂起';
+$lang->program->featureBar['browse']['closed']    = '已关闭';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';

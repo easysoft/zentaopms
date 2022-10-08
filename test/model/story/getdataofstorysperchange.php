@@ -9,7 +9,9 @@ title=测试 storyModel->getDataOfStorysPerChange();
 cid=1
 pid=1
 
-
+按照需求版本号分组，获取分组后的需求数量 >> 3
+按照需求版本号分组，获取各个版本号下的需求数量，查看admin下的数据 >> 1,80
+按照需求版本号分组，获取各个版本号下的需求数量，查看admin下的数据 >> 0,350
 
 */
 

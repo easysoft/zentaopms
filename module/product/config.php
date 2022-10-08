@@ -11,7 +11,7 @@ $config->product->custom->batchEditFields = 'line,PO,QD,RD';
 if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',program';
 
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,program,line,name,activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,activeStories,changedStories,draftStories,closedStories,storyCompleteRate,plans,releases,bugs,unResolvedBugs,assignToNullBugs,closedBugs,bugFixedRate';
+$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
 
 $config->product->showBranchMethod = 'browse,project';
 
@@ -38,6 +38,7 @@ $config->product->search['fields']['category']   = $lang->story->category;
 
 $config->product->search['fields']['openedBy']     = $lang->story->openedBy;
 $config->product->search['fields']['reviewedBy']   = $lang->story->reviewedBy;
+$config->product->search['fields']['result']       = $lang->story->reviewResultAB;
 $config->product->search['fields']['assignedTo']   = $lang->story->assignedTo;
 $config->product->search['fields']['closedBy']     = $lang->story->closedBy;
 $config->product->search['fields']['lastEditedBy'] = $lang->story->lastEditedBy;
@@ -73,6 +74,7 @@ $config->product->search['params']['category']       = array('operator' => '=', 
 
 $config->product->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['reviewedBy']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+$config->product->search['params']['result']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reviewResultList);
 $config->product->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
@@ -93,7 +95,7 @@ $app->loadLang('product');
 $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
-$config->product->all->search['fields']['code']        = $lang->product->code;
+if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
 $config->product->all->search['fields']['id']          = $lang->product->id;
 if($config->systemMode == 'new') $config->product->all->search['fields']['program'] = $lang->product->program;
 $config->product->all->search['fields']['line']        = $lang->product->line;
@@ -107,7 +109,7 @@ $config->product->all->search['fields']['createdDate'] = $lang->product->created
 $config->product->all->search['fields']['createdBy']   = $lang->product->createdBy;
 
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->product->all->search['params']['code']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
 if($config->systemMode == 'new') $config->product->all->search['params']['program'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->product->all->search['params']['line']        = array('operator' => '=',       'control' => 'select', 'values' => '');
@@ -147,10 +149,10 @@ $config->product->report->planLabels   = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['requirements'] = array('draftRequirements', 'activeRequirements', 'changedRequirements', 'closedRequirements');
-$config->product->statisticFields['stories']      = array('draftStories', 'activeStories', 'changedStories', 'closedStories');
+$config->product->statisticFields['requirements'] = array('draftRequirements', 'activeRequirements', 'changingRequirements', 'reviewingRequirements', 'closedRequirements');
+$config->product->statisticFields['stories']      = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories');
 $config->product->statisticFields['bugs']         = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
 $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
 
-$config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,';
+$config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';

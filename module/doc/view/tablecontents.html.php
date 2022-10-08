@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('moduleTree', $moduleTree);?>
+<?php js::set('docLang', $lang->doc);?>
 <?php
 $sideLibs = array();
 foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
@@ -27,6 +28,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div class="main-content">
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">
@@ -91,11 +93,12 @@ if(empty($type)) $type = 'product';
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
-                $icon  = zget($this->config->doc->iconList, $typeKey);
-                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                $html .= "<li>";
-                $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                $html .= "</li>";
+                $icon   = zget($this->config->doc->iconList, $typeKey);
+                $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
+                $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
+                $html  .= "<li>";
+                $html  .= html::a(helper::createLink('doc', $method, "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                $html  .= "</li>";
                 if($typeKey == 'url') $html .= '<li class="divider"></li>';
             }
             $html .= "</ul></div>";

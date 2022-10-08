@@ -7,9 +7,10 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
  * @version     $Id$
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->extension->common           = 'Extension';
+$lang->extension->id               = 'ID';
 $lang->extension->browse           = 'Extensions';
 $lang->extension->install          = 'Installer Extension';
 $lang->extension->installAuto      = 'Auto Installation';
@@ -28,6 +29,8 @@ $lang->extension->erase            = 'Effacer';
 $lang->extension->eraseAction      = 'Effacer Extension';
 $lang->extension->upgrade          = 'Upgrade Extension';
 $lang->extension->agreeLicense     = 'Accepter le contrat de license.';
+
+$lang->extension->browseAction = 'Extension List';
 
 $lang->extension->structure        = 'Structure Extension';
 $lang->extension->structureAction  = 'Extension Structure';
@@ -89,13 +92,14 @@ $lang->extension->viewInstalled            = 'Extensions Installées';
 $lang->extension->viewAvailable            = 'Extensions Possibles';
 $lang->extension->viewDeactivated          = 'Extensions Désactivées';
 $lang->extension->backDBFile               = 'Les données de cette extension ont été sauvegardées dans %s!';
-$lang->extension->noticeOkFile             = '<h5>Pour des raisons de sécurité, votre compte Administrateur doit être confirmé.</h5>
-    <h5>Connectez-vous à votre serveur ZenTao et créez %s.</h5>
+$lang->extension->noticeOkFile             = "<h5>For security reasons, your Admin account has to be confirmed.</h5>
+    <h5>Plese login your ZenTao server and create %s.</h5>
+    <p>Execute command: echo '' > %s</p>
     <p>Note</p>
     <ol>
-    <li>Le fichier que vous allez créer doit être vide.</li>
-    <li>Si le fichier existe déjà, supprimez-le et créez-le à nouveau.</li>
-    </ol>'; 
+    <li>The file you will create is empty.</li>
+    <li>If such file exists, delete it first, and then create one.</li>
+    </ol>"; 
 
 $lang->extension->upgradeExt     = 'Upgrader';
 $lang->extension->installExt     = 'Installer';

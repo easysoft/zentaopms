@@ -73,7 +73,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->testreport->profile?></th>
+          <th id='profile'><?php echo $lang->testreport->profile?></th>
           <td colspan='2'>
           <?php
           echo '<p>' . $storySummary . '</p>';

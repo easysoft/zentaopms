@@ -91,18 +91,45 @@ $(document).on('change', '[id^=visions]', function()
     }
 })
 
-$('select[id^="visions"]').each(function()
+var rndGroupSelect = liteGroupSelect = allGroupSelect = emptyGroupSelect = '';
+$.post(createLink('user', 'ajaxGetGroup', "visions=rnd&i=2"), function(data)
 {
-    var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
+    rndGroupSelect = data;
     var vision = $('#visions1 option:selected').val();
+    if(vision == 'rnd') initGroup(data);
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=lite&i=2"), function(data)
+{
+    liteGroupSelect = data;
+    var vision = $('#visions1 option:selected').val();
+    if(vision == 'lite') initGroup(data);
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=rnd,lite&i=2"), function(data)
+{
+    allGroupSelect = data;
+});
+$.post(createLink('user', 'ajaxGetGroup', "visions=null&i=2"), function(data)
+{
+    emptyGroupSelect = data;
+});
 
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i + '&selected=' + $('#group' + i).val()), function(data)
+function initGroup(data)
+{
+    $('select[id^="visions"]').each(function()
     {
-         $('#group' + i).replaceWith(data);
-         $('#group' + i + '_chosen').remove();
-         $('#group' + i).chosen();
+        var i        = $(this).attr('id').replace(/[^0-9]/ig, '');
+        var groupVal = $('#group' + i).val();
+
+        var dataObj = $(data);
+        var dataHtml = $(dataObj).attr('id', 'group' + i).attr('name', 'group[' + i + '][]').prop('outerHTML');
+
+        $('#group' + i).replaceWith(dataHtml);
+        $('#group' + i + '_chosen').remove();
+        if(i == 1) $('#group' + i).find('option[value="ditto"]').remove();
+        $('#group' + i).val(groupVal);
+        $('#group' + i).chosen();
     })
-})
+}
 
 $(document).on('change', "select[id^='visions']", function()
 {
@@ -119,6 +146,22 @@ $(document).on('change', "select[id^='visions']", function()
         $('#group' + i).chosen();
     })
 
+    visions = visions ? visions.join() : '';
+    switch(visions)
+    {
+        case 'rnd':
+            var data = rndGroupSelect;
+            break;
+        case 'lite':
+            var data = liteGroupSelect;
+            break;
+        case 'rnd,lite':
+            var data = allGroupSelect;
+            break;
+        default:
+            var data = emptyGroupSelect;
+            break;
+    }
     for(n = i + 1; n <= batchCreateCount; n++)
     {
         if(n == i) continue;
@@ -126,12 +169,12 @@ $(document).on('change', "select[id^='visions']", function()
 
         ((function(n)
         {
-            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n + '&selected=' + $('#group' + n).val()), function(data)
-            {
-                $('#group' + n).replaceWith(data);
-                $('#group' + n + '_chosen').remove();
-                $('#group' + n).chosen();
-            })
+            var groupVal = $('#group' + n).val();
+            var dataHtml = $(data).attr('id', 'group' + n).attr('name', 'group[' + n + '][]').prop('outerHTML');
+            $('#group' + n).replaceWith(dataHtml);
+            $('#group' + n + '_chosen').remove();
+            $('#group' + n).val(groupVal);
+            $('#group' + n).chosen();
         }(n)));
     }
 });

@@ -24,3 +24,11 @@
 #productsBox .row .col-sm-4 {padding-right: 13px;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .row .col-sm-4 {display: inline-block; float: none; padding-right: 13px;}
+
+#dateRange {vertical-align: top; padding-top: 13px;}
+#dateRangeOption {vertical-align: top; padding-top: 13px;}
+#beginLabel {white-space: nowrap;}
+#endLabel {white-space: nowrap;}
+#copyProjectModal .projectSelect {display: inline-block; margin-left: 10px; width: 20%;}
+#copyProjectModal .titleBox{position: relative; bottom: 3px; display: inline-block;}
+a.chosen-single > div > b {top: -4px !important;}

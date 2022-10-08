@@ -23,13 +23,6 @@
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -80,7 +73,7 @@
           ?>
         </div>
       </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug));?>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true', 'object' => $bug, 'method' => 'view', 'showDelete' => false));?>
       <?php
       $canBeChanged = common::canBeChanged('bug', $bug);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");
@@ -224,7 +217,7 @@
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td>
                     <?php
-                    if($bug->deadline) echo $bug->deadline;
+                    if($bug->deadline) echo helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
                     if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
                     ?>
                   </td>
@@ -239,11 +232,29 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
-                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                  <td>
+                  <?php $osList = explode(',', $bug->os);?>
+                  <?php if($osList):?>
+                  <p class='osContent'>
+                    <?php foreach($osList as $os):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->osList, $os) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->browser;?></th>
-                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                  <td>
+                  <?php $browserList = explode(',', $bug->browser);?>
+                  <?php if($browserList):?>
+                  <p class='browserContent'>
+                    <?php foreach($browserList as $browser):?>
+                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php endforeach;?>
+                  </p>
+                  <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->keywords;?></th>
@@ -251,7 +262,14 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
+                  <td>
+                  <?php
+                  if(!empty($bug->mailto))
+                  {
+                      foreach(explode(',', str_replace(' ', '', $bug->mailto)) as $account) echo ' ' . zget($users, $account);
+                  }
+                  ?>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -337,10 +355,10 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->resolution;?></th>
-                  <td>
+                  <td class='resolution'>
                     <?php
                     echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
-                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
+                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "title='{$bug->duplicateBugTitle}' class='iframe' data-width='80%'");
                     ?>
                   </td>
                 </tr>
@@ -375,7 +393,7 @@
                 <?php if($bug->case):?>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=" . ($bug->testtask ? "&from=testtask&taskID={$bug->testtask}" : ''), '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
+                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($bug->toCases):?>
@@ -415,6 +433,20 @@
                     ?>
                   </td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->bug->linkCommit;?></th>
+                  <td>
+                    <?php
+                    $canViewRevision = common::hasPriv('repo', 'revision');
+                    foreach($linkCommits as $commit)
+                    {
+                        $revision    = substr($commit->revision, 0, 10);
+                        $commitTitle = $revision . ' ' . $commit->comment;
+                        echo "<div class='link-commit' title='$commitTitle'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . " $commit->comment" : $commitTitle) . '</div>';
+                    }
+                    ?>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -432,7 +464,7 @@
   <?php common::printPreAndNext($preAndNext);?>
 </div>
 <div class="modal fade" id="toTask">
-  <div class="modal-dialog mw-500px">
+  <div class="modal-dialog mw-500px select-project-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"><?php echo $lang->bug->selectProjects;?></h4>
@@ -466,11 +498,6 @@
   </div>
 </div>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

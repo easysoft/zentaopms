@@ -313,6 +313,26 @@ class control extends baseControl
     }
 
     /**
+     * 获取一个方法的输出内容，这样我们可以在一个方法里获取其他模块方法的内容。
+     * 如果模块名为空，则调用该模块、该方法；如果设置了模块名，调用指定模块指定方法。
+     *
+     * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
+     * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
+     *
+     * @param  string $moduleName module name.
+     * @param  string $methodName method name.
+     * @param  array  $params     params.
+     * @access  public
+     * @return  string  the parsed html.
+     */
+    public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
+    {
+        if($moduleName != $this->moduleName) $this->app->fetchModule = $moduleName;
+
+        return parent::fetch($moduleName, $methodName, $params, $appName);
+    }
+
+    /**
      * Build operate menu of a method.
      *
      * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
@@ -369,27 +389,21 @@ class control extends baseControl
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
      * @param  bool   $print
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '', $print = true)
+    public function printExtendFields($object, $type, $extras = '', $print = true, $moduleName = '', $methodName = '')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
         $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
         if(!$print) return $fields;
 
-        $picker = '';
-        //$jsRoot = $this->config->webRoot . "js/";
-        //$picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
-        //$picker = substr($picker, strpos($picker, '<style>'));
-
-        //js::import($jsRoot . 'picker/min.js');
-        //css::import($jsRoot . 'picker/min.css');
-
-        echo $picker . $fields;
+        echo $fields;
     }
 
     /**
