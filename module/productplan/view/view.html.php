@@ -550,7 +550,7 @@
                 <?php if($plan->parent > 0):?>
                 <tr>
                   <th><?php echo $lang->productplan->parent;?></th>
-                  <td><?php echo html::a(inlink('view', "planID={$parentPlan->id}"), "#{$parentPlan->id} " . $parentPlan->title);?></td>
+                  <td><?php echo html::a(inlink('view', "planID={$parentPlan->id}"), "#{$parentPlan->id} " . $parentPlan->title, '', "data-app={$app->tab}");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($product->type != 'normal'):?>
@@ -572,7 +572,7 @@
                   <th><?php echo $lang->productplan->children;?></th>
                   <td>
                     <?php foreach($childrenPlans as $childrenPlan):?>
-                    <?php echo html::a(inlink('view', "planID={$childrenPlan->id}"), "#{$childrenPlan->id} " . $childrenPlan->title) . '<br />';?>
+                    <?php echo html::a(inlink('view', "planID={$childrenPlan->id}"), "#{$childrenPlan->id} " . $childrenPlan->title, '', "data-app={$app->tab}") . '<br />';?>
                     <?php endforeach;?>
                   </td>
                 </tr>
