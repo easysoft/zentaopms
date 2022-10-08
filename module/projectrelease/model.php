@@ -61,7 +61,7 @@ class projectreleaseModel extends model
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
-            ->beginIF($pager)->page($pager)->fi()
+            ->page($pager)
             ->fetchAll();
     }
 
