@@ -3609,7 +3609,8 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
+            $tab   = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='$tab' id='tostory'", $this->lang->bug->toStory);
             if(common::hasPriv('task', 'create') and !isonlybody()) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }

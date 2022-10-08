@@ -96,14 +96,14 @@
 
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo "<div class='btn-group dropdown' title='{$buttonTitle}'>";
-            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden'");
+            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='$app->tab'");
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
             {
                 if(!($isAllProduct and count($products) > 1)) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
-                echo '<li>' . html::a($createStoryLink, $lang->story->create) . '</li>';
-                echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate) . '</li>';
+                echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app=$app->tab") . '</li>';
+                echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app=$app->tab") . '</li>';
                 echo '</ul>';
             }
 
