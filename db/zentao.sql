@@ -7141,6 +7141,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `activatedDate` datetime NOT NULL,
   `closedBy` varchar(30) NOT NULL,
   `closedDate` datetime NOT NULL,
+  `closedReason` varchar(30) NOT NULL,
   `finishedBy` varchar(30) NOT NULL,
   `finishedDate` datetime NOT NULL,
   `resolvedBy` varchar(30) NOT NULL,
