@@ -341,6 +341,7 @@ $lang->execution->stats                = '<strong>%s</strong> Verfügbar, <stron
 $lang->execution->taskSummary          = "Aufgaben auf dieser Seite: <strong>%s</strong> Total, <strong>%s</strong> Wartend, <strong>%s</strong> In Arbeit;  &nbsp;&nbsp;&nbsp;  Stunden : <strong>%s</strong> geplant., <strong>%s</strong> genutzt, <strong>%s</strong> Rest.";
 $lang->execution->pageSummary          = "Aufgaben auf dieser Seite:  <strong>%total%</strong>, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
 $lang->execution->checkedSummary       = " <strong>%total%</strong> Geprüft, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
+$lang->execution->executionSummary     = "Total executions: <strong>%s</strong>.";
 $lang->execution->pageExecSummary      = "Total executions: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
 $lang->execution->checkedExecSummary   = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
 $lang->execution->memberHoursAB        = "%s hat <strong>%s</strong> Stunden";
@@ -417,7 +418,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is not ac
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
-$lang->execution->checkedExecutions           = 'Seleted %s executions';
+$lang->execution->checkedExecutions           = 'Seleted %s executions.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

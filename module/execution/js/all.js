@@ -6,7 +6,7 @@ $(function()
         var $toggle = $(this);
         var id      = $(this).data('id');
         var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
-        $toggle.closest('[data-ride="table"]').find('tr.parent-' + id).toggle(!isCollapsed);
+        $toggle.closest('#executionsForm').find('tr.parent-' + id).toggle(!isCollapsed);
 
         e.stopPropagation();
         e.preventDefault();
@@ -94,10 +94,11 @@ $(function()
                 var data = $row.data();
                 executionIDList.push(data.id);
 
-                var status = data.status;
-                if(status === 'wait') checkedWait++;
-                if(status === 'doing') checkedDoing++;
+                if(data.status === 'wait') checkedWait++;
+                if(data.status === 'doing') checkedDoing++;
             });
+
+            if(status != 'all') return (checkedTotal ? checkedExecutions : executionSummary).replace('%s', $rows.length);
             return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait).replace('%doing%', checkedDoing);
         }
     })

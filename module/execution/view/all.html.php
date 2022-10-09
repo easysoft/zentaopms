@@ -21,6 +21,8 @@ $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->data
 <?php js::set('from', $from);?>
 <?php js::set('checkedSummary', $lang->execution->checkedExecSummary);?>
 <?php js::set('pageSummary', $lang->execution->pageExecSummary);?>
+<?php js::set('executionSummary', $lang->execution->executionSummary);?>
+<?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <?php
 /* Set unfold parent executionID. */
 js::set('unfoldAll', $lang->execution->treeLevel['all']);
@@ -135,7 +137,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
         <?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?>
       </div>
       <?php endif;?>
-      <div class="table-statistic"><?php echo $summary;?></div>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
