@@ -4932,7 +4932,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution' || !$this->session->multiple)
+                if($tab == 'execution' || (isset($_SESSION['multiple']) && empty($_SESSION['multiple'])))
                 {
                     $menuType = 'execution';
                 }
