@@ -53,3 +53,5 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公開';
+$lang->testsuite->summary               = "本頁共 <strong>%total%</strong> 個套件，公開 <strong>%public%</strong> 個，私有 <strong>%private%</strong> 個。";
+

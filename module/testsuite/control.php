@@ -81,6 +81,20 @@ class testsuite extends control
             $pager  = pager::init(0, $recPerPage, 1);
             $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
+        $privateSuites = array();
+        foreach($suites as $suiteItem)
+        {
+            $item = new stdclass();
+            $item = $suiteItem;
+            if($suiteItem->type == 'private')
+            {
+                $privateSuites[] = $item;
+            }
+        }
+        $suitesNum         = !empty(count($suites, 0)) ? count($suites, 0) : 0;
+        $privateNum        = !empty(count($privateSuites, 0)) ? count($privateSuites, 0) : 0;
+        $publicNum         = $suitesNum - $privateNum;
+        $summary           = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 
         $this->view->title       = $productName . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $productName);
@@ -94,6 +108,7 @@ class testsuite extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getByID($productID);
+        $this->view->summary     = $summary;
 
         $this->display();
     }

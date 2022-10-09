@@ -56,3 +56,4 @@ $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
 $lang->testsuite->featureBar['browse']['all'] = '套件列表';
+$lang->testsuite->summary                     = "本页共 <strong>%total%</strong> 个套件，公开 <strong>%public%</strong> 个，私有 <strong>%private%</strong> 个。";
