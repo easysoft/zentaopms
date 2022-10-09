@@ -213,7 +213,11 @@ class repo extends control
         $shadowProduct = null;
         $productIDList = explode(',', $repo->product);
         /* Code repository linked only one project without product. */
-        if(count($productIDList) == 1) $shadowProduct = $this->dao->select('*')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->andWhere('id')->eq($productIDList[0])->fetch();
+        if(count($productIDList) == 1)
+        {
+            $shadowProduct = $this->loadModel('product')->getByID($productIDList[0]);
+            $shadowProduct = $shadowProduct && $shadowProduct->shadow ? $shadowProduct : null;
+        }
 
         $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->repo          = $repo;
