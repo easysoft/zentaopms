@@ -8,7 +8,7 @@ $config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
 $config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
@@ -173,11 +173,7 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-if((!isset($config->setCode) or $config->setCode == 1) and $config->systemMode == 'new')
-{
-    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
-}
-elseif($config->systemMode == 'new')
+if($config->systemMode == 'new')
 {
     $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
@@ -208,7 +204,7 @@ if($config->systemMode == 'new')
 {
     $config->execution->datatable->fieldList['project']['title']    = 'project';
     $config->execution->datatable->fieldList['project']['fixed']    = 'no';
-    $config->execution->datatable->fieldList['project']['width']    = '100';
+    $config->execution->datatable->fieldList['project']['width']    = '128';
     $config->execution->datatable->fieldList['project']['required'] = 'no';
 }
 
