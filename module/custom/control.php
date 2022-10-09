@@ -645,8 +645,6 @@ class custom extends control
 
             if($mode == 'lean') $this->custom->processProjectAcl();
 
-            $this->custom->processMeasrecordCron();
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 

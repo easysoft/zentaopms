@@ -919,7 +919,11 @@ class customModel extends model
             }
             $disabledFeatures .= 'scrumMeasrecord,';
         }
-        $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
+
+        $disabledFeatures = rtrim($disabledFeatures, ',');
+        $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+
+        $this->processMeasrecordCron($disabledFeatures);
     }
 
     /**
@@ -1069,19 +1073,19 @@ class customModel extends model
     /**
      * Process measrecord cron.
      *
+     * @param  string  $disabledFeatures
      * @access public
      * @return void
      */
-    public function processMeasrecordCron()
+    public function processMeasrecordCron($disabledFeatures)
     {
-        $disabledFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=disabledFeatures');
-
         $cronStatus = 'normal';
         if(strpos(",$disabledFeatures,", ',waterfall,') !== false and strpos(",$disabledFeatures,", ',scrumMeasrecord,') !== false) $cronStatus = 'stop';
 
-        $cronID = $this->dao->select('id')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch('id');
-        if($cronID) $this->loadModel('cron')->changeStatus($cronID, $cronStatus);
-        $cronID = $this->dao->select('id')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch('id');
-        if($cronID) $this->cron->changeStatus($cronID, $cronStatus);
+        $this->loadModel('cron');
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
 }
