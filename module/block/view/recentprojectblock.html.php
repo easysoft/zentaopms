@@ -40,8 +40,8 @@
     <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
   <?php else:?>
   <div class='row' id='cards'>
-    <?php foreach ($projects as $projectID => $project):?>
-    <?php $viewLink = $config->systemMode == 'new' ? $this->createLink('project', 'index', "projectID=$project->id") : $this->createLink('execution', 'task', "projectID=$project->id");?>
+    <?php foreach($projects as $projectID => $project):?>
+    <?php $viewLink = $this->createLink('project', 'index', "projectID=$project->id");?>
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
@@ -71,7 +71,7 @@
             <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
           <?php if($config->systemMode == 'new'):?>
-          <?php if($project->model === 'waterfall'): ?>
+          <?php if($project->model === 'waterfall'):?>
           <div class='project-detail project-stages'>
             <?php
             $projectProjects = array();
@@ -95,7 +95,7 @@
             </div>
             <?php endif; ?>
           </div>
-          <?php else: ?>
+          <?php elseif($project->multiple):?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
             <?php if($project):?>
@@ -110,10 +110,10 @@
               </div>
               </div>
             </div>
-            <?php endif; ?>
+            <?php endif;?>
           </div>
-          <?php endif; ?>
-          <?php endif; ?>
+          <?php endif;?>
+          <?php endif;?>
         </div>
       </div>
     </div>
