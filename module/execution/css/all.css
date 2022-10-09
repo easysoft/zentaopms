@@ -27,7 +27,7 @@ td.flex span.project-type-label {min-width: 40px;}
 .c-name > a, .table-children .text-left > a {padding-left: 5px;}
 .has-child > span {margin-right: 5px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
-.c-code, .c-project {overflow: hidden; white-space: nowrap;}
+.c-code, .c-project {overflow: hidden; white-space: nowrap; padding: 0 8px;}
 th.c-status, .c-begin, .c-end, .c-realBegan, .c-realEnd {text-align: center;}
 
 .c-project{text-overflow: unset !important;}
