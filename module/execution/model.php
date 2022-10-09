@@ -1260,7 +1260,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter|withdelete or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete|multiple or empty
      * @access public
      * @return array
      */
@@ -1288,6 +1288,7 @@ class executionModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->session->multiple and $this->app->tab == 'execution')->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
@@ -1296,12 +1297,23 @@ class executionModel extends model
             ->orderBy($orderBy)
             ->fetchAll();
 
-        $pairs = array();
+        $pairs       = array();
+        $noMultiples = array();
         foreach($executions as $execution)
         {
             if(strpos($mode, 'noclosed') !== false and ($execution->status == 'done' or $execution->status == 'closed')) continue;
             if(strpos($mode, 'stagefilter') !== false and isset($executionModel) and $executionModel == 'waterfall' and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
+            if(empty($execution->multiple)) $noMultiples[$execution->id] = $execution->project;
             $pairs[$execution->id] = $execution->name;
+        }
+        if($noMultiples)
+        {
+            $this->app->loadLang('project');
+            $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
+            foreach($noMultiples as $executionID => $projectID)
+            {
+                if(isset($noMultipleProjects[$projectID])) $pairs[$executionID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
+            }
         }
 
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
@@ -1657,15 +1669,21 @@ class executionModel extends model
                 ->where('t2.id')->in(array_keys($executions))
                 ->fetchPairs('id', 'name');
         }
+        else
+        {
+            $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetchPairs('id', 'name');
+        }
 
         if($pairs)
         {
+            $this->app->loadLang('project');
             $executionPairs = array();
             foreach($executions as $execution)
             {
                 $executionPairs[$execution->id] = '';
                 if(isset($projects[$execution->project])) $executionPairs[$execution->id] .= $projects[$execution->project] . ' / ';
                 $executionPairs[$execution->id] .= $execution->name;
+                if(empty($execution->multiple)) $executionPairs[$execution->id] = $projects[$execution->project] . "({$this->lang->project->disableExecution})";
             }
             $executions = $executionPairs;
         }
