@@ -207,16 +207,16 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
-                <?php if($config->systemMode == 'new'):?>
                 <tr>
                   <th class='w-85px'><?php echo $lang->bug->project;?></th>
                   <td><span id='projectBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProductExecutions($bug->product, this.value)'");?></span></td>
                 </tr>
-                <?php endif;?>
+                <?php if(!$execution or $execution->multiple):?>
                 <tr>
                   <th class='w-85px' id='executionBox'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->bug->story;?></th>
                   <td><div id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class='form-control chosen'");?></div>

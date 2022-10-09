@@ -1149,6 +1149,8 @@ class project extends control
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
         $products = $this->product->getProducts($projectID);
 
+        if(!$project->multiple) unset($this->config->bug->datatable->fieldList['execution']);
+
         if(!$project->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
