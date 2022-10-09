@@ -1307,7 +1307,7 @@ class actionModel extends model
             if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea' or substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
-            $this->setObjectLink($action, $deptUsers);
+            $this->setObjectLink($action, $deptUsers, $shadowProducts);
 
             /* Set merge request link. */
             if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
@@ -1468,10 +1468,11 @@ class actionModel extends model
      *
      * @param  object   $action
      * @param  array    $deptUsers
+     * @param  array    $shadowProducts
      * @access public
      * @return object|bool
      */
-    public function setObjectLink($action, $deptUsers)
+    public function setObjectLink($action, $deptUsers, $shadowProducts)
     {
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
@@ -1567,7 +1568,7 @@ class actionModel extends model
                     if(!empty($story))
                     {
                         $moduleName = $story->type;
-                        $action->objectLink = helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
+                        $action->objectLink = isset($shadowProducts[$story->product]) ? helper::createLink('projectstory', 'view', "storyID=$story->id") : helper::createLink('story', 'view', "id=$story->id&version=0&param=0&storyType=$story->type");
                     }
                 }
 
