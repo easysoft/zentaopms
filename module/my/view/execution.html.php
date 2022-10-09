@@ -42,7 +42,7 @@
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user' title='<?php echo $lang->team->roleAB;?>'><?php echo $lang->team->roleAB;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='c-hours text-right'><?php echo $lang->my->hours;?></th>
+        <th class='c-hours align-right'><?php echo $lang->my->hours;?></th>
         <th class='c-user text-center'><?php echo $lang->execution->myTask;?></th>
         <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
