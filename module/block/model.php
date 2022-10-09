@@ -774,6 +774,11 @@ class blockModel extends model
      */
     public function getAssignToMeParams()
     {
+        $hasWaterfall = strpos(",{$this->config->disabledFeatures},", ',waterfall,')    === false;
+        $hasIssue     = strpos(",{$this->config->disabledFeatures},", ',scrumIssue,')   === false or $hasWaterfall;
+        $hasRisk      = strpos(",{$this->config->disabledFeatures},", ',scrumRisk,')    === false or $hasWaterfall;
+        $hasMeeting   = strpos(",{$this->config->disabledFeatures},", ',scrumMeeting,') === false or $hasWaterfall;
+
         $params = new stdclass();
         $params->todoCount['name']    = $this->lang->block->todoCount;
         $params->todoCount['default'] = 20;
@@ -789,17 +794,26 @@ class blockModel extends model
 
         if($this->config->edition == 'max')
         {
-            $params->riskCount['name']    = $this->lang->block->riskCount;
-            $params->riskCount['default'] = 20;
-            $params->riskCount['control'] = 'input';
+            if($hasRisk)
+            {
+                $params->riskCount['name']    = $this->lang->block->riskCount;
+                $params->riskCount['default'] = 20;
+                $params->riskCount['control'] = 'input';
+            }
 
-            $params->issueCount['name']    = $this->lang->block->issueCount;
-            $params->issueCount['default'] = 20;
-            $params->issueCount['control'] = 'input';
+            if($hasIssue)
+            {
+                $params->issueCount['name']    = $this->lang->block->issueCount;
+                $params->issueCount['default'] = 20;
+                $params->issueCount['control'] = 'input';
+            }
 
-            $params->meetingCount['name']    = $this->lang->block->meetingCount;
-            $params->meetingCount['default'] = 20;
-            $params->meetingCount['control'] = 'input';
+            if($hasMeeting)
+            {
+                $params->meetingCount['name']    = $this->lang->block->meetingCount;
+                $params->meetingCount['default'] = 20;
+                $params->meetingCount['control'] = 'input';
+            }
 
             $params->feedbackCount['name']    = $this->lang->block->feedbackCount;
             $params->feedbackCount['default'] = 20;
