@@ -300,10 +300,11 @@ class product extends control
         }
 
         $project = $this->loadModel('project')->getByID($projectID);
-        if(empty($project->hasProduct))
+        if(isset($project->hasProduct) && empty($project->hasProduct))
         {
-            if($isProjectStory && !$productID && !empty($this->products)) $productID = key($this->products);   // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
-            unset($this->config->product->search['fields']['product']);     // The none-product project don't need display the product in the search form.
+            if($isProjectStory && !$productID && !empty($this->products)) $productID = key($this->products);    // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
+            unset($this->config->product->search['fields']['product']);                                         // The none-product project don't need display the product in the search form.
+            if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);             // The none-product and none-scrum project don't need display the plan in the search form.
         }
 
         /* Build search form. */
