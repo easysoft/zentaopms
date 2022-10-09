@@ -1753,16 +1753,21 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
+        $hasWaterfall = strpos(",{$this->config->disabledFeatures},", ',waterfall,')    === false;
+        $hasIssue     = strpos(",{$this->config->disabledFeatures},", ',scrumIssue,')   === false or $hasWaterfall;
+        $hasRisk      = strpos(",{$this->config->disabledFeatures},", ',scrumRisk,')    === false or $hasWaterfall;
+        $hasMeeting   = strpos(",{$this->config->disabledFeatures},", ',scrumMeeting,') === false or $hasWaterfall;
+
         $hasViewPriv = array();
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
-        if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite') $hasViewPriv['bug']   = true;
-        if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['story'] = true;
-        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
-        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
-        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
-        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))              $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('todo',  'view'))                                                                                          $hasViewPriv['todo']        = true;
+        if(common::hasPriv('task',  'view'))                                                                                          $hasViewPriv['task']        = true;
+        if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite')                                                      $hasViewPriv['bug']         = true;
+        if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite')                           $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('story', 'view') and $this->config->vision != 'lite')                                                      $hasViewPriv['story']       = true;
+        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasRisk)      $hasViewPriv['risk']        = true;
+        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasIssue)     $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))                             $hasViewPriv['feedback']    = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1771,8 +1776,20 @@ class block extends control
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount', 'requirement' => 'requirementCount');
         if($this->config->edition == 'max')
         {
-            $objectList      += array('risk' => 'risks', 'issue' => 'issues', 'feedback' => 'feedbacks');
-            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount', 'feedback' => 'feedbackCount');
+            if($hasRisk)
+            {
+                $objectList      += array('risk' => 'risks');
+                $objectCountList += array('risk' => 'riskCount');
+            }
+
+            if($hasIssue)
+            {
+                $objectList      += array('issue' => 'issues');
+                $objectCountList += array('issue' => 'issueCount');
+            }
+
+            $objectList      += array('feedback' => 'feedbacks');
+            $objectCountList += array('feedback' => 'feedbackCount');
         }
 
         if($this->config->edition == 'biz')

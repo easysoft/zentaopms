@@ -300,7 +300,7 @@ class storyModel extends model
             }
 
             /* Project or execution linked story. */
-            if($executionID != 0 and $story->type == 'story')
+            if($executionID != 0)
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
@@ -4932,7 +4932,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                if($tab == 'execution' || !$this->session->multiple)
+                if($tab == 'execution' || ($tab == 'project' && isset($_SESSION['multiple']) && empty($_SESSION['multiple'])))
                 {
                     $menuType = 'execution';
                 }

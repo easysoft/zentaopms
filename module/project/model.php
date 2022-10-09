@@ -2636,7 +2636,7 @@ class projectModel extends model
 
         common::setMenuVars('project', $objectID);
 
-        $this->setNomultipleMenu($objectID);
+        $this->setNoMultipleMenu($objectID);
         return $objectID;
     }
 
