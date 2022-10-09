@@ -877,7 +877,7 @@ class block extends control
             $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
             foreach($noMultiples as $productID => $projectID)
             {
-                if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->noMultiple})";
+                if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->disableExecution})";
             }
         }
 

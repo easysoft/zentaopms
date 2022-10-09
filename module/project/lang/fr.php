@@ -64,7 +64,7 @@ $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
 $lang->project->ignore             = 'Ignorer';
-$lang->project->noMultiple         = 'Project of disable iteration';
+$lang->project->disableExecution   = 'Project of disable iteration';
 
 /* Fields. */
 $lang->project->common             = 'Projets';
