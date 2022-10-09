@@ -107,6 +107,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table-footer'><?php echo $pager->show('left', 'pagerjs');?></div>
   </form>
   <?php endif;?>
 </div>
