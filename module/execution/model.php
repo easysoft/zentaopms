@@ -1260,7 +1260,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete or empty
      * @access public
      * @return array
      */

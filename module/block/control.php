@@ -1668,6 +1668,7 @@ class block extends control
         $total = 0;
         foreach($executions as $execution)
         {
+            if(empty($execution->multiple)) continue;
             if(!isset($overview[$execution->status])) $overview[$execution->status] = 0;
             $overview[$execution->status]++;
             $total++;
