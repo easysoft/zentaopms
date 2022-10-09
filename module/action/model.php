@@ -1063,6 +1063,8 @@ class actionModel extends model
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1087,6 +1089,7 @@ class actionModel extends model
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
+            ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
