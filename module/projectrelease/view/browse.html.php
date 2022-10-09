@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
+<?php js::set('pageAllSummary', $lang->release->pageAllSummary)?>
+<?php js::set('pageSummary', $lang->release->pageSummary)?>
+<?php js::set('type', $type)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
@@ -60,7 +63,7 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
-      <tr>
+      <tr data-type='<?php echo $release->status;?>'>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
           <?php
@@ -82,7 +85,10 @@
       <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'><?php echo $pager->show('left', 'pagerjs');?></div>
+  <div class='table-footer'>
+    <div class="table-statistic"></div>
+    <?php echo $pager->show('left', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
