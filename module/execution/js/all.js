@@ -72,7 +72,7 @@ $(function()
         }
     });
 
-    // Update table summary text
+    /* Update table summary text. */
     $('#executionsForm').table(
     {
         statisticCreator: function(table)
@@ -89,7 +89,7 @@ $(function()
             $rows.each(function()
             {
                 var $row = $(this);
-                if ($originTable) $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                if($originTable) $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
 
                 var data = $row.data();
                 executionIDList.push(data.id);
