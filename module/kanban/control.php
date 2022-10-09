@@ -1199,16 +1199,16 @@ class kanban extends control
         $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
 
         /* Waterfall project has no plan. */
-        $waterfallProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $excludeProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->eq('project')
-            ->andWhere('t2.model')->eq('waterfall')
+            ->andWhere('t2.model')->ne('scrum')
             ->andWhere('t2.hasProduct')->eq('0')
             ->fetchPairs();
 
         foreach($productPairs as $id => $name)
         {
-            if(isset($waterfallProducts[$id])) unset($productPairs[$id]);
+            if(isset($excludeProducts[$id])) unset($productPairs[$id]);
         }
 
         $this->view->products          = $productPairs;
