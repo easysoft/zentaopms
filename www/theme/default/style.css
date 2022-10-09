@@ -54,6 +54,7 @@ a.showMoreImage:hover {opacity: 1;}
 #visionSwitcher>div {margin: 10px 5px;}
 #visionSwitcher li.switchTo {padding-top: 5px;}
 
+th.c-confirmed, th.c-confirm {text-align: center;}
 .c-icon {width: 20px;}
 .c-count {width: 30px;}
 .c-pri {width: 40px;}
@@ -71,12 +72,17 @@ a.showMoreImage:hover {opacity: 1;}
 .c-object {width: 250px;}
 .c-case-step {width: 300px;}
 .c-actions-8 {width: 240px;}
+
+.confirmed, .confirm1 {color: #0DBB7D;}
+.unconfirmed, .confirm0 {color: gray;}
+
 #userNav>li.open>a:before, #userNav>li>a:hover:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
 #userNav .dropdown-menu {z-index: 2000;}
 #userNav .dropdown-menu:hover + .dropdown-toggle:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
-#userNav .dropdown-menu .dropdown-menu:hover:before {content: none;}
 #userNav .dropdown-menu, #userNav .create-list {margin-right: -15px !important; border-top: 0px;}
 #userNav .dropdown-menu .dropdown-submenu>ul {margin-right: 0px !important;}
+#userNav .dropdown-menu .dropdown-submenu>ul::before {position: absolute; content: ''; top: -60px; bottom: -40px; left: -40px; right: 0;}
+#userNav .dropdown-menu>li>a::before {position: absolute; content: ''; top: -4px; bottom: -4px; left: -10px; right: -10px;}
 #userNav .create-list:hover:before {right: 21.5% !important;}
 #modules li>a, #modules ul>li>a {overflow: hidden; white-space: nowrap;}
 
@@ -111,3 +117,20 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #downloadMobile .dropdown-menu .mobile-qrcode iframe {width: 110px; height: 120px; text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version {text-align: center;}
 #downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
+
+.radio-text-divider {width: 1px; height: 13px; display: inline-block; margin: -2px 9px 0; background: #D9D9D9; vertical-align: middle;}
+.input-divider {margin: 0 4px;}
+.setting-input {width: 64px; height: 20px; margin: 0 4px; text-align: center;}
+.setting-input.disabled,.setting-input[disabled="disabled"] {color: #C4C4C4;}
+.radio-col {display: flex;}
+.mt10 {margin-top: 10px;}
+
+
+#programTableList > tr:hover {background: #E6F0FF; opacity: 0.8;}
+#programTableList > tr[data-type="project"] > .c-name:hover > a {color: #1E6AEB !important;}
+#programTableList > tr[data-type="project"] > .c-name > a {color: #2463c7 !important;}
+#mainMenu > div.btn-toolbar.pull-right > a.btn.btn-link.iframe {color: #18A6FD;}
+
+#projectForm .c-name .label-danger,
+#executionTableList .c-name .label-danger,
+#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}

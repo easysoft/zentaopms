@@ -28,26 +28,99 @@
     </div>
   </div>
   <?php else:?>
-  <div class='panel' style='padding:50px 300px'>
+  <div class='panel'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
-      <div class='panel-body'>
-        <?php echo $lang->install->introductionContent;?>
-        <video class='hidden' src="<?php echo $lang->install->guideVideo;?>"  width="100%" controls ="controls"></video>
-        <div class='text-center'>
-          <h2><?php echo $lang->install->howToUse;?></h2>
-          <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
-          <?php if($config->visions == ',lite,'):?>
-          <?php unset($lang->install->modeList['classic']);?>
-          <?php $systemMode = 'new';?>
-          <?php endif;?>
-          <div class='select-mode'><?php echo html::radio('mode', $lang->install->modeList, $systemMode);?></div>
-          <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips[$systemMode];?></div>
+      <div class='main-row' id='mainContent'>
+        <div class='main-col main-table'>
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th colspan='2'><?php echo $this->lang->upgrade->mode;?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['lean'];?></th>
+                <th colspan='2' class="text-center"><?php echo $this->lang->upgrade->to18Mode['new'];?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->usage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->leanUsage;?></td>
+                <td colspan='2' class="text-center"><?php echo $this->lang->upgrade->newUsage;?></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->program;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->productRR;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->productUR;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->productLine;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->projectScrum;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <?php if($edition == 'max'):?>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->scrumDetail;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->projectWaterfall;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->projectKanban;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->execution;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <?php if($edition == 'max'):?>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->assetlib;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-close"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <?php if($edition == 'biz' or $edition == 'max'):?>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->oa;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <?php endif;?>
+              <tr>
+                <td colspan='2' style="font-weight:bold;font-size:14px;"><?php echo $this->lang->upgrade->selectUsage;?></td>
+                <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useLean;?></button></td>
+                <td colspan='2' class="text-center"><button class="btn" type="button" id='useNew'><?php echo $this->lang->upgrade->useNew;?></button></td>
+              </tr>
+              <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->remark;?></td>
+                <td colspan='4'><?php echo $this->lang->upgrade->remarkDesc;?></td>
+              </tr>
+            </tbody>
+            <?php echo html::hidden('mode','')?>
+          </table>
         </div>
-      </div>
-      <hr/>
-      <div class='panel-footer text-center'>
-        <?php echo html::submitButton($lang->install->next);?>
       </div>
     </form>
   </div>

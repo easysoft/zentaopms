@@ -686,7 +686,7 @@ class mrModel extends model
             }
 
             $mergeResult = json_decode(commonModel::http($url, $MRObject));
-            if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;
+            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
             if(isset($mergeResult->mergeable))
             {
                 if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
@@ -867,7 +867,16 @@ class mrModel extends model
      */
     public function apiGetMRCommits($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+        }
+        else
+        {
+            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
+        }
+
         return json_decode(commonModel::http($url));
     }
 
@@ -1797,6 +1806,8 @@ class mrModel extends model
 
         /* Get commits by MR. */
         $commits = $this->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
+        if(empty($commits)) return true;
+
         foreach($commits as $commit)
         {
             $objects = $this->repo->parseComment($commit->message);

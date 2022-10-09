@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '17.6.1';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '17.6.2';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -96,6 +96,11 @@ $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|edu
 /* Config for Content-Security-Policy. */
 $config->CSPs = array();
 $config->CSPs[] = "form-action 'self';connect-src 'self'";
+
+/* Config for kanban col setting */
+$config->colWidth    = 264;
+$config->minColWidth = 180;
+$config->maxColWidth = 384;
 
 /* 系统框架配置。Framework settings. */
 $config->framework = new stdclass();

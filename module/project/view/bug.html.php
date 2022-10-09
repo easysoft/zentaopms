@@ -34,7 +34,7 @@
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
     $module    = $type != 'bysearch' ?  "&param=$param" : '';
-    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->featureBar['browse']['all']}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
     echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=unresolved$module"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
@@ -96,6 +96,8 @@
             <?php
             foreach($setting as $key => $value)
             {
+                if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+
                 if($value->show)
                 {
                     $this->datatable->printHead($value, $orderBy, $vars, $canBatchAssignTo);
@@ -112,7 +114,12 @@
         $arrtibute    = $canBeChanged ? '' : 'disabled';
         ?>
         <tr data-id='<?php echo $bug->id?>'>
-          <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);?>
+        <?php foreach($setting as $value)
+        {
+            if(!$project->hasProduct and $project->model != 'scrum' and $value->id == 'plan') continue;
+            $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);
+        }
+        ?>
         </tr>
         <?php endforeach;?>
         </tbody>

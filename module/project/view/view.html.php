@@ -129,7 +129,7 @@
               </p>
             </div>
           </div>
-          <?php if($this->config->systemMode == 'new'):?>
+          <?php if(empty($globalDisableProgram)):?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->parent;?></strong>
@@ -213,7 +213,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
-                    <td><?php echo $project->end;?></td>
+                    <td><?php echo $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;;?></td>
                     <th><?php echo $lang->project->realEndAB;?></th>
                     <td><?php echo $project->realEnd == '0000-00-00' ? '' : $project->realEnd;?></td>
                   </tr>
@@ -249,6 +249,8 @@
                     <td><?php echo $statData->taskCount;?></td>
                     <th><?php echo $lang->bug->common;?></th>
                     <td><?php echo $statData->bugCount;?></td>
+                    <th><?php echo $lang->project->budget;?></th>
+                    <td><?php echo $project->budget;?></td>
                   </tr>
                 </tbody>
               </table>

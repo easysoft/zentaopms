@@ -98,12 +98,13 @@ class reportModel extends model
      */
     public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
+        $permission = common::hasPriv('report', 'showProject') or $this->app->user->admin;
+        $tasks      = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$permission)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
@@ -140,12 +141,13 @@ class reportModel extends model
      */
     public function getProducts($conditions, $storyType = 'story')
     {
-        $products = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
+        $permission = common::hasPriv('report', 'showProduct') or $this->app->user->admin;
+        $products   = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
 
@@ -1086,9 +1088,8 @@ class reportModel extends model
     {
         $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root")
-            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage,kanban' : 'project')
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
+            ->where('t1.type')->in('project')
+            ->andWhere('t2.type')->eq('project')
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
@@ -1208,10 +1209,7 @@ class reportModel extends model
             ->fetchAll();
 
         $pairs = array();
-        foreach($executions as $execution)
-        {
-            $pairs[$execution->id] = $this->config->systemMode == 'new' ? $execution->projectname . '/' .$execution->name : $execution->name;
-        }
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->projectname . '/' .$execution->name;
 
         return $pairs;
     }

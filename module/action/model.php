@@ -374,10 +374,10 @@ class actionModel extends model
             elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
-                $name      = $execution->name;
-                $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
-                if($name)
+                if(!empty($execution))
                 {
+                    $name      = $execution->name;
+                    $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
                     $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
                 }
             }
@@ -1060,6 +1060,9 @@ class actionModel extends model
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
 
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1079,6 +1082,7 @@ class actionModel extends model
             ->markRight(1)
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
+            ->beginIF($this->config->systemMode == 'lean')->andWhere('objectType')->notin('program')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
@@ -1087,6 +1091,7 @@ class actionModel extends model
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
             ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
+            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1778,9 +1783,20 @@ class actionModel extends model
         }
         elseif(in_array($action->objectType, array('program', 'project', 'execution')))
         {
-            $project    = $this->dao->select('id,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $project    = $this->dao->select('id,acl,name,hasProduct')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
             $objecttype = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, $objecttype);
+
+            /* Reduction shadow product. */
+            if(!$project->hasProduct and $action->objectType == 'project')
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($project->id);;
+                $this->dao->update(TABLE_PRODUCT)
+                    ->set('name')->eq($project->name)
+                    ->set('deleted')->eq(0)
+                    ->where('id')->eq($productID)
+                    ->exec();
+            }
         }
         elseif($action->objectType == 'module')
         {

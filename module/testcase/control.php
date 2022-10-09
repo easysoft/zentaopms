@@ -979,13 +979,16 @@ class testcase extends control
             $moduleIdList = $case->module;
             if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
+            $moduleIdList = (!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) ? 0 : $moduleIdList;
+            $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+            $this->view->stories          = $stories;
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
@@ -1390,6 +1393,8 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project') $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        unset($this->config->testcase->search['fields']['product']);
         $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
@@ -1403,7 +1408,7 @@ class testcase extends control
 
         /* Assign. */
         $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
-        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), $this->products[$case->product]);
+        $this->view->position[] = html::a($this->createLink('product', 'view', "productID=$case->product"), zget($this->products, $case->product, ''));
         $this->view->position[] = html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case->title);
         $this->view->position[] = $this->lang->testcase->linkCases;
         $this->view->case       = $case;
@@ -1439,6 +1444,15 @@ class testcase extends control
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
+
+        /* Unset search field 'plan' in single project. */
+        unset($this->config->bug->search['fields']['product']);
+        if($case->project and ($this->app->tab == 'project' or $this->app->tab == 'execution'))
+        {
+            $project = $this->loadModel('project')->getById($case->project);
+            if(!$project->hasProduct and $project->model == 'waterfall') unset($this->config->bug->search['fields']['plan']);
+        }
+
         $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */

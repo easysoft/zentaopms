@@ -205,6 +205,7 @@ class install extends control
         if(!empty($_POST))
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
+            $this->loadModel('custom')->disableFeaturesByMode($this->post->mode);
             return print(js::locate(inlink('step5'), 'parent'));
         }
 
@@ -216,8 +217,8 @@ class install extends control
         else
         {
             $this->app->loadLang('upgrade');
-
-            $this->view->title = $this->lang->install->introduction;
+            $this->view->edition = $this->config->edition;
+            $this->view->title   = $this->lang->install->selectMode;
             $this->display();
         }
     }
@@ -239,6 +240,16 @@ class install extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
+
+            $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+            if($this->config->systemMode == 'lean' and empty($defaultProgram))
+            {
+                /* Lean mode create default program. */
+                $programID = $this->loadModel('program')->createDefaultProgram();
+                /* Set default program config. */
+                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+            }
+
             if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData));
 
             $this->loadModel('setting');

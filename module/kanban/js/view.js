@@ -1399,8 +1399,8 @@ function initKanban($kanban)
         maxColHeight:          510,
         calcColHeight:         calcColHeight,
         fluidBoardWidth:       fluidBoard,
-        minColWidth:           285,
-        maxColWidth:           285,
+        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
         cardHeight:            cardHeight,
         displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:      kanbanLang.createColumn,
@@ -1457,7 +1457,7 @@ $(function()
         resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
-    $('.region-header').on('click', '.action', hideKanbanAction);
+    $('#regionTabs, .region-header').on('click', '.action', hideKanbanAction);
     $('#TRAction').on('click', '.btn', hideKanbanAction);
 
     /* Hide action box when user click document */
@@ -1507,6 +1507,7 @@ $(function()
     $(window).on('resize', function(a)
     {
         adjustAddBtnPosition();
+        initRegionTabs();
     });
 
     resetLaneHeight();
@@ -1558,7 +1559,6 @@ $(function()
 
     distance    = 0;
     radiusWidth = 10;
-    $(window).on('resize', initRegionTabs);
 
     $('.leftBtn').click(function()
     {
@@ -1864,6 +1864,8 @@ function swipeRegionNavTabs($object, direction)
         {
             /* If you swipe left, the distance is equal to the item's left. */
             distance = - itemLeft + radius - ($item.prev().hasClass('active') ? radiusWidth : 0);
+            /* tab overlap width */
+            distance += 20;
             if($item.prev().length == 0)
             {
                 distance = 0;
@@ -1881,6 +1883,7 @@ function swipeRegionNavTabs($object, direction)
         {
             /* If you swipe right, the distance is equal to the left distance of item plus the width of item minus the width of the regionNavTabs. */
             distance = offsetWidth - itemOffset - radius + nextRadius - radiusWidth * 2;
+            distance += 20;
             if($item.next().length == 0)
             {
                 distance = - objectWidth + offsetWidth - radiusWidth * 2;
@@ -1921,6 +1924,7 @@ function initRegionTabs()
     if(acitiveItemLeft + distance < 0)
     {
         distance = - acitiveItemLeft;
+        distance += 20;
         if($acitiveItem.prev().length == 0)
         {
             distance = 0;
@@ -1931,6 +1935,7 @@ function initRegionTabs()
     else if(acitiveItemWidth + acitiveItemLeft + distance + radiusWidth * 2 > regionTabsWidth && acitiveItemLeft != 0 && acitiveItemWidth != 0)
     {
         distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft + (distance != 0 ? - radiusWidth * 2 : radiusWidth);
+        distance += 20;
         if($acitiveItem.next().length == 0)
         {
             distance = regionTabsWidth - acitiveItemWidth - acitiveItemLeft - radiusWidth * 2;
@@ -1966,6 +1971,11 @@ $('[data-tab]').on('shown.zui.tab', function(e)
     {
         $regions.addClass('active').removeClass('notAll');
         if(hasActions) $regionActions.removeClass('active');
+        $regions.each(function()
+        {
+            var isFold = $(this).find('.region-header i').hasClass('icon-angle-down');
+            if(isFold) $(this).find('.kanban').css('display', 'none');
+        });
     }
     else
     {
@@ -1985,6 +1995,7 @@ $('[data-tab]').on('shown.zui.tab', function(e)
             if($(this).hasClass('archivedColumn')) $(this).find('a').attr('href', "javascript:loadMore(\"Column\", " + regionID + ')');
         });
     }
+     window.scrollTo(0, 0);
 
     /* To manually refresh stay under the current tab, save the ID of the current region. */
     var url = createLink('kanban', 'ajaxSaveRegionID', 'regionID=' + regionID);

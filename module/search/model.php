@@ -634,6 +634,8 @@ class searchModel extends model
         }
         else
         {
+            if($this->config->systemMode != 'new') unset($this->config->search->fields->program);
+
             foreach($this->config->search->fields as $objectType => $fields)
             {
                 $module = $objectType;

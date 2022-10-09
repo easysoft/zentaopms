@@ -169,7 +169,6 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
-            ->beginIF(!$this->cookie->showClosed and $status == 'all')->andWhere('status')->ne('closed')->fi()
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
@@ -228,7 +227,6 @@ class programModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
-            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
@@ -574,8 +572,8 @@ class programModel extends model
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
+            ->andWhere('t1.type')->eq('project')
+            ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
@@ -583,8 +581,7 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($this->cookie->involved or $involved)
             ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
             ->orWhere('t1.PM')->eq($this->app->user->account)
@@ -843,12 +840,17 @@ class programModel extends model
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
-            if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+            $this->loadModel('user');
+            if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
 	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
 	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
-            $this->loadModel('user');
             foreach($children as $id => $type) $this->user->updateUserView($id, $type);
+            if(isset($program->PM) and $program->PM != $oldProgram->PM)
+            {
+                $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs('id');
+                foreach($productIdList as $productID) $this->user->updateUserView($productID, 'product');
+            }
 
             if($oldProgram->parent != $program->parent)
             {
@@ -1181,7 +1183,7 @@ class programModel extends model
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
-            ->where('path')->like("%{$parentProgram->id}%")
+            ->where('path')->like("%,{$parentProgram->id},%")
             ->andWhere('grade')->eq($childGrade)
             ->andWhere('deleted')->eq('0')
             ->fetch('sumBudget');
@@ -1576,7 +1578,7 @@ class programModel extends model
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=program", $program, $type, 'link', '', '', '', "data-app='project'");
 
@@ -1591,5 +1593,56 @@ class programModel extends model
             }
         }
         return $menu;
+    }
+
+    /**
+     * Create default program.
+     *
+     * @access public
+     * @return int
+     */
+    public function createDefaultProgram()
+    {
+        $defaultProgram = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
+        if($defaultProgram)
+        {
+            $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('id')->eq($defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+            if($program) return $defaultProgram;
+        }
+
+        $program = $this->dao->select('id')->from(TABLE_PROGRAM)->where('name')->eq($this->lang->program->defaultProgram)->andWhere('deleted')->eq(0)->fetch();
+        if($program) return $program->id;
+
+        $account  = isset($this->app->user->account) ? $this->app->user->account : '';
+        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+
+        $program = new stdclass();
+        $program->name          = $this->lang->program->defaultProgram;
+        $program->type          = 'program';
+        $program->budgetUnit    = 'CNY';
+        $program->status        = 'doing';
+        $program->auth          = 'extend';
+        $program->begin         = !empty($minBegin) ? $minBegin : helper::today();
+        $program->end           = LONG_TIME;
+        $program->openedBy      = $account;
+        $program->openedDate    = helper::now();
+        $program->openedVersion = $this->config->version;
+        $program->acl           = 'open';
+        $program->grade         = 1;
+        $program->vision        = 'rnd';
+
+        $this->app->loadLang('program');
+        $this->app->loadLang('project');
+        $this->lang->project->name = $this->lang->program->name;
+
+        $this->dao->insert(TABLE_PROGRAM)->data($program)->exec();
+        if(dao::isError()) return false;
+
+        $programID = $this->dao->lastInsertId();
+
+        $this->dao->update(TABLE_PROGRAM)->set('path')->eq(",{$programID},")->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+        $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+
+        return $programID;
     }
 }

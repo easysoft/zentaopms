@@ -66,7 +66,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setDefault('notifyEmail', '')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -88,9 +88,6 @@ class bugModel extends model
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
-
-        /* Use classic mode to replace required project. */
-        if($this->config->systemMode == 'classic' and strpos($this->config->bug->create->requiredFields, 'project') !== false) $this->config->bug->create->requiredFields = str_replace('project', 'execution', $this->config->bug->create->requiredFields);
 
         $this->dao->insert(TABLE_BUG)->data($bug)
             ->autoCheck()
@@ -288,7 +285,7 @@ class bugModel extends model
                 }
             }
 
-            if($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
+            if($this->lang->navGroup->bug != 'qa') $bug->project = $this->session->project;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -705,7 +702,7 @@ class bugModel extends model
             ->setDefault('browser', '')
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
-            ->setDefault('resolvedDate', '0000-00-00 00:00:00')
+            ->setDefault('resolvedDate', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
@@ -1618,7 +1615,7 @@ class bugModel extends model
 
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $projectParams;
+        $this->config->bug->search['params']['project']['values']       = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $modules;
@@ -2042,8 +2039,7 @@ class bugModel extends model
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->in(array_keys($projects))
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'classic')->andWhere('t1.type')->eq('execution')->fi()
+            ->andWhere('t1.type')->eq('project')
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchAll('account');
@@ -3486,15 +3482,17 @@ class bugModel extends model
     public function printAssignedHtml($bug, $users)
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
-        $btnTextClass   = 'text-primary';
-        if($bug->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if(empty($bug->assignedTo)) $btnClass = $btnTextClass = 'assigned-none';
+        if($bug->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $bug->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= $bug->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
 
         $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
@@ -3611,7 +3609,8 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
+            $tab   = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='$tab' id='tostory'", $this->lang->bug->toStory);
             if(common::hasPriv('task', 'create') and !isonlybody()) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }

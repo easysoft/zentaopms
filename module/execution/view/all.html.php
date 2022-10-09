@@ -95,8 +95,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
           {
               if($value->show)
               {
-                  if($config->systemMode == 'classic' and $value->id == 'project') continue;
-
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
                   $columns ++;
               }

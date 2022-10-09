@@ -43,13 +43,15 @@
           </th>
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->story->title;?></th>
-          <?php if(!empty($object->hasProduct)):?>
+          <?php if($project->hasProduct):?>
           <th class='c-object'><?php echo $lang->story->product;?></th>
           <?php endif;?>
           <th class='c-module'><?php echo $lang->story->module;?></th>
+          <?php if($project->hasProduct || (!$project->hasProduct && $project->model != 'kanban')):?>
           <th class='c-plan'><?php echo $lang->story->plan;?></th>
+          <?php endif;?>
           <th class='c-stage'><?php echo $lang->story->stage;?></th>
-          <?php if(!empty($object->hasProduct) && $productType != 'normal'):?>
+          <?php if($project->hasProduct && $productType != 'normal'):?>
           <th class='c-branch'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
@@ -79,13 +81,15 @@
           }
           ?>
         </td>
-        <?php if(!empty($object->hasProduct)):?>
+        <?php if($project->hasProduct):?>
         <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>
         <?php endif;?>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
+        <?php if($project->hasProduct || (!$project->hasProduct && $project->model != 'kanban')):?>
         <td class='text-ellipsis' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+        <?php endif;?>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
-        <?php if(!empty($object->hasProduct) && $productType != 'normal'):?>
+        <?php if($project->hasProduct && $productType != 'normal'):?>
         <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
         <?php endif;?>
         <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>

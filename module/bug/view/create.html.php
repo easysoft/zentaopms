@@ -51,18 +51,18 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-110px'><?php echo $hiddenProduct ? $lang->bug->module : $lang->bug->product;?></th>
-            <td class="<?php if($hiddenProduct) echo 'hidden';?>">
+            <th class='w-110px'><?php echo $product->shadow ? $lang->bug->module : $lang->bug->product;?></th>
+            <td class="<?php if($product->shadow) echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
+                <?php if($product->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
             </td>
             <td>
               <div class='input-group' id='moduleIdBox'>
-              <?php if(!$hiddenProduct):?>
+              <?php if(!$product->shadow):?>
               <span class="input-group-addon"><?php echo $lang->bug->module?></span>
               <?php endif;?>
                 <?php
@@ -82,7 +82,6 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
             <th>
-              <?php if($config->systemMode == 'classic') $lang->bug->project = $lang->bug->execution;?>
               <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
             </th>
 
@@ -113,23 +112,17 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <?php endif;?>
             <?php if($showExecution):?>
             <td>
-              <?php if($config->systemMode == 'new'):?>
               <div class='table-row'>
                 <div class='table-col' id='projectBox'>
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
                 <div class='table-col'>
                   <div class='input-group' id='executionIdBox'>
-                    <span class='input-group-addon fix-border' id='executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></span>
+                    <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
                     <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
                   </div>
                 </div>
               </div>
-              <?php else:?>
-              <div class='input-group' id='executionIdBox'>
-                <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
-              </div>
-              <?php endif;?>
             </td>
             <?php endif;?>
             <td>
@@ -162,11 +155,11 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php if($showNoticefeedbackBy):?>
           <tr>
             <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
-            <td><?php echo html::input('feedbackBy', '', "class='form-control'");?></td>
+            <td><?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?></td>
             <td id='notifyEmailTd'>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->bug->notifyEmail?></span>
-                <span><?php echo html::input('notifyEmail', '', "class='form-control'");?></span>
+                <span><?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?></span>
               </div>
             </td>
           </tr>
@@ -175,9 +168,9 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='feedback'>
               <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
-              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+              <?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?>
               <span class="input-group-addon"><?php echo $lang->bug->notifyEmail?></span>
-              <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+              <?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?>
               </div>
             </td>
           </tr>
@@ -391,7 +384,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php js::set('bugExecution', (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution);?>
+<?php js::set('bugExecution', $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})

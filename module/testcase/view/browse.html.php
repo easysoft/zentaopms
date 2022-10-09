@@ -114,6 +114,7 @@ js::set('suiteID',        $suiteID);
           <tr data-id='<?php echo $case->id?>'>
             <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branchOption, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
           </tr>
+          <?php $caseProductIds[$case->product] = $case->product;?>
           <?php endforeach;?>
         </tbody>
       </table>
@@ -129,8 +130,9 @@ js::set('suiteID',        $suiteID);
             $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
-            $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
+            $caseProductID = count($caseProductIds) > 1 ? 0 : $productID;
+            $actionLink    = $this->createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch");
+            $misc          = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -180,7 +182,7 @@ js::set('suiteID',        $suiteID);
               ?>
             </ul>
           </div>
-          <?php if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType != 'normal'):?>
+          <?php if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
             <?php $withSearch = count($branchTagOption) > 6;?>

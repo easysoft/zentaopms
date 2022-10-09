@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php if(!$this->task->canOperateEffort($task) and empty($myOrders)):?>
+<style>#mainContent {min-height: unset;}</style>
+<?php endif;?>
 <?php $members = $task->members;?>
 <?php
 $confirmRecord = $lang->task->confirmRecord;
@@ -21,7 +24,11 @@ if(!empty($members) && $task->mode == 'linear')
     $isCurrent   = false;
     foreach($task->team as $taskTeam)
     {
-        if($isCurrent) $nextAccount = $taskTeam->account;
+        if($isCurrent)
+        {
+            $nextAccount = $taskTeam->account;
+            break;
+        }
         if($task->assignedTo == $taskTeam->account and $taskTeam->account == $app->user->account and $taskTeam->status != 'done') $isCurrent = true;
     }
     if($nextAccount) $confirmRecord = sprintf($lang->task->confirmTransfer, zget($users, $nextAccount));
@@ -52,10 +59,11 @@ if(!empty($members) && $task->mode == 'linear')
     <?php if(!empty($task->team) and $task->mode == 'linear'):?>
     <?php include __DIR__ . '/lineareffort.html.php';?>
     <?php else:?>
-    <table class='table table-bordered table-fixed table-recorded'>
+    <table class='table table-bordered table-fixed table-recorded has-sort-head'>
       <thead>
         <tr class='text-center'>
-          <th class="w-120px"><?php echo $lang->task->date;?></th>
+          <?php $vars = "taskID=$task->id&from=$from&orderBy=%s";?>
+          <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
           <th><?php echo $lang->task->work;?></th>
           <th class="thWidth"><?php echo $lang->task->consumed;?></th>
@@ -96,7 +104,7 @@ if(!empty($members) && $task->mode == 'linear')
       </div>
     </div>
     <?php else:?>
-    <form id="recordForm" method='post' target='hiddenwin'>
+    <form id="recordForm" class='hidden' method='post' target='hiddenwin'>
       <?php
       $readonly = '';
       $left     = '';
@@ -111,20 +119,20 @@ if(!empty($members) && $task->mode == 'linear')
       <table class='table table-form table-fixed table-record'>
         <thead>
           <tr class='text-center'>
-            <th class="w-150px"><?php echo $lang->task->date;?></th>
+            <th class="w-150px required"><?php echo $lang->task->date;?></th>
             <?php if($readonly):?>
             <th class="w-60px <?php if(count($reverseOrders) == 1) echo "hidden"?>"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
             <th><?php echo $lang->task->work;?></th>
-            <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
-            <th class="w-100px"><?php echo $lang->task->leftAB;?></th>
+            <th class="w-100px required"><?php echo $lang->task->consumedAB;?></th>
+            <th class="w-100px <?php if(empty($readonly)) echo 'required'?>"><?php echo $lang->task->leftAB;?></th>
           </tr>
         </thead>
         <tbody>
           <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
-              <div class='input-group'>
+              <div class='input-group date-group'>
                 <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
                 <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
               </div>

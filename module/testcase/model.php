@@ -1914,7 +1914,8 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
     {
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
+        $productName = zget($products, $productID, '');
+        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productName) + array('all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['product']['values'] = $product;
 
         $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
@@ -1934,6 +1935,7 @@ class testcaseModel extends model
         }
         else
         {
+            $this->app->loadLang('branch');
             $productInfo = $this->loadModel('product')->getByID($productID);
             $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
@@ -2501,11 +2503,11 @@ class testcaseModel extends model
 
         if($case->needconfirm || $case->browseType == 'needconfirm')
         {
-            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'ok', 'hiddenwin', '', '', '', $this->lang->confirm);
         }
 
-        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
         $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
+        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
 
         $editParams = $params;
         if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";

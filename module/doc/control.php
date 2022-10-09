@@ -506,8 +506,8 @@ class doc extends control
 
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
-            if($this->config->systemMode == 'classic') unset($this->lang->doc->menu->execution['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->execution['subMenu']);
 
             /* High light menu. */
             if(strpos(',product,project,execution,custom,book,', ",$objectType,") !== false)
@@ -626,8 +626,19 @@ class doc extends control
         {
             $doc        = $this->doc->getByID($docID);
             $objectType = $this->dao->select('type')->from(TABLE_DOCLIB)->where('id')->eq($doc->lib)->fetch('type');
-            if($this->config->systemMode == 'classic' and $objectType == 'project') $objectType = 'execution';
             $this->doc->delete(TABLE_DOC, $docID);
+
+            /* Delete doc files. */
+            $this->loadModel('file');
+            foreach($doc->files as $fileID => $file)
+            {
+                $file = $this->file->getById($fileID);
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
+                $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+
+                $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+                if(empty($fileRecord)) @unlink($file->realPath);
+            }
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -1119,7 +1130,6 @@ class doc extends control
         $lib = $this->doc->getLibById($libID);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $libID;
 
-        if($this->config->systemMode == 'classic' and $type == 'project') $type = 'execution';
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID, $appendLib);
 
         /* Set Custom. */

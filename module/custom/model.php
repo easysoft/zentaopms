@@ -816,4 +816,252 @@ class customModel extends model
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
     }
+
+    /**
+     * Get waterfall, assetLib, URStory counts.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCounts()
+    {
+        $counts = array();
+        $counts['waterfall'] = $this->dao->select('COUNT(*) AS waterfallCount')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->fetch('waterfallCount');
+        $counts['URStory']   = $this->dao->select('COUNT(*) AS URStoryCount')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('URStoryCount');
+        if($this->config->edition == 'max') $counts['assetLib'] = $this->dao->select('COUNT(*) AS assetLibCount')->from(TABLE_ASSETLIB)->where('deleted')->eq('0')->fetch('assetLibCount');
+
+        return $counts;
+    }
+
+    /**
+     * process project priv within a program set.
+     *
+     * @access public
+     * @return void
+     */
+    public function processProjectAcl()
+    {
+        $projectGroup = $this->dao->select('id,parent,whitelist,acl')->from(TABLE_PROJECT)
+            ->where('parent')->ne('0')
+            ->andwhere('type')->eq('project')
+            ->andWhere('acl')->eq('program')
+            ->fetchGroup('parent', 'id');
+
+        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
+            ->where('id')->in(array_keys($projectGroup))
+            ->andWhere('type')->eq('program')
+            ->fetchPairs();
+
+        $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
+            ->where('objectType')->eq('program')
+            ->andWhere('objectID')->in(array_keys($projectGroup))
+            ->fetchGroup('objectID', 'user');
+
+        $projectIDList = array();
+        foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));
+        $executionGroup = $this->dao->select('project,id')->from(TABLE_EXECUTION)->where('project')->in($projectIDList)->fetchGroup('project', 'id');
+
+        $this->loadModel('user');
+        $this->loadModel('action');
+        $this->loadModel('personnel');
+        foreach($projectGroup as $projects)
+        {
+            foreach($projects as $project)
+            {
+                $PM          = zget($programPM, $project->parent, '');
+                $stakeholder = zget($stakeholders, $project->parent, '');
+                if($stakeholder) $stakeholder = join(',', array_keys($stakeholder));
+
+                $whitelist = rtrim($project->whitelist . ',' . $PM . ',' . $stakeholder);
+                $whitelist = explode(',', $whitelist);
+                $whitelist = array_filter(array_unique($whitelist));
+                $whitelist = join(',', $whitelist);
+
+                $data = new stdclass();
+                $data->acl       = 'private';
+                $data->whitelist = $whitelist;
+                $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($project->id)->exec();
+
+                $whitelist = explode(',', $whitelist);
+                $this->personnel->updateWhitelist($whitelist, 'project', $project->id);
+
+                $this->user->updateUserView($project->id, 'project');
+                if(zget($executionGroup, $project->id, ''))
+                {
+                    $executions = zget($executionGroup, $project->id);
+                    $executionPairs = array();
+                    foreach($executions as $executionID => $execution) $executionPairs[$executionID] = $executionID;
+                    $this->user->updateUserView($executionPairs, 'sprint');
+                }
+                $changes = common::createChanges($project, $data);
+                $actionID = $this->action->create('project', $project->id, 'SwitchToLean');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+    }
+
+    /**
+     * Set features to disable.
+     *
+     * @param  int    $mode
+     * @access public
+     * @return void
+     */
+    public function disableFeaturesByMode($mode)
+    {
+        $disabledFeatures = '';
+        if($mode == 'lean')
+        {
+            foreach($this->config->custom->features as $feature)
+            {
+                $function = 'has' . ucfirst($feature) . 'Data';
+                if(!$this->$function()) $disabledFeatures .= "$feature,";
+            }
+        }
+        $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
+    }
+
+    /**
+     * Check for URStory data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasURStoryData()
+    {
+        return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for waterfall project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
+     * Check for assetlib data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasAssetlibData()
+    {
+        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        return false;
+    }
+
+    /**
+     * Check for issue data.
+     *
+     * @access public
+     * @return bool|int
+     */
+    public function hasScrumIssueData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Check for risk data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumRiskData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.model')->eq('scrum')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum opportunity data
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumOpportunityData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum meeting data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumMeetingData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum auditplan data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumAuditplanData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
+                ->where('t1.model')->eq('scrum')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->count();
+        }
+        return false;
+    }
+
+    /**
+     * Verify whether there is scrum process data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hasScrumProcessData()
+    {
+        if($this->config->edition == 'max')
+        {
+            return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
+        }
+        return false;
+    }
 }

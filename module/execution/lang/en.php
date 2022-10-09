@@ -145,8 +145,7 @@ $lang->execution->estimate = 'Estimate';
 $lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
-if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "copy Project/{$lang->execution->common} team members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "copy Project/{$lang->executionCommon} team members";
+$lang->execution->copyTeamTip = "copy Project/project team members";
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
@@ -196,13 +195,13 @@ $lang->execution->statusList['closed']    = 'Closed';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->execution->aclList['private'] = 'Private (for team members and execution stakeholders)';
+    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
     $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 }
 else
 {
-    $lang->execution->aclList['private'] = 'Private (for team members and execution stakeholders)';
-    $lang->execution->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
+    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+    $lang->execution->aclList['open']    = "Public (Users who can visit project can access it.)";
 }
 
 $lang->execution->kanbanAclList['private'] = 'Private';
@@ -371,8 +370,7 @@ $lang->execution->noMembers            = 'No team members yet. ';
 $lang->execution->workloadTotal        = "The cumulative workload ratio should not exceed 100, and the total workload under the current product is: %s";
 // $lang->execution->linkProjectStoryTip  = "(Link {$lang->SRCommon} comes from {$lang->SRCommon} linked under the execution)";
 $lang->execution->linkAllStoryTip      = "({$lang->SRCommon} has never been linked under the execution, and can be directly linked with {$lang->SRCommon} of the product linked with the sprint/stage)";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "Choose a {$lang->execution->common} Team to copy.";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
+$lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {$lang->execution->common} Team to copy.";
 
 /* Interactive prompts. */
 $lang->execution->confirmDelete               = "Do you want to delete the {$lang->executionCommon}[%s]?";
@@ -467,7 +465,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Settings";
 $lang->execution->setKanban     = "Set Kanban";
 $lang->execution->resetKanban   = "Reset";
-$lang->execution->printKanban   = "Print";
+$lang->execution->printKanban   = "Print Kanban";
 $lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 

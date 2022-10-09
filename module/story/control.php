@@ -66,12 +66,17 @@ class story extends control
         {
             $this->product->setMenu($productID);
         }
-        else if($this->app->tab == 'project')
+        elseif($this->app->tab == 'project')
         {
-            $objectID = empty($objectID) ? $this->session->project : $objectID;
-            $objects  = $this->project->getPairsByProgram();
-            $objectID = $this->project->saveState($objectID, $objects);
-            $this->project->setMenu($objectID);
+            $objects = $this->project->getPairsByProgram();
+
+            if(empty($objectID)) $objectID = $this->session->project;
+
+            $projectID = $objectID;
+            if(!$this->session->multiple) $projectID = $this->session->project;
+            $projectID = isset($objects[$projectID]) ? $projectID : $this->session->project;
+            $projectID = $this->project->saveState($projectID, $objects);
+            $this->project->setMenu($projectID);
         }
         else if($this->app->tab == 'execution')
         {
@@ -441,7 +446,7 @@ class story extends control
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
         $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
 
         $this->display();
@@ -549,7 +554,7 @@ class story extends control
             }
 
             /* Project or execution linked stories. */
-            if($executionID)
+            if($executionID and $storyType == 'story')
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
@@ -639,7 +644,7 @@ class story extends control
 
         /* Init vars. */
         $planID   = $plan;
-        $pri      = 0;
+        $pri      = 3;
         $estimate = '';
         $title    = '';
         $spec     = '';
@@ -722,7 +727,7 @@ class story extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
-        $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->needReview       = ($this->app->user->account == $product->PO or $executionID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? 0 : 1;
         $this->view->forceReview      = $this->story->checkForceReview();
         $this->view->executionID      = $executionID;
 
@@ -785,6 +790,7 @@ class story extends control
         $this->loadModel('file');
         $this->app->loadLang('bug');
         $story = $this->story->getById($storyID, 0, true);
+        $this->commonAction($storyID);
 
         if(!empty($_POST))
         {
@@ -827,8 +833,6 @@ class story extends control
             $params = $this->app->rawModule == 'story' ? "storyID=$storyID&version=0&param=0&storyType=$storyType" : "storyID=$storyID";
             return print(js::locate($this->createLink($this->app->rawModule, 'view', $params), 'parent'));
         }
-
-        $this->commonAction($storyID);
 
         /* Sort products. */
         $myProducts     = array();
@@ -898,7 +902,7 @@ class story extends control
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
         $branch         = $product->type == 'branch' ? ($story->branch > 0 ? $story->branch : '0') : 'all';
-        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '');
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
@@ -1202,7 +1206,7 @@ class story extends control
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
-        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0) and empty($reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
 
@@ -1648,7 +1652,7 @@ class story extends control
         $this->view->actions    = $this->action->getList('story', $storyID);
         $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview = (($this->app->user->account == $product->PO || $this->config->story->needReview == 0) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
 
         $this->display();
     }
@@ -2615,41 +2619,42 @@ class story extends control
         {
             $this->session->set('storyPortParams', array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
+            if(!$productID)
+            {
+                $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = 'story';
+
+                $this->config->story->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->story->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+
+                $productIdList = implode(',', array_flip($this->session->exportProductList));
+
+                $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
+            }
+
             $this->post->set('rows', $this->story->getExportStorys($executionID, $orderBy));
             $this->fetch('port', 'export', 'model=story');
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $project  = null;
         if($executionID)
         {
-            $execution     = $this->loadModel('execution')->getByID($executionID);
-            $executionName = $execution->name;
-            $hasProduct    = true;
-            if($execution->type == 'project')
-            {
-                $hasProduct = $execution->hasProduct;
-            }
-            else
-            {
-                $project = $this->loadModel('project')->getById($execution->project);
-                $hasProduct = $project->hasProduct;
-            }
-
-            /* Unset product field when in single project.  */
-            if(!$hasProduct)
-            {
-                $this->config->story->exportFields = str_replace(array('product,', 'branch,'), array('', ''), $this->config->story->exportFields);
-            }
-
-            $fileName = $executionName . $this->lang->dash . $fileName;
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $fileName  = $execution->name . $this->lang->dash . $fileName;
+            $project   = $execution;
+            if($execution->type == 'execution') $project = $this->project->getById($execution->project);
         }
         else
         {
             $productName = $this->lang->product->all;
             if($productID)
             {
-                $product = $this->product->getById($productID);
+                $product     = $this->product->getById($productID);
                 $productName = $product->name;
+
+                if($product->shadow) $project = $this->project->getByShadowProduct($productID);
             }
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
@@ -2661,6 +2666,14 @@ class story extends control
             }
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        /* Unset product field when in single project.  */
+        if(isset($project->hasProduct) && !$project->hasProduct)
+        {
+            $filterFields = array('product,', 'branch,');
+            if($project->model != 'scrum') $filterFields[] = 'plan';
+            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;

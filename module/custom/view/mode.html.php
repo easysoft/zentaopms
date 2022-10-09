@@ -11,8 +11,11 @@
  */
 ?>
 <?php include 'header.html.php';?>
+<?php js::set('changeModeTitleTips', $lang->custom->changeModeTitleTips);?>
+<?php js::set('changeModeContentTips', $lang->custom->changeModeContentTips);?>
+<?php js::set('mode', $mode);?>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form" method='post'>
+  <form id='modeForm' class="load-indicator main-form form-ajax"  method='post'>
     <div class='main-header'>
       <div class='heading'>
         <strong><?php echo $lang->custom->mode?></strong>
@@ -20,24 +23,52 @@
     </div>
     <table class='table table-form'>
       <tr>
-        <th class='text-top'><?php echo $lang->custom->mode;?></th>
-        <td>
+        <th class='text-top w-120px'><?php echo $lang->custom->mode;?></th>
+        <td class='w-300px'>
           <p>
-            <?php $isDisabled = $changedMode == 'yes' ? ' disabled' : '';?>
-            <label class="radio-inline"><input type="radio" name="mode" value="classic" <?php echo $mode == 'classic'? "checked='checked'" : ''; echo $isDisabled;?> id="modeclassic"><?php echo $lang->upgrade->to15Mode['classic'];?></label>
-            <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : ''; echo $isDisabled;?> id="modenew"><?php echo $lang->upgrade->to15Mode['new'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="lean" <?php echo $mode == 'lean'? "checked='checked'" : '';?> id="modelean"><?php echo $lang->upgrade->to18Mode['lean'];?></label>
+            <label class="radio-inline"><input type="radio" name="mode" value="new" <?php echo $mode == 'new'? "checked='checked'" : '';?> id="modenew"><?php echo $lang->upgrade->to18Mode['new'];?></label>
           </p>
-          <p class='text-info' id='modeTips'><?php echo $lang->upgrade->selectedModeTips['new'];?></p>
+        </td>
+        <td></td>
+      </tr>
+      <?php if($program):?>
+      <tr class='hide'>
+        <th><?php echo $lang->custom->defaultProgram;?></th>
+        <td>
+          <?php
+          $disabled = $mode == 'lean' ? "disabled" : '';
+          echo html::select('program', $program, $programID, "class='form-control chosen' $disabled" );
+          ?>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <td></td>
-        <td>
-          <?php if($changedMode != 'yes') echo html::submitButton($lang->custom->switch);?>
-          <div id='changeModeTips' class='text-danger hidden'><?php echo $lang->custom->changeModeTips;?></div>
-        </td>
+        <td><?php echo html::submitButton($lang->custom->switch, 'disabled');?></td>
       </tr>
     </table>
   </form>
 </div>
+
+<div class='modal fade' id='confirmModal'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>×</span><span class='sr-only'><?php echo $this->lang->close;?></span></button>
+        <h4 class='modal-title'></h4>
+      </div>
+      <div class='modal-body'></div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-primary btn-wide btn-confirm'><?php echo $lang->confirm;?></button>
+        <button type='button' class='btn btn-default btn-wide' data-dismiss='modal'><?php echo $this->lang->cancel;?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+#confirmModal .modal-header {border-bottom: 0px}
+#confirmModal .modal-header h4.modal-title{font-weight: 700}
+#confirmModal .modal-footer {border-top: 0px; text-align: center}
+</style>
 <?php include '../../common/view/footer.html.php';?>

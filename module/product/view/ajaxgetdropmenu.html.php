@@ -73,7 +73,7 @@ foreach($products as $programID => $programProducts)
     foreach($programProducts as $index => $product)
     {
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = $product->line ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $productName = ($config->systemMode == 'new' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
         $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 

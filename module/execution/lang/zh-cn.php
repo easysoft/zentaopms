@@ -145,8 +145,7 @@ $lang->execution->estimate = '预计';
 $lang->execution->consumed = '消耗';
 $lang->execution->left     = '剩余';
 
-if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以选择复制{$lang->executionCommon}团队的成员";
+$lang->execution->copyTeamTip = "可以选择复制项目或{$lang->execution->common}团队的成员";
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";
@@ -201,8 +200,8 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $lang->execution->aclList['private'] = "私有（团队成员和{$lang->executionCommon}负责人可访问）";
-    $lang->execution->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
+    $lang->execution->aclList['private'] = "私有（团队成员和项目负责人可访问）";
+    $lang->execution->aclList['open']    = "公开（有项目视图权限即可访问）";
 }
 
 $lang->execution->kanbanAclList['private'] = '私有';
@@ -317,12 +316,12 @@ $lang->execution->groups['finishedBy'] = '完成者分组';
 $lang->execution->groups['closedBy']   = '关闭者分组';
 $lang->execution->groups['type']       = '类型分组';
 
-$lang->execution->groupFilter['story']['all']         = '所有';
+$lang->execution->groupFilter['story']['all']         = '全部';
 $lang->execution->groupFilter['story']['linked']      = "已关联{$lang->SRCommon}的任务";
-$lang->execution->groupFilter['pri']['all']           = '所有';
+$lang->execution->groupFilter['pri']['all']           = '全部';
 $lang->execution->groupFilter['pri']['noset']         = '未设置';
 $lang->execution->groupFilter['assignedTo']['undone'] = '未完成';
-$lang->execution->groupFilter['assignedTo']['all']    = '所有';
+$lang->execution->groupFilter['assignedTo']['all']    = '全部';
 
 $lang->execution->byQuery = '搜索';
 
@@ -371,8 +370,7 @@ $lang->execution->noMembers            = '暂时没有团队成员。';
 $lang->execution->workloadTotal        = "工作量占比累计不应当超过100, 当前产品下的工作量之和为%s";
 // $lang->execution->linkProjectStoryTip = "(关联{$lang->SRCommon}来源于项目下所关联的{$lang->SRCommon})";
 $lang->execution->linkAllStoryTip      = "(项目下还未关联{$lang->SRCommon}，可直接关联该{$lang->execution->common}所关联产品的{$lang->SRCommon})";
-if($config->systemMode == 'classic') $lang->execution->copyTeamTitle = "选择一个{$lang->execution->common}团队";
-if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
+$lang->execution->copyTeamTitle        = "选择一个{$lang->project->common}或{$lang->execution->common}团队";
 
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您确定删除{$lang->executionCommon}[%s]吗？";
@@ -487,7 +485,7 @@ $lang->kanbanSetting->optionList['0'] = '隐藏';
 $lang->kanbanSetting->optionList['1'] = '显示';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
+$lang->printKanban->common  = '打印看板';
 $lang->printKanban->content = '内容';
 $lang->printKanban->print   = '打印';
 
@@ -501,7 +499,7 @@ $lang->execution->typeList['stage']  = '阶段';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = '看板';
 
-$lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
+$lang->execution->featureBar['task']['all']          = '全部';
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
@@ -509,17 +507,17 @@ $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
-$lang->execution->featureBar['all']['all']       = $lang->execution->all;
+$lang->execution->featureBar['all']['all']       = '全部';
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
 $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList['wait'];
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = '所有';
+$lang->execution->featureBar['bug']['all']        = '全部';
 $lang->execution->featureBar['bug']['unresolved'] = '未解决';
 
-$lang->execution->featureBar['build']['all'] = '所有版本';
+$lang->execution->featureBar['build']['all'] = '全部版本';
 
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';

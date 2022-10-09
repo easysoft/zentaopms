@@ -11,6 +11,21 @@
 class project extends control
 {
     /**
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->view->globalDisableProgram = $this->config->systemMode != 'new';
+    }
+
+    /**
      * Project create guide.
      *
      * @param  int    $programID
@@ -296,6 +311,17 @@ class project extends control
         $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
+
+        /* Locate to task when set no execution. */
+        if(!$project->multiple)
+        {
+            $executions = $this->loadModel('execution')->getList($project->id);
+            foreach($executions as $execution)
+            {
+                if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
+            }
+        }
+
         if(empty($project) || $project->type != 'project') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
@@ -385,6 +411,7 @@ class project extends control
         $this->view->recTotal       = $recTotal;
         $this->view->recPerPage     = $recPerPage;
         $this->view->pageID         = $pageID;
+        $this->view->showBatchEdit  = $this->cookie->showProjectBatchEdit;
         $this->view->allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
 
         $this->display();
@@ -514,6 +541,8 @@ class project extends control
         }
 
         if($this->app->tab == 'program' and $programID) $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
         $this->session->set('projectModel', $model);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -556,9 +585,7 @@ class project extends control
             }
         }
 
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
-        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
-
+        if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $topProgramID = $this->program->getTopByID($programID);
 
         if($model == 'kanban')
@@ -567,8 +594,11 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
-        $this->view->title      = $this->lang->project->create;
-        $this->view->position[] = $this->lang->project->create;
+        $sprintConcept = empty($this->config->custom->sprintConcept) ?
+        $this->config->executionCommonList[$this->app->getClientLang()][0] :
+        $this->config->executionCommonList[$this->app->getClientLang()][1];
+
+        $this->view->title = $this->lang->project->create;
 
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
@@ -740,7 +770,7 @@ class project extends control
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
-        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
+        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel) ? '' : 'disabled';
         $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
 
         $this->display();
@@ -749,12 +779,10 @@ class project extends control
     /**
      * Batch edit projects.
      *
-     * @param  string $from
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function batchEdit($from = 'browse', $projectID = 0)
+    public function batchEdit()
     {
         $this->loadModel('action');
         $this->loadModel('execution');
@@ -1046,7 +1074,19 @@ class project extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $showToggleIcon = false;
+        foreach($executionStats as $execution)
+        {
+            if(!empty($execution->tasks) or !empty($execution->children))
+            {
+                $showToggleIcon = true;
+                break;
+            }
+        }
+
+        $this->view->executionStats = $executionStats;
+        $this->view->showToggleIcon = $showToggleIcon;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
@@ -1109,13 +1149,16 @@ class project extends control
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
         $products = $this->product->getProducts($projectID);
 
-        if(!$project->hasProduct) unset($this->config->bug->search['fields']['product']);
+        if(!$project->hasProduct)
+        {
+            unset($this->config->bug->search['fields']['product']);
+            if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
+        }
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
 
-        $hasProduct = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
-        if($hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
+        if($project->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -1128,7 +1171,6 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
 
         /* team member pairs. */
         $memberPairs   = array();
@@ -1157,20 +1199,6 @@ class project extends control
             }
         }
 
-        /* Process the openedBuild and resolvedBuild fields. */
-        $bugs = $this->bug->processBuildForBugs($bugs);
-
-        /* Get story and task id list. */
-        $storyIdList = $taskIdList = array();
-        foreach($bugs as $bug)
-        {
-            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
-            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
-            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
-        }
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
-
         $moduleID = $type != 'bysearch' ? $param : 0;
         $modules  = $this->tree->getAllModulePairs('bug');
 
@@ -1191,6 +1219,21 @@ class project extends control
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+
         $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->projectBug->showModule : '';
 
         /* Assign. */
@@ -1203,7 +1246,7 @@ class project extends control
         $this->view->pager           = $pager;
         $this->view->orderBy         = $orderBy;
         $this->view->productID       = $productID;
-        $this->view->project         = $this->project->getById($projectID);
+        $this->view->project         = $project;
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
@@ -1224,7 +1267,6 @@ class project extends control
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->setModule       = true;
         $this->view->showBranch      = false;
-
 
         $this->display();
     }
@@ -1603,11 +1645,18 @@ class project extends control
         $this->loadModel('dept');
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
+        $project = $this->project->getById($projectID);
 
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($projectID);
+                if($executionID) $this->execution->manageMembers($executionID);
+            }
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
@@ -1615,7 +1664,6 @@ class project extends control
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
-        $project      = $this->project->getById($projectID);
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles        = $this->user->getUserRoles(array_keys($users));
         $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
@@ -1948,6 +1996,13 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
+            /* Delete shadow product.*/
+            if(!$project->hasProduct)
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
+            }
+
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
@@ -2064,6 +2119,8 @@ class project extends control
     {
         $this->loadModel('product');
         $this->loadModel('program');
+        $this->loadModel('execution');
+        $project = $this->project->getById($projectID);
 
         if(!empty($_POST))
         {
@@ -2077,6 +2134,12 @@ class project extends control
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($projectID);
+                if($executionID) $this->execution->updateProducts($executionID);
+            }
+
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
@@ -2088,7 +2151,6 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $project = $this->project->getById($projectID);
         if($this->app->tab == 'program')
         {
             $this->program->setMenu($project->parent);
@@ -2128,7 +2190,7 @@ class project extends control
 
         /* Assign. */
         $this->view->title                    = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $this->view->position[]               = $this->lang->project->manageProducts;
+        $this->view->project                  = $project;
         $this->view->allProducts              = $allProducts;
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
@@ -2201,5 +2263,37 @@ class project extends control
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+    }
+
+    /**
+     * Link projects and code repositories.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function manageRepo($projectID)
+    {
+        $this->project->setMenu($projectID);
+
+        if($_POST)
+        {
+            $postData = fixer::input('post')->setDefault('repos', array())->get();
+
+            $this->project->updateRepoRelations($projectID, $postData->repos);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->linkRepoFailed));
+
+            $locateLink = inLink('manageRepo', "projectID=$projectID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
+        }
+
+        $this->view->title         = $this->lang->project->manageRepo;
+        $this->view->allRepos      = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+        $this->view->linkedRepos   = $this->project->linkedRepoPairs($projectID);
+        $this->view->unlinkedRepos = array();
+
+        foreach($this->view->allRepos as $repoID => $repoName) if(!isset($this->view->linkedRepos[$repoID])) $this->view->unlinkedRepos[$repoID] = $repoName;
+
+        $this->display();
     }
 }

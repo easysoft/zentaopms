@@ -120,7 +120,7 @@
                 <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
-                  <th><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
+                  <th class='thWidth'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type]);?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
                 </tr>
                 <?php endif;?>
@@ -162,7 +162,7 @@
                   <th><?php echo $lang->bug->fromCase;?></th>
                   <td><?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
                 </tr>
-                <tr valign='middle'>
+                <tr valign='middle' class='<?php if($product->shadow and zget($project, 'model') != 'scrum') echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
                 </tr>
@@ -395,7 +395,7 @@
                 <?php if($bug->case):?>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=" . ($bug->testtask ? "&from=testtask&taskID={$bug->testtask}" : ''), '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
+                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=$bug->caseVersion", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
                 <?php if($bug->toCases):?>

@@ -270,6 +270,8 @@ class portModel extends model
         foreach($fields as $key => $field)
         {
             $field = trim($field);
+            if($model == 'bug' and $this->session->currentProductType == 'normal' and $field == 'branch') continue;
+
             $modelFieldList = isset($this->modelFieldList[$field]) ? $this->modelFieldList[$field] : array();
 
             foreach($portFieldList as $portField => $value)
@@ -483,9 +485,7 @@ class portModel extends model
         if(!$tmpFile)
         {
             $rows      = $this->getRowsFromExcel();
-
             $modelData = $this->processRows4Fields($rows, $fields);
-
             $modelData = $this->getNatureDatas($model, $modelData, $filter, $fields);
 
             $this->createTmpFile($modelData);
@@ -565,6 +565,10 @@ class portModel extends model
                 if(!empty($pairs[0])) $valuePairs[$value[$pairs[0]]] = $value[$pairs[1]];
             }
             $values = $valuePairs;
+            if(reset($values))
+            {
+                if(current($values) or (current($values) == 0)) $values[0] = '';
+            }
         }
 
         return $values;
@@ -635,7 +639,7 @@ class portModel extends model
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''*/
-                if(helper::isZeroDate($value))
+                if(helper::isZeroDate($rows[$id]->$field))
                 {
                     $rows[$id]->$field = '';
                 }
@@ -706,7 +710,7 @@ class portModel extends model
                     $lists[$listName] = $fieldList[$field]['values'];
                     if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
                 }
-                $this->config->excel->sysDataField[] = $field;
+                if(is_array($lists[$listName])) $this->config->excel->sysDataField[] = $field;
             }
 
             $lists['listStyle'] = $listFields;

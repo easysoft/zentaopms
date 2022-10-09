@@ -69,7 +69,7 @@
     </div>
     <?php endif;?>
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe' data-app='execution'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
 
     if(common::canModify('execution', $execution))
     {
@@ -96,14 +96,14 @@
 
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo "<div class='btn-group dropdown' title='{$buttonTitle}'>";
-            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='execution'");
+            echo html::a($buttonLink, "<i class='icon icon-plus'></i> $buttonTitle", '', "class='btn btn-secondary $hidden' data-app='$app->tab'");
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
             {
                 if(!($isAllProduct and count($products) > 1)) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
-                echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
-                echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
+                echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app=$app->tab") . '</li>';
+                echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app=$app->tab") . '</li>';
                 echo '</ul>';
             }
 

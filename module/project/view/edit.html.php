@@ -50,8 +50,9 @@
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>
+        <?php if(empty($globalDisableProgram)):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->parent;?></th>
+          <th class='w-120px'><?php echo $lang->project->parent;?></th>
           <?php
           $attr = '';
           if(!isset($programList[$project->parent]))
@@ -64,14 +65,22 @@
           <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
           <td colspan='2'></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-120px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
+          <td colspan='2'></td>
         </tr>
         <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
+        </tr>
+        <?php endif;?>
+        <?php if($model != 'waterfall'):?>
+        <tr>
+          <th><?php echo $lang->project->multiple;?></th>
+          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, $project->multiple, 'disabled'));?></td>
         </tr>
         <?php endif;?>
         <tr>

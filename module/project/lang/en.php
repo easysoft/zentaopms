@@ -64,6 +64,10 @@ $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 $lang->project->allProjects        = 'All Projects';
 $lang->project->ignore             = 'Ignore';
+$lang->project->manageRepo         = 'Manage Repo';
+$lang->project->linkedRepo         = 'Link Repo';
+$lang->project->unlinkedRepo       = 'Unlink Repo';
+$lang->project->disableExecution   = 'Project of disable iteration';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -206,6 +210,7 @@ $lang->project->productTip             = 'After clicking New Product, the projec
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
 $lang->project->budgetOverrun          = "The project's budget exceeds the remaining budget of the parent program:";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
+$lang->project->linkRepoFailed         = 'Failed to link projects and code repositories.';
 
 $lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';
@@ -251,6 +256,9 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
+global $config;
+if(strpos(",$config->disabledFeatures,", ',waterfall,') !== false) unset($lang->project->modelList['waterfall']);
+
 $lang->project->featureBar['browse']['all']       = 'All';
 $lang->project->featureBar['browse']['undone']    = 'Unfinished';
 $lang->project->featureBar['browse']['wait']      = 'Waiting';
@@ -262,6 +270,9 @@ $lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
+
+$lang->project->multipleList['1'] = 'Yes';
+$lang->project->multipleList['0'] = 'No';
 
 $lang->project->acls['private'] = 'Private';
 $lang->project->acls['open']    = 'Open';
@@ -276,6 +287,13 @@ $lang->project->kanbanAclList['open']    = "Open (accessible with project view p
 $lang->project->kanbanSubAclList['private'] = "Private (Only the project leader, team members can access)";
 $lang->project->kanbanSubAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
+
+global $config;
+if($config->systemMode != 'new')
+{
+    unset($lang->project->subAclList['program']);
+    unset($lang->project->kanbanSubAclList['program']);
+}
 
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
@@ -320,24 +338,26 @@ $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';
 $lang->project->programTitle['end']  = 'End-level project only';
 
-$lang->project->accessDenied        = 'Access denied to this project';
-$lang->project->chooseProgramType   = 'Select management type';
-$lang->project->cannotCreateChild   = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
-$lang->project->hasChildren         = 'This project has a child project, so it cannot be deleted.';
-$lang->project->confirmDelete       = 'Do you want to delete \"%s\"?';
-$lang->project->cannotChangeToCat   = "The project has contents, so you cannot it to a parent project.";
-$lang->project->cannotCancelCat     = "There are child projects of this project. You cannot cancel the parent project mark.";
-$lang->project->parentBeginEnd      = "The begin and end date of the parent project: %s ~ %s";
-$lang->project->parentBudget        = "The budget of the parent program: ";
+$lang->project->accessDenied         = 'Access denied to this project';
+$lang->project->chooseProgramType    = 'Select management type';
+$lang->project->cannotCreateChild    = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
+$lang->project->hasChildren          = 'This project has a child project, so it cannot be deleted.';
+$lang->project->confirmDelete        = 'Do you want to delete \"%s\"?';
+$lang->project->cannotChangeToCat    = "The project has contents, so you cannot it to a parent project.";
+$lang->project->cannotCancelCat      = "There are child projects of this project. You cannot cancel the parent project mark.";
+$lang->project->parentBeginEnd       = "The begin and end date of the parent project: %s ~ %s";
+$lang->project->parentBudget         = "The budget of the parent program: ";
 $lang->project->beginLetterParent    = "The start date of the project is < the start date of the parent program:";
 $lang->project->endGreaterParent     = "The finish date of the project is > the finish date of the parent program:";
 $lang->project->dateExceedParent     = "The start and finish date of the project was > the start and finish date of the parent program:";
-$lang->project->beginGreateChild    = 'The start date of the project should be ≥ the start date of program: %s.';
-$lang->project->endLetterChild      = 'The finish date of the project should be ≤ the finish date of program: %s.';
+$lang->project->beginGreateChild     = 'The start date of the project should be ≥ the start date of program: %s.';
+$lang->project->endLetterChild       = 'The finish date of the project should be ≤ the finish date of program: %s.';
 $lang->project->begigLetterExecution = 'The start date of project should be ≤ the minimum start date of the execution: %s.';
 $lang->project->endGreateExecution   = 'The finish date of the project should be ≥ the maximum finish date of the execution: %s.';
-$lang->project->childLongTime       = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
-$lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
+$lang->project->childLongTime        = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
+$lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
+
+$lang->project->multiple = "Multi {$lang->executionCommon}";

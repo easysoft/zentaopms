@@ -147,10 +147,7 @@ class port extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
-        if($model == 'story')
-        {
-            if($this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
-        }
+        if($model == 'story' and $this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
 
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;

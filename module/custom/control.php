@@ -627,42 +627,44 @@ class custom extends control
      */
     public function mode()
     {
-        $mode = zget($this->config->global, 'mode', 'classic');
+        $mode = zget($this->config->global, 'mode', 'lean');
         if($this->post->mode and $this->post->mode != $mode) // If mode value change.
         {
-            $mode = fixer::input('post')->get('mode');
+            $mode    = fixer::input('post')->get('mode');
+            $program = isset($_POST['program']) ? $_POST['program'] : 0;
+
+            if($mode == 'lean' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
+
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
-            $this->setting->setItem('system.common.global.changedMode', 'yes');
+            $this->setting->setItem('system.common.global.defaultProgram', $program);
 
-            $sprintConcept = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-            if($mode == 'new')
-            {
-                if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
-                return print(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
-            }
-            else
-            {
-                if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
-                if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
-                return print(js::reload('top'));
-            }
-        }
+            /* Set default program for product and project with no program. */
+            $this->loadModel('upgrade')->relateDefaultProgram($program);
 
-        if($mode == 'new')
-        {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') return print(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
+            $this->custom->disableFeaturesByMode($mode);
 
-            unset($_SESSION['upgrading']);
+            if($mode == 'lean') $this->custom->processProjectAcl();
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'top'));
         }
 
         $this->app->loadLang('upgrade');
 
-        $this->view->title       = $this->lang->custom->mode;
-        $this->view->position[]  = $this->lang->custom->common;
-        $this->view->position[]  = $this->view->title;
-        $this->view->mode        = $mode;
-        $this->view->changedMode = zget($this->config->global, 'changedMode', 'no');
+        $this->lang->custom->changeModeContentTips['lean'] = $this->lang->custom->hasMoreData['yes'];
+
+        $counts = $this->custom->getCounts();
+        foreach($counts as $function => $count)
+        {
+            if($count) unset($this->lang->custom->needClosedFunctions[$function]);
+        }
+        if(!empty($this->lang->custom->needClosedFunctions)) $this->lang->custom->changeModeContentTips['lean'] = sprintf($this->lang->custom->hasMoreData['no'], implode($this->lang->comma, $this->lang->custom->needClosedFunctions));
+
+        $this->view->title      = $this->lang->custom->mode;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->mode       = $mode;
+        $this->view->program    = $this->loadModel('program')->getTopPairs('', 'noclosed', true);
+        $this->view->programID  = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
 
         $this->display();
     }

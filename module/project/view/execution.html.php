@@ -70,7 +70,9 @@
       <thead>
         <tr>
           <th class='table-nest-title'>
-          <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+          <?php if($showToggleIcon):?>
+            <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+          <?php endif;?>
           <?php echo $lang->nameAB;?>
           </th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>

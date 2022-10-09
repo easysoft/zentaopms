@@ -23,12 +23,12 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->task->date;?></th>
-          <td class='w-p45'><?php echo html::input('date', $estimate->date, 'class="form-control form-date"');?></td>
+          <td class='w-p45 required'><?php echo html::input('date', $estimate->date, 'class="form-control form-date"');?></td>
           <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->record;?></th>
-          <td><?php echo html::input('consumed', $estimate->consumed, 'class="form-control"');?></td>
+          <td class='required'><?php echo html::input('consumed', $estimate->consumed, 'class="form-control"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->left;?></th>
@@ -57,7 +57,8 @@ $(function()
 
         var $this = $(this);
         var $left = $('#left');
-        if(!$left.prop('readonly') && $left.val() === '0')
+        var left  = $.trim($left.val());
+        if(!$left.prop('readonly') && left == 0)
         {
             e.preventDefault();
             bootbox.confirm(confirmRecord, function(result)

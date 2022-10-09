@@ -66,7 +66,7 @@ function processKanbanData(key, programGroup)
                         var execution = latestExecutions[projectID];
                         if(execution && execution.id)
                         {
-                            executionsCol.count++;
+                            if(typeof(executionsCol) == 'object') executionsCol.count++;
                             projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                         }
                     }

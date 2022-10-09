@@ -236,6 +236,8 @@ class search extends control
         foreach($typeCount as $objectType => $count)
         {
             if(!isset($this->lang->search->modules[$objectType])) continue;
+            if($this->config->systemMode != 'new' and $objectType == 'program') continue;
+
             $typeList[$objectType] = $this->lang->search->modules[$objectType];
         }
 

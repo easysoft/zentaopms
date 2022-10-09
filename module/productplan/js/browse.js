@@ -57,8 +57,8 @@ $(function()
         $('#kanban').kanban(
         {
             data:         kanbanData,
-            minColWidth:  290,
-            maxColWidth:  290,
+            minColWidth:  typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
+            maxColWidth:  typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
             maxColHeight: 460,
             minColHeight: 190,
             cardHeight:   80,

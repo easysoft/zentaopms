@@ -84,11 +84,14 @@ $lang->kanban->importRelease       = 'Release';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
 $lang->kanban->allKanban           = 'All Kanban';
-$lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
+$lang->kanban->allProjects         = 'All Projects';
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
 $lang->kanban->allUsers            = 'Charger Tous';
+$lang->kanban->colWidth            = 'Column Width';
+$lang->kanban->minColWidth         = 'Min Column Width';
+$lang->kanban->maxColWidth         = 'Max Column Width';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -124,7 +127,7 @@ $lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
-$lang->kanban->selectedProject = 'Please select ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Project');
+$lang->kanban->selectedProject = 'Please select Project';
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';
@@ -351,8 +354,8 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Largeur standard pour toutes les colonnes)</span>";
-$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapter selon la largeur de voie)</span>";
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<i class='radio-text-divider'></i>Width";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Column width range";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et 32767.';

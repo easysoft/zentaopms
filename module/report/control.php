@@ -292,6 +292,8 @@ class report extends control
         $this->loadModel('dept');
         $this->loadModel('user');
 
+        $super = common::hasPriv('report', 'allAnnualData');
+
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
         $currentYear = date('Y');
         $firstYear   = empty($firstAction) ? $currentYear : substr($firstAction->date, 0, 4);
@@ -329,7 +331,7 @@ class report extends control
 
         $noDepartment = array('0' => '/' . $this->lang->dept->noDepartment);
         $depts        = $this->dept->getOptionMenu();
-        if(!$this->app->user->admin)
+        if(!$super)
         {
             $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $noDepartment;
         }

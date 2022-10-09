@@ -47,6 +47,8 @@ js::set('entertime', time());
 js::set('displayCards', $execution->displayCards);
 js::set('productNum', $productNum);
 js::set('fluidBoard', $execution->fluidBoard);
+js::set('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
+js::set('maxColWidth',$execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
@@ -56,6 +58,8 @@ js::set('executionID', $execution->id);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');
+js::set('defaultMinColWidth', $this->config->minColWidth);
+js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
@@ -157,11 +161,13 @@ js::set('priv',
     echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     if(common::hasPriv('execution', 'setKanban')) echo html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link text-left' data-width='$width'");
-    if(common::hasPriv('execution', 'edit')) echo html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i> ' . $lang->edit, '', "class='iframe btn btn-link text-left' data-width='80%'");
+    if(!$execution->multiple and common::hasPriv('project', 'edit'))  $editURL = helper::createLink('project',   'edit', "projectID=$execution->project", '', true);
+    if($execution->multiple and common::hasPriv('execution', 'edit')) $editURL = helper::createLink('execution', 'edit', "executionID=$execution->id", '', true);
+    if(!empty($editURL)) echo html::a($editURL, '<i class="icon icon-edit"></i> ' . $lang->edit, '', "class='iframe btn btn-link text-left' data-width='80%'");
     $actions           = '';
     $printSettingBtn   = (common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
-    if($printSettingBtn)
+    if($printSettingBtn and $execution->multiple)
     {
         $actions .= "<div class='btn-group menu-actions'>";
         $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
@@ -304,4 +310,33 @@ js::set('priv',
     </div>
   </div>
 </div>
+<?php js::set('taskToOpen', $taskToOpen);?>
+<script>
+$(function()
+{
+    /* Open the task details popup from dynamic. */
+    if(taskToOpen)
+    {
+        var kanban   = document.querySelector('#kanban');
+        var observer = new MutationObserver(function (mutationsList, observer)
+        {
+            for(var mutation of mutationsList)
+            {
+                var target = mutation.target;
+                if(mutation.type == 'childList' && target.tagName.toLowerCase() == 'a' && target.classList.contains('title') && target.parentElement.parentElement.dataset.id == taskToOpen && target.parentElement.className.includes('kanban-item-task'))
+                {
+                    var a = document.querySelector('[data-id="' + taskToOpen +'"] a.title');
+                    if(a)
+                    {
+                        observer.disconnect();
+                        a.click();
+                        break;
+                    }
+                }
+            }
+        });
+        observer.observe(kanban, {subtree: true, childList: true});
+    }
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>
