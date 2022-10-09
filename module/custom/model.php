@@ -917,6 +917,7 @@ class customModel extends model
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";
             }
+            $disabledFeatures .= 'scrumMeasrecord,';
         }
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
     }
@@ -1063,5 +1064,24 @@ class customModel extends model
             return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
         return false;
+    }
+
+    /**
+     * Process measrecord cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function processMeasrecordCron()
+    {
+        $disabledFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=disabledFeatures');
+
+        $cronStatus = 'normal';
+        if(strpos(",$disabledFeatures,", ',waterfall,') !== false and strpos(",$disabledFeatures,", ',scrumMeasrecord,') !== false) $cronStatus = 'stop';
+
+        $cronID = $this->dao->select('id')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch('id');
+        if($cronID) $this->loadModel('cron')->changeStatus($cronID, $cronStatus);
+        $cronID = $this->dao->select('id')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch('id');
+        if($cronID) $this->cron->changeStatus($cronID, $cronStatus);
     }
 }
