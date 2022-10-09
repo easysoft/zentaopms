@@ -70,7 +70,6 @@
             <span><i class='icon icon-group'></i> <?php printf($lang->project->membersUnit, $project->teamCount); ?></span>
             <span><i class='icon icon-clock'></i> <?php printf($lang->project->hoursUnit, $project->estimate); ?></span>
           </div>
-          <?php if($config->systemMode == 'new'):?>
           <?php if($project->model === 'waterfall'):?>
           <div class='project-detail project-stages'>
             <?php
@@ -112,7 +111,6 @@
             </div>
             <?php endif;?>
           </div>
-          <?php endif;?>
           <?php endif;?>
         </div>
       </div>
