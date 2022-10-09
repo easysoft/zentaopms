@@ -856,14 +856,32 @@ class block extends control
         $productIdList = array();
         foreach($productStats as $product) $productIdList[] = $product->id;
 
-        $this->view->executions = $this->dao->select('t1.product,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $this->app->loadLang('project');
+        $executions = $this->dao->select('t1.product,t2.id,t2.project,t2.name,t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t2.type')->in('stage,sprint')
-            ->andWhere('t2.multiple')->eq('1')
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t1.project')
-            ->fetchPairs('product', 'name');
+            ->fetchAll('product');
+
+        $executionPairs = array();
+        $noMultiples    = array();
+        foreach($executions as $execution)
+        {
+            if(empty($execution->multiple)) $noMultiples[$execution->product] = $execution->project;
+            $executionPairs[$execution->product] = $execution->name;
+        }
+        if($noMultiples)
+        {
+            $noMultipleProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($noMultiples)->fetchPairs('id', 'name');
+            foreach($noMultiples as $productID => $projectID)
+            {
+                if(isset($noMultipleProjects[$projectID])) $executionPairs[$productID] = $noMultipleProjects[$projectID] . "({$this->lang->project->noMultiple})";
+            }
+        }
+
+        $this->view->executions   = $executionPairs;
         $this->view->productStats = $productStats;
     }
 

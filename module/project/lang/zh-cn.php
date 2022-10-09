@@ -64,6 +64,7 @@ $lang->project->budgetNumber       = '『预算』金额必须为数字。';
 $lang->project->budgetGe0          = '『预算』金额必须大于等于0。';
 $lang->project->allProjects        = '所有项目';
 $lang->project->ignore             = '忽略';
+$lang->project->noMultiple         = '不启用迭代的项目';
 
 /* Fields. */
 $lang->project->common             = '项目';
