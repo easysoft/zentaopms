@@ -209,6 +209,7 @@ $lang->project->productTip             = 'After clicking New Product, the projec
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
 $lang->project->budgetOverrun          = "The project's budget exceeds the remaining budget of the parent program:";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
+$lang->project->linkRepoFailed         = 'Failed to link projects and code repositories.';
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';

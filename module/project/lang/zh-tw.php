@@ -58,6 +58,7 @@ $lang->project->copyTeamTitle     = '選擇一個項目團隊來複制';
 $lang->project->manageRepo        = '關聯代碼庫';
 $lang->project->linkedRepo        = '已關聯代碼庫';
 $lang->project->unlinkedRepo      = '未關聯代碼庫';
+$lang->project->linkRepoFailed    = '關聯代碼庫失敗。';
 
 /* Fields. */
 $lang->project->common             = '項目';

@@ -2246,7 +2246,7 @@ class project extends control
     }
 
     /**
-     * Link project and repo.
+     * Link projects and code repositories.
      *
      * @param  int    $projectID
      * @access public
@@ -2261,17 +2261,17 @@ class project extends control
             $postData = fixer::input('post')->setDefault('repos', array())->get();
 
             $this->project->updateRepoRelations($projectID, $postData->repos);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->linkRepoFailed));
 
             $locateLink = inLink('manageRepo', "projectID=$projectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $this->view->title = $this->lang->project->manageRepo;
-
-        $this->view->allRepos    = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
-        $this->view->linkedRepos = $this->project->linkedRepoPairs($projectID);
-
+        $this->view->title         = $this->lang->project->manageRepo;
+        $this->view->allRepos      = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+        $this->view->linkedRepos   = $this->project->linkedRepoPairs($projectID);
         $this->view->unlinkedRepos = array();
+
         foreach($this->view->allRepos as $repoID => $repoName) if(!isset($this->view->linkedRepos[$repoID])) $this->view->unlinkedRepos[$repoID] = $repoName;
 
         $this->display();

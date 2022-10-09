@@ -2889,7 +2889,6 @@ class projectModel extends model
             ->andWhere('BType')->eq('repo')
             ->fetchPairs('BID', 'BID');
 
-
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($repoIDList)

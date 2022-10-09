@@ -209,6 +209,7 @@ $lang->project->productTip             = '点击新建产品后，项目将不�
 $lang->project->noDevStage             = '该项目下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。';
 $lang->project->budgetOverrun          = '项目的预算超出了父项目集的剩余预算：';
 $lang->project->disabledInputTip       = '请先取消%s';
+$lang->project->linkRepoFailed         = '关联代码库失败';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
