@@ -25,8 +25,9 @@ js::set('unfoldAll', $lang->execution->treeLevel['all']);
 js::set('foldAll', $lang->execution->treeLevel['root']);
 js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
 ?>
+<?php $canBatchEdit = common::hasPriv('execution', 'batchEdit');?>
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
+  <div class='btn-toolBar pull-left'>
     <?php if($from == 'project'):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
@@ -51,6 +52,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->execution->editAction), $showBatchEdit);?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -72,7 +74,6 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     </p>
   </div>
   <?php else:?>
-  <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' <?php if(!$useDatatable) echo "data-ride='table'";?>>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>

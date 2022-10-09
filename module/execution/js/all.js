@@ -79,9 +79,45 @@ $(function()
             });
         }
     })
+
+    $('input[name^="showEdit"]').click(function()
+    {
+        $.cookie('showExecutionBatchEdit', $(this).is(':checked') ? 1 : 0, {expires: config.cookieLife, path: config.webRoot});
+        setCheckbox();
+    });
+    setCheckbox();
+
+    $('#executionTableList tr').on('click', function(e)
+    {
+        if($.cookie('showExecutionBatchEdit') != 1) e.stopPropagation();
+    });
 });
 
+/**
+ * Location to product list.
+ *
+ * @param  int    productID
+ * @param  int    projectID
+ * @param  string status
+ * @access public
+ * @return void
+ */
 function byProduct(productID, projectID, status)
 {
     location.href = createLink('project', 'all', "status=" + status + "&project=" + projectID + "&orderBy=" + orderBy + '&productID=' + productID);
+}
+
+/**
+ * Set batch edit checkbox.
+ *
+ * @access public
+ * @return void
+ */
+function setCheckbox()
+{
+    $('#executionsForm .checkbox-primary').hide();
+    $('.check-all, .sortable tr').removeClass('checked');
+    $(":checkbox[name^='executionIDList']").prop('checked', false);
+    $('#executionsForm').removeClass('has-row-checked');
+    if($.cookie('showExecutionBatchEdit') == 1) $('#executionsForm .checkbox-primary').show();
 }
