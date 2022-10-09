@@ -54,6 +54,7 @@ $lang->execution->end                 = 'Planned End';
 $lang->execution->dateRange           = 'Plan Duration';
 $lang->execution->realBeganAB         = 'Actual Begin';
 $lang->execution->realEndAB           = 'Actual End';
+$lang->execution->teamCount           = 'number of people';
 $lang->execution->realBegan           = 'Actual Begin';
 $lang->execution->realEnd             = 'Actual End';
 $lang->execution->to                  = 'To';
@@ -341,6 +342,9 @@ $lang->execution->stats                = 'Available: <strong>%s</strong>(h). Est
 $lang->execution->taskSummary          = "Total tasks on this page:<strong>%s</strong>. Waiting: <strong>%s</strong>. Doing: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).";
 $lang->execution->pageSummary          = "Total tasks: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
 $lang->execution->checkedSummary       = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
+$lang->execution->executionSummary     = "Total executions: <strong>%s</strong>.";
+$lang->execution->pageExecSummary      = "Total executions: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
+$lang->execution->checkedExecSummary   = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
 $lang->execution->memberHoursAB        = "%s has <strong>%s</ strong> hours.";
 $lang->execution->memberHours          = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Available Hours</div><div class="segment-value">%s</div></div></div></div>';
 $lang->execution->countSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Waiting</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -415,7 +419,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is not ac
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
-$lang->execution->checkedExecutions           = 'Seleted %s items';
+$lang->execution->checkedExecutions           = 'Seleted %s executions.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

@@ -19,6 +19,10 @@ $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->data
 <?php js::set('unfoldExecutions', array());?>
 <?php js::set('useDatatable', $useDatatable);?>
 <?php js::set('from', $from);?>
+<?php js::set('checkedSummary', $lang->execution->checkedExecSummary);?>
+<?php js::set('pageSummary', $lang->execution->pageExecSummary);?>
+<?php js::set('executionSummary', $lang->execution->executionSummary);?>
+<?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <?php
 /* Set unfold parent executionID. */
 js::set('unfoldAll', $lang->execution->treeLevel['all']);
@@ -74,7 +78,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' <?php if(!$useDatatable) echo "data-ride='table'";?>>
+  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-header fixed-right">
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
@@ -107,7 +111,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       </thead>
       <tbody class='sortable' id='executionTableList'>
         <?php foreach($executionStats as $execution):?>
-        <tr data-id='<?php echo $execution->id ?>' data-order='<?php echo $execution->order ?>'>
+        <tr data-id='<?php echo $execution->id ?>' data-order='<?php echo $execution->order ?>' data-status='<?php echo $execution->status?>'>
           <?php foreach($setting as $key => $value) $this->execution->printCell($value, $execution, $users, $useDatatable ? 'datatable' : 'table', $isStage, $productID);?>
         </tr>
         <?php if(!empty($execution->children)):?>
@@ -131,28 +135,15 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
         <?php echo html::submitButton($lang->execution->batchEdit, '', 'btn');?>
-        <div class="table-statistic"></div>
       </div>
       <?php endif;?>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   </form>
   <?php endif;?>
 </div>
-<script>
-$("#<?php echo $status;?>Tab").addClass('btn-active-text');
-$(document).on('click', '.plan-toggle', function(e)
-{
-    var $toggle = $(this);
-    var id      = $(this).data('id');
-    var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
-    $toggle.closest('[data-ride="table"]').find('tr.parent-' + id).toggle(!isCollapsed);
-
-    e.stopPropagation();
-    e.preventDefault();
-});
-</script>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('status', $status)?>
 <?php include '../../common/view/footer.html.php';?>
