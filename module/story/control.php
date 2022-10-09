@@ -283,7 +283,7 @@ class story extends control
         else
         {
             $products = array();
-            $productList = $this->product->getOrderedProducts('noclosed', 0, 0, 'all');
+            $productList = $this->product->getOrderedProducts('noclosed');
             foreach($productList as $product) $products[$product->id] = $product->name;
             $product = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
