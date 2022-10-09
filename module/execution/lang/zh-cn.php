@@ -341,6 +341,8 @@ $lang->execution->stats                = '可用工时 <strong>%s</strong> 工�
 $lang->execution->taskSummary          = "本页共 <strong>%s</strong> 个任务，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，总预计 <strong>%s</strong> 工时，已消耗 <strong>%s</strong> 工时，剩余 <strong>%s</strong> 工时。";
 $lang->execution->pageSummary          = "本页共 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
 $lang->execution->checkedSummary       = "选中 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
+$lang->execution->pageExecSummary      = "本页共 <strong>%total%</strong> 个{$lang->execution->common}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。";
+$lang->execution->checkedExecSummary   = "选中 <strong>%total%</strong> 个{$lang->execution->common}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。";
 $lang->execution->memberHoursAB        = "<div>%s有 <strong>%s</strong> 工时</div>";
 $lang->execution->memberHours          = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s可用工时</div><div class="segment-value">%s</div></div></div></div>';
 $lang->execution->countSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">总任务</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">进行中</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">未开始</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -415,7 +417,7 @@ $lang->execution->storyDragError              = "该{$lang->SRCommon}不是激�
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 $lang->execution->week                        = '周';
-$lang->execution->checkedExecutions           = '已选择%s项';
+$lang->execution->checkedExecutions           = "共选中%s个{$lang->execution->common}";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
