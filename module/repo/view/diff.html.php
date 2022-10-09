@@ -13,7 +13,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php
 $browser = helper::getBrowser();
-js::set('browser', $browser);
+js::set('browser', $browser['name']);
 ?>
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
@@ -59,7 +59,7 @@ js::set('browser', $browser);
   </div>
 </div>
 <?php endif;?>
-<?php if($browser == 'ie'):?>
+<?php if($browser['name'] == 'ie'):?>
 <div class="repo panel">
   <div class='panel-heading'>
     <form method='post'>
@@ -122,7 +122,7 @@ js::set('browser', $browser);
         {
             $oldlc = $line->oldlc;
             $newlc = '';
-            if(isset($content->new[$oldlc]))
+            if(isset($content->new[$oldlc]) and !isset($content->new[$oldlc - 1]))
             {
                 $newlc = $line->oldlc;
                 $line->type = 'custom';
@@ -159,7 +159,7 @@ js::set('browser', $browser);
   </div>
   <?php endforeach?>
 </div>
-<?php else:?>
+<?php elseif($diffs):?>
 <?php include 'diffeditor.html.php';?>
 <?php endif;?>
 <div class='revisions hidden'>

@@ -347,7 +347,7 @@ class repo extends control
         $this->view->objectID    = $objectID;
         $this->view->repo        = $repo;
         $this->view->revision    = $revision;
-        $this->view->oldRevision = $revision;
+        $this->view->oldRevision = '';
         $this->view->file        = $file;
         $this->view->entry       = $entry;
         $this->view->path        = $entry;
