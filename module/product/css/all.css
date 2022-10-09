@@ -68,6 +68,7 @@ th.c-actions {width: 50px;}
 #productListForm .table.has-sort-head thead > tr > th > a:before {top: -3px;}
 #productListForm .icon-product:before {content: '\e98f'; width: 22px; height: 22px; background: none; color: rgb(166, 170, 184); top: 0; line-height: 22px; margin-right: 2px; font-size: 14px;}
 #productTableList td.table-nest-title > span.icon.table-nest-toggle {vertical-align: middle;}
+#productTableList > tr[data-nest-parent] {background: #f8f8f8;}
 #productList > thead th.table-nest-title.c-name {position: relative; padding-left: 16px !important;}
 
 @media screen and (max-width: 1460px)
