@@ -4316,7 +4316,8 @@ class storyModel extends model
                         }
                     }
 
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                    $executionID = empty($execution) ? 0 : $execution->id;
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
 
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite')
