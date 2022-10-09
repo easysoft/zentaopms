@@ -39,6 +39,6 @@ canvas {height: 28px;}
 #datatable-executionList .parent.has-child.c-name.flex {border-bottom: 1px solid #cbd0db !important;}
 #datatable-executionList tr:last-child .c-name.flex {margin-top: 1px !important;}
 
-#executionList thead .c-estimate.text-right,
-#executionList thead .c-consumed.text-right,
-#executionList thead .c-left.text-right {padding-right: 8px;}
+.table thead .c-estimate.text-right,
+.table thead .c-consumed.text-right,
+.table thead .c-left.text-right {padding-right: 8px;}
