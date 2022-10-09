@@ -4592,12 +4592,12 @@ class executionModel extends model
         if(!$isChild)
         {
             $trClass = 'is-top-level table-nest-child-hide';
-            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
+            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true' data-status={$execution->status}";
         }
         else
         {
             $trClass  = 'table-nest-hide';
-            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
+            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent} data-status={$execution->status}";
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
         }
 
