@@ -3,8 +3,8 @@ $(function()
     $("#" + status + "Tab").addClass('btn-active-text');
     $(document).on('click', '.plan-toggle', function(e)
     {
-        var $toggle = $(this);
-        var id      = $(this).data('id');
+        var id          = $(this).data('id');
+        var $toggle     = $(this);
         var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
         $toggle.closest('#executionsForm').find('tr.parent-' + id).toggle(!isCollapsed);
 
