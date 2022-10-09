@@ -51,18 +51,18 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-110px'><?php echo $hiddenProduct ? $lang->bug->module : $lang->bug->product;?></th>
-            <td class="<?php if($hiddenProduct) echo 'hidden';?>">
+            <th class='w-110px'><?php echo $product->shadow ? $lang->bug->module : $lang->bug->product;?></th>
+            <td class="<?php if($product->shadow) echo 'hidden';?>">
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
+                <?php if($product->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
             </td>
             <td>
               <div class='input-group' id='moduleIdBox'>
-              <?php if(!$hiddenProduct):?>
+              <?php if(!$product->shadow):?>
               <span class="input-group-addon"><?php echo $lang->bug->module?></span>
               <?php endif;?>
                 <?php
@@ -118,7 +118,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 </div>
                 <div class='table-col'>
                   <div class='input-group' id='executionIdBox'>
-                    <span class='input-group-addon fix-border' id='executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></span>
+                    <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
                     <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
                   </div>
                 </div>
@@ -384,7 +384,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php js::set('bugExecution', (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution);?>
+<?php js::set('bugExecution', $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
