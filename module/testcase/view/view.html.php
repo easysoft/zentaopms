@@ -146,7 +146,7 @@
               <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
             </tr>
             <?php else:?>
-            <tr class='<?php if(!$product->shadow) echo 'hide';?>'>
+            <tr class='<?php if($product->shadow) echo 'hide';?>'>
               <th class='thWidth'><?php echo $lang->testcase->product;?></th>
               <td><?php echo (common::hasPriv('product', 'browse') and $productName) ? html::a($this->createLink('product', 'browse', "productID=$case->product"), $productName) : $productName;?></td>
             </tr>
@@ -158,7 +158,7 @@
             <?php endif;?>
             <?php endif;?>
             <tr>
-              <th><?php echo $lang->testcase->module;?></th>
+              <th class='thWidth'><?php echo $lang->testcase->module;?></th>
               <td>
                 <?php
                 if(empty($modulePath))
