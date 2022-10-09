@@ -860,6 +860,7 @@ class block extends control
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t2.type')->in('stage,sprint')
+            ->andWhere('t2.multiple')->eq('1')
             ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t1.project')
             ->fetchPairs('product', 'name');
