@@ -102,6 +102,7 @@ $lang->custom->object['user']      = '用户';
 $lang->custom->object['block']     = '区块';
 $lang->custom->object['flow']      = '流程';
 $lang->custom->object['score']     = '积分';
+$lang->custom->object['mode']      = '模式';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
@@ -117,9 +118,10 @@ $lang->custom->menuOrder[55] = 'user';
 $lang->custom->menuOrder[60] = 'block';
 $lang->custom->menuOrder[65] = 'flow';
 $lang->custom->menuOrder[70] = 'score';
+$lang->custom->menuOrder[85] = 'mode';
 
 $lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score,mode';
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';

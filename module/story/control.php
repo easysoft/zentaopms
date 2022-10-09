@@ -554,7 +554,7 @@ class story extends control
             }
 
             /* Project or execution linked stories. */
-            if($executionID)
+            if($executionID and $storyType == 'story')
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
@@ -2638,36 +2638,23 @@ class story extends control
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $project  = null;
         if($executionID)
         {
-            $execution     = $this->loadModel('execution')->getByID($executionID);
-            $executionName = $execution->name;
-            $hasProduct    = true;
-            if($execution->type == 'project')
-            {
-                $hasProduct = $execution->hasProduct;
-            }
-            else
-            {
-                $project = $this->loadModel('project')->getById($execution->project);
-                $hasProduct = $project->hasProduct;
-            }
-
-            /* Unset product field when in single project.  */
-            if(!$hasProduct)
-            {
-                $this->config->story->exportFields = str_replace(array('product,', 'branch,'), array('', ''), $this->config->story->exportFields);
-            }
-
-            $fileName = $executionName . $this->lang->dash . $fileName;
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $fileName  = $execution->name . $this->lang->dash . $fileName;
+            $project   = $execution;
+            if($execution->type == 'execution') $project = $this->project->getById($execution->project);
         }
         else
         {
             $productName = $this->lang->product->all;
             if($productID)
             {
-                $product = $this->product->getById($productID);
+                $product     = $this->product->getById($productID);
                 $productName = $product->name;
+
+                if($product->shadow) $project = $this->project->getByShadowProduct($productID);
             }
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
@@ -2679,6 +2666,14 @@ class story extends control
             }
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        /* Unset product field when in single project.  */
+        if(isset($project->hasProduct) && !$project->hasProduct)
+        {
+            $filterFields = array('product,', 'branch,');
+            if($project->model != 'scrum') $filterFields[] = 'plan';
+            $this->config->story->exportFields = str_replace($filterFields, '', $this->config->story->exportFields);
         }
 
         $this->view->fileName        = $fileName;

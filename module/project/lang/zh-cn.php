@@ -67,6 +67,7 @@ $lang->project->ignore             = '忽略';
 $lang->project->manageRepo         = '关联代码库';
 $lang->project->linkedRepo         = '已关联代码库';
 $lang->project->unlinkedRepo       = '未关联代码库';
+$lang->project->disableExecution   = '不启用迭代的项目';
 
 /* Fields. */
 $lang->project->common             = '项目';

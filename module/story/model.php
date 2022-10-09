@@ -300,7 +300,7 @@ class storyModel extends model
             }
 
             /* Project or execution linked story. */
-            if($executionID != 0)
+            if($executionID != 0 and $story->type == 'story')
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
@@ -3359,6 +3359,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('story')
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
@@ -4294,7 +4295,7 @@ class storyModel extends model
                     if($canClose and ($canBatchCreate or $canCreateCase)) $menu .= "<div class='dividing-line'></div>";
                 }
 
-                if($storyType == 'requirement') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                if($storyType == 'requirement') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=0&plan=0&storyType=story", $story, $type, 'split', '', 'showinonlybody', '', '', $this->lang->story->subdivide);
 
                 $tab = $this->app->tab == 'project' ? 'project' : 'qa';
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
@@ -4325,7 +4326,7 @@ class storyModel extends model
                     if($canCreateCase and ($canClose or $canUnlinkStory)) $menu .= "<div class='dividing-line'></div>";
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                    $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                    if($execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
                 }
 
                 if($this->app->tab == 'product' and $storyType == 'story')
@@ -4334,7 +4335,6 @@ class storyModel extends model
 
                     $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
                 }
-                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite' and $execution->hasProduct) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
             }
             else
             {

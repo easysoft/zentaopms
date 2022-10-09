@@ -1645,11 +1645,18 @@ class project extends control
         $this->loadModel('dept');
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
+        $project = $this->project->getById($projectID);
 
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($projectID);
+                if($executionID) $this->execution->manageMembers($executionID);
+            }
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
@@ -1657,7 +1664,6 @@ class project extends control
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
-        $project      = $this->project->getById($projectID);
         $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles        = $this->user->getUserRoles(array_keys($users));
         $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
@@ -1990,6 +1996,13 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
+            /* Delete shadow product.*/
+            if(!$project->hasProduct)
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+                $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(1)->where('id')->eq($productID)->exec();
+            }
+
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
@@ -2106,6 +2119,8 @@ class project extends control
     {
         $this->loadModel('product');
         $this->loadModel('program');
+        $this->loadModel('execution');
+        $project = $this->project->getById($projectID);
 
         if(!empty($_POST))
         {
@@ -2119,6 +2134,12 @@ class project extends control
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(empty($project->multiple))
+            {
+                $executionID = $this->execution->getNoMultipleID($projectID);
+                if($executionID) $this->execution->updateProducts($executionID);
+            }
+
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
@@ -2130,7 +2151,6 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $project = $this->project->getById($projectID);
         if($this->app->tab == 'program')
         {
             $this->program->setMenu($project->parent);
@@ -2170,7 +2190,7 @@ class project extends control
 
         /* Assign. */
         $this->view->title                    = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
-        $this->view->position[]               = $this->lang->project->manageProducts;
+        $this->view->project                  = $project;
         $this->view->allProducts              = $allProducts;
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;

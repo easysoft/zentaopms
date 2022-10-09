@@ -1260,7 +1260,7 @@ class executionModel extends model
      *
      * @param  int    $projectID
      * @param  string $type all|sprint|stage|kanban
-     * @param  string $mode all|noclosed|stagefilter or empty
+     * @param  string $mode all|noclosed|stagefilter|withdelete or empty
      * @access public
      * @return array
      */
@@ -1671,6 +1671,18 @@ class executionModel extends model
         }
 
         return $executions;
+    }
+
+    /**
+     * Get no multiple execution id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getNoMultipleID($projectID)
+    {
+        return $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq(0)->andWhere('deleted')->eq(0)->fetch('id');
     }
 
     /**
@@ -2149,19 +2161,18 @@ class executionModel extends model
      * @param  int    $queryID
      * @param  string $actionURL
      * @param  string $type
-     * @param  int    $objectID
+     * @param  object $execution
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $objectID = 0)
+    public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $execution = null)
     {
         $this->app->loadLang('branch');
         $branchPairs  = array(BRANCH_MAIN => $this->lang->branch->main);
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
-        $branches     = $this->loadModel('project')->getBranchesByProject($objectID);
-        $hasProduct   = $this->dao->select('hasProduct')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('hasProduct');
+        $branches     = $this->loadModel('project')->getBranchesByProject($execution->id);
 
         foreach($products as $product)
         {
@@ -2213,7 +2224,13 @@ class executionModel extends model
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
-        if(empty($hasProduct)) unset($this->config->product->search['fields']['product']);
+        $project = $this->loadModel('project')->getByID($execution->project);
+        if(empty($project->hasProduct))
+        {
+            unset($this->config->product->search['fields']['product']);
+
+            if($project->model == 'kanban') unset($this->config->product->search['fields']['plan']);
+        }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }

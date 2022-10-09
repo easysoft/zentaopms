@@ -425,7 +425,8 @@ class groupModel extends model
             {
                 $methodList = (array)zget($this->lang->resource, $moduleName, array());
                 $methodList = array_keys($methodList);
-                $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->eq($groupID)
+                $this->dao->delete()->from(TABLE_GROUPPRIV)
+                    ->where('`group`')->eq($groupID)
                     ->andWhere('module')->eq($moduleName)
                     ->beginIF($methodList)->andWhere('method')->in($methodList)->fi()
                     ->exec();

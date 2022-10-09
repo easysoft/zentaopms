@@ -67,7 +67,7 @@ $lang->project->ignore             = 'Ignorer';
 $lang->project->manageRepo         = 'Manage Repo';
 $lang->project->linkedRepo         = 'Link Repo';
 $lang->project->unlinkedRepo       = 'Unlink Repo';
-
+$lang->project->disableExecution   = 'Project of disable iteration';
 /* Fields. */
 $lang->project->common             = 'Projets';
 $lang->project->id                 = 'ID';

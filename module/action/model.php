@@ -1783,9 +1783,20 @@ class actionModel extends model
         }
         elseif(in_array($action->objectType, array('program', 'project', 'execution')))
         {
-            $project    = $this->dao->select('id,acl')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
+            $project    = $this->dao->select('id,acl,name,hasProduct')->from(TABLE_PROJECT)->where('id')->eq($action->objectID)->fetch();
             $objecttype = $action->objectType == 'execution' ? 'sprint' : $action->objectType;
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($project->id, $objecttype);
+
+            /* Reduction shadow product. */
+            if(!$project->hasProduct and $action->objectType == 'project')
+            {
+                $productID = $this->loadModel('product')->getProductIDByProject($project->id);;
+                $this->dao->update(TABLE_PRODUCT)
+                    ->set('name')->eq($project->name)
+                    ->set('deleted')->eq(0)
+                    ->where('id')->eq($productID)
+                    ->exec();
+            }
         }
         elseif($action->objectType == 'module')
         {

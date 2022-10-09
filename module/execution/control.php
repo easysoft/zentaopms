@@ -865,7 +865,7 @@ class execution extends control
             if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);
         }
 
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $execution);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->story;
@@ -3271,7 +3271,7 @@ class execution extends control
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $objectID);
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
         if($browseType == 'bySearch')
         {
@@ -3317,6 +3317,7 @@ class execution extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
+        $this->view->project      = $this->loadModel('project')->getByID($object->project);
 
         $this->display();
     }

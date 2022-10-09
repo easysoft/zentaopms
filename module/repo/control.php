@@ -203,8 +203,7 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $products       = explode(',', $repo->product);
-        $projectOptions = $this->filterProject($products);
+        $projectOptions = $this->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
 
         $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
         $this->view->repo         = $repo;
@@ -1226,6 +1225,7 @@ class repo extends control
      * Remove projects without privileges.
      *
      * @param  array   $productIDList
+     * @param  array   $projectIDList
      * @access private
      * @return array
      */

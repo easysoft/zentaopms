@@ -876,7 +876,6 @@ class productModel extends model
     public function close($productID)
     {
         $oldProduct = $this->getById($productID);
-        $now        = helper::now();
         $product    = fixer::input('post')
             ->add('id', $productID)
             ->setDefault('status', 'closed')
@@ -892,6 +891,25 @@ class productModel extends model
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldProduct, $product);
+    }
+
+    /**
+     * Activate a product.
+     *
+     * @param  int    $productID.
+     * @access public
+     * @return bool | array
+     */
+    public function activate($productID)
+    {
+        $oldProduct = $this->getById($productID);
+        $product    = (object)array('status' => 'normal');
+
+        $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq((int)$productID)->exec();
+
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldProduct, $product);
     }
 
     /**
@@ -1328,7 +1346,7 @@ class productModel extends model
         $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
-            ->andWhere('t2.project')->eq($projectID)
+            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
