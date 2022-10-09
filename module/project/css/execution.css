@@ -11,3 +11,5 @@ th.table-nest-title .check-all {position: absolute; left: 15px; top: 7px;}
 #executionTableList > tr.has-nest-child .table-nest-toggle {vertical-align: middle;}
 #executionTableList > tr:not(.has-nest-child) .table-nest-toggle {display: none;}
 #executionTableList > tr:not(.has-nest-child) .project-type-label {margin-left: 22px;}
+.table-statistic {padding-left: 10px;}
+#executionTableList .table-nest-icon {top: 6px;}
