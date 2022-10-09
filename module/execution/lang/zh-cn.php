@@ -54,6 +54,7 @@ $lang->execution->end                 = '计划完成';
 $lang->execution->dateRange           = '计划起止日期';
 $lang->execution->realBeganAB         = '实际开始';
 $lang->execution->realEndAB           = '实际完成';
+$lang->execution->teamCount           = '人数';
 $lang->execution->realBegan           = '实际开始日期';
 $lang->execution->realEnd             = '实际完成日期';
 $lang->execution->to                  = '至';

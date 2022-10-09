@@ -54,6 +54,7 @@ $lang->execution->execPM           = "{$lang->execution->common}負責人";
 $lang->execution->QD               = '測試負責人';
 $lang->execution->RD               = '發佈負責人';
 $lang->execution->release          = '發佈';
+$lang->execution->teamCount        = '人數';
 $lang->execution->acl              = '訪問控制';
 $lang->execution->teamname         = '團隊名稱';
 $lang->execution->updateOrder      = '排序';

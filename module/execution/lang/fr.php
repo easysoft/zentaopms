@@ -54,6 +54,7 @@ $lang->execution->end                 = 'Fin';
 $lang->execution->dateRange           = 'Durée';
 $lang->execution->realBeganAB         = 'Actual Begin';
 $lang->execution->realEndAB           = 'Actual End';
+$lang->execution->teamCount           = 'nombre de personnes';
 $lang->execution->realBegan           = 'Début effectif';
 $lang->execution->realEnd             = 'Clôture effective';
 $lang->execution->to                  = 'à';
