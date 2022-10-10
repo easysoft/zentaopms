@@ -116,6 +116,7 @@ $lang->task->assignedTo        = 'Zuständiger';
 $lang->task->assignedToAB      = 'Zuständiger';
 $lang->task->assignedDate      = 'Zugewisen am';
 $lang->task->openedBy          = 'Ersteller';
+$lang->task->openedByAB        = 'Created';
 $lang->task->openedDate        = 'Erstellt am';
 $lang->task->openedDateAB      = 'Hinzufügen';
 $lang->task->finishedBy        = 'Abgeschlossen';
