@@ -182,25 +182,24 @@
           <div class='tab-pane active' id='legendBasic'>
             <table class="table table-data">
               <tbody>
+                <?php if($execution->multiple):?>
                 <tr>
-                  <?php
-                  $method = 'view';
-                  if($this->config->vision == 'lite') $method = 'kanban';
-                  ?>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
                   <td>
-                  <?php
-                  if($execution->type != 'kanban')
-                  {
-                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
-                  }
-                  else
-                  {
-                      echo $execution->name;
-                  }
-                  ?>
-                </td>
+                    <?php
+                    $method = $this->config->vision == 'lite' ? 'kanban' : 'view';
+                    if($execution->type != 'kanban')
+                    {
+                        common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
+                    }
+                    else
+                    {
+                        echo $execution->name;
+                    }
+                    ?>
+                  </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>
                   <?php
