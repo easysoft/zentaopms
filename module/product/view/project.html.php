@@ -63,11 +63,11 @@
       </thead>
       <tbody>
         <?php
-        $id               = 0;
-        $waitCount        = 0;
-        $doingCount       = 0;
-        $suspendedCount   = 0;
-        $closedCount      = 0;
+        $id             = 0;
+        $waitCount      = 0;
+        $doingCount     = 0;
+        $suspendedCount = 0;
+        $closedCount    = 0;
         ?>
         <?php foreach($projectStats as $project):?>
         <?php if($project->status == 'wait')      $waitCount ++;?>
