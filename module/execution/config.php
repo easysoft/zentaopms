@@ -8,7 +8,7 @@ $config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
 $config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
@@ -135,6 +135,7 @@ $config->execution->all->search['fields']['realEnd']        = $lang->execution->
 $config->execution->all->search['fields']['closedBy']       = $lang->execution->closedBy;
 $config->execution->all->search['fields']['lastEditedDate'] = $lang->execution->lastEditedDate;
 $config->execution->all->search['fields']['closedDate']     = $lang->execution->closedDate;
+$config->execution->all->search['fields']['teamCount']      = $lang->execution->teamCount;
 
 $config->execution->all->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->all->search['params']['id']             = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -150,6 +151,7 @@ $config->execution->all->search['params']['realEnd']        = array('operator' =
 $config->execution->all->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['teamCount']      = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;
@@ -173,17 +175,13 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-if((!isset($config->setCode) or $config->setCode == 1) and $config->systemMode == 'new')
+if($config->systemMode == 'new')
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
-}
-elseif($config->systemMode == 'new')
-{
-    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'status', 'PM', 'begin', 'end', 'estimate', 'consumed', 'left', 'progress', 'burn');
 }
 else
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'status', 'PM', 'begin', 'end', 'estimate', 'consumed', 'left', 'progress', 'burn');
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
@@ -208,7 +206,7 @@ if($config->systemMode == 'new')
 {
     $config->execution->datatable->fieldList['project']['title']    = 'project';
     $config->execution->datatable->fieldList['project']['fixed']    = 'no';
-    $config->execution->datatable->fieldList['project']['width']    = '100';
+    $config->execution->datatable->fieldList['project']['width']    = '128';
     $config->execution->datatable->fieldList['project']['required'] = 'no';
 }
 
@@ -254,6 +252,12 @@ $config->execution->datatable->fieldList['realEnd']['fixed']    = 'no';
 $config->execution->datatable->fieldList['realEnd']['width']    = '90';
 $config->execution->datatable->fieldList['realEnd']['required'] = 'no';
 $config->execution->datatable->fieldList['realEnd']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['teamCount']['title']    = 'teamCount';
+$config->execution->datatable->fieldList['teamCount']['fixed']    = 'no';
+$config->execution->datatable->fieldList['teamCount']['width']    = '80';
+$config->execution->datatable->fieldList['teamCount']['required'] = 'no';
+$config->execution->datatable->fieldList['teamCount']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
 $config->execution->datatable->fieldList['estimate']['fixed']    = 'no';

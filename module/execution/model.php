@@ -1531,6 +1531,15 @@ class executionModel extends model
         $hours = $this->loadModel('project')->computerProgress($executions);
         $burns = $this->getBurnData($executions);
 
+        /* Get the number of execution teams. */
+        $teams = $this->dao->select('t1.root,count(t1.id) as teams')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.root')->in(array_keys($executions))
+            ->andWhere('t1.type')->ne('project')
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchAll('root');
+
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         /* Process executions. */
@@ -1557,6 +1566,7 @@ class executionModel extends model
 
             /* Process the hours. */
             $execution->hours = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
+            $execution->teamCount   = isset($teams[$execution->id]) ? $teams[$execution->id]->teams : 0;
 
             if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
@@ -4582,18 +4592,18 @@ class executionModel extends model
         if(!$isChild)
         {
             $trClass = 'is-top-level table-nest-child-hide';
-            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
+            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true' data-status={$execution->status}";
         }
         else
         {
             $trClass  = 'table-nest-hide';
-            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
+            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent} data-status={$execution->status}";
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
         }
 
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
-        echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
+        echo "<td class='c-name text-left flex sort-handler'><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
         {
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
@@ -4626,9 +4636,9 @@ class executionModel extends model
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
         echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
@@ -4841,6 +4851,12 @@ class executionModel extends model
                 if(!empty($execution->children)) $class .= ' has-child';
             }
 
+            if($id == 'teamCount')
+            {
+                $title = " title='{$execution->teamCount}'";
+                $class .= ' text-right';
+            }
+
             if($id == 'project') $title = " title='{$execution->projectName}'";
             if($id == 'code')    $title = " title='{$execution->code}'";
 
@@ -4882,7 +4898,7 @@ class executionModel extends model
                 if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
                 if(!empty($execution->children))
                 {
-                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-double-right'></i></a>";
+                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-right'></i></a>";
                 }
                 break;
             case 'code':
@@ -4908,6 +4924,9 @@ class executionModel extends model
                 break;
             case 'begin':
                 echo helper::isZeroDate($execution->begin) ? '' : $execution->begin;
+                break;
+            case 'teamCount':
+                echo $execution->teamCount;
                 break;
             case 'end':
                 echo helper::isZeroDate($execution->end) ? '' : $execution->end;

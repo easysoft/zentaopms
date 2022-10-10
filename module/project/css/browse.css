@@ -18,7 +18,6 @@ th.c-name {min-width: 240px;}
     th.c-name {width: auto;}
 }
 [lang^='en'] .project-name > .label-warning {width: 55px !important;}
-[lang^='en'] .c-status {width: 100px !important;}
 
 .table-responsive {overflow: auto !important;}
 .checkbox-primary {margin-right: 10px;}

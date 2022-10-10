@@ -82,7 +82,10 @@
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  <div class='table-footer'>
+    <div class='table-statistic'><?php echo $summary;?></div>
+    <?php $pager->show('right', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

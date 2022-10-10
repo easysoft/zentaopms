@@ -134,8 +134,18 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 
 #projectForm .c-name .label-danger,
 #executionTableList .c-name .label-danger,
+
+.flex-between {display: flex !important;align-items: center;justify-content: space-between;}
+#toggleFold > .icon {display: inline-block; color: #838a9d; font-size: 16px; transition: transform .2s; transform: rotate(-90deg);}
+#toggleFold.collapsed > .icon {transform: rotate(90deg);}
+
+#executionTableList .c-name .label-danger {position: absolute; top: 8px; right: 0px;}
 #programTableList .c-name .label-danger {position: absolute; right: 4px; padding: 2px 4px;}
 
 #projectForm .c-name,
 #executionTableList .c-name,
 #programTableList .c-name {padding-right: 64px;}
+td.delayed > span {display: inline-block; height: 20px; line-height: 18px; background: #FFEBEB; color: #FB2B2B; border-radius: 20px; padding: 2px 8px;}
+.table .table-children,
+.table .is-nest-child {background: #F8F8F8;}
+.table tbody td.has-child .icon-angle-right {color: #838a9d;}
