@@ -811,7 +811,6 @@ class testtask extends control
                     $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
                 }
             }
-            $this->view->project = $this->loadModel('project')->getById($execution->project);
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;

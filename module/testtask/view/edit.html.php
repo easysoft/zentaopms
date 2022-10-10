@@ -24,7 +24,7 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
-        <tr <?php if(isset($project->multiple) and empty($project->multiple)) echo "class='hidden'"?>>
+        <tr>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
           <?php
