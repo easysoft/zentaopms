@@ -484,6 +484,22 @@ class productModel extends model
     }
 
     /**
+     * Get shadow products by project id.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object
+     */
+    public function getShadowProductByProject($projectID)
+    {
+        return $this->dao->select('products.*')->from(TABLE_PRODUCT)->alias('products')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('relations')->on('products.id = relations.product')
+            ->where('products.shadow')->eq(1)
+            ->andWhere('relations.project')->eq($projectID)
+            ->fetch();
+    }
+
+    /**
      * Get grouped products.
      *
      * @access public

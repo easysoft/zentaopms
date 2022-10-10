@@ -126,6 +126,7 @@ $lang->nameAB       = 'Name';
 $lang->common = new stdclass();
 $lang->common->common  = 'Module chung';
 $lang->devops->common  = 'DevOps';
+$lang->repo->codeRepo  = 'Code Repo';
 $lang->app->common     = 'APP';
 $lang->app->serverLink = 'Server Link';
 

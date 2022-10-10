@@ -167,6 +167,7 @@ $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
 $lang->repo->common       = 'Code';
+$lang->repo->codeRepo     = 'Code Repo';
 $lang->report->common     = 'Statistic';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
