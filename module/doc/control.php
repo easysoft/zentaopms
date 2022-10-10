@@ -348,7 +348,7 @@ class doc extends control
             unset($this->lang->doc->menu->product['subMenu']);
             unset($this->lang->doc->menu->custom['subMenu']);
             unset($this->lang->doc->menu->execution['subMenu']);
-            if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
+            unset($this->lang->doc->menu->project['subMenu']);
         }
 
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');

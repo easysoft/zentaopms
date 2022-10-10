@@ -121,7 +121,6 @@ function createCardMenu(options)
     if(privs.includes('createExecution'))
     {
         var className     = '';
-        var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
         var today         = new Date();
         var end           = $.zui.createDate(card.end);
         if(end.getTime() < today.getTime())
@@ -138,14 +137,7 @@ function createCardMenu(options)
             if(branchStatus == 'closed') className = 'disabled';
         }
 
-        if(systemMode == 'new')
-        {
-            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className, attrs: {'data-toggle': 'modal', 'onclick': 'getPlanID(this,' + card.branch + ')', 'data-id': card.id}});
-        }
-        else
-        {
-            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className});
-        }
+        items.push({label: productplanLang.createExecution, icon: 'plus', url: '#projects', className: className, attrs: {'data-toggle': 'modal', 'onclick': 'getPlanID(this,' + card.branch + ')', 'data-id': card.id}});
     }
 
     if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink(rawModule, 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});

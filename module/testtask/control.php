@@ -478,11 +478,8 @@ class testtask extends control
         if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product   = $this->product->getByID($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         if($this->app->tab == 'project')
         {
@@ -548,6 +545,7 @@ class testtask extends control
         $this->config->testcase->search['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
@@ -1071,11 +1069,9 @@ class testtask extends control
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product   = $this->product->getByID($productID);
+
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         /* Save session. */
         if($this->app->tab == 'project')
@@ -1103,6 +1099,8 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
+
+        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

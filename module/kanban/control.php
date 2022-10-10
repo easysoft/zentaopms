@@ -1260,7 +1260,21 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs('', 0, '', 'all');
+        /* Kanban products has no releases. */
+        $productPairs   = $this->product->getPairs('', 0, '', 'all');
+        $kanbanProducts = $this->dao->select('t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t2.type')->eq('project')
+            ->andWhere('t2.model')->eq('kanban')
+            ->andWhere('t2.hasProduct')->eq('0')
+            ->fetchPairs();
+
+        foreach($productPairs as $id => $name)
+        {
+            if(isset($excludeProducts[$id])) unset($productPairs[$id]);
+        }
+
+        $this->view->products          = array($this->lang->kanban->allProducts) + $productPairs;
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);

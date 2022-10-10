@@ -49,22 +49,19 @@ $(function()
 
     $('#teams_chosen').click(function()
     {
-        if(systemMode == 'new')
+        $('#teams_chosen ul li').each(function(index)
         {
-            $('#teams_chosen ul li').each(function(index)
+            if(index == 0)
             {
-                if(index == 0)
-                {
-                    var projectName = subString($(this).text(), 56);
-                    $(this).text(projectName);
-                    $(this).append(' <label class="label">' + projectCommon + '</label>');
-                }
-                else
-                {
-                    $(this).prepend('&nbsp;&nbsp;&nbsp;');
-                }
-            })
-        }
+                var projectName = subString($(this).text(), 56);
+                $(this).text(projectName);
+                $(this).append(' <label class="label">' + projectCommon + '</label>');
+            }
+            else
+            {
+                $(this).prepend('&nbsp;&nbsp;&nbsp;');
+            }
+        })
     })
 
     $('#teams').change(function()

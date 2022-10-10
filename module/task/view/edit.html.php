@@ -107,7 +107,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendBasic;?></div>
             <table class='table table-form'>
-              <?php if($task->parent <= 0):?>
+              <?php if($task->parent <= 0 and $execution->multiple):?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->execution;?></th>
                 <td><?php echo html::select('execution', $executions, $task->execution, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>

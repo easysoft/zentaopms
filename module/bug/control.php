@@ -196,7 +196,7 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['onMenuBar'] = 'yes';
-        $searchProducts = $this->product->getPairs('', 0, '', true);
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
         $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
@@ -510,6 +510,7 @@ class bug extends control
         if(isset($bugID))
         {
             $bug = $this->bug->getById($bugID);
+
             extract((array)$bug);
             $executionID = $bug->execution;
             $moduleID    = $bug->module;
@@ -610,8 +611,9 @@ class bug extends control
 
                 /* Replace language. */
                 if(!empty($project->model) and $project->model == 'waterfall') $this->lang->bug->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->bug->execution);
-
                 $projectModel = $project->model;
+
+                if(!$project->multiple) $executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
             }
         }
 
@@ -655,7 +657,7 @@ class bug extends control
         $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
         $this->view->projectModel     = $projectModel;
-        $this->view->executionID      = $executionID;
+        $this->view->execution        = $execution;
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;
         $this->view->buildID          = $buildID;
@@ -1034,6 +1036,7 @@ class bug extends control
         $projectID       = $bug->project;
         $currentModuleID = $bug->module;
         $product         = $this->loadModel('product')->getByID($productID);
+        $execution       = $this->loadModel('execution')->getByID($executionID);
         $this->bug->checkBugExecutionPriv($bug);
 
         if(!isset($this->products[$bug->product]))
@@ -1043,14 +1046,16 @@ class bug extends control
         }
 
         /* Set the menu. */
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($bug->project);
+        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
-        if($this->app->tab == 'qa') $this->qa->setMenu($this->products, $productID, $bug->branch);
+        if($this->app->tab == 'qa')        $this->qa->setMenu($this->products, $productID, $bug->branch);
         if($this->app->tab == 'devops')
         {
             session_write_close();
+
             $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
             $this->repo->setMenu($repos);
+
             $this->lang->navGroup->bug = 'devops';
         }
 
@@ -1066,9 +1071,10 @@ class bug extends control
         }
         if($this->app->tab == 'project')
         {
-            $products = array();
+            $products    = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
             foreach($productList as $productInfo) $products[$productInfo->id] = $productInfo->name;
+
             $this->view->products = $products;
         }
 
@@ -1158,6 +1164,7 @@ class bug extends control
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
         $this->view->product          = $product;
+        $this->view->execution        = $execution;
         $this->view->productBugs      = $productBugs;
         $this->view->productName      = $this->products[$productID];
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);

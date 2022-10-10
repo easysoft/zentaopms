@@ -49,7 +49,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                 <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
               </div>
             </td>
-            <td style='padding-left:15px;'>
+            <td style='<?php if(!$hiddenProduct) echo 'padding-left:15px;';?>'>
               <div class='input-group' id='moduleIdBox'>
                 <?php if(!$hiddenProduct):?>
                 <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>

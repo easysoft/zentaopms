@@ -1600,7 +1600,7 @@ class bugModel extends model
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
         $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
-        $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
+        $productParams = $productParams + array('all' => $this->lang->all);
         $projectParams = $this->getProjects($productID);
         $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 

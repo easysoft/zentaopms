@@ -917,8 +917,13 @@ class customModel extends model
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";
             }
+            $disabledFeatures .= 'scrumMeasrecord,';
         }
-        $this->loadModel('setting')->setItem('system.common.disabledFeatures', rtrim($disabledFeatures, ','));
+
+        $disabledFeatures = rtrim($disabledFeatures, ',');
+        $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+
+        $this->processMeasrecordCron($disabledFeatures);
     }
 
     /**
@@ -1063,5 +1068,24 @@ class customModel extends model
             return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
         return false;
+    }
+
+    /**
+     * Process measrecord cron.
+     *
+     * @param  string  $disabledFeatures
+     * @access public
+     * @return void
+     */
+    public function processMeasrecordCron($disabledFeatures)
+    {
+        $cronStatus = 'normal';
+        if(strpos(",$disabledFeatures,", ',waterfall,') !== false and strpos(",$disabledFeatures,", ',scrumMeasrecord,') !== false) $cronStatus = 'stop';
+
+        $this->loadModel('cron');
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
+        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
 }

@@ -1014,7 +1014,6 @@ EOF;
         $this->view->outputs         = $this->pssp->getOutputPairs();
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->auditplan;
-        $this->view->position[] = $this->lang->my->auditplan;
         $this->view->browseType = $browseType;
         $this->view->auditplans = $auditplans;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');

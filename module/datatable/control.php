@@ -104,10 +104,9 @@ class datatable extends control
         if($moduleName == 'project' and $method == 'bug')
         {
             $project = $this->loadModel('project')->getByID($this->session->project);
-            if(!$project->hasProduct and $project->model != 'scrum')
-            {
-                unset($cols['plan']);
-            }
+
+            if(!$project->multiple) unset($cols['execution']);
+            if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
         }
 
         if($moduleName == 'execution' and $method == 'bug')

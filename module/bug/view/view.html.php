@@ -14,7 +14,6 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('tab', $app->tab);?>
 <?php js::set('bugID', $bug->id);?>
 <?php js::set('branchID', $bug->branch);?>
@@ -106,7 +105,7 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $config->systemMode == 'new' ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></a></li>
+          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $project->multiple ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -279,16 +278,16 @@
           <div class='tab-pane' id='legendExecStoryTask'>
             <table class='table table-data'>
               <tbody>
-                <?php if($config->systemMode == 'new'):?>
                 <tr>
                   <th class='w-70px'><?php echo $lang->bug->project;?></th>
                   <td><?php if($bug->project) echo html::a($this->createLink('project', 'view', "projectID=$bug->project"), $bug->projectName);?></td>
                 </tr>
-                <?php endif;?>
+                <?php if($project->multiple):?>
                 <tr>
                   <th class='w-70px'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
                 </tr>
+                <?php endif;?>
                 <tr class='nofixed'>
                   <th><?php echo $lang->bug->story;?></th>
                   <td>
@@ -459,7 +458,6 @@
       </div>
       <div class="modal-body">
         <table class='table table-form'>
-          <?php if($this->config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->bug->project;?></th>
             <td class='required'><?php echo html::select('taskProjects', $projects, '', "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?></td>
@@ -468,12 +466,6 @@
             <th id='executionHead'><?php echo $lang->bug->execution;?></th>
             <td id='executionBox' class='required'><?php echo html::select('execution', '', '', "class='form-control chosen'");?></td>
           </tr>
-          <?php else:?>
-          <tr>
-            <th><?php echo $lang->execution->common;?></th>
-            <td><?php echo html::select('execution', $projects, '', "class='form-control chosen'");?></td>
-          </tr>
-          <?php endif;?>
           <tr>
             <td colspan='2' class='text-center'>
               <?php echo html::commonButton($lang->bug->nextStep, "id='toTaskButton'", 'btn btn-primary btn-wide');?>
