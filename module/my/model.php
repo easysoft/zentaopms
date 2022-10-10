@@ -337,8 +337,9 @@ class myModel extends model
         if($objectType == 'task')
         {
             $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
-            $objectList = $this->dao->select("t1.*, t2.name as executionName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
+            $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.id')->in(array_keys($objectIDList))
@@ -571,11 +572,11 @@ class myModel extends model
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t1.id = t5.task")
             ->where($query)
             ->andWhere('t1.deleted')->eq(0)
@@ -602,10 +603,7 @@ class myModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
-        if(!empty($taskTeam))
-        {
-            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
-        }
+        foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
 
         if($tasks) return $this->loadModel('task')->processTasks($tasks);
         return array();

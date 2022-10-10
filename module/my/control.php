@@ -487,23 +487,12 @@ EOF;
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
-        $parents         = array();
-        $executionIDList = array();
+        $parents = array();
         foreach($tasks as $task)
         {
-            if($this->config->systemMode == 'new') $executionIDList[$task->execution] = $task->execution;
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
-        if($this->config->systemMode == 'new')
-        {
-            $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
-                ->where('t2.id')->in($executionIDList)
-                ->andWhere('t1.type')->eq('project')
-                ->fetchAll('execution');
-        }
 
         foreach($tasks as $task)
         {
@@ -543,7 +532,6 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
-        $this->view->projects   = isset($projects) ? $projects : array();
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
