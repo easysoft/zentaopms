@@ -56,4 +56,4 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->testsuite->featureBar['browse']['all'] = 'Suite List';
-$lang->testsuite->summary                     = "Total suites <strong>%total%</strong>, public <strong>%public%</strong>, private <strong>%private%</strong>.";
+$lang->testsuite->summary                     = "Total suites: <strong>%total%</strong>, public: <strong>%public%</strong>, private: <strong>%private%</strong>.";

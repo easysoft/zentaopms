@@ -53,4 +53,4 @@ $lang->testsuite->authorList['private'] = 'Riêng tư';
 $lang->testsuite->authorList['public']  = 'Công khai';
 
 $lang->testsuite->featureBar['browse']['all'] = 'Suite List';
-$lang->testsuite->summary                     = "Tổng <strong>%total%</strong> suites nào, Công khai <strong>%public%</strong>, Riêng tư <strong>%private%</strong>.";
+$lang->testsuite->summary                     = "Tổng <strong>%total%</strong> suites nào, Công khai: <strong>%public%</strong>, Riêng tư: <strong>%private%</strong>.";
