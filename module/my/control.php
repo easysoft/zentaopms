@@ -207,6 +207,7 @@ var storyCount    = $storyCount;
 var bugCount      = $bugCount;
 var caseCount     = $caseCount;
 var testTaskCount = $testTaskCount;
+var reviewCount   = $reviewCount;
 
 var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
@@ -220,8 +221,6 @@ if(isMax !== 0)
 {
     var issueCount   = $issueCount;
     var riskCount    = $riskCount;
-    var reviewCount  = $reviewCount;
-    var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
 }
 </script>
@@ -949,28 +948,32 @@ EOF;
      */
     public function audit($browseType = 'needreview', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $this->loadModel('datatable');
-        $this->loadModel('baseline');
-        $this->session->set('reviewList', $this->app->getURI(true));
-        $this->app->loadLang('review');
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $pendingList = $this->loadModel('approval')->getPendingReviews('review');
-        if($browseType == 'needreview')
+        $reviewList = array();
+        if($this->config->edition == 'max')
         {
-            $reviewList  = $this->loadModel('review')->getByList($pendingList, $orderBy, $pager);
-        }
-        else
-        {
-            $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+            $this->loadModel('datatable');
+            $this->loadModel('baseline');
+            $this->app->loadLang('review');
+            $this->session->set('reviewList', $this->app->getURI(true));
+            $pendingList = $this->loadModel('approval')->getPendingReviews('review');
+            if($browseType == 'needreview')
+            {
+                $reviewList  = $this->loadModel('review')->getByList($pendingList, $orderBy, $pager);
+            }
+            else
+            {
+                $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+            }
+            $this->view->products    = $this->my->getProductPairs();
+            $this->view->pendingList = $pendingList;
         }
 
         $this->view->title       = $this->lang->my->myReview;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->reviewList  = $reviewList;
-        $this->view->pendingList = $pendingList;
-        $this->view->products    = $this->my->getProductPairs();
         $this->view->recTotal    = $recTotal;
         $this->view->recPerPage  = $recPerPage;
         $this->view->pageID      = $pageID;

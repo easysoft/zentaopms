@@ -202,6 +202,7 @@ $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
 $lang->app->common        = 'APP';
 $lang->app->serverLink    = 'Server Link';
+$lang->review->common     = 'Review';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

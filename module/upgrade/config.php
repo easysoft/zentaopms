@@ -347,7 +347,6 @@ $config->delete['17_0_beta1'][] = 'extension/max/group/ext/lang/zh-cn/zflow.php'
 $config->delete['17_0_beta1'][] = 'extension/max/group/ext/model/flow.php';
 $config->delete['17_0_beta1'][] = 'extension/max/user/ext/model/bizext.php';
 $config->delete['17_0_beta1'][] = 'extension/max/sso/ext/model/bizext.php';
-$config->delete['18_0'][]       = 'extension/max/custom/ext/view/mode.zentaomax.html.hook.php';
 
 $config->delete['17_2'][] = 'extension/biz/my/ext/view/todo.calendar.html.hook.php';
 $config->delete['17_2'][] = 'extension/max/my/ext/view/todo.calendar.html.hook.php';
@@ -374,6 +373,9 @@ $config->delete['17_2'][] = 'extension/lite/workflowlayout/ext/view/admin.flow.h
 $config->delete['17_2'][] = 'extension/lite/workflowrelation/ext/view/admin.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/browse.flow.html.hook.php';
 $config->delete['17_2'][] = 'extension/lite/extension/lite/workflowrule/ext/view/view.flow.html.hook.php';
+
+$config->delete['18_0'][] = 'extension/max/custom/ext/view/mode.zentaomax.html.hook.php';
+$config->delete['18_0'][] = 'extension/max/my/ext/view/audit.html.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'port');
 

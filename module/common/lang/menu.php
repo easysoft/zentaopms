@@ -96,6 +96,7 @@ $lang->my->menu->work['subMenu']->story       = "$lang->SRCommon|my|work|mode=st
 $lang->my->menu->work['subMenu']->bug         = "{$lang->bug->common}|my|work|mode=bug";
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
 $lang->my->menu->work['subMenu']->testtask    = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
+$lang->my->menu->work['subMenu']->audit       = array('link' => "{$lang->review->common}|my|work|mode=audit", 'subModule' => 'review');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
 $lang->my->menu->work['menuOrder'][10] = 'requirement';
@@ -103,6 +104,7 @@ $lang->my->menu->work['menuOrder'][15] = 'story';
 $lang->my->menu->work['menuOrder'][20] = 'bug';
 $lang->my->menu->work['menuOrder'][25] = 'testcase';
 $lang->my->menu->work['menuOrder'][30] = 'testtask';
+$lang->my->menu->work['menuOrder'][35] = 'audit';
 if(!$config->URAndSR) unset($lang->my->menu->work['subMenu']->requirement, $lang->my->menu->work['menuOrder'][10]);
 
 $lang->my->menu->contribute['subMenu']              = new stdclass();
@@ -112,6 +114,7 @@ $lang->my->menu->contribute['subMenu']->story       = "$lang->SRCommon|my|contri
 $lang->my->menu->contribute['subMenu']->bug         = "{$lang->bug->common}|my|contribute|mode=bug";
 $lang->my->menu->contribute['subMenu']->testcase    = "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme";
 $lang->my->menu->contribute['subMenu']->testtask    = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review');
 $lang->my->menu->contribute['subMenu']->doc         = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
@@ -120,7 +123,8 @@ $lang->my->menu->contribute['menuOrder'][15] = 'story';
 $lang->my->menu->contribute['menuOrder'][20] = 'bug';
 $lang->my->menu->contribute['menuOrder'][25] = 'testcase';
 $lang->my->menu->contribute['menuOrder'][30] = 'testtask';
-$lang->my->menu->contribute['menuOrder'][35] = 'doc';
+$lang->my->menu->contribute['menuOrder'][35] = 'audit';
+$lang->my->menu->contribute['menuOrder'][40] = 'doc';
 
 if(!$config->URAndSR) unset($lang->my->menu->contribute['subMenu']->requirement, $lang->my->menu->contribute['menuOrder'][10]);
 

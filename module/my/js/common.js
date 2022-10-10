@@ -10,6 +10,7 @@ $(function()
             $("#subNavbar li[data-id='bug'] a").append('<span class="label label-light label-badge">' + bugCount + '</span>');
             $("#subNavbar li[data-id='testcase'] a").append('<span class="label label-light label-badge">' + caseCount + '</span>');
             $("#subNavbar li[data-id='testtask'] a").append('<span class="label label-light label-badge">' + testTaskCount + '</span>');
+            $("#subNavbar li[data-id='audit'] a").append('<span class="label label-light label-badge">' + reviewCount + '</span>');
 
             if(isOpenedURAndSR !== 0) $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + requirementCount + '</span>');
 
@@ -18,7 +19,6 @@ $(function()
             {
                 $("#subNavbar li[data-id='issue'] a").append('<span class="label label-light label-badge">' + issueCount + '</span>');
                 $("#subNavbar li[data-id='risk'] a").append('<span class="label label-light label-badge">' + riskCount + '</span>');
-                $("#subNavbar li[data-id='audit'] a").append('<span class="label label-light label-badge">' + reviewCount + '</span>');
                 $("#subNavbar li[data-id='nc'] a").append('<span class="label label-light label-badge">' + qaCount + '</span>');
                 $("#subNavbar li[data-id='myMeeting'] a").append('<span class="label label-light label-badge">' + meetingCount + '</span>');
             }
