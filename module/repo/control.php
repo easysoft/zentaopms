@@ -519,6 +519,7 @@ class repo extends control
         $this->view->branchesAndTags = $branchesAndTags;
         $this->view->branchID        = $branchID;
         $this->view->objectID        = $objectID;
+        $this->view->currentProject  = $this->app->tab == 'project' ? $this->loadModel('project')->getByID($objectID) : null;
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
