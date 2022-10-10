@@ -419,7 +419,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is not ac
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
-$lang->execution->checkedExecutions           = 'Seleted %s executions.';
+$lang->execution->checkedExecutions           = "Seleted %s {$lang->executionCommon}.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
