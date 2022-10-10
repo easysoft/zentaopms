@@ -1233,6 +1233,7 @@ class userModel extends model
             ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('openedBy')->eq($account)->fi()
+            ->beginIF($type == 'execution')->andWhere('t2.multiple')->eq('1')->fi()
             ->beginIF($type == 'execution' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
