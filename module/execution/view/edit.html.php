@@ -23,10 +23,10 @@
         <small><?php echo $lang->arrow . ' ' . $lang->execution->edit;?></small>
       </h2>
     </div>
-    <?php if($config->systemMode == 'new') echo html::hidden('project', $project->id);?>
+    <?php echo html::hidden('project', $project->id);?>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new' and isset($project)):?>
+        <?php if(isset($project)):?>
         <?php if($project->model == 'scrum'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
@@ -236,5 +236,4 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php include '../../common/view/footer.html.php';?>

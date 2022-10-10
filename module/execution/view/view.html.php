@@ -312,7 +312,6 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($this->config->systemMode == 'new'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->project;?></strong>
@@ -326,7 +325,6 @@
                 </div>
               </div>
             </div>
-            <?php endif;?>
             <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">

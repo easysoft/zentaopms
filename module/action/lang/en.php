@@ -681,14 +681,7 @@ $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|product|programID=%s";
 $lang->action->label->project     = "Project|project|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 
 $lang->action->label->task         = 'Task|task|view|taskID=%s';
 $lang->action->label->build        = 'Build|build|view|buildID=%s';

@@ -1577,7 +1577,7 @@ class docModel extends model
             $orderedExecutions = array();
             foreach($executions as $id => $execution)
             {
-                $execution->name = $this->config->systemMode == 'new' ? zget($projectPairs, $execution->project) . ' / ' . $execution->name : $execution->name;
+                $execution->name = zget($projectPairs, $execution->project) . ' / ' . $execution->name;
 
                 if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM == $this->app->user->account)
                 {
@@ -2336,7 +2336,7 @@ class docModel extends model
 
         if($this->app->tab == 'doc' and $type != 'custom' and $type != 'book')
         {
-            $objectTitle = ($this->config->systemMode == 'new' and $type == 'execution') ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
+            $objectTitle = $type == 'execution' ? substr($objects[$objectID], strpos($objects[$objectID], '/') + 1) : $objects[$objectID];
 
             $output = <<<EOT
 <div class='btn-group angle-btn'>

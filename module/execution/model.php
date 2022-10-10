@@ -346,7 +346,7 @@ class executionModel extends model
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
 
-        if($this->config->systemMode == 'new' && !empty($sprint->parent))
+        if(!empty($sprint->parent))
         {
             $project = $this->loadModel('project')->getByID($sprint->parent);
             $sprint->hasProduct = $project->hasProduct;
@@ -4833,7 +4833,7 @@ class executionModel extends model
         $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
 
         if(!$isStage and in_array($col->id, array('percent', 'attribute', 'actions'))) return;
-        if(($this->config->systemMode == 'classic' or ($this->config->systemMode == 'new' and $this->app->tab != 'execution')) and $col->id == 'project') return;
+        if($this->app->tab != 'execution' and $col->id == 'project') return;
 
         if($col->show)
         {
@@ -4892,7 +4892,7 @@ class executionModel extends model
             case 'name':
                 $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';
                 $executionLink = $execution->projectModel == 'kanban' ? html::a(helper::createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a(helper::createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
-                if($this->config->systemMode != 'classic' and !$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
+                if(!$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
                 if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$this->lang->programplan->childrenAB}</span> ";
                 echo !empty($execution->children) ? "<span class='text-ellipsis'>$execution->name</span>" :  $executionLink;
                 if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";

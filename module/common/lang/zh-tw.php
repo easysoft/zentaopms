@@ -146,7 +146,7 @@ $lang->my->common         = '地盤';
 $lang->program->common    = '項目集';
 $lang->product->common    = '產品';
 $lang->project->common    = '項目';
-$lang->execution->common  = $config->systemMode == 'new' ? '執行' : $lang->executionCommon;
+$lang->execution->common  = '執行';
 $lang->kanban->common     = '看板';
 $lang->qa->common         = '測試';
 $lang->devops->common     = 'DevOps';

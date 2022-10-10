@@ -289,7 +289,7 @@ $lang->project->kanbanSubAclList['open']    = "公开 (有项目视图权限即�
 $lang->project->kanbanSubAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、项目负责人、团队成员可访问）';
 
 global $config;
-if($config->systemMode != 'new')
+if($config->systemMode == 'lean')
 {
     unset($lang->project->subAclList['program']);
     unset($lang->project->kanbanSubAclList['program']);

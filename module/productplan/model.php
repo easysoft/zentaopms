@@ -1169,15 +1169,7 @@ class productplanModel extends model
 
             if($canClickExecution)
             {
-                $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
-                if($this->config->systemMode == 'new')
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
-                else
-                {
-                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
-                }
+                $menu .= html::a('#projects', '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
             }
             elseif($canCreateExec)
             {

@@ -22,7 +22,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
-        $this->view->globalDisableProgram = $this->config->systemMode != 'new';
+        $this->view->globalDisableProgram = $this->config->systemMode == 'lean';
     }
 
     /**
@@ -1732,19 +1732,16 @@ class project extends control
             }
         }
 
-        if($this->config->systemMode == 'new')
+        $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+        if($project->acl != 'open')
         {
-            $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
-            if($project->acl != 'open')
+            foreach($outsideUsers as $account => $outsideUser)
             {
-                foreach($outsideUsers as $account => $outsideUser)
-                {
-                    if(!isset($canViewMembers[$account])) unset($outsideUsers[$account]);
-                }
+                if(!isset($canViewMembers[$account])) unset($outsideUsers[$account]);
             }
-
-            $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
         }
+
+        $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
 
         $title      = $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;

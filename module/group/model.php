@@ -284,7 +284,7 @@ class groupModel extends model
                     unset($executions[$object->parent]);
                 }
 
-                $object->name = (isset($objects[$object->project]) and $this->config->systemMode == 'new') ? $objects[$object->project]->name . '/' . $object->name : $object->name;
+                $object->name = isset($objects[$object->project]) ? $objects[$object->project]->name . '/' . $object->name : $object->name;
                 $executions[$object->id] = $object->name;
             }
         }

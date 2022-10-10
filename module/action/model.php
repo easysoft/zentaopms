@@ -1761,7 +1761,7 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
 
-        if($this->config->systemMode == 'new' and $action->objectType == 'execution')
+        if($action->objectType == 'execution')
         {
             $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
             if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));

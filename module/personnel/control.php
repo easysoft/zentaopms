@@ -176,8 +176,7 @@ class personnel extends control
         $copyUsers   = empty($copyID) ? array() : $this->personnel->getWhitelistAccount($copyID, $copyObjectType);
         $appendUsers = array_unique($deptUsers + $copyUsers);
 
-        $objectName = $this->lang->execution->common;
-        if($this->config->systemMode == 'new') $objectName = $this->lang->projectCommon . $this->lang->execution->or . $objectName;
+        $objectName = $this->lang->projectCommon . $this->lang->execution->or . $objectName;
         if($objectType == 'program')           $objectName = $this->lang->program->common;
         if($objectType == 'product')           $objectName = $this->lang->productCommon;
         if($objectType == 'project')           $objectName = $this->lang->projectCommon;
