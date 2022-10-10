@@ -13,5 +13,10 @@ pid=1
 */
 
 $repo = new repoTest();
+$result1 = $repo->getListBySCMTest('Gitlab');
+$result2 = $repo->getListBySCMTest('gogs');
+$result3 = $repo->getListBySCMTest('empty');
 
-r($repo->getListBySCMTest()) && p() && e();
+r($result1) && p('') && e('723test');
+r($result2) && p('') && e('empty');
+r($result3) && p('') && e('empty');
