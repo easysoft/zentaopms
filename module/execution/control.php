@@ -41,7 +41,9 @@ class execution extends control
         $this->loadModel('project');
 
         if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
-        $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
+
+        $mode = $this->app->tab == 'execution' ? 'multiple' : '';
+        $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {

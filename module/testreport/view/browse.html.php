@@ -35,11 +35,13 @@
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr class='text-center'>
-        <th class='c-id'><?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
-        <th class='text-left'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->testreport->title);?></th>
-        <th class='c-user'><?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+        <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+        <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->testreport->title);?></th>
+        <th class='c-user'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='c-full-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
+        <?php if($objectType != 'project' || ($objectType == 'project' && $object->multiple)):?>
         <th class='c-object text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->execution);?></th>
+        <?php endif;?>
         <th class='c-object text-left'><?php echo $lang->testreport->testtask;?></th>
         <th class='c-actions-2'><?php echo $lang->actions;?></th>
       </tr>
@@ -52,8 +54,11 @@
         <td class='c-name'><?php echo html::a($viewLink, $report->title, '', "data-app='{$app->tab}' title='{$report->title}'")?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
-        <?php $executionName = $report->execution ? '#' . $report->execution . zget($executions, $report->execution, '') : '';?>
+        <?php if($objectType != 'project' || ($objectType == 'project' && $object->multiple)):?>
+        <?php $execution = zget($executions, $report->execution, '');?>
+        <?php $executionName = ($report->execution and zget($execution, 'multiple', '')) ? '#' . $report->execution . zget($execution, 'name', '') : '';?>
         <td class='text-left' title='<?php echo $executionName?>'><?php echo $executionName;?></td>
+        <?php endif;?>
         <?php
         $taskName = '';
         foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';

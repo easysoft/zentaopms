@@ -76,8 +76,8 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t3.name), t3.name)" : 't3.name';
-        return $this->dao->select("t1.*, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $executionNameField = "IF(t5.id IS NOT NULL && t5.multiple = '1', CONCAT(t5.name, ' / ', t3.name), IF(t5.id IS NOT NULL, t5.name, t3.name))";
+        return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
