@@ -1064,11 +1064,9 @@ class testtask extends control
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product   = $this->product->getByID($productID);
+
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         /* Save session. */
         if($this->app->tab == 'project')
@@ -1096,6 +1094,8 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
+
+        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

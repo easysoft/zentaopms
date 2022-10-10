@@ -605,7 +605,14 @@ class story extends control
 
             if($storyID)
             {
-                return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+                if($this->app->tab == 'product')
+                {
+                    return print(js::locate(inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType"), 'parent'));
+                }
+                else
+                {
+                    return print(js::locate($this->createLink('projectstory', 'view', "storyID=$storyID"), 'parent'));
+                }
             }
             elseif($executionID)
             {
