@@ -1916,7 +1916,7 @@ class testcaseModel extends model
     {
         $productName = zget($products, $productID, '');
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productName) + array('all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['product']['values'] = $product;
+        $this->config->testcase->search['params']['product']['values'] = array('') + $product;
 
         $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
         if(!$productID)
