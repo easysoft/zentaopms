@@ -1,2 +1,4 @@
 .hours {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right;}
-td.deadline > span {padding-left: 4px;}
+.c-execution {width: 180px;}
+.c-hour, .c-status {width: 70px;}
+.c-deadline {width: 100px;}

@@ -122,7 +122,7 @@
         <th class="c-hours"><?php echo $lang->task->leftAB;?></th>
         <th class="c-progress" title='<?php echo $lang->task->progress;?>'><?php echo $lang->task->progressAB;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
-        <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
+        <th class="c-date text-center"><?php echo $lang->task->deadlineAB;?></th>
         <th class="c-actions-3"><?php echo $lang->actions;?></th>
       </tr>
     </thead>

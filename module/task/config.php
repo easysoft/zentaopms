@@ -99,7 +99,7 @@ $config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '65';
+$config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 $config->task->datatable->fieldList['deadline']['control'] = 'date';
 

@@ -42,7 +42,7 @@
           <?php endif;?>
           <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
-          <th class='c-date'><?php echo $lang->task->deadlineAB;?></th>
+          <th class='c-date text-center'><?php echo $lang->task->deadlineAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
           <th class='c-story'><?php echo $lang->task->story;?></th>
         </tr>

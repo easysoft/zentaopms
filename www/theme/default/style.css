@@ -139,4 +139,4 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #projectForm .c-name,
 #executionTableList .c-name,
 #programTableList .c-name {padding-right: 64px;}
-td.delayed > span {display: block; height: 20px; line-height: 20px; background: #FFEBEB; color: #FB2B2B; border-radius: 20px;}
+td.delayed > span {display: inline-block; height: 20px; line-height: 18px; background: #FFEBEB; color: #FB2B2B; border-radius: 20px; padding: 2px 8px;}
