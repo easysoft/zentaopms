@@ -24,7 +24,7 @@
     {
         $active = $type == $featureType ? 'btn-active-text' : '';
         $label  = "<span class='text'>$label</span>";
-        if($type == $featureType) $label .= " <span class='label label-light label-badge'>" . count($releases) . "</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>" . $pager->recTotal . "</span>";
         echo html::a(inlink('browse', "projectID={$projectID}&executionID=$executionID&type=$featureType"), $label, '', "id='{$featureType}Tab' data-app='$from' class='btn btn-link $active'");
     }
     ?>
