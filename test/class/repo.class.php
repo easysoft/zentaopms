@@ -68,10 +68,9 @@ class repoTest
 
     public function createTest($list)
     {
-        $create    = array();
-        $getCreate = array('SCM' => '', 'serviceHost' => '', 'serviceProject' => '', 'name' => '', 'path' => '', 'encoding' => '', 'client' => '', 'account' => '', 'password' => '', 'encrypt' => '', 'desc' => '', 'uid' => '');
+        $init = array('SCM' => '', 'serviceHost' => '', 'serviceProject' => '', 'name' => '', 'path' => '', 'encoding' => '', 'client' => '', 'account' => '', 'password' => '', 'encrypt' => '', 'desc' => '', 'uid' => '');
 
-        foreach($getCreate as $filed => $defaultvalue) $_POST[$filed] = $defaultvalue;
+        foreach($init as $filed => $defaultvalue) $_POST[$filed] = $defaultvalue;
         foreach($list as $key => $value) $_POST[$key] = $value;
 
         $objects = $this->objectModel->create();
