@@ -64,7 +64,7 @@ $lang->release->mailto         = 'Mailto';
 $lang->release->mailContent    = '<p>Dear users,</p><p style                                                                                               = "margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
 $lang->release->storyList      = '<p style                                                                                                                 = "margin-left: 30px;">Story List：%s。</p>';
 $lang->release->bugList        = '<p style                                                                                                                 = "margin-left: 30px;">Bug List：%s。</p>';
-$lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>。';
+$lang->release->pageAllSummary = 'Total releases: <strong>%total%</strong>, Normal: <strong>%normal%</strong>, Terminate: <strong>%terminate%</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
 
 $lang->release->storyTitle = 'Story Name';
