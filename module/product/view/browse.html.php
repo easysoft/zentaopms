@@ -19,24 +19,25 @@ body {margin-bottom: 25px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 .assignedTo{border-radius: 4px !important;}
 </style>
-<?php js::set('browseType', $browseType);?>
-<?php js::set('productID', $productID);?>
-<?php js::set('projectID', $projectID);?>
-<?php js::set('branch', $branch);?>
-<?php js::set('rawModule', $this->app->rawModule);?>
-<?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
-<?php js::set('projectHasProduct', !empty($project->hasProduct));?>
-<?php js::set('URAndSR', $this->config->URAndSR);?>
 <?php
-$unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
-$unfoldStories = zget($unfoldStories, $productID, array());
+$lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
+$unfoldStories     = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
+$unfoldStories     = zget($unfoldStories, $productID, array());
+$isProjectStory    = $this->app->rawModule == 'projectstory';
+$projectHasProduct = $isProjectStory && !empty($project->hasProduct);
+$projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
+js::set('browseType', $browseType);
+js::set('productID', $productID);
+js::set('projectID', $projectID);
+js::set('branch', $branch);
+js::set('rawModule', $this->app->rawModule);
+js::set('productType', $this->app->tab == 'product' ? $product->type : '');
+js::set('projectHasProduct', $projectHasProduct);
+js::set('URAndSR', $this->config->URAndSR);
 js::set('unfoldStories', $unfoldStories);
 js::set('unfoldAll',     $lang->execution->treeLevel['all']);
 js::set('foldAll',       $lang->execution->treeLevel['root']);
 js::set('storyType',     $storyType);
-$lang->story->createCommon = $storyType == 'story' ? $lang->story->createStory : $lang->story->createRequirement;
-$isProjectStory = $this->app->rawModule == 'projectstory';
-$projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 ?>
 <style>
 .btn-group .icon-close:before {font-size: 5px; vertical-align: 25%;}
@@ -203,7 +204,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       </ul>
       <?php endif;?>
     </div>
-    <?php if($isProjectStory && !empty($project->hasProduct)):?>
+    <?php if($projectHasProduct):?>
     <div class='btn-group dropdown'>
     <?php
     if(commonModel::isTutorialMode())
@@ -307,10 +308,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $canBatchChangeStage  = ($canBeChanged and common::hasPriv('story', 'batchChangeStage') and $storyType == 'story');
       $canBatchChangeBranch = ($canBeChanged and common::hasPriv($storyType, 'batchChangeBranch') and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID);
       $canBatchChangeModule = ($canBeChanged and common::hasPriv($storyType, 'batchChangeModule'));
-      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story');
+      $canBatchChangePlan   = ($canBeChanged and common::hasPriv('story', 'batchChangePlan') and $storyType == 'story' and (!$isProjectStory or $projectHasProduct or ($isProjectStory and isset($project->model) and $project->model == 'scrum')));
       $canBatchAssignTo     = ($canBeChanged and common::hasPriv($storyType, 'batchAssignTo'));
-      $canBatchUnlink       = ($canBeChanged and $this->app->tab == 'project' and !empty($project->hasProduct) and common::hasPriv('projectstory', 'batchUnlinkStory'));
-      $canBatchImportToLib  = ($canBeChanged and $this->app->tab == 'project' and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
+      $canBatchUnlink       = ($canBeChanged and $projectHasProduct and common::hasPriv('projectstory', 'batchUnlinkStory'));
+      $canBatchImportToLib  = ($canBeChanged and $isProjectStory and isset($this->config->maxVersion) and common::hasPriv('story', 'batchImportToLib'));
 
       $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlink or $canBatchImportToLib or $canBatchChangeBranch);
       ?>
@@ -507,7 +508,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </ul>
           </div>
 
-          <?php $isShowModuleBTN = ($this->app->tab == 'project' and $browseType != 'bybranch') ? false : true;?>
+          <?php $isShowModuleBTN = ($isProjectStory and $browseType != 'bybranch') ? false : true;?>
           <?php if($canBatchChangeModule and $productID and $isShowModuleBTN):?>
           <?php if(($product->type != 'normal' and $branchID != 'all') or $product->type == 'normal')?>
           <div class="btn-group dropup">
