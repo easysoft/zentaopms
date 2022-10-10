@@ -177,11 +177,11 @@ $config->execution->gantt->linkType['begin']['end']   = 3;
 $config->execution->datatable = new stdclass();
 if($config->systemMode == 'new')
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'status', 'PM', 'begin', 'end', 'estimate', 'consumed', 'left', 'progress', 'burn');
 }
 else
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+    $config->execution->datatable->defaultField = array('id', 'name', 'status', 'PM', 'begin', 'end', 'estimate', 'consumed', 'left', 'progress', 'burn');
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
