@@ -118,7 +118,7 @@ $(function()
             });
 
             var rate = '0%';
-            if(rateCount) rate = Math.round(checkedCase / rateCount * 10000 / 100) + '' + '%';
+            if(rateCount) rate = Math.round(checkedCase / rateCount * 100) + '%';
 
             if(checkedTotal == 0) return storySummary;
             return checkedSummary.replace('%total%', checkedTotal)
