@@ -627,6 +627,7 @@ EOF;
         }
 
         $this->app->loadLang('testcase');
+        $this->app->loadLang('project');
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);

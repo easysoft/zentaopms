@@ -334,11 +334,9 @@ class testtask extends control
 
         $this->executeHooks($taskID);
 
-        $this->view->title      = "TASK #$task->id $task->name/" . $this->products[$productID];
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->view;
+        if($task->execution) $this->view->execution = $this->loadModel('project')->getById($task->execution);
 
+        $this->view->title           = "TASK #$task->id $task->name/" . $this->products[$productID];
         $this->view->productID       = $productID;
         $this->view->task            = $task;
         $this->view->users           = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -796,22 +794,27 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
-        $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->edit;
-
         /* Create testtask from testtask of test.*/
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $executionID = $task->execution;
-        if(!isset($executions[$executionID]))
+        if($executionID)
         {
-            $appendExecution = $this->loadModel('execution')->getByID($executionID);
-            $executions[$executionID] = $appendExecution->name;
+            $execution = $this->loadModel('execution')->getById($executionID);
+            if(!isset($executions[$executionID]))
+            {
+                $executions[$executionID] = $execution->name;
+                if(empty($execution->multiple))
+                {
+                    $project = $this->loadModel('project')->getById($execution->project);
+                    $executions[$executionID] = $project->name . "({$this->lang->project->disableExecution})";
+                }
+            }
+            $this->view->project = $this->loadModel('project')->getById($execution->project);
         }
 
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->task         = $task;
         $this->view->executions   = $executions;
         $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');

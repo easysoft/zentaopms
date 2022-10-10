@@ -1357,11 +1357,13 @@ class productModel extends model
         if(empty($productID)) return array();
 
         $project = $this->loadModel('project')->getByID($projectID);
-        $orderBy = $project && $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
+        $orderBy = $project && $project->model == 'waterfall' ? 't2.begin_asc,t2.id_asc' : 't2.begin_desc,t2.id_desc';
 
-        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+        $executions = $this->dao->select('t2.id,t2.name,t2.grade,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->in('sprint,kanban,stage')
             ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -1371,7 +1373,7 @@ class productModel extends model
             ->fetchAll('id');
 
         /* The waterfall project needs to show the hierarchy and remove the parent stage. */
-        $executionList = array('0' => '');
+        $executionPairs = array('0' => '');
         if($project && $project->model == 'waterfall')
         {
             foreach($executions as $id => $execution)
@@ -1388,19 +1390,24 @@ class productModel extends model
             {
                 if(isset($execution->children))
                 {
-                    $executionList = $executionList + $execution->children;
+                    $executionPairs = $executionPairs + $execution->children;
                     continue;
                 }
                 if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
-                $executionList[$execution->id] = $execution->name;
+                $executionPairs[$execution->id] = $execution->name;
             }
         }
         else
         {
-            foreach($executions as $execution) $executionList[$execution->id] = $execution->name;
+            $this->app->loadLang('project');
+            foreach($executions as $execution)
+            {
+                $executionPairs[$execution->id] = $execution->name;
+                if(empty($execution->multiple)) $executionPairs[$execution->id] = $execution->projectName . "({$this->lang->project->disableExecution})";
+            }
         }
 
-        return $executionList;
+        return $executionPairs;
     }
 
     /**

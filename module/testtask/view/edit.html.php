@@ -24,7 +24,7 @@
     </div>
     <form method='post' class="main-form form-ajax" enctype="multipart/form-data" id='dataform'>
       <table class='table table-form'>
-        <tr>
+        <tr <?php if(isset($project->multiple) and empty($project->multiple)) echo "class='hidden'"?>>
           <th class='w-100px'><?php echo $lang->testtask->execution;?></th>
           <td class='w-p35-f'>
           <?php
@@ -35,7 +35,7 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->testtask->build;?></th>
+          <th class='w-100px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
           <td></td>
         </tr>
