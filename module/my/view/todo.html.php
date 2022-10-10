@@ -100,7 +100,7 @@
           <?php endif;?>
           <th class="c-begin">  <?php common::printOrderLink('begin',      $orderBy, $vars, $lang->todo->beginAB);?></th>
           <th class="c-end">    <?php common::printOrderLink('end',        $orderBy, $vars, $lang->todo->endAB);?></th>
-          <th class="c-actions-5"><?php echo $lang->actions;?></th>
+          <th class="c-actions-5 text-center"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
