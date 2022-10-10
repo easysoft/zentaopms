@@ -207,7 +207,7 @@
         <td class="c-hours em" title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . $lang->execution->workHourUnit;?></td>
         <td class="c-num em"><?php echo $task->progress . '%';?></td>
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
-        <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
+        <td class='c-date text-center <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';?></td>
         <td class="c-actions">
           <?php if(common::canModify('execution', $execution)):?>
           <?php common::printIcon('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
