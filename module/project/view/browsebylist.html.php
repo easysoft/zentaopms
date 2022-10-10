@@ -84,7 +84,7 @@
       </p>
     </div>
     <?php else:?>
-    <form class='main-table' id='projectForm' method='post' data-ride="table">
+    <form class='main-table' id='projectForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -94,6 +94,10 @@
       $useDatatable     = (!commonModel::isTutorialMode() and (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable'));
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
+      $waitCount        = 0;
+      $doingCount       = 0;
+      $suspendedCount   = 0;
+      $closedCount      = 0;
 
       if($useDatatable) include dirname(dirname(dirname(__FILE__))) . '/common/view/datatable.html.php';
       ?>
@@ -115,7 +119,11 @@
         <tbody class="sortable">
           <?php foreach($projectStats as $project):?>
           <?php $project->from = 'project';?>
-          <tr data-id="<?php echo $project->id;?>">
+          <?php if($project->status == 'wait')      $waitCount ++;?>
+          <?php if($project->status == 'doing')     $doingCount ++;?>
+          <?php if($project->status == 'suspended') $suspendedCount ++;?>
+          <?php if($project->status == 'closed')    $closedCount ++;?>
+          <tr data-id="<?php echo $project->id;?>" data-status="<?php echo $project->status;?>">
             <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
@@ -136,10 +144,51 @@
         }
         ?>
         </div>
+        <div class="table-statistic"><?php echo strpos(',all,undone,', ",$browseType,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
   </div>
 </div>
-<?php js::set('useDatatable', isset($useDatatable) ? $useDatatable : false);?>
+<?php
+js::set('useDatatable', isset($useDatatable) ? $useDatatable : false);
+js::set('summary', sprintf($lang->project->summary, count($projectStats)));
+js::set('allSummary', sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount));
+js::set('checkedSummary', $lang->project->checkedSummary);
+js::set('checkedAllSummary', $lang->project->checkedAllSummary);
+?>
+<script>
+$(function()
+{
+    $('#projectForm').table(
+    {
+        replaceId: 'projectIdList',
+        statisticCreator: function(table)
+        {
+            var $table            = table.getTable();
+            var $checkedRows      = $table.find('tbody>tr.checked');
+            var checkedTotal      = $checkedRows.length;
+            var statistics        = summary;
+            var checkedStatistics = checkedSummary.replace('%total%', checkedTotal);
+
+            if(browseType == 'all' || browseType == 'undone')
+            {
+                var checkedWait      = $checkedRows.filter("[data-status=wait]").length;
+                var checkedDoing     = $checkedRows.filter("[data-status=doing]").length;
+                var checkedSuspended = $checkedRows.filter("[data-status=suspended]").length;
+                var checkedClosed    = $checkedRows.filter("[data-status=closed]").length;
+
+                statistics        = allSummary;
+                checkedStatistics = checkedAllSummary.replace('%total%', checkedTotal)
+                    .replace('%wait%', checkedWait)
+                    .replace('%doing%', checkedDoing)
+                    .replace('%suspended%', checkedSuspended)
+                    .replace('%closed%', checkedClosed);
+            }
+
+            return checkedTotal ? checkedStatistics : statistics;
+        }
+    });
+});
+</script>
