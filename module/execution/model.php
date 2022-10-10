@@ -4898,7 +4898,7 @@ class executionModel extends model
                 if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
                 if(!empty($execution->children))
                 {
-                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-double-right'></i></a>";
+                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-right'></i></a>";
                 }
                 break;
             case 'code':
