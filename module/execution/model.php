@@ -4603,7 +4603,8 @@ class executionModel extends model
 
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
-        echo "<td class='c-name text-left flex sort-handler'><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
+        echo "<td class='c-name text-left flex sort-handler'>";
+        if(common::hasPriv('execution', 'batchEdit')) echo "<span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
         {
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';

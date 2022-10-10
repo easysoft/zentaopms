@@ -72,7 +72,7 @@
       <thead>
         <tr>
           <th class='table-nest-title'>
-          <?php if($showToggleIcon):?>
+          <?php if($canBatchEdit and $showToggleIcon):?>
             <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php endif;?>
           <?php echo $lang->nameAB;?>
