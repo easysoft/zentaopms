@@ -301,7 +301,7 @@ class task extends control
             {
                 foreach($executionList as $key => $val)
                 {
-                    $values      = str_replace($replace, $project->name, $val);
+                    $values = str_replace($replace, $project->name, $val);
                     $executionAll[$key] = $values;
                 }
             }
