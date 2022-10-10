@@ -42,7 +42,7 @@
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user' title='<?php echo $lang->team->roleAB;?>'><?php echo $lang->team->roleAB;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='c-hours'><?php echo $lang->my->hours;?></th>
+        <th class='c-hours align-right'><?php echo $lang->my->hours;?></th>
         <th class='c-user text-center'><?php echo $lang->execution->myTask;?></th>
         <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
@@ -79,7 +79,7 @@
         </td>
         <td><?php echo $execution->role;?></td>
         <td class='c-date'><?php echo $execution->join;?></td>
-        <td><?php echo $execution->hours;?></td>
+        <td class="text-right"><?php echo $execution->hours;?></td>
         <td class="text-center"><?php echo $execution->assignedToMeTasks;?></td>
         <td>
           <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
