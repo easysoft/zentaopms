@@ -32,6 +32,13 @@ class repoTest
         return $objects;
     }
 
+    /**
+     * Get switcher test.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return object
+     */
     public function getSwitcherTest($repoID)
     {
         $objects = $this->objectModel->getSwitcher($repoID);
@@ -59,8 +66,14 @@ class repoTest
         return $objects;
     }
 
-    public function createTest()
+    public function createTest($list)
     {
+        $create    = array();
+        $getCreate = array('SCM' => '', 'serviceHost' => '', 'serviceProject' => '', 'name' => '', 'path' => '', 'encoding' => '', 'client' => '', 'account' => '', 'password' => '', 'encrypt' => '', 'desc' => '', 'uid' => '');
+
+        foreach($getCreate as $filed => $defaultvalue) $_POST[$filed] = $defaultvalue;
+        foreach($list as $key => $value) $_POST[$key] = $value;
+
         $objects = $this->objectModel->create();
 
         if(dao::isError()) return dao::getError();
