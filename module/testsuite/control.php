@@ -81,18 +81,15 @@ class testsuite extends control
             $pager  = pager::init(0, $recPerPage, 1);
             $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         }
-        $privateSuites = array();
+        $privateNum = 0;
         foreach($suites as $suiteItem)
         {
-            $item = new stdclass();
-            $item = $suiteItem;
             if($suiteItem->type == 'private')
             {
-                $privateSuites[] = $item;
+                $privateNum++;
             }
         }
         $suitesNum         = !empty(count($suites, 0)) ? count($suites, 0) : 0;
-        $privateNum        = !empty(count($privateSuites, 0)) ? count($privateSuites, 0) : 0;
         $publicNum         = $suitesNum - $privateNum;
         $summary           = str_replace(array('%total%', '%public%', '%private%'), array($suitesNum, $publicNum, $privateNum), $this->lang->testsuite->summary);
 

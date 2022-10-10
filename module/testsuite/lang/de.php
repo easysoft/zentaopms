@@ -48,6 +48,7 @@ $lang->testsuite->confirmUnlinkCase = 'Möchten Sie diese Verknüpfung aufheben?
 $lang->testsuite->noticeNone        = 'Sie haben noch keine Suite erstellt.';
 $lang->testsuite->noModule          = '<div>Sie haben keine Module</div><div>Jetzt verwalten</div>';
 $lang->testsuite->noTestsuite       = 'Keine Suite. ';
+$lang->testsuite->summary           = "Total suites: <strong>%total%</strong>, public: <strong>%public%</strong>, private: <strong>%private%</strong>.";
 
 $lang->testsuite->lblCases      = 'Fälle';
 $lang->testsuite->lblUnlinkCase = 'Unverknüpfte Fälle';
@@ -56,4 +57,3 @@ $lang->testsuite->authorList['private'] = 'Privat';
 $lang->testsuite->authorList['public']  = 'Öffentlich';
 
 $lang->testsuite->featureBar['browse']['all'] = 'Suite List';
-$lang->testsuite->summary                     = "Total suites: <strong>%total%</strong>, public: <strong>%public%</strong>, private: <strong>%private%</strong>.";
