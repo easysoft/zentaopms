@@ -3183,7 +3183,7 @@ class execution extends control
         {
             $this->project->setMenu($object->id);
         }
-        elseif($object->type == 'sprint' or $object->type == 'stage')
+        elseif($object->type == 'sprint' or $object->type == 'stage' or $object->type == 'kanban')
         {
             $this->execution->setMenu($object->id);
         }
@@ -3760,6 +3760,7 @@ class execution extends control
         $this->view->from           = $from;
         $this->view->param          = $param;
         $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
 
         $this->display();
     }

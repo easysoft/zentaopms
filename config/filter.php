@@ -172,6 +172,7 @@ $filter->tree->browse             = new stdclass();
 $filter->productplan->browse      = new stdclass();
 $filter->kanban->space            = new stdclass();
 $filter->execution->kanban        = new stdclass();
+$filter->execution->all           = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -300,14 +301,15 @@ $filter->productplan->browse->cookie['viewType'] = 'code';
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';
 
-$filter->execution->default->cookie['kanbanview']        = 'code';
-$filter->execution->story->cookie['storyPreExecutionID'] = 'int';
-$filter->execution->story->cookie['storyModuleParam']    = 'int';
-$filter->execution->story->cookie['storyProductParam']   = 'int';
-$filter->execution->story->cookie['storyBranchParam']    = 'int';
-$filter->execution->story->cookie['executionStoryOrder'] = 'code';
-$filter->execution->export->cookie['checkedItem']        = 'reg::checked';
-$filter->execution->kanban->cookie['taskToOpen']         = 'int';
+$filter->execution->default->cookie['kanbanview']         = 'code';
+$filter->execution->story->cookie['storyPreExecutionID']  = 'int';
+$filter->execution->story->cookie['storyModuleParam']     = 'int';
+$filter->execution->story->cookie['storyProductParam']    = 'int';
+$filter->execution->story->cookie['storyBranchParam']     = 'int';
+$filter->execution->story->cookie['executionStoryOrder']  = 'code';
+$filter->execution->export->cookie['checkedItem']         = 'reg::checked';
+$filter->execution->kanban->cookie['taskToOpen']          = 'int';
+$filter->execution->all->cookie['showExecutionBatchEdit'] = 'int';
 
 $filter->testcase->browse->cookie['caseModule']     = 'int';
 $filter->testcase->browse->cookie['caseSuite']      = 'int';

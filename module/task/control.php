@@ -291,7 +291,22 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'noclosed', 0, true);
+        $executionAll = array();
+        if(!empty($projectID))
+        {
+            $executionList = $this->execution->getByProject($projectID, 'noclosed', 0, true);
+            $project       = $this->loadModel('project')->getByID($projectID);
+            $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key => $val)
+                {
+                    $values = str_replace($replace, $project->name, $val);
+                    $executionAll[$key] = $values;
+                }
+            }
+        }
+        $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -1196,7 +1211,18 @@ class task extends control
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
         $task = $this->task->getById($taskID);
-        if(!empty($task->team) and $task->mode == 'linear' and !$orderBy) $orderBy = 'order_asc';
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            if(empty($orderBy))
+            {
+                $orderBy = 'order_asc,id';
+            }
+            else
+            {
+                /* The id sort with order or date style. */
+                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
+            }
+        }
         if(!$orderBy) $orderBy = 'date_asc';
 
         $this->view->title   = $this->lang->task->record;

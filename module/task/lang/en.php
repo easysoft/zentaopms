@@ -116,6 +116,7 @@ $lang->task->assignedTo        = 'AssignTo';
 $lang->task->assignedToAB      = 'AssignedTo';
 $lang->task->assignedDate      = 'AssignedDate';
 $lang->task->openedBy          = 'CreatedBy';
+$lang->task->openedByAB        = 'Created';
 $lang->task->openedDate        = 'CreatedDate';
 $lang->task->openedDateAB      = 'CreatedOn';
 $lang->task->finishedBy        = 'FinishedBy';

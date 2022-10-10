@@ -29,7 +29,11 @@ class taskModel extends model
         }
 
         $executionID    = (int)$executionID;
+        $estStarted     = '0000-00-00';
+        $deadline       = '0000-00-00';
+        $assignedTo     = '';
         $taskIdList     = array();
+        $taskDatas      = array();
         $taskFiles      = array();
         $requiredFields = "," . $this->config->task->create->requiredFields . ",";
 
@@ -38,26 +42,31 @@ class taskModel extends model
             foreach($this->post->testStory as $i => $storyID)
             {
                 if(empty($storyID)) continue;
-                if($this->post->testEstStarted[$i] > $this->post->testDeadline[$i])
-                {
-                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
-                    return false;
-                }
             }
 
             /* Check required fields when create test task. */
             foreach($this->post->testStory as $i => $storyID)
             {
                 if(empty($storyID)) continue;
+                $estStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $estStarted : $this->post->testEstStarted[$i];
+                $deadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on'))     ? $deadline : $this->post->testDeadline[$i];
+                $assignedTo = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
+
+                if($estStarted > $deadline)
+                {
+                    dao::$errors[] = "ID: $storyID {$this->lang->task->error->deadlineSmall}";
+                    return false;
+                }
 
                 $task = new stdclass();
                 $task->pri        = $this->post->testPri[$i];
-                $task->estStarted = $this->post->testEstStarted[$i];
-                $task->deadline   = $this->post->testDeadline[$i];
-                $task->assignedTo = $this->post->testAssignedTo[$i];
+                $task->estStarted = $estStarted;
+                $task->deadline   = $deadline;
+                $task->assignedTo = $assignedTo;
                 $task->estimate   = $this->post->testEstimate[$i];
                 $task->left       = $this->post->testEstimate[$i];
 
+                /* Check requiredFields */
                 $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($requiredFields, 'notempty');
                 if(dao::isError())
                 {
@@ -67,6 +76,7 @@ class taskModel extends model
                         return false;
                     }
                 }
+                $taskDatas[$i] = $task;
             }
 
             $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
@@ -187,10 +197,6 @@ class taskModel extends model
                 $this->loadModel('action');
                 if($this->post->testStory)
                 {
-                    $assignedTo     = '';
-                    $testEstStarted = '0000-00-00';
-                    $testDeadline   = '0000-00-00';
-
                     foreach($this->post->testStory as $storyID)
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
@@ -200,9 +206,9 @@ class taskModel extends model
                     {
                         if(!isset($testStories[$storyID])) continue;
 
-                        $assignedTo     = (!isset($this->post->testAssignedTo[$i]) or $this->post->testAssignedTo[$i] == 'ditto') ? $assignedTo : $this->post->testAssignedTo[$i];
-                        $testEstStarted = (!isset($this->post->testEstStarted[$i]) or (isset($this->post->estStartedDitto[$i]) and $this->post->estStartedDitto[$i] == 'on')) ? $testEstStarted : $this->post->testEstStarted[$i];
-                        $testDeadline   = (!isset($this->post->testDeadline[$i]) or (isset($this->post->deadlineDitto[$i]) and $this->post->deadlineDitto[$i] == 'on')) ? $testDeadline : $this->post->testDeadline[$i];
+                        $assignedTo     = $taskDatas[$i]->assignedTo;
+                        $testEstStarted = $taskDatas[$i]->estStarted;
+                        $testDeadline   = $taskDatas[$i]->deadline;
 
                         $task->parent       = $taskID;
                         $task->story        = $storyID;
@@ -1059,7 +1065,7 @@ class taskModel extends model
         }
 
         /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
-        if(!$this->post->assignedTo and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
+        if(!$this->post->assignedTo and !empty($oldTask->team) and !empty($_POST['team'])) $_POST['assignedTo'] = $this->getAssignedTo4Multi($_POST['team'], $oldTask);
 
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)
@@ -2609,7 +2615,7 @@ class taskModel extends model
             ->fi()
             ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed') )")->fi()
             ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -2896,8 +2902,11 @@ class taskModel extends model
     public function updateEstimate($estimateID)
     {
         $oldEstimate = $this->getEstimateById($estimateID);
-        $estimate    = fixer::input('post')->cleanINT('consumed,left')->get();
         $today       = helper::today();
+        $estimate    = fixer::input('post')
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
+            ->get();
 
         if(helper::isZeroDate($estimate->date)) return dao::$errors[] = $this->lang->task->error->dateEmpty;
         if($estimate->date > $today)            return dao::$errors[] = $this->lang->task->error->date;
@@ -3768,7 +3777,7 @@ class taskModel extends model
                 echo round($task->progress, 2) . '%';
                 break;
             case 'deadline':
-                if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
+                if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
                 break;
             case 'openedBy':
                 echo zget($users, $task->openedBy);
@@ -4140,10 +4149,24 @@ class taskModel extends model
         $storyChanged = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed'));
         if($storyChanged) return $this->buildMenu('task', 'confirmStoryChange', $params, $task, 'browse', '', 'hiddenwin');
 
+        $canStart          = ($task->status != 'pause' and common::hasPriv('task', 'start'));
+        $canRestart        = ($task->status == 'pause' and common::hasPriv('task', 'restart'));
+        $canFinish         = common::hasPriv('task', 'finish');
+        $canClose          = common::hasPriv('task', 'close');
+        $canRecordEstimate = common::hasPriv('task', 'recordEstimate');
+        $canEdit           = common::hasPriv('task', 'edit');
+        $canBatchCreate    = ($this->config->vision == 'rnd' and common::hasPriv('task', 'batchCreate'));
+
         if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
         if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
-        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
+
+        if(($canStart or $canRestart or $canFinish or $canClose) and ($canRecordEstimate or $canEdit or $canBatchCreate))
+        {
+            $menu .= "<div class='dividing-line'></div>";
+        }
+
         $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
         $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
         if($this->config->vision == 'rnd')

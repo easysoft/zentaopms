@@ -58,6 +58,8 @@ $(function()
         saveCustomFields('createFields');
         return false;
     });
+
+    $(document).on('change', '#module', loadURS);
 });
 
 /**

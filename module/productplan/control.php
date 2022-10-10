@@ -440,10 +440,12 @@ class productplan extends control
 
         if($plan->branch > 0) $this->view->branchStatus = $this->loadModel('branch')->getById($plan->branch, $plan->product, 'status');
 
+        $storyIdList = array();
         $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         foreach($planStories as $story)
         {
             if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName($story->module);
+            $storyIdList[] = $story->id;
         }
 
         $this->loadModel('datatable');
@@ -466,6 +468,7 @@ class productplan extends control
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
         $this->view->canBeChanged = $canBeChanged;
+        $this->view->storyCases   = $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);;
 
         if($this->app->getViewType() == 'json')
         {

@@ -1366,12 +1366,12 @@ class kanbanModel extends model
                     $cardData['openedDate']     = $object->openedDate;
                     $cardData['closedDate']     = $object->closedDate;
                     $cardData['lastEditedDate'] = $object->lastEditedDate;
+                    $cardData['status']         = $object->status;
 
                     if($cell->type == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']       = $object->name;
-                        $cardData['status']     = $object->status;
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
                     }
@@ -2237,6 +2237,9 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
@@ -2336,24 +2339,20 @@ class kanbanModel extends model
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
-
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
-        {
-            if(!$this->checkDisplayCards($kanban->displayCards)) return;
-        }
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->checkDisplayCards($kanban->displayCards)) return;
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->checkIF(!$kanban->fluidBoard, 'colWidth', 'gt', 0)
+            ->batchCheckIF($kanban->fluidBoard, 'minColWidth,maxColWidth', 'gt', 0)
+            ->checkIF($kanban->minColWidth and $kanban->maxColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError())
-        {
-            return common::createChanges($oldKanban, $kanban);
-        }
+        if(dao::isError()) return false;
 
-        return false;
+        return common::createChanges($oldKanban, $kanban);
     }
 
     /**

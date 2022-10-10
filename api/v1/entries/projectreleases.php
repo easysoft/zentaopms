@@ -23,8 +23,10 @@ class projectReleasesEntry extends entry
         if(empty($projectID)) $projectID = $this->param('project');
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
+        $page    = intval($this->param('page', 1));
+        $limit   = intval($this->param('limit', 20));
         $control = $this->loadController('projectrelease', 'browse');
-        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
+        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'), 0, $limit, $page);
 
         /* Response */
         $data = $this->getData();

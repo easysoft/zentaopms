@@ -51,16 +51,18 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th rowspan="2"><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <th class="w-300px" colspan="4"><?php echo $lang->story->story;?></th>
-            <th class="w-150px" colspan="2"><?php echo $lang->bug->common;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->plan;?></th>
-            <th class="w-80px"  rowspan="2"><?php echo $lang->product->release;?></th>
-            <th class='c-actions w-70px' rowspan="2"><?php echo $lang->actions;?></th>
+            <th class='c-PO' rowspan="2"><?php common::printOrderLink('PO', $orderBy, $vars, $lang->product->manager);?></th>
+            <th class='c-story' colspan="5"><?php echo $lang->story->story;?></th>
+            <th class='c-bug' colspan="2"><?php echo $lang->bug->common;?></th>
+            <th class='c-plan' rowspan="2"><?php echo $lang->product->plan;?></th>
+            <th class='c-release' rowspan="2"><?php echo $lang->product->release;?></th>
+            <th class='c-actions' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
+            <th><?php echo $lang->story->statusList['reviewing'];?></th>
             <th><?php echo $lang->story->completeRate;?></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
@@ -68,10 +70,7 @@
         </thead>
         <tbody class="sortable" id="productTableList">
         <?php foreach($products as $product):?>
-          <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'];
-          ?>
+          <?php $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];?>
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
               <?php if($canBatchEdit):?>
@@ -80,9 +79,22 @@
               <span class="product-id <?php if($canBatchEdit && $showBatchEdit) echo 'hidden';?>"><?php printf('%03d', $product->id);?></span>
             </td>
             <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'browse', 'product=' . $product->id), $product->name);?></td>
+            <td class='c-manager'>
+              <?php
+              if(!empty($product->PO))
+              {
+                  $userName  = zget($users, $product->PO);
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
+
+                  $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+              }
+              ?>
+            </td>
             <td><?php echo $product->stories['draft'];?></td>
             <td><?php echo $product->stories['active'];?></td>
             <td><?php echo $product->stories['changing'];?></td>
+            <td><?php echo $product->stories['reviewing'];?></td>
             <td><?php echo $totalStories == 0 ? 0 : round($product->stories['closed'] / $totalStories, 3) * 100;?>%</td>
             <td><?php echo $product->unResolved;?></td>
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>

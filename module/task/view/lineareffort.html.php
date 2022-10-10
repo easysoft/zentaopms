@@ -13,12 +13,15 @@ $this->app->loadLang('execution');
 $teamOrders = array();
 foreach($task->team as $team) $teamOrders[$team->order] = $team->account;
 
-$myOrders   = array();
-$allEfforts = array();
-$recorders  = array();
-$index      = 0;
-$allOrders  = array();
-$efforts    = array_values($efforts);
+$index       = 0;
+$efforts     = array_values($efforts);
+$recorders   = array();
+$allOrders   = array();
+$allEfforts  = array();
+$myOrders    = array();
+$myLastID    = array();
+$myEfforts   = array();
+$myLastOrder = 0;
 foreach($efforts as $key => $effort)
 {
     $prevEffort = $key > 0 ? $efforts[$key - 1] : null;
@@ -27,12 +30,15 @@ foreach($efforts as $key => $effort)
 
     $allEfforts[$order][]        = $effort;
     $recorders[$order][$account] = $account;
+
+    $allOrders[$order] = $effort->order + 1;
     if($app->user->account == $account)
     {
-        if(!isset($myOrders[$order])) $myOrders[$order] = 0;
-        $myOrders[$order] += 1;
+        if($allOrders[$myLastOrder] != $effort->order + 1) $myLastOrder = $order;
+        $myOrders[$myLastOrder]    = isset($myOrders[$myLastOrder]) ? ++$myOrders[$myLastOrder] : 1;
+        $myLastID[$myLastOrder]    = isset($myLastID[$myLastOrder]) ? ($myLastID[$myLastOrder] < $effort->id ? $effort->id : $myLastID[$myLastOrder]) : $effort->id;
+        $myEfforts[$myLastOrder][] = $effort;
     }
-    $allOrders[$order] = $effort->order + 1;
 }
 ?>
 <div id='linearefforts'>
@@ -65,8 +71,7 @@ foreach($efforts as $key => $effort)
           <tbody>
             <?php foreach($myOrders as $order => $count):?>
             <?php $showOrder = false;?>
-            <?php $index     = 1;?>
-            <?php foreach($allEfforts[$order] as $effort):?>
+            <?php foreach($myEfforts[$order] as $effort):?>
             <?php if($effort->account != $this->app->user->account) continue;?>
             <tr class="text-center">
               <?php if(!$showOrder):?>
@@ -83,12 +88,11 @@ foreach($efforts as $key => $effort)
                 $canOperateEffort = $this->task->canOperateEffort($task, $effort);
                 common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'editEstimate' : 'edit', "effortID=$effort->id", '', 'list', 'edit', '', 'showinonlybody', true, $canOperateEffort ? '' : 'disabled');
                 $deleteDisable = false;
-                if(!$canOperateEffort or ($index == $count and $effort->left == 0)) $deleteDisable = true;
+                if(!$canOperateEffort or ($myLastID[$order] == $effort->id and $effort->left == 0)) $deleteDisable = true;
                 common::printIcon($this->config->edition == 'open' ? 'task' : 'effort', $this->config->edition == 'open' ? 'deleteEstimate' : 'delete', "effortID=$effort->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody', false, $deleteDisable ? 'disabled' : '');
                 ?>
               </td>
             </tr>
-            <?php $index ++;?>
             <?php endforeach;?>
             <?php endforeach;?>
           </tbody>
@@ -111,7 +115,6 @@ foreach($efforts as $key => $effort)
           <tbody>
             <?php foreach($recorders as $order => $accounts):?>
             <?php $showOrder = false;?>
-            <?php $index     = 1;?>
             <?php $count     = count($allEfforts[$order]);?>
             <?php foreach($allEfforts[$order] as $effort):?>
             <tr class="text-center">
@@ -125,7 +128,6 @@ foreach($efforts as $key => $effort)
               <td title="<?php echo $effort->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $effort->consumed . ' ' . $lang->execution->workHourUnit;?></td>
               <td title="<?php echo $effort->left     . ' ' . $lang->execution->workHour;?>"><?php echo $effort->left     . ' ' . $lang->execution->workHourUnit;?></td>
             </tr>
-            <?php $index ++;?>
             <?php endforeach;?>
             <?php endforeach;?>
           </tbody>

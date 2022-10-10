@@ -245,6 +245,14 @@ class release extends control
         $this->view->storyPager    = $storyPager;
         $this->view->bugPager      = $bugPager;
         $this->view->leftBugPager  = $leftBugPager;
+
+        if($this->app->getViewType() == 'json')
+        {
+            unset($this->view->storyPager);
+            unset($this->view->bugPager);
+            unset($this->view->leftBugPager);
+        }
+
         $this->display();
     }
 

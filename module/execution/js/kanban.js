@@ -1324,9 +1324,9 @@ function createStoryMenu(options)
     var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
 
     if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id + '&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
-    if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canChangeStory && showAction && story.status == 'active') items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask && showAction && story.status == 'active') items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canBatchCreateTask && showAction && story.status == 'active') items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
     if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
@@ -1450,8 +1450,8 @@ function initKanban($kanban)
         data:              groupBy == 'default' ? region.groups : kanbanData[groupBy],
         maxColHeight:      'auto',
         calcColHeight:     calcColHeight,
-        minColWidth:       240,
-        maxColWidth:       240,
+        minColWidth:       typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:       typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
         displayCards:      typeof window.displayCards === 'number' ? window.displayCards : 2,
@@ -1474,6 +1474,13 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 }
 
 /**

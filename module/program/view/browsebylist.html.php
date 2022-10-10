@@ -5,8 +5,8 @@
     <thead>
       <tr>
         <th class='table-nest-title'>
-          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
           <?php echo $lang->nameAB;?>
+          <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
         </th>
         <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->program->status);?></th>
         <th class='c-user'><?php common::printOrderLink('PM',     $orderBy, $vars, $lang->program->PM);?></th>
@@ -73,10 +73,10 @@
           <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
-        <td>
+        <td class="c-manager">
           <?php if(!empty($program->PM)):?>
           <?php $userName = zget($users, $program->PM);?>
-          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $program->PM)); ?>
+          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . zget($userIdPairs, $program->PM)); ?>
           <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
@@ -106,6 +106,10 @@
   </div>
 </form>
 <style>
+th.table-nest-title {padding-left: 12px !important;}
+th.table-nest-title > .table-nest-toggle-global {left: auto; right: 6px; font-size: 12px; color: #888fa1;}
+th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !important;}
+#programTableList td.c-name span.icon.table-nest-toggle {cursor: pointer;}
 #programTableList.sortable-sorting > tr {opacity: 0.7}
 #programTableList.sortable-sorting > tr.drag-row {opacity: 1;}
 #programTableList > tr.drop-not-allowed {opacity: 0.1!important}
@@ -119,9 +123,9 @@
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
 #programTableList .icon-kanban:before {content: '\e983';}
-/* #programTableList .has-nest-child > .c-name > a {color: #0b0f18!important;}
-#programTableList .is-nest-child > .c-name > a {color: #2463c7!important;} */
-#programTableList .c-name .label-danger {position: absolute; right: 10px; padding: 2px 4px;}
+#programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18 !important;}
+#programTableList > tr[data-type="program"] > .c-name:hover > a {color: #313c52 !important;}
+#programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>

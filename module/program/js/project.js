@@ -6,6 +6,29 @@ $(function()
         setCheckbox();
     });
     setCheckbox();
+
+    $(":checkbox[name^='projectIdList']").on('click', function()
+    {
+        updateStatistic()
+    });
+
+    $(".check-all").on('click', function()
+    {
+        if($(":checkbox[name^='projectIdList']:not(:checked)").length == 0)
+        {
+            $(":checkbox[name^='projectIdList']").prop('checked', false);
+        }
+        else
+        {
+            $(":checkbox[name^='projectIdList']").prop('checked', true);
+        }
+        updateStatistic()
+    });
+
+    $('.main-table').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
+    })
 });
 
 /**
@@ -17,5 +40,62 @@ $(function()
 function setCheckbox()
 {
     $('#projectsForm .checkbox-primary').hide();
-    if($.cookie('showProjectBatchEdit') == 1) $('#projectsForm .checkbox-primary').show();
+    $(":checkbox[name^='projectIdList']").prop('checked', false);
+    $('.check-all, .sortable tr').removeClass('checked');
+    if($.cookie('showProjectBatchEdit') == 1)
+    {
+        $('#projectsForm .checkbox-primary').show();
+    }
+    else
+    {
+        $('.table-actions').hide();
+    }
+}
+
+/**
+ * Add a statistics prompt statement after the Edit button.
+ *
+ * @access public
+ * @return void
+ */
+function addStatistic()
+{
+    var checkedLength = $(":checkbox[name^='projectIdList']:checked").length;
+    if(checkedLength > 0)
+    {
+        $('.table-actions').show();
+    }
+    else
+    {
+        $('.table-actions').hide();
+    }
+}
+
+/**
+ * Anti shake operation for jquery.
+ *
+ * @param  fn $fn
+ * @param  delay $delay
+ * @access public
+ * @return void
+ */
+function debounce(fn, delay)
+{
+    var timer = null;
+    return function()
+    {
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(fn, delay)
+    }
+}
+
+/**
+ * Update statistics.
+ *
+ * @access public
+ * @return void
+ */
+function updateStatistic()
+{
+    debounce(addStatistic(), 200)
 }

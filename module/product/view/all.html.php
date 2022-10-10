@@ -52,6 +52,9 @@
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
+            <th class='c-PO' rowspan="2">
+              <?php common::printOrderLink('PO', $orderBy, $vars, $lang->product->manager);?>
+            </th>
             <th class="c-story" colspan="5"><?php echo $lang->story->story;?></th>
             <th class="c-bug" colspan="2"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
@@ -101,7 +104,21 @@
             <?php endif;?>
             <td class='text-left table-nest-title' title="<?php echo $program['programName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
-              <?php echo $program['programName']?>
+              &nbsp;<span class="icon icon-cards-view"></span>
+              <span><?php echo $program['programName']?></span>
+            </td>
+            <td class='c-manager'>
+              <?php
+              if(!empty($program['programPM']))
+              {
+                  $programPM = $program['programPM'];
+                  $userName  = zget($users, $programPM);
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$programPM], 'account' => $programPM, 'name' => $userName), 'avatar-circle avatar-top avatar-' . zget($userIdPairs, $programPM));
+
+                  $userID = isset($userIdPairs[$programPM]) ? $userIdPairs[$programPM] : '';
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+              }
+              ?>
             </td>
             <td><?php echo $program['draftStories'];?></td>
             <td><?php echo $program['activeStories'];?></td>
@@ -142,6 +159,7 @@
               <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $line['lineName']?>
             </td>
+            <td></td>
             <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
             <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
@@ -160,8 +178,7 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories      = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];
-          $totalRequirements = $product->requirements['active'] + $product->requirements['closed'] + $product->requirements['draft'] + $product->requirements['changing'] + $product->requirements['reviewing'];
+          $totalStories = $product->stories['active'] + $product->stories['closed'] + $product->stories['draft'] + $product->stories['changing'] + $product->stories['reviewing'];
 
           $trClass = '';
           if($product->line)
@@ -192,6 +209,18 @@
             <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
               <?php
               echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
+              ?>
+            </td>
+            <td class='c-manager'>
+              <?php
+              if(!empty($product->PO))
+              {
+                  $userName  = zget($users, $product->PO);
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$product->PO], 'account' => $product->PO, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $product->PO));
+
+                  $userID = isset($userIdPairs[$product->PO]) ? $userIdPairs[$product->PO] : '';
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+              }
               ?>
             </td>
             <td><?php echo $product->stories['draft'];?></td>

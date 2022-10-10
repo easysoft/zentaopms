@@ -966,14 +966,8 @@ class bug extends control
                 $changes = $this->bug->update($bugID);
                 if(dao::isError())
                 {
-                    if(defined('RUN_MODE') && RUN_MODE == 'api')
-                    {
-                        return $this->send(array('status' => 'error', 'message' => dao::getError()));
-                    }
-                    else
-                    {
-                        return print(js::error(dao::getError()));
-                    }
+                    if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => dao::getError()));
+                    return print(js::error(dao::getError()));
                 }
             }
 
@@ -1158,6 +1152,7 @@ class bug extends control
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1814,6 +1809,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
