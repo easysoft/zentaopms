@@ -1737,10 +1737,8 @@ class block extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init(0, $count, 1);
 
-        $projectPairs = array();
-        if($this->config->systemMode == 'new') $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
-
-        $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
+        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs('id', 'name');
+        $projectID    = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
 
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, 0, 0, false, 'skipParent', 'id_asc', $pager);
     }

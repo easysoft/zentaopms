@@ -52,7 +52,6 @@
     </div>
   </div>
 </div>
-<?php js::set('systemMode', $this->config->systemMode);?>
 <script>
 function getFeedbackID(obj)
 {

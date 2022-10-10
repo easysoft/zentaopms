@@ -33,15 +33,8 @@
 $kanbanColumns = array();
 $kanbanColumns['unclosedProduct'] = array('name' => $lang->product->unclosedProduct, 'type' => 'unclosedProduct');
 $kanbanColumns['unexpiredPlan']   = array('name' => $lang->product->unexpiredPlan, 'type' => 'unexpiredPlan');
-if($config->systemMode == 'new')
-{
-    $kanbanColumns['doingProject']    = array('name' => $lang->product->doingProject, 'type' => 'doingProject');
-    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doingExecution, 'type' => 'doingExecution');
-}
-else
-{
-    $kanbanColumns['doingExecution']  = array('name' => $lang->product->doingClassicExecution, 'type' => 'doingExecution');
-}
+$kanbanColumns['doingProject']    = array('name' => $lang->product->doingProject, 'type' => 'doingProject');
+$kanbanColumns['doingExecution']  = array('name' => $lang->product->doingExecution, 'type' => 'doingExecution');
 $kanbanColumns['normalRelease']   = array('name' => $lang->product->normalRelease, 'type' => 'normalRelease');
 $userPrivs = array();
 $userPrivs['product']     = common::hasPriv('product', 'browse');
@@ -49,7 +42,6 @@ $userPrivs['productplan'] = common::hasPriv('productplan', 'view');
 $userPrivs['project']     = common::hasPriv('project', 'index');
 $userPrivs['execution']   = common::hasPriv('execution', 'task');
 $userPrivs['release']     = common::hasPriv('release', 'view');
-js::set('isClassicMode',    $config->systemMode != 'new');
 js::set('kanbanColumns',    array_values($kanbanColumns));
 js::set('userPrivs',        $userPrivs);
 js::set('kanbanList',       $kanbanList);
@@ -63,6 +55,7 @@ js::set('classicExecution', $executionList);
 js::set('releaseList',      $releaseList);
 js::set('hourList',         $hourList);
 js::set('doingText',        $lang->product->doing);
+js::set('isLeanMode',       $config->systemMode == 'lean');
 ?>
 <?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

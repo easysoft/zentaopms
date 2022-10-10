@@ -193,16 +193,8 @@ $lang->execution->statusList['suspended'] = '已挂起';
 $lang->execution->statusList['closed']    = '已关闭';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
-    $lang->execution->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
-}
-else
-{
-    $lang->execution->aclList['private'] = "私有（团队成员和项目负责人可访问）";
-    $lang->execution->aclList['open']    = "公开（有项目视图权限即可访问）";
-}
+$lang->execution->aclList['private'] = "私有（团队成员和项目负责人、干系人可访问）";
+$lang->execution->aclList['open']    = "继承项目访问权限（能访问当前项目，即可访问）";
 
 $lang->execution->kanbanAclList['private'] = '私有';
 $lang->execution->kanbanAclList['open']    = '继承项目';

@@ -24,7 +24,6 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
@@ -204,7 +203,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $config->systemMode == 'class' ? $lang->bug->legendExecStoryTask : $lang->bug->legendPRJExecStoryTask;?></div>
+            <div class='detail-title'><?php echo $lang->bug->legendPRJExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
                 <tr>

@@ -150,7 +150,7 @@ $(function()
         $kanban.kanban(
         {
             data:            data,
-            noLaneName:      isClassicMode,
+            noLaneName:      isLeanMode,
             virtualize:      true,
             virtualCardList: true,
             calcColHeight:   calcColHeight

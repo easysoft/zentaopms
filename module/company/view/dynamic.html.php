@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('browseType', $browseType);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->action->periods as $period => $label):?>

@@ -193,16 +193,8 @@ $lang->execution->statusList['suspended'] = 'Suspended';
 $lang->execution->statusList['closed']    = 'Closed';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = "Public (Users who can visit project can access it.)";
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Project ACL (for who can access the current project)';
 
 $lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = 'Inherited Project';

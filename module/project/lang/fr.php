@@ -288,7 +288,7 @@ $lang->project->kanbanSubAclList['open']    = "Open (accessible with project vie
 $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
 
 global $config;
-if($config->systemMode != 'new')
+if($config->systemMode == 'lean')
 {
     unset($lang->project->subAclList['program']);
     unset($lang->project->kanbanSubAclList['program']);

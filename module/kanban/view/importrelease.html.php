@@ -40,9 +40,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
-          <?php if($config->systemMode == 'new'):?>
           <th class='c-name'><?php echo $lang->release->project;?></th>
-          <?php endif;?>
           <th class='c-name'><?php echo $lang->release->build;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
@@ -64,9 +62,7 @@
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
-          <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
-          <?php endif;?>
           <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
           <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>

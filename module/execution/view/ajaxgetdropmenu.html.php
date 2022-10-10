@@ -57,16 +57,16 @@ foreach($executions as $projectID => $projectExecutions)
 }
 $executionsPinYin = common::convert2Pinyin($executionNames);
 
-$myExecutionsHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
-$normalExecutionsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
-$closedExecutionsHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noProject">';
+$myExecutionsHtml     = '<ul class="tree tree-angles" data-ride="tree">';
+$normalExecutionsHtml = '<ul class="tree tree-angles" data-ride="tree">';
+$closedExecutionsHtml = '<ul class="tree tree-angles" data-ride="tree">';
 
 $kanbanLink = $this->createLink('execution', 'kanban', "executionID=%s");
 $taskLink   = $this->createLink('execution', 'task', "executionID=%s");
 foreach($executions as $projectID => $projectExecutions)
 {
     /* Adapt to the old version. */
-    if($projectID and $config->systemMode == 'new')
+    if($projectID)
     {
         $projectName = zget($projects, $projectID);
 
@@ -112,7 +112,7 @@ foreach($executions as $projectID => $projectExecutions)
                 }
             }
         }
-        else if($execution->grade == 1 or $config->systemMode == 'classic')
+        else if($execution->grade == 1)
         {
             if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
             {

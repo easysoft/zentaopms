@@ -1457,7 +1457,7 @@ class product extends control
                 $fields[$fieldName] = zget($productLang, $fieldName);
 
                 unset($fields[$key]);
-                if($this->config->systemMode != 'new' and ($fieldName == 'line' or $fieldName == 'program')) unset($fields[$fieldName]);
+                if($this->config->systemMode == 'lean' and ($fieldName == 'line' or $fieldName == 'program')) unset($fields[$fieldName]);
             }
 
             $lastProgram  = $lastLine = '';

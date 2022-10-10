@@ -2330,11 +2330,10 @@ class projectModel extends model
         $project = $this->getByID($projectID);
         if(empty($project)) return array();
 
-        $type = $this->config->systemMode == 'new' ? $project->type : 'project';
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
-            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.type')->eq($project->type)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchAll('account');
