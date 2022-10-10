@@ -50,6 +50,7 @@
       $canBatchReview   = common::hasPriv('requirement', 'batchReview');
       $canBatchAssignTo = common::hasPriv('requirement', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
+      $URTitle          = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
       ?>
       <thead>
         <tr>
@@ -61,7 +62,7 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $lang->URCommon . $lang->my->name);?></th>
+          <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $URTitle);?></th>
           <th class='c-pri w-40px' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
