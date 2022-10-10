@@ -108,6 +108,7 @@ class my extends control
         $this->loadModel('bug');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
+        $this->loadModel('ticket');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -198,6 +199,9 @@ class my extends control
             /* Get the number of meetings assigned to me. */
             $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $meetingCount = $pager->recTotal;
+
+            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
+            $ticketCount = $pager->recTotal;
         }
 
 echo <<<EOF
@@ -223,6 +227,7 @@ if(isMax !== 0)
     var reviewCount  = $reviewCount;
     var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
+    var ticketCount  = $ticketCount;
 }
 </script>
 EOF;
@@ -1205,6 +1210,38 @@ EOF;
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, $viewType = 'feedback', 0);
+        $this->display();
+    }
+
+    /**
+     * My ticket.
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('ticket');
+
+        $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+
+        $this->view->title      = $this->lang->ticket->browse;
+        $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->tickets    = $tickets;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 
