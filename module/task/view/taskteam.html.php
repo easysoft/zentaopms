@@ -26,7 +26,8 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 ?>
 <tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
   <td>
-    <span><?php echo $i;?></span>
+    <span class="team-number"><?php echo $i;?></span>
+    <i class="icon icon-angle-down"></i>
   </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
@@ -56,7 +57,8 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php endif;?>
 <tr class='template teamTemplate member-wait'>
   <td>
-    <span><?php echo $i;?></span>
+    <span class="team-number"><?php echo $i;?></span>
+    <i class="icon icon-angle-down"></i>
   </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
