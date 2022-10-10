@@ -4603,7 +4603,7 @@ class executionModel extends model
 
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
-        echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
+        echo "<td class='c-name text-left flex sort-handler'><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
         {
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
@@ -4636,9 +4636,9 @@ class executionModel extends model
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
         echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours text-right' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
@@ -4898,7 +4898,7 @@ class executionModel extends model
                 if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
                 if(!empty($execution->children))
                 {
-                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-double-right'></i></a>";
+                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-right'></i></a>";
                 }
                 break;
             case 'code':

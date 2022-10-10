@@ -1,4 +1,4 @@
-#executionList > thead > tr > th .table-nest-toggle-global {top: 6px}
+#executionList > thead > tr > th .table-nest-toggle-global {top: 4px;}
 #executionList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #executionsSummary {padding-left: 10px;}
 #mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
@@ -8,7 +8,7 @@ th.table-nest-title-edit {padding-left: 50px !important;}
 th.table-nest-title-edit .table-nest-toggle {left: 28px;}
 th.table-nest-title .check-all {position: absolute; left: 15px; top: 7px;}
 .c-date {text-align: center;}
+#executionTableList > tr.has-nest-child .table-nest-toggle {vertical-align: middle;}
 #executionTableList > tr:not(.has-nest-child) .table-nest-toggle {display: none;}
 #executionTableList > tr:not(.has-nest-child) .project-type-label {margin-left: 22px;}
 .table-statistic {padding-left: 10px;}
-#executionTableList .table-nest-icon {top: 6px;}

@@ -34,16 +34,13 @@
       <tr class='text-left'>
         <th class='c-id'><?php echo $lang->idAB;?></th>
         <th class='c-name text-left'><?php echo $lang->my->name;?></th>
-        <?php if($config->systemMode == 'new'):?>
-        <th class='c-name text-left'><?php echo $lang->my->projects;?></th>
-        <?php endif;?>
-        <th class='c-date'><?php echo $lang->execution->begin;?></th>
-        <th class='c-date'><?php echo $lang->execution->end;?></th>
         <th class='c-status'><?php echo $lang->statusAB;?></th>
         <th class='c-user' title='<?php echo $lang->team->roleAB;?>'><?php echo $lang->team->roleAB;?></th>
-        <th class='c-date'><?php echo $lang->team->join;?></th>
-        <th class='c-hours'><?php echo $lang->my->hours;?></th>
         <th class='c-user text-center'><?php echo $lang->execution->myTask;?></th>
+        <th class='c-date'><?php echo $lang->execution->begin;?></th>
+        <th class='c-date'><?php echo $lang->execution->end;?></th>
+        <th class='c-date'><?php echo $lang->team->join;?></th>
+        <th class='c-hours align-right'><?php echo $lang->my->hours;?></th>
         <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>
@@ -62,13 +59,6 @@
           <?php endif;?>
           <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
-        <?php if($config->systemMode == 'new'):?>
-        <td class='c-name text-left'>
-          <?php echo isset($execution->projectName) ? html::a($this->createLink('project', 'index', "id=$execution->project", '', '', $execution->project), $execution->projectName, '', "title='$execution->projectName'") : '';?>
-        </td>
-        <?php endif;?>
-        <td class='c-date'><?php echo $execution->begin;?></td>
-        <td class='c-date'><?php echo $execution->end;?></td>
         <td class="c-status">
           <?php if(isset($execution->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->execution->delayed;?>'><?php echo $lang->execution->delayed;?></span>
@@ -78,9 +68,11 @@
           <?php endif;?>
         </td>
         <td><?php echo $execution->role;?></td>
-        <td class='c-date'><?php echo $execution->join;?></td>
-        <td><?php echo $execution->hours;?></td>
         <td class="text-center"><?php echo $execution->assignedToMeTasks;?></td>
+        <td class='c-date'><?php echo $execution->begin;?></td>
+        <td class='c-date'><?php echo $execution->end;?></td>
+        <td class='c-date'><?php echo $execution->join;?></td>
+        <td class="text-right"><?php echo $execution->hours;?></td>
         <td>
           <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $execution->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
             <div class='progress-info'><?php echo $execution->progress;?></div>
