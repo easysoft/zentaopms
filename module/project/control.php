@@ -1562,6 +1562,14 @@ class project extends control
             }
             if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
+            if(!$project->multiple)
+            {
+                unset($this->lang->resource->execution->create);
+                unset($this->lang->resource->execution->start);
+                unset($this->lang->resource->execution->delete);
+            }
+
+            $this->view->project  = $project;
             $this->lang->resource = $this->project->processProjectPrivs($project->model);
         }
 
