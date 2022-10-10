@@ -419,7 +419,7 @@ $lang->execution->storyDragError              = "该{$lang->SRCommon}不是激�
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 $lang->execution->week                        = '周';
-$lang->execution->checkedExecutions           = "共选中%s个{$lang->execution->common}。";
+$lang->execution->checkedExecutions           = "共选中%s个{$lang->executionCommon}。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
