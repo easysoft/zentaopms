@@ -16,13 +16,17 @@
 $datatableId  = $this->moduleName . ucfirst($this->methodName);
 $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
 ?>
-<?php js::set('unfoldExecutions', array());?>
-<?php js::set('useDatatable', $useDatatable);?>
-<?php js::set('from', $from);?>
-<?php js::set('checkedSummary', $lang->execution->checkedExecSummary);?>
-<?php js::set('pageSummary', $lang->execution->pageExecSummary);?>
-<?php js::set('executionSummary', $lang->execution->executionSummary);?>
-<?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
+<?php
+js::set('unfoldExecutions', array());
+js::set('useDatatable', $useDatatable);
+js::set('from', $from);
+
+/* Replace Iteration to Execution. */
+js::set('checkedSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecSummary));
+js::set('pageSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->pageExecSummary));
+js::set('executionSummary', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->executionSummary));
+js::set('checkedExecutions', str_replace($lang->executionCommon, $lang->execution->common, $lang->execution->checkedExecutions));
+?>
 <?php
 /* Set unfold parent executionID. */
 js::set('unfoldAll', $lang->execution->treeLevel['all']);
