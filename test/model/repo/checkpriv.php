@@ -10,6 +10,8 @@ title=测试 repoModel->checkPriv();
 cid=1
 pid=1
 
+ >> 0
+
 */
 
 $checkPriv = new repoTest();
