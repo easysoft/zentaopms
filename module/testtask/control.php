@@ -230,10 +230,12 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $this->loadModel('project');
+
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($projectID);
+            $this->project->setMenu($projectID);
         }
         elseif($this->app->tab == 'execution')
         {
@@ -246,7 +248,7 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID, 'multiple');
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
         $execution = $this->loadModel('execution')->getByID($executionID);
@@ -255,12 +257,14 @@ class testtask extends control
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
 
+        $project = $this->project->getByID($projectID);
+        if($project && !$project->multiple) $this->view->noMultipleExecutionID = $this->loadModel('execution')->getNoMultipleID($project->id);
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
-        $this->view->productID   = $productID;
         $this->view->product     = $this->product->getByID($productID);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
@@ -474,11 +478,8 @@ class testtask extends control
         if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product   = $this->product->getByID($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         if($this->app->tab == 'project')
         {
@@ -544,6 +545,7 @@ class testtask extends control
         $this->config->testcase->search['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
@@ -774,10 +776,12 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $this->loadModel('project');
+
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($task->project);
+            $this->project->setMenu($task->project);
         }
         elseif($this->app->tab == 'execution')
         {
@@ -797,7 +801,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
-        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
+        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID, 'multiple');
         $executionID = $task->execution;
         if($executionID)
         {
@@ -815,6 +819,7 @@ class testtask extends control
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->task         = $task;
+        $this->view->project      = $this->project->getByID($projectID);
         $this->view->executions   = $executions;
         $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
@@ -1064,11 +1069,9 @@ class testtask extends control
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->product->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product   = $this->product->getByID($productID);
+
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
         /* Save session. */
         if($this->app->tab == 'project')
@@ -1096,6 +1099,8 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
+
+        if($product->shadow) unset($this->config->testcase->search['fields']['product']);
         if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);

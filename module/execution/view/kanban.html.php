@@ -118,7 +118,7 @@ js::set('priv',
         'canDeleteStory'        => common::hasPriv('story', 'delete'),
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
-        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
+        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct),
         'canViewStory'          => common::hasPriv('execution', 'storyView'),
     )
 );

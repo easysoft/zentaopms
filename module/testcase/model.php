@@ -58,7 +58,7 @@ class testcaseModel extends model
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
-            ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
+            ->setIF($this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->stripTags($this->config->testcase->editor->create['id'], $this->config->allowedTags)
@@ -165,7 +165,7 @@ class testcaseModel extends model
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;
-            if($this->config->systemMode == 'new' && $this->app->tab == 'project') $data[$i]->project = $this->session->project;
+            if($this->app->tab == 'project') $data[$i]->project = $this->session->project;
             $data[$i]->branch       = $cases->branch[$i];
             $data[$i]->module       = $cases->module[$i];
             $data[$i]->type         = $cases->type[$i];
@@ -1543,7 +1543,7 @@ class testcaseModel extends model
             }
             else
             {
-                if($this->config->systemMode == 'new' && $this->app->tab == 'project') $caseData->project = $this->session->project;
+                if($this->app->tab == 'project') $caseData->project = $this->session->project;
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
@@ -1914,15 +1914,23 @@ class testcaseModel extends model
      */
     public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
     {
-        $productName = zget($products, $productID, '');
-        $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $productName) + array('all' => $this->lang->testcase->allProduct);
-        $this->config->testcase->search['params']['product']['values'] = array('') + $product;
+        $productList = array();
+        if($this->app->tab == 'project' and empty($productID))
+        {
+            $productList = $products;
+        }
+        else
+        {
+            $productList = array('all' => $this->lang->all);
+            if(isset($products[$productID])) $productList = array($productID => $products[$productID]) + $productList;
+        }
+        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
 
         $module = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0);
         if(!$productID)
         {
             $module = array();
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+            foreach($products as $id => $name) $module += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
         }
         $this->config->testcase->search['params']['module']['values'] = $module;
 
@@ -1936,8 +1944,8 @@ class testcaseModel extends model
         else
         {
             $this->app->loadLang('branch');
-            $productInfo = $this->loadModel('product')->getByID($productID);
-            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+            $product = $this->loadModel('product')->getByID($productID);
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
         }
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);

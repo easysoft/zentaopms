@@ -10,13 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc') and ($config->systemMode == 'new');?>
+<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
-  <?php $tipsModal = $this->config->systemMode == 'new' ? 'newTipsModal' : 'classicTipsModal';?>
-  <div class='modal-dialog' id='<?php echo $tipsModal;?>'>
+  <div class='modal-dialog' id='newTipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->tips;?></h4>
@@ -40,10 +39,8 @@
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
 <?php js::set('isStage', $isStage);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
-<?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
@@ -260,9 +257,7 @@
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <div class='titleBox'><h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4></div>
-      <?php if($this->config->systemMode == 'new'):?>
       <div class='projectSelect'><?php echo html::select("project", $copyProjects, $projectID, "class='form-control chosen' required onchange='loadProjectExecutions(this.value)'");?></div>
-      <?php endif;?>
     </div>
     <div class='modal-body'>
       <?php if(count($executions) == 1):?>
@@ -272,7 +267,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php if($config->systemMode == 'new' and $projectID == 0) $executions = $copyExecutions;?>
+      <?php if($projectID == 0) $executions = $copyExecutions;?>
       <?php foreach ($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>

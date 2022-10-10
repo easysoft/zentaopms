@@ -1368,6 +1368,7 @@ class productModel extends model
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
+            ->andWhere('t2.multiple', true)->eq('1')->orWhere('t2.type')->eq('project')->markright(1)
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');

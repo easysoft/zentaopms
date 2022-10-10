@@ -91,7 +91,7 @@ class taskModel extends model
             ->setDefault('execution', $executionID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
-            ->setIF($this->config->systemMode == 'new', 'project', $this->getProjectID($executionID))
+            ->setDefault('project', $this->getProjectID($executionID))
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
@@ -369,7 +369,7 @@ class taskModel extends model
             $data[$i]->pri        = $tasks->pri[$i];
             $data[$i]->estimate   = $tasks->estimate[$i];
             $data[$i]->left       = $tasks->estimate[$i];
-            $data[$i]->project    = $this->config->systemMode == 'new' ? $projectID : 0;
+            $data[$i]->project    = $projectID;
             $data[$i]->execution  = $executionID;
             $data[$i]->estStarted = $estStarted;
             $data[$i]->deadline   = $deadline;
@@ -1467,11 +1467,9 @@ class taskModel extends model
                 return false;
             }
 
-            if($this->config->systemMode == 'new')
-            {
-                $project = $this->loadModel('project')->getByID($oldTask->project);
-                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
-            }
+            $project = $this->loadModel('project')->getByID($oldTask->project);
+            if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
+
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -2686,7 +2684,7 @@ class taskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t3.deleted')->eq(0)->fi()
+            ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');
         return $tasks;
     }

@@ -101,9 +101,7 @@ $lang->execution->copyNoExecution = 'There are no ' . $lang->executionCommon . '
 $lang->execution->noTeam          = 'No team members at the moment';
 $lang->execution->or              = ' or ';
 $lang->execution->selectProject   = 'Please select project';
-
-if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "select Project/{$lang->execution->common} to copy its members";
-if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "select Project/{$lang->executionCommon} to copy its members";
+$lang->execution->copyTeamTip     = "select Project/{$lang->execution->common} to copy its members";
 
 $lang->execution->start    = 'Bắt đầu';
 $lang->execution->activate = 'Kích hoạt';
@@ -147,16 +145,8 @@ $lang->execution->statusList['suspended'] = 'Đã đình chỉ';
 $lang->execution->statusList['closed']    = 'Đã đóng';
 
 global $config;
-if($config->systemMode == 'new')
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
-}
-else
-{
-    $lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
-    $lang->execution->aclList['open']    = "Public (Users who can visit {$lang->executionCommon} can access it.)";
-}
+$lang->execution->aclList['private'] = 'Private (for team members and project stakeholders)';
+$lang->execution->aclList['open']    = 'Inherited Execution ACL (for who can access the current project)';
 
 $lang->execution->storyPoint = 'Story Point';
 

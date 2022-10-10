@@ -30,7 +30,7 @@ class testtaskModel extends model
 
         $task = fixer::input('post')
             ->setDefault('build', '')
-            ->setIF($this->config->systemMode == 'new', 'project', $projectID)
+            ->setDefault('project', $projectID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
@@ -76,8 +76,8 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        $executionNameField = $this->config->systemMode == 'new' ? "IF(t5.id IS NOT NULL, CONCAT(t5.name, ' / ', t3.name), t3.name)" : 't3.name';
-        return $this->dao->select("t1.*, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $executionNameField = "IF(t5.id IS NOT NULL && t5.multiple = '1', CONCAT(t5.name, ' / ', t3.name), IF(t5.id IS NOT NULL, t5.name, t3.name))";
+        return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -131,7 +131,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.auto')->eq('unit')
             ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
             ->andWhere('t1.end')->ge($beginAndEnd['begin'])
@@ -402,7 +402,7 @@ class testtaskModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -435,7 +435,7 @@ class testtaskModel extends model
         if($bugs)
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
@@ -468,7 +468,7 @@ class testtaskModel extends model
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+                ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->andWhere('t2.suite')->eq((int)$suite)
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
@@ -503,7 +503,7 @@ class testtaskModel extends model
             ->where($query)
             ->andWhere('t1.id')->notin($linkedCases)
             ->andWhere('t2.task')->eq($testTask)
-            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.status')->ne('wait')
             ->page($pager)
             ->fetchAll();

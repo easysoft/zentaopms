@@ -196,7 +196,7 @@ class bug extends control
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['onMenuBar'] = 'yes';
-        $searchProducts = $this->product->getPairs('', 0, '', true);
+        $searchProducts = $this->product->getPairs('', 0, '', 'all');
         $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';

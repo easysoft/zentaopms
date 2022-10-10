@@ -33,19 +33,13 @@ $('#toTaskButton').on('click', function()
     var executionID = $('#execution').val();
     var executionID = executionID ? executionID : 0;
 
-    if(systemMode == 'new' && projectID && executionID != 0)
+    if(projectID && executionID != 0)
     {
         $('#cancelButton').click();
         link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
         window.parent.$.apps.open(link, 'execution');
     }
-    else if(systemMode == 'classic' && executionID)
-    {
-        $('#cancelButton').click();
-        var link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=0&bugID=' + bugID);
-        window.parent.$.apps.open(link, 'execution');
-    }
-    else if(systemMode == 'new' && projectID == 0)
+    else if(projectID == 0)
     {
         alert(errorNoProject);
     }

@@ -99,7 +99,7 @@ $lang->action->objectTypes['productplan']      = '计划';
 $lang->action->objectTypes['release']          = '发布';
 $lang->action->objectTypes['program']          = '项目集';
 $lang->action->objectTypes['project']          = '项目';
-$lang->action->objectTypes['execution']        = $config->systemMode == 'new' ? '执行' : $lang->executionCommon;
+$lang->action->objectTypes['execution']        = '执行';
 $lang->action->objectTypes['task']             = '任务';
 $lang->action->objectTypes['build']            = '版本';
 $lang->action->objectTypes['job']              = '构建';
@@ -681,14 +681,7 @@ $lang->action->label->release     = '发布|release|view|productID=%s';
 $lang->action->label->story       = "{$lang->SRCommon}|story|view|storyID=%s";
 $lang->action->label->program     = "项目集|program|product|programID=%s";
 $lang->action->label->project     = "项目|project|index|projectID=%s";
-if($config->systemMode == 'new')
-{
-    $lang->action->label->execution = "执行|execution|task|executionID=%s";
-}
-else
-{
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
-}
+$lang->action->label->execution   = "执行|execution|task|executionID=%s";
 
 $lang->action->label->task         = '任务|task|view|taskID=%s';
 $lang->action->label->build        = '版本|build|view|buildID=%s';

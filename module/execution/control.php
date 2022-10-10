@@ -41,7 +41,9 @@ class execution extends control
         $this->loadModel('project');
 
         if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
-        $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
+
+        $mode = $this->app->tab == 'execution' ? 'multiple' : '';
+        $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {
@@ -3184,6 +3186,7 @@ class execution extends control
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
         $browseLink = $this->session->executionStoryList;
         if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+        if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 

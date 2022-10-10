@@ -138,7 +138,7 @@ function loadBranches(product)
     if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
-    var projectID = (typeof(systemMode) != 'undefined' && systemMode == 'new') ? $('#project').val() : 0;
+    var projectID = $('#project').val();
     if(typeof(projectID) == 'undefined') projectID = 0;
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');

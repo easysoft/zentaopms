@@ -536,8 +536,7 @@ $lang->block->flowchart            = array();
 $lang->block->flowchart['admin']   = array('管理員', '維護公司', '添加用戶', '維護權限');
 if($config->systemMode == 'new') $lang->block->flowchart['program'] = array('項目集負責人', '創建項目集', '關聯產品', "創建項目", "制定預算和規劃", '添加干係人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '經理', '創建' . $lang->productCommon, '維護模組', "維護計劃", "維護需求", '創建發佈');
-$lang->block->flowchart['project'] = array('項目經理', '創建' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
-if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('項目經理', '創建項目、' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
+$lang->block->flowchart['project'] = array('項目經理', '創建項目、' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
 $lang->block->flowchart['dev']     = array('研發人員', '領取任務和Bug', '設計實現方案', '更新狀態', '完成任務和Bug', '提交代碼');
 $lang->block->flowchart['tester']  = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');
 

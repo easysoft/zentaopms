@@ -611,8 +611,8 @@ class commonModel extends model
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
-        if($config->edition == 'open')   unset($lang->createIcons['effort']);
-        if($config->systemMode != 'new') unset($lang->createIcons['program']);
+        if($config->edition == 'open')    unset($lang->createIcons['effort']);
+        if($config->systemMode == 'lean') unset($lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
 
@@ -1238,7 +1238,7 @@ class commonModel extends model
         echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
 
         $searchObjects = $lang->searchObjects;
-        if($config->systemMode != 'new') unset($searchObjects['program']);
+        if($config->systemMode == 'lean') unset($searchObjects['program']);
 
         foreach($searchObjects as $key => $value)
         {

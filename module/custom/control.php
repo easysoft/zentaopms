@@ -21,11 +21,7 @@ class custom extends control
     {
         if($this->config->vision == 'lite') return print(js::locate(inlink('execution')));
 
-        if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
-        {
-            return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
-        }
-
+        if(common::hasPriv('custom', 'set'))       return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
         if(common::hasPriv('custom', 'product'))   return print(js::locate(inlink('product')));
         if(common::hasPriv('custom', 'execution')) return print(js::locate(inlink('execution')));
 
@@ -609,7 +605,7 @@ class custom extends control
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
-            $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';
+            $locate = inlink('flow');
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }

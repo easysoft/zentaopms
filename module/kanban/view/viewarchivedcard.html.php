@@ -62,7 +62,6 @@ $app->loadLang('execution');
 $app->loadLang('release');
 $app->loadLang('build');
 $app->loadLang('productplan');
-js::set('systemMode', $this->config->systemMode);
 ?>
 <div class='panel'>
   <div class='panel-heading text-center'>
