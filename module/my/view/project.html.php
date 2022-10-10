@@ -47,7 +47,17 @@
         </tr>
       </thead>
       <tbody id='projectTableList'>
+        <?php
+        $waitCount        = 0;
+        $doingCount       = 0;
+        $suspendedCount   = 0;
+        $closedCount      = 0;
+        ?>
         <?php foreach($projects as $project):?>
+        <?php if($project->status == 'wait')      $waitCount ++;?>
+        <?php if($project->status == 'doing')     $doingCount ++;?>
+        <?php if($project->status == 'suspended') $suspendedCount ++;?>
+        <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
@@ -101,6 +111,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
+      <div class="table-statistic"><?php echo $status == 'openedbyme' ? sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projects));?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
