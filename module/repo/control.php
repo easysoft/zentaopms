@@ -140,17 +140,22 @@ class repo extends control
         $this->app->loadLang('action');
 
         $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->andWhere('shadow')->eq(0)->fetchPairs('id', 'name'); /* Remove shadow products. */
         $productID = count($products) > 0 ? key($products) : '';
 
-        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
-        $this->view->position[]   = $this->lang->repo->create;
-        $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products     = $products;
-        $this->view->projects     = array();
-        $this->view->productID    = $productID;
-        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
-        $this->view->objectID     = $objectID;
+        $shadowProduct = null;
+        if($this->app->tab == 'project' && $objectID) $shadowProduct = $this->loadModel('product')->getShadowProductByProject($objectID);
+
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[]    = $this->lang->repo->create;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products      = $products;
+        $this->view->projects      = array();
+        $this->view->productID     = $productID;
+        $this->view->serviceHosts  = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID      = $objectID;
+        $this->view->shadowProduct = $shadowProduct;
 
         $this->display();
     }
@@ -205,15 +210,25 @@ class repo extends control
 
         $projectOptions = $this->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
 
-        $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
-        $this->view->repo         = $repo;
-        $this->view->repoID       = $repoID;
-        $this->view->objectID     = $objectID;
-        $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products     = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->projects     = $projectOptions;
-        $this->view->serviceHosts = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $shadowProduct = null;
+        $productIDList = explode(',', $repo->product);
+        /* Code repository linked only one project without product. */
+        if(count($productIDList) == 1)
+        {
+            $shadowProduct = $this->loadModel('product')->getByID($productIDList[0]);
+            $shadowProduct = $shadowProduct && $shadowProduct->shadow ? $shadowProduct : null;
+        }
+
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->repo          = $repo;
+        $this->view->repoID        = $repoID;
+        $this->view->objectID      = $objectID;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $this->view->projects      = $projectOptions;
+        $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
+        $this->view->shadowProduct = $shadowProduct;
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;

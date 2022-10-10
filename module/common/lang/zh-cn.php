@@ -167,6 +167,7 @@ $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->repo->common       = '代码';
+$lang->repo->codeRepo     = '代码库';
 $lang->report->common     = '统计';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
