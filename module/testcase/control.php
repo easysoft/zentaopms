@@ -66,7 +66,7 @@ class testcase extends control
         }
         else
         {
-            $products = $this->product->getPairs();
+            $products = $this->product->getPairs('', 0, '', 'all');
         }
         $this->view->products = $this->products = $products;
     }
