@@ -31,9 +31,11 @@ $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
 $lang->testcase->type             = '用例类型';
 $lang->testcase->status           = '用例状态';
+$lang->testcase->statusAB         = '状态';
 $lang->testcase->subStatus        = '子状态';
 $lang->testcase->steps            = '用例步骤';
 $lang->testcase->openedBy         = '由谁创建';
+$lang->testcase->openedByAB       = '创建者';
 $lang->testcase->openedDate       = '创建日期';
 $lang->testcase->lastEditedBy     = '最后修改者';
 $lang->testcase->result           = '测试结果';
@@ -250,11 +252,11 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <st
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
-$lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['all']         = '全部';
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
-$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['browseunits'] = '单元测试';
+$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

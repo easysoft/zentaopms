@@ -1602,7 +1602,10 @@ class testtaskModel extends model
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
                 break;
             case 'assignedTo':
-                echo zget($users, $run->assignedTo);
+                $btnTextClass = '';
+                if($run->assignedTo == $this->app->user->account) $btnTextClass = 'assigned-current';
+                if(!empty($run->assignedTo) and $run->assignedTo != $this->app->user->account) $btnTextClass = 'assigned-other';
+                echo "<span class='$btnTextClass'>" . zget($users, $run->assignedTo) . '</span>';
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
@@ -1622,8 +1625,8 @@ class testtaskModel extends model
 
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
-                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {

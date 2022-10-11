@@ -503,6 +503,8 @@ class bug extends control
         $type        = 'codeerror';
         $pri         = 3;
         $color       = '';
+        $feedbackBy  = '';
+        $notifyEmail = '';
 
         /* Parse the extras. extract fix php7.2. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -525,9 +527,11 @@ class bug extends control
             $severity    = $bug->severity;
             $type        = $bug->type;
             $assignedTo  = $bug->assignedTo;
-            $deadline    = $bug->deadline;
+            $deadline    = helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
+            $feedbackBy  = $bug->feedbackBy;
+            $notifyEmail = $bug->notifyEmail;
             if($pri == 0) $pri = '3';
         }
 
@@ -688,6 +692,8 @@ class bug extends control
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
         $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
+        $this->view->feedbackBy       = $feedbackBy;
+        $this->view->notifyEmail      = $notifyEmail;
 
         $this->display();
     }
@@ -960,14 +966,8 @@ class bug extends control
                 $changes = $this->bug->update($bugID);
                 if(dao::isError())
                 {
-                    if(defined('RUN_MODE') && RUN_MODE == 'api')
-                    {
-                        return $this->send(array('status' => 'error', 'message' => dao::getError()));
-                    }
-                    else
-                    {
-                        return print(js::error(dao::getError()));
-                    }
+                    if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => dao::getError()));
+                    return print(js::error(dao::getError()));
                 }
             }
 
@@ -1148,10 +1148,17 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]))
+        {
+            /* Fix bug #28378. */
+            $assignedTo = $this->user->getById($bug->assignedTo);
+            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+        }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1808,6 +1815,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);
@@ -2003,11 +2011,15 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $browseType
+     * @param  string $excludeBugs
      * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkBugs($bugID, $browseType = '', $excludeBugs = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2022,11 +2034,11 @@ class bug extends control
         $this->qa->setMenu($this->products, $bug->product, $bug->branch);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID=$bugID&browseType=bySearch&excludeBugs=$excludeBugs&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
 
         /* Get bugs to link. */
-        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager);
+        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager, $excludeBugs);
 
         /* Assign. */
         $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
@@ -2309,6 +2321,15 @@ class bug extends control
         {
             $this->loadModel('port');
             $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            if(!$productID)
+            {
+                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+
+                $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+            }
+
             $this->port->export('bug');
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }

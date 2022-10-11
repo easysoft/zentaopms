@@ -14,15 +14,14 @@
 .export {margin-left: 0px !important;}
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
-.project-name {position: relative; display: flex; align-items: center;}
+.project-name {display: flex; align-items: center;}
 .project-name > span,
 .project-name > span {flex: none;}
-.project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
-.project-name.has-prefix > a,
-.project-name.has-suffix > a {max-width: calc(100% - 100px);}
+.project-name > a {display: inline-block; max-width: calc(100% - 50px);}
 .project-name.has-prefix > a {padding-left: 5px;}
 .project-name.has-suffix > a {padding-right: 5px;}
 </style>
+<?php $canBatchEdit = common::hasPriv('project', 'batchEdit');?>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebarHeader">
@@ -40,6 +39,7 @@
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
+    <?php if($canBatchEdit) echo html::checkbox('showEdit', array('1' => $lang->project->edit), $showBatchEdit);?>
     <?php if($browseType != 'bysearch') echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
@@ -84,7 +84,7 @@
       </p>
     </div>
     <?php else:?>
-    <form class='main-table' id='projectForm' method='post' data-ride="table">
+    <form class='main-table' id='projectForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -94,18 +94,21 @@
       $useDatatable     = (!commonModel::isTutorialMode() and (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable'));
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
+      $waitCount        = 0;
+      $doingCount       = 0;
+      $suspendedCount   = 0;
+      $closedCount      = 0;
 
       if($useDatatable) include dirname(dirname(dirname(__FILE__))) . '/common/view/datatable.html.php';
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $fixedFieldsWidth['leftWidth']?>' data-fixed-right-width='<?php echo $fixedFieldsWidth['rightWidth']?>'>
-      <?php $canBatchEdit = $this->config->systemMode == 'new' ? common::hasPriv('project', 'batchEdit') : common::hasPriv('project', 'batchEdit');?>
         <thead>
           <tr>
             <?php
             foreach($setting as $value)
             {
-              if($value->id == 'status' and strpos(',all,bysearch,', ",$browseType,") === false) $value->show = false;
+              if($value->id == 'status' and strpos(',all,bysearch,undone,', ",$browseType,") === false) $value->show = false;
               if($value->id == 'teamCount' and $browseType == 'all') $value->show = false;
               if(commonModel::isTutorialMode() && ($value->id == 'PM' || $value->id == 'budget' || $value->id == 'teamCount')) $value->show = false;
               if($value->show) $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
@@ -116,7 +119,11 @@
         <tbody class="sortable">
           <?php foreach($projectStats as $project):?>
           <?php $project->from = 'project';?>
-          <tr data-id="<?php echo $project->id;?>">
+          <?php if($project->status == 'wait')      $waitCount ++;?>
+          <?php if($project->status == 'doing')     $doingCount ++;?>
+          <?php if($project->status == 'suspended') $suspendedCount ++;?>
+          <?php if($project->status == 'closed')    $closedCount ++;?>
+          <tr data-id="<?php echo $project->id;?>" data-status="<?php echo $project->status;?>">
             <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
@@ -137,10 +144,51 @@
         }
         ?>
         </div>
+        <div class="table-statistic"><?php echo strpos(',all,undone,', ",$browseType,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
   </div>
 </div>
-<?php js::set('useDatatable', isset($useDatatable) ? $useDatatable : false);?>
+<?php
+js::set('useDatatable', isset($useDatatable) ? $useDatatable : false);
+js::set('summary', sprintf($lang->project->summary, count($projectStats)));
+js::set('allSummary', sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount));
+js::set('checkedSummary', $lang->project->checkedSummary);
+js::set('checkedAllSummary', $lang->project->checkedAllSummary);
+?>
+<script>
+$(function()
+{
+    $('#projectForm').table(
+    {
+        replaceId: 'projectIdList',
+        statisticCreator: function(table)
+        {
+            var $table            = table.getTable();
+            var $checkedRows      = $table.find('tbody>tr.checked');
+            var checkedTotal      = $checkedRows.length;
+            var statistics        = summary;
+            var checkedStatistics = checkedSummary.replace('%total%', checkedTotal);
+
+            if(browseType == 'all' || browseType == 'undone')
+            {
+                var checkedWait      = $checkedRows.filter("[data-status=wait]").length;
+                var checkedDoing     = $checkedRows.filter("[data-status=doing]").length;
+                var checkedSuspended = $checkedRows.filter("[data-status=suspended]").length;
+                var checkedClosed    = $checkedRows.filter("[data-status=closed]").length;
+
+                statistics        = allSummary;
+                checkedStatistics = checkedAllSummary.replace('%total%', checkedTotal)
+                    .replace('%wait%', checkedWait)
+                    .replace('%doing%', checkedDoing)
+                    .replace('%suspended%', checkedSuspended)
+                    .replace('%closed%', checkedClosed);
+            }
+
+            return checkedTotal ? checkedStatistics : statistics;
+        }
+    });
+});
+</script>

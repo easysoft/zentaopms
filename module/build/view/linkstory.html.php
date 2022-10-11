@@ -47,7 +47,7 @@
           <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
             <?php
-            if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+            if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
             echo html::a($this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
             ?>
           </td>

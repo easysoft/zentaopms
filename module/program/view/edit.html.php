@@ -144,7 +144,7 @@
         <h4 class="modal-title"><?php echo $lang->program->changePRJUnit;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post'>
+        <form method='post' class='not-watch'>
           <table class='table table-form'>
             <tr>
               <td colspan='3'><div class='alert alert-info no-margin'><?php echo $lang->program->confirmChangePRJUint;?></div></td>

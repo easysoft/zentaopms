@@ -1,5 +1,7 @@
 $(function()
 {
+    $("#" + status + "Tab").addClass('btn-active-text');
+
     $('input[name^="showTask"]').click(function()
     {
         var show = $(this).is(':checked') ? 1 : 0;
@@ -38,14 +40,10 @@ $(function()
         }
         if(notCheckedLength > 0) $('#executionForm .checkAll').prop('checked', false);
 
-        var summary = checkedExecutions.replace('%s', checkedLength);
-        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
-        var statistic = "<div id='executionsSummary' class='table-statistic'>" + summary + "</div>";
         if(checkedLength > 0)
         {
             $('#executionSummary').addClass('hidden');
             $('#executionsSummary').remove();
-            $('.editCheckbox').after(statistic);
         }
         else
         {
@@ -63,12 +61,8 @@ $(function()
             $("#executionForm .checkAll").prop('checked', true);
             $('#executionForm').addClass('has-row-checked');
             var checkedLength = $(":checkbox[name^='executionIDList']:checked").length;
-            var summary = checkedExecutions.replace('%s', checkedLength);
-            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
-            var statistic = "<div id='executionsSummary' class='table-statistic'>" + summary + "</div>";
             $('#executionSummary').addClass('hidden');
             $('#executionsSummary').remove();
-            $('.editCheckbox').after(statistic);
             $(this).next('label').addClass('hover');
         }
         else
@@ -91,6 +85,37 @@ $(function()
         });
         $('#executionsForm .checkAll').prop('checked', false);
     }, 10);
+
+    /* Update table summary text. */
+    $('#executionForm').table(
+    {
+        statisticCreator: function(table)
+        {
+            var $table       = table.getTable();
+            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
+            var checkedTotal = $checkedRows.length;
+            var $rows        = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
+
+            var checkedWait     = 0;
+            var checkedDoing    = 0;
+            var executionIDList = [];
+            $rows.each(function()
+            {
+                var $row = $(this);
+                if($originTable) $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+
+                var data = $row.data();
+                executionIDList.push(data.id);
+
+                if(data.status === 'wait') checkedWait++;
+                if(data.status === 'doing') checkedDoing++;
+            });
+
+            if(status != 'all') return (checkedTotal ? checkedExecutions : executionSummary).replace('%s', $rows.length);
+            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait).replace('%doing%', checkedDoing);
+        }
+    })
 })
 
 window.addEventListener('scroll', this.handleScroll)

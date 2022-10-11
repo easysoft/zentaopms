@@ -704,7 +704,7 @@ class bugModel extends model
             ->setDefault('browser', '')
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
-            ->setDefault('resolvedDate', '0000-00-00 00:00:00')
+            ->setDefault('resolvedDate', '')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
@@ -754,7 +754,7 @@ class bugModel extends model
             /* Link bug to build and release. */
             if($bug->resolution == 'fixed' and !empty($bug->resolvedBuild) and $oldBug->resolvedBuild != $bug->resolvedBuild)
             {
-                if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, (int)$bugID);
+                if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, (int)$bugID);
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
@@ -1014,13 +1014,13 @@ class bugModel extends model
      *
      * @param  int    $bugID
      * @access public
-     * @return string
+     * @return array
      */
     public function assign($bugID)
     {
         $now = helper::now();
         $oldBug = $this->getById($bugID);
-        if($oldBug->status == 'closed') return false;
+        if($oldBug->status == 'closed') return array();
 
         $bug = fixer::input('post')
             ->add('id', $bugID)
@@ -1526,15 +1526,16 @@ class bugModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager
+     * @param  string $excludeBugs
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null, $excludeBugs = '')
     {
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugIDList = $bug->id . ',' . $bug->linkBug;
+            $bugIDList = $bug->id . ',' . $bug->linkBug . ',' . $excludeBugs;
             $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }
@@ -3279,7 +3280,7 @@ class bugModel extends model
                     $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
                     break;
                 case 'plan':
-                    $title = "title='" . zget($plans, $bug->plan) . "'";
+                    $title = "title='" . zget($plans, $bug->plan, '') . "'";
                     break;
                 case 'execution':
                     $title = "title='" . zget($executions, $bug->execution) . "'";
@@ -3295,6 +3296,9 @@ class bugModel extends model
                 case 'browser':
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $browser . "'";
+                    break;
+                case 'deadline':
+                    $class .= ' text-center';
                     break;
             }
 
@@ -3439,7 +3443,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->assignedDate) ? '' : substr($bug->assignedDate, 5, 11);
                 break;
             case 'deadline':
-                echo helper::isZeroDate($bug->deadline) ? '' : substr($bug->deadline, 5, 11);
+                echo helper::isZeroDate($bug->deadline) ? '' : '<span>' . substr($bug->deadline, 5, 11) . '</span>';
                 break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);
@@ -3484,15 +3488,17 @@ class bugModel extends model
     public function printAssignedHtml($bug, $users)
     {
         $btnTextClass   = '';
+        $btnClass       = '';
         $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
-        $btnTextClass   = 'text-primary';
-        if($bug->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+        if(empty($bug->assignedTo)) $btnClass = $btnTextClass = 'assigned-none';
+        if($bug->assignedTo == $this->app->user->account) $btnClass = $btnTextClass = 'assigned-current';
+        if(!empty($bug->assignedTo) and $bug->assignedTo != $this->app->user->account) $btnClass = $btnTextClass = 'assigned-other';
 
-        $btnClass     = $bug->assignedTo == 'closed' ? ' disabled' : '';
-        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $btnClass    .= $bug->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass    .= ' iframe btn btn-icon-left btn-sm';
 
         $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
@@ -3637,7 +3643,7 @@ class bugModel extends model
     public function getRelatedObjects($object, $pairs = '')
     {
         /* Get bugs. */
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($this->session->bugQueryCondition)->fetchAll('id');
+        $bugs = $this->loadModel('port')->getQueryDatas('bug');
 
         /* Get related objects id lists. */
         $relatedObjectIdList = array();

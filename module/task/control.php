@@ -230,7 +230,7 @@ class task extends control
             elseif($this->post->after == 'toTaskList')
             {
                 setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=all&param=0&orderBy=id_desc");
+                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 return $this->send($response);
             }
@@ -291,7 +291,22 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'noclosed', 0, true);
+        $executionAll = array();
+        if(!empty($projectID))
+        {
+            $executionList = $this->execution->getByProject($projectID, 'noclosed', 0, true);
+            $project       = $this->loadModel('project')->getByID($projectID);
+            $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key => $val)
+                {
+                    $values = str_replace($replace, $project->name, $val);
+                    $executionAll[$key] = $values;
+                }
+            }
+        }
+        $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -611,6 +626,26 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
+        $executions = array();
+        if(!empty($task->project))
+        {
+            $executionList  = $this->execution->getPairs($task->project);
+            $project        = $this->loadModel('project')->getByID($task->project);
+
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key=>$val)
+                {
+                    $values           = $project->name . '/' . $val;
+                    $executions[$key] = $values;
+                }
+            }
+            else
+            {
+                $executions = $executionList;
+            }
+        }
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
@@ -619,7 +654,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'noclosed', 0, true, false, $task->execution);
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $executions;
         $this->display();
     }
 
@@ -941,7 +976,11 @@ class task extends control
         }
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        if(!isonlybody() and $execution->type == 'kanban')
+        {
+            setcookie('taskToOpen', $taskID, 0, $this->config->webRoot, '', false, true);
+            return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
+        }
 
         $this->session->project = $task->project;
 
@@ -1038,12 +1077,9 @@ class task extends control
                 return print(js::error(dao::getError()));
             }
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Started';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Started';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
             $this->loadModel('common')->syncPPEStatus($taskID);
@@ -1079,7 +1115,7 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
-                if($output['from'] == 'taskkanban')
+                if(isset($output['from']) and $output['from'] == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                     $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -1111,10 +1147,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $from
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function recordEstimate($taskID, $from = '')
+    public function recordEstimate($taskID, $from = '', $orderBy = '')
     {
         $this->commonAction($taskID);
 
@@ -1152,7 +1189,7 @@ class task extends control
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban($kanbanData)"));
                 }
                 if($from == 'taskkanban')
                 {
@@ -1162,9 +1199,9 @@ class task extends control
                     $kanbanData      = $kanbanData[$kanbanType];
                     $kanbanData      = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
+                    return print(js::reload('parent') . js::execute("parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
-                return print(js::closeModal('parent.parent', 'this'));
+                return print(js::reload('parent') . js::execute("if(typeof(parent.parent.ajaxRefresh) == 'function') parent.parent.ajaxRefresh()"));
             }
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
@@ -1173,12 +1210,25 @@ class task extends control
         $this->session->set('estimateList', $uri, 'execution');
         if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
-        $task    = $this->task->getById($taskID);
-        $orderBy = 'date,id';
-        if(!empty($task->team) and $task->mode == 'linear') $orderBy = 'order,date,id';
+        $task = $this->task->getById($taskID);
+        if(!empty($task->team) and $task->mode == 'linear')
+        {
+            if(empty($orderBy))
+            {
+                $orderBy = 'order_asc,id';
+            }
+            else
+            {
+                /* The id sort with order or date style. */
+                $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
+            }
+        }
+        if(!$orderBy) $orderBy = 'date_asc';
 
         $this->view->title   = $this->lang->task->record;
         $this->view->task    = $task;
+        $this->view->from    = $from;
+        $this->view->orderBy = $orderBy;
         $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
@@ -1202,7 +1252,7 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
+            $url = $this->session->estimateList ? $this->session->estimateList : inlink('recordEstimate', "taskID={$estimate->task}");
             return print(js::locate($url, 'parent'));
         }
 
@@ -1447,12 +1497,9 @@ class task extends control
             $changes = $this->task->start($taskID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
-                $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
+            $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
+            $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($taskID);
 

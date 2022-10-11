@@ -12,8 +12,29 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php if(!$this->task->canOperateEffort($task) and empty($myOrders)):?>
+<style>#mainContent {min-height: unset;}</style>
+<?php endif;?>
 <?php $members = $task->members;?>
-<?php js::set('confirmRecord',    (!empty($members) && $task->mode == 'linear' && $task->assignedTo != end($members)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
+<?php
+$confirmRecord = $lang->task->confirmRecord;
+if(!empty($members) && $task->mode == 'linear')
+{
+    $nextAccount = '';
+    $isCurrent   = false;
+    foreach($task->team as $taskTeam)
+    {
+        if($isCurrent)
+        {
+            $nextAccount = $taskTeam->account;
+            break;
+        }
+        if($task->assignedTo == $taskTeam->account and $taskTeam->account == $app->user->account and $taskTeam->status != 'done') $isCurrent = true;
+    }
+    if($nextAccount) $confirmRecord = sprintf($lang->task->confirmTransfer, zget($users, $nextAccount));
+}
+?>
+<?php js::set('confirmRecord',    $confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
@@ -26,7 +47,7 @@
       <ul class='nav nav-default hours'>
         <li><span><?php echo $lang->task->estimate;?></span> </li>
         <li><span class='estimateTotally'><?php echo $task->estimate . 'h';?></span></li>
-        <li class='divider'></li>
+        <li>，</li>
         <li><span><?php echo $lang->task->consumed;?></span> </li>
         <li><span class='consumedTotally'><?php echo $task->consumed . 'h';?></span></li>
       </ul>
@@ -38,10 +59,11 @@
     <?php if(!empty($task->team) and $task->mode == 'linear'):?>
     <?php include __DIR__ . '/lineareffort.html.php';?>
     <?php else:?>
-    <table class='table table-bordered table-fixed table-recorded'>
+    <table class='table table-bordered table-fixed table-recorded has-sort-head'>
       <thead>
         <tr class='text-center'>
-          <th class="w-120px"><?php echo $lang->task->date;?></th>
+          <?php $vars = "taskID=$task->id&from=$from&orderBy=%s";?>
+          <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px"><?php echo $lang->task->recordedBy;?></th>
           <th><?php echo $lang->task->work;?></th>
           <th class="thWidth"><?php echo $lang->task->consumed;?></th>
@@ -82,7 +104,7 @@
       </div>
     </div>
     <?php else:?>
-    <form id="recordForm" method='post' target='hiddenwin'>
+    <form id="recordForm" class='hidden' method='post' target='hiddenwin'>
       <?php
       $readonly = '';
       $left     = '';
@@ -91,27 +113,26 @@
           $readonly      = ' readonly';
           $left          = 0;
           $reverseOrders = array_reverse($myOrders, true);
-          foreach($reverseOrders as $order) $reverseOrders[$order] = $order + 1;
+          foreach($reverseOrders as $order => $count) $reverseOrders[$order] = $order + 1;
       }
       ?>
       <table class='table table-form table-fixed table-record'>
         <thead>
           <tr class='text-center'>
-            <th class="w-150px"><?php echo $lang->task->date;?></th>
+            <th class="w-150px required"><?php echo $lang->task->date;?></th>
             <?php if($readonly):?>
             <th class="w-60px <?php if(count($reverseOrders) == 1) echo "hidden"?>"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
             <th><?php echo $lang->task->work;?></th>
-            <th class="w-100px"><?php echo $lang->task->consumedAB;?></th>
-            <th class="w-100px"><?php echo $lang->task->leftAB;?></th>
+            <th class="w-100px required"><?php echo $lang->task->consumedAB;?></th>
+            <th class="w-100px <?php if(empty($readonly)) echo 'required'?>"><?php echo $lang->task->leftAB;?></th>
           </tr>
         </thead>
         <tbody>
-          <?php $initNum = !empty($efforts) ? 3 : 5;?>
-          <?php for($i = 1; $i <= $initNum; $i++):?>
+          <?php for($i = 1; $i <= 5; $i++):?>
           <tr class="text-center">
             <td>
-              <div class='input-group'>
+              <div class='input-group date-group'>
                 <?php echo html::input("dates[$i]", helper::today(), "class='form-control text-center form-date'");?>
                 <span class='input-group-addon'><i class='icon icon-calendar'></i></span>
               </div>

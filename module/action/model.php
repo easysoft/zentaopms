@@ -330,12 +330,20 @@ class actionModel extends model
             ->where("objectType IN('project', 'testtask', 'build')")
             ->andWhere('project')->eq((int)$objectID)
             ->fi()
+            ->beginIF($objectType == 'story')
+            ->where('objectType')->in('story,requirement')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
+            ->beginIF($objectType == 'case')
+            ->where('objectType')->in('case,testcase')
+            ->andWhere('objectID')->eq((int)$objectID)
+            ->fi()
             ->beginIF($objectType == 'module')
             ->where('objectType')->eq($objectType)
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF($objectType != 'project' and $objectType != 'module')
+            ->beginIF(strpos('project,case,story,module', $objectType) === false)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->fi()
@@ -366,10 +374,10 @@ class actionModel extends model
             elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
-                $name      = $execution->name;
-                $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
-                if($name)
+                if(!empty($execution))
                 {
+                    $name      = $execution->name;
+                    $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
                     $action->extra = (!common::hasPriv('execution', $method) or ($method == 'kanban' and isonlybody())) ? $name : html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name);
                 }
             }
@@ -567,7 +575,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif($actionName == 'linkstory' or $actionName == 'unlinkstory')
+            elseif(strpos('linkstory,unlinkstory,createchildrenstory', $actionName) !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -1052,6 +1060,9 @@ class actionModel extends model
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
 
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
@@ -1079,6 +1090,7 @@ class actionModel extends model
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
             ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
+            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1687,6 +1699,7 @@ class actionModel extends model
             $fieldName = $history->field;
             $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
             if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }

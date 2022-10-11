@@ -71,7 +71,7 @@
     </div>
 
     <?php
-    $width = common::checkNotCN() ? '600px' : '470px';
+    $width = common::checkNotCN() ? '600px' : '560px';
     echo "<div class='btn-group menu-actions'>";
     echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
     echo "<ul class='dropdown-menu pull-right'>";
@@ -116,7 +116,7 @@
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "execution=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php endif;?>
-        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe' data-width='80%'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
     </div>
@@ -223,8 +223,12 @@ js::set('priv',
 <?php js::set('userList', $userList);?>
 <?php js::set('entertime', time());?>
 <?php js::set('fluidBoard', $execution->fluidBoard);?>
+<?php js::set('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);?>
+<?php js::set('maxColWidth',$execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);?>
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>
 <?php js::set('orderBy', $storyOrder);?>
+<?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
+<?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php include '../../common/view/footer.html.php';?>

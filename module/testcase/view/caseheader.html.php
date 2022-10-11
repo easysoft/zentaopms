@@ -13,6 +13,7 @@
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
+#mainMenu .dividing-line {width: 1px; height: 16px; display: inline-block; background: #D8DBDE; margin: 7px 8px 0 0; float: left;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <?php if(!($this->app->rawMethod == 'groupcase')):?>
@@ -195,3 +196,50 @@ if(!empty($headerHooks))
     foreach($headerHooks as $fileName) include($fileName);
 }
 ?>
+<script>
+$(function()
+{
+    var $allTab           = $('#allTab');
+    var $waitTab          = $('#waitTab');
+    var $needconfirmTab   = $('#needconfirmTab');
+    var $groupTab         = $('#groupTab');
+    var $zerocaseTab      = $('#zerocaseTab');
+    var $bysuiteTab       = $('#bysuiteTab');
+    var $browseunitsTab   = $('#browseunitsTab');
+    var hasAllTab         = $allTab.length > 0;
+    var hasWaitTab        = $waitTab.length > 0;
+    var hasNeedconfirmTab = $needconfirmTab.length > 0;
+    var hasGroupTab       = $groupTab.length > 0;
+    var hasZerocaseTab    = $zerocaseTab.length > 0;
+    var hasbysuiteTab     = $bysuiteTab.length > 0;
+    var hasBrowseunitsTab = $browseunitsTab.length > 0;
+
+    if((hasAllTab || hasWaitTab) && (hasNeedconfirmTab || hasGroupTab || hasbysuiteTab || hasZerocaseTab || hasBrowseunitsTab))
+    {
+        if(hasWaitTab)
+        {
+            $waitTab.after("<div class='dividing-line'></div>");
+        }
+        else
+        {
+            $allTab.after("<div class='dividing-line'></div>");
+        }
+    }
+
+    if((hasNeedconfirmTab || hasGroupTab || hasZerocaseTab) && (hasbysuiteTab || hasBrowseunitsTab)) 
+    {
+        if(hasZerocaseTab)
+        {
+            $zerocaseTab.after("<div class='dividing-line'></div>");
+        }
+        else if(hasGroupTab)
+        {
+            $groupTab.after("<div class='dividing-line'></div>");
+        }
+        else
+        {
+            $needconfirmTab.after("<div class='dividing-line'></div>");
+        }
+    }
+});
+</script>

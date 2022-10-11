@@ -16,6 +16,7 @@
 #subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
 #subHeader #dropMenu .col-left {padding-bottom: 0px;}
 #currentBranch + #dropMenu .col-left {padding-bottom: 30px;}
+.c-deadline {text-align: center;}
 </style>
 <div id="mainMenu" class="clearfix main-row fade in">
   <div id="sidebarHeader">
@@ -34,7 +35,7 @@
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
     $module    = $type != 'bysearch' ?  "&param=$param" : '';
-    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=all$module"), "<span class='text'>{$lang->bug->featureBar['browse']['all']}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
     echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=unresolved$module"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>

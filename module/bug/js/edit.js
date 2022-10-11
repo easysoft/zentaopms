@@ -26,6 +26,20 @@ $(function()
         dropWidth : 'auto',
         maxAutoDropWidth : document.body.scrollWidth + document.getElementById('resolution').offsetWidth - document.getElementById('resolution').getBoundingClientRect().right
     });
+
+    $('#linkBugsLink').click(function()
+    {
+        var bugIdList = '';
+        $('#linkBugsBox input').each(function()
+        {
+            bugIdList += $(this).val() + ',';
+        });
+
+        var link = createLink('bug', 'linkBugs', 'bugID=' + bugID + '&browseType=&excludeBugs=' + bugIdList, '', true);
+
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%', url: link});
+        modalTrigger.show();
+    });
 });
 
 /**

@@ -20,6 +20,7 @@
 #stories .action {display: none;}
 #bugs .action {display: none;}
 tbody tr td:first-child input {display: none;}
+.page-title .dropdown-menu {top: 40px; left: 70px;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
@@ -28,8 +29,8 @@ tbody tr td:first-child input {display: none;}
     <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='text' title='<?php echo $build->name;?>'>
-      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <span title='<?php echo $build->name;?>'>
+      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='text btn btn-link btn-active-text'");?>
       <?php
       echo "<ul class='dropdown-menu'>";
       foreach($buildPairs as $id => $name)
@@ -103,7 +104,7 @@ tbody tr td:first-child input {display: none;}
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
-                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  if($story->parent > 0) echo "<span class='label label-badge label-light'>{$lang->story->childrenAB}</span>";
                   if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
                   {
                       echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");

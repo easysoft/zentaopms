@@ -117,8 +117,7 @@ class productModel extends model
         }
         $this->session->set('currentProductType', $currentProduct->type);
 
-        $executionID = ($isQaModule and $this->app->tab == 'execution') ? $extra : 0;
-        $output      = '';
+        $output = '';
         if(!empty($products))
         {
             $moduleName = 'product';
@@ -136,8 +135,8 @@ class productModel extends model
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
 
-                $branches   = $this->loadModel('branch')->getPairs($productID, 'all', $executionID);
-                $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+                $branches   = $this->loadModel('branch')->getPairs($productID, 'all');
+                $branchName = $branches[$branch];
                 if(!$isMobile)
                 {
                     $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
@@ -1193,15 +1192,16 @@ class productModel extends model
     /**
      * Get project list by product.
      *
-     * @param  int       $productID
-     * @param  string    $browseType
-     * @param  int       $branch
-     * @param  int       $involved
-     * @param  string    $orderBy
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $branch
+     * @param  int    $involved
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1220,6 +1220,7 @@ class productModel extends model
             ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
+            ->page($pager, 't2.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
@@ -1241,12 +1242,13 @@ class productModel extends model
      * @param  int       $branch
      * @param  int       $involved
      * @param  string    $orderBy
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -1827,11 +1829,15 @@ class productModel extends model
         {
             $programKeys = array(0 => 0);
             foreach($products as $product) $programKeys[] = $product->program;
-            $programs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
+            $programs = $this->dao->select('id,name,PM')->from(TABLE_PROGRAM)
                 ->where('id')->in(array_unique($programKeys))
-                ->fetchPairs();
+                ->fetchAll('id');
 
-            foreach($products as $product) $product->programName = isset($programs[$product->program]) ? $programs[$product->program] : '';
+            foreach($products as $product)
+            {
+                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+                $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+            }
         }
 
         $stats = array();
@@ -2055,6 +2061,7 @@ class productModel extends model
                 /* Init vars. */
                 /* Program name. */
                 $productStructure[$product->program]['programName'] = $product->programName;
+                $productStructure[$product->program]['programPM']   = $product->programPM;
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
         }

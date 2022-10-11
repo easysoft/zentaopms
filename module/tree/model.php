@@ -1453,7 +1453,7 @@ class treeModel extends model
         $module = $this->getById((int)$moduleID);
         if(empty($module)) return array();
 
-        return $this->dao->select('id')->from(TABLE_MODULE)->where("CONCAT(',', path, ',')")->like("%,$module->path,%")->andWhere('deleted')->eq(0)->fetchPairs();
+        return $this->dao->select('id')->from(TABLE_MODULE)->where("CONCAT(',', path, ',')")->like("%$module->path%")->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**

@@ -2,9 +2,6 @@
 .closed, .closed a {color: gray; text-decoration:line-through;}
 .resolved, .resolved a {color: #8EC21F; text-decoration: none;}
 .tree .closed, .tree .closed a {color: #003366; text-decoration: none;}
-.confirm0 {color: gray;}
-.confirm1 {color: green;}
-td.delayed {color: #fff; background: #e84e0f !important;}
 #bugForm .setting {height: 25px;}
 
 .datatable-wrapper .table-datatable .datatable-row td {height: 37px;}

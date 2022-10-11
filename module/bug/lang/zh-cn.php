@@ -187,10 +187,11 @@ $lang->bug->allUsers      = '加载所有用户';
 $lang->bug->allBuilds     = '所有';
 $lang->bug->createBuild   = '创建';
 
+global $config;
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPRJExecStoryTask      = "项目/" . $lang->executionCommon . "/{$lang->SRCommon}/任务";
+$lang->bug->legendPRJExecStoryTask      = $config->systemMode == 'new' ? "项目/" . $lang->executionCommon . "/{$lang->SRCommon}/任务" : $lang->executionCommon . "/{$lang->SRCommon}/任务";
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . "/{$lang->SRCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
@@ -284,8 +285,8 @@ $lang->bug->statusList['resolved'] = '已解决';
 $lang->bug->statusList['closed']   = '已关闭';
 
 $lang->bug->confirmedList[''] = '';
-$lang->bug->confirmedList[1]  = '是';
-$lang->bug->confirmedList[0]  = '否';
+$lang->bug->confirmedList[1]  = '已确认';
+$lang->bug->confirmedList[0]  = '未确认';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';
@@ -412,7 +413,7 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
 $lang->bug->placeholder->newBuildName = '新版本名称';
 
-$lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;
+$lang->bug->featureBar['browse']['all']          = '全部';
 $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;

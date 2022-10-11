@@ -307,6 +307,7 @@ $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the bra
 $lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
 $lang->story->confirmRecallChange  = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 $lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
+$lang->story->noStoryToTask        = "Only the activated {$lang->SRCommon} can be converted into a task!";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Story Bereich';

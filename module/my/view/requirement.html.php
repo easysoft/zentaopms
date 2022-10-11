@@ -50,6 +50,7 @@
       $canBatchReview   = common::hasPriv('requirement', 'batchReview');
       $canBatchAssignTo = common::hasPriv('requirement', 'batchAssignTo');
       $canBatchAction   = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchAssignTo);
+      $URTitle          = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
       ?>
       <thead>
         <tr>
@@ -61,12 +62,12 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
+          <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $URTitle);?></th>
           <th class='c-pri w-40px' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
-          <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-user'>      <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
+          <th class='c-user'>      <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->story->openedByAB);?></th>
+          <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-stage'>     <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
           <th class='c-actions-6 text-center'> <?php echo $lang->actions;?></th>
         </tr>
@@ -88,15 +89,15 @@
             <?php endif;?>
             <?php printf('%03d', $story->id);?>
           </td>
-          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
             <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product' title='$story->title'") : "<span title='$story->title'>$story->title</span>";?>
             <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
+          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+          <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
           <td class='c-product' title="<?php echo $story->productTitle;?>"><?php echo $story->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
@@ -107,15 +108,30 @@
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
-                    echo common::buildIconButton('story', 'submitReview', "$vars&storyType=requirement", $story, 'list', 'sub-review', '', 'iframe', true);
+                    echo common::buildIconButton('story', 'submitReview', "$vars&storyType=requirement", $story, 'list', 'confirm', '', 'iframe', true);
                 }
                 else
                 {
                     echo common::buildIconButton('story', 'review', "$vars&from=product&storyType=requirement", $story, 'list', 'search', '', 'iframe', true);
                 }
-                echo common::buildIconButton('story', 'recall', "$vars&from=list&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
+
+                $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                echo common::buildIconButton('story', 'recall', "$vars&from=list&confirm=no&storyType=requirement", $story, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                 echo common::buildIconButton('story', 'edit',   "$vars&from=default&storyType=requirement", $story, 'list', '', '', 'iframe', true, "data-width='95%'");
+
+                $storyType       = 'storyType=requirement';
+                $canChange       = common::hasPriv('story', 'change', '', $storyType);
+                $canSubmitReview = (strpos('draft,changing', $story->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType));
+                $canReview       = (strpos('draft,changing', $story->status) === false and common::hasPriv('story', 'review', '', $storyType));
+                $canRecall       = common::hasPriv('story', 'recall', '', $storyType);
+                $canEdit         = common::hasPriv('story', 'edit', '', $storyType);
+                $canClose        = common::hasPriv('story', 'close', '', $storyType);
+                if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and $canClose)
+                {
+                    echo "<div class='dividing-line'></div>";
+                }
+
+                echo common::buildIconButton('story', 'close',  "$vars&from=&storyType=requirement", $story, 'list', '', '', 'iframe', true);
             }
             ?>
           </td>
@@ -131,14 +147,14 @@
             <span class="<?php echo $spanClass?>"></span>
             <?php printf('%03d', $child->id);?>
           </td>
-          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
           <td class='c-name nobr'>
             <?php echo '<span class="label label-badge label-light" title="' . $this->lang->story->children .'">SR</span> ' . (common::hasPriv('story', 'view') ? html::a($storyLink, $child->title, null, "style='color: $child->color' data-group='product' title='$child->title'") : $child->title);?>
           </td>
+          <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->story->priList, $child->pri, $child->pri);?>'><?php echo zget($lang->story->priList, $child->pri, $child->pri);?></span></td>
+          <td class='c-status'><?php echo $child->URChanged ? "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>" : "<span class='status-story status-$child->status'>" . $this->processStatus('story', $child) . '</span>'?></td>
           <td class='c-product' title="<?php echo $child->productTitle;?>"><?php echo $child->productTitle;?></td>
           <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
           <td class='c-hours'><?php echo $child->estimate . $config->hourUnit;?></td>
-          <td class='c-status'><?php echo $child->URChanged ? "<span class='status-story status-changed'>{$this->lang->story->URChanged}</span>" : "<span class='status-story status-$child->status'>" . $this->processStatus('story', $child) . '</span>'?></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
@@ -155,16 +171,28 @@
 
                     if(strpos('draft,changing', $child->status) !== false)
                     {
-                        common::printIcon('story', 'submitReview', "$vars&storyType=story", $child, 'list', 'sub-review', '', 'iframe', true);
+                        common::printIcon('story', 'submitReview', "$vars&storyType=story", $child, 'list', 'confirm', '', 'iframe', true);
                     }
                     else
                     {
                         common::printIcon('story', 'review', "$vars&from=product&storyType=story", $child, 'list', 'search', '', 'iframe', true);
                     }
 
-                    common::printIcon('story', 'recall', "$vars&from=list&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
-                    common::printIcon('story', 'close',  "$vars&from=&storyType=story", $child, 'list', '', '', 'iframe', true);
+                    $title = $child->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
+                    common::printIcon('story', 'recall', "$vars&from=list&confirm=no&storyType=story", $child, 'list', 'undo', 'hiddenwin', '', '', '', $title);
                     common::printIcon('story', 'edit',   "$vars&from=default&storyType=story", $child, 'list');
+                    $storyType       = 'storyType=story';
+                    $canChange       = common::hasPriv('story', 'change', '', $storyType);
+                    $canSubmitReview = (strpos('draft,changing', $child->status) !== false and common::hasPriv('story', 'submitReview', '', $storyType));
+                    $canReview       = (strpos('draft,draft', $child->status) === false and common::hasPriv('story', 'review', '', $storyType));
+                    $canRecall       = common::hasPriv('story', 'recall', '', $storyType);
+                    $canEdit         = common::hasPriv('story', 'edit', '', $storyType);
+                    $canClose        = common::hasPriv('story', 'close', '', $storyType);
+                    if(($canChange or $canSubmitReview or $canReview or $canRecall or $canEdit) and $canClose)
+                    {
+                        echo "<div class='dividing-line'></div>";
+                    }
+                    common::printIcon('story', 'close',  "$vars&from=&storyType=story", $child, 'list', '', '', 'iframe', true);
                 }
             }
             ?>

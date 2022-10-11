@@ -65,14 +65,25 @@
           <td></td>
         </tr>
         <tr>
-          <th><?php echo $lang->task->consumed;?></th>
+          <?php
+          $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
+          $consumed    = !empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed;
+          $lblConsumed = $lang->task->consumed;
+          $readonly    = '';
+          if($app->rawMethod == 'restart' and !empty($currentTeam))
+          {
+              $lblConsumed = $lang->task->myConsumed;
+              $readonly    = 'readonly';
+          }
+          elseif($app->rawMethod == 'start' and $task->mode == 'linear')
+          {
+              $lblConsumed = $lang->task->myConsumed;
+          }
+          ?>
+          <th><?php echo $lblConsumed;?></th>
           <td>
             <div class='input-group'>
-              <?php
-              $currentTeam = !empty($task->team) ? $this->task->getTeamByAccount($task->team) : '';
-              $consumed    = !empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed;
-              ?>
-              <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+              <?php echo html::input('consumed', $consumed, "class='form-control' $readonly");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
         </tr>

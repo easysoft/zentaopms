@@ -552,6 +552,13 @@ class upgradeModel extends model
                 $this->updateStoryFile();
                 $this->convertTaskteam();
                 $this->convertEstToEffort();
+                $this->fixWeeklyReport();
+                $this->xuanSetOwnedByForGroups();
+                $this->xuanRecoverCreatedDates();
+                $this->xuanSetPartitionedMessageIndex();
+                break;
+            case '17_6_1':
+                $this->updateProductView();
                 break;
         }
 
@@ -1018,6 +1025,10 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
             case '17_5':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.5'));
+            case '17_6':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6'));
+            case '17_6_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6.1'));
         }
 
         return $confirmContent;
@@ -7327,6 +7338,7 @@ class upgradeModel extends model
     {
         $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
 
+        $this->app->loadLang('task');
         $this->loadModel('action');
         foreach($estimates as $estimate)
         {
@@ -7338,7 +7350,7 @@ class upgradeModel extends model
             $effort->product    = $relation['product'];
             $effort->project    = (int)$relation['project'];
             $effort->account    = $estimate->account;
-            $effort->work       = empty($estimate->work) ? $this->lang->effort->handleTask : $estimate->work;
+            $effort->work       = empty($estimate->work) ? $this->lang->task->process : $estimate->work;
             $effort->date       = $estimate->date;
             $effort->left       = $estimate->left;
             $effort->consumed   = $estimate->consumed;
@@ -7347,6 +7359,206 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_EFFORT)->data($effort)->exec();
             $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimate->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Xuan: Set ownedBy for group chats without it.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetOwnedByForGroups()
+    {
+        $this->dao->update(TABLE_IM_CHAT)->set('ownedBy = createdBy')->where('ownedBy')->eq('')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Recover created date for chats.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanRecoverCreatedDates()
+    {
+        $chats = $this->dao->select('gid, id')->from(TABLE_IM_CHAT)
+            ->where('createdDate')->eq('0000-00-00 00:00:00')
+            ->fetchPairs('gid');
+        if(empty($chats)) return true;
+
+        $createdDateData = array();
+
+        /* Try query earliest message date indexed. */
+        $indexedMinDates = $this->dao->select('gid, MIN(startDate)')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('gid')->in(array_keys($chats))
+            ->groupBy('gid')
+            ->fetchPairs('gid');
+
+        /* Then try query earliest message date non-indexed from master table. */
+        $queryChats = array_diff(array_keys($chats), array_keys($indexedMinDates));
+        $minDates = $this->dao->select('cgid, MIN(date)')->from(TABLE_IM_MESSAGE)
+            ->where('cgid')->in($queryChats)
+            ->groupBy('cgid')
+            ->fetchPairs('cgid');
+
+        $knownMinDates = array_merge($indexedMinDates, $minDates);
+
+        $remainingChats = $chats;
+        foreach($chats as $cgid => $cid)
+        {
+            if(isset($knownMinDates[$cgid]))
+            {
+                $createdDateData[$cid] = $knownMinDates[$cgid];
+                unset($remainingChats[$cgid]);
+            }
+        }
+
+        /* Use other dates for chats without messages. */
+        $chatDates = $this->dao->select('id, gid, editedDate, lastActiveTime, dismissDate')->from(TABLE_IM_CHAT)
+            ->where('gid')->in(array_keys($remainingChats))
+            ->fetchAll('gid');
+        $chatDates = array_map(function($chatDate)
+        {
+            $dates = array_filter(array($chatDate->editedDate, $chatDate->lastActiveTime, $chatDate->dismissDate), function($date)
+            {
+                return $date != '0000-00-00 00:00:00';
+            });
+            $minDate = min($dates);
+            return $minDate;
+        }, $chatDates);
+
+        $knownMinDates = array_merge($knownMinDates, $chatDates);
+        if(empty($knownMinDates)) return true;
+
+        $queryData = array();
+        foreach($knownMinDates as $gid => $date) $queryData[] = "WHEN {$chats[$gid]} THEN '{$date}'";
+
+        if(empty($queryData)) return true;
+
+        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
+        $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Set index range for chats in chat partition index table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanSetPartitionedMessageIndex()
+    {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+
+        /* Fetch chat and message partition table associations with message range. */
+        $chatTableData = $this->dao->select('gid, tableName, start, end')->from(TABLE_IM_CHAT_MESSAGE_INDEX)
+            ->where('startIndex')->eq(0)
+            ->orWhere('endIndex')->eq(0)
+            ->orderBy('id_asc')
+            ->fetchAll();
+        if(empty($chatTableData)) return true;
+
+        /* Sort ranges by table. */
+        $tableRanges = array();
+        foreach($chatTableData as $chatTable)
+        {
+            if(isset($tableRanges[$chatTable->tableName]))
+            {
+                $tableRanges[$chatTable->tableName]->start[] = $chatTable->start;
+                $tableRanges[$chatTable->tableName]->end[]   = $chatTable->end;
+                continue;
+            }
+            $tableRanges[$chatTable->tableName] = (object)array('start' => array($chatTable->start), 'end' => array($chatTable->end));
+        }
+
+        /* Query corresponding message indice. */
+        foreach($tableRanges as $tableName => $tableRange)
+        {
+            $ids = array_merge($tableRange->start, $tableRange->end);
+            $ids = array_unique($ids);
+            $indexPairs = $this->dao->select('id, `index`')->from("`$tableName`")
+                ->where('id')->in($ids)
+                ->fetchPairs('id');
+            $tableRanges[$tableName]->indexPairs = $indexPairs;
+        }
+
+        /* Set startIndice and endIndice. */
+        foreach($tableRanges as $tableRange)
+        {
+            $queryData = array();
+            foreach($tableRange->start as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . join(' ', $queryData) . " END) WHERE `start` IN(" . join(',', $tableRange->start) . ");";
+            $this->dao->query($query);
+
+            $queryData = array();
+            foreach($tableRange->end as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
+            $this->dao->query($query);
+        }
+    }
+
+    /**
+     * Fix weekly report.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWeeklyReport()
+    {
+        $this->loadModel('weekly');
+        $projects = $this->dao->select('id,begin,end')->from(TABLE_PROJECT)->where('deleted')->eq('0')->andWhere('model')->eq('waterfall')->fetchAll('id');
+
+        $today = helper::today();
+        foreach($projects as $projectID => $project)
+        {
+            if(helper::isZeroDate($project->begin) or helper::isZeroDate($project->end)) continue;
+
+            $begin = $project->begin;
+            $end   = $today > $project->end ? $project->end : $today;
+
+            $beginTimestame = strtotime($begin);
+            $endTimestame   = strtotime($end);
+            while($beginTimestame <= $endTimestame)
+            {
+                $this->weekly->save($projectID, $begin);
+
+                $beginTimestame += 7 * 24 * 3600;
+                $begin = date('Y-m-d', $beginTimestame);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Update the owner of the program into the product view.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProductView()
+    {
+        $programs = $this->dao->select('id,PM')->from(TABLE_PROGRAM)->where('type')->eq('program')->andWhere('PM')->ne('')->fetchPairs('id', 'PM');
+        if(empty($programs)) return true;
+
+        $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
+        if(empty($productGroup)) return true;
+
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        foreach($programs as $programID => $programPM)
+        {
+            if(empty($productGroup[$programID])) continue;
+            $canViewProducts = zget($productGroup, $programID);
+            $view            = $userView[$programPM]->products;
+            foreach($canViewProducts as $productID => $product)
+            {
+                if(strpos(",$view,", ",$productID,") === false) $view .= ',' . $productID;
+            }
+            $this->dao->update(TABLE_USERVIEW)->set('products')->eq($view)->where('account')->eq($programPM)->exec();
         }
         return true;
     }

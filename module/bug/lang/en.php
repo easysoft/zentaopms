@@ -187,10 +187,11 @@ $lang->bug->allUsers      = 'Load All Users';
 $lang->bug->allBuilds     = 'All Builds';
 $lang->bug->createBuild   = 'New';
 
-/* Legend list。*/
+global $config;
+/* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Files';
-$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
+$lang->bug->legendPRJExecStoryTask      = $config->systemMode == 'new' ? 'Project/' . $lang->executionCommon . '/Story/Task' : $lang->executionCommon . '/Story/Task';
 $lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
@@ -284,8 +285,8 @@ $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->confirmedList[''] = '';
-$lang->bug->confirmedList[1] = 'Yes';
-$lang->bug->confirmedList[0] = 'No';
+$lang->bug->confirmedList[1] = 'confirmed';
+$lang->bug->confirmedList[0] = 'unconfirmed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Designed';

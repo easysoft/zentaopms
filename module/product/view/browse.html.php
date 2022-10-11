@@ -41,6 +41,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 .btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+
+#productStoryForm table tbody tr td.c-actions {overflow: visible;}
+#productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
@@ -344,11 +347,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
             <?php endif;?>
           </tr>
           <?php if(!empty($story->children)):?>
@@ -385,8 +388,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=$projectID&branch=$branch&storyType=$storyType");
+            foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
+            $storyProductID = count($storyProductIds) > 1 ? 0 : $productID;
+            $disabled       = $canBatchEdit ? '' : "disabled='disabled'";
+            $actionLink     = $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType");
             ?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch) echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <?php if($canBatchEdit or $canBatchClose or $canBatchUnlink or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch):?>

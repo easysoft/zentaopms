@@ -61,7 +61,6 @@ class testcaseModel extends model
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->stripTags($this->config->testcase->editor->create['id'], $this->config->allowedTags)
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
@@ -78,7 +77,6 @@ class testcaseModel extends model
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
-        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
         if(!$this->dao->isError())
         {
@@ -626,7 +624,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status as lastRunStatus,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -815,10 +813,7 @@ class testcaseModel extends model
         if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/
-            $requiredFieldsArr = explode(',', $requiredFields);
-            $fieldIndex        = array_search('story', $requiredFieldsArr);
-            array_splice($requiredFieldsArr, $fieldIndex, 1);
-            $requiredFields    = implode(',', $requiredFieldsArr);
+            $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
         }
         $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles')->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
@@ -2504,11 +2499,11 @@ class testcaseModel extends model
 
         if($case->needconfirm || $case->browseType == 'needconfirm')
         {
-            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'ok', 'hiddenwin', '', '', '', $this->lang->confirm);
         }
 
-        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
         $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
+        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
 
         $editParams = $params;
         if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";

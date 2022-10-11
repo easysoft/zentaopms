@@ -422,46 +422,33 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getWaterfallPVEV($projectID)
+    public function getWaterfallPVEVAC($projectID)
     {
         $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->query();
 
         $PV = 0;
         $EV = 0;
+        $AC = 0;
         while($task = $stmt->fetch())
         {
+            if(empty($task->estimate)) continue;
+
             $PV += $task->estimate;
+            $AC += $task->consumed;
             if($task->status == 'done' or $task->closedReason == 'done')
             {
                 $EV += $task->estimate;
             }
             else
             {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
                 $EV += round($task->estimate * $task->progress / 100, 2);
             }
         }
 
-        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV));
-    }
-
-    /**
-     * Get waterfall general AC
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return string
-     */
-    public function getWaterfallAC($projectID)
-    {
-        $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->fetchPairs('id', 'id');
-
-        $AC = $this->dao->select('sum(consumed) as consumed')->from(TABLE_EFFORT)->where('objectType')->eq('task')->andWhere('objectID')->in($taskIdList)->andWhere('deleted')->eq('0')->fetch('consumed');
-        if(is_null($AC)) $AC = 0;
-
-        return sprintf("%.2f", $AC);
+        return array('PV' => sprintf("%.2f", $PV), 'EV' => sprintf("%.2f", $EV), 'AC' => sprintf("%.2f", $AC));
     }
 
     /**
@@ -1988,11 +1975,14 @@ class projectModel extends model
                 $class .= ' c-name';
                 $title  = "title={$project->code}";
             }
-
-            if($id == 'name')
+            elseif($id == 'name')
             {
                 $class .= ' text-left';
-                $title  = "title='{$project->name}'";
+                $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
+            }
+            elseif($id == 'PM')
+            {
+                $class .= ' c-manager';
             }
 
             if($id == 'end')
@@ -2031,9 +2021,6 @@ class projectModel extends model
                 case 'name':
                     $prefix = '';
                     $suffix = '';
-                    if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                    if($project->model === 'scrum') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
-                    if($project->model === 'kanban') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->kanban}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
@@ -2045,10 +2032,12 @@ class projectModel extends model
                     echo $project->code;
                     break;
                 case 'PM':
-                    $user     = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID   = !empty($user) ? $user->id : '';
-                    $PMLink   = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    $userName = zget($users, $project->PM);
+                    $user       = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID     = !empty($user) ? $user->id : '';
+                    $userAvatar = !empty($user) ? $user->avatar : '';
+                    $PMLink     = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    $userName   = zget($users, $project->PM);
+                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}");
                     echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':
@@ -2625,7 +2614,7 @@ class projectModel extends model
             if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
-                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-ellipsis-v'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
                 $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
                 if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);

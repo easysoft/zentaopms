@@ -402,10 +402,10 @@ class weeklyModel extends model
         $this->loadModel('holiday');
         foreach($tasks as $task)
         {
-            if(helper::isZeroDate($task->estStarted)) $task->estStarted = date('Y-m-d', strtotime($task->openedDate));
+            $execution = $executions[$task->execution];
+            if(helper::isZeroDate($task->estStarted)) $task->estStarted = helper::isZeroDate($task->openedDate) ? $execution->begin : date('Y-m-d', strtotime($task->openedDate));
             if(helper::isZeroDate($task->deadline))
             {
-                $execution = $executions[$task->execution];
                 $task->deadline = helper::isZeroDate($execution->realEnd) ? $execution->end : $execution->realEnd;
                 if(helper::isZeroDate($task->finishedDate)) $task->deadline = date('Y-m-d', strtotime($task->finishedDate));
             }
@@ -433,7 +433,8 @@ class weeklyModel extends model
             }
             else
             {
-                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $task->progress = 0;
+                if(($task->consumed + $task->left) > 0) $task->progress = round($task->consumed / ($task->consumed + $task->left) * 100, 2);
                 $EV += round($thisPV * $task->progress / 100, 2);
             }
             $PV += $thisPV;

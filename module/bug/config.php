@@ -24,7 +24,7 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
     lastEditedBy,
     lastEditedDate';
 
-$config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
+$config->bug->list->defaultFields = 'id,title,severity,pri,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, story, task,
     title, keywords, severity, pri, type, os, browser,
@@ -159,7 +159,7 @@ $config->bug->search['params']['deadline']      = array('operator' => '=',      
 $config->bug->search['params']['activatedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
-$config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'confirmed', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
+$config->bug->datatable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'openedBy', 'openedDate', 'confirmed', 'assignedTo', 'resolution', 'actions');
 
 $config->bug->datatable->fieldList['id']['title']    = 'idAB';
 $config->bug->datatable->fieldList['id']['fixed']    = 'left';
@@ -174,6 +174,12 @@ $config->bug->datatable->fieldList['module']['control']    = 'select';
 $config->bug->datatable->fieldList['module']['title']      = 'module';
 $config->bug->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug');
 
+$config->bug->datatable->fieldList['title']['title']    = 'title';
+$config->bug->datatable->fieldList['title']['fixed']    = 'left';
+$config->bug->datatable->fieldList['title']['width']    = 'auto';
+$config->bug->datatable->fieldList['title']['required'] = 'yes';
+$config->bug->datatable->fieldList['title']['minWidth'] = '200';
+
 $config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
 $config->bug->datatable->fieldList['severity']['fixed']    = 'left';
 $config->bug->datatable->fieldList['severity']['width']    = '50';
@@ -186,16 +192,10 @@ $config->bug->datatable->fieldList['pri']['width']    = '50';
 $config->bug->datatable->fieldList['pri']['required'] = 'no';
 $config->bug->datatable->fieldList['pri']['name']     = $lang->bug->pri;
 
-$config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
-$config->bug->datatable->fieldList['confirmed']['fixed']    = 'left';
-$config->bug->datatable->fieldList['confirmed']['width']    = '50';
-$config->bug->datatable->fieldList['confirmed']['required'] = 'no';
-
-$config->bug->datatable->fieldList['title']['title']    = 'title';
-$config->bug->datatable->fieldList['title']['fixed']    = 'left';
-$config->bug->datatable->fieldList['title']['width']    = 'auto';
-$config->bug->datatable->fieldList['title']['required'] = 'yes';
-$config->bug->datatable->fieldList['title']['minWidth'] = '200';
+$config->bug->datatable->fieldList['status']['title']    = 'statusAB';
+$config->bug->datatable->fieldList['status']['fixed']    = 'left';
+$config->bug->datatable->fieldList['status']['width']    = '80';
+$config->bug->datatable->fieldList['status']['required'] = 'no';
 
 $config->bug->datatable->fieldList['branch']['title']      = 'branch';
 $config->bug->datatable->fieldList['branch']['fixed']      = 'left';
@@ -230,10 +230,66 @@ $config->bug->datatable->fieldList['plan']['fixed']    = 'no';
 $config->bug->datatable->fieldList['plan']['width']    = '120';
 $config->bug->datatable->fieldList['plan']['required'] = 'no';
 
-$config->bug->datatable->fieldList['status']['title']    = 'statusAB';
-$config->bug->datatable->fieldList['status']['fixed']    = 'no';
-$config->bug->datatable->fieldList['status']['width']    = '80';
-$config->bug->datatable->fieldList['status']['required'] = 'no';
+$config->bug->datatable->fieldList['openedBy']['title']    = 'openedByAB';
+$config->bug->datatable->fieldList['openedBy']['fixed']    = 'no';
+$config->bug->datatable->fieldList['openedBy']['width']    = '80';
+$config->bug->datatable->fieldList['openedBy']['required'] = 'no';
+
+$config->bug->datatable->fieldList['openedDate']['title']    = 'openedDateAB';
+$config->bug->datatable->fieldList['openedDate']['fixed']    = 'no';
+$config->bug->datatable->fieldList['openedDate']['width']    = '90';
+$config->bug->datatable->fieldList['openedDate']['required'] = 'no';
+
+$config->bug->datatable->fieldList['openedBuild']['title']      = 'openedBuild';
+$config->bug->datatable->fieldList['openedBuild']['fixed']      = 'no';
+$config->bug->datatable->fieldList['openedBuild']['width']      = '120';
+$config->bug->datatable->fieldList['openedBuild']['required']   = 'no';
+$config->bug->datatable->fieldList['openedBuild']['control']    = 'multiple';
+$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
+
+$config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
+$config->bug->datatable->fieldList['confirmed']['fixed']    = 'no';
+$config->bug->datatable->fieldList['confirmed']['width']    = '100';
+$config->bug->datatable->fieldList['confirmed']['required'] = 'no';
+
+$config->bug->datatable->fieldList['assignedTo']['title']      = 'assignedToAB';
+$config->bug->datatable->fieldList['assignedTo']['fixed']      = 'no';
+$config->bug->datatable->fieldList['assignedTo']['width']      = '120';
+$config->bug->datatable->fieldList['assignedTo']['required']   = 'no';
+$config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' =>'getPairs', 'params' => 'noclosed|noletter');
+
+$config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
+$config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';
+$config->bug->datatable->fieldList['assignedDate']['width']    = '90';
+$config->bug->datatable->fieldList['assignedDate']['required'] = 'no';
+
+$config->bug->datatable->fieldList['deadline']['title']    = 'deadline';
+$config->bug->datatable->fieldList['deadline']['fixed']    = 'no';
+$config->bug->datatable->fieldList['deadline']['width']    = '90';
+$config->bug->datatable->fieldList['deadline']['required'] = 'no';
+$config->bug->datatable->fieldList['deadline']['control']  = 'date';
+
+$config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedBy';
+$config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
+$config->bug->datatable->fieldList['resolvedBy']['width']    = '100';
+$config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
+
+$config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
+$config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
+$config->bug->datatable->fieldList['resolution']['width']    = '110';
+$config->bug->datatable->fieldList['resolution']['required'] = 'no';
+
+$config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
+$config->bug->datatable->fieldList['resolvedDate']['fixed']    = 'no';
+$config->bug->datatable->fieldList['resolvedDate']['width']    = '120';
+$config->bug->datatable->fieldList['resolvedDate']['required'] = 'no';
+
+$config->bug->datatable->fieldList['resolvedBuild']['title']    = 'resolvedBuild';
+$config->bug->datatable->fieldList['resolvedBuild']['fixed']    = 'no';
+$config->bug->datatable->fieldList['resolvedBuild']['width']    = '120';
+$config->bug->datatable->fieldList['resolvedBuild']['required'] = 'no';
+$config->bug->datatable->fieldList['resolvedBuild']['control']  = 'select';
+$config->bug->datatable->fieldList['resolvedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'resolvedBuild&id,name');
 
 $config->bug->datatable->fieldList['activatedCount']['title']    = 'activatedCountAB';
 $config->bug->datatable->fieldList['activatedCount']['fixed']    = 'no';
@@ -282,62 +338,6 @@ $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
 $config->bug->datatable->fieldList['mailto']['width']    = '100';
 $config->bug->datatable->fieldList['mailto']['required'] = 'no';
-
-$config->bug->datatable->fieldList['openedBy']['title']    = 'openedByAB';
-$config->bug->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['openedBy']['width']    = '80';
-$config->bug->datatable->fieldList['openedBy']['required'] = 'no';
-
-$config->bug->datatable->fieldList['openedDate']['title']    = 'openedDateAB';
-$config->bug->datatable->fieldList['openedDate']['fixed']    = 'no';
-$config->bug->datatable->fieldList['openedDate']['width']    = '90';
-$config->bug->datatable->fieldList['openedDate']['required'] = 'no';
-
-$config->bug->datatable->fieldList['openedBuild']['title']      = 'openedBuild';
-$config->bug->datatable->fieldList['openedBuild']['fixed']      = 'no';
-$config->bug->datatable->fieldList['openedBuild']['width']      = '120';
-$config->bug->datatable->fieldList['openedBuild']['required']   = 'no';
-$config->bug->datatable->fieldList['openedBuild']['control']    = 'multiple';
-$config->bug->datatable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
-
-$config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
-$config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->bug->datatable->fieldList['assignedTo']['width']    = '120';
-$config->bug->datatable->fieldList['assignedTo']['required'] = 'no';
-$config->bug->datatable->fieldList['assignedTo']['dataSource'] = array('module' => 'bug', 'method' =>'getProductMemberPairs', 'params' => '$productID&$branch');
-
-$config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
-$config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';
-$config->bug->datatable->fieldList['assignedDate']['width']    = '90';
-$config->bug->datatable->fieldList['assignedDate']['required'] = 'no';
-
-$config->bug->datatable->fieldList['deadline']['title']    = 'deadline';
-$config->bug->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->bug->datatable->fieldList['deadline']['width']    = '90';
-$config->bug->datatable->fieldList['deadline']['required'] = 'no';
-$config->bug->datatable->fieldList['deadline']['control']  = 'date';
-
-$config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
-$config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedBy']['width']    = '100';
-$config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
-
-$config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
-$config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '110';
-$config->bug->datatable->fieldList['resolution']['required'] = 'no';
-
-$config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
-$config->bug->datatable->fieldList['resolvedDate']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedDate']['width']    = '120';
-$config->bug->datatable->fieldList['resolvedDate']['required'] = 'no';
-
-$config->bug->datatable->fieldList['resolvedBuild']['title']    = 'resolvedBuild';
-$config->bug->datatable->fieldList['resolvedBuild']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedBuild']['width']    = '120';
-$config->bug->datatable->fieldList['resolvedBuild']['required'] = 'no';
-$config->bug->datatable->fieldList['resolvedBuild']['control']  = 'select';
-$config->bug->datatable->fieldList['resolvedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'resolvedBuild&id,name');
 
 $config->bug->datatable->fieldList['closedBy']['title']    = 'closedBy';
 $config->bug->datatable->fieldList['closedBy']['fixed']    = 'no';

@@ -39,6 +39,7 @@ $(function()
             return false;
         }
     })
+    handleKanbanWidthAttr();
 })
 
 /**

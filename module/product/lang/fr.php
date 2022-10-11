@@ -37,6 +37,8 @@ $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'Consulter Stories Matrice';
 $lang->product->checkedProducts  = '%s produits s électionnés';
+$lang->product->pageSummary      = 'Total products: %s.';
+$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Fermer {$lang->productCommon}";
@@ -70,6 +72,8 @@ $lang->product->changedStories        = 'Changées [S]';
 $lang->product->changedStoriesTitle   = 'Stories Modifiées';
 $lang->product->draftStories          = 'Brouillon [S]';
 $lang->product->draftStoriesTitle     = 'Stories en Analyse';
+$lang->product->reviewingStories      = "Reviewing [S]";
+$lang->product->reviewingStoriesTitle = "Reviewing Stories";
 $lang->product->closedStories         = 'Fermées [S]';
 $lang->product->closedStoriesTitle    = 'Stories Fermées';
 $lang->product->storyCompleteRate     = "{$lang->SRCommon} Completion rate";
@@ -186,7 +190,7 @@ $lang->product->statusList['closed'] = 'Fermé';
 global $config;
 if($config->systemMode == 'new')
 {
-    $lang->product->aclList['private'] = "{$lang->productCommon} Privé (seuls les membres de l'équipe {$lang->executionCommon} ont les droits)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
 }
 else
 {

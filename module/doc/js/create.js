@@ -62,7 +62,7 @@ $(function()
 
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
 
-    if(!fromGlobal && textType.indexOf(docType) != -1)
+    if(!fromGlobal && textType.indexOf(docType) != -1 && from == 'doc')
     {
         var basicInfo = JSON.parse(sessionStorage.getItem('docBasicInfo'));
 

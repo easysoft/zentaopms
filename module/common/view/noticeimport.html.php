@@ -21,6 +21,9 @@
     </div>
   </div>
 </div>
+<style>
+#importNoticeModal .modal-dialog {top: 15% !important; max-height: 450px; overflow-y: auto;}
+</style>
 <script>
 function submitForm(type)
 {

@@ -54,6 +54,7 @@ $lang->execution->end                 = '计划完成';
 $lang->execution->dateRange           = '计划起止日期';
 $lang->execution->realBeganAB         = '实际开始';
 $lang->execution->realEndAB           = '实际完成';
+$lang->execution->teamCount           = '人数';
 $lang->execution->realBegan           = '实际开始日期';
 $lang->execution->realEnd             = '实际完成日期';
 $lang->execution->to                  = '至';
@@ -317,12 +318,12 @@ $lang->execution->groups['finishedBy'] = '完成者分组';
 $lang->execution->groups['closedBy']   = '关闭者分组';
 $lang->execution->groups['type']       = '类型分组';
 
-$lang->execution->groupFilter['story']['all']         = '所有';
+$lang->execution->groupFilter['story']['all']         = '全部';
 $lang->execution->groupFilter['story']['linked']      = "已关联{$lang->SRCommon}的任务";
-$lang->execution->groupFilter['pri']['all']           = '所有';
+$lang->execution->groupFilter['pri']['all']           = '全部';
 $lang->execution->groupFilter['pri']['noset']         = '未设置';
 $lang->execution->groupFilter['assignedTo']['undone'] = '未完成';
-$lang->execution->groupFilter['assignedTo']['all']    = '所有';
+$lang->execution->groupFilter['assignedTo']['all']    = '全部';
 
 $lang->execution->byQuery = '搜索';
 
@@ -341,6 +342,9 @@ $lang->execution->stats                = '可用工时 <strong>%s</strong> 工�
 $lang->execution->taskSummary          = "本页共 <strong>%s</strong> 个任务，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，总预计 <strong>%s</strong> 工时，已消耗 <strong>%s</strong> 工时，剩余 <strong>%s</strong> 工时。";
 $lang->execution->pageSummary          = "本页共 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
 $lang->execution->checkedSummary       = "选中 <strong>%total%</strong> 个任务，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，总预计 <strong>%estimate%</strong> 工时，已消耗 <strong>%consumed%</strong> 工时，剩余 <strong>%left%</strong> 工时。";
+$lang->execution->executionSummary     = "本页共 <strong>%s</strong> 个{$lang->executionCommon}。";
+$lang->execution->pageExecSummary      = "本页共 <strong>%total%</strong> 个{$lang->executionCommon}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。";
+$lang->execution->checkedExecSummary   = "选中 <strong>%total%</strong> 个{$lang->executionCommon}，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。";
 $lang->execution->memberHoursAB        = "<div>%s有 <strong>%s</strong> 工时</div>";
 $lang->execution->memberHours          = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s可用工时</div><div class="segment-value">%s</div></div></div></div>';
 $lang->execution->countSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">总任务</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">进行中</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">未开始</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -415,7 +419,7 @@ $lang->execution->storyDragError              = "该{$lang->SRCommon}不是激�
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 $lang->execution->week                        = '周';
-$lang->execution->checkedExecutions           = '已选择%s项';
+$lang->execution->checkedExecutions           = "共选中%s个{$lang->executionCommon}。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -487,7 +491,7 @@ $lang->kanbanSetting->optionList['0'] = '隐藏';
 $lang->kanbanSetting->optionList['1'] = '显示';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = '看板打印';
+$lang->printKanban->common  = '打印看板';
 $lang->printKanban->content = '内容';
 $lang->printKanban->print   = '打印';
 
@@ -501,7 +505,7 @@ $lang->execution->typeList['stage']  = '阶段';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = '看板';
 
-$lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
+$lang->execution->featureBar['task']['all']          = '全部';
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
@@ -509,17 +513,17 @@ $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assigne
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
-$lang->execution->featureBar['all']['all']       = $lang->execution->all;
+$lang->execution->featureBar['all']['all']       = '全部';
 $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
 $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList['wait'];
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = '所有';
+$lang->execution->featureBar['bug']['all']        = '全部';
 $lang->execution->featureBar['bug']['unresolved'] = '未解决';
 
-$lang->execution->featureBar['build']['all'] = '所有版本';
+$lang->execution->featureBar['build']['all'] = '全部版本';
 
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';

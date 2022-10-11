@@ -547,6 +547,8 @@ class userModel extends model
             ->remove('new, password1, password2, groups,verifyPassword, passwordStrength,passwordLength')
             ->get();
 
+        /* Fix bug for api requests using json. */
+        if($this->app->getViewType() == 'json') $this->post->verifyPassword = md5(md5($this->post->verifyPassword) . $this->session->rand);
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
@@ -1982,6 +1984,17 @@ class userModel extends model
             {
                 $productIdList = zget($programProduct, $programStakeholder->objectID, array());
                 foreach($productIdList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
+            }
+
+            $sql = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
+                ->where('type')->eq('program')
+                ->andWhere('id')->in(array_keys($programProduct))
+                ->query();
+
+            while($programOwner = $sql->fetch())
+            {
+                $productIdList = zget($programProduct, $programOwner->id, array());
+                foreach($productIdList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
             }
         }
 
