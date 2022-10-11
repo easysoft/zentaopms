@@ -67,13 +67,15 @@
     </p>
   </div>
   <?php else:?>
-  <form class="main-table table-todo" data-ride="table" method="post">
+  <form class="main-table table-todo" method="post" id='todoForm'>
     <?php
     $canBatchEdit   = common::hasPriv('todo', 'batchEdit');
     $canBatchFinish = common::hasPriv('todo', 'batchFinish');
     $canBatchClose  = common::hasPriv('todo', 'batchClose');
 
     $canbatchAction = ($type != 'cycle' and ($canBatchEdit or $canBatchFinish or $canBatchClose or (common::hasPriv('todo', 'import2Today') and $importFuture)));
+    $waitCount      = 0;
+    $doingCount     = 0;
     ?>
     <table class="table has-sort-head" id='todoList'>
       <?php $vars = "type=$type&userID={$user->id}&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -105,7 +107,9 @@
       </thead>
       <tbody>
         <?php foreach($todos as $todo):?>
-        <tr>
+        <?php if($todo->status == 'wait')  $waitCount ++;?>
+        <?php if($todo->status == 'doing') $doingCount ++;?>
+        <tr data-status='<?php echo $todo->status;?>'>
           <td class="c-id">
             <?php if($canbatchAction):?>
             <div class="checkbox-primary">
@@ -192,10 +196,13 @@
       }
       ?>
       </div>
+      <div class="table-statistic"><?php echo sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
 <?php js::set('listName', 'todoList');?>
+<?php js::set('pageSummary', sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount));?>
+<?php js::set('checkedSummary', $lang->todo->checkedSummary);?>
 <?php include '../../common/view/footer.html.php';?>
