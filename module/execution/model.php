@@ -5029,6 +5029,7 @@ class executionModel extends model
         $_POST['PM']          = '';
         $_POST['RD']          = '';
         $_POST['multiple']    = '0';
+        $_POST['hasProduct']  = $project->hasProduct;
 
         $executionID = $this->create();
         if($project->model == 'kanban')
