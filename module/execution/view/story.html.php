@@ -33,6 +33,13 @@
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .export {margin-left: 0px !important;}
 </style>
+<?php if(isset($execution->hasProduct) && !$execution->hasProduct && $execution->type != 'sprint'):?>
+<style>
+#executionStoryForm th.c-plan {display: none !important;}
+#executionStoryForm td.c-plan {display: none !important;}
+#customDatatable div.col[data-key=plan] {display: none !important;}
+</style>
+<?php endif;?>
 <?php $isAllModules = (!empty($module->name) or !empty($product->name) or !empty($branch)) ? false : true;?>
 <?php $sidebarName  = $lang->tree->all;?>
 <?php $removeBtn    = '';?>
