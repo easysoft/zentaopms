@@ -111,6 +111,15 @@ $(document).ready(function()
 {
     <?php if(isset($task->mode) and $task->mode == 'multi'):?>
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
+    <?php else:?>
+    var options = {
+        selector: '.teamTemplate',
+        dragCssClass: '',
+        finish: function(){
+        setLineNumber();
+        }
+    }
+    $('#taskTeamEditor').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
@@ -217,6 +226,7 @@ $(document).ready(function()
         }, 1600);
         disableMembers();
         adjustButtons();
+        setLineNumber();
     }).on('click', '.btn-delete', function()
     {
         var $row = $(this).closest('tr');
@@ -228,11 +238,13 @@ $(document).ready(function()
             $row.remove();
             disableMembers();
             adjustButtons();
+            setLineNumber();
         });
     });
 
     adjustButtons();
     disableMembers();
+    setLineNumber();
 
     $taskTeamEditor.on('change', 'select#team', function()
     {
@@ -275,4 +287,20 @@ $(document).ready(function()
         if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
+
+/**
+ * Set line number.
+ *
+ * @access public
+ * @return void
+ */
+function setLineNumber()
+{
+    var lineNumber = 1;
+    $('.team-number').each(function()
+    {
+        $(this).text(lineNumber);
+        lineNumber ++;
+    });
+}
 </script>
