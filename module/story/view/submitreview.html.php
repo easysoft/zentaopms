@@ -27,7 +27,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td colspan='2' id='reviewerBox' <?php if(!empty($story->reviewer)) echo "class='required'";?>>
+          <td colspan='2' id='reviewerBox' <?php if($this->story->checkForceReview() or !empty($story->reviewer)) echo "class='required'";?>>
             <div class="table-row">
               <?php if(!$this->story->checkForceReview()):?>
               <div class="table-col">
@@ -43,7 +43,7 @@
               </div>
               <?php else:?>
               <div class="table-col">
-                <?php echo html::select('reviewer[]', $reviewers, $story->reviewer, "class='form-control picker-select' multiple required");?>
+                <?php echo html::select('reviewer[]', $reviewers, $story->reviewer, "class='form-control picker-select' multiple");?>
               </div>
               <?php endif;?>
             </div>
