@@ -1611,8 +1611,16 @@ class testcase extends control
 
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
-        if($product->shadow and $this->app->tab == 'project') $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
+        if($product->type != 'normal')
+        {
+            $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+        }
+        else
+        {
+            $this->config->testcase->exportFields = str_replace('branch,', '', $this->config->testcase->exportFields);
+        }
+
+        if($product->shadow) $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
 
         if($_POST)
         {
