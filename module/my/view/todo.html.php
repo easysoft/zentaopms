@@ -56,6 +56,10 @@
     <?php endif;?>
   </div>
 </div>
+<?php
+$waitCount      = 0;
+$doingCount     = 0;
+?>
 <div id="mainContent">
   <?php if(empty($todos)):?>
   <div class="table-empty-tip">
@@ -74,8 +78,6 @@
     $canBatchClose  = common::hasPriv('todo', 'batchClose');
 
     $canbatchAction = ($type != 'cycle' and ($canBatchEdit or $canBatchFinish or $canBatchClose or (common::hasPriv('todo', 'import2Today') and $importFuture)));
-    $waitCount      = 0;
-    $doingCount     = 0;
     ?>
     <table class="table has-sort-head" id='todoList'>
       <?php $vars = "type=$type&userID={$user->id}&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
