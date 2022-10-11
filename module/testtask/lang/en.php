@@ -105,6 +105,8 @@ $lang->testtask->caseCount        = 'Case Count';
 $lang->testtask->passCount        = 'Pass';
 $lang->testtask->failCount        = 'Fail';
 $lang->testtask->summary          = '%s cases, %s failures, %s time.';
+$lang->testtask->pageSummary      = 'Total testtasks: <strong>%s</strong>.';
+$lang->testtask->allSummary       = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
 
 $lang->testtask->beginAndEnd = 'Duration';
 $lang->testtask->to          = 'To';

@@ -75,17 +75,25 @@ $status = $this->session->testTaskVersionStatus;
       </tr>
     </thead>
     <tbody>
+    <?php
+    $waitCount    = 0;
+    $testingCount = 0;
+    $blockedCount = 0;
+    ?>
     <?php foreach($tasks as $task):?>
+    <?php if($task->status == 'wait')    $waitCount ++;?>
+    <?php if($task->status == 'doing')   $testingCount ++;?>
+    <?php if($task->status == 'blocked') $blockedCount ++;?>
     <tr class='text-left'>
       <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "data-group=execution");?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
-      <?php $status = $this->processStatus('testtask', $task);?>
-      <td title='<?php echo $status;?>'>
+      <?php $statusName = $this->processStatus('testtask', $task);?>
+      <td title='<?php echo $statusName;?>'>
         <span class='status-task status-<?php echo $task->status?>'>
-          <?php echo $status;?>
+          <?php echo $statusName;?>
         </span>
       </td>
       <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
@@ -100,7 +108,10 @@ $status = $this->session->testTaskVersionStatus;
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  <div class='table-footer'>
+    <div class="table-statistic"><?php echo $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
+    <?php $pager->show('right', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <script>$(function(){$("#" + status + "Tab").addClass('btn-active-text').append(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>")})</script>
