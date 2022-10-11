@@ -57,10 +57,10 @@
   </div>
 </div>
 <?php
-$waitCount        = 0;
-$doingCount       = 0;
-$suspendedCount   = 0;
-$closedCount      = 0;
+$waitCount      = 0;
+$doingCount     = 0;
+$suspendedCount = 0;
+$closedCount    = 0;
 ?>
 <div id='mainContent' class="main-row fade">
   <?php if($this->config->systemMode == 'new'):?>

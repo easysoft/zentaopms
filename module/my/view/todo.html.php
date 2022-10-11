@@ -57,8 +57,8 @@
   </div>
 </div>
 <?php
-$waitCount      = 0;
-$doingCount     = 0;
+$waitCount  = 0;
+$doingCount = 0;
 ?>
 <div id="mainContent">
   <?php if(empty($todos)):?>
