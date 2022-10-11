@@ -925,7 +925,14 @@ class programplanModel extends model
                     $spec->end       = $data->end;
                     $this->dao->insert(TABLE_PROJECTSPEC)->data($spec)->exec();
 
-                    $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                    if($project->hasProduct)
+                    {
+                        $this->action->create('execution', $stageID, 'opened', '', join(',', $_POST['products']));
+                    }
+                    else
+                    {
+                        $this->action->create('execution', $stageID, 'opened');
+                    }
                 }
             }
 
