@@ -111,15 +111,15 @@ $(document).ready(function()
     <?php if(isset($task->mode) and $task->mode == 'multi'):?>
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
     <?php else:?>
+    var canSort = false;
     var options = {
-        selector: '.teamTemplate',
-        dragCssClass: '',
-        finish: function(){
-        setLineNumber();
-        }
+        selector: '.icon-move',
+        dragCssClass: 'drag-row',
+        reverse: true,
+        finish: setLineNumber
     }
 
-    $('#taskTeamEditor tbody.sortable').sortable(options);
+    $('#taskTeamEditor').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */

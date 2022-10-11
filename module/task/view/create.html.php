@@ -299,7 +299,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
+                    <td colspan='4' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>
