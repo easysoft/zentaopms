@@ -517,7 +517,7 @@ class project extends control
         $code      = '';
         $team      = '';
         $whitelist = '';
-        $acl       = 'private';
+        $acl       = 'open';
         $auth      = 'extend';
 
         $products      = array();
