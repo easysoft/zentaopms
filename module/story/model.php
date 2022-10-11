@@ -4415,7 +4415,7 @@ class storyModel extends model
                 $canBatchCreateTask = common::hasPriv('task', 'batchCreate');
                 $canCreateCase      = ($hasDBPriv and common::hasPriv('testcase', 'create'));
                 $canEstimate        = common::hasPriv('execution', 'storyEstimate', $execution);
-                $canUnlinkStory     = common::hasPriv('execution', 'unlinkStory', $execution);
+                $canUnlinkStory     = (common::hasPriv('execution', 'unlinkStory', $execution) and ($execution->hasProduct or $execution->multiple));
 
                 if(strpos('draft,changing', $story->status) !== false)
                 {
