@@ -33,7 +33,7 @@
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .export {margin-left: 0px !important;}
 </style>
-<?php if(isset($execution->hasProduct) && !$execution->hasProduct && $execution->type != 'sprint'):?>
+<?php if(!$execution->hasProduct && $execution->type != 'sprint'):?>
 <style>
 #executionStoryForm th.c-plan {display: none !important;}
 #executionStoryForm td.c-plan {display: none !important;}
@@ -144,7 +144,7 @@
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories'))
+            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories') and ($execution->hasProduct or $execution->type == 'sprint'))
             {
                 echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
