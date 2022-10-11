@@ -1564,9 +1564,11 @@ class project extends control
 
             if(!$project->multiple)
             {
+                unset($this->lang->resource->project->execution);
                 unset($this->lang->resource->execution->create);
                 unset($this->lang->resource->execution->start);
                 unset($this->lang->resource->execution->delete);
+                if(strpos(",{$this->config->disabledFeatures},", ',scrumMeeting,') !== false) unset($this->lang->resource->meeting);
             }
 
             $this->view->project  = $project;

@@ -180,7 +180,7 @@ $config->bug->datatable->fieldList['pri']['name']     = $lang->bug->pri;
 
 $config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
 $config->bug->datatable->fieldList['confirmed']['fixed']    = 'left';
-$config->bug->datatable->fieldList['confirmed']['width']    = '100';
+$config->bug->datatable->fieldList['confirmed']['width']    = '80';
 $config->bug->datatable->fieldList['confirmed']['required'] = 'no';
 
 $config->bug->datatable->fieldList['title']['title']    = 'title';

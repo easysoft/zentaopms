@@ -1271,7 +1271,7 @@ class kanban extends control
 
         foreach($productPairs as $id => $name)
         {
-            if(isset($excludeProducts[$id])) unset($productPairs[$id]);
+            if(isset($kanbanProducts[$id])) unset($productPairs[$id]);
         }
 
         $this->view->products          = array($this->lang->kanban->allProducts) + $productPairs;

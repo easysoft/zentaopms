@@ -2248,7 +2248,7 @@ class executionModel extends model
         {
             unset($this->config->product->search['fields']['product']);
 
-            if($project->model == 'kanban') unset($this->config->product->search['fields']['plan']);
+            if($project->model != 'kanban') unset($this->config->product->search['fields']['plan']);
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -4529,10 +4529,11 @@ class executionModel extends model
      * Print html for tree.
      *
      * @param object $trees
+     * @param bool   $hasProduct true|false
      * @access pubic
      * @return string
      */
-    public function printTree($trees)
+    public function printTree($trees, $hasProduct = true)
     {
         $html = '';
         foreach($trees as $tree)
@@ -4552,8 +4553,9 @@ class executionModel extends model
                     break;
                 case 'product':
                     $this->app->loadLang('product');
+                    $productName = $hasProduct ? $this->lang->productCommon : $this->lang->projectCommon;
                     $html .= '<li class="item-product">';
-                    $html .= '<a class="tree-toggle"><span class="label label-type">' . $this->lang->productCommon . "</span><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
+                    $html .= '<a class="tree-toggle"><span class="label label-type">' . $productName . "</span><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
                     break;
                 case 'story':
                     $this->app->loadLang('story');
@@ -4570,7 +4572,7 @@ class executionModel extends model
             if(isset($tree->children))
             {
                 $html .= '<ul>';
-                $html .= $this->printTree($tree->children);
+                $html .= $this->printTree($tree->children, $hasProduct);
                 $html .= '</ul>';
             }
             $html .= '</li>';
@@ -5027,6 +5029,7 @@ class executionModel extends model
         $_POST['PM']          = '';
         $_POST['RD']          = '';
         $_POST['multiple']    = '0';
+        $_POST['hasProduct']  = $project->hasProduct;
 
         $executionID = $this->create();
         if($project->model == 'kanban')

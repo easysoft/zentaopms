@@ -157,10 +157,23 @@ class group extends control
             $this->app->user->admin = true;
             $changeAdmin            = true;
         }
+
+        $executionProject = $this->dao->select('t1.id, t2.name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.id')->in($this->app->user->view->sprints)
+            ->fetchPairs();
+
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        foreach($executions as $id => $name)
+        {
+            if(isset($executionProject[$id])) $executions[$id] = $executionProject[$id] . ' / ' . $name;
+        }
+
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getParentPairs('', '', false);
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
-        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
+        $this->view->executions = $executions;
         $this->view->products   = $this->loadModel('product')->getPairs();
         if(!empty($changeAdmin)) $this->app->user->admin = false;
 

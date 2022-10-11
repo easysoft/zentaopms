@@ -25,6 +25,8 @@ class build extends control
         {
             $project = $this->loadModel('project')->getByID($projectID);
             if(!$project->hasProduct) $hidden = 'hide';
+
+            $this->view->multipleProject = $project->multiple;
         }
 
         $this->view->hidden = $hidden;

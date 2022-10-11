@@ -16,6 +16,9 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
+<?php if(count($executions2Imported) <= 3):?>
+<style>#importExecutionForm, .table-empty-tip {margin-bottom: 120px}</style>
+<?php endif;?>
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
@@ -86,6 +89,9 @@
   <div class='table-empty-tip'><?php echo $lang->noData;?></div>
   <?php endif;?>
 </div>
+<?php if($config->systemMode == 'classic'):?>
+<style>.input-group {width: 45% !important}</style>
+<?php else:?>
 <style>#project_chosen {width: 45% !important}</style>
 <?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>

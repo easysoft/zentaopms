@@ -389,4 +389,12 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
+<?php if(isonlybody()):?>
+<script>
+$('#osBox').next('.table-col').find('span').removeClass('fix-border');
+var browser = $('#osBox').next('.table-col').html();
+$('#osBox').next('.table-col').remove();
+$('#typeBox').closest('tr').append('<td>' + browser + '</td>');
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

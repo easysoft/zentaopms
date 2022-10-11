@@ -33,6 +33,13 @@
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .export {margin-left: 0px !important;}
 </style>
+<?php if(!$execution->hasProduct && $execution->type != 'sprint'):?>
+<style>
+#executionStoryForm th.c-plan {display: none !important;}
+#executionStoryForm td.c-plan {display: none !important;}
+#customDatatable div.col[data-key=plan] {display: none !important;}
+</style>
+<?php endif;?>
 <?php $isAllModules = (!empty($module->name) or !empty($product->name) or !empty($branch)) ? false : true;?>
 <?php $sidebarName  = $lang->tree->all;?>
 <?php $removeBtn    = '';?>
@@ -71,6 +78,7 @@
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
 
+    $canLinkStory = $execution->hasProduct or $execution->multiple;
     if(common::canModify('execution', $execution))
     {
         $this->lang->story->create = $this->lang->execution->createStory;
@@ -115,7 +123,7 @@
             $wizardParams = helper::safe64Encode("execution=$execution->id");
             echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}",'', "class='btn btn-link link-story-btn'");
         }
-        else
+        elseif($canLinkStory)  // The none-product and single execution cann't link stories.
         {
             echo "<div class='btn-group dropdown'>";
 
@@ -137,7 +145,7 @@
             $hidden = empty($buttonLink) ? 'hidden' : '';
             echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories'))
+            if(common::hasPriv('execution', 'linkStory') and common::hasPriv('execution', 'importPlanStories') and ($execution->hasProduct or $execution->type == 'sprint'))
             {
                 echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
@@ -177,9 +185,29 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
-        <?php if(common::canModify('execution', $execution) and common::hasPriv('execution', 'linkStory')):?>
-        <?php echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");?>
-        <?php endif;?>
+        <?php
+        if(common::canModify('execution', $execution))
+        {
+            if($canLinkStory && common::hasPriv('execution', 'linkStory'))
+            {
+                echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");
+            }
+            else
+            {
+                $storyModuleID = (int)$this->cookie->storyModuleParam;
+                if(common::hasPriv('story', 'create'))
+                {
+                    $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+                    echo html::a($createStoryLink, "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-info' data-app=$app->tab");
+                }
+                elseif(common::hasPriv('story', 'batchCreate'))
+                {
+                    $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+                    echo html::a($batchCreateLink, "<i class='icon icon-plus'></i> " . $lang->story->batchCreate, '', "class='btn btn-info' data-app=$app->tab");
+                }
+            }
+        }
+        ?>
       </p>
     </div>
     <?php else:?>
@@ -282,7 +310,7 @@
           </div>
           <?php endif;?>
           <?php
-          if(common::hasPriv('execution', 'batchUnlinkStory'))
+          if($canLinkStory && common::hasPriv('execution', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('execution', 'batchUnlinkStory', "executionID=$execution->id");
               echo html::commonButton($lang->execution->unlinkStoryAB, "data-form-action='$actionLink'");

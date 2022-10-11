@@ -105,7 +105,7 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo $project->multiple ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></a></li>
+          <li><a href='#legendExecStoryTask' data-toggle='tab'><?php echo !empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
@@ -282,7 +282,7 @@
                   <th class='w-70px'><?php echo $lang->bug->project;?></th>
                   <td><?php if($bug->project) echo html::a($this->createLink('project', 'view', "projectID=$bug->project"), $bug->projectName);?></td>
                 </tr>
-                <?php if($project->multiple):?>
+                <?php if(!empty($project->multiple)):?>
                 <tr>
                   <th class='w-70px'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
