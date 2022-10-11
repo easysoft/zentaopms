@@ -56,6 +56,12 @@
     <?php endif;?>
   </div>
 </div>
+<?php
+$waitCount        = 0;
+$doingCount       = 0;
+$suspendedCount   = 0;
+$closedCount      = 0;
+?>
 <div id='mainContent' class="main-row fade">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebar" class="side-col">
@@ -94,10 +100,6 @@
       $useDatatable     = (!commonModel::isTutorialMode() and (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable'));
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
-      $waitCount        = 0;
-      $doingCount       = 0;
-      $suspendedCount   = 0;
-      $closedCount      = 0;
 
       if($useDatatable) include dirname(dirname(dirname(__FILE__))) . '/common/view/datatable.html.php';
       ?>
