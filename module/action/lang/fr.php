@@ -392,6 +392,7 @@ $lang->action->label->updatetolib           = 'MàJ';
 $lang->action->label->ganttmove             = 'sorted';
 $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->switchtolean          = 'switch from new mode to lean mode';
+$lang->action->label->managerepo            = 'Linked Code Repo';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

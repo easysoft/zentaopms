@@ -2900,6 +2900,9 @@ class projectModel extends model
 
             $this->dao->insert(TABLE_RELATION)->data($newRelation)->exec();
         }
+
+        $this->loadModel('action');
+        $this->action->create('project', $projectID, 'manageRepo');
     }
 
     /**
