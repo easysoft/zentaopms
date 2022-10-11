@@ -224,6 +224,8 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+$lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
+$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
 $lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']    = $lang->product->activeStory;

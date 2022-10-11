@@ -105,6 +105,9 @@ $lang->testtask->caseCount        = '用例数';
 $lang->testtask->passCount        = '成功';
 $lang->testtask->failCount        = '失败';
 $lang->testtask->summary          = '有%s个用例，失败%s个，耗时%s。';
+$lang->testtask->pageSummary      = '本页共 <strong>%s</strong> 个测试单。';
+$lang->testtask->allSummary       = '本页共 <strong>%s</strong> 个测试单， 待测试测试单 <strong>%s</strong>， 测试中测试单 <strong>%s</strong>， 被阻塞测试单 <strong>%s</strong>。';
+$lang->testtask->checkedAllSummary = '共选中 <strong>%total%</strong> 个测试单， 待测试测试单 <strong>%wait%</strong>， 测试中测试单 <strong>%testing%</strong>， 被阻塞测试单 <strong>%blocked%</strong>。';
 
 $lang->testtask->beginAndEnd = '起止时间';
 $lang->testtask->to          = '至';
