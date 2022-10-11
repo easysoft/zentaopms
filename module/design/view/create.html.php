@@ -21,7 +21,7 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <tr>
+          <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
             <th class='w-120px'><?php echo $lang->design->product;?></th>
             <td><?php echo html::select('product', $products, $productID, "class='form-control chosen'");?></td>
             <td></td>

@@ -234,6 +234,7 @@ class design extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
+        $this->view->project = $this->loadModel('project')->getByID($design->project);
 
         $this->display();
     }
