@@ -1366,12 +1366,12 @@ class kanbanModel extends model
                     $cardData['openedDate']     = $object->openedDate;
                     $cardData['closedDate']     = $object->closedDate;
                     $cardData['lastEditedDate'] = $object->lastEditedDate;
+                    $cardData['status']         = $object->status;
 
                     if($cell->type == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']       = $object->name;
-                        $cardData['status']     = $object->status;
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
                     }

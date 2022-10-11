@@ -11,6 +11,7 @@ $(document).on('click', '.task-toggle', function(e)
 
 $(function()
 {
+    toggleFold('#productplanForm', unfoldPlans, productID, 'productplan');
     $('#productplanList tbody tr').each(function()
     {
         var $content = $(this).find('td.content');
@@ -99,7 +100,8 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
-    $('.project-popover').on('click', function(e)
+
+    $('.execution-popover').on('click', function(e)
     {
         e.stopPropagation();
         var showPopover = $(this).next().css('display') == 'block';
@@ -107,7 +109,7 @@ $(function()
         if(!showPopover) $(this).next().show();
     });
 
-    $('.project-link').on('click', function()
+    $('.execution-link').on('click', function()
     {
         $('.popover.right').hide();
     });
@@ -116,7 +118,7 @@ $(function()
     $(document).on('mousedown', function(e)
     {
         var $target = $(e.target);
-        var $toggle = $target.closest('.popover, .project-popover');
+        var $toggle = $target.closest('.popover, .execution-popover');
         if(!$toggle.length) $('.popover.right').hide();
     });
 });

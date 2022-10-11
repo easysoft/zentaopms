@@ -16,7 +16,7 @@ class taskTest
      * @access public
      * @return object
      */
-    public function createObject($param = array(), $executionID = '')
+    public function createObject($param = array(), $executionID = '', $bugID = '')
     {
         $assignedTo   = array('');
         $createFields = array('module' => '', 'story' => '', 'name' => '', 'type' => '', 'assignedTo' => $assignedTo,
@@ -26,7 +26,7 @@ class taskTest
 
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->objectModel->create($executionID);
+        $object = $this->objectModel->create($executionID, $bugID);
         if (in_array('user92', $_POST['assignedTo'], true))
         {
             $objectID = $object['user92']['id'];

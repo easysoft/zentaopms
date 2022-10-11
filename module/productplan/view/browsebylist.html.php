@@ -9,6 +9,14 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php $unfoldPlans = isset($config->productplan->browse->unfoldPlans) ? json_decode($config->productplan->browse->unfoldPlans, true) : array();?>
+<?php $unfoldPlans = zget($unfoldPlans, $productID, array());?>
+<?php js::set('unfoldPlans', $unfoldPlans);?>
+<style>
+.c-actions {width: 250px;}
+#productplanList .c-actions .btn+.btn {margin-left: -1px;}
+#productplanList .c-actions .btn {display: block; float: left;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -70,7 +78,7 @@
         <th class='c-story text-center'><?php echo $lang->productplan->stories;?></th>
         <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
         <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
-        <th class='c-execution text-center'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-execution c-actions'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
@@ -108,7 +116,7 @@
           $i++;
       }
       ?>
-      <tr class='<?php echo $class;?>' data-parent="<?php echo $plan->parent;?>">
+      <tr class='<?php echo $class;?>' data-id="<?php echo $plan->id;?>" data-parent="<?php echo $plan->parent;?>">
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
@@ -130,7 +138,7 @@
           if($plan->parent > 0) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($expired)) echo $expired;
-          if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-right"></i></a>';
           echo '</div>';
           ?>
         </td>
@@ -145,26 +153,26 @@
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
-        <td class='text-center'>
+        <td class='text-center c-actions execution-links'>
           <?php
           if(!empty($plan->projects))
           {
               if(count($plan->projects) === 1)
               {
                   $executionID = key($plan->projects);
-                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}'");
+                  echo html::a(helper::createLink('execution', 'task', "executionID=$executionID"), '<i class="icon-run text-primary"></i>', '', "title='{$plan->projects[$executionID]->name}' class='btn'");
               }
               else
               {
-                  $executionHtml  = '<div class="popover right"  id="taskPopover">';
+                  $executionHtml  = '<div class="popover right">';
                   $executionHtml .= '<div class="arrow"></div>';
                   $executionHtml .= '<div class="popover-content">';
                   $executionHtml .= '<ul class="execution-tip">';
-                  foreach($plan->executions as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
+                  foreach($plan->projects as $executionID => $execution) $executionHtml .=  '<li>' . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $execution->name, '', "class='execution-link' title='{$execution->name}'") . '</li>';
                   $executionHtml .= '</ul>';
                   $executionHtml .= '</div>';
                   $executionHtml .= '</div>';
-                  echo "<i class='icon-run execution-popover text-primary'></i>";
+                  echo "<a href='javascript:;' class='btn execution-popover'><i class='icon-run text-primary'></i></a>";
                   echo $executionHtml;
               }
           }

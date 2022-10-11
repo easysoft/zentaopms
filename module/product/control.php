@@ -73,10 +73,13 @@ class product extends control
      * @param  int    $branch
      * @param  int    $involved
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
+    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('execution');
         $this->loadModel('project');
@@ -87,9 +90,13 @@ class product extends control
 
         $this->product->setMenu($productID, $branch);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
         $product      = $this->product->getByID($productID);
         $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
 
@@ -112,6 +119,10 @@ class product extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchID     = $branch;
         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->pager        = $pager;
         $this->display();
     }
 

@@ -1838,16 +1838,16 @@ class repoModel extends model
 
         if($objects['stories'])
         {
-            $productsAndExecutions = $this->getTaskProductsAndExecutions($objects['stories']);
+            $stories = $this->loadModel('story')->getByList($objects['stories']);
             foreach($objects['stories'] as $storyID)
             {
                 $storyID = (int)$storyID;
-                if(!isset($productsAndExecutions[$storyID])) continue;
+                if(!isset($stories[$storyID])) continue;
 
                 $action->objectType = 'story';
                 $action->objectID   = $storyID;
-                $action->product    = $productsAndExecutions[$storyID]['product'];
-                $action->execution  = $productsAndExecutions[$storyID]['execution'];
+                $action->product    = $stories[$storyID]->product;
+                $action->execution  = 0;
 
                 $this->saveRecord($action, $changes);
             }

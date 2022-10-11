@@ -24,6 +24,11 @@ $(function()
         }
         updateStatistic()
     });
+
+    $('.main-table').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
+    })
 });
 
 /**
@@ -35,15 +40,15 @@ $(function()
 function setCheckbox()
 {
     $('#projectsForm .checkbox-primary').hide();
+    $(":checkbox[name^='projectIdList']").prop('checked', false);
+    $('.check-all, .sortable tr').removeClass('checked');
     if($.cookie('showProjectBatchEdit') == 1)
     {
         $('#projectsForm .checkbox-primary').show();
     }
     else
     {
-        $(":checkbox[name^='projectIdList']").prop('checked', false);
         $('.table-actions').hide();
-        $('.check-all').removeClass('checked');
     }
 }
 

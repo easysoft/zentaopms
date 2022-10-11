@@ -104,7 +104,8 @@
             <?php endif;?>
             <td class='text-left table-nest-title' title="<?php echo $program['programName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
-              <?php echo $program['programName']?>
+              &nbsp;<span class="icon icon-cards-view"></span>
+              <span><?php echo $program['programName']?></span>
             </td>
             <td class='c-manager'>
               <?php
