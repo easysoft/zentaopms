@@ -58,11 +58,15 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach($executions as $id  =>$execution):?>
+              <?php foreach($executions as $id => $execution):?>
               <tr class="text-center">
                 <td><?php echo $id;?></td>
-                <td class="text-left" title="<?php echo $execution->projectName;?>"><?php echo $execution->projectName;?></td>
-                <td class="text-left" title="<?php echo $execution->name;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name);?></td>
+                <td class="text-left" title="<?php echo $execution->projectName;?>">
+                  <?php echo $execution->name ? $execution->projectName : html::a($this->createLink('project', 'index', "projectID=$execution->projectID"), $execution->projectName);?>
+                </td>
+                <td class="text-left" title="<?php echo $execution->name;?>">
+                  <?php echo $execution->name ? html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name) : '';?>
+                </td>
                 <td><?php echo round($execution->estimate, 2);?></td>
                 <td><?php echo round($execution->consumed, 2);?></td>
                 <?php $deviation = round($execution->consumed - $execution->estimate, 2);?>
