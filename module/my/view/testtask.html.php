@@ -44,7 +44,15 @@
       </tr>
     </thead>
     <tbody>
+      <?php
+      $waitCount    = 0;
+      $testingCount = 0;
+      $blockedCount = 0;
+      ?>
       <?php foreach($tasks as $task):?>
+      <?php if($task->status == 'wait')    $waitCount ++;?>
+      <?php if($task->status == 'doing')   $testingCount ++;?>
+      <?php if($task->status == 'blocked') $blockedCount ++;?>
       <tr>
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
         <td class='text-left nobr' title='<?php echo $task->name;?>'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
@@ -71,7 +79,10 @@
       <?php endforeach;?>
     </tbody>
   </table>
-  <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
+  <div class="table-footer">
+    <div class="table-statistic"><?php echo $app->rawMethod == 'work' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
+    <?php $pager->show('right', 'pagerjs');?>
+  </div>
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
