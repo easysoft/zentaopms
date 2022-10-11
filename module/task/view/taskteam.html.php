@@ -99,7 +99,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php if($newRowCount == 0 and $app->rawMethod == 'edit'):?>
 <tr>
-  <td colspan='3'>
+  <td colspan='4'>
     <div class='alert alert-info'><?php printf($lang->task->noticeManageTeam, zget($lang->task->statusList, $task->status));?></div>
   </td>
 </tr>
