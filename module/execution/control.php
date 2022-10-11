@@ -2708,6 +2708,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         $execution = $this->loadModel('execution')->getById($executionID);
+        $project   = $this->loadModel('project')->getById($execution->project);
         $tree      = $this->execution->getTree($executionID);
 
         /* Save to session. */
@@ -2720,13 +2721,13 @@ class execution extends control
 
         if($type === 'json') return print(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
-        $this->view->title      = $this->lang->execution->tree;
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
+        $this->view->title       = $this->lang->execution->tree;
+        $this->view->position[]  = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]  = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
-        $this->view->tree        = $this->execution->printTree($tree);
+        $this->view->tree        = $this->execution->printTree($tree, $project->hasProduct);
         $this->display();
     }
 
@@ -4080,7 +4081,7 @@ class execution extends control
         $story = $this->story->getById($storyID, $version, true);
 
         $story->files = $this->loadModel('file')->getByObject('story', $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, shadow')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
