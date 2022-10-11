@@ -56,6 +56,10 @@
     <?php endif;?>
   </div>
 </div>
+<?php
+$waitCount  = 0;
+$doingCount = 0;
+?>
 <div id="mainContent">
   <?php if(empty($todos)):?>
   <div class="table-empty-tip">
@@ -67,7 +71,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class="main-table table-todo" data-ride="table" method="post">
+  <form class="main-table table-todo" method="post" id='todoForm'>
     <?php
     $canBatchEdit   = common::hasPriv('todo', 'batchEdit');
     $canBatchFinish = common::hasPriv('todo', 'batchFinish');
@@ -105,7 +109,9 @@
       </thead>
       <tbody>
         <?php foreach($todos as $todo):?>
-        <tr>
+        <?php if($todo->status == 'wait')  $waitCount ++;?>
+        <?php if($todo->status == 'doing') $doingCount ++;?>
+        <tr data-status='<?php echo $todo->status;?>'>
           <td class="c-id">
             <?php if($canbatchAction):?>
             <div class="checkbox-primary">
@@ -192,10 +198,13 @@
       }
       ?>
       </div>
+      <div class="table-statistic"><?php echo sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
 <?php js::set('listName', 'todoList');?>
+<?php js::set('pageSummary', sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount));?>
+<?php js::set('checkedSummary', $lang->todo->checkedSummary);?>
 <?php include '../../common/view/footer.html.php';?>
