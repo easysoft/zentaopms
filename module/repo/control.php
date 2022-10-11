@@ -1075,7 +1075,7 @@ class repo extends control
             $this->repo->link($repoID, $revision, 'story');
 
             if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[2].getRelation('$revision')"));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
         }
 
         $this->loadModel('story');
@@ -1161,7 +1161,7 @@ class repo extends control
             $this->repo->link($repoID, $revision, 'bug');
 
             if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[2].getRelation('$revision')"));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
         }
 
         $this->loadModel('bug');
@@ -1245,7 +1245,7 @@ class repo extends control
             $this->repo->link($repoID, $revision, 'task');
 
             if(dao::isError()) return print(js::error(dao::getError()));
-            return print(js::closeModal('parent', '', "parent.parent[2].getRelation('$revision')"));
+            return print(js::closeModal('parent', '', "parent.parent[parent.parent.length - 2].getRelation('$revision')"));
         }
 
         $this->loadModel('execution');
