@@ -358,6 +358,7 @@ $lang->block->availableBlocks->risk        = 'Risks';
 $lang->block->availableBlocks->issue       = 'Issues';
 $lang->block->availableBlocks->meeting     = 'Meetings';
 $lang->block->availableBlocks->feedback    = 'My Feedbacks';
+$lang->block->availableBlocks->ticket      = 'Ticket';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
