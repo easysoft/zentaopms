@@ -111,7 +111,7 @@ $(document).ready(function()
 
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
 
-    <?php if( !(isset($task->mode) and $task->mode == 'multi')):?>
+    <?php if(!isset($task->mode) or $task->mode != 'multi'):?>
     var canSort = false;
     var options = {
         trigger: '.icon-move',
