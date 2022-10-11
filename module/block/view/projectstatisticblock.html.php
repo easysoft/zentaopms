@@ -105,7 +105,7 @@ $(function()
     var $projectList = $('#activeProject');
     if($projectList.length)
     {
-        var projectList  = $projectList[0];
+        var projectList = $projectList[0];
         $(".col ul.nav").animate({scrollTop: projectList.offsetTop}, "slow");
     }
 });
