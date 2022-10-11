@@ -99,14 +99,15 @@ $(function()
         var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
         if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
+        console.log($nav)
         e.preventDefault();
     });
 
-    var $projectLi = $('#activeProject');
-    if($projectLi.length)
+    var $projectList = $('#activeProject');
+    if($projectList.length)
     {
-        var projectLi  = $projectLi[0];
-        $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
+        var projectList  = $projectList[0];
+        $(".col ul.nav").animate({scrollTop: projectList.offsetTop}, "slow");
     }
 });
 </script>
@@ -123,7 +124,7 @@ $(function()
         <?php $selected = key($projects);?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
-          <a href="###" title="<?php echo $project->name?>" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <a href="###" title="<?php echo $project->name?>" data-target='<?php echo "#tab3{$blockNavId}Content{$project->id}";?>' data-toggle="tab"><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'index', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->index}");?>
         </li>
         <?php endforeach;?>
@@ -132,7 +133,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($projects as $project):?>
-      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
+      <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$project->id}";?>'>
         <div class="table-row">
           <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
           <div class='table-row'>
