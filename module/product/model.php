@@ -1211,7 +1211,7 @@ class productModel extends model
             ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't2.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */

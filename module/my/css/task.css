@@ -1,5 +1,3 @@
-td.delayed {background: #e84e0f !important; color: white;}
-
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
 .table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
@@ -28,7 +26,7 @@ html[lang="en"] .c-user-short {width: 88px;}
 [lang^=de] #taskTable .c-date {width: 78px;}
 [lang^=de] #taskTable .assigned-title {width: 123px !important;}
 [lang^=de] #taskTable .c-user {width: 118px;}
-[lang^=de] #taskTable .c-hours {width: 86px;}
+[lang^=de] #taskTable .estimate, [lang^=de] #taskTable .consumed {width: 86px;}
 [lang^=de] #taskTable .c-user-short {width: 75px;}
 [lang^=fr] #taskTable .c-name {width: 120px;}
 [lang^=fr] #taskTable .c-project {width: 100px;}

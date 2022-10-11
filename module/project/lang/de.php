@@ -200,6 +200,10 @@ $lang->project->productTip             = 'After clicking New Product, the projec
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
 $lang->project->budgetOverrun          = "The project's budget exceeds the remaining budget of the parent program:";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
+$lang->project->summary                = 'Total projects: <strong>%s</strong>.';
+$lang->project->allSummary             = 'Total projects: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>, Suspended: <strong>%s</strong>, Closed: <strong>%s</strong>.';
+$lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
+$lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';

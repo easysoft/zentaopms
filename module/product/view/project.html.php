@@ -62,8 +62,18 @@
         </tr>
       </thead>
       <tbody>
-        <?php $id = 0;?>
+        <?php
+        $id             = 0;
+        $waitCount      = 0;
+        $doingCount     = 0;
+        $suspendedCount = 0;
+        $closedCount    = 0;
+        ?>
         <?php foreach($projectStats as $project):?>
+        <?php if($project->status == 'wait')      $waitCount ++;?>
+        <?php if($project->status == 'doing')     $doingCount ++;?>
+        <?php if($project->status == 'suspended') $suspendedCount ++;?>
+        <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
           <?php if($config->systemMode == 'new'):?>
@@ -107,7 +117,10 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <div class='table-footer'><?php echo $pager->show('left', 'pagerjs');?></div>
+    <div class='table-footer'>
+      <div class="table-statistic"><?php echo strpos(',all,undone,', ",$status,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
+      <?php echo $pager->show('left', 'pagerjs');?>
+    </div>
   </form>
   <?php endif;?>
 </div>

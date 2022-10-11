@@ -1148,6 +1148,12 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]))
+        {
+            /* Fix bug #28378. */
+            $assignedTo = $this->user->getById($bug->assignedTo);
+            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+        }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';

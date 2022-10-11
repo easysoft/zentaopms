@@ -3297,6 +3297,9 @@ class bugModel extends model
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $browser . "'";
                     break;
+                case 'deadline':
+                    $class .= ' text-center';
+                    break;
             }
 
             if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
@@ -3440,7 +3443,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->assignedDate) ? '' : substr($bug->assignedDate, 5, 11);
                 break;
             case 'deadline':
-                echo helper::isZeroDate($bug->deadline) ? '' : substr($bug->deadline, 5, 11);
+                echo helper::isZeroDate($bug->deadline) ? '' : '<span>' . substr($bug->deadline, 5, 11) . '</span>';
                 break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);

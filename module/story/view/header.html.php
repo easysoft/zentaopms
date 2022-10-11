@@ -40,15 +40,6 @@ function loadProduct(productID)
 
     if(typeof(storyType) == 'string' && storyType == 'story')
     {
-        var requirementLink = createLink('story', 'ajaxGetProductURS', 'productID=' + productID + '&labelName=URS' + '&isMultiple=1');
-        $.get(requirementLink, function(data)
-        {
-            $('#URS').replaceWith(data);
-            $('#URS' + "_chosen").remove();
-            $('#URS').next('.picker').remove();
-            $('#URS').chosen();
-        });
-
         var storyLink = createLink('story', 'ajaxGetParentStory', 'productID=' + productID + '&labelName=parent');
         $.get(storyLink, function(data)
         {
@@ -75,7 +66,6 @@ function loadBranch()
 
     loadProductModules(productID, branch);
     loadProductPlans(productID, branch);
-    loadURS();
 }
 
 /**
@@ -105,7 +95,6 @@ function loadProductBranches(productID)
 
         loadProductModules(productID, $('#branch').val());
         loadProductPlans(productID, $('#branch').val());
-        loadURS();
     })
 }
 
@@ -136,8 +125,6 @@ function loadProductModules(productID, branch)
         if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
-
-    loadURS();
 }
 
 /**

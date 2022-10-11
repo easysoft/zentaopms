@@ -35,11 +35,11 @@
       <tr>
         <th class='c-id'>       <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
         <th>                    <?php common::printOrderLink('name',      $orderBy, $vars, $lang->testtask->name);?></th>
-        <th class='c-execution'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
         <th class='c-build'>    <?php common::printOrderLink('build',     $orderBy, $vars, $lang->testtask->build);?></th>
+        <th class='c-execution'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
+        <th class='c-status'>   <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-date'>     <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='c-date'>     <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
-        <th class='c-status'>   <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -48,11 +48,11 @@
       <tr>
         <td class="c-id"><?php printf('%03d', $task->id);?></td>
         <td class='text-left nobr' title='<?php echo $task->name;?>'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
-        <td class='nobr' title='<?php echo $task->executionName;?>'><?php echo $task->executionName;?></td>
         <td class='nobr' title='<?php echo $task->build == 'trunk' ? $lang->trunk : $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+        <td class='nobr' title='<?php echo $task->executionName;?>'><?php echo $task->executionName;?></td>
+        <td title='<?php echo $this->processStatus('testtask', $task);?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
-        <td title='<?php echo $this->processStatus('testtask', $task);?>'><span class="status-task status-<?php echo $task->status?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', "data-app='qa'");
