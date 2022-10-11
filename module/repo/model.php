@@ -396,10 +396,7 @@ class repoModel extends model
         foreach($repos as $repo)
         {
             $repo->acl = json_decode($repo->acl);
-            if($this->checkPriv($repo))
-            {
-                $repoPairs[$repo->id] = $repo->name;
-            }
+            if($this->checkPriv($repo)) $repoPairs[$repo->id] = $repo->name;
         }
 
         return $repoPairs;
