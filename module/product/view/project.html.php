@@ -118,7 +118,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <div class="table-statistic"><?php echo strpos(',all,undone,', ",$status,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
+      <div class="table-statistic"><?php echo $status == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
       <?php echo $pager->show('left', 'pagerjs');?>
     </div>
   </form>
