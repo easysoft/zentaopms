@@ -105,7 +105,6 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 </tr>
 <?php endif;?>
 <?php endif;?>
-<?php js::set('id', $i);?>
 <script>
 $(document).ready(function()
 {
@@ -125,8 +124,8 @@ $(document).ready(function()
     /* Init task team manage dialog */
     var $taskTeamEditor = $('tr.teamTemplate').closest('table').batchActionForm(
     {
-        idStart: id,
-        idEnd: id + newRowCount - 1,
+        idStart: 0,
+        idEnd: newRowCount - 1,
         chosen: true,
         datetimepicker: false,
         colorPicker: false,
