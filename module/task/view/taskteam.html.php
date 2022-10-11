@@ -246,6 +246,12 @@ $(document).ready(function()
     disableMembers();
     setLineNumber();
 
+    $('#modalTeam').on('mouseup', 'tr', function()
+    {
+        setTimeout(setLineNumber, 10);
+    });
+
+
     $taskTeamEditor.on('change', 'select#team', function()
     {
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
