@@ -61,10 +61,10 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
           <th><?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
           <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
-          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -88,13 +88,13 @@
           </td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
-          <td><?php echo zget($users, $task->owner);?></td>
-          <td><?php echo $task->begin?></td>
-          <td><?php echo $task->end?></td>
           <?php $status = $this->processStatus('testtask', $task);?>
           <td title='<?php echo $status;?>'>
             <span class='status-testtask status-<?php echo $task->status?>'><?php echo $status;?></span>
           </td>
+          <td><?php echo zget($users, $task->owner);?></td>
+          <td><?php echo $task->begin?></td>
+          <td><?php echo $task->end?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)
