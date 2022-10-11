@@ -20,14 +20,10 @@
     <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
         <?php if($app->tab == 'project'):?>
-        <?php if(!empty($multipleProject)):?>
-        <tr>
+        <tr class="<?php echo empty($multipleProject) ? 'hidden' : '';?>">
           <th><?php echo $lang->executionCommon;?></th>
           <td><?php echo html::select('execution', $executions, $executionID, "onchange='loadProducts(this.value);' class='form-control chosen' required");?></td>
         </tr>
-        <?php else:?>
-        <?php echo html::hidden('execution', $executionID);?>
-        <?php endif;?>
         <?php endif;?>
         <tr class="<?php echo $hidden;?>">
           <th><?php echo $lang->build->product;?></th>

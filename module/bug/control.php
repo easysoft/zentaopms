@@ -165,7 +165,7 @@ class bug extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get executios. */
-        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete');
+        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
 
         /* Get product id list. */
         $productIDList = $productID ? $productID : array_keys($this->products);
@@ -341,10 +341,7 @@ class bug extends control
         }
         else if($this->app->tab == 'project')
         {
-            if(isset($output['projectID']))
-            {
-                $this->loadModel('project')->setMenu($output['projectID']);
-            }
+            if(isset($output['projectID'])) $this->loadModel('project')->setMenu($output['projectID']);
         }
         else
         {
