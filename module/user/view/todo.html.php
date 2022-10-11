@@ -46,8 +46,14 @@
       </tr>
       </thead>
       <tbody>
+      <?php
+      $waitCount  = 0;
+      $doingCount = 0;
+      ?>
       <?php foreach($todos as $todo):?>
       <tr class='text-left'>
+        <?php if($todo->status == 'wait')  $waitCount ++;?>
+        <?php if($todo->status == 'doing') $doingCount ++;?>
         <td><?php echo $todo->id;?></td>
         <td class='text-left'>
           <?php echo ($todo->private and $this->app->user->account != $todo->account) ? $todo->name : html::a($this->createLink('todo', 'view', "id=$todo->id&from=company", '', true), $todo->name, '', "class='iframe'");?>
@@ -64,7 +70,10 @@
     </table>
 
     <?php if($todos):?>
-    <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
+    <div class="table-footer">
+      <div class="table-statistic"><?php echo sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);?></div>
+      <?php $pager->show('right', 'pagerjs');?>
+    </div>
     <?php endif;?>
 
   </form>

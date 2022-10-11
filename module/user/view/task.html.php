@@ -42,22 +42,20 @@
       <thead>
         <tr class='colhead'>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-execution'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-execution'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
+          <th class='c-deadline text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
           <th class='c-hour hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='c-hour hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='c-hour hours'><?php common::printOrderLink('left', $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='c-deadline text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
-          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-          <td><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-          <td class='text-left nobr' title="<?php echo $task->executionName?>"><?php echo html::a($this->createLink('execution', 'browse', "executionID=$task->executionID"), $task->executionName);?></td>
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
@@ -67,11 +65,13 @@
             ?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color' title='$task->name'");?>
           </td>
+          <td><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+          <td class='<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></td>
+          <td class='text-left nobr' title="<?php echo $task->executionName?>"><?php echo html::a($this->createLink('execution', 'browse', "executionID=$task->executionID"), $task->executionName);?></td>
+          <td class="deadline text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
           <td class='hours' title="<?php echo $task->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $task->estimate . $lang->execution->workHourUnit;?></td>
           <td class='hours' title="<?php echo $task->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $task->consumed . $lang->execution->workHourUnit;?></td>
           <td class='hours' title="<?php echo $task->left     . ' ' . $lang->execution->workHour;?>"><?php echo $task->left     . $lang->execution->workHourUnit;?></td>
-          <td class="deadline text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
-          <td class='<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
