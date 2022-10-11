@@ -844,18 +844,19 @@ class projectModel extends model
      * Get project pairs by id list.
      *
      * @param  array  $projectIdList
-     * @param  string $mode
+     * @param  string $model
      * @access public
      * @return array
      */
-    public function getPairsByIdList($projectIdList = array(), $mode = '')
+    public function getPairsByIdList($projectIdList = array(), $model = '', $param = '')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectIdList)->andWhere('id')->in($projectIdList)->fi()
-            ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in($mode)->fi()
+            ->beginIF(!$this->app->user->admin and $model != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($model != 'all' and !empty($model))->andWhere('model')->in($model)->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->fetchPairs('id', 'name');
     }
 
@@ -1030,7 +1031,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(strpos($param, 'nomultiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(strpos($param, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
             ->orderBy($orderBy)

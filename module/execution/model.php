@@ -1692,9 +1692,10 @@ class executionModel extends model
             $executionPairs = array();
             foreach($executions as $execution)
             {
-                $executionPairs[$execution->id] = '';
-                if(isset($projects[$execution->project])) $executionPairs[$execution->id] .= $projects[$execution->project] . ' / ';
+                $executionPairs[$execution->id]  = '';
+                $executionPairs[$execution->id] .= isset($projects[$execution->project]) ? ($projects[$execution->project] . ' / ') : '';
                 $executionPairs[$execution->id] .= $execution->name;
+
                 if(empty($execution->multiple)) $executionPairs[$execution->id] = $projects[$execution->project] . "({$this->lang->project->disableExecution})";
             }
             $executions = $executionPairs;
