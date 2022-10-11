@@ -448,7 +448,15 @@ class portModel extends model
         foreach($sysDataFields as $field)
         {
             $dataList[$field] = $this->loadModel($field)->getPairs();
-            if($field == 'user') $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+            if($field == 'user')
+            {
+                $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+                unset($dataList[$field]['']);
+                if(!in_array(strtolower($this->app->methodName) ,array('ajaxgettbody','ajaxgetoptions','showimport')))
+                {
+                    foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
+                }
+            }
         }
 
         return $dataList;
