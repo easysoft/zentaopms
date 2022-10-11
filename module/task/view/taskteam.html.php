@@ -118,7 +118,8 @@ $(document).ready(function()
         setLineNumber();
         }
     }
-    $('#taskTeamEditor').sortable(options);
+
+    $('#taskTeamEditor tbody.sortable').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
