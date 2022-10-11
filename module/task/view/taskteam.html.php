@@ -108,18 +108,20 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <script>
 $(document).ready(function()
 {
-    <?php if(isset($task->mode) and $task->mode == 'multi'):?>
+
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
-    <?php else:?>
+
+    <?php if( !(isset($task->mode) and $task->mode == 'multi')):?>
     var canSort = false;
     var options = {
-        selector: '.icon-move',
+        trigger: '.icon-move',
+        selector: 'tr.teamTemplate',
         dragCssClass: 'drag-row',
         reverse: true,
         finish: setLineNumber
     }
 
-    $('#taskTeamEditor').sortable(options);
+    $('#taskTeamEditor > .sortable').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
@@ -246,12 +248,6 @@ $(document).ready(function()
     disableMembers();
     setLineNumber();
 
-    $('#modalTeam').on('mouseup', 'tr', function()
-    {
-        setTimeout(setLineNumber, 10);
-    });
-
-
     $taskTeamEditor.on('change', 'select#team', function()
     {
         $(this).closest('tr').find('input[id^=teamEstimate]').closest('.input-group').toggleClass('required', $(this).val() != '')
@@ -308,5 +304,6 @@ function setLineNumber()
         $(this).text(lineNumber);
         lineNumber ++;
     });
+
 }
 </script>
