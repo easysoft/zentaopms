@@ -72,10 +72,12 @@
       <thead>
         <tr>
           <th class='table-nest-title'>
-          <?php if($canBatchEdit and $showToggleIcon):?>
-            <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
-          <?php endif;?>
-          <?php echo $lang->nameAB;?>
+            <div class="flex-between">
+              <?php echo $lang->nameAB;?>
+              <?php if($canBatchEdit and $showToggleIcon):?>
+                <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+              <?php endif;?>
+            </div>
           </th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
