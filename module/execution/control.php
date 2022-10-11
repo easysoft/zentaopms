@@ -979,7 +979,7 @@ class execution extends control
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
 
-        if($execution->project and !$project->hasProduct)
+        if($execution->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
             if($project->model != 'scrum')
@@ -990,7 +990,7 @@ class execution extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        if($project->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
+        if($execution->hasProduct) $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
