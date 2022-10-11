@@ -16,7 +16,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
-<?php if(count($plans2Imported) < 5):?>
+<?php if(count($plans2Imported) <= 3):?>
 <style>#importPlanForm, .table-empty-tip {margin-bottom: 120px}</style>
 <?php endif;?>
 <div id='mainContent' class='main-content importModal'>
