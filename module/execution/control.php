@@ -858,15 +858,6 @@ class execution extends control
             }
         }
 
-        $projectID = $execution->project;
-        $project   = $this->loadModel('project')->getByID($projectID);
-
-        if(empty($project->hasProduct))
-        {
-            unset($this->config->product->search['fields']['product']);
-            if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);
-        }
-
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $execution);
 
         /* Header and position. */

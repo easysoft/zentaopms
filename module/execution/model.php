@@ -2248,7 +2248,7 @@ class executionModel extends model
         {
             unset($this->config->product->search['fields']['product']);
 
-            if($project->model == 'kanban') unset($this->config->product->search['fields']['plan']);
+            if($project->model != 'kanban') unset($this->config->product->search['fields']['plan']);
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
