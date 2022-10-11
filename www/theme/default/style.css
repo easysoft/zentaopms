@@ -149,3 +149,4 @@ td.delayed > span {display: inline-block; height: 20px; line-height: 18px; backg
 .table .table-children,
 .table .is-nest-child {background: #F8F8F8;}
 .table tbody td.has-child .icon-angle-right {color: #838a9d;}
+.table.has-sort-head thead > tr > th:last-child {padding-right: 8px;}
