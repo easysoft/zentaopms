@@ -36,8 +36,8 @@
   <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
 <div id="mainContent">
-<?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
-<div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
+  <?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>

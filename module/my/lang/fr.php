@@ -80,6 +80,20 @@ $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 $lang->my->storyMenu->assignedByMe = 'AssignedByMe';
 
+$lang->my->audit = new stdclass();
+$lang->my->audit->title  = 'Title';
+$lang->my->audit->time   = 'Time';
+$lang->my->audit->type   = 'Type';
+$lang->my->audit->status = 'Status';
+
+$lang->my->auditMenu = new stdclass();
+$lang->my->auditMenu->all      = 'All';
+$lang->my->auditMenu->story    = 'Story';
+$lang->my->auditMenu->testcase = 'Case';
+if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->project = 'Project';
+if($config->edition != 'open') $lang->my->auditMenu->feedback = 'Feedback';
+if($config->edition != 'open') $lang->my->auditMenu->oa       = 'OA';
+
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';
 $lang->my->projectMenu->wait       = 'Waiting';
@@ -120,6 +134,7 @@ $lang->my->executionLinkList['execution-all']             = 'Enter the execution
 $lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
 $lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
 
+$lang->my->confirmReview = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
 <div>

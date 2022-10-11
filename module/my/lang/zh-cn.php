@@ -80,6 +80,20 @@ $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
 $lang->my->storyMenu->assignedByMe = '由我指派';
 
+$lang->my->audit = new stdclass();
+$lang->my->audit->title  = '评审标题';
+$lang->my->audit->time   = '提交时间';
+$lang->my->audit->type   = '类型';
+$lang->my->audit->status = '状态';
+
+$lang->my->auditMenu = new stdclass();
+$lang->my->auditMenu->all      = '所有';
+$lang->my->auditMenu->story    = '需求';
+$lang->my->auditMenu->testcase = '用例';
+if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->project = '项目';
+if($config->edition != 'open') $lang->my->auditMenu->feedback = '反馈';
+if($config->edition != 'open') $lang->my->auditMenu->oa       = '办公';
+
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';
 $lang->my->projectMenu->wait       = '未开始';
@@ -120,6 +134,7 @@ $lang->my->executionLinkList['execution-all']             = '默认进入执行�
 $lang->my->executionLinkList['execution-task']            = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
 $lang->my->executionLinkList['execution-executionkanban'] = '默认进入执行看板，可以查看进行中项目的执行情况';
 
+$lang->my->confirmReview = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
 <div>
