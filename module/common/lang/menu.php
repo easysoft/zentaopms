@@ -96,7 +96,7 @@ $lang->my->menu->work['subMenu']->story       = "$lang->SRCommon|my|work|mode=st
 $lang->my->menu->work['subMenu']->bug         = "{$lang->bug->common}|my|work|mode=bug";
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
 $lang->my->menu->work['subMenu']->testtask    = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
-$lang->my->menu->work['subMenu']->audit       = array('link' => "{$lang->review->common}|my|work|mode=audit", 'subModule' => 'review');
+$lang->my->menu->work['subMenu']->audit       = array('link' => "{$lang->review->common}|my|work|mode=audit&type=all&param=&orderBy=time_desc", 'subModule' => 'review');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
 $lang->my->menu->work['menuOrder'][10] = 'requirement';

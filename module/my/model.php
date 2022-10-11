@@ -968,4 +968,238 @@ class myModel extends model
         return $requirements;
     }
 
+    /**
+     * Get review list for me.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewList($browseType, $orderBy = 'time_desc', $pager = null)
+    {
+        if($this->app->rawMethod != 'work') return array();
+        $reviewList = array();
+        if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' or $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($browseType == 'all' or $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+
+        if(empty($reviewList)) return array();
+
+        $field     = $orderBy;
+        $direction = 'asc';
+        if(strpos($orderBy, '_') !== false) list($field, $direction) = explode('_', $orderBy);
+
+        /* Sort review. */
+        $reviewGroup = array();
+        foreach($reviewList as $review)
+        {
+            if(!isset($review->$field)) $field = 'time';
+            $reviewGroup[$review->$field][] = $review;
+        }
+        if($direction == 'asc')  ksort($reviewGroup);
+        if($direction == 'desc') krsort($reviewGroup);
+
+        $reviewList = array();
+        foreach($reviewGroup as $reviews) $reviewList = array_merge($reviewList, $reviews);
+
+        /* Pager. */
+        $pager->setRecTotal(count($reviewList));
+        $pager->setPageTotal();
+        $pager->setPageID($pager->pageID);
+        $reviewList = array_chunk($reviewList, $pager->recPerPage);
+        $reviewList = $reviewList[$pager->pageID - 1];
+
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing stories.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingStories($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('story', 'review')) return array();
+
+        $this->app->loadLang('story');
+        $stmt = $this->dao->select("t1.*")->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->andWhere('t2.reviewer')->eq($this->app->user->account)
+            ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.status')->eq('reviewing')
+            ->orderBy($orderBy)
+            ->query();
+
+        $stories = array();
+        while($data = $stmt->fetch())
+        {
+            $story = new stdclass();
+            $story->id      = $data->id;
+            $story->title   = $data->title;
+            $story->type    = 'story';
+            $story->time    = $data->openedDate;
+            $story->status  = $data->status;
+            $stories[$story->id] = $story;
+        }
+
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
+        return array_values($stories);
+    }
+
+    /**
+     * Get reviewing cases.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingCases($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('testcase', 'review')) return array();
+
+        $this->app->loadLang('testcase');
+        $stmt = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('wait')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->orderBy($orderBy)
+            ->query();
+
+        $cases = array();
+        while($data = $stmt->fetch())
+        {
+            $case = new stdclass();
+            $case->id     = $data->id;
+            $case->title  = $data->title;
+            $case->type   = 'testcase';
+            $case->time   = $data->openedDate;
+            $case->status = $data->status;
+            $cases[$case->id] = $case;
+        }
+
+        return array_values($cases);
+    }
+
+    /**
+     * Get reviewing approvals.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingApprovals($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('review', 'assess')) return array();
+        if($this->config->edition != 'max') return array();
+
+        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
+        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+
+        $this->app->loadLang('project');
+        $this->session->set('reviewList', $this->app->getURI(true));
+
+        $reviewList = array();
+        foreach($projectReviews as $review)
+        {
+            if(!isset($pendingList[$review->id])) continue;
+
+            $data = new stdclass();
+            $data->id     = $review->id;
+            $data->title  = $review->title;
+            $data->type   = 'project';
+            $data->time   = $review->createdDate;
+            $data->status = $review->status;
+            $reviewList[] = $data;
+        }
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing feedbacks.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingFeedbacks($orderBy = 'id_desc')
+    {
+        if(!common::hasPriv('feedback', 'review')) return array();
+        if($this->config->edition == 'open') return array();
+
+        $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
+        $reviewList = array();
+        foreach($feedbacks as $feedback)
+        {
+            $data = new stdclass();
+            $data->id     = $feedback->id;
+            $data->title  = $feedback->title;
+            $data->type   = 'feedback';
+            $data->time   = $feedback->openedDate;
+            $data->status = $feedback->status;
+            $reviewList[] = $data;
+        }
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewing OA.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingOA($orderBy = 'status')
+    {
+        if($this->config->edition == 'open') return array();
+
+        $users   = $this->loadModel('user')->getPairs('noletter');
+        $account = $this->app->user->account;
+
+        /* Get dept info. */
+        $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
+        $allDeptList['0'] = '/';
+        $managedDeptList = array();
+        $tmpDept = $this->dept->getDeptManagedByMe($account);
+        foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
+
+        $oa = array();
+        if(common::hasPriv('attend',   'review')) $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
+        if(common::hasPriv('leave',    'review')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('overtime', 'review')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('makeup',   'review')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('lieu',     'review')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
+
+        $reviewList = array();
+        foreach($oa as $type => $reviewings)
+        {
+            foreach($reviewings as $object)
+            {
+                $review = new stdclass();
+                $review->id     = $object->id;
+                $review->type   = $type;
+                $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
+                $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
+                if($type == 'attend')
+                {
+                    $review->title = zget($users, $object->account) . ': ' . $object->date . $this->lang->attend->statusList[$object->status ];
+                }
+                else
+                {
+                    $review->title = zget($users, $object->createdBy) . ': ' . $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5);
+                }
+                $reviewList[] = $review;
+            }
+        }
+
+        return $reviewList;
+    }
 }

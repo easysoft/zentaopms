@@ -4,69 +4,124 @@
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if($app->rawMethod == 'work'):?>
+    <?php foreach($lang->my->auditMenu as $key => $type):?>
+    <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
+    <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key&param=&orderBy=time_desc"), '<span class="text">' . $type . '</span>', '', 'class="btn btn-link ' . $active .'"');?>
+    <?php endforeach;?>
+    <?php else:?>
     <?php foreach($lang->review->browseTypeList as $key => $type):?>
     <?php if(in_array($key, array('all', 'done', 'reviewing'))) continue;?>
-    <?php if($app->rawMethod == 'work' && in_array($key, array('reviewedbyme', 'createdbyme', 'wait'))) continue;?>
     <?php if($app->rawMethod == 'contribute' && $key == 'wait') continue;?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php $recTotalLabel = $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>": '';?>
-    <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key"), '<span class="text">' . $type . '</span>' . $recTotalLabel, '', 'class="btn btn-link ' . $active .'"');?>
+    <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key&param=&orderBy=time_desc"), '<span class="text">' . $type . '</span>' . $recTotalLabel, '', 'class="btn btn-link ' . $active .'"');?>
     <?php endforeach;?>
-  </div>
-</div>
-<div id="mainContent" class="main-row fade">
-  <div class='main-col'>
-    <?php if(empty($reviewList)):?>
-    <div class="table-empty-tip">
-      <p>
-        <span class="text-muted"><?php echo $lang->noData;?></span>
-      </p>
-    </div>
-    <?php else:?>
-    <form class='main-table' method='post' id='myReviewForm'>
-      <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
-      </div>
-      <?php
-      $vars = "mode=$mode&browseType=$browseType&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
-      include $app->getModuleRoot() . 'common/view/datatable.html.php';
-
-      $setting = $this->datatable->getSetting('review');
-      foreach($setting as $key => $value)
-      {
-          if($value->id == 'actions') $setting[$key]->width = 80;
-      }
-
-      $widths  = $this->datatable->setFixedFieldWidth($setting);
-      ?>
-        <table class='table has-sort-head datatable' id='reviewList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
-          <thead>
-            <tr>
-              <?php
-              foreach($setting as $value)
-              {
-                  if($value->show)
-                  {
-                      $this->datatable->printHead($value, $orderBy, $vars, false);
-                  }
-              }
-              ?>
-            </tr>
-          </thead>
-          <tbody>
-          <?php foreach($reviewList as $review):?>
-          <tr data-id='<?php echo $review->id?>'>
-            <?php foreach($setting as $value) $this->my->reviewPrintCell($value, $review, $users, $products, $pendingList);?>
-          </tr>
-          <?php endforeach;?>
-          </tbody>
-        </table>
-      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
-    </form>
     <?php endif;?>
   </div>
 </div>
+<div id="mainContent">
+  <?php if(empty($reviewList)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->noData;?></span>
+    </p>
+  </div>
+  <?php else:?>
+  <form id='myReviewForm' class="main-table" method="post" data-ride="table">
+  <table class='table has-sort-head' id='reviewList'>
+    <thead>
+      <?php $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
+      <tr>
+        <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+        <th class='c-title'> <?php common::printOrderLink('title', $orderBy, $vars, $lang->my->audit->title);?></th>
+        <th class='c-type'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->audit->type);?></th>
+        <th class='c-date w-150px'> <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->audit->time);?></th>
+        <th class='c-status w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->my->audit->status);?></th>
+        <th class='c-actions-2'><?php echo $lang->actions?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($reviewList as $review):?>
+      <?php
+      $type     = $review->type;
+      $typeName = $lang->$type->common;
+      if($type == 'project') $type = 'review';
+
+      $statusList = $lang->$type->statusList;
+      if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
+      ?>
+      <tr>
+        <td class='c-id'>    <?php echo $review->id?></td>
+        <td class='c-title'> <?php echo $review->title?></td>
+        <td class='c-type'>  <?php echo $typeName;?></td>
+        <td class='c-time'>  <?php echo $review->time?></td>
+        <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
+        <td class='c-actions'>
+          <?php
+          $module = $type;
+          $method = 'review';
+          $params = "id=$review->id";
+
+          $reviewIcon = '<i class="icon-glasses"></i>';
+          $passIcon   = '<i class="icon-check"></i>';
+          $rejectIcon = '<i class="icon-close"></i>';
+
+          if($module == 'review')
+          {
+              $method = 'assess';
+              $params = "reviewID=$review->id&from={$this->app->rawMethod}";
+              common::printLink($module, $method, $params, $reviewIcon, '', "class='btn' title='{$lang->review->common}'");
+          }
+          elseif($module == 'attend')
+          {
+              extCommonModel::printLink('attend', 'review', "attendID={$review->id}&status=pass",   $passIcon,   "class='btn' title='{$lang->attend->reviewStatusList['pass']}' data-status='pass' data-toggle='ajax'");
+              extCommonModel::printLink('attend', 'review', "attendID={$review->id}&status=reject", $rejectIcon, "class='btn' title='{$lang->attend->reviewStatusList['reject']}' data-toggle='modal'");
+          }
+          elseif($module == 'leave')
+          {
+              $leaveMode = $review->status == 'pass' ? 'back' : '';
+              extCommonModel::printLink('leave', 'review', "id={$review->id}&status=pass&mode=$leaveMode",   $passIcon,   "class='btn' title='{$lang->$module->statusList['pass']}' data-status='pass' data-toggle='ajax'");
+              extCommonModel::printLink('leave', 'review', "id={$review->id}&status=reject&mode=$leaveMode", $rejectIcon, "class='btn' title='{$lang->$module->statusList['reject']}' data-toggle='modal'");
+          }
+          elseif(strpos('|makeup|overtime|lieu|', "|$module|") !== false)
+          {
+              extCommonModel::printLink($module, $method, "id={$review->id}&status=pass",   $passIcon,   "class='btn' title='{$lang->$module->statusList['pass']}' data-status='pass' data-toggle='ajax'");
+              extCommonModel::printLink($module, $method, "id={$review->id}&status=reject", $rejectIcon, "class='btn' title='{$lang->$module->statusList['reject']}' data-toggle='modal'");
+          }
+          else
+          {
+              common::printLink($module, $method, $params, $reviewIcon, '', "class='btn iframe' title='{$lang->review->common}'", true, true);
+          }
+          ?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  </form>
+  <?php endif;?>
+</div>
+<?php js::set('confirmReview', $lang->my->confirmReview);?>
 <script>
-$(function(){$('#myReviewForm').table();})
+$(function()
+{
+    $('[data-toggle=ajax]').click(function()
+    {
+        if($(this).hasClass('disabled')) return false;
+        var status = $(this).data('status');
+        if(status == 'undefined' || confirm(confirmReview))
+        {
+            $.get($(this).prop('href'), function(response)
+            {
+                if(response.message) $.zui.messager.success(response.message);
+                if(response.result == 'success') location.reload();
+                return false;
+            }, 'json');
+        }
+        return false;
+    });
+});
 </script>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php'?>
