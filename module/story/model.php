@@ -6040,4 +6040,25 @@ class storyModel extends model
         $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
     }
+
+    /**
+     * Get the last reviewer.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return string
+     */
+    public function getLastReviewer($storyID)
+    {
+        $lastReviewer = $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t1.objectID')->eq($storyID)
+            ->andWhere('t2.field')->in('reviewer,reviewers')
+            ->andWhere('t2.new')->ne('')
+            ->orderBy('t1.id_desc')
+            ->fetch('new');
+
+        return $lastReviewer;
+    }
 }
