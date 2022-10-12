@@ -20,7 +20,6 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->ticket->noTicket;?></span>
-      <?php echo html::a(inlink('browse', "browseType=$type"), "<i class='icon icon-plus'></i> " . $lang->ticket->create, '', "class='btn btn-info'")?>
     </p>
   </div>
   <?php else:?>
