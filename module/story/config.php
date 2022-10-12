@@ -77,18 +77,18 @@ $config->story->datatable->fieldList['title']['fixed']    = 'left';
 $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
+$config->story->datatable->fieldList['pri']['title']    = 'priAB';
+$config->story->datatable->fieldList['pri']['fixed']    = 'left';
+$config->story->datatable->fieldList['pri']['width']    = '50';
+$config->story->datatable->fieldList['pri']['required'] = 'no';
+$config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
+
 $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
 $config->story->datatable->fieldList['plan']['width']      = '90';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
-
-$config->story->datatable->fieldList['pri']['title']    = 'priAB';
-$config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '35';
-$config->story->datatable->fieldList['pri']['required'] = 'no';
-$config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
