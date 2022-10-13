@@ -383,26 +383,6 @@ class repoModel extends model
     }
 
     /**
-     * Get Repo pairs under current user privileges.
-     *
-     * @access public
-     * @return array
-     */
-    public function repoPairsForCurrentUser()
-    {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
-
-        $repoPairs = array();
-        foreach($repos as $repo)
-        {
-            $repo->acl = json_decode($repo->acl);
-            if($this->checkPriv($repo)) $repoPairs[$repo->id] = $repo->name;
-        }
-
-        return $repoPairs;
-    }
-
-    /**
      * Get repos group by repo type.
      *
      * @param  string type

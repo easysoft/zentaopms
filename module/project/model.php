@@ -2923,8 +2923,15 @@ class projectModel extends model
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($repoIDList)
-            ->fetchPairs('id', 'name');
+            ->fetchAll();
 
-        return $repos;
+        $repoPairs = array();
+        foreach($repos as $repo)
+        {
+            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
+            $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+        }
+
+        return $repoPairs;
     }
 }

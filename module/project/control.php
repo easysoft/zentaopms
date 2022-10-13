@@ -2297,7 +2297,7 @@ class project extends control
         }
 
         $this->view->title         = $this->lang->project->manageRepo;
-        $this->view->allRepos      = $this->loadModel('repo')->repoPairsForCurrentUser();
+        $this->view->allRepos      = $this->loadModel('repo')->getRepoPairs('');
         $this->view->linkedRepos   = $this->project->linkedRepoPairs($projectID);
         $this->view->unlinkedRepos = array();
 
