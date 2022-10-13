@@ -362,7 +362,7 @@ class executionModel extends model
         }
 
         /* Check the workload format and total. */
-        if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
+        if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent, $sprint->project);
 
         /* Set planDuration and realDuration. */
         if($this->config->edition == 'max')
@@ -1147,9 +1147,9 @@ class executionModel extends model
     /**
      * Check the workload format and total.
      *
-     * @param  string $type create|update
-     * @param  int    $percent
-     * @param  object $oldExecution
+     * @param  string     $type create|update
+     * @param  int        $percent
+     * @param  object|int $oldExecution
      * @access public
      * @return bool
      */
@@ -1170,7 +1170,7 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.parent')->eq($oldExecution->parent)
+                ->andWhere('t2.parent')->eq($oldExecution)
                 ->fetch('total');
 
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
