@@ -7169,6 +7169,15 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   key `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `zt_ticketrelation` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `ticketId` mediumint unsigned NOT NULL,
+  `objectId` mediumint NOT NULL,
+  `objectType` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ticketId` (`ticketId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 ALTER TABLE `zt_bug`   ADD `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `caseVersion`;
 ALTER TABLE `zt_story` ADD `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `fromBug`;
 ALTER TABLE `zt_user`  ADD `feedback` enum('0', '1') NOT NULL DEFAULT '0' AFTER `locked`;
