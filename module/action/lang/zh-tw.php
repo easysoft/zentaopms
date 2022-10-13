@@ -324,6 +324,7 @@ $lang->action->label->importfromgitlab      = '從Gitlab關聯創建了';
 $lang->action->label->archived              = '歸檔了';
 $lang->action->label->restore               = '還原了';
 $lang->action->label->mergedbranch          = '合併分支';
+$lang->action->label->managerepo            = '關聯了代碼庫';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();

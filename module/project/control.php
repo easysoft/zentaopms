@@ -2297,7 +2297,7 @@ class project extends control
         }
 
         $this->view->title         = $this->lang->project->manageRepo;
-        $this->view->allRepos      = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+        $this->view->allRepos      = $this->loadModel('repo')->getRepoPairs('');
         $this->view->linkedRepos   = $this->project->linkedRepoPairs($projectID);
         $this->view->unlinkedRepos = array();
 

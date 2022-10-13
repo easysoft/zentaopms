@@ -2900,6 +2900,9 @@ class projectModel extends model
 
             $this->dao->insert(TABLE_RELATION)->data($newRelation)->exec();
         }
+
+        $this->loadModel('action');
+        $this->action->create('project', $projectID, 'manageRepo');
     }
 
     /**
@@ -2920,8 +2923,15 @@ class projectModel extends model
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($repoIDList)
-            ->fetchPairs('id', 'name');
+            ->fetchAll();
 
-        return $repos;
+        $repoPairs = array();
+        foreach($repos as $repo)
+        {
+            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
+            $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+        }
+
+        return $repoPairs;
     }
 }
