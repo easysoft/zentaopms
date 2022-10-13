@@ -83,6 +83,7 @@ $lang->kanban->importPlan          = 'Plan';
 $lang->kanban->importRelease       = 'Release';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
+$lang->kanban->importTicket        = 'Ticket';
 $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
@@ -233,6 +234,7 @@ $lang->kanban->importObjectList['plans']      = 'Product Plan';
 $lang->kanban->importObjectList['releases']   = 'Release';
 $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
+$lang->kanban->importObjectList['tickets']    = 'Ticket';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
 
 $lang->kanban->showWIPList[1] = 'Show';
