@@ -11,7 +11,7 @@ $(document).on('click', '.task-toggle', function(e)
 
 $(function()
 {
-    toggleFold('#productplanForm', unfoldPlans, productID, 'productplan');
+    if(viewType != 'kanban') toggleFold('#productplanForm', unfoldPlans, productID, 'productplan');
     $('#productplanList tbody tr').each(function()
     {
         var $content = $(this).find('td.content');
