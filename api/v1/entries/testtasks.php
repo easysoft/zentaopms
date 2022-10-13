@@ -71,6 +71,7 @@ class testtasksEntry extends entry
      * POST method.
      *
      * @access public
+     * @param  int    $projectID
      * @return void
      */
     public function post($projectID = 0)
