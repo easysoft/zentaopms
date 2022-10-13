@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `type` varchar(30) NOT NULL,
   `desc` text NOT NULL,
   `openedBuild` varchar(255) NOT NULL,
-  `source` varchar(255) NOT NULL,
+  `feedback` mediumint(8) NOT NULL,
   `assignedTo` varchar(255) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `realStarted` datetime NOT NULL,
