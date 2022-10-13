@@ -77,10 +77,10 @@ class testtasksEntry extends entry
     public function post($projectID = 0)
     {
         if(!$projectID) $projectID = $this->param('project', 0);
-
         $productID   = $this->request('product', 0);
         $executionID = $this->request('execution', 0);
         $buildID     = $this->request('build', 0);
+        if(empty($projectID))   return $this->sendError(400, 'need project id!');
         if(empty($productID))   return $this->sendError(400, 'need product id!');
         if(empty($executionID)) return $this->sendError(400, 'need execution id!');
         if(empty($buildID))     return $this->sendError(400, 'need build id!');
