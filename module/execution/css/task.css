@@ -11,4 +11,3 @@
 #datatable-taskList .c-progress{padding-right: 8px; text-align: right;}
 .c-finishedBy, .c-lastEditedBy {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #executionTaskForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
-#executionTaskForm table thead th[data-width="auto"] {width: unset;}

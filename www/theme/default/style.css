@@ -136,6 +136,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #executionTableList .c-name .label-danger,
 
 .flex-between {display: flex !important;align-items: center;justify-content: space-between;}
+#toggleFold {float: right;}
 #toggleFold > .icon {display: inline-block; color: #838a9d; font-size: 16px; transition: transform .2s; transform: rotate(-90deg);}
 #toggleFold.collapsed > .icon {transform: rotate(90deg);}
 
