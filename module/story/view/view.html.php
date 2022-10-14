@@ -477,7 +477,8 @@
                     <?php
                     foreach($bugs as $bug)
                     {
-                        echo "<li title='$bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "#$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        $bugInfo = "#$bug->id" . '&nbsp<span class="status-bug status-' . $bug->status .'">' . $bugStatusList[$bug->status]  . '</span>&nbsp' . $bug->title;
+                        echo "<li title='$bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bugInfo, '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
