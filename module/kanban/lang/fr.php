@@ -234,7 +234,7 @@ $lang->kanban->importObjectList['plans']      = 'Product Plan';
 $lang->kanban->importObjectList['releases']   = 'Release';
 $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
-$lang->kanban->importObjectList['tickets']    = 'Ticket';
+if($this->config->edition != 'open') $lang->kanban->importObjectList['tickets'] = 'Ticket';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
 
 $lang->kanban->showWIPList[1] = 'Show';
