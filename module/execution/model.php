@@ -4612,7 +4612,7 @@ class executionModel extends model
         }
         if(empty($execution->children))
         {
-            echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+            echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name, '', 'class="text-ellipsis"');
             if(!helper::isZeroDate($execution->end))
             {
                 if($execution->status != 'closed')
