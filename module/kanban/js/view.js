@@ -778,37 +778,22 @@ function renderTicketItem(item, $item)
         '</div>'
     ].join('')).appendTo($header);
 
-    /* Print execution name. */
+    /* Print ticket name. */
     var $title = $titleBox.children('.title');
     var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
-        var icon = 'file-text-o';
-        var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
+        var icon = 'file-text';
         if(privs.includes('viewTicket') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('ticket', 'view', 'ticketID=' + item.fromID));
         if(!privs.includes('viewTicket') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
     }
-    //if(!$title.children('i').length)
-    //{
-    //    $title.append('<i class="icon icon-run"></i>' + item.title);
-    //}
     $title.attr('title', name);
-
-    if(item.delay)
-    {
-        $delayed = $titleBox.children('.delayed');
-        if(!$delayed.length)
-        {
-            $('<span class="delayed label label-danger label-badge">' + executionLang.delayed + '</span>').appendTo($titleBox);
-        }
-    }
-
     $item.data('card', item);
 
-    var $info = $item.children('.execInfo');
+    var $info = $item.children('.info');
     if(!$info.length) $info = $(
     [
-        '<div class="execInfo">',
+        '<div class="info">',
         '</div>'
     ].join('')).appendTo($item);
 
@@ -817,30 +802,33 @@ function renderTicketItem(item, $item)
     {
         if(item.deleted == '0')
         {
-            $statusBox = $('<span class="execStatus label label-' + item.objectStatus + '">' + executionLang.statusList[item.objectStatus] + '</span>').appendTo($info);
+            $statusBox = $('<span class="execStatus label label-' + item.objectStatus + '">' + ticketLang.statusList[item.objectStatus] + '</span>').appendTo($info);
         }
         else
         {
-            $statusBox = $('<span class="execStatus label label-deleted">' + executionLang.deleted + '</span>').appendTo($info);
+            $statusBox = $('<span class="execStatus label label-deleted">' + ticketLang.deleted + '</span>').appendTo($info);
         }
     }
 
     /* Display deadline of execution. */
-    var $date     = $info.children('.date');
-    var end       = $.zui.createDate(item.end);
-    var today     = new Date();
-    var labelType = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
-    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    if(item.deadline != '0000-00-00')
+    {
+        var $date     = $info.children('.date');
+        var deadline  = $.zui.createDate(item.deadline);
+        var today     = new Date();
+        var labelType = deadline.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
+        if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
 
-    $date.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+        $date.text($.zui.formatDate(deadline, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(deadline, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+    }
 
-    /* Display avatars of PM. */
+    /* Display avatars of ticket assignedTo. */
     var $user = $info.children('.user');
-    var user  = [item.PM];
-    if(users[item.PM])
+    var user  = [item.assignedTo];
+    if(users[item.assignedTo])
     {
         if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
-        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.PM]);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.assignedTo]);
     }
 }
 

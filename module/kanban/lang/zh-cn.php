@@ -234,7 +234,7 @@ $lang->kanban->importObjectList['plans']      = '计划';
 $lang->kanban->importObjectList['releases']   = '发布';
 $lang->kanban->importObjectList['builds']     = '版本';
 $lang->kanban->importObjectList['executions'] = $lang->execution->common;
-$lang->kanban->importObjectList['tickets']    = '工单';
+if($this->config->edition != 'open') $lang->kanban->importObjectList['tickets'] = '工单';
 $lang->kanban->importObjectList['cards']      = '其他看板卡片';
 
 $lang->kanban->showWIPList[1] = '显示';
