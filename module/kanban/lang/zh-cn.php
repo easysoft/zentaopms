@@ -83,6 +83,7 @@ $lang->kanban->importPlan          = '计划';
 $lang->kanban->importRelease       = '发布';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = '版本';
+$lang->kanban->importTicket        = '工单';
 $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
 $lang->kanban->allProducts         = '所有产品';
@@ -233,6 +234,7 @@ $lang->kanban->importObjectList['plans']      = '计划';
 $lang->kanban->importObjectList['releases']   = '发布';
 $lang->kanban->importObjectList['builds']     = '版本';
 $lang->kanban->importObjectList['executions'] = $lang->execution->common;
+if($this->config->edition != 'open') $lang->kanban->importObjectList['tickets'] = '工单';
 $lang->kanban->importObjectList['cards']      = '其他看板卡片';
 
 $lang->kanban->showWIPList[1] = '显示';

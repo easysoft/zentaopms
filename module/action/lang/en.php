@@ -215,6 +215,7 @@ $lang->action->desc->importedproductplan  = '$date, imported to <strong>$extra</
 $lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedticket       = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
 $lang->action->desc->tolib                = '$date, imported by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->updatetolib          = '$date, updated to ' . $lang->testcase->common . ' by  <strong>$actor</strong>.' . "\n";
