@@ -1,7 +1,10 @@
 $(document).ready(function()
 {
-    $("#inline").click(function(){$('#arrange').val('inline');this.form.submit();});
-    $("#appose").click(function(){$('#arrange').val('appose');this.form.submit();});
+    if(!browser || browser == 'ie')
+    {
+        $("#inline").click(function(){$('#arrange').val('inline');this.form.submit();});
+        $("#appose").click(function(){$('#arrange').val('appose');this.form.submit();});
+    }
     $(".label-exchange").click(function(){ $('#exchange').submit();});
 });
 
