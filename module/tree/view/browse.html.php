@@ -105,6 +105,8 @@ if($viewType == 'doc' or $viewType == 'api')
         </div>
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
+        <?php elseif($viewType == 'feedback'):?>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', '', '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">

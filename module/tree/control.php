@@ -48,7 +48,8 @@ class tree extends control
         else if($this->app->tab == 'feedback')
         {
             $products = $this->loadModel('feedback')->getGrantProducts();
-            if($viewType == 'feedback') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'feedback', '', '', '', false);
+            if(!$rootID) $rootID = key($products);
+            $this->loadModel('feedback')->setMenu($rootID);
         }
 
         /* According to the type, set the module root and modules. */

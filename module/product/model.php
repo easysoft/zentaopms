@@ -2311,6 +2311,10 @@ class productModel extends model
             $objectID = $module == 'project' ? 'projectID' : 'executionID';
             return helper::createLink($module, $method, "$objectID=$extra&productID=%s");
         }
+        elseif($module == 'feedback')
+        {
+            return helper::createLink($module, $method, "browseType=byProduct&productID=%s");
+        }
 
         return $link;
     }
