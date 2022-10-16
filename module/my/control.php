@@ -1113,6 +1113,9 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
+        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
+        $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $this->view->rooms      = array('' => '') + $this->loadModel('meetingroom')->getPairs();
 
         $this->display();
     }
