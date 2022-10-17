@@ -1315,7 +1315,7 @@ class story extends control
         $this->view->param              = $param;
         $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
         $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
-        $this->view->bugStatusList      = $this->loadModel('bug')->lang->bug->statusList;
+        $this->view->bugStatusList      = $this->app->loadLang('bug')->bug->statusList;
 
         $this->display();
     }
