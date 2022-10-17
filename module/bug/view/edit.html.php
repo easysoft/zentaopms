@@ -203,7 +203,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
             </table>
           </div>
           <div class='detail'>
-            <div class='detail-title'><?php echo $lang->bug->legendPRJExecStoryTask;?></div>
+            <div class='detail-title'><?php echo !empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask;?></div>
             <table class='table table-form'>
               <tbody>
                 <tr>
