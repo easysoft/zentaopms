@@ -48,7 +48,7 @@ js::set('storyType',     $storyType);
 #productStoryForm table tbody tr td.c-actions {overflow: visible;}
 #productStoryForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 </style>
-<?php if(isset($project->hasProduct) && empty($project->hasProduct)):?>
+<?php if(isset($project->hasProduct) && empty($project->hasProduct) && $project->model != 'scrum'):?>
 <style>
 #productStoryForm th.c-plan {display: none !important;}
 #productStoryForm td.c-plan {display: none !important;}
