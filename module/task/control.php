@@ -305,6 +305,10 @@ class task extends control
                     $executionAll[$key] = $values;
                 }
             }
+            else
+            {
+                $executionAll = $executionList;
+            }
         }
         $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
 
