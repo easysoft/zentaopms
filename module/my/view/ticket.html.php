@@ -52,13 +52,13 @@
         <tr>
           <td class='text-center'><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->id) : $ticket->id;?></td>
           <td><?php echo zget($products, $ticket->product);?></td>
-          <td><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->title) : $ticket->title;?></td>
-          <td><?php echo zget($lang->ticket->priList, $ticket->pri);?></td>
+          <td class='no-wrap' title="<?php echo $ticket->title;?>"><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->title) : $ticket->title;?></td>
+          <td><span class='label-pri label-pri-<?php echo $ticket->pri;?>' title='<?php echo zget($lang->ticket->priList, $ticket->pri, $ticket->pri);?>'><?php echo zget($lang->ticket->priList, $ticket->pri); ?></span></td>
           <td><?php echo zget($lang->ticket->statusList, $ticket->status);?></td>
           <td><?php echo zget($lang->ticket->typeList, $ticket->type);?></td>
           <td><?php echo zget($users, $ticket->openedBy);?></td>
           <td><?php echo $ticket->openedDate;?></td>
-          <td><?php echo zget($users, $ticket->assignedTo);?></td>
+          <td><?php echo $this->ticket->printAssignedHtml($ticket, $users);?></td>
           <td class='c-actions'><?php echo $this->ticket->buildOperateBrowseMenu($ticket->id);?></td>
           </tr>
         <?php endforeach;?>

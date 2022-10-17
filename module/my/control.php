@@ -1249,7 +1249,7 @@ EOF;
 
         $this->view->title      = $this->lang->ticket->browse;
         $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
         $this->view->tickets    = $tickets;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
