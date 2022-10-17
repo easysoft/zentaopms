@@ -713,8 +713,6 @@ class upgradeModel extends model
                 $this->addFlowActions('biz7.4');
                 $this->addFlowFields('biz7.4');
                 break;
-            case 'biz7_6':
-                //$this->processFeedbackModule();
         }
     }
 
@@ -7244,58 +7242,6 @@ class upgradeModel extends model
         foreach($storyFiles as $storyID => $files) $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($files)->where('story')->eq($storyID)->exec();
 
         return true;
-    }
-
-    /**
-     * Process feedback module
-     *
-     * @access public
-     * @return void
-     */
-    public function processFeedbackModule()
-    {
-        $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
-        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
-        $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
-
-        $allProductRelation = array();
-        foreach($products as $product)
-        {
-            $productID = $product->id;
-            $relation  = array();
-            foreach($modules as $moduleID => $module)
-            {
-                unset($module->id);
-                $module->root = $productID;
-                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-                $newModuleID = $this->dao->lastInsertID();
-                $relation[$moduleID] = $newModuleID;
-                $allProductRelation[$productID][$moduleID] = $newModuleID;
-                $newPaths = array();
-                foreach(explode(',', trim($module->path, ',')) as $path)
-                {
-                    if(isset($relation[$path])) $newPaths[] = $relation[$path];
-                }
-                $newPaths = join(',', $newPaths);
-                $parent   = !empty($module->parent) ? $relation[$module->parent] : 0;
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
-            }
-        }
-
-        /* Update feedback module */
-        foreach($feedbacks as $feedback)
-        {
-            $moduleID = $feedback->module;
-            $product  = $feedback->product;
-            if(empty($moduleID)) continue;
-            $newModuleID = isset($allProductRelation[$product][$moduleID]) ? $allProductRelation[$product][$moduleID] : 0;
-            if(empty($newModuleID)) continue;
-
-            $this->dao->update(TABLE_FEEDBACK)->set('module')->eq($newModuleID)->where('id')->eq($feedback->id)->exec();
-        }
-
-        /* Delete history module */
-        $this->dao->delete()->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->exec();
     }
 
     /*
