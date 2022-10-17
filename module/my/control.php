@@ -1228,12 +1228,24 @@ EOF;
     public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('ticket');
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
 
         $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
 
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+
+        if($browseType != 'bysearch')
+        {
+            $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+        }
+        else
+        {
+            $tickets = $this->ticket->getBySearch($queryID, $orderBy, $pager);
+        }
+
+        $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildTicketSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->ticket->browse;
         $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
