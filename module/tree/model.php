@@ -63,14 +63,15 @@ class treeModel extends model
      * Build the sql query.
      *
      * @param  int        $rootID
-     * @param  string     $type
+     * @param  int        $type
      * @param  int        $startModule
      * @param  string|int $branch
      * @param  string     $param
+     * @param  int        $grade
      * @access public
      * @return void
      */
-    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted')
+    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted', $grade = 0)
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -79,7 +80,7 @@ class treeModel extends model
             $startModule = $this->getById($startModule);
             if($startModule) $startModulePath = $startModule->path . '%';
         }
-
+        if($type == 'feedback' and strpos($param, 'noproduct') === false) $type = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -101,7 +102,8 @@ class treeModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('1=1')
             ->beginIF($type != 'feedback' or !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
-            ->andWhere('type')->eq($type)
+            ->andWhere('type')->in($type)
+            ->beginIF($grade)->andWhere('grade')->lt($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
             ->andWhere('(branch')->eq(0)
@@ -124,7 +126,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted')
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
     {
         if(empty($branch)) $branch = 0;
         if(defined('TUTORIAL'))
@@ -168,7 +170,11 @@ class treeModel extends model
         {
             $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
-            while($module = $stmt->fetch()) $modules[$module->id] = $module;
+            while($module = $stmt->fetch())
+            {
+                if($grade != 'all' and $module->grade > $grade) continue;
+                $modules[$module->id] = $module;
+            }
 
             foreach($modules as $module)
             {
@@ -1375,10 +1381,11 @@ class treeModel extends model
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
         {
+            if($type == 'feedback') $type = "$type,story";
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('parent')->eq((int)$moduleID)
-                ->andWhere('type')->eq($type)
+                ->andWhere('type')->in($type)
                 ->beginIF($branch !== 'all')
                 ->andWhere("(branch")->eq(0)
                 ->orWhere("branch")->eq((int)$branch)
@@ -1390,7 +1397,7 @@ class treeModel extends model
         }
 
         /* else get modules of its type and story type. */
-        if(strpos('task|case|bug', $type) !== false) $type = "$type,story";
+        if(strpos('task|case|bug|feedback', $type) !== false) $type = "$type,story";
 
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
