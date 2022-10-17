@@ -845,6 +845,7 @@ class projectModel extends model
      *
      * @param  array  $projectIdList
      * @param  string $model
+     * @param  string $param
      * @access public
      * @return array
      */
