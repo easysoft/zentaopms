@@ -14,8 +14,16 @@
 <?php js::set('mode', 'ticket');?>
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id='mainMenu' class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink($app->rawMethod, "mode=ticket&type=assignedtome"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>"   . ($browseType == 'assignedtome' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($browseType == 'assignedtome' ? ' btn-active-text' : '') . "'");
+    ?>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
+  </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workTicket'></div>
   <?php if(empty($tickets)):?>
   <div class="table-empty-tip">
     <p>
@@ -44,13 +52,13 @@
         <tr>
           <td class='text-center'><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->id) : $ticket->id;?></td>
           <td><?php echo zget($products, $ticket->product);?></td>
-          <td><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->title) : $ticket->title;?></td>
-          <td><?php echo zget($lang->ticket->priList, $ticket->pri);?></td>
+          <td class='no-wrap' title="<?php echo $ticket->title;?>"><?php echo $canView ? html::a($this->createLink('ticket', 'view', "id={$ticket->id}"), $ticket->title) : $ticket->title;?></td>
+          <td><span class='label-pri label-pri-<?php echo $ticket->pri;?>' title='<?php echo zget($lang->ticket->priList, $ticket->pri, $ticket->pri);?>'><?php echo zget($lang->ticket->priList, $ticket->pri); ?></span></td>
           <td><?php echo zget($lang->ticket->statusList, $ticket->status);?></td>
           <td><?php echo zget($lang->ticket->typeList, $ticket->type);?></td>
           <td><?php echo zget($users, $ticket->openedBy);?></td>
           <td><?php echo $ticket->openedDate;?></td>
-          <td><?php echo zget($users, $ticket->assignedTo);?></td>
+          <td><?php echo $this->ticket->printAssignedHtml($ticket, $users);?></td>
           <td class='c-actions'><?php echo $this->ticket->buildOperateBrowseMenu($ticket->id);?></td>
           </tr>
         <?php endforeach;?>
