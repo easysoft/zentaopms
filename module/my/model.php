@@ -923,7 +923,7 @@ class myModel extends model
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = array('' => '') + $this->loadModel('feedback')->getGrantProducts();
-        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs('bug');
+        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs();
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
         $productIDlist = array_keys($grantProducts);
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist);
