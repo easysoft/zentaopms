@@ -2254,8 +2254,9 @@ class executionModel extends model
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
-        $project = $this->loadModel('project')->getByID($execution->project);
-        if(empty($project->hasProduct))
+        $project = $execution;
+        if(strpos('sprint,stage,kanban', $execution->type) !== false) $project = $this->loadModel('project')->getByID($execution->project);
+        if(isset($project->hasProduct) && empty($project->hasProduct))
         {
             unset($this->config->product->search['fields']['product']);
 

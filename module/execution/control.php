@@ -3297,6 +3297,9 @@ class execution extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
+        $project = $object;
+        if(strpos('sprint,stage,kanban', $object->type) !== false) $project = $this->loadModel('project')->getByID($object->project);
+
         /* Assign. */
         $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
         $this->view->position[]   = html::a($browseLink, $object->name);
@@ -3312,7 +3315,7 @@ class execution extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
-        $this->view->project      = $this->loadModel('project')->getByID($object->project);
+        $this->view->project      = $project;
 
         $this->display();
     }
