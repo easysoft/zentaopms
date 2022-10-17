@@ -791,7 +791,7 @@ class mailModel extends model
         {
             if($objectType == 'ticket')
             {
-                $emails = $this->loadModel('ticket')->getContactEmails($objectID, $toList, $ccList);
+                $emails = $this->loadModel('ticket')->getContactEmails($objectID, $toList, $ccList, $action->action == 'closed');
                 $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
             }
             else
