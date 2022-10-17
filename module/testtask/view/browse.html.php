@@ -17,8 +17,9 @@
 <?php
 $scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
+$status = strtolower($status);
 ?>
-<?php js::set('status', strtolower($status));?>
+<?php js::set('status', $status);?>
 <style>
 #action-divider{display: inline-block; line-height: 0px;}
 </style>
