@@ -17,8 +17,9 @@
 <?php
 $scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
+$status = strtolower($status);
 ?>
-<?php js::set('status', strtolower($status));?>
+<?php js::set('status', $status);?>
 <style>
 #action-divider{display: inline-block; line-height: 0px;}
 </style>
@@ -89,11 +90,13 @@ $status = $this->session->testTaskVersionStatus;
     $waitCount    = 0;
     $testingCount = 0;
     $blockedCount = 0;
+    $doneCount    = 0;
     ?>
     <?php foreach($tasks as $task):?>
     <?php if($task->status == 'wait')    $waitCount ++;?>
     <?php if($task->status == 'doing')   $testingCount ++;?>
     <?php if($task->status == 'blocked') $blockedCount ++;?>
+    <?php if($task->status == 'done')    $doneCount ++;?>
     <tr class='text-left'>
       <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
@@ -118,7 +121,7 @@ $status = $this->session->testTaskVersionStatus;
     </tbody>
   </table>
   <div class='table-footer'>
-    <div class="table-statistic"><?php echo $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
+    <div class="table-statistic"><?php echo $status == 'totalstatus' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
   <?php endif;?>

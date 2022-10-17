@@ -80,7 +80,7 @@
     </tbody>
   </table>
   <div class="table-footer">
-    <div class="table-statistic"><?php echo $app->rawMethod == 'work' ? sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
+    <div class="table-statistic"><?php echo $app->rawMethod == 'work' ? sprintf($lang->testtask->mySummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));?></div>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
   <?php endif;?>
