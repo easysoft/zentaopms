@@ -114,7 +114,7 @@ $lang->my->menu->contribute['subMenu']->story       = "$lang->SRCommon|my|contri
 $lang->my->menu->contribute['subMenu']->bug         = "{$lang->bug->common}|my|contribute|mode=bug";
 $lang->my->menu->contribute['subMenu']->testcase    = "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme";
 $lang->my->menu->contribute['subMenu']->testtask    = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=all", 'subModule' => 'review');
 $lang->my->menu->contribute['subMenu']->doc         = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';

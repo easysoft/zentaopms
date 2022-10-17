@@ -2458,7 +2458,7 @@ class testcaseModel extends model
             }
             if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
             {
-                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'iframe', '', '', $this->lang->testcase->reviewAB);
+                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'showinonlybody iframe', '', '', $this->lang->testcase->reviewAB);
             }
         }
         else
@@ -2524,7 +2524,7 @@ class testcaseModel extends model
 
         if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
         {
-            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
+            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'showinonlybody iframe');
         }
         $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'browse', 'bug', '', 'iframe', '', "data-width='90%'");
         $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');

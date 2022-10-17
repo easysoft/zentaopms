@@ -182,7 +182,7 @@ class my extends control
             $riskCount = $pager->recTotal;
 
             /* Get the number of reviews assigned to me. */
-            $reviewList  = $this->my->getReviewList('all', 'time_desc', $pager);
+            $reviewList  = $this->my->getReviewingList('all', 'time_desc', $pager);
             $reviewCount = $pager->recTotal;
 
             /* Get the number of nc assigned to me. */
@@ -952,14 +952,13 @@ EOF;
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        if($this->config->edition == 'max' and ($browseType == 'reviewedbyme' or $browseType == 'createdbyme'))
+        if($this->app->rawMethod == 'contribute')
         {
-            $this->session->set('reviewList', $this->app->getURI(true));
-            $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+            $reviewList = $this->my->getReviewedList($browseType, $orderBy, $pager);
         }
         else
         {
-            $reviewList = $this->my->getReviewList($browseType, $orderBy, $pager);
+            $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
         $this->view->title       = $this->lang->review->common;

@@ -969,7 +969,7 @@ class myModel extends model
     }
 
     /**
-     * Get review list for me.
+     * Get reviewing list for me.
      *
      * @param  string $browseType
      * @param  string $orderBy
@@ -977,7 +977,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewList($browseType, $orderBy = 'time_desc', $pager = null)
+    public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
         if($this->app->rawMethod != 'work') return array();
         $reviewList = array();
@@ -1190,7 +1190,7 @@ class myModel extends model
                 $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
                 if($type == 'attend')
                 {
-                    $review->title = zget($users, $object->account) . ': ' . $object->date . $this->lang->attend->statusList[$object->status ];
+                    $review->title = zget($users, $object->account) . ': ' . $object->date . ' ' . $this->lang->attend->statusList[$object->status];
                 }
                 else
                 {
@@ -1200,6 +1200,92 @@ class myModel extends model
             }
         }
 
+        return $reviewList;
+    }
+
+    /**
+     * Get reviewed list.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewedList($browseType, $orderBy = 'time_desc', $pager = null)
+    {
+        $field = $orderBy;
+        $direction = 'asc';
+        if(strpos($orderBy, '_') !== false) list($field, $direction) = explode('_', $orderBy);
+
+        $actionField = '';
+        if($field == 'time')    $actionField = 'date';
+        if($field == 'type')    $actionField = 'objectType';
+        if($field == 'id')      $actionField = 'objectID';
+        if(empty($actionField)) $actionField = 'date';
+        $orderBy = $actionField . '_' . $direction;
+
+        $objectType = $this->config->my->reviewObjectType;
+        if($browseType != 'all')      $objectType = $browseType;
+        if($browseType == 'oa')       $objectType = $this->config->my->oaObjectType;
+        if($objectType == 'testcase') $objectType = 'case';
+
+        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`')->from(TABLE_ACTION)
+            ->where('action')->eq('reviewed')
+            ->andWhere('objectType')->in($objectType)
+            ->groupBy('objectType,objectID')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+        $objectTypeList = array();
+        foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
+
+        $objectGroup = array();
+        foreach($objectTypeList as $objectType => $idList)
+        {
+            $table = zget($this->config->objectTables, $objectType, '');
+            if(empty($table)) continue;
+
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+        }
+
+        foreach($objectGroup as $objectType => $idList)
+        {
+            $moduleName = $objectType;
+            if($objectType == 'case') $moduleName = 'testcase';
+            $this->app->loadLang($moduleName);
+        }
+        $users = $this->loadModel('user')->getPairs('noletter');
+
+        $reviewList = array();
+        foreach($actions as $action)
+        {
+            $objectType = $action->objectType;
+            if(!isset($objectGroup[$objectType])) continue;
+
+            $object = $objectGroup[$objectType][$action->objectID];
+            $review = new stdclass();
+            $review->id     = $object->id;
+            $review->type   = $objectType;
+            $review->time   = $action->date;
+            $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
+
+            if($review->type == 'review') $review->type = 'project';
+            if(isset($object->title))
+            {
+                $review->title = $object->title;
+            }
+            elseif($objectType == 'attend')
+            {
+                $review->title = zget($users, $object->account) . ': ' . $object->date . ' ' . $this->lang->attend->statusList[$object->status];
+            }
+            else
+            {
+                $review->title = zget($users, $object->createdBy) . ': ' . $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5);
+            }
+
+            $reviewList[] = $review;
+        }
         return $reviewList;
     }
 }

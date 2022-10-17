@@ -4,20 +4,13 @@
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php if($app->rawMethod == 'work'):?>
+    <?php $rawMethod = $app->rawMethod;?>
     <?php foreach($lang->my->auditMenu as $key => $type):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key&param=&orderBy=time_desc"), '<span class="text">' . $type . '</span>', '', 'class="btn btn-link ' . $active .'"');?>
-    <?php endforeach;?>
-    <?php else:?>
-    <?php foreach($lang->review->browseTypeList as $key => $type):?>
-    <?php if(in_array($key, array('all', 'done', 'reviewing'))) continue;?>
-    <?php if($app->rawMethod == 'contribute' && $key == 'wait') continue;?>
-    <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
-    <?php $recTotalLabel = $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>": '';?>
+    <?php $recTotalLabel = '';?>
+    <?php if($key == $browseType) $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key&param=&orderBy=time_desc"), '<span class="text">' . $type . '</span>' . $recTotalLabel, '', 'class="btn btn-link ' . $active .'"');?>
     <?php endforeach;?>
-    <?php endif;?>
   </div>
 </div>
 <div id="mainContent">
@@ -34,11 +27,13 @@
       <?php $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
       <tr>
         <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-        <th class='c-title'> <?php common::printOrderLink('title', $orderBy, $vars, $lang->my->audit->title);?></th>
+        <th class='c-title'> <?php $rawMethod == 'contribute' ? print($lang->my->audit->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->audit->title);?></th>
         <th class='c-type'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->audit->type);?></th>
         <th class='c-date w-150px'> <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->audit->time);?></th>
-        <th class='c-status w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->my->audit->status);?></th>
+        <th class='c-status w-80px'><?php $rawMethod == 'contribute' ? print($lang->my->audit->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->audit->status);?></th>
+        <?php if($rawMethod == 'work'):?>
         <th class='c-actions-2'><?php echo $lang->actions?></th>
+        <?php endif;?>
       </tr>
     </thead>
     <tbody>
@@ -52,11 +47,18 @@
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
       ?>
       <tr>
-        <td class='c-id'>    <?php echo $review->id?></td>
-        <td class='c-title'> <?php echo $review->title?></td>
+        <td class='c-id'><?php echo $review->id?></td>
+        <td class='c-title' title='<?php echo $review->title?>'>
+          <?php
+          $titleHtml = $review->title;
+          if(strpos(",{$config->my->oaObjectType},", ",$type,") === false) $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', true), $review->title, '', "class='iframe' data-width='90%'");
+          echo $titleHtml;
+          ?>
+        </td>
         <td class='c-type'>  <?php echo $typeName;?></td>
         <td class='c-time'>  <?php echo $review->time?></td>
         <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
+        <?php if($rawMethod == 'work'):?>
         <td class='c-actions'>
           <?php
           $module = $type;
@@ -70,7 +72,7 @@
           if($module == 'review')
           {
               $method = 'assess';
-              $params = "reviewID=$review->id&from={$this->app->rawMethod}";
+              $params = "reviewID=$review->id&from={$rawMethod}";
               common::printLink($module, $method, $params, $reviewIcon, '', "class='btn' title='{$lang->review->common}'");
           }
           elseif($module == 'attend')
@@ -95,6 +97,7 @@
           }
           ?>
         </td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
     </tbody>
