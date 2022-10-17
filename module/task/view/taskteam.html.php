@@ -60,11 +60,11 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <span class="team-number"><?php echo $i;?></span>
     <i class="icon icon-angle-down"></i>
   </td>
-  <td class='w-250px'>
+  <td class='w-240px'>
     <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
-  <td>
+  <td class='w-130px'>
     <?php if(empty($task->team)):?>
     <div class='input-group estimateBox'>
       <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
@@ -81,7 +81,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     </div>
     <?php endif;?>
   </td>
-  <td class='w-130px sort-handler'>
+  <td class='w-100px sort-handler'>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(empty($task->mode) or $task->mode == 'linear'):?>
