@@ -2209,4 +2209,27 @@ class repoModel extends model
 
         return $url;
     }
+
+    /**
+     * Remove projects without privileges.
+     *
+     * @param  array   $productIDList
+     * @param  array   $projectIDList
+     * @access public
+     * @return array
+     */
+    public function filterProject($productIDList, $projectIDList = array())
+    {
+        /* Get all projects that can be accessed. */
+        $accessProjects = array();
+        foreach($productIDList as $productID)
+        {
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $accessProjects = $accessProjects + $projects;
+        }
+
+        /* Get linked projects. */
+        $linkedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchPairs('id', 'name');
+        return $accessProjects + $linkedProjects; /* Merge projects can be accessed and exists.*/
+    }
 }
