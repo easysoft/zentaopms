@@ -24,7 +24,7 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
 $hourDisabled = $memberDisabled;
 if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = false;
 ?>
-<tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
+<tr class='member member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
   <td>
     <span class="team-number"><?php echo $i;?></span>
     <i class="icon icon-angle-down"></i>
@@ -55,7 +55,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php $i ++;?>
 <?php endforeach;?>
 <?php endif;?>
-<tr class='template teamTemplate member-wait'>
+<tr class='template teamTemplate member member-wait'>
   <td>
     <span class="team-number"><?php echo $i;?></span>
     <i class="icon icon-angle-down"></i>
