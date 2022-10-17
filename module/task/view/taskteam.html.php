@@ -4,6 +4,7 @@
 #taskTeamEditor .estimateBox input {background-color: #fff; border-right-width: 0px;}
 #taskTeamEditor input, #taskTeamEditor span, #taskTeamEditor .chosen-container > a {border-color: #eee;}
 </style>
+<?php $hiddenArrow = (empty($task->mode) or $task->mode == 'linear') ? '' : 'hidden';?>
 <?php $i = 1;?>
 <?php if(!empty($task->team)):?>
 <?php foreach($task->team as $member):?>
@@ -27,7 +28,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <tr class='member member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
   <td>
     <span class="team-number"><?php echo $i;?></span>
-    <i class="icon icon-angle-down"></i>
+    <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
@@ -58,7 +59,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <tr class='template teamTemplate member member-wait'>
   <td>
     <span class="team-number"><?php echo $i;?></span>
-    <i class="icon icon-angle-down"></i>
+    <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-250px'>
     <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
@@ -226,6 +227,10 @@ $(document).ready(function()
         {
             $newRow.removeClass('highlight');
         }, 1600);
+
+        var taskMode = $('#mode').val();
+        if(taskMode == 'multi') $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
+
         disableMembers();
         adjustButtons();
         setLineNumber();
@@ -278,9 +283,11 @@ $(document).ready(function()
         if($(this).val() == 'multi')
         {
             disableMembers();
+            $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
         }
         else
         {
+            $('#taskTeamEditor tr.member .icon-angle-down').removeClass('hidden');
             $taskTeamEditor.find('select#team').each(function()
             {
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
