@@ -14,8 +14,16 @@
 <?php js::set('mode', 'ticket');?>
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id='mainMenu' class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink($app->rawMethod, "mode=ticket&type=assignedtome"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>"   . ($browseType == 'assignedtome' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($browseType == 'assignedtome' ? ' btn-active-text' : '') . "'");
+    ?>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
+  </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workTicket'></div>
   <?php if(empty($tickets)):?>
   <div class="table-empty-tip">
     <p>
