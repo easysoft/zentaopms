@@ -1367,7 +1367,7 @@ class story extends control
         $position[] = $this->lang->story->view;
 
         $execution = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
-        $project   = empty($execution->project) ? $execution : $this->dao->findById($execution->project)->from(TABLE_PROJECT)->fetch();
+        $project   = $param ? $this->dao->findById($param)->from(TABLE_PROJECT)->fetch() : array();
 
         $this->view->title         = $title;
         $this->view->position      = $position;
@@ -1385,6 +1385,7 @@ class story extends control
         $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
         $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->execution     = $execution;
+        $this->view->project       = $project;
         $this->view->actions       = $this->action->getList('story', $storyID);
         $this->view->storyModule   = $storyModule;
         $this->view->modulePath    = $modulePath;

@@ -198,7 +198,7 @@
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$story->deleted) echo $this->story->buildOperateMenu($story, 'view');?>
+        <?php if(!$story->deleted) echo $this->story->buildOperateMenu($story, 'view', $project);?>
       </div>
     </div>
   </div>
