@@ -789,10 +789,7 @@ EOT;
     {
         $filePath = helper::safe64Decode($filePath);
         $fileBasePath = realpath(dirname($filePath));
-        if(strpos($fileBasePath, $this->app->appRoot . 'module') !== 0 && strpos($fileBasePath, $this->app->appRoot . 'extension') !== 0)
-        {
-            return;
-        }
+        if(strpos($fileBasePath, $this->app->appRoot . 'module') !== 0 && strpos($fileBasePath, $this->app->appRoot . 'extension') !== 0) return;
         if($action == 'extendModel')
         {
             $method = $this->api->getMethod($filePath, 'Model');
