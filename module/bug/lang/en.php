@@ -192,7 +192,7 @@ global $config;
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Files';
 $lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
-$lang->bug->legendExecStoryTask         = $lang->executionCommon . '/Story/Task';
+$lang->bug->legendExecStoryTask         = 'Porject/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
