@@ -1233,6 +1233,7 @@ class myModel extends model
         $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`')->from(TABLE_ACTION)
             ->where('action')->eq('reviewed')
             ->andWhere('objectType')->in($objectType)
+            ->andWhere('actor')->eq($this->app->user->account)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
             ->page($pager)
