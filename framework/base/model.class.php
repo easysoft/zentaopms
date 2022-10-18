@@ -203,32 +203,34 @@ class baseModel
      * @access  public
      * @return  object|bool  the model object or false if model file not exists.
      */
-    public function loadModel($moduleName, $appName = '')
+    public function loadModel($moduleName, $appName = '', $type = 'model')
     {
         if(empty($moduleName)) return false;
         if(empty($appName)) $appName = $this->appName;
         $moduleName = strtolower($moduleName);
 
+        $objectName = $type == 'model' ? $moduleName : $moduleName . ucfirst($type);
+
         global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
+        if(isset($loadedModels[$type][$appName][$moduleName]))
         {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            return $this->$moduleName;
+            $this->$objectName = $loadedModels[$type][$appName][$moduleName];
+            return $this->$objectName;
         }
 
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
+        $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
 
         if(!helper::import($modelFile)) return false;
-        $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
+        $modelClass = class_exists('ext' . $appName . $moduleName. $type) ? 'ext' . $appName . $moduleName . $type : $appName . $moduleName . $type;
         if(!class_exists($modelClass))
         {
-            $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+            $modelClass = class_exists('ext' . $moduleName. $type) ? 'ext' . $moduleName . $type : $moduleName . $type;
+            if(!class_exists($modelClass)) $this->app->triggerError(" The $type $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName = $loadedModels[$appName][$moduleName];
-        return $this->$moduleName;
+        $loadedModels[$type][$appName][$moduleName] = new $modelClass($appName);
+        $this->$objectName = $loadedModels[$type][$appName][$moduleName];
+        return $this->$objectName;
     }
 
     /**

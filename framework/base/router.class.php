@@ -1781,12 +1781,12 @@ class baseRouter
      * @access  public
      * @return  string the model file
      */
-    public function setModelFile($moduleName, $appName = '')
+    public function setModelFile($moduleName, $appName = '', $type = 'model')
     {
         if($appName == '') $appName = $this->getAppName();
 
         /* 设置主model文件。 Set the main model file. */
-        $mainModelFile = $this->getModulePath($appName, $moduleName) . 'model.php';
+        $mainModelFile = $this->getModulePath($appName, $moduleName) . "{$type}.php";
         if($this->config->framework->extensionLevel == 0) return $mainModelFile;
 
         /* 计算扩展的文件和hook文件。Compute the extension files and hook files. */
@@ -1795,7 +1795,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, 'model');
+        $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, $type);
         foreach($modelExtPaths as $extType => $modelExtPath)
         {
             if(empty($modelExtPath)) continue;
@@ -1817,7 +1817,7 @@ class baseRouter
         $extModelPrefix = $this->config->edition . DS . $this->config->vision . DS;
         if($siteExtended and !empty($this->siteCode)) $extModelPrefix .= $this->siteCode[0] . DS . $this->siteCode;
 
-        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . $extModelPrefix;
+        $mergedModelDir  = $this->getTmpRoot() . $type . DS . $extModelPrefix;
         $mergedModelFile = $mergedModelDir . $moduleName . '.php';
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
@@ -1825,8 +1825,8 @@ class baseRouter
         if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
 
         /* 合并扩展和hook文件。Merge the extension and hook files. */
-        $modelLines = $this->mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir);
-        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles);
+        $modelLines = $this->mergeModelExtFiles($moduleName, $extFiles, $mergedModelDir, $type);
+        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles, $type);
 
         return $mergedModelFile;
     }
@@ -1873,22 +1873,22 @@ class baseRouter
      * 将model的扩展文件合并在一起。Merge model ext files.
      *
      * @param  string    $moduleName
-     * @param  string    $mainModelFile
      * @param  array     $extFiles
      * @param  string    $mergedModelDir
+     * @param  string    $type
      * @access public
      * @return void
      */
-    public function mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir)
+    public function mergeModelExtFiles($moduleName, $extFiles, $mergedModelDir, $type = 'model')
     {
         /* 设置类名。Set the class names. */
-        $modelClass    = "{$moduleName}Model";
+        $modelClass    = $moduleName . ucfirst($type);
         $tmpModelClass = "tmpExt$modelClass";
 
         /* 开始拼装代码。Prepare the codes. */
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'model.php');\n";
+        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'$type.php');\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
@@ -1917,10 +1917,10 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles)
+    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles, $type = 'model')
     {
         /* 定义相关变量。Init vars. */
-        $modelClass    = $moduleName . 'Model';
+        $modelClass    = $moduleName . ucfirst($type);
         $extModelClass = 'ext' . $modelClass;
         $tmpModelClass = 'tmpExt' . $modelClass;
         $tmpModelFile  = $mergedModelDir . "tmp$moduleName.php";

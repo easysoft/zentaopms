@@ -270,20 +270,22 @@ class baseControl
      * @access  public
      * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName = '', $appName = '')
+    public function loadModel($moduleName = '', $appName = '', $type = 'model')
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
 
+        $objectName = $type == 'model' ? $moduleName : $moduleName . ucfirst($type);
+
         global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
+        if(isset($loadedModels[$type][$appName][$moduleName]))
         {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            $this->dao         = $this->$moduleName->dao;
-            return $this->$moduleName;
+            $this->$objectName = $loadedModels[$type][$appName][$moduleName];
+            $this->dao         = $this->$objectName->dao;
+            return $this->$objectName;
         }
 
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
+        $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
 
         /**
          * 如果没有model文件，尝试加载config配置信息。
@@ -298,24 +300,24 @@ class baseControl
         }
 
         /**
-         * 如果没有扩展文件，model类名是$moduleName + 'model'，如果有扩展，还需要增加ext前缀。
-         * If no extension file, model class name is $moduleName + 'model', else with 'ext' as the prefix.
+         * 如果没有扩展文件，model类名是$moduleName + $type，如果有扩展，还需要增加ext前缀。
+         * If no extension file, model class name is $moduleName + $type, else with 'ext' as the prefix.
          */
-        $modelClass = class_exists('ext' . $appName . $moduleName . 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
+        $modelClass = class_exists('ext' . $appName . $moduleName . $type) ? 'ext' . $appName . $moduleName . $type : $appName . $moduleName . $type;
         if(!class_exists($modelClass))
         {
-            $modelClass = class_exists('ext' . $moduleName . 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+            $modelClass = class_exists('ext' . $moduleName . $type) ? 'ext' . $moduleName . $type : $moduleName . $type;
+            if(!class_exists($modelClass)) $this->app->triggerError(" The $type $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
         /**
-         * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
-         * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
+         * 初始化model对象，在control对象中可以通过$this->$objectName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
+         * Init the model object thus you can try $this->$objectName to access it. Also assign the $dao object as a member of control object.
          */
         $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName                   = $loadedModels[$appName][$moduleName];
-        $this->dao                           = $this->$moduleName->dao;
-        return $this->$moduleName;
+        $this->$objectName                   = $loadedModels[$appName][$moduleName];
+        $this->dao                           = $this->$objectName->dao;
+        return $this->$objectName;
     }
 
     /**
