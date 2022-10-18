@@ -216,6 +216,7 @@ $config->openMethods[] = 'kanban.importplan';
 $config->openMethods[] = 'kanban.importrelease';
 $config->openMethods[] = 'kanban.importexecution';
 $config->openMethods[] = 'kanban.importbuild';
+$config->openMethods[] = 'kanban.importticket';
 $config->openMethods[] = 'kanban.activatecard';
 $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
@@ -402,4 +403,4 @@ $config->waterfallModules = array('workestimation', 'durationestimation', 'budge
 $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
-$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
