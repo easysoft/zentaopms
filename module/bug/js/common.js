@@ -327,8 +327,6 @@ function loadProductExecutions(productID, projectID = 0)
     branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    console.log(projectID);
-    console.log(projectExecutionPairs);
     if(projectExecutionPairs[projectID] !== undefined)
     {
         $('#executionIdBox').parents('.executionBox').hide();
