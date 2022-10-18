@@ -18,8 +18,8 @@
 <?php js::set('members', $members);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
-<?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->task->error->notempty, $lang->task->estimate))?>
+<?php js::set('leftNotEmpty', sprintf($lang->task->error->notempty, $lang->task->left))?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

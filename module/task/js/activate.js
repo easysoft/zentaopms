@@ -16,11 +16,11 @@ $('#confirmButton').click(function()
 
         var estimate = parseFloat($tr.find('[name^=teamEstimate]').val());
         if(!isNaN(estimate)) totalEstimate += estimate;
-        if($tr.hasClass('member-wait') && (isNaN(estimate) || estimate == 0))
+        if($tr.hasClass('member-wait') && (isNaN(estimate) || estimate <= 0))
         {
-              bootbox.alert(account + ' ' + estimateNotEmpty);
-              error = true;
-              return false;
+            bootbox.alert(account + ' ' + estimateNotEmpty);
+            error = true;
+            return false;
         }
 
         var consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
@@ -29,7 +29,7 @@ $('#confirmButton').click(function()
         var $left = $tr.find('[name^=teamLeft]');
         var left  = parseFloat($left.val());
         if(!isNaN(left)) totalLeft += left;
-        if(!$left.prop('readonly') && $tr.hasClass('member-wait') && (isNaN(left) || left == 0))
+        if(!$left.prop('readonly') && $tr.hasClass('member-wait') && (isNaN(left) || left <= 0))
         {
               bootbox.alert(account + ' ' + leftNotEmpty);
               error = true;
