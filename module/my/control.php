@@ -156,6 +156,7 @@ class my extends control
         $ncCount      = 0;
         $qaCount      = 0;
         $meetingCount = 0;
+        $ticketCount  = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
 
         $feedbackCount = 0;
