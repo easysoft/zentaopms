@@ -407,6 +407,7 @@ $lang->bug->action->linked2build         = array('main' => '$date, 由 <strong>$
 $lang->bug->action->unlinkedfrombuild    = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
 $lang->bug->action->unlinkedfromrelease  = array('main' => '$date, 由 <strong>$actor</strong> 从发布 <strong>$extra</strong> 移除。');
 $lang->bug->action->linked2release       = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
+$lang->bug->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
 $lang->bug->action->linkrelatedbug       = array('main' => '$date, 由 <strong>$actor</strong> 关联相关Bug <strong>$extra</strong>。');
 $lang->bug->action->unlinkrelatedbug     = array('main' => '$date, 由 <strong>$actor</strong> 移除相关Bug <strong>$extra</strong>。');

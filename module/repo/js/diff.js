@@ -92,8 +92,8 @@ function createTab(filename, filepath)
 
 $(document).ready(function()
 {
-    var diffAppose = true;
-    $('.dropdown #appose').hide();
+    var diffAppose = false;
+    $('.dropdown #inline').hide();
 
     if(!browser || browser == 'ie')
     {

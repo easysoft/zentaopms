@@ -33,8 +33,8 @@ js::set('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$ol
           <ul class="dropdown-menu">
             <?php
             if(common::hasPriv('repo', 'download')) echo '<li>' . html::a($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevison=$oldRevision&toRevision=$newRevision&type=path"), '<i class="icon icon-download"></i> ' . $lang->repo->downloadDiff, 'hiddenwin') . '</li>';
-            echo '<li>' . html::a('javascript:;', '<i class="icon icon-download"></i> ' . $lang->repo->viewDiffList['inline'], '', "class='inline-appose' id='inline'") . '</li>';
-            echo '<li>' . html::a('javascript:;', '<i class="icon icon-download"></i> ' . $lang->repo->viewDiffList['appose'], '', "class='inline-appose' id='appose'") . '</li>';
+            echo '<li>' . html::a('javascript:;', '<i class="icon icon-inline"></i> ' . $lang->repo->viewDiffList['inline'], '', "class='inline-appose' id='inline'") . '</li>';
+            echo '<li>' . html::a('javascript:;', '<i class="icon icon-appose"></i> ' . $lang->repo->viewDiffList['appose'], '', "class='inline-appose' id='appose'") . '</li>';
             ?>
           </ul>
         </div>

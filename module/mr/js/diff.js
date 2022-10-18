@@ -159,8 +159,8 @@ $(document).ready(function()
 {
     if(browser != 'ie')
     {
-        var diffAppose = true;
-        $('.dropdown #appose').hide();
+        var diffAppose = false;
+        $('.dropdown #inline').hide();
 
         if(!browser || browser == 'ie')
         {

@@ -278,7 +278,7 @@ $(function()
                     inDiffEditor:         true,
                     contextmenu:          true,
                     automaticLayout:      true,
-                    renderSideBySide:     true,
+                    renderSideBySide:     false,
                     EditorMinimapOptions: {enabled: false},
                     lineNumbers: function(number)
                     {
