@@ -37,12 +37,18 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
   </td>
   <td>
     <div class='input-group'>
-      <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-      <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-      <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->estimate}'" . ($hourDisabled ? ' readonly' : ''))?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->consumed}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->left}'" . ($hourDisabled ? ' readonly' : ''))?>
+        <label class="input-control-icon-right">h</label>
+      </div>
     </div>
   </td>
   <td class='w-130px sort-handler'>
@@ -73,12 +79,18 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     </div>
     <?php else:?>
     <div class='input-group'>
-      <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-      <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-      <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimate}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->consumed}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->left}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
     </div>
     <?php endif;?>
   </td>
