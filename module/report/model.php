@@ -1202,7 +1202,7 @@ class reportModel extends model
      */
     public function getProjectExecutions()
     {
-        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status')
+        $executions = $this->dao->select('t1.id, t1.name, t2.name as projectname, t1.status, t1.multiple')
             ->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
@@ -1210,7 +1210,11 @@ class reportModel extends model
             ->fetchAll();
 
         $pairs = array();
-        foreach($executions as $execution) $pairs[$execution->id] = $execution->projectname . '/' .$execution->name;
+        foreach($executions as $execution)
+        {
+            if($execution->multiple)  $pairs[$execution->id] = $execution->projectname . '/' . $execution->name;
+            if(!$execution->multiple) $pairs[$execution->id] = $execution->projectname;
+        }
 
         return $pairs;
     }
