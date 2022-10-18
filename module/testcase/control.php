@@ -421,8 +421,9 @@ class testcase extends control
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
-            $useSession         = $this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false;
-            $response['locate'] = $useSession ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $useSession         = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
+            $locateLink         = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $response['locate'] = $useSession ? $this->session->caseList : $locateLink;
             return $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -975,13 +976,16 @@ class testcase extends control
             $moduleIdList = $case->module;
             if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
+            $moduleIdList = (!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) ? 0 : $moduleIdList;
+            $stories = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
+            $this->view->stories          = $stories;
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);

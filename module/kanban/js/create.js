@@ -49,6 +49,7 @@ $(function()
     {
         setCopyKanban($(this).data('id')); $('#copyKanbanModal').modal('hide');
     });
+    handleKanbanWidthAttr();
 })
 
 /**

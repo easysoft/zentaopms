@@ -33,6 +33,7 @@ $lang->design->affectedStory = "影响{$lang->SRCommon}";
 $lang->design->affectedTasks = '影响任务';
 $lang->design->reviewObject  = '评审对象';
 $lang->design->createdBy     = '由谁创建';
+$lang->design->createdByAB   = '创建者';
 $lang->design->createdDate   = '创建时间';
 $lang->design->basicInfo     = '基本信息';
 $lang->design->noAssigned    = '未指派';

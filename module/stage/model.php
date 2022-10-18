@@ -72,9 +72,9 @@ class stageModel extends model
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
                 ->checkIF($stage->percent != '', 'percent', 'float')
                 ->exec();
-            
-            if(dao::isError()) return false; 
-            
+
+            if(dao::isError()) return false;
+
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
         }
@@ -117,13 +117,24 @@ class stageModel extends model
      * Get stages.
      *
      * @param  string $orderBy
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getStages($orderBy = 'id_desc')
+    public function getStages($orderBy = 'id_desc', $projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
-    }
+        $stages = $this->dao->select('t1.id,name,type,percent,openedBy as createdBy,begin as createdDate,lastEditedBy as editedBy,end as editedDate,deleted')
+            ->from(TABLE_EXECUTION)->alias('t1')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+        $stages = !empty($stages) ? $stages : $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
+        return $stages;
+     }
 
     /**
      * Get pairs of stage.

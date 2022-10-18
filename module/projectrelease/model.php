@@ -49,7 +49,7 @@ class projectreleaseModel extends model
      * @access public
      * @return array
      */
-    public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc')
+    public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -61,6 +61,7 @@ class projectreleaseModel extends model
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll();
     }
 

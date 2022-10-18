@@ -1485,8 +1485,8 @@ function initKanban($kanban)
         maxColHeight:          510,
         calcColHeight:         calcColHeight,
         fluidBoardWidth:       fluidBoard,
-        minColWidth:           285,
-        maxColWidth:           285,
+        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:            cardHeight,
         displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:      kanbanLang.createColumn,
@@ -1514,6 +1514,13 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 }
 
 /**
@@ -1543,7 +1550,7 @@ $(function()
         resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
-    $('.region-header').on('click', '.action', hideKanbanAction);
+    $('#regionTabs, .region-header').on('click', '.action', hideKanbanAction);
     $('#TRAction').on('click', '.btn', hideKanbanAction);
 
     /* Hide action box when user click document */
@@ -1594,6 +1601,7 @@ $(function()
     $(window).on('resize', function(a)
     {
         adjustAddBtnPosition();
+        initRegionTabs();
     });
 
     resetLaneHeight();
@@ -1645,7 +1653,6 @@ $(function()
 
     distance    = 0;
     radiusWidth = 10;
-    $(window).on('resize', initRegionTabs);
     initRegionTabs();
 
     $('.leftBtn').click(function()

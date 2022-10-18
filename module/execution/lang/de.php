@@ -54,6 +54,7 @@ $lang->execution->end                 = 'Ende';
 $lang->execution->dateRange           = 'Dauer';
 $lang->execution->realBeganAB         = 'Actual Begin';
 $lang->execution->realEndAB           = 'Actual End';
+$lang->execution->teamCount           = 'Anzahl der Personen';
 $lang->execution->realBegan           = 'Tatsächlicher Start';
 $lang->execution->realEnd             = 'Tatsächliches Ende';
 $lang->execution->to                  = 'An';
@@ -341,6 +342,9 @@ $lang->execution->stats                = '<strong>%s</strong> Verfügbar, <stron
 $lang->execution->taskSummary          = "Aufgaben auf dieser Seite: <strong>%s</strong> Total, <strong>%s</strong> Wartend, <strong>%s</strong> In Arbeit;  &nbsp;&nbsp;&nbsp;  Stunden : <strong>%s</strong> geplant., <strong>%s</strong> genutzt, <strong>%s</strong> Rest.";
 $lang->execution->pageSummary          = "Aufgaben auf dieser Seite:  <strong>%total%</strong>, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
 $lang->execution->checkedSummary       = " <strong>%total%</strong> Geprüft, <strong>%wait%</strong> Wartend, <strong>%doing%</strong> In Arbeit;    Stunden: <strong>%estimate%</strong>  geplant, <strong>%consumed%</strong> genutzt, <strong>%left%</strong> Rest.";
+$lang->execution->executionSummary     = "Total executions: <strong>%s</strong>.";
+$lang->execution->pageExecSummary      = "Total executions: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
+$lang->execution->checkedExecSummary   = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.";
 $lang->execution->memberHoursAB        = "%s hat <strong>%s</strong> Stunden";
 $lang->execution->memberHours          = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Arbeitsstunden</div><div class="segment-value">%s</div></div></div></div>';
 $lang->execution->countSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Aufgaben</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">In Arbeit</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Wait</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -415,7 +419,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is not ac
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
-$lang->execution->checkedExecutions           = 'Seleted %s items';
+$lang->execution->checkedExecutions           = "Seleted %s {$lang->executionCommon}.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -467,7 +471,7 @@ $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Kanban Einstellung";
 $lang->execution->setKanban     = "Kanban Einstellung";
 $lang->execution->resetKanban   = "Einstellungen zurücksetzen";
-$lang->execution->printKanban   = "Kanban drucken";
+$lang->execution->printKanban   = "drucken Kanban";
 $lang->execution->fullScreen    = "Full Screen";
 $lang->execution->bugList       = "Bugs";
 
@@ -487,7 +491,7 @@ $lang->kanbanSetting->optionList['0'] = 'Verstecken';
 $lang->kanbanSetting->optionList['1'] = 'Anzeigen';
 
 $lang->printKanban = new stdclass();
-$lang->printKanban->common  = 'Kanban drucken';
+$lang->printKanban->common  = 'drucken Kanban';
 $lang->printKanban->content = 'Inhanlt';
 $lang->printKanban->print   = 'Drucken';
 

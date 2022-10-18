@@ -90,6 +90,9 @@ $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '列标题对齐方式';
 $lang->kanban->allUsers            = '加载所有用户';
+$lang->kanban->colWidth            = '列宽';
+$lang->kanban->minColWidth         = '最小列宽';
+$lang->kanban->maxColWidth         = '最大列宽';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -353,8 +356,8 @@ $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 $lang->kanbanlane->heightTypeList['auto']   = "自适应<span class='tip'>（根据卡片高度和泳道名称高度自适应）</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "自定义<span class='tip'>（根据卡片数量自定义泳道高度）</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = "固定列宽<span class='tip'>（所有列保持一致的宽度）</span>";
-$lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽<span class='tip'>（根据泳道宽度自适应）</span>";
+$lang->kanbancolumn->fluidBoardList['0'] = "固定列宽<i class='radio-text-divider'></i>宽度";
+$lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽<i class='radio-text-divider'></i>列宽范围";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~32767 的正整数。';

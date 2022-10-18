@@ -64,9 +64,19 @@
         </tr>
       </thead>
       <tbody>
+        <?php
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        ?>
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
+        <?php if($task->status == 'wait')    $waitCount ++;?>
+        <?php if($task->status == 'doing')   $testingCount ++;?>
+        <?php if($task->status == 'blocked') $blockedCount ++;?>
+        <?php if($task->status == 'done')    $doneCount ++;?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
@@ -117,6 +127,7 @@
       </tbody>
     </table>
     <div class="table-footer">
+      <div class="table-statistic"><?php echo sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

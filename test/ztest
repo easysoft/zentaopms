@@ -202,6 +202,9 @@ switch($argv[1])
     case 'webhook':
         ztfRun('model/webhook');
         break;
+    case 'repo':
+        ztfRun('model/repo');
+        break;
 
     default:
         ztfExtract($argv[1]);

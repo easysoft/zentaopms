@@ -488,7 +488,8 @@ class block extends control
                 return true;
             }
 
-            $blocks     = json_decode($blocks, true);
+            $blocks = json_decode($blocks, true);
+            if(empty($blocks)) $blocks = array();
             $blockPairs = array('' => '') + $blocks;
 
             echo '<div class="form-group">';

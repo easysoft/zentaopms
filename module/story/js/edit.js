@@ -33,7 +33,7 @@ $(function()
 
     $('#needNotReview').on('change', function()
     {
-        $('#reviewer').text('').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        $('#reviewer').val($(this).is(':checked') ? '' : lastReviewer).attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
         if($(this).is(':checked'))
         {
             $('#reviewerBox').removeClass('required');
@@ -80,10 +80,13 @@ $(function()
         modalTrigger.show();
     });
 
-    $('#duplicateStory').picker(
+    if($('#duplicateStory').length > 0)
     {
-        disableEmptySearch : true,
-        dropWidth : 'auto',
-        maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
-    });
+        $('#duplicateStory').picker(
+        {
+            disableEmptySearch : true,
+            dropWidth : 'auto',
+            maxAutoDropWidth : document.body.scrollWidth + document.getElementById('duplicateStory').offsetWidth - document.getElementById('duplicateStoryBox').getBoundingClientRect().right
+        });
+    }
 })

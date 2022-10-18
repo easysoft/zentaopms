@@ -55,7 +55,7 @@ $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto
 global $lang, $app;
 $config->story->datatable = new stdclass();
 
-$config->story->datatable->defaultField = array('id', 'title', 'plan', 'pri', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
+$config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
@@ -77,18 +77,18 @@ $config->story->datatable->fieldList['title']['fixed']    = 'left';
 $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
+$config->story->datatable->fieldList['pri']['title']    = 'priAB';
+$config->story->datatable->fieldList['pri']['fixed']    = 'left';
+$config->story->datatable->fieldList['pri']['width']    = '50';
+$config->story->datatable->fieldList['pri']['required'] = 'no';
+$config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
+
 $config->story->datatable->fieldList['plan']['title']      = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']      = 'no';
 $config->story->datatable->fieldList['plan']['width']      = '90';
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
-
-$config->story->datatable->fieldList['pri']['title']    = 'priAB';
-$config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '35';
-$config->story->datatable->fieldList['pri']['required'] = 'no';
-$config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
@@ -254,5 +254,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '200';
+$config->story->datatable->fieldList['actions']['width']    = $app->tab == 'project' ? '220' : '210';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

@@ -617,17 +617,17 @@ class projectModel extends model
             }
             elseif($module == 'repo')
             {
-                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s#app=project");
+                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . "#app=project";
             }
             elseif($module == 'doc')
             {
-                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s#app=project");
+                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . "#app=project";
             }
             elseif($module == 'build')
             {
                 if($method == 'create')
                 {
-                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s#app=project");
+                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s") . "#app=project";
                 }
                 else
                 {
@@ -660,7 +660,7 @@ class projectModel extends model
             {
                 if($method == 'projectsummary')
                 {
-                    $link = helper::createLink($module, $method, "projectID=%s#app=project");
+                    $link = helper::createLink($module, $method, "projectID=%s"). "#app=project";
                 }
                 else
                 {
@@ -1975,11 +1975,14 @@ class projectModel extends model
                 $class .= ' c-name';
                 $title  = "title={$project->code}";
             }
-
-            if($id == 'name')
+            elseif($id == 'name')
             {
                 $class .= ' text-left';
-                $title  = "title='{$project->name}'";
+                $title  = "title='{$project->name}" . ($this->config->vision == 'lite' ? "'" : "({$this->lang->project->{$project->model}})'");
+            }
+            elseif($id == 'PM')
+            {
+                $class .= ' c-manager';
             }
 
             if($id == 'end')
@@ -2018,9 +2021,6 @@ class projectModel extends model
                 case 'name':
                     $prefix = '';
                     $suffix = '';
-                    if($project->model === 'waterfall') $prefix = "<span class='project-type-label label label-outline label-warning'>{$this->lang->project->waterfall}</span> ";
-                    if($project->model === 'scrum') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
-                    if($project->model === 'kanban') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->kanban}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
@@ -2032,10 +2032,12 @@ class projectModel extends model
                     echo $project->code;
                     break;
                 case 'PM':
-                    $user     = $this->loadModel('user')->getByID($project->PM, 'account');
-                    $userID   = !empty($user) ? $user->id : '';
-                    $PMLink   = helper::createLink('user', 'profile', "userID=$userID", '', true);
-                    $userName = zget($users, $project->PM);
+                    $user       = $this->loadModel('user')->getByID($project->PM, 'account');
+                    $userID     = !empty($user) ? $user->id : '';
+                    $userAvatar = !empty($user) ? $user->avatar : '';
+                    $PMLink     = helper::createLink('user', 'profile', "userID=$userID", '', true);
+                    $userName   = zget($users, $project->PM);
+                    if($project->PM) echo html::smallAvatar(array('avatar' => $userAvatar, 'account' => $project->PM, 'name' => $userName), "avatar-circle avatar-{$project->PM}");
                     echo empty($project->PM) ? '' : html::a($PMLink, $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
                     break;
                 case 'begin':

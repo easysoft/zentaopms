@@ -334,7 +334,7 @@ EOF;
     {
         $this->loadModel('story');
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -399,7 +399,7 @@ EOF;
     {
         /* Save session. */
         $this->loadModel('story');
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -814,17 +814,18 @@ EOF;
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->position[] = $this->lang->my->project;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects   = $projects;
-        $this->view->PMList     = $PMList;
-        $this->view->pager      = $pager;
-        $this->view->status     = $status;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->position[]  = $this->lang->my->project;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projects    = $projects;
+        $this->view->PMList      = $PMList;
+        $this->view->pager       = $pager;
+        $this->view->status      = $status;
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->usersAvatar = $this->user->getAvatarPairs('');
         $this->display();
     }
 
@@ -1117,6 +1118,9 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
+        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
+        $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $this->view->rooms      = array('' => '') + $this->loadModel('meetingroom')->getPairs();
 
         $this->display();
     }
@@ -1565,7 +1569,6 @@ EOF;
         $this->session->set('designList',         $uri, 'project');
         $this->session->set('productPlanList',    $uri, 'product');
         $this->session->set('releaseList',        $uri, 'product');
-        $this->session->set('programList',        $uri, 'program');
         $this->session->set('projectList',        $uri, 'project');
         $this->session->set('executionList',      $uri, 'execution');
         $this->session->set('taskList',           $uri, 'execution');

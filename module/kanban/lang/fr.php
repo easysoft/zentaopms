@@ -90,6 +90,9 @@ $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
 $lang->kanban->allUsers            = 'Charger Tous';
+$lang->kanban->colWidth            = 'Column Width';
+$lang->kanban->minColWidth         = 'Min Column Width';
+$lang->kanban->maxColWidth         = 'Max Column Width';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -353,8 +356,8 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Largeur standard pour toutes les colonnes)</span>";
-$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapter selon la largeur de voie)</span>";
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<i class='radio-text-divider'></i>Width";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Column width range";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et 32767.';

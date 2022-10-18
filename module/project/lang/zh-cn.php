@@ -200,6 +200,10 @@ $lang->project->productTip             = '点击新建产品后，项目将不�
 $lang->project->noDevStage             = '该项目下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。';
 $lang->project->budgetOverrun          = '项目的预算超出了父项目集的剩余预算：';
 $lang->project->disabledInputTip       = '请先取消%s';
+$lang->project->summary                = '本页共 <strong>%s</strong> 个项目。';
+$lang->project->allSummary             = '本页共 <strong>%s</strong> 个项目，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，已挂起 <strong>%s</strong>，已关闭 <strong>%s</strong> 。';
+$lang->project->checkedSummary         = '选中 <strong>%total%</strong> 个项目。';
+$lang->project->checkedAllSummary      = '选中 <strong>%total%</strong> 个项目，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';

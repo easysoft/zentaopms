@@ -516,7 +516,10 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $recTotal   = count($tasks2Imported);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
+
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
+        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
@@ -525,7 +528,7 @@ class execution extends control
         $this->view->pager            = $pager;
         $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
         $this->view->position[]       = $this->lang->execution->importTask;
-        $this->view->tasks2Imported   = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $this->view->tasks2Imported   = $tasks2ImportedList;
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
@@ -2498,7 +2501,7 @@ class execution extends control
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
+            $this->kanban->createExecutionLane($executionID, $browseType);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
@@ -3183,7 +3186,7 @@ class execution extends control
         {
             $this->project->setMenu($object->id);
         }
-        elseif($object->type == 'sprint' or $object->type == 'stage')
+        elseif($object->type == 'sprint' or $object->type == 'stage' or $object->type == 'kanban')
         {
             $this->execution->setMenu($object->id);
         }
@@ -3760,6 +3763,7 @@ class execution extends control
         $this->view->from           = $from;
         $this->view->param          = $param;
         $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
 
         $this->display();
     }

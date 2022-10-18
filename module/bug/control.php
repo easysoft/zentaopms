@@ -966,14 +966,8 @@ class bug extends control
                 $changes = $this->bug->update($bugID);
                 if(dao::isError())
                 {
-                    if(defined('RUN_MODE') && RUN_MODE == 'api')
-                    {
-                        return $this->send(array('status' => 'error', 'message' => dao::getError()));
-                    }
-                    else
-                    {
-                        return print(js::error(dao::getError()));
-                    }
+                    if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'error', 'message' => dao::getError()));
+                    return print(js::error(dao::getError()));
                 }
             }
 
@@ -1154,10 +1148,17 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if($bug->assignedTo and !isset($assignedToList[$bug->assignedTo]))
+        {
+            /* Fix bug #28378. */
+            $assignedTo = $this->user->getById($bug->assignedTo);
+            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+        }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1814,6 +1815,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
         $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        unset($productBugs[$bugID]);
 
         $this->bug->checkBugExecutionPriv($bug);
         $this->qa->setMenu($this->products, $productID, $bug->branch);

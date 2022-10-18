@@ -21,7 +21,6 @@
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php if(!empty($storyID)):?>
-<style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -292,7 +291,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
+                    <td colspan='4' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>

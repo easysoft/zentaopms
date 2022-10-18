@@ -11,3 +11,4 @@
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 .c-span {margin-left: 22px;}
+[lang^=de] .c-hours{width: 105px;}

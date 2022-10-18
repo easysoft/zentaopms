@@ -4,3 +4,5 @@
 td.padding-right {padding-right: 20px !important}
 
 .c-program {width: 150px;}
+.c-progress {width: 70px;}
+[lang^=zh].c-progress {width: 60px;}
