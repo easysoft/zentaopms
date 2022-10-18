@@ -82,3 +82,73 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 .dataYearStat .canvas {float: left; height: 305px; padding-left: 30px;}
 .dataYearStat .canvas.left {width: 450px;}
 .dataYearStat .canvas.right {width: 810px; float: right;}
+
+#timeline {
+  display: inline-block;
+  width: 310px;
+  padding-top: 20px;
+  list-style: none;
+  text-align: center;
+  margin-left: 25px;
+ }
+ .scroll-shell {
+   position: relative;
+ }
+ #stopPlaying {
+  font-size: 18px;
+  position: absolute;
+  left: 0;
+  top: 8px;
+ }
+
+ #timeline li {
+  display: inline-block;
+  cursor: pointer;
+  color: #444;
+  padding: 0 5px;
+  margin: 0;
+  position: relative;
+ }
+
+ 
+ #timeline li::before{
+   content: '';
+   display: inline-block;
+   width: 8px;
+   height: 8px;
+   border-radius: 4px;
+   background: #fff;
+   position: absolute;
+   left: 20px;
+   top: -8px;
+   z-index: 2;
+ }
+ #timeline li::after{content: ''; display: block; width: 100%; height: 2px; border-radius: 1px; background: #fff; position: absolute; left: -20px; top: -5px;}
+
+ .biaoqian {
+  background-size: 60px 24px;
+ }
+
+ #timeline .selecteded {
+   color: #1a77a5;
+  /* background: url('img/tuoyuan2.png') 0 15px no-repeat;
+  background-size: 20px 20px; */
+ }
+ #timeline .selecteded::before {
+   background: #1a77a5;
+ }
+
+ .scroll-shell {
+  width: 100px;
+  height: 96%;
+  margin-top: 1.5%;
+  float: left;
+  overflow: hidden;
+ }
+.scroll-shell {width: 330px;}
+.scroll {
+  width: 330px;
+  height: 103%;
+  overflow: auto;
+  overflow-x: hidden;
+}
