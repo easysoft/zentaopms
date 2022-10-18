@@ -409,6 +409,7 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
+            if($this->testcase->getStatus('create') == 'wait') $this->action->create('case', $caseID, 'submitReview');
 
             /* If the story is linked project, make the case link the project. */
             $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
@@ -858,6 +859,9 @@ class testcase extends control
     {
         $this->loadModel('story');
 
+        $case = $this->testcase->getById($caseID);
+        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
+
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
 
@@ -875,6 +879,8 @@ class testcase extends control
                 $action = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('case', $caseID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($case->status != 'wait' and $this->post->status == 'wait') $this->action->create('case', $caseID, 'submitReview');
             }
 
             $this->executeHooks($caseID);
@@ -889,8 +895,6 @@ class testcase extends control
             }
         }
 
-        $case = $this->testcase->getById($caseID);
-        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
             $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
