@@ -292,7 +292,7 @@ class reportModel extends model
 
         if($assign == 'noassign')
         {
-            $members = $this->dao->select('t1.account,t2.name,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
+            $members = $this->dao->select('t1.account,t2.name,t2.multiple,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
                 ->where('t2.status')->notin('cancel, closed, done, suspended')
@@ -314,6 +314,7 @@ class reportModel extends model
                         {
                             $project[$execution->projectname]['projectID'] = $execution->project;
                             $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
+                            $project[$execution->projectname]['execution'][$name]['multiple']    = $execution->multiple;
                             $project[$execution->projectname]['execution'][$name]['count']       = 0;
                             $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
 

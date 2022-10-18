@@ -97,7 +97,11 @@
                 <?php if($projectTimes == 1):?>
 		        <td class="text-center" rowspan="<?php echo $projectCount;?>" title="<?php echo $projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $projectName);?></td>
                 <?php endif;?>
+                <?php if($executionInfo['multiple']):?>
 		        <td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
+                <?php else:?>
+		        <td></td>
+                <?php endif;?>
                 <td class="text-center"><?php echo $executionInfo['count'];?></td>
                 <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
                 <?php if($userTimes == 1):?>
