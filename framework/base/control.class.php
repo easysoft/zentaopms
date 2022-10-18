@@ -281,7 +281,7 @@ class baseControl
         if(isset($loadedModels[$type][$appName][$moduleName]))
         {
             $this->$objectName = $loadedModels[$type][$appName][$moduleName];
-            $this->dao         = $this->$objectName->dao;
+            if($type == 'model') $this->dao = $this->$objectName->dao;
             return $this->$objectName;
         }
 
@@ -314,9 +314,9 @@ class baseControl
          * 初始化model对象，在control对象中可以通过$this->$objectName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
          * Init the model object thus you can try $this->$objectName to access it. Also assign the $dao object as a member of control object.
          */
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$objectName                   = $loadedModels[$appName][$moduleName];
-        $this->dao                           = $this->$objectName->dao;
+        $this->$objectName = new $modelClass($appName);
+        if($type == 'model') $this->dao = $this->$objectName->dao;
+        $loadedModels[$type][$appName][$moduleName] = $this->$objectName;
         return $this->$objectName;
     }
 

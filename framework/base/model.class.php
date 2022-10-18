@@ -221,6 +221,7 @@ class baseModel
         $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
 
         if(!helper::import($modelFile)) return false;
+
         $modelClass = class_exists('ext' . $appName . $moduleName. $type) ? 'ext' . $appName . $moduleName . $type : $appName . $moduleName . $type;
         if(!class_exists($modelClass))
         {
@@ -228,8 +229,8 @@ class baseModel
             if(!class_exists($modelClass)) $this->app->triggerError(" The $type $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        $loadedModels[$type][$appName][$moduleName] = new $modelClass($appName);
-        $this->$objectName = $loadedModels[$type][$appName][$moduleName];
+        $this->$objectName = new $modelClass($appName);
+        $loadedModels[$type][$appName][$moduleName] = $this->$objectName;
         return $this->$objectName;
     }
 
