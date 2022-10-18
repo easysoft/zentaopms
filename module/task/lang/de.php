@@ -277,6 +277,7 @@ $lang->task->error->alreadyConsumed   = 'The currently selected parent task has 
 $lang->task->error->date              = 'The date should be <= today.';
 $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left" cannot be 0';
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
+$lang->task->error->notempty          = '%s must be > 0.';
 
 /* Report. */
 $lang->task->report = new stdclass();
