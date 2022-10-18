@@ -18,9 +18,9 @@ $('#confirmButton').click(function()
         if(!isNaN(estimate)) totalEstimate += estimate;
         if($tr.hasClass('member-wait') && (isNaN(estimate) || estimate == 0))
         {
-              bootbox.alert(account + ' ' + estimateNotEmpty);
-              error = true;
-              return false;
+            bootbox.alert(account + ' ' + estimateNotEmpty);
+            error = true;
+            return false;
         }
 
         var consumed = parseFloat($tr.find('[name^=teamConsumed]').val());
