@@ -21,6 +21,25 @@ include dirname(__FILE__) . '/base/model.class.php';
 class model extends baseModel
 {
     /**
+     * Load the tao file.
+     *
+     * @param  string $appName
+     * @access public
+     * @return void
+     */
+    public function __construct($appName = '')
+    {
+        parent::__construct($appName);
+
+        $className = get_class($this);
+        if(strtolower(substr($className, -5)) == 'model')
+        {
+            $moduleName = $this->app->getModuleName();
+            $this->loadModel($moduleName, $appName, 'tao');
+        }
+    }
+
+    /**
      * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
      * 调用父类的loadModel方法来避免这个错误。
      * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
@@ -30,9 +49,9 @@ class model extends baseModel
      * @access  public
      * @return  object|bool  the model object or false if model file not exists.
      */
-    public function loadModel($moduleName, $appName = '')
+    public function loadModel($moduleName, $appName = '', $type = 'model')
     {
-        return parent::loadModel($moduleName);
+        return parent::loadModel($moduleName, '', $type);
     }
 
     /**

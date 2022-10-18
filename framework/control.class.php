@@ -33,6 +33,9 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
+        $className = get_class($this);
+        if(strtolower(substr($className, -6)) == 'control') $this->loadModel($moduleName, $appName, 'zen');
+
         $this->app->setOpenApp();
 
         if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
@@ -179,9 +182,9 @@ class control extends baseControl
      * @access  public
      * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName = '', $appName = '')
+    public function loadModel($moduleName = '', $appName = '', $type = 'model')
     {
-        return parent::loadModel($moduleName);
+        return parent::loadModel($moduleName, '', $type);
     }
 
     /**
@@ -575,5 +578,4 @@ class control extends baseControl
         }
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
-
 }
