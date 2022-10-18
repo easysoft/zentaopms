@@ -2282,6 +2282,12 @@ class taskModel extends model
             return false;
         }
 
+        if(empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->notempty, $this->lang->task->left);
+            return false;
+        }
+
         if(!empty($oldTask->team))
         {
             $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
