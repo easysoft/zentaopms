@@ -1201,7 +1201,7 @@ class productModel extends model
     {
         $product = $this->getById($productID);
 
-        $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->beginIF($status == 'closed')->andWhere('t2.status')->ne('closed')->fi()
@@ -1209,11 +1209,9 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
             ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
-
-        if($appendProject) $projects += $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($appendProject)->fetchPairs('id', 'name');
-        return $projects;
     }
 
     /**
