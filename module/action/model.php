@@ -1245,7 +1245,11 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
-        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+        $projectIdList = array();
+        foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
+
+        $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
+        $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         foreach($actions as $i => $action)
         {
@@ -1307,7 +1311,7 @@ class actionModel extends model
             if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea' or substr($objectType, 0, 4) == 'gogs')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
-            $this->setObjectLink($action, $deptUsers, $shadowProducts);
+            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
 
             /* Set merge request link. */
             if((empty($action->objectName) or $action->action == 'deleted') and $action->objectType == 'mr') $action->objectLink = '';
@@ -1374,10 +1378,7 @@ class actionModel extends model
                 elseif($objectType == 'reviewcl')
                 {
                     $objectInfo = $this->dao->select('id,title')->from($table)->where('id')->in($objectIdList)->fetchAll();
-                    foreach($objectInfo as $object)
-                    {
-                        $objectName[$object->id] = $object->title;
-                    }
+                    foreach($objectInfo as $object) $objectName[$object->id] = $object->title;
                 }
                 elseif($objectType == 'team')
                 {
@@ -1469,10 +1470,11 @@ class actionModel extends model
      * @param  object   $action
      * @param  array    $deptUsers
      * @param  array    $shadowProducts
+     * @param  object   $project
      * @access public
      * @return object|bool
      */
-    public function setObjectLink($action, $deptUsers, $shadowProducts)
+    public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
@@ -1601,15 +1603,8 @@ class actionModel extends model
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
 
-        if($action->objectType == 'story' and $action->action == 'import2storylib')
-        {
-            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
-        }
-
-        if($action->objectType == 'story' and $this->config->vision == 'lite')
-        {
-            $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
-        }
+        if($action->objectType == 'story' and $action->action == 'import2storylib') $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        if($action->objectType == 'story' and $this->config->vision == 'lite') $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
 
         if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
         {
@@ -1630,11 +1625,7 @@ class actionModel extends model
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
-        if($action->objectType == 'branch' and $action->action == 'mergedbranch')
-        {
-            $action->objectLink = 'javascript:void(0)';
-        }
-
+        if($action->objectType == 'branch' and $action->action == 'mergedbranch') $action->objectLink = 'javascript:void(0)';
         if($action->objectType == 'module')
         {
             $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
@@ -1645,10 +1636,10 @@ class actionModel extends model
             }
         }
 
-        if($action->objectType == 'review')
-        {
-            $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
-        }
+        if($action->objectType == 'review') $action->objectLink = helper::createLink('review', 'view', "reviewID=$action->objectID");
+
+        /* Set app for no multiple project. */
+        if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
 
         return $action;
     }
