@@ -384,7 +384,7 @@ $(function()
     var timelines = document.querySelectorAll('#timeline li');
     timelines[0].classList.add('selecteded');
     var ps = document.querySelectorAll('#timeline li p');
-    ps[0].classList.add('biaoqian');
+    ps[0].classList.add('class1');
  
     //点击事件,点击其中一个切换到相应的效果
     var ulElement = document.querySelector('#timeline');
@@ -410,9 +410,9 @@ $(function()
    //公共部分,清除掉所有的样式,再给点击的添加相应的类名
     function classChange(ps, lis, target) {
         ps.forEach(k => {
-            k.classList.remove('biaoqian');
+            k.classList.remove('class1');
         })
-        target.classList.add('biaoqian');
+        target.classList.add('class1');
         lis.forEach(v => {
             v.classList.remove('selecteded');
         })
