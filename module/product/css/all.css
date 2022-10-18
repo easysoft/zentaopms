@@ -55,7 +55,7 @@ th.c-actions {width: 50px;}
 #productListForm thead > tr > th.c-checkbox {border-left: none; padding-left: 15px; width: 30px;}
 #productListForm tbody > tr > td {padding: 2px 4px;}
 #productListForm tbody > tr > td:first-child {text-align: left; padding-left: 15px;}
-#productListForm tbody > tr > td.table-nest-title {padding-left: 16px;}
+#productListForm tbody > tr > td.table-nest-title {padding-left: 16px; display: flex; align-items: center;}
 #productListForm th.table-nest-title .nest-has-checkbox {margin-top: 7px; margin-left: 35px;}
 #productListForm th.table-nest-title .nest-none-checkbox {margin-top: 8px; margin-left: 5px;}
 #productListForm th.table-nest-title .header {margin-left: 5px;}
@@ -100,3 +100,5 @@ th.c-actions {width: 50px;}
 #productTableList .c-manager {padding-left: 14px;}
 #productTableList .c-manager a {top: 7px; left: 22px;}
 .checkbox-primary {margin-right: 10px;}
+.table-nest-title > a, .table-nest-title > span {padding-left: 2px;}
+.table-nest-icon {font-size: 14px; top: 50%;}

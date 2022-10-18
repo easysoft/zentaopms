@@ -53,7 +53,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table table-productplan' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
+  <form class='main-table table-productplan' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>' data-preserve-nested='true'>
     <table class='table has-sort-head' id="productplanList">
       <thead>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

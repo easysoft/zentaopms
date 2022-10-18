@@ -42,7 +42,7 @@
           <th class='text-left'>   <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
           <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='c-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->bug->type);?></th>
           <th class='c-user'>      <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>

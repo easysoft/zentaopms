@@ -1127,7 +1127,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -1146,7 +1146,7 @@ class kanbanModel extends model
                 $card->actions = array();
                 foreach($actions as $action)
                 {
-                    if(in_array($action, array('viewExecution', 'viewPlan', 'viewRelease', 'viewBuild')))
+                    if(in_array($action, array('viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket')))
                     {
                         if($card->fromType == 'execution')
                         {

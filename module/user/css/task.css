@@ -2,3 +2,4 @@
 .c-execution {width: 180px;}
 .c-hour, .c-status {width: 70px;}
 .c-deadline {width: 100px;}
+td.hours:last-child {padding-right: 14px;}

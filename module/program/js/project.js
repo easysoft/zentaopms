@@ -11,7 +11,7 @@ $(function()
             var statistics        = summary;
             var checkedStatistics = checkedSummary.replace('%total%', checkedTotal);
 
-            if(browseType == 'all' || browseType == 'unclosed')
+            if(browseType == 'all')
             {
                 var checkedWait      = $checkedRows.filter("[data-status=wait]").length;
                 var checkedDoing     = $checkedRows.filter("[data-status=doing]").length;

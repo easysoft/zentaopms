@@ -91,7 +91,7 @@ $closedCount    = 0;
         }
         ?>
         </div>
-        <div class="table-statistic"><?php echo strpos(',all,unclosed,', ",$browseType,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
+        <div class="table-statistic"><?php echo $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

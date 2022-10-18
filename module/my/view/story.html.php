@@ -84,7 +84,7 @@
         $storyLink    = $this->createLink('story', 'view', "id=$story->id");
         $canBeChanged = common::canBeChanged('story', $story);
         ?>
-        <tr>
+        <tr data-id='<?php echo $story->id?>'>
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">

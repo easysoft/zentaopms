@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php js::set('lastReviewer', explode(',', $lastReviewer))?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

@@ -28,3 +28,6 @@
 .c-modulel {width: 110px;}
 
 .keep-row-height {height: 32px;}
+#modalTeam .modal-dialog {height: 340px; width: 520px; color: #3c4353;}
+#taskTeamEditor .chosen-single {width: 200px;}
+#taskTeamEditor .estimateBox {width: 120px;}

@@ -21,6 +21,7 @@ $(function()
                 $("#subNavbar li[data-id='audit'] a").append('<span class="label label-light label-badge">' + reviewCount + '</span>');
                 $("#subNavbar li[data-id='nc'] a").append('<span class="label label-light label-badge">' + qaCount + '</span>');
                 $("#subNavbar li[data-id='myMeeting'] a").append('<span class="label label-light label-badge">' + meetingCount + '</span>');
+                $("#subNavbar li[data-id='ticket'] a").append('<span class="label label-light label-badge">' + ticketCount + '</span>');
             }
         }
     }

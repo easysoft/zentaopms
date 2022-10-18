@@ -194,13 +194,6 @@ $config->execution->datatable->fieldList['name']['fixed']    = 'left';
 $config->execution->datatable->fieldList['name']['width']    = 'auto';
 $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
-if(!isset($config->setCode) or $config->setCode == 1)
-{
-    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
-    $config->execution->datatable->fieldList['code']['fixed']    = 'no';
-    $config->execution->datatable->fieldList['code']['width']    = '95';
-    $config->execution->datatable->fieldList['code']['required'] = 'no';
-}
 
 if($config->systemMode == 'new')
 {
@@ -210,21 +203,23 @@ if($config->systemMode == 'new')
     $config->execution->datatable->fieldList['project']['required'] = 'no';
 }
 
-$config->execution->datatable->fieldList['PM']['title']    = 'owner';
-$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
-$config->execution->datatable->fieldList['PM']['width']    = '70';
-$config->execution->datatable->fieldList['PM']['required'] = 'no';
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->execution->datatable->fieldList['code']['title']    = 'execCode';
+    $config->execution->datatable->fieldList['code']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['code']['width']    = '95';
+    $config->execution->datatable->fieldList['code']['required'] = 'no';
+}
 
 $config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 $config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';
 
-$config->execution->datatable->fieldList['progress']['title']    = 'progress';
-$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
-$config->execution->datatable->fieldList['progress']['width']    = '70';
-$config->execution->datatable->fieldList['progress']['required'] = 'no';
-$config->execution->datatable->fieldList['progress']['sort']     = 'no';
+$config->execution->datatable->fieldList['PM']['title']    = 'owner';
+$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
+$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['required'] = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
@@ -253,12 +248,6 @@ $config->execution->datatable->fieldList['realEnd']['width']    = '90';
 $config->execution->datatable->fieldList['realEnd']['required'] = 'no';
 $config->execution->datatable->fieldList['realEnd']['sort']     = 'no';
 
-$config->execution->datatable->fieldList['teamCount']['title']    = 'teamCount';
-$config->execution->datatable->fieldList['teamCount']['fixed']    = 'no';
-$config->execution->datatable->fieldList['teamCount']['width']    = '80';
-$config->execution->datatable->fieldList['teamCount']['required'] = 'no';
-$config->execution->datatable->fieldList['teamCount']['sort']     = 'no';
-
 $config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
 $config->execution->datatable->fieldList['estimate']['fixed']    = 'no';
 $config->execution->datatable->fieldList['estimate']['width']    = '70';
@@ -276,6 +265,12 @@ $config->execution->datatable->fieldList['left']['fixed']    = 'no';
 $config->execution->datatable->fieldList['left']['width']    = '70';
 $config->execution->datatable->fieldList['left']['required'] = 'no';
 $config->execution->datatable->fieldList['left']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['progress']['title']    = 'progress';
+$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
+$config->execution->datatable->fieldList['progress']['width']    = '70';
+$config->execution->datatable->fieldList['progress']['required'] = 'no';
+$config->execution->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['burn']['title']    = 'burn';
 $config->execution->datatable->fieldList['burn']['fixed']    = 'no';

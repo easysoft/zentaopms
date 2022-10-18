@@ -33,7 +33,7 @@ $(function()
 
     $('#needNotReview').on('change', function()
     {
-        $('#reviewer').text('').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        $('#reviewer').val($(this).is(':checked') ? '' : lastReviewer).attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
         if($(this).is(':checked'))
         {
             $('#reviewerBox').removeClass('required');

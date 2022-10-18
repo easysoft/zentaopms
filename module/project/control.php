@@ -517,7 +517,7 @@ class project extends control
         $code      = '';
         $team      = '';
         $whitelist = '';
-        $acl       = 'private';
+        $acl       = 'open';
         $auth      = 'extend';
 
         $products      = array();
@@ -1052,6 +1052,7 @@ class project extends control
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
         $this->view->project        = $project;
+        $this->view->projects       = $projects;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
@@ -1176,6 +1177,7 @@ class project extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
         $bugs = $this->bug->processBuildForBugs($bugs);
+        $bugs = $this->bug->checkDelayedBugs($bugs);
 
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();

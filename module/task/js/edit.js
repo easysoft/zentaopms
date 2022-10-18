@@ -1,6 +1,7 @@
 $(function()
 {
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
+    if(!newRowCount) $('#taskTeamEditor tr.member').last().addClass('member-last');
 })
 
 /**
