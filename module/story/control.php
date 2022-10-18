@@ -2570,10 +2570,11 @@ class story extends control
      * @param  string $browseType
      * @param  int    $moduleID
      * @param  string $chartType
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function report($productID, $branchID, $storyType = 'story', $browseType = 'unclosed', $moduleID = 0, $chartType = 'pie')
+    public function report($productID, $branchID, $storyType = 'story', $browseType = 'unclosed', $moduleID = 0, $chartType = 'pie', $projectID = 0)
     {
         $this->loadModel('report');
         $this->view->charts = array();
@@ -2593,8 +2594,23 @@ class story extends control
             }
         }
 
+        if($this->app->tab == 'project')
+        {
+            $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
+            {
+                $this->loadModel('project')->setMenu($projectID);
+                $this->lang->story->report->charts['storysPerProduct'] = str_replace($this->lang->productCommon, $this->lang->projectCommon, $this->lang->story->report->charts['storysPerProduct']);
+                if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storysPerPlan']);
+            }
+            else
+            {
+                $this->loadModel('execution')->setMenu($projectID);
+            }
+        }
+
         $this->story->replaceURLang($storyType);
-        $this->products = $this->product->getPairs();
+        $this->products = $this->product->getPairs('', 0, '', 'all');
         $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;

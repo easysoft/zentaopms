@@ -146,7 +146,7 @@ js::set('storyType',     $storyType);
   </div>
   <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
-    <?php if($this->app->rawModule != 'projectstory') common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie", '', 'button', 'bar-chart muted'); ?>
+    <?php if($productID) common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn pull-right btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
