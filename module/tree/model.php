@@ -63,7 +63,7 @@ class treeModel extends model
      * Build the sql query.
      *
      * @param  int        $rootID
-     * @param  int        $type
+     * @param  string     $type
      * @param  int        $startModule
      * @param  string|int $branch
      * @param  string     $param
@@ -126,8 +126,9 @@ class treeModel extends model
      * @param  int       $startModule
      * @param  int|array $branch
      * @param  string    $param
+     * @param  string    $grade
      * @access public
-     * @return string
+     * @return void
      */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
     {
