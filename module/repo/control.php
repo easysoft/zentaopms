@@ -208,7 +208,7 @@ class repo extends control
             $this->view->projects = $options;
         }
 
-        $projectOptions = $this->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $projectOptions = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
 
         $shadowProduct = null;
         $productIDList = explode(',', $repo->product);
@@ -1233,36 +1233,8 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
-        $projectOptions = $this->filterProject($postData->products, $postData->projects);
+        $projectOptions = $this->repo->filterProject($postData->products, $postData->projects);
         return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
-    }
-
-    /**
-     * Remove projects without privileges.
-     *
-     * @param  array   $productIDList
-     * @param  array   $projectIDList
-     * @access private
-     * @return array
-     */
-    private function filterProject($productIDList, $projectIDList = array())
-    {
-        $allProjects = array();
-        foreach($productIDList as $productID)
-        {
-            $projects    = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $allProjects = $allProjects + $projects;
-        }
-
-        $accessProjects = explode(',', $this->app->user->view->projects);
-        $accessProjects = $accessProjects + $projectIDList; /* Merge projects can be accessed and exists.*/
-        $projectOptions = array();
-        foreach($allProjects as $projectID => $projectName)
-        {
-            if(in_array($projectID, $accessProjects)) $projectOptions[$projectID] = $projectName;
-        }
-
-        return $projectOptions;
     }
 
     /**
