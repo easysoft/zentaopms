@@ -5,6 +5,7 @@
 <?php $annualDataLang   = $lang->report->annualData;?>
 <?php $annualDataConfig = $config->report->annualData;?>
 <?php $soFar = sprintf($annualDataLang->soFar, $year);?>
+<?php js::set('totalYears', (array)($years)); ?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
   <main id='main' style='background: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_layout_header.png'?>) top no-repeat'>
     <header id='header'>
@@ -13,6 +14,7 @@
     <div id='toolbar'>
       <div class='pull-left'>
         <span><?php echo $annualDataLang->scope;?></span>
+        
         <?php echo html::select('year', $years, $year, "class='form-control'");?>
         <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
         <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
@@ -136,7 +138,15 @@
     </section>
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
-      <div id='radarCanvas'></div>
+      <div id='radarCanvas' style="display: none;"></div>
+      <canvas id="canvas" width="330" height="280" style="margin-top:-30px"></canvas>
+      <?php if(is_array($options) and !empty($options)):?>
+        <div class="scroll-shell">
+            <i class="icon icon-play" id="stopPlaying"></i>
+            <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
+        </div>
+    <?php endif;?>
+        
     </section>
     <section id='executionData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2></header>
@@ -279,8 +289,185 @@ $(function()
           data: [{value: <?php echo json_encode(array_values($radarData));?>}]
       }]
     };
+    console.log(totalYears);
 
-    radarChart.setOption(radarOption);
+    radarChart && radarChart.setOption(radarOption);
+
+    function exportImg () 
+    {
+        var radarCanvasArr = echarts.getInstanceByDom(document.getElementById('radarCanvas'));
+        if(!radarCanvasArr)
+        {
+            radarCanvasArr = echarts.init(document.getElementById('radarCanvas'));
+        }
+        var radarCanvasimg = radarCanvasArr.getDataURL({
+            type: 'png',
+            PixelRatio: 1.5,
+        });
+        canvasImg = radarCanvasimg;
+        pngimages.push(canvasImg);
+        
+    }
+
+    
+    var canvasImg = '';
+    var pngimages = [];
+    exportImg();
+    setInterval(function(){exportImg();}, 1000);
+
+    var cStream, recorder, chunks = [];
+    function saveChunks(e)
+    {
+        chunks.push(e.data);
+    }
+    function stopRecording()
+    {
+        recorder.stop();
+    }
+
+    function exportStream(e)
+    {
+        var blob = new Blob(chunks);
+        var vidURL = URL.createObjectURL(blob);
+        var canvasVideo = document.createElement('video');
+        canvasVideo.controls = true;
+        canvasVideo.src = vidURL;
+        canvasVideo.onended = function() {
+            URL.revokeObjectURL(vidURL);
+        }
+        document.body.insertBefore(canvasVideo, canvas);
+    }
+
+    var x = 0;
+    var ctx = canvas.getContext('2d');
+
+    var left = 0;
+  
+    var animationCanvas = function() {
+        x = (x + 2) % (canvas.width + 100);
+        ctx.fillStyle = '#01061b';
+       
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        var img=document.createElement("img");
+        img.src = canvasImg;
+        ctx.drawImage(img, 10, 10);
+        ctx.fillStyle = 'red';
+        // ctx.fillRect(x - 50, 20, 50, 50);
+        
+        rafId = requestAnimationFrame(animationCanvas);
+       
+
+    };
+    animationCanvas();
+    var years = [];
+    for(var key in totalYears){
+        years.push(totalYears[key]);
+    }
+    var radarCanvasDom = document.getElementById('radarCanvas');
+    if(years.length > 1) {
+        radarCanvasDom.style.display = 'none';
+    }
+    
+    
+    // var years = [2016, 2017, 2018, 2019, 2020, 2021, 2022]
+    var index = 0
+    var timer=null
+    //创建时间轴对应的li
+    years.map(k => {
+        var createLi = document.createElement('li')
+        var createP = document.createElement('p')
+        createP.innerHTML = k
+        createLi.appendChild(createP)
+        timeline.appendChild(createLi)
+    })
+    //默认选中第一个
+    var timelines = document.querySelectorAll('#timeline li');
+    timelines[0].classList.add('selecteded');
+    var ps = document.querySelectorAll('#timeline li p');
+    ps[0].classList.add('biaoqian');
+ 
+    //点击事件,点击其中一个切换到相应的效果
+    var ulElement = document.querySelector('#timeline');
+    ulElement.onclick = function(e) {
+    var lis = document.querySelectorAll('#timeline li');
+    var ps = document.querySelectorAll('#timeline li p');
+    var event = e || window.event;
+    var target = event.target || event.srcElement;
+    if (target.tagName == 'P') {  
+        classChange(ps, lis, target);
+        for (var i = 0; i < lis.length; i++) {
+            if (lis[i].getAttribute('class') == 'selecteded') {
+                //记住此时被点击的索引,方便点击播放按钮时继续播放
+                index = i;
+                console.log(index);
+                break;
+            }
+    
+        }
+    }
+   }
+   
+   //公共部分,清除掉所有的样式,再给点击的添加相应的类名
+    function classChange(ps, lis, target) {
+        ps.forEach(k => {
+            k.classList.remove('biaoqian');
+        })
+        target.classList.add('biaoqian');
+        lis.forEach(v => {
+            v.classList.remove('selecteded');
+        })
+        target.parentNode.classList.add('selecteded');
+    }
+ 
+    //播放和暂停按钮
+    var stopPlaying = document.getElementById('stopPlaying');
+    if (stopPlaying)
+    {
+        stopPlaying.onclick = () => {
+            if (stopPlaying.className.indexOf('play') != -1)
+            {
+                stopPlaying.classList.remove('icon-play');
+                stopPlaying.classList.add('icon-pause');
+                if (!timer) {
+                    autoPlay();
+                }
+            }
+            else 
+            {
+                console.log('clearInterval');
+                stopPlaying.classList.remove('icon-pause');
+                stopPlaying.classList.add('icon-play');
+                if (timer)
+                {
+                    timer = clearInterval(timer)
+                }
+                else
+                {
+                    return
+                }
+            }
+        }
+    }
+ 
+   //自动播放
+   function autoPlay()
+   {
+        var lis = document.querySelectorAll('#timeline li');
+        var ps = document.querySelectorAll('#timeline li p');
+        timer = setInterval(() => {
+            if (index < ps.length - 1) {
+                classChange(ps, lis, ps[index + 1]);
+                index++;
+            } else {
+                //跳转到开始
+                index = 0;               
+                classChange(ps, lis, ps[index]);
+                stopPlaying.classList.remove('icon-pause');
+                stopPlaying.classList.add('icon-play');
+                clearInterval(timer);
+            }
+        }, 1000);
+   }
 
     var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
 
@@ -384,5 +571,6 @@ $(function()
     ?>
     <?php endforeach;?>
 })
+// <script type="text/javascript" src="./js/processor.js">
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
