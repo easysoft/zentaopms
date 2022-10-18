@@ -979,7 +979,7 @@ class myModel extends model
      */
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
-        if($this->app->rawMethod != 'work') return array();
+        if($this->app->rawMethod != 'audit') return array();
         $reviewList = array();
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
@@ -1225,15 +1225,20 @@ class myModel extends model
         if(empty($actionField)) $actionField = 'date';
         $orderBy = $actionField . '_' . $direction;
 
-        $objectType = $this->config->my->reviewObjectType;
-        if($browseType != 'all')      $objectType = $browseType;
-        if($browseType == 'oa')       $objectType = $this->config->my->oaObjectType;
-        if($objectType == 'testcase') $objectType = 'case';
+        $condition = "action = 'reviewed'";
+        if($browseType == 'createdbyme')
+        {
+            $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
+            $condition .= "(objectType = 'review' and action = 'opened') OR ";
+            $condition .= "(objectType = 'attend' and action = 'commited') OR ";
+            $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
+            $condition  = "($condition)";
+        }
 
         $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`')->from(TABLE_ACTION)
-            ->where('action')->eq('reviewed')
-            ->andWhere('objectType')->in($objectType)
-            ->andWhere('actor')->eq($this->app->user->account)
+            ->where('actor')->eq($this->app->user->account)
+            ->andWhere('objectType')->in($this->config->my->reviewObjectType)
+            ->andWhere($condition)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
             ->page($pager)

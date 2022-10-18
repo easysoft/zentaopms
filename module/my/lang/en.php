@@ -87,12 +87,18 @@ $lang->my->audit->type   = 'Type';
 $lang->my->audit->status = 'Status';
 
 $lang->my->auditMenu = new stdclass();
-$lang->my->auditMenu->all      = 'All';
-$lang->my->auditMenu->story    = 'Story';
-$lang->my->auditMenu->testcase = 'Case';
-if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->project = 'Project';
-if($config->edition != 'open') $lang->my->auditMenu->feedback = 'Feedback';
-if($config->edition != 'open') $lang->my->auditMenu->oa       = 'OA';
+$lang->my->auditMenu->audit = new stdclass();
+$lang->my->auditMenu->audit->all      = 'All';
+$lang->my->auditMenu->audit->story    = 'Story';
+$lang->my->auditMenu->audit->testcase = 'Case';
+if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->audit->project = 'Project';
+if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = 'Feedback';
+if($config->edition != 'open') $lang->my->auditMenu->audit->oa       = 'OA';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->audit = new stdclass();
+$lang->my->contributeMenu->audit->reviewedbyme = 'ReviewedByMe';
+$lang->my->contributeMenu->audit->createdbyme  = 'CreatedByMe';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';

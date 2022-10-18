@@ -151,7 +151,6 @@ class my extends control
 
         $issueCount   = 0;
         $riskCount    = 0;
-        $reviewCount  = 0;
         $ncCount      = 0;
         $qaCount      = 0;
         $meetingCount = 0;
@@ -181,10 +180,6 @@ class my extends control
             $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
             $riskCount = $pager->recTotal;
 
-            /* Get the number of reviews assigned to me. */
-            $reviewList  = $this->my->getReviewingList('all', 'time_desc', $pager);
-            $reviewCount = $pager->recTotal;
-
             /* Get the number of nc assigned to me. */
             $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
             $ncCount = $pager->recTotal;
@@ -206,7 +201,6 @@ var storyCount    = $storyCount;
 var bugCount      = $bugCount;
 var caseCount     = $caseCount;
 var testTaskCount = $testTaskCount;
-var reviewCount   = $reviewCount;
 
 var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;

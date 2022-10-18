@@ -83,16 +83,22 @@ $lang->my->storyMenu->assignedByMe = '由我指派';
 $lang->my->audit = new stdclass();
 $lang->my->audit->title  = '评审标题';
 $lang->my->audit->time   = '提交时间';
-$lang->my->audit->type   = '类型';
+$lang->my->audit->type   = '评审对象';
 $lang->my->audit->status = '状态';
 
 $lang->my->auditMenu = new stdclass();
-$lang->my->auditMenu->all      = '所有';
-$lang->my->auditMenu->story    = '需求';
-$lang->my->auditMenu->testcase = '用例';
-if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->project = '项目';
-if($config->edition != 'open') $lang->my->auditMenu->feedback = '反馈';
-if($config->edition != 'open') $lang->my->auditMenu->oa       = '办公';
+$lang->my->auditMenu->audit = new stdclass();
+$lang->my->auditMenu->audit->all      = '所有';
+$lang->my->auditMenu->audit->story    = '需求';
+$lang->my->auditMenu->audit->testcase = '用例';
+if($config->edition == 'max' and strpos(",$config->disabledFeatures,", ',waterfall,') === false) $lang->my->auditMenu->audit->project = '项目';
+if($config->edition != 'open') $lang->my->auditMenu->audit->feedback = '反馈';
+if($config->edition != 'open') $lang->my->auditMenu->audit->oa       = '办公';
+
+$lang->my->contributeMenu = new stdclass();
+$lang->my->contributeMenu->audit = new stdclass();
+$lang->my->contributeMenu->audit->reviewedbyme = '由我评审';
+$lang->my->contributeMenu->audit->createdbyme  = '由我发起';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';
