@@ -578,4 +578,41 @@ class control extends baseControl
         }
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
+
+    /**
+     * Call the functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        $moduleName = $this->app->getModuleName();
+        $taoClass   = $moduleName . 'Tao';
+
+        if(!is_callable(array($this->{$taoClass}, $method))) $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+
+        return call_user_func_array(array($this->{$taoClass}, $method), $arguments);
+    }
+
+    /**
+     * Call the static functions declared in the tao files.
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @access public
+     * @return mixed
+     */
+    public static function __callStatic($method, $arguments)
+    {
+        global $app;
+        $moduleName = $app->getModuleName();
+        $taoClass   = $moduleName . 'Tao';
+
+        if(!is_callable("{$taoClass}::{$method}")) $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+
+        return call_user_func_array("{$taoClass}::{$method}", $arguments);
+    }
 }
