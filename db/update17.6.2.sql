@@ -68,3 +68,8 @@ ALTER TABLE `zt_kanban` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFT
 ALTER TABLE `zt_project` ADD `colWidth` smallint(4) NOT NULL DEFAULT '264' AFTER `fluidBoard`;
 ALTER TABLE `zt_project` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '180' AFTER `colWidth`;
 ALTER TABLE `zt_project` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFTER `minColWidth`;
+
+/* feedback */
+ALTER TABLE `zt_feedback` ADD `pri` tinyint unsigned NOT NULL DEFAULT 2;
+ALTER TABLE `zt_feedback` ADD `source` varchar(255) NOT NULL;
+ALTER TABLE `zt_feedback` CHANGE `pri` `pri` tinyint unsigned NOT NULL DEFAULT 2;
