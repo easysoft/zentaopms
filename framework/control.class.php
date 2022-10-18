@@ -42,45 +42,68 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
-            {
-                if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
-                {
-                    $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
-
-                    if(isset($this->config->{$this->moduleName}->exportFields))
-                    {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
-                    }
-
-                    if(isset($this->config->{$this->moduleName}->list->exportFields))
-                    {
-                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
-                    }
-
-                    foreach($exportFields as $flowField => $exportField)
-                    {
-                        if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
-                    }
-                }
-            }
-
-            /* Append editor field to this module config from workflow. */
-            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
-            if($textareaFields)
-            {
-                $editorIdList = array();
-                foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
-
-                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
-                if(!isset($this->config->{$this->moduleName}->editor)) $this->config->{$this->moduleName}->editor = new stdclass();
-                if(!isset($this->config->{$this->moduleName}->editor->{$this->methodName})) $this->config->{$this->moduleName}->editor->{$this->methodName} = array('id' => '', 'tools' => 'simpleTools');
-                $this->config->{$this->moduleName}->editor->{$this->methodName}['id'] .= ',' . join(',', $editorIdList);
-                trim($this->config->{$this->moduleName}->editor->{$this->methodName}['id'], ',');
-            }
+            $this->extendExportFields();
+            $this->extendEditorFields();
 
             /* If workflow is created by a normal user, set priv. */
             if(isset($this->app->user) and !$this->app->user->admin) $this->setDefaultPrivByWorkflow();
+        }
+    }
+
+    /**
+     * Append export fields to the config of this module from workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function extendExportFields()
+    {
+        if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
+        {
+            if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
+            {
+                $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
+
+                if(isset($this->config->{$this->moduleName}->exportFields))
+                {
+                    foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
+                }
+
+                if(isset($this->config->{$this->moduleName}->list->exportFields))
+                {
+                    foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
+                }
+
+                foreach($exportFields as $flowField => $exportField)
+                {
+                    if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
+                }
+            }
+        }
+    }
+
+    /**
+     * Append editor fields to the config of this module from workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function extendEditorFields()
+    {
+        $moduleName = $this->moduleName;
+        $methodName = $this->methodName;
+
+        $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
+        if($textareaFields)
+        {
+            $editorIdList = array();
+            foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
+
+            if(!isset($this->config->{$moduleName})) $this->config->{$moduleName} = new stdclass();
+            if(!isset($this->config->{$moduleName}->editor)) $this->config->{$moduleName}->editor = new stdclass();
+            if(!isset($this->config->{$moduleName}->editor->{$methodName})) $this->config->{$moduleName}->editor->{$methodName} = array('id' => '', 'tools' => 'simpleTools');
+            $this->config->{$moduleName}->editor->{$methodName}['id'] .= ',' . join(',', $editorIdList);
+            trim($this->config->{$moduleName}->editor->{$methodName}['id'], ',');
         }
     }
 
