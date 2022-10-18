@@ -27,18 +27,14 @@
       </div>
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
-          <?php if($shadowProduct):?>
-          <?php echo html::hidden('product[]', $shadowProduct->id);?>
-          <?php else:?>
           <tr>
             <th><?php echo $lang->repo->product;?></th>
             <td class='required'><?php echo html::select('product[]', $products, $repo->product, "class='form-control chosen' multiple");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->projects;?></th>
-            <td id='projectContainer'><?php echo html::select('projects[]', $projects, $repo->projects, "class='form-control chosen' multiple");?></td>
+            <td id='projectContainer'><?php echo html::select('projects[]', $relatedProjects, $repo->projects, "class='form-control chosen' multiple");?></td>
           </tr>
-          <?php endif;?>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type;?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, $repo->SCM, "onchange='scmChanged(this.value)' class='form-control chosen'");?></td>

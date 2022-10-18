@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->repo->projects;?></th>
-            <td id='projectContainer'><?php echo html::select('projects[]', $projects, array(), "class='form-control chosen' multiple");?></td>
+            <td id='projectContainer'><?php echo html::select('projects[]', $relatedProjects, array(), "class='form-control chosen' multiple");?></td>
           </tr>
           <?php endif;?>
           <tr>
