@@ -1421,7 +1421,6 @@ class kanban extends control
         $this->display();
     }
 
-
     /**
      * Set a card's color.
      *
