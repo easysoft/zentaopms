@@ -1943,7 +1943,9 @@ class projectModel extends model
      */
     public function changeExecutionStatus($projectID, $status)
     {
+        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
         $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
         return $this->loadModel('execution')->$status($executionID);
     }
 
