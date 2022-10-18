@@ -2230,6 +2230,6 @@ class repoModel extends model
 
         /* Get linked projects. */
         $linkedProjects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchPairs('id', 'name');
-        return $accessProjects + $linkedProjects; /* Merge projects can be accessed and exists.*/
+        return $accessProjects + $linkedProjects; // Merge projects can be accessed and exists.
     }
 }
