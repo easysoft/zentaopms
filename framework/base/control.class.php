@@ -266,9 +266,10 @@ class baseControl
      * Load the model file of one module.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
-     * @param  string $appName    The app name, if empty, use current app's name.
-     * @access  public
-     * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $type       对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
     public function loadModel($moduleName = '', $appName = '', $type = 'model')
     {

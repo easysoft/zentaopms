@@ -1623,7 +1623,7 @@ class baseRouter
      *
      * @param   string $appName        the app name
      * @param   string $moduleName     the module name
-     * @param   string $ext            the extension type, can be control|model|view|lang|config
+     * @param   string $ext            the extension type, can be control|model|view|lang|config|zen|tao
      * @access  public
      * @return  string the extension path.
      */
@@ -1775,11 +1775,11 @@ class baseRouter
      * 设置一个模块的model文件，如果存在model扩展，一起合并。
      * Set the model file of one module. If there's an extension file, merge it with the main model file.
      *
-     * @param   string $moduleName the module name
-     * @param   string $appName the app name
-     * @static
-     * @access  public
-     * @return  string the model file
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $type       对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
+     * @access public
+     * @return string the model file
      */
     public function setModelFile($moduleName, $appName = '', $type = 'model')
     {
