@@ -80,7 +80,10 @@ class treeModel extends model
             $startModule = $this->getById($startModule);
             if($startModule) $startModulePath = $startModule->path . '%';
         }
-        if($type == 'feedback' and strpos($param, 'noproduct') === false) $type = 'story,' . $type;
+
+        /* If feedback module is merge add story module.*/
+        $syncConfig = json_decode($this->config->global->syncProductFeedback, true);
+        if($type == 'feedback' and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -1378,10 +1381,13 @@ class treeModel extends model
     {
         if($type == 'line') $rootID = 0;
 
+        $syncConfig = json_decode($this->config->global->syncProductFeedback, true);
+        if($type == 'feedback' and isset($syncConfig[$rootID])) $type = "$type,story";
+
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
         {
-            if($type == 'feedback') $type = "$type,story";
+
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('parent')->eq((int)$moduleID)
@@ -1397,7 +1403,7 @@ class treeModel extends model
         }
 
         /* else get modules of its type and story type. */
-        if(strpos('task|case|bug|feedback', $type) !== false) $type = "$type,story";
+        if(strpos('task|case|bug', $type) !== false) $type = "$type,story";
 
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)

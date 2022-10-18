@@ -143,7 +143,6 @@ class tree extends control
             $this->view->root       = $root;
 
             $title      = $this->lang->tree->manageFeedback;
-            $this->lang->feedback->menu->browse['subMenu'] = new stdclass();
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
         }
         elseif($viewType == 'case')
