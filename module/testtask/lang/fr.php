@@ -106,7 +106,8 @@ $lang->testtask->passCount         = 'Pass';
 $lang->testtask->failCount         = 'Fail';
 $lang->testtask->summary           = '%s CasTest, %s échecs, %s heures.';
 $lang->testtask->pageSummary       = 'Total testtasks: <strong>%s</strong>.';
-$lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
+$lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
+$lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
 $lang->testtask->checkedAllSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Testing: <strong>%testing%</strong>, Blocked: <strong>%blocked%</strong>.';
 
 $lang->testtask->beginAndEnd = 'Durée';
