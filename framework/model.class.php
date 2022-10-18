@@ -31,12 +31,9 @@ class model extends baseModel
     {
         parent::__construct($appName);
 
-        $className = get_class($this);
-        if(strtolower(substr($className, -5)) == 'model')
-        {
-            $moduleName = $this->app->getModuleName();
-            $this->loadModel($moduleName, $appName, 'tao');
-        }
+        $className  = strtolower(get_class($this));
+        $moduleName = $this->app->getModuleName();
+        if($className == $moduleName . 'model' || $className == 'ext' . $moduleName . 'model') $this->loadModel($moduleName, $appName, 'tao');
     }
 
     /**

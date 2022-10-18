@@ -33,8 +33,10 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        $className = get_class($this);
-        if(strtolower(substr($className, -6)) == 'control') $this->loadModel($moduleName, $appName, 'zen');
+        if(!$moduleName) $moduleName = $this->moduleName;
+
+        $className = strtolower(get_class($this));
+        if($className == $moduleName || $className == 'my' . $moduleName) $this->loadModel($moduleName, $appName, 'zen');
 
         $this->app->setOpenApp();
 
@@ -591,7 +593,7 @@ class control extends baseControl
     public function __call($method, $arguments)
     {
         $moduleName = $this->app->getModuleName();
-        $taoClass   = $moduleName . 'Tao';
+        $taoClass   = $moduleName . 'Zen';
 
         if(!is_callable(array($this->{$taoClass}, $method))) $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
 
@@ -610,7 +612,7 @@ class control extends baseControl
     {
         global $app;
         $moduleName = $app->getModuleName();
-        $taoClass   = $moduleName . 'Tao';
+        $taoClass   = $moduleName . 'Zen';
 
         if(!is_callable("{$taoClass}::{$method}")) $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
 
