@@ -70,3 +70,7 @@ ALTER TABLE `zt_project` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '180' AF
 ALTER TABLE `zt_project` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFTER `minColWidth`;
 
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProduct', '{"feedback":{},"ticket":{}}');
+
+ALTER TABLE `zt_feedback` ADD `pri` tinyint unsigned NOT NULL DEFAULT 2;
+ALTER TABLE `zt_feedback` ADD `source` varchar(255) NOT NULL;
+ALTER TABLE `zt_feedback` CHANGE `pri` `pri` tinyint unsigned NOT NULL DEFAULT 2;
