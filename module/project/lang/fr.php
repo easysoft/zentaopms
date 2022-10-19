@@ -210,6 +210,7 @@ $lang->project->noDevStage             = "Il n'y a pas de phase R&D dans ce proj
 $lang->project->budgetOverrun          = "Le budget du projet a dépassé le budget restant du programme parent:";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
 $lang->project->linkRepoFailed         = 'Failed to link projects and code repositories.';
+$lang->project->unLinkProductTip       = 'Are you sure you want to unlink %s? (Does not affect linked requirements)';
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';

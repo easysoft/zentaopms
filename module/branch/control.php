@@ -280,7 +280,7 @@ class branch extends control
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
-        return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
+        return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)' data-last='{$oldBranch}'"));
     }
 
     /**

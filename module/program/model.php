@@ -76,16 +76,15 @@ class programModel extends model
         if($programID)
         {
             $program   = $this->getByID($programID);
-            $path      = explode(',', $program->path);
-            $path      = array_filter($path);
+            $path      = array_filter(explode(',', $program->path));
             $programID = current($path);
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
-        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+        return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
@@ -93,7 +92,6 @@ class programModel extends model
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi()
             ->fetchPairs('id', 'name');
-        return $products;
     }
 
     /**
