@@ -1259,7 +1259,6 @@ class taskModel extends model
             unset($task->parent);
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
             if(isset($oldTask->team))
             {
                 $users = $this->loadModel('user')->getPairs('noletter|noempty');

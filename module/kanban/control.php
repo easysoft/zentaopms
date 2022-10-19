@@ -1401,14 +1401,14 @@ class kanban extends control
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
-        $this->loadModel('product');
+        $this->loadModel('feedback');
         $this->loadModel('ticket');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs();
+        $this->view->products          = array('all' => $this->lang->kanban->allProducts) + $this->feedback->getGrantProducts();
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->tickets2Imported  = $this->ticket->getTicketByProduct($selectedProductID, '', 'id_desc', $pager);
