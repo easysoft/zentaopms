@@ -10,3 +10,4 @@ function button($text = '', $v = 0) {return wgFactory('button', $text);}
 function select($text = '', $v = 0) {return wgFactory('select', $text);}
 function tab($text = '', $v = 0) {return wgFactory('tab', $text);}
 function toolbar($text = '', $v = 0) {return wgFactory('toolbar', $text);}
+function actionbar($text = '', $v = 0) {return wgFactory('actionbar', $text);}

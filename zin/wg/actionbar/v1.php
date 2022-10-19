@@ -1,5 +1,5 @@
 <?php
-class toolbar
+class actionbar
 {
     private $children = array();
 
@@ -14,7 +14,7 @@ class toolbar
 
     public function toString()
     {
-        $html = '<div class="btn-toolBar pull-left">';
+        $html = '<div class="pull-right">';
         foreach($this->children as $child)
         {
             if(is_string($child))
