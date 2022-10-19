@@ -50,23 +50,6 @@
               <li><span class='todoStatus'><?php echo $annualDataLang->todoStatus['done'];?></span><span><?php echo (int)$data['todos']->done;?></span></li>
             </ul>
           </li>
-          <?php
-          $contributions = 0;
-          $maxCount      = 0;
-          $radarData     = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
-          foreach($data['contributions'] as $objectType => $objectContributions)
-          {
-              $sum = array_sum($objectContributions);
-              if($sum > $maxCount) $maxCount = $sum;
-              $contributions += $sum;
-
-              foreach($objectContributions as $actionName => $count)
-              {
-                  $radarTypes = isset($annualDataConfig['radar'][$objectType][$actionName]) ? $annualDataConfig['radar'][$objectType][$actionName] : array('other');
-                  foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
-              }
-          }
-          ?>
           <?php if($dept !== '' or !empty($userID)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
@@ -140,12 +123,10 @@
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
       <div id='radarCanvas' style="display: none;"></div>
       <canvas id="canvas" width="330" height="280" style="margin-top:-30px"></canvas>
-      <?php if(is_array($options) and !empty($options)):?>
         <div class="scroll-shell">
             <i class="icon icon-play" id="stopPlaying"></i>
             <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
         </div>
-    <?php endif;?>
         
     </section>
     <section id='executionData'>
