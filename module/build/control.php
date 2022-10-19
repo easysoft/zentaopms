@@ -556,6 +556,9 @@ class build extends control
         $this->loadModel('tree');
         $this->loadModel('product');
 
+        $execution = $this->execution->getByID($build->execution);
+        if(!$execution->hasProduct and !$execution->multiple) unset($this->config->product->search['fields']['plan']);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -682,6 +685,9 @@ class build extends control
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getBuildPairs($build->product, $branch = 'all', $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        $execution = $this->execution->getByID($build->execution);
+        if(!$execution->hasProduct and !$execution->multiple) unset($this->config->bug->search['fields']['plan']);
 
         unset($this->config->bug->search['fields']['product']);
         unset($this->config->bug->search['params']['product']);
