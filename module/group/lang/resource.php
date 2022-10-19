@@ -1887,6 +1887,7 @@ $lang->dev->methodOrder[20] = 'translate';
 
 global $config;
 $hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false || (defined('IN_UPGRADE') && IN_UPGRADE);
+$hasTrack     = strpos(",$config->disabledFeatures,", ',track,') === false     || (defined('IN_UPGRADE') && IN_UPGRADE);
 $isURSR       = $config->URAndSR || (defined('IN_UPGRADE') && IN_UPGRADE);
 $hasProgram   = $config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE);
 if(!$hasWaterfall)
@@ -1906,5 +1907,6 @@ if(!$isURSR)
     unset($lang->resource->story->linkStory);
     unset($lang->resource->requirement);
 }
+if(!$hasTrack) unset($lang->resource->product->track);
 
 include (dirname(__FILE__) . '/changelog.php');

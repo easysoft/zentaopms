@@ -166,10 +166,14 @@ $lang->product->menu->project     = array('link' => "{$lang->project->common}|pr
 $lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
 $lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->track       = array('link' => "{$lang->track}|product|track|productID=%s");
 $lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
 $lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
+
+if(strpos(",$config->disabledFeatures,", ',track,') === false)
+{
+    $lang->product->menu->track = array('link' => "{$lang->track}|product|track|productID=%s");
+}
 
 /* Product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';

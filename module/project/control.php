@@ -280,7 +280,7 @@ class project extends control
             $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
 
-        $allProducts = array(0 => '') + $this->program->getProductPairs($selectedProgramID, 'assign', 'noclosed');
+        $allProducts = array(0 => '') + $this->program->getProductPairs(0, 'all', 'noclosed');
         $data['allProducts'] = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
         $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
 
@@ -540,25 +540,24 @@ class project extends control
             }
         }
 
-        if($this->app->tab == 'program' and $programID) $this->loadModel('program')->setMenu($programID);
-        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'program' and $programID)                   $this->loadModel('program')->setMenu($programID);
         if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
         $this->session->set('projectModel', $model);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $name       = '';
-        $code       = '';
-        $team       = '';
-        $whitelist  = '';
-        $acl        = 'private';
-        $auth       = 'extend';
-        $hasProduct = 1;
-
+        $name          = '';
+        $code          = '';
+        $team          = '';
+        $whitelist     = '';
+        $acl           = 'private';
+        $auth          = 'extend';
+        $hasProduct    = 1;
+        $shadow        = 0;
         $products      = array();
         $productPlans  = array();
-        $shadow        = 0;
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
         if($copyProjectID)
@@ -567,12 +566,12 @@ class project extends control
             $name        = $copyProject->name;
             $code        = $copyProject->code;
             $team        = $copyProject->team;
+            $whitelist   = $copyProject->whitelist;
             $acl         = $copyProject->acl;
             $auth        = $copyProject->auth;
-            $whitelist   = $copyProject->whitelist;
+            $hasProduct  = $copyProject->hasProduct;
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
-            $hasProduct  = $copyProject->hasProduct;
             $products    = $this->product->getProducts($copyProjectID);
 
             if(!$copyProject->hasProduct) $shadow = 1;
@@ -598,14 +597,13 @@ class project extends control
         $this->config->executionCommonList[$this->app->getClientLang()][0] :
         $this->config->executionCommonList[$this->app->getClientLang()][1];
 
-        $this->view->title = $this->lang->project->create;
-
+        $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
-        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed', '', $shadow);
+        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs(0, 'all', 'noclosed', '', $shadow);
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
@@ -713,7 +711,7 @@ class project extends control
         $productPlans        = array(0 => '');
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
-        $allProducts         = $this->program->getProductPairs($project->parent, 'assign', 'noclosed', $linkedProductIdList);
+        $allProducts         = $this->program->getProductPairs(0, 'all', 'noclosed', $linkedProductIdList);
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
         $parentProject       = $this->program->getByID($project->parent);
         $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
@@ -1562,17 +1560,10 @@ class project extends control
             }
             if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
-            if(!$project->multiple)
-            {
-                unset($this->lang->resource->project->execution);
-                unset($this->lang->resource->execution->create);
-                unset($this->lang->resource->execution->start);
-                unset($this->lang->resource->execution->delete);
-                unset($this->lang->resource->meeting);
-            }
+            if(!$project->multiple) $this->config->project->includedPriv = $this->config->project->noSprintPriv;
 
             $this->view->project  = $project;
-            $this->lang->resource = $this->project->processProjectPrivs($project->model);
+            $this->lang->resource = $this->project->processProjectPrivs($project->multiple ? $project->model : 'noSprint');
         }
 
         $this->display();
