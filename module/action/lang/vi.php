@@ -306,7 +306,9 @@ $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->submitreview          = 'submitted';
-$lang->action->label->managerepo            = 'Linked Code Repo';
+$lang->action->label->linkrepo              = 'Linked Code Repo';
+$lang->action->label->unlinkrepo            = 'Unlinked Code Repo';
+
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

@@ -2875,7 +2875,7 @@ class projectModel extends model
     }
 
     /**
-     * Update linked repos.
+     * Update linked repos. This method only for project without product.
      *
      * @param  int    $projectID
      * @param  array  $repos
@@ -2884,27 +2884,68 @@ class projectModel extends model
      */
     public function updateRepoRelations($projectID, $repos)
     {
-        /* Delete old relations. */
-        $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq('project')
-            ->andWhere('AID')->eq($projectID)
-            ->andWhere('BType')->eq('repo')
-            ->exec();
+        $this->loadModel('action');
+        $this->loadModel('product');
 
-        /* Insert new relations. */
-        foreach($repos as $repoID)
+        $linkedRepos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
+            ->fetchAll('id');
+        /* 1. Delete old relations. */
+
+        /* Get relations should be deleted. */
+        $shouldDeleteRepos = array_diff(array_keys($linkedRepos), $repos);
+        foreach($shouldDeleteRepos as $repoID)
         {
-            $newRelation = new stdclass;
-            $newRelation->AType = 'project';
-            $newRelation->AID   = $projectID;
-            $newRelation->BType = 'repo';
-            $newRelation->BID   = $repoID;
+            /* Remove project id form this repo. */
+            $repo        = zget($linkedRepos, $repoID, null);
+            $oldProjects = explode(',', $repo->projects);
+            $newProjects = array_filter($oldProjects, function($oldProjectID) use ($projectID)
+            {
+                return $projectID != $oldProjectID;
+            });
 
-            $this->dao->insert(TABLE_RELATION)->data($newRelation)->exec();
+            /* Remove products */
+            $shadowProduct = $this->loadModel('product')->getShadowProductByProject($projectID);
+            $oldProducts   = explode(',', $repo->product);
+            $newProducts   = array_filter($oldProducts, function($oldProductID)use($shadowProduct)
+            {
+                return $oldProductID != $shadowProduct->id;
+            });
+
+            $this->dao->update(TABLE_REPO)
+                ->set('product')->eq(implode(',', $newProducts))
+                ->set('projects')->eq(implode(',', $newProjects))
+                ->where('id')->eq($repo->id)->exec();
+
+            /* Save action log. */
+            $this->action->create('project', $projectID, 'unlinkRepo', $repo->name);
         }
 
-        $this->loadModel('action');
-        $this->action->create('project', $projectID, 'manageRepo');
+        /* 2. Add new relations. */
+
+        $products      = $this->product->getProductPairsByProject($projectID); // There will be only one (shadow) product for project without product.
+        $addedProducts = array_keys($products);
+
+        $addedRepos = array_diff($repos, array_keys($linkedRepos));
+        $newRepos   = $this->dao->select('*')->from(TABLE_REPO)->where('id')->in($addedRepos)->fetchAll();
+        foreach($newRepos as $repo)
+        {
+            $oldProducts = explode(',', $repo->product);
+            $newProducts = array_merge($oldProducts, $addedProducts);
+            $newProducts = array_unique($newProducts);
+
+            $oldProjects   = explode(',', $repo->projects);
+            $oldProjects[] = $projectID;
+            $newProjects   = array_unique($oldProjects);
+
+            $this->dao->update(TABLE_REPO)
+                ->set('product')->eq(implode(',', $newProducts))
+                ->set('projects')->eq(implode(',', $newProjects))
+                ->where('id')->eq($repo->id)->exec();
+
+            $this->action->create('project', $projectID, 'linkRepo', $repo->name);
+        }
     }
 
     /**
@@ -2916,15 +2957,9 @@ class projectModel extends model
      */
     public function linkedRepoPairs($projectID)
     {
-        $repoIDList = $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('AType')->eq('project')
-            ->andWhere('AID')->eq($projectID)
-            ->andWhere('BType')->eq('repo')
-            ->fetchPairs('BID', 'BID');
-
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->andWhere('id')->in($repoIDList)
+            ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
             ->fetchAll();
 
         $repoPairs = array();
