@@ -930,21 +930,22 @@ class projectModel extends model
     {
         $this->app->loadLang('group');
 
-        $privs = clone $this->lang->resource;
-        foreach($privs as $module => $methods)
+        $privs    = new stdclass();
+        $resource = $this->lang->resource;
+        foreach($resource as $module => $methods)
         {
-            if(!in_array($module, $this->config->programPriv->$model))
+            if(!$methods) continue;
+            if(!in_array($module, $this->config->programPriv->$model)) continue;
+
+            foreach($methods as $method => $label)
             {
-                unset($privs->$module);
-            }
-            elseif($methods)
-            {
-                foreach($methods as $method => $label)
-                {
-                    if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) unset($privs->$module->$method);
-                }
+                if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) continue;
+
+                if(!isset($privs->$module)) $privs->$module = new stdclass();
+                $privs->$module->$method = $label;
             }
         }
+
         return $privs;
     }
 
@@ -1511,7 +1512,7 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
@@ -2770,6 +2771,8 @@ class projectModel extends model
         $this->lang->project->menu        = $this->lang->$navGroup->menu;
         $this->lang->project->menuOrder   = $this->lang->$navGroup->menuOrder;
         $this->lang->project->dividerMenu = $this->lang->$navGroup->dividerMenu;
+
+        $this->loadModel('common')->resetProjectPriv($projectID);
     }
 
     /**

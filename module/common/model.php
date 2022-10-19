@@ -2424,12 +2424,6 @@ EOD;
 
             if(isset($this->app->user))
             {
-                if($this->app->tab == 'project')
-                {
-                    $projectPrivs = $this->loadModel('project')->processProjectPrivs();
-                    if(isset($projectPrivs->$module->$method)) return true;
-                }
-
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -2619,8 +2613,8 @@ EOD;
         foreach($programRights as $programRight) $programRightGroup[strtolower($programRight->module)][strtolower($programRight->method)] = 1;
 
         /* Reset priv by program privway. */
-        $rights = $this->app->user->rights['rights'];
         $this->app->user = clone $_SESSION['user'];
+        $rights = $this->app->user->rights['rights'];
 
         if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
@@ -2628,12 +2622,14 @@ EOD;
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            $projectPrivs = $this->loadModel('project')->processProjectPrivs();
-            foreach($rights as $module => $methods)
+            $projectPrivs = $this->loadModel('project')->processProjectPrivs($program->multiple ? $program->model : 'noSprint');
+            foreach($projectPrivs as $module => $methods)
             {
                 foreach($methods as $method)
                 {
-                    if(isset($projectPrivs->$module->$method)) unset($rights[$module][$method]);
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    if(isset($rights[$module][$method])) unset($rights[$module][$method]);
                 }
             }
 
@@ -2646,6 +2642,7 @@ EOD;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
             $this->app->user->rights['rights'] = $recomputedRights;
+            $this->session->set('user', $this->app->user);
         }
     }
 

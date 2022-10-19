@@ -1560,17 +1560,10 @@ class project extends control
             }
             if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
-            if(!$project->multiple)
-            {
-                unset($this->lang->resource->project->execution);
-                unset($this->lang->resource->execution->create);
-                unset($this->lang->resource->execution->start);
-                unset($this->lang->resource->execution->delete);
-                unset($this->lang->resource->meeting);
-            }
+            if(!$project->multiple) $this->config->project->includedPriv = $this->config->project->noSprintPriv;
 
             $this->view->project  = $project;
-            $this->lang->resource = $this->project->processProjectPrivs($project->model);
+            $this->lang->resource = $this->project->processProjectPrivs($project->multiple ? $project->model : 'noSprint');
         }
 
         $this->display();
