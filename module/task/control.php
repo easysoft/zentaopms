@@ -2020,6 +2020,9 @@ class task extends control
             }
         }
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
+
         $executions = $this->execution->getPairs();
 
         $this->execution->setMenu($executionID);
