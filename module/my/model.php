@@ -1188,13 +1188,14 @@ class myModel extends model
                 $review->type   = $type;
                 $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
                 $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
+                $review->title  = '';
                 if($type == 'attend')
                 {
-                    $review->title = zget($users, $object->account) . ': ' . $object->date . ' ' . $this->lang->attend->statusList[$object->status];
+                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->account), $object->date);
                 }
-                else
+                elseif(isset($this->lang->my->auditField->oaTitle[$type]))
                 {
-                    $review->title = zget($users, $object->createdBy) . ': ' . $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5);
+                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
                 }
                 $reviewList[] = $review;
             }
@@ -1277,17 +1278,18 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
 
             if($review->type == 'review') $review->type = 'project';
+            $review->title = '';
             if(isset($object->title))
             {
                 $review->title = $object->title;
             }
             elseif($objectType == 'attend')
             {
-                $review->title = zget($users, $object->account) . ': ' . $object->date . ' ' . $this->lang->attend->statusList[$object->status];
+                $review->title = sprintf($this->lang->my->auditField->oaTitle[$objectType], zget($users, $object->account), $object->date);
             }
-            else
+            elseif(isset($this->lang->my->auditField->oaTitle[$objectType]))
             {
-                $review->title = zget($users, $object->createdBy) . ': ' . $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5);
+                $review->title = sprintf($this->lang->my->auditField->oaTitle[$objectType], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
             }
 
             $reviewList[] = $review;

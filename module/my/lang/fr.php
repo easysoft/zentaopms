@@ -17,6 +17,7 @@ $lang->my->doc             = "My Docs";
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My Projects";
 $lang->my->execution       = "My {$lang->executionCommon}s";
+$lang->my->audit           = 'Review';
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->profile         = 'My Profile';
@@ -80,11 +81,17 @@ $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 $lang->my->storyMenu->assignedByMe = 'AssignedByMe';
 
-$lang->my->audit = new stdclass();
-$lang->my->audit->title  = 'Title';
-$lang->my->audit->time   = 'Time';
-$lang->my->audit->type   = 'Type';
-$lang->my->audit->status = 'Status';
+$lang->my->auditField = new stdclass();
+$lang->my->auditField->title  = 'Title';
+$lang->my->auditField->time   = 'Time';
+$lang->my->auditField->type   = 'Type';
+$lang->my->auditField->status = 'Status';
+
+$lang->my->auditField->oaTitle['attend']   = '%s application for attend: %s';
+$lang->my->auditField->oaTitle['leave']    = '%s application for leave: %s';
+$lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
+$lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
+$lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
 
 $lang->my->auditMenu = new stdclass();
 $lang->my->auditMenu->audit = new stdclass();
@@ -140,7 +147,7 @@ $lang->my->executionLinkList['execution-all']             = 'Enter the execution
 $lang->my->executionLinkList['execution-task']            = 'By default, enter the list of the most recently executed task, and you can view the task information under the current iteration';
 $lang->my->executionLinkList['execution-executionkanban'] = 'By default, you can enter the execution Kanban to view the execution status of projects in progress';
 
-$lang->my->confirmReview = 'Do you want to pass it?';
+$lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
 <div>

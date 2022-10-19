@@ -37,10 +37,10 @@
       ?>
       <tr>
         <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-        <th class='c-title'> <?php $rawMethod == 'contribute' ? print($lang->my->audit->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->audit->title);?></th>
-        <th class='c-type'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->audit->type);?></th>
-        <th class='c-date w-150px'> <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->audit->time);?></th>
-        <th class='c-status w-80px'><?php $rawMethod == 'contribute' ? print($lang->my->audit->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->audit->status);?></th>
+        <th class='c-title'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
+        <th class='c-type w-120px'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->auditField->type);?></th>
+        <th class='c-date w-150px'>  <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
+        <th class='c-status w-110px'><?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
         <?php if($rawMethod == 'audit'):?>
         <th class='c-actions-2'><?php echo $lang->actions?></th>
         <?php endif;?>
@@ -61,7 +61,12 @@
         <td class='c-title' title='<?php echo $review->title?>'>
           <?php
           $titleHtml = $review->title;
-          if(strpos(",{$config->my->oaObjectType},", ",$type,") === false) $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', true), $review->title, '', "class='iframe' data-width='90%'");
+          if($type != 'attend')
+          {
+              $class = "class='iframe' data-width='90%'";
+              if(strpos(",{$config->my->oaObjectType},", ",{$type},") !== false) $class = "data-toggle='modal'";
+              $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', true), $review->title, '', $class);
+          }
           echo $titleHtml;
           ?>
         </td>
@@ -124,7 +129,7 @@ $(function()
     {
         if($(this).hasClass('disabled')) return false;
         var status = $(this).data('status');
-        if(status == 'undefined' || confirm(confirmReview))
+        if(status == 'undefined' || confirm(confirmReview.pass))
         {
             $.get($(this).prop('href'), function(response)
             {

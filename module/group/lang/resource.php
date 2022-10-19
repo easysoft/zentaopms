@@ -88,6 +88,7 @@ $lang->resource->my->index           = 'indexAction';
 $lang->resource->my->todo            = 'todo';
 $lang->resource->my->calendar        = 'calendarAction';
 $lang->resource->my->work            = 'workAction';
+$lang->resource->my->audit           = 'audit';
 $lang->resource->my->contribute      = 'contributeAction';
 $lang->resource->my->project         = 'project';
 $lang->resource->my->profile         = 'profileAction';
@@ -121,6 +122,7 @@ $lang->my->methodOrder[70] = 'unbind';
 $lang->my->methodOrder[75] = 'team';
 $lang->my->methodOrder[80] = 'execution';
 $lang->my->methodOrder[85] = 'doc';
+$lang->my->methodOrder[90] = 'audit';
 
 /* Todo. */
 $lang->resource->todo = new stdclass();

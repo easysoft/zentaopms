@@ -17,6 +17,7 @@ $lang->my->doc             = "我的文档";
 $lang->my->createProgram   = '添加项目';
 $lang->my->project         = "我的项目";
 $lang->my->execution       = "我的{$lang->executionCommon}";
+$lang->my->audit           = '评审';
 $lang->my->issue           = '我的问题';
 $lang->my->risk            = '我的风险';
 $lang->my->profile         = '我的档案';
@@ -80,11 +81,17 @@ $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
 $lang->my->storyMenu->assignedByMe = '由我指派';
 
-$lang->my->audit = new stdclass();
-$lang->my->audit->title  = '评审标题';
-$lang->my->audit->time   = '提交时间';
-$lang->my->audit->type   = '评审对象';
-$lang->my->audit->status = '状态';
+$lang->my->auditField = new stdclass();
+$lang->my->auditField->title  = '评审标题';
+$lang->my->auditField->time   = '提交时间';
+$lang->my->auditField->type   = '评审对象';
+$lang->my->auditField->status = '状态';
+
+$lang->my->auditField->oaTitle['attend']   = '%s的考勤申请：%s';
+$lang->my->auditField->oaTitle['leave']    = '%s的请假申请：%s';
+$lang->my->auditField->oaTitle['makeup']   = '%s的补班申请：%s';
+$lang->my->auditField->oaTitle['overtime'] = '%s的加班申请：%s';
+$lang->my->auditField->oaTitle['lieu']     = '%s的调休申请：%s';
 
 $lang->my->auditMenu = new stdclass();
 $lang->my->auditMenu->audit = new stdclass();
@@ -140,7 +147,7 @@ $lang->my->executionLinkList['execution-all']             = '默认进入执行�
 $lang->my->executionLinkList['execution-task']            = '默认进入最近一个执行的任务列表，可以查看当前迭代下的任务信息';
 $lang->my->executionLinkList['execution-executionkanban'] = '默认进入执行看板，可以查看进行中项目的执行情况';
 
-$lang->my->confirmReview = '您确定要执行通过操作吗？';
+$lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
 <div>
