@@ -122,8 +122,8 @@
     </section>
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
-      <div id='radarCanvas'></div>
-      <div class="scroll-shell">
+      <div id='radarCanvas' class="hidden"></div>
+      <div class="scroll-shell hidden">
         <img alt="" id="showImg">
         <i class="icon icon-play" id="stopPlaying"></i>
         <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
@@ -245,48 +245,6 @@
 $(function()
 {
     var contributionData = [];
-    // var contributionData = [
-    //     // {
-    //     //     year: '2014',
-    //     //     data: [1,2,1,5,1],
-    //     //     img:''
-    //     // },
-    //     {
-    //         year: '2015',
-    //         data: [1,2,1,5,1],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2016',
-    //         data: [1,2,9,5,12],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2017',
-    //         data: [1,10,4,8,0],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2018',
-    //         data: [5,7,1,9,1],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2019',
-    //         data: [1,10,1,9,1],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2020',
-    //         data: [1,4,5,1,0],
-    //         img:''
-    //     },
-    //     {
-    //         year: '2021',
-    //         data: [1,9,1,8,1],
-    //         img:''
-    //     },
-    // ]
     
     if(contributionGroups) {
         for(var contributionKey in contributionGroups)
@@ -306,21 +264,35 @@ $(function()
     
     if(contributionData.length > 1)
     {
-        $('#radarCanvas').addClass('hidden');
+        $('.scroll-shell').removeClass('hidden');
+        
         for(var k=0;k<contributionData.length;k++)
         {
-            contributionData[k].img = renderCanvasImg(contributionData[k].data, true);
+            contributionData[k].img = renderCanvasImg(contributionData[k].data, true, k);
         }
     }
     else 
     {
-        $('.scroll-shell').addClass('hidden');
+        $('#radarCanvas').removeClass('hidden');
         renderCanvasImg([{value: <?php echo json_encode(array_values($radarData));?>}], false)
     }
     
-    function renderCanvasImg(paramsData, renderImg)
-    {
-        var radarChart  = echarts.init(document.getElementById('radarCanvas'));
+    function renderCanvasImg(paramsData, renderImg, index)
+    {  
+        var radarChart = null;
+        if(renderImg)
+        {
+            var canvas = document.createElement('div');
+            canvas.id = 'canvas' +index;
+            canvas.style.width = '300px';
+            canvas.style.height = '300px';
+            canvas.style.display = 'none';
+            radarChart = echarts.init(canvas);
+        }
+        else 
+        {
+            radarChart = echarts.init(document.getElementById('radarCanvas'));
+        }
         var radarOption = {
         tooltip: {},
         radar: {
@@ -358,82 +330,6 @@ $(function()
         }
     }
     
-   
-    // function exportImg () 
-    // {
-    //     var radarCanvasArr = echarts.getInstanceByDom(document.getElementById('radarCanvas'));
-    //     if(!radarCanvasArr)
-    //     {
-    //         radarCanvasArr = echarts.init(document.getElementById('radarCanvas'));
-    //     }
-    //     var radarCanvasimg = radarCanvasArr.getDataURL({
-    //         type: 'png',
-    //         PixelRatio: 1.5,
-    //     });
-    //     canvasImg = radarCanvasimg;
-    //     pngimages.push(canvasImg);
-        
-    // }
-
-    
-    // var canvasImg = '';
-    // var pngimages = [];
-    // exportImg();
-
-    // var cStream, recorder, chunks = [];
-    // function saveChunks(e)
-    // {
-    //     chunks.push(e.data);
-    // }
-    // function stopRecording()
-    // {
-    //     recorder.stop();
-    // }
-
-    // function exportStream(e)
-    // {
-    //     var blob = new Blob(chunks);
-    //     var vidURL = URL.createObjectURL(blob);
-    //     var canvasVideo = document.createElement('video');
-    //     canvasVideo.controls = true;
-    //     canvasVideo.src = vidURL;
-    //     canvasVideo.onended = function() {
-    //         URL.revokeObjectURL(vidURL);
-    //     }
-    //     document.body.insertBefore(canvasVideo, canvas);
-    // }
-
-    // var x = 0;
-    // var ctx = canvas.getContext('2d');
-
-    // var left = 0;
-  
-    // var animationCanvas = function() {
-    //     x = (x + 2) % (canvas.width + 100);
-    //     ctx.fillStyle = '#01061b';
-       
-    //     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //     var img=document.createElement("img");
-    //     img.src = canvasImg;
-    //     ctx.drawImage(img, 10, 10);
-    //     ctx.fillStyle = 'red';
-    //     // ctx.fillRect(x - 50, 20, 50, 50);
-        
-    //     rafId = requestAnimationFrame(animationCanvas);
-       
-
-    // };
-    // animationCanvas();
-
-    // var years = [];
-    // for(var key in totalYears){
-    //     years.push(totalYears[key]);
-    // }
-    // var radarCanvasDom = document.getElementById('radarCanvas');
-    // if(years.length > 1) {
-    //     radarCanvasDom.style.display = 'none';
-    // }
-    
     var index = 0;
     var timer = null;
     contributionData.map(function(item)
@@ -452,17 +348,17 @@ $(function()
     $('#timeline li')[0].classList.add('selecteded');
     $('#showImg')[0].src = $('#timeline li img')[0].src;
 
-    var ulElement = document.querySelector('#timeline');
-    ulElement.onclick = function(e) {
-        var lis = document.querySelectorAll('#timeline li');
-        var ps = document.querySelectorAll('#timeline li p');
+    var timelineDom = document.querySelector('#timeline');
+    timelineDom.onclick = function(e) {
+        var liData = document.querySelectorAll('#timeline li');
+        var pData = document.querySelectorAll('#timeline li p');
         var event = e || window.event;
         var target = event.target || event.srcElement;
         if (['P', 'LI'].includes(target.tagName) ) {  
-            classChange(ps, lis, target, target.tagName == 'LI');
-            for (var i = 0; i < lis.length; i++) {
-                if (lis[i].getAttribute('class') == 'selecteded') {
-                    $('#showImg')[0].src = $(lis[i]).find('img')[0].src;
+            classChange(liData, target, target.tagName == 'LI');
+            for (var i = 0; i < liData.length; i++) {
+                if (liData[i].getAttribute('class') == 'selecteded') {
+                    $('#showImg')[0].src = $(liData[i]).find('img')[0].src;
                     index = i;
                     break;
                 }
@@ -471,10 +367,10 @@ $(function()
         }
     }
    
-    function classChange(ps, lis, target, isParent)
+    function classChange(liData, target, isParent)
     {
-        lis.forEach(v => {
-            v.classList.remove('selecteded');
+        liData.forEach(function(liItem){
+            liItem.classList.remove('selecteded');
         })
         isParent ? target.classList.add('selecteded') : target.parentNode.classList.add('selecteded');
     }
@@ -508,28 +404,28 @@ $(function()
         }
     }
  
-   function autoPlay()
-   {
-        var lis = document.querySelectorAll('#timeline li');
-        var ps = document.querySelectorAll('#timeline li p');
+    function autoPlay()
+    {
+        var liData = document.querySelectorAll('#timeline li');
+        var pData = document.querySelectorAll('#timeline li p');
         timer = setInterval(function()
         {
-            if (index < ps.length - 1)
+            if (index < pData.length - 1)
             {
-                classChange(ps, lis, ps[index + 1]);
+                classChange(liData, pData[index + 1]);
                 $('#showImg')[0].src = $('#timeline li img')[index].src;
                 index++;
             }
             else 
             {
                 index = 0;               
-                classChange(ps, lis, ps[index]);
+                classChange(liData, pData[index]);
                 stopPlaying.classList.remove('icon-pause');
                 stopPlaying.classList.add('icon-play');
                 clearInterval(timer);
             }
         }, 1000);
-   }
+    }
 
     var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
 
