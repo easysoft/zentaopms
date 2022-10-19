@@ -1335,7 +1335,7 @@ class productModel extends model
     public function getExecutionPairsByProduct($productID, $branch = 0, $orderBy = 'id_asc', $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
-        if(empty($projectID) or $this->config->systemMode == 'classic') return $this->getAllExecutionPairsByProduct($productID, $branch);
+        if(empty($projectID) or $this->config->systemMode == 'classic') return $this->getAllExecutionPairsByProduct($productID, $branch, '', $mode);
 
         $project = $this->loadModel('project')->getByID($projectID);
         $orderBy = $project->model == 'waterfall' ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
@@ -1390,13 +1390,14 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $projectID
+     * @param  string $mode stagefilter or empty
      * @access public
      * @return array
      */
-    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0)
+    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
-        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('stage,sprint,kanban')
@@ -1429,8 +1430,10 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
-           if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
+            /* Some stage of waterfall not need.*/
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
+            if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+            if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
         }
 
         return $executionPairs;
