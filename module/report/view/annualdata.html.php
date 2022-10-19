@@ -244,48 +244,49 @@
 <script>
 $(function()
 {
-    var contributionData = [
-        // {
-        //     year: '2014',
-        //     data: [1,2,1,5,1],
-        //     img:''
-        // },
-        {
-            year: '2015',
-            data: [1,2,1,5,1],
-            img:''
-        },
-        {
-            year: '2016',
-            data: [1,2,9,5,12],
-            img:''
-        },
-        {
-            year: '2017',
-            data: [1,10,4,8,0],
-            img:''
-        },
-        {
-            year: '2018',
-            data: [5,7,1,9,1],
-            img:''
-        },
-        {
-            year: '2019',
-            data: [1,10,1,9,1],
-            img:''
-        },
-        {
-            year: '2020',
-            data: [1,4,5,1,0],
-            img:''
-        },
-        {
-            year: '2021',
-            data: [1,9,1,8,1],
-            img:''
-        },
-    ]
+    var contributionData = [];
+    // var contributionData = [
+    //     // {
+    //     //     year: '2014',
+    //     //     data: [1,2,1,5,1],
+    //     //     img:''
+    //     // },
+    //     {
+    //         year: '2015',
+    //         data: [1,2,1,5,1],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2016',
+    //         data: [1,2,9,5,12],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2017',
+    //         data: [1,10,4,8,0],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2018',
+    //         data: [5,7,1,9,1],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2019',
+    //         data: [1,10,1,9,1],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2020',
+    //         data: [1,4,5,1,0],
+    //         img:''
+    //     },
+    //     {
+    //         year: '2021',
+    //         data: [1,9,1,8,1],
+    //         img:''
+    //     },
+    // ]
     
     if(contributionGroups) {
         for(var contributionKey in contributionGroups)
