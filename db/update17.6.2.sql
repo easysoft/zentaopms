@@ -69,4 +69,4 @@ ALTER TABLE `zt_project` ADD `colWidth` smallint(4) NOT NULL DEFAULT '264' AFTER
 ALTER TABLE `zt_project` ADD `minColWidth` smallint(4) NOT NULL DEFAULT '180' AFTER `colWidth`;
 ALTER TABLE `zt_project` ADD `maxColWidth` smallint(4) NOT NULL DEFAULT '384' AFTER `minColWidth`;
 
-REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProductFeedback', '{}');
+REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProduct', '{"feedback":{},"ticket":{}}');

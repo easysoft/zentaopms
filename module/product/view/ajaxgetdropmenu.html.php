@@ -139,7 +139,12 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
       <?php if($this->app->tab == 'feedback'):?>
       <?php $selected = !$productID ? 'selected' : '';?>
+      <?php if($module == 'feedback'):?>
       <?php echo html::a(helper::createLink('feedback', 'admin', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
+      <?php if($module == 'ticket'):?>
+      <?php echo html::a(helper::createLink('ticket', 'browse', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
       <?php endif;?>
     </div>
   </div>
