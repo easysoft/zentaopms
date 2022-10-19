@@ -50,6 +50,7 @@ $lang->tree->successSave          = 'Sauvé.';
 $lang->tree->successFixed         = 'Corrigé.';
 $lang->tree->repeatName           = 'Le nom "%s" existe déjà !';
 $lang->tree->shouldNotBlank       = 'Module name should not be blank!';
+$lang->tree->syncProductModule    = 'Sync Module';
 
 $lang->tree->module       = 'Module';
 $lang->tree->name         = 'Nom';

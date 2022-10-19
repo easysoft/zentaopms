@@ -36,7 +36,7 @@ class taskRecordEstimateEntry extends Entry
         if(!$data) return $this->error('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $effort = array();
+        $effort = new stdclass();
         if($issetEffort and $data->data->efforts)    $effort = $data->data->efforts;
         if(!$issetEffort and $data->data->estimates) $effort = $data->data->estimates;
         $this->send(200, array('effort' => $effort));
