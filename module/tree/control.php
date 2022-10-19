@@ -45,7 +45,7 @@ class tree extends control
             $products = $this->product->getProducts($this->session->project, 'all', '', false);
             if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
-        else if($this->app->tab == 'feedback')
+        else if($this->app->tab == 'feedback' or $this->app->tab == 'ticket')
         {
             $products = $this->loadModel('feedback')->getGrantProducts();
             if(!$rootID) $rootID = key($products);
@@ -133,7 +133,7 @@ class tree extends control
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageBug;
         }
-        elseif($viewType == 'feedback')
+        elseif($viewType == 'feedback' or $viewType == 'ticket')
         {
             $this->app->loadLang('feedback');
             $this->lang->tree->menu = $this->lang->feedback->menu;
@@ -141,8 +141,10 @@ class tree extends control
             $root                   = new stdclass();
             $root->name             = !empty($rootID) ? $productItem->name : $this->lang->feedback->common;
             $this->view->root       = $root;
+            $syncConfig             = json_decode($this->config->global->syncProduct, true);
+            $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
 
-            $title      = $this->lang->tree->manageFeedback;
+            $title      = $this->lang->tree->{$viewType == 'feedback' ? 'manageFeedback' : 'manageTicket'};
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
         }
         elseif($viewType == 'case')

@@ -105,8 +105,10 @@ if($viewType == 'doc' or $viewType == 'api')
         </div>
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
-        <?php elseif($viewType == 'feedback'):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe'");?></div>
+        <?php elseif($viewType == 'feedback' and common::hasPriv('feedback', 'syncProduct') and !isset($syncConfig[$rootID])):?>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <?php elseif($viewType == 'ticket' and common::hasPriv('ticket', 'syncProduct') and !isset($syncConfig[$rootID])):?>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">
@@ -229,6 +231,8 @@ $(function()
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
+            if(item.type === 'feedback') $toggle.append('&nbsp; <span class="text-muted">[F]</span>');
+            if(item.type === 'ticket') $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
             $li.append($toggle);
             if(item.nodeType || item.type) $li.addClass('tree-item-' + (item.nodeType || item.type));
             $li.toggleClass('active', <?php echo $currentModuleID ?> === item.id);

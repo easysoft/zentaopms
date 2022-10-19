@@ -2315,6 +2315,10 @@ class productModel extends model
         {
             return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
         }
+        elseif($module == 'ticket')
+        {
+            return helper::createLink('ticket', 'browse', "browseType=byProduct&productID=%s");
+        }
 
         return $link;
     }
