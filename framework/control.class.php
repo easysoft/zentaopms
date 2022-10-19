@@ -36,7 +36,12 @@ class control extends baseControl
         if(!$moduleName) $moduleName = $this->moduleName;
 
         $className = strtolower(get_class($this));
-        if($className == $moduleName || $className == 'my' . $moduleName) $this->loadModel($moduleName, $appName, 'zen');
+        if($className == $moduleName || $className == 'my' . $moduleName)
+        {
+            $this->loadModel($moduleName, $appName, 'zen');
+            $zenClass = $moduleName . 'Zen';
+            if(isset($this->{$zenClass})) $this->{$zenClass}->view = $this->view;
+        }
 
         $this->app->setOpenApp();
 
