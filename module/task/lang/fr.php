@@ -148,6 +148,7 @@ $lang->task->my                = 'My ';
 $lang->task->hasConsumed       = 'Consommé';
 $lang->task->multiple          = 'Utilisateurs Multiples';
 $lang->task->multipleAB        = 'M';
+$lang->task->teamSetting       = 'Team Setting';
 $lang->task->team              = 'Equipe';
 $lang->task->transfer          = 'Transferer';
 $lang->task->transferTo        = 'Transferer à';

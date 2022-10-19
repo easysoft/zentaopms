@@ -836,7 +836,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
 
     var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
     var nameClass   = ['product', 'productplan'].indexOf(objectType) !== -1 ? 'c-title' : 'c-name';
-    $form.find('th.' + nameClass).addClass('flex-between').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
+    $form.find('th.' + nameClass).addClass('clearfix').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
 
     var allUnfold = true;
     $parentTd.each(function()

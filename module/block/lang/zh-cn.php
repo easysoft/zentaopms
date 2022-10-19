@@ -358,6 +358,7 @@ $lang->block->availableBlocks->risk        = '风险';
 $lang->block->availableBlocks->issue       = '问题';
 $lang->block->availableBlocks->meeting     = '会议';
 $lang->block->availableBlocks->feedback    = '反馈';
+$lang->block->availableBlocks->ticket      = '工单';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -478,6 +479,7 @@ $lang->block->issueCount    = '问题数';
 $lang->block->storyCount    = '需求数';
 $lang->block->meetingCount  = '会议数';
 $lang->block->feedbackCount = '反馈数';
+$lang->block->ticketCount   = '工单数';
 
 $lang->block->typeList = new stdclass();
 

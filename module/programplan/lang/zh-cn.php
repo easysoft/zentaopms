@@ -60,6 +60,9 @@ $lang->programplan->exporting        = '导出';
 $lang->programplan->exportFail       = '导出失败';
 $lang->programplan->hideCriticalPath = '隐藏关键路径';
 $lang->programplan->showCriticalPath = '显示关键路径';
+$lang->programplan->delay            = '是否延期';
+$lang->programplan->delayDays        = '延期天数';
+
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
 $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
@@ -69,6 +72,10 @@ $lang->programplan->checkEnd         = '『计划完成』应当为合法的日�
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
+
+$lang->programplan->delayList = array();
+$lang->programplan->delayList[1] = '是';
+$lang->programplan->delayList[0] = '否';
 
 $lang->programplan->noData        = '暂无数据。';
 $lang->programplan->children      = '二级计划';
@@ -89,6 +96,8 @@ $lang->programplan->ganttCustom['progress']     ='工作量占比';
 $lang->programplan->ganttCustom['taskProgress'] ='任务进度';
 $lang->programplan->ganttCustom['estimate']     ='工时';
 $lang->programplan->ganttCustom['consumed']     ='消耗工时';
+$lang->programplan->ganttCustom['delay']        = '是否延期';
+$lang->programplan->ganttCustom['delayDays']    = '延期天数';
 
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量比例"必须为数字';

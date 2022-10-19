@@ -194,7 +194,7 @@ $config->task->datatable->fieldList['activatedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['story']['title']      = "storyAB";
 $config->task->datatable->fieldList['story']['fixed']      = 'no';
-$config->task->datatable->fieldList['story']['width']      = '70';
+$config->task->datatable->fieldList['story']['width']      = '80';
 $config->task->datatable->fieldList['story']['required']   = 'no';
 $config->task->datatable->fieldList['story']['name']       = $lang->task->story;
 $config->task->datatable->fieldList['story']['control']    = 'select';

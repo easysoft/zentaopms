@@ -56,6 +56,12 @@
     <?php endif;?>
   </div>
 </div>
+<?php
+$waitCount      = 0;
+$doingCount     = 0;
+$suspendedCount = 0;
+$closedCount    = 0;
+?>
 <div id='mainContent' class="main-row fade">
   <?php if($this->config->systemMode == 'new'):?>
   <div id="sidebar" class="side-col">
@@ -94,10 +100,6 @@
       $useDatatable     = (!commonModel::isTutorialMode() and (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable'));
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
-      $waitCount        = 0;
-      $doingCount       = 0;
-      $suspendedCount   = 0;
-      $closedCount      = 0;
 
       if($useDatatable) include dirname(dirname(dirname(__FILE__))) . '/common/view/datatable.html.php';
       ?>
@@ -144,7 +146,7 @@
         }
         ?>
         </div>
-        <div class="table-statistic"><?php echo strpos(',all,undone,', ",$browseType,") !== false ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
+        <div class="table-statistic"><?php echo $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
@@ -172,7 +174,7 @@ $(function()
             var statistics        = summary;
             var checkedStatistics = checkedSummary.replace('%total%', checkedTotal);
 
-            if(browseType == 'all' || browseType == 'undone')
+            if(browseType == 'all')
             {
                 var checkedWait      = $checkedRows.filter("[data-status=wait]").length;
                 var checkedDoing     = $checkedRows.filter("[data-status=doing]").length;

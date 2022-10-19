@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
             ->get();
 
         if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
@@ -2214,6 +2214,7 @@ class bugModel extends model
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
 
+        if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);

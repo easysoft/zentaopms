@@ -205,7 +205,7 @@ class storyModel extends model
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
-            dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
+            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedBy);
             return false;
         }
 
@@ -226,7 +226,7 @@ class storyModel extends model
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket')
             ->get();
 
         /* Check repeat story. */
@@ -6039,5 +6039,26 @@ class storyModel extends model
         $product   = $this->loadModel('product')->getByID($productID);
         $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+    }
+
+    /**
+     * Get the last reviewer.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return string
+     */
+    public function getLastReviewer($storyID)
+    {
+        $lastReviewer = $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t1.objectID')->eq($storyID)
+            ->andWhere('t2.field')->in('reviewer,reviewers')
+            ->andWhere('t2.new')->ne('')
+            ->orderBy('t1.id_desc')
+            ->fetch('new');
+
+        return $lastReviewer;
     }
 }

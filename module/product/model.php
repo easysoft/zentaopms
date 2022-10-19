@@ -76,7 +76,7 @@ class productModel extends model
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
-
+        $isFeedbackModel = strpos(',feedback,', ",{$this->app->tab},") !== false ? true : false;
         if(count($products) <= 2 and isset($products[0]))
         {
             unset($products[0]);
@@ -86,7 +86,7 @@ class productModel extends model
         if(empty($products)) return;
 
         $this->app->loadLang('product');
-        if(!$isQaModule and !$productID)
+        if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
             return;
@@ -109,12 +109,21 @@ class productModel extends model
             $currentProduct->name = $products[$productID];
             $currentProduct->type = 'normal';
         }
+        if($isFeedbackModel and !$productID)
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = isset($products[$productID]) ? $products[$productID] : current($products);
+            $currentProduct->type = 'normal';
+        }
         $this->session->set('currentProductType', $currentProduct->type);
 
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $moduleName = 'product';
+            if($isQaModule) $moduleName = 'bug';
+            if($isFeedbackModel) $moduleName = 'feedback';
+            $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
@@ -2301,6 +2310,10 @@ class productModel extends model
         {
             $objectID = $module == 'project' ? 'projectID' : 'executionID';
             return helper::createLink($module, $method, "$objectID=$extra&productID=%s");
+        }
+        elseif($module == 'feedback')
+        {
+            return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
         }
 
         return $link;

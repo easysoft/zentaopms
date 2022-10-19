@@ -169,6 +169,7 @@ class programplanModel extends model
             }
         }
 
+        $today       = helper::today();
         $datas       = array();
         $planIdList  = array();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
@@ -204,6 +205,15 @@ class programplanModel extends model
             $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
             $data->textColor     = $this->lang->execution->gantt->stage->textColor;
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+            /* Determines if the object is delay. */
+            $data->delay     = $this->lang->programplan->delayList[0];
+            $data->delayDays = 0;
+            if($today > $end)
+            {
+                $data->delay     = $this->lang->programplan->delayList[1];
+                $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
+            }
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate(substr($data->endDate, 0, 10), substr($data->start_date, 0, 10)) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
@@ -284,6 +294,15 @@ class programplanModel extends model
             $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
             $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
             $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+            /* Determines if the object is delay. */
+            $data->delay     = $this->lang->programplan->delayList[0];
+            $data->delayDays = 0;
+            if($today > $end)
+            {
+                $data->delay     = $this->lang->programplan->delayList[1];
+                $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
+            }
 
             /* If multi task then show the teams. */
             if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
