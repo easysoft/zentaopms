@@ -130,10 +130,13 @@ body {margin-bottom: 25px;}
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
-        $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
-        $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
+        if($execution->multiple)
+        {
+            $class = common::hasPriv('execution', 'importTask') ? '' : "class=disabled";
+            $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
+            $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
+            echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
+        }
 
         if($execution->lifetime != 'ops')
         {
