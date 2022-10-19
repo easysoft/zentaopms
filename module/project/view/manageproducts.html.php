@@ -11,6 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('unmodifiableProducts', $unmodifiableProducts);?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
+<?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('BRANCH_MAIN', BRANCH_MAIN);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageProducts;?></span></span>
@@ -26,22 +33,15 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php $isDisabled = '';?>
-          <?php if($branchID == BRANCH_MAIN and isset($unmodifiableMainBranches[$productID])) $isDisabled = "disabled='disabled'";?>
-          <?php if($branchID != BRANCH_MAIN and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) $isDisabled = "disabled='disabled'";?>
-          <?php if(empty($project->multiple)) $isDisabled = '';?>
-          <?php $title      = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? $lang->project->notAllowRemoveProducts : $productName;?>
-          <?php $checked    = 'checked';?>
           <div class='col-sm-4'>
-            <div class='product <?php echo $checked . (isset($allBranches[$productID]) ? ' has-branch' : '')?>'>
-              <div class="checkbox-primary" title='<?php echo $title;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked id='products{$productID}' $isDisabled>";?>
+            <div class='product checked <?php echo isset($allBranches[$productID]) ? ' has-branch' : ''?>'>
+              <div class="checkbox-primary" title='<?php echo $productName;?>'>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' data-drop_direction='down' disabled='disabled'");?>
             </div>
           </div>
-          <?php if(!empty($isDisabled)) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
           <?php if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);?>
           <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
