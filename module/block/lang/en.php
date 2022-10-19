@@ -479,6 +479,7 @@ $lang->block->issueCount    = 'Issues';
 $lang->block->storyCount    = 'Stories';
 $lang->block->meetingCount  = 'Meetings';
 $lang->block->feedbackCount = 'Feedbacks';
+$lang->block->ticketCount   = 'Tickets';
 
 $lang->block->typeList = new stdclass();
 

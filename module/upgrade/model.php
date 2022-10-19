@@ -560,6 +560,13 @@ class upgradeModel extends model
             case '17_6_1':
                 $this->updateProductView();
                 break;
+            case '17_6_2':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                break;
         }
 
         $this->deletePatch();
@@ -1030,6 +1037,10 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.6'));
             case '17_6_1':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.6.1'));
+            case '17_6_2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.6.2'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
         }
 
         return $confirmContent;
