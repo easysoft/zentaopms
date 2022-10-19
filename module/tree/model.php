@@ -84,7 +84,11 @@ class treeModel extends model
         /* If feedback module is merge add story module.*/
         $syncConfig = json_decode($this->config->global->syncProduct, true);
         $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
-        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type = 'story,' . $type;
+        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID]))
+        {
+            $grade = $syncConfig[$rootID];
+            $type  = 'story,' . $type;
+        }
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -107,7 +111,7 @@ class treeModel extends model
             ->where('1=1')
             ->beginIF($type != 'feedback' or !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
             ->andWhere('type')->in($type)
-            ->beginIF($grade)->andWhere('grade')->lt($grade)->fi()
+            ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
             ->andWhere('(branch')->eq(0)
