@@ -722,6 +722,7 @@ class execution extends control
      * Browse stories of a execution.
      *
      * @param  int    $executionID
+     * @param  string $storyType story|requirement
      * @param  string $orderBy
      * @param  string $type
      * @param  string $param
@@ -731,7 +732,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story($executionID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($executionID = 0, $storyType = 'story', $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -739,6 +740,18 @@ class execution extends control
         $this->loadModel('datatable');
         $this->app->loadLang('datatable');
         $this->app->loadLang('testcase');
+
+        /* Change for requirement story title. */
+        if($storyType == 'requirement')
+        {    
+            $this->lang->story->title           = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->noStory         = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->noStory);
+            $this->lang->execution->createStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->execution->createStory);
+            $this->config->product->search['fields']['title'] = $this->lang->story->title;
+            unset($this->config->product->search['fields']['plan']);
+            unset($this->config->product->search['fields']['stage']);
+            $this->story->replaceURLang($storyType);
+        }
 
         $type      = strtolower($type);
         $param     = $param;
@@ -754,7 +767,7 @@ class execution extends control
         if($type == 'bymodule')
         {
             $module    = $this->loadModel('tree')->getByID($param);
-            $productID = $module->root;
+            $productID = isset($module->root) ? $module->root : 0;
 
             $_COOKIE['storyModuleParam']  = $param;
             $_COOKIE['storyProductParam'] = 0;
@@ -809,7 +822,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, $storyType, '', $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
@@ -847,7 +860,7 @@ class execution extends control
                 }
             }
         }
-        $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
+        $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchOption = array();
         foreach($branchGroups as $branches)
@@ -897,6 +910,16 @@ class execution extends control
         $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        if(!$execution->hasProduct and !$execution->multiple)
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), array('executionID' => $executionID, 'productID' => $productID), '', "&param=$param&storyType=$storyType");
+        }
+        else
+        {
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($executionID, 0, array('treeModel', $createModuleLink));
+        }
+
         /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
@@ -907,10 +930,12 @@ class execution extends control
         $this->view->allPlans          = $allPlans;
         $this->view->summary           = $this->product->summary($stories);
         $this->view->orderBy           = $orderBy;
+        $this->view->storyType         = $storyType;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
         $this->view->isAllProduct      = ($this->cookie->storyProductParam or $this->cookie->storyModuleParam or $this->cookie->storyBranchParam) ? false : true;
-        $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        $this->view->moduleTree        = $moduleTree;
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
         $this->view->storyTasks        = $storyTasks;

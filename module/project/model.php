@@ -2687,6 +2687,19 @@ class projectModel extends model
         $this->lang->$navGroup->menuOrder   = $this->lang->project->noMultiple->{$model}->menuOrder;
         $this->lang->$navGroup->dividerMenu = $this->lang->project->noMultiple->{$model}->dividerMenu;
 
+        /* Single execution and has no product project menu. */
+        if(!$project->hasProduct and !$project->multiple and !empty($this->config->URAndSR))
+        {
+            if(isset($this->lang->$navGroup->menu->storyGroup))
+            {
+                $this->lang->$navGroup->menu->story = $this->lang->$navGroup->menu->storyGroup;
+                $this->lang->$navGroup->menu->story['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['link'], '%s', $projectID);
+
+                $this->lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $projectID);
+                $this->lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($this->lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectID);
+            }
+        }
+
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
             $objectID = 0;

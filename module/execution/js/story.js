@@ -2,6 +2,15 @@ $(function()
 {
     if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
 
+    if(isDropMenu)
+    {
+        $('#navbar .nav li').removeClass('active');
+        $("#navbar .nav li[data-id=" + storyType + ']').addClass('active');
+
+        $('#navbar .nav>li[data-id=story]').addClass('active');
+        $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
+    }
+
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';

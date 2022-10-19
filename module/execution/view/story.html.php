@@ -19,6 +19,8 @@
 <?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
 <?php js::set('executionID', $execution->id);?>
 <?php js::set('projectID', $execution->project);?>
+<?php js::set('storyType', $storyType);?>
+<?php js::set('isDropMenu', (!$execution->hasProduct and !$execution->multiple and $config->URAndSR));?>
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('typeError', sprintf($this->lang->error->notempty, $this->lang->task->type))?>
 <?php js::set('typeNotEmpty', sprintf($this->lang->error->notempty, $this->lang->task->type));?>
@@ -50,7 +52,7 @@
     {
         $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
         $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
-        $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+        $removeLink  = inlink('story', "executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
         $removeBtn   = html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
     }
     ?>
@@ -64,14 +66,14 @@
     <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
     <?php $label  = "<span class='text'>$label</span>";?>
     <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('story', "executionID=$execution->id&orderBy=order_desc&type=$featureType"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('story', "executionID=$execution->id&storyType=$storyType&orderBy=order_desc&type=$featureType"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('execution', 'storykanban')):?>
     <div class="btn-group panel-actions">
-      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
+      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&storyType=$storyType&orderBy=order_desc&type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
       <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
     </div>
     <?php endif;?>
@@ -87,8 +89,8 @@
         if($productID)
         {
             $storyModuleID   = (int)$this->cookie->storyModuleParam;
-            $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
-            $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+            $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
+            $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id&plan=0&storyType=$storyType");
 
             $buttonLink  = '';
             $buttonTitle = '';
@@ -174,7 +176,10 @@
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php echo $moduleTree;?>
-      <div class="text-center"></div>
+      <div class="text-center">
+        <?php if($productID and !$execution->hasProduct and !$execution->multiple) common::printLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=all", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <hr class="space-sm" />
+      </div>
     </div>
   </div>
   <div class="main-col">
@@ -198,12 +203,12 @@
                 $storyModuleID = (int)$this->cookie->storyModuleParam;
                 if(common::hasPriv('story', 'create'))
                 {
-                    $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+                    $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType");
                     echo html::a($createStoryLink, "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-info' data-app=$app->tab");
                 }
                 elseif(common::hasPriv('story', 'batchCreate'))
                 {
-                    $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
+                    $batchCreateLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id&plan=0&storyType=$storyType");
                     echo html::a($batchCreateLink, "<i class='icon icon-plus'></i> " . $lang->story->batchCreate, '', "class='btn btn-info' data-app=$app->tab");
                 }
             }

@@ -336,21 +336,26 @@ $lang->execution->homeMenu->all             = array('link' => "{$lang->execution
 $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->task   = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
+$lang->execution->menu->task   = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug', 'exclude' => 'tree-browse');
 $lang->execution->menu->kanban = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
 $lang->execution->menu->burn   = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view   = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 
 if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 
-$lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
-$lang->execution->menu->qa       = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->devops   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->execution->menu->doc      = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
-$lang->execution->menu->build    = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
-$lang->execution->menu->action   = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
-$lang->execution->menu->settings = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
-$lang->execution->menu->more     = array('link' => "$lang->more|execution|more|%s");
+$lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate');
+$lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
+$lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
+$lang->execution->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|doc|tableContents|type=execution&objectID=%s", 'subModule' => 'doc');
+$lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
+$lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
+$lang->execution->menu->settings   = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
+$lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s");
+
+$lang->execution->menu->storyGroup['dropMenu'] = new stdclass();
+$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s");
+$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement");
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
@@ -394,20 +399,21 @@ $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang-
 
 $lang->execution->dividerMenu = ',story,build,';
 
-$lang->project->noMultiple                        = new stdclass();
-$lang->project->noMultiple->scrum                 = new stdclass();
-$lang->project->noMultiple->scrum->menu           = new stdclass();
-$lang->project->noMultiple->scrum->menu->task     = $lang->execution->menu->task;
-$lang->project->noMultiple->scrum->menu->kanban   = $lang->execution->menu->kanban;
-$lang->project->noMultiple->scrum->menu->burn     = $lang->execution->menu->burn;
-$lang->project->noMultiple->scrum->menu->view     = $lang->execution->menu->view;
-$lang->project->noMultiple->scrum->menu->story    = $lang->execution->menu->story;
-$lang->project->noMultiple->scrum->menu->qa       = $lang->scrum->menu->qa;
-$lang->project->noMultiple->scrum->menu->devops   = $lang->scrum->menu->devops;
-$lang->project->noMultiple->scrum->menu->doc      = $lang->scrum->menu->doc;
-$lang->project->noMultiple->scrum->menu->build    = $lang->scrum->menu->build;
-$lang->project->noMultiple->scrum->menu->dynamic  = $lang->scrum->menu->dynamic;
-$lang->project->noMultiple->scrum->menu->settings = $lang->scrum->menu->settings;
+$lang->project->noMultiple                          = new stdclass();
+$lang->project->noMultiple->scrum                   = new stdclass();
+$lang->project->noMultiple->scrum->menu             = new stdclass();
+$lang->project->noMultiple->scrum->menu->task       = $lang->execution->menu->task;
+$lang->project->noMultiple->scrum->menu->kanban     = $lang->execution->menu->kanban;
+$lang->project->noMultiple->scrum->menu->burn       = $lang->execution->menu->burn;
+$lang->project->noMultiple->scrum->menu->view       = $lang->execution->menu->view;
+$lang->project->noMultiple->scrum->menu->story      = $lang->execution->menu->story;
+$lang->project->noMultiple->scrum->menu->storyGroup = $lang->execution->menu->storyGroup;
+$lang->project->noMultiple->scrum->menu->qa         = $lang->scrum->menu->qa;
+$lang->project->noMultiple->scrum->menu->devops     = $lang->scrum->menu->devops;
+$lang->project->noMultiple->scrum->menu->doc        = $lang->scrum->menu->doc;
+$lang->project->noMultiple->scrum->menu->build      = $lang->scrum->menu->build;
+$lang->project->noMultiple->scrum->menu->dynamic    = $lang->scrum->menu->dynamic;
+$lang->project->noMultiple->scrum->menu->settings   = $lang->scrum->menu->settings;
 
 $lang->project->noMultiple->kanban                 = new stdclass();
 $lang->project->noMultiple->kanban->menu           = new stdclass();
