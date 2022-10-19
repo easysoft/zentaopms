@@ -214,6 +214,7 @@ $lang->product->noMatched      = '"%s" kann nicht gefunden werden.' . $lang->pro
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
+
 $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
