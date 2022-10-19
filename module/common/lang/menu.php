@@ -343,7 +343,7 @@ $lang->execution->menu->view   = array('link' => "$lang->view|execution|grouptas
 
 if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 
-$lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate');
+$lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate,storykanban');
 $lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban,batchtotask');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');

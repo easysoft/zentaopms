@@ -4,6 +4,8 @@ $(function()
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
 
+    $('#navbar .nav>li[data-id=story]>a').html($('.active [data-id=story]').text() + '<span class="caret"></span>');
+
     var stageMap = new Object();
     if(canBeChanged)
     {

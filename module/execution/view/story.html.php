@@ -71,7 +71,7 @@
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('execution', 'storykanban')):?>
+    <?php if(common::hasPriv('execution', 'storykanban') and $storyType == 'story'):?>
     <div class="btn-group panel-actions">
       <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&storyType=$storyType&orderBy=order_desc&type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
       <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
