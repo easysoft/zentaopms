@@ -141,6 +141,7 @@ class tree extends control
             $root                   = new stdclass();
             $root->name             = !empty($rootID) ? $productItem->name : $this->lang->feedback->common;
             $this->view->root       = $root;
+            $this->view->syncConfig = json_decode($this->config->global->syncProductFeedback, true);
 
             $title      = $this->lang->tree->manageFeedback;
             $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
