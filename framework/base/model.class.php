@@ -170,11 +170,11 @@ class baseModel
      */
     public function getModuleName()
     {
-        $parentClass = get_parent_class($this);
-        $selfClass   = get_class($this);
-        $className   = $parentClass == 'model' ? $selfClass : $parentClass;
-        if($className == 'extensionModel') return 'extension';
-        return strtolower(str_ireplace(array('ext', 'Model'), '', $className));
+        $className     = get_class($this);
+        $parentClasses = class_parents($this);
+        if(count($parentClasses) > 2) $className = current(array_slice($parentClasses, -3, 1));
+        if(strtolower(substr($className, -5)) == 'model') $className = strtolower(substr($className, 0, strlen($className) - 5));
+        return $className;
     }
 
     /**
