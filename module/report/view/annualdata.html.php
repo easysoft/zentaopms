@@ -5,7 +5,8 @@
 <?php $annualDataLang   = $lang->report->annualData;?>
 <?php $annualDataConfig = $config->report->annualData;?>
 <?php $soFar = sprintf($annualDataLang->soFar, $year);?>
-<?php js::set('totalYears', (array)($years)); ?>
+<?php js::set('totalYears', (array)$years); ?>
+<?php js::set('contributionGroups', $contributionGroups); ?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
   <main id='main' style='background: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_layout_header.png'?>) top no-repeat'>
     <header id='header'>
@@ -122,7 +123,8 @@
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
       <div id='radarCanvas' style="display: none;"></div>
-      <canvas id="canvas" width="330" height="280" style="margin-top:-30px"></canvas>
+      <canvas id="canvas" width="330" height="280" style="margin-top:-30px;"></canvas>
+      <!-- <img src="blob:http://wzm.oop.cc/4390c26b-15b8-4a97-b509-f1f0b11d4d71" alt=""> -->
         <div class="scroll-shell">
             <i class="icon icon-play" id="stopPlaying"></i>
             <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
@@ -243,6 +245,7 @@
 <script>
 $(function()
 {
+    console.log(contributionGroups);
     var radarChart  = echarts.init(document.getElementById('radarCanvas'));
     var radarOption = {
       tooltip: {},
@@ -270,10 +273,10 @@ $(function()
           data: [{value: <?php echo json_encode(array_values($radarData));?>}]
       }]
     };
-    console.log(totalYears);
+    console.log(' <?php echo json_encode(array_values($radarData));?>');
 
-    radarChart && radarChart.setOption(radarOption);
-
+    radarChart.setOption(radarOption);
+   
     function exportImg () 
     {
         var radarCanvasArr = echarts.getInstanceByDom(document.getElementById('radarCanvas'));
@@ -340,17 +343,16 @@ $(function()
 
     };
     animationCanvas();
-    var years = [];
-    for(var key in totalYears){
-        years.push(totalYears[key]);
-    }
-    var radarCanvasDom = document.getElementById('radarCanvas');
-    if(years.length > 1) {
-        radarCanvasDom.style.display = 'none';
-    }
+    // var years = [];
+    // for(var key in totalYears){
+    //     years.push(totalYears[key]);
+    // }
+    // var radarCanvasDom = document.getElementById('radarCanvas');
+    // if(years.length > 1) {
+    //     radarCanvasDom.style.display = 'none';
+    // }
     
-    
-    // var years = [2016, 2017, 2018, 2019, 2020, 2021, 2022]
+    var years = [2016, 2017, 2018, 2019, 2020, 2021, 2022]
     var index = 0
     var timer=null
     //创建时间轴对应的li

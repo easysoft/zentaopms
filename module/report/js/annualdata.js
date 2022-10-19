@@ -52,7 +52,6 @@ function drawStatusPieChart(id, title, data, callback)
             itemHeight: legendItemHeight,
             textStyle: legendTextStyle,
         },
-        saveAsImage: {},
         series: [
             {
                 name: title,
@@ -187,7 +186,6 @@ function exportAnnualImage(sucessCallback, errorCallback)
             if(sucessCallback) sucessCallback(imageUrl);
             afterFinish(canvas);
         });
-        console.log(imageUrl);
     });
 }
 
