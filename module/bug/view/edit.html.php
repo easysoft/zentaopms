@@ -29,6 +29,7 @@ js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
 js::set('isClosedBug'            , $bug->status == 'closed');
+js::set('projectExecutionPairs'  , $projectExecutionPairs);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -210,12 +211,11 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th class='w-85px'><?php echo $lang->bug->project;?></th>
                   <td><span id='projectBox'><?php echo html::select('project', $projects, $bug->project, "class='form-control chosen' onchange='loadProductExecutions($bug->product, this.value)'");?></span></td>
                 </tr>
-                <?php if(!$execution or $execution->multiple):?>
-                <tr>
+                <?php $executionClass = ($execution and !$execution->multiple) ? 'hide' : '';?>
+                <tr class="executionBox <?php echo $executionClass;?>" >
                   <th class='w-85px' id='executionBox'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>
-                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->bug->story;?></th>
                   <td><div id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class='form-control chosen'");?></div>

@@ -29,6 +29,7 @@ js::set('moduleID', $moduleID);
 js::set('tab', $this->app->tab);
 js::set('requiredFields', $config->bug->create->requiredFields);
 js::set('showFields', $showFields);
+js::set('projectExecutionPairs', $projectExecutionPairs);
 if($this->app->tab == 'execution') js::set('objectID', zget($execution, 'id', ''));
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
@@ -117,7 +118,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                   <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?>
                 </div>
                 <?php $executionClass = ($execution and !$execution->multiple) ? 'hidden' : '';?>
-                <div class="table-col <?php echo $executionClass;?>">
+                <div class="table-col executionBox <?php echo $executionClass;?>">
                   <div class='input-group' id='executionIdBox'>
                     <span class='input-group-addon fix-border' id='executionBox'><?php echo $projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution;?></span>
                     <?php echo html::select('execution', $executions, zget($execution, 'id', ''), "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>

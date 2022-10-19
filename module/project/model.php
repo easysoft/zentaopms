@@ -909,6 +909,17 @@ class projectModel extends model
     }
 
     /**
+     * Get project and execution pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutionPairs()
+    {
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
      * Process the project privs according to the project model.
      *
      * @param  string $model    sprint | waterfall
