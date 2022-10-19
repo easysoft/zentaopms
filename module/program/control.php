@@ -99,7 +99,8 @@ class program extends control
         $this->view->progressList = $this->program->getProgressList();
         $this->view->hasProject   = $hasProject;
 
-        $this->display();
+        // $this->display();
+        $this->render();
     }
 
     /**
