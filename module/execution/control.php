@@ -802,8 +802,8 @@ class execution extends control
         }
 
         /* Save session. */
-        $this->app->session->set('storyList', $this->app->getURI(true), 'execution');
-        $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
+        $this->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
@@ -878,8 +878,18 @@ class execution extends control
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $position[] = $this->lang->execution->story;
 
+        /* Get related tasks, bugs, cases count of each story. */
+        $storyIdList = array();
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(!empty($story->children))
+            {
+                foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+            }
+        }
+
         /* Count T B C */
-        $storyIdList = array_keys($stories);;
         $storyTasks  = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);

@@ -615,7 +615,8 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::locate($this->createLink('projectstory', 'view', "storyID=$storyID"), 'parent'));
+                    $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('projectstory', 'view', "storyID=$storyID");
+                    return print(js::locate($locateLink, 'parent'));
                 }
             }
             elseif($executionID)

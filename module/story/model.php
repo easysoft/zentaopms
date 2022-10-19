@@ -4472,6 +4472,27 @@ class storyModel extends model
 
                 if(($canEstimate or $canCreateCase) and $canUnlinkStory) $menu .= "<div class='dividing-line'></div>";
 
+                $executionID = empty($execution) ? 0 : $execution->id;
+                if(common::hasPriv('story', 'batchCreate') and !$execution->multiple and !$execution->hasProduct)
+                {
+                    $isClick = $this->isClickable($story, 'batchcreate');
+                    $title   = $this->lang->story->subdivide;
+                    if(!$isClick and $story->status != 'closed')
+                    {
+                        if($story->parent > 0)
+                        {
+                            $title = $this->lang->story->subDivideTip['subStory'];
+                        }
+                        else
+                        {
+                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                            if($story->status == 'active' and $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                        }
+                    }
+
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, 'browse', 'split', '', 'showinonlybody', '', '', $title);
+                }
+
                 if($canUnlinkStory)
                 {
                     $menu .= common::buildIconButton('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
