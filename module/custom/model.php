@@ -917,7 +917,7 @@ class customModel extends model
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";
             }
-            $disabledFeatures .= 'scrumMeasrecord,';
+            $disabledFeatures .= 'scrumMeasrecord,track';
         }
 
         $disabledFeatures = rtrim($disabledFeatures, ',');
