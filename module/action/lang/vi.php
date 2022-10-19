@@ -309,7 +309,6 @@ $lang->action->label->submitreview          = 'submitted';
 $lang->action->label->linkrepo              = 'Linked Code Repo';
 $lang->action->label->unlinkrepo            = 'Unlinked Code Repo';
 
-
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
 $lang->action->dynamicAction->todo['opened']    = 'Tạo việc làm';

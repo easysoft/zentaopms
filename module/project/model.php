@@ -2891,8 +2891,8 @@ class projectModel extends model
             ->where('deleted')->eq(0)
             ->andWhere("CONCAT(',', projects, ',')")->like("%,$projectID,%")
             ->fetchAll('id');
-        /* 1. Delete old relations. */
 
+        /* 1. Delete old relations. */
         /* Get relations should be deleted. */
         $shouldDeleteRepos = array_diff(array_keys($linkedRepos), $repos);
         foreach($shouldDeleteRepos as $repoID)
@@ -2923,7 +2923,6 @@ class projectModel extends model
         }
 
         /* 2. Add new relations. */
-
         $products      = $this->product->getProductPairsByProject($projectID); // There will be only one (shadow) product for project without product.
         $addedProducts = array_keys($products);
 
