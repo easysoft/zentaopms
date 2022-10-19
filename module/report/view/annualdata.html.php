@@ -122,13 +122,12 @@
     </section>
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
-      <div id='radarCanvas' style="display: none;"></div>
-      <canvas id="canvas" width="330" height="280" style="margin-top:-30px;"></canvas>
-      <!-- <img src="blob:http://wzm.oop.cc/4390c26b-15b8-4a97-b509-f1f0b11d4d71" alt=""> -->
-        <div class="scroll-shell">
-            <i class="icon icon-play" id="stopPlaying"></i>
-            <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
-        </div>
+      <div id='radarCanvas'></div>
+      <div class="scroll-shell">
+        <img alt="" id="showImg">
+        <i class="icon icon-play" id="stopPlaying"></i>
+        <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
+      </div>
         
     </section>
     <section id='executionData'>
@@ -245,104 +244,186 @@
 <script>
 $(function()
 {
-    console.log(contributionGroups);
-    var radarChart  = echarts.init(document.getElementById('radarCanvas'));
-    var radarOption = {
-      tooltip: {},
-      radar: {
-          splitArea:{areaStyle:{color: ['#010419']}},
-          radius:'65%',
-          <?php
-          $max = max($radarData);
-          if($max == 0) $max = 1;
-          $indicator = array();
-          foreach($annualDataLang->radarItems as $radarKey => $radarName)
-          {
-          	$indicator[$radarKey]['name'] = $radarName;
-          	$indicator[$radarKey]['max']  = $max;
-          }
-          ?>
-          indicator: <?php echo json_encode(array_values($indicator));?>
-      },
-      series: [{
-          name:'<?php echo $annualDataLang->radar;?>',
-          areaStyle:{color: 'rgb(45, 40, 33)'},
-          type: 'radar',
-          itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
-          lineStyle: {color: "rgb(247, 193, 35)"},
-          data: [{value: <?php echo json_encode(array_values($radarData));?>}]
-      }]
-    };
-    console.log(' <?php echo json_encode(array_values($radarData));?>');
-
-    radarChart.setOption(radarOption);
-   
-    function exportImg () 
-    {
-        var radarCanvasArr = echarts.getInstanceByDom(document.getElementById('radarCanvas'));
-        if(!radarCanvasArr)
+    var contributionData = [
+        // {
+        //     year: '2014',
+        //     data: [1,2,1,5,1],
+        //     img:''
+        // },
         {
-            radarCanvasArr = echarts.init(document.getElementById('radarCanvas'));
+            year: '2015',
+            data: [1,2,1,5,1],
+            img:''
+        },
+        {
+            year: '2016',
+            data: [1,2,9,5,12],
+            img:''
+        },
+        {
+            year: '2017',
+            data: [1,10,4,8,0],
+            img:''
+        },
+        {
+            year: '2018',
+            data: [5,7,1,9,1],
+            img:''
+        },
+        {
+            year: '2019',
+            data: [1,10,1,9,1],
+            img:''
+        },
+        {
+            year: '2020',
+            data: [1,4,5,1,0],
+            img:''
+        },
+        {
+            year: '2021',
+            data: [1,9,1,8,1],
+            img:''
+        },
+    ]
+    
+    if(contributionGroups) {
+        for(var contributionKey in contributionGroups)
+        {
+            var contributionItem = {
+                year: contributionKey,
+                data: [],
+                img: ''
+            }
+            for(var itemKey in contributionGroups[contributionKey])
+            {
+                contributionItem.data.push(contributionGroups[contributionKey][itemKey]);
+            }
+            contributionData.push(contributionItem);
         }
-        var radarCanvasimg = radarCanvasArr.getDataURL({
-            type: 'png',
-            PixelRatio: 1.5,
-        });
-        canvasImg = radarCanvasimg;
-        pngimages.push(canvasImg);
-        
     }
+    
+    if(contributionData.length > 1)
+    {
+        $('#radarCanvas').addClass('hidden');
+        for(var k=0;k<contributionData.length;k++)
+        {
+            contributionData[k].img = renderCanvasImg(contributionData[k].data, true);
+        }
+    }
+    else 
+    {
+        $('.scroll-shell').addClass('hidden');
+        renderCanvasImg([{value: <?php echo json_encode(array_values($radarData));?>}], false)
+    }
+    
+    function renderCanvasImg(paramsData, renderImg)
+    {
+        var radarChart  = echarts.init(document.getElementById('radarCanvas'));
+        var radarOption = {
+        tooltip: {},
+        radar: {
+            splitArea:{areaStyle:{color: ['#010419']}},
+            radius:'65%',
+            <?php
+            $max = max($radarData);
+            if($max == 0) $max = 1;
+            $indicator = array();
+            foreach($annualDataLang->radarItems as $radarKey => $radarName)
+            {
+                $indicator[$radarKey]['name'] = $radarName;
+                $indicator[$radarKey]['max']  = $max;
+            }
+            ?>
+            indicator: <?php echo json_encode(array_values($indicator));?>
+        },
+        series: [{
+            name:'<?php echo $annualDataLang->radar;?>',
+            areaStyle:{color: 'rgb(45, 40, 33)'},
+            type: 'radar',
+            itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
+            lineStyle: {color: "rgb(247, 193, 35)"},
+            data: paramsData
+        }]
+        };
+        radarChart.setOption(radarOption);
+        if(renderImg)
+        {
+            var radarCanvasimg = radarChart.getDataURL({
+                type: 'png',
+                PixelRatio: 1.5,
+            });
+            return radarCanvasimg;
+        }
+    }
+    
+   
+    // function exportImg () 
+    // {
+    //     var radarCanvasArr = echarts.getInstanceByDom(document.getElementById('radarCanvas'));
+    //     if(!radarCanvasArr)
+    //     {
+    //         radarCanvasArr = echarts.init(document.getElementById('radarCanvas'));
+    //     }
+    //     var radarCanvasimg = radarCanvasArr.getDataURL({
+    //         type: 'png',
+    //         PixelRatio: 1.5,
+    //     });
+    //     canvasImg = radarCanvasimg;
+    //     pngimages.push(canvasImg);
+        
+    // }
 
     
-    var canvasImg = '';
-    var pngimages = [];
-    exportImg();
-    setInterval(function(){exportImg();}, 1000);
+    // var canvasImg = '';
+    // var pngimages = [];
+    // exportImg();
 
-    var cStream, recorder, chunks = [];
-    function saveChunks(e)
-    {
-        chunks.push(e.data);
-    }
-    function stopRecording()
-    {
-        recorder.stop();
-    }
+    // var cStream, recorder, chunks = [];
+    // function saveChunks(e)
+    // {
+    //     chunks.push(e.data);
+    // }
+    // function stopRecording()
+    // {
+    //     recorder.stop();
+    // }
 
-    function exportStream(e)
-    {
-        var blob = new Blob(chunks);
-        var vidURL = URL.createObjectURL(blob);
-        var canvasVideo = document.createElement('video');
-        canvasVideo.controls = true;
-        canvasVideo.src = vidURL;
-        canvasVideo.onended = function() {
-            URL.revokeObjectURL(vidURL);
-        }
-        document.body.insertBefore(canvasVideo, canvas);
-    }
+    // function exportStream(e)
+    // {
+    //     var blob = new Blob(chunks);
+    //     var vidURL = URL.createObjectURL(blob);
+    //     var canvasVideo = document.createElement('video');
+    //     canvasVideo.controls = true;
+    //     canvasVideo.src = vidURL;
+    //     canvasVideo.onended = function() {
+    //         URL.revokeObjectURL(vidURL);
+    //     }
+    //     document.body.insertBefore(canvasVideo, canvas);
+    // }
 
-    var x = 0;
-    var ctx = canvas.getContext('2d');
+    // var x = 0;
+    // var ctx = canvas.getContext('2d');
 
-    var left = 0;
+    // var left = 0;
   
-    var animationCanvas = function() {
-        x = (x + 2) % (canvas.width + 100);
-        ctx.fillStyle = '#01061b';
+    // var animationCanvas = function() {
+    //     x = (x + 2) % (canvas.width + 100);
+    //     ctx.fillStyle = '#01061b';
        
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        var img=document.createElement("img");
-        img.src = canvasImg;
-        ctx.drawImage(img, 10, 10);
-        ctx.fillStyle = 'red';
-        // ctx.fillRect(x - 50, 20, 50, 50);
+    //     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //     var img=document.createElement("img");
+    //     img.src = canvasImg;
+    //     ctx.drawImage(img, 10, 10);
+    //     ctx.fillStyle = 'red';
+    //     // ctx.fillRect(x - 50, 20, 50, 50);
         
-        rafId = requestAnimationFrame(animationCanvas);
+    //     rafId = requestAnimationFrame(animationCanvas);
        
 
-    };
-    animationCanvas();
+    // };
+    // animationCanvas();
+
     // var years = [];
     // for(var key in totalYears){
     //     years.push(totalYears[key]);
@@ -352,61 +433,56 @@ $(function()
     //     radarCanvasDom.style.display = 'none';
     // }
     
-    var years = [2016, 2017, 2018, 2019, 2020, 2021, 2022]
-    var index = 0
-    var timer=null
-    //创建时间轴对应的li
-    years.map(k => {
-        var createLi = document.createElement('li')
-        var createP = document.createElement('p')
-        createP.innerHTML = k
-        createLi.appendChild(createP)
-        timeline.appendChild(createLi)
-    })
-    //默认选中第一个
-    var timelines = document.querySelectorAll('#timeline li');
-    timelines[0].classList.add('selecteded');
-    var ps = document.querySelectorAll('#timeline li p');
-    ps[0].classList.add('class1');
- 
-    //点击事件,点击其中一个切换到相应的效果
+    var index = 0;
+    var timer = null;
+    contributionData.map(function(item)
+    {
+        var createLi = document.createElement('li');
+        var createP = document.createElement('p');
+        var createImg = document.createElement('img');
+        createImg.src = item.img;
+        createImg.style.display = 'none';
+        createP.innerHTML = contributionData.length < 6 ? item.year : item.year.substring(item.year.length - 2, item.year.length);;
+        createLi.appendChild(createP);
+        createLi.appendChild(createImg);
+        timeline.appendChild(createLi);
+    });
+    
+    $('#timeline li')[0].classList.add('selecteded');
+    $('#showImg')[0].src = $('#timeline li img')[0].src;
+
     var ulElement = document.querySelector('#timeline');
     ulElement.onclick = function(e) {
-    var lis = document.querySelectorAll('#timeline li');
-    var ps = document.querySelectorAll('#timeline li p');
-    var event = e || window.event;
-    var target = event.target || event.srcElement;
-    if (target.tagName == 'P') {  
-        classChange(ps, lis, target);
-        for (var i = 0; i < lis.length; i++) {
-            if (lis[i].getAttribute('class') == 'selecteded') {
-                //记住此时被点击的索引,方便点击播放按钮时继续播放
-                index = i;
-                console.log(index);
-                break;
+        var lis = document.querySelectorAll('#timeline li');
+        var ps = document.querySelectorAll('#timeline li p');
+        var event = e || window.event;
+        var target = event.target || event.srcElement;
+        if (['P', 'LI'].includes(target.tagName) ) {  
+            classChange(ps, lis, target, target.tagName == 'LI');
+            for (var i = 0; i < lis.length; i++) {
+                if (lis[i].getAttribute('class') == 'selecteded') {
+                    $('#showImg')[0].src = $(lis[i]).find('img')[0].src;
+                    index = i;
+                    break;
+                }
+        
             }
-    
         }
     }
-   }
    
-   //公共部分,清除掉所有的样式,再给点击的添加相应的类名
-    function classChange(ps, lis, target) {
-        ps.forEach(k => {
-            k.classList.remove('class1');
-        })
-        target.classList.add('class1');
+    function classChange(ps, lis, target, isParent)
+    {
         lis.forEach(v => {
             v.classList.remove('selecteded');
         })
-        target.parentNode.classList.add('selecteded');
+        isParent ? target.classList.add('selecteded') : target.parentNode.classList.add('selecteded');
     }
- 
-    //播放和暂停按钮
+    
     var stopPlaying = document.getElementById('stopPlaying');
     if (stopPlaying)
     {
-        stopPlaying.onclick = () => {
+        stopPlaying.onclick = function()
+        {
             if (stopPlaying.className.indexOf('play') != -1)
             {
                 stopPlaying.classList.remove('icon-play');
@@ -417,7 +493,6 @@ $(function()
             }
             else 
             {
-                console.log('clearInterval');
                 stopPlaying.classList.remove('icon-pause');
                 stopPlaying.classList.add('icon-play');
                 if (timer)
@@ -432,17 +507,20 @@ $(function()
         }
     }
  
-   //自动播放
    function autoPlay()
    {
         var lis = document.querySelectorAll('#timeline li');
         var ps = document.querySelectorAll('#timeline li p');
-        timer = setInterval(() => {
-            if (index < ps.length - 1) {
+        timer = setInterval(function()
+        {
+            if (index < ps.length - 1)
+            {
                 classChange(ps, lis, ps[index + 1]);
+                $('#showImg')[0].src = $('#timeline li img')[index].src;
                 index++;
-            } else {
-                //跳转到开始
+            }
+            else 
+            {
                 index = 0;               
                 classChange(ps, lis, ps[index]);
                 stopPlaying.classList.remove('icon-pause');
@@ -554,6 +632,6 @@ $(function()
     ?>
     <?php endforeach;?>
 })
-// <script type="text/javascript" src="./js/processor.js">
+
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
