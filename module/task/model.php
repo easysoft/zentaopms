@@ -4053,14 +4053,14 @@ class taskModel extends model
             }
         }
         $list .= '</td>';
-        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
-        $list .= '<td></td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
         $list .= helper::isZeroDate($task->deadline) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->deadline . '</td>';
-        $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td></td>';
         $list .= '<td></td>';
         $list .= '<td class="c-actions">';
         $list .= $this->buildOperateMenu($task, 'browse');
