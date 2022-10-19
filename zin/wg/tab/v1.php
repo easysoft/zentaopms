@@ -25,6 +25,6 @@ class tab
     public function toString()
     {
         $active = $this->isActive ? 'btn-active-text' : '';
-        return html::a($link, $this->text, '', "class='btn btn-link $active'");
+        return html::a($this->link, $this->text, '', "class='btn btn-link $active'");
     }
 }
