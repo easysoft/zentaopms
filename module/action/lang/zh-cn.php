@@ -392,7 +392,8 @@ $lang->action->label->updatetolib           = '更新了';
 $lang->action->label->ganttmove             = '排序了';
 $lang->action->label->submitreview          = '提交了评审';
 $lang->action->label->switchtolean          = '从综合模式切换为迅捷模式';
-$lang->action->label->managerepo            = '关联了代码库';
+$lang->action->label->linkrepo              = '关联了代码库';
+$lang->action->label->unlinkrepo            = '取消关联代码库';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

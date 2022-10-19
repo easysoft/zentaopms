@@ -91,7 +91,8 @@ class repoModel extends model
             return $output;
         }
 
-        $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu', "repoID=$repoID&module=$currentModule&method=$currentMethod");
+        $projectID    = $this->app->tab == 'project' ? $this->get->objectID : 0;
+        $dropMenuLink = helper::createLink('repo', 'ajaxGetDropMenu', "repoID=$repoID&module=$currentModule&method=$currentMethod&projectId=$projectID");
 
         $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentRepoName}'><span class='text'>{$currentRepoName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
