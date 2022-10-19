@@ -1385,8 +1385,11 @@ class portModel extends model
 
                 elseif($control == 'hidden')   $html .= html::hidden("$name", $selected);
 
-                elseif($control == 'textarea') $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
-
+                elseif($control == 'textarea')
+                {
+                    if($model == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
+                    $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
+                }
                 elseif($field == 'stepDesc' or $field == 'stepExpect')
                 {
                     $stepDesc = $this->process4Testcase($field, $tmpList, $row);
