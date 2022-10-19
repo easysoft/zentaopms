@@ -207,23 +207,30 @@ class baseModel
      */
     public function loadModel($moduleName, $appName = '', $type = 'model')
     {
-        if(empty($moduleName)) return false;
+        if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
-        $moduleName = strtolower($moduleName);
 
         $objectName = $type == 'model' ? $moduleName : $moduleName . ucfirst($type);
 
         global $loadedModels;
         if(isset($loadedModels[$type][$appName][$moduleName]))
         {
-            $this->$objectName = $loadedModels[$type][$appName][$moduleName];
-            return $this->$objectName;
+            $this->{$objectName} = $loadedModels[$type][$appName][$moduleName];
+            return $this->{$objectName};
         }
 
         $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
 
+        /**
+         * 如果没有model文件，返回。
+         * If no model file, return.
+         */
         if(!helper::import($modelFile)) return false;
 
+        /**
+         * 如果没有扩展文件，model类名是$moduleName + $type，如果有扩展，还需要增加ext前缀。
+         * If no extension file, model class name is $moduleName + $type, else with 'ext' as the prefix.
+         */
         $modelClass = class_exists('ext' . $appName . $moduleName. $type) ? 'ext' . $appName . $moduleName . $type : $appName . $moduleName . $type;
         if(!class_exists($modelClass))
         {
@@ -231,9 +238,18 @@ class baseModel
             if(!class_exists($modelClass)) $this->app->triggerError(" The $type $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        $this->$objectName = new $modelClass($appName);
-        $loadedModels[$type][$appName][$moduleName] = $this->$objectName;
-        return $this->$objectName;
+        /**
+         * 因为tao继承model，构造函数里会调用loadModel方法，赋默认值值防止递归调用。
+         */
+        if($type == 'tao') $loadedModels[$type][$appName][$moduleName] = false;
+
+        /**
+         * 初始化model对象，在model对象中可以通过$this->$objectName来引用。
+         * Init the model object thus you can try $this->$objectName to access it.
+         */
+        $this->{$objectName} = new $modelClass($appName);
+        $loadedModels[$type][$appName][$moduleName] = $this->{$objectName};
+        return $this->{$objectName};
     }
 
     /**
