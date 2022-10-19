@@ -5,7 +5,6 @@
 <?php $annualDataLang   = $lang->report->annualData;?>
 <?php $annualDataConfig = $config->report->annualData;?>
 <?php $soFar = sprintf($annualDataLang->soFar, $year);?>
-<?php js::set('totalYears', (array)$years); ?>
 <?php js::set('contributionGroups', $contributionGroups); ?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
   <main id='main' style='background: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_layout_header.png'?>) top no-repeat'>
@@ -123,10 +122,10 @@
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
       <div id='radarCanvas' class="hidden"></div>
-      <div class="scroll-shell hidden">
+      <div class="scroll-canvas hidden">
         <img alt="" id="showImg">
         <i class="icon icon-play" id="stopPlaying"></i>
-        <ul id="timeline" ref="timeline" onclick="timeline($event)" class="scroll"></ul>
+        <ul id="timeline" ref="timeline" class="scroll"></ul>
       </div>
         
     </section>
@@ -245,7 +244,6 @@
 $(function()
 {
     var contributionData = [];
-    
     if(contributionGroups) {
         for(var contributionKey in contributionGroups)
         {
@@ -261,14 +259,12 @@ $(function()
             contributionData.push(contributionItem);
         }
     }
-    
     if(contributionData.length > 1)
     {
-        $('.scroll-shell').removeClass('hidden');
-        
-        for(var k=0;k<contributionData.length;k++)
+        $('.scroll-canvas').removeClass('hidden');
+        for(var k = 0; k < contributionData.length; k++)
         {
-            contributionData[k].img = renderCanvasImg(contributionData[k].data, true, k);
+            contributionData[k].img = renderCanvasImg([{value: contributionData[k].data}], true, k);
         }
     }
     else 
@@ -283,7 +279,7 @@ $(function()
         if(renderImg)
         {
             var canvas = document.createElement('div');
-            canvas.id = 'canvas' +index;
+            canvas.id = 'canvas' + index;
             canvas.style.width = '300px';
             canvas.style.height = '300px';
             canvas.style.display = 'none';
@@ -324,7 +320,7 @@ $(function()
         {
             var radarCanvasimg = radarChart.getDataURL({
                 type: 'png',
-                PixelRatio: 1.5,
+                PixelRatio: 2,
             });
             return radarCanvasimg;
         }
@@ -339,7 +335,7 @@ $(function()
         var createImg = document.createElement('img');
         createImg.src = item.img;
         createImg.style.display = 'none';
-        createP.innerHTML = contributionData.length < 6 ? item.year : item.year.substring(item.year.length - 2, item.year.length);;
+        createP.innerHTML = contributionData.length < 10 ? item.year : item.year.substring(item.year.length - 2, item.year.length);;
         createLi.appendChild(createP);
         createLi.appendChild(createImg);
         timeline.appendChild(createLi);
@@ -347,17 +343,22 @@ $(function()
     
     $('#timeline li')[0].classList.add('selecteded');
     $('#showImg')[0].src = $('#timeline li img')[0].src;
-
-    var timelineDom = document.querySelector('#timeline');
-    timelineDom.onclick = function(e) {
-        var liData = document.querySelectorAll('#timeline li');
-        var pData = document.querySelectorAll('#timeline li p');
+    $('#timeline').on('click', function(e) {
+        var liData = $('#timeline li');
+        var pData = $('#timeline li p');
         var event = e || window.event;
         var target = event.target || event.srcElement;
         if (['P', 'LI'].includes(target.tagName) ) {  
             classChange(liData, target, target.tagName == 'LI');
             for (var i = 0; i < liData.length; i++) {
-                if (liData[i].getAttribute('class') == 'selecteded') {
+                if ($(liData[i])[0].classList.contains('selecteded')) {
+                    if(target.tagName == 'LI')
+                    {
+                        $(liData[i]).prevAll().addClass('active');
+                    }
+                    else {
+                        $(liData[i]).parent().prevAll().addClass('active');
+                    }
                     $('#showImg')[0].src = $(liData[i]).find('img')[0].src;
                     index = i;
                     break;
@@ -365,49 +366,56 @@ $(function()
         
             }
         }
-    }
+    });
    
     function classChange(liData, target, isParent)
     {
-        liData.forEach(function(liItem){
-            liItem.classList.remove('selecteded');
-        })
-        isParent ? target.classList.add('selecteded') : target.parentNode.classList.add('selecteded');
-    }
-    
-    var stopPlaying = document.getElementById('stopPlaying');
-    if (stopPlaying)
-    {
-        stopPlaying.onclick = function()
+        for (var i = 0; i < liData.length; i++) {
+            $(liData[i]).removeClass('selecteded');
+        }
+        // isParent ? $(target).addClass('selecteded') : $(target).parent().addClass('selecteded');
+        if(isParent)
         {
-            if (stopPlaying.className.indexOf('play') != -1)
+            $(target).addClass('selecteded');
+            $(target).prevAll().addClass('active');
+        }
+        else {
+            $(target).parent().addClass('selecteded');
+            $(target).parent().prevAll().addClass('active');
+        }
+    }
+    if ($('#stopPlaying'))
+    {
+        $('#stopPlaying').on('click', function()
+        {
+            if ($('#stopPlaying')[0].classList.contains('icon-play'))
             {
-                stopPlaying.classList.remove('icon-play');
-                stopPlaying.classList.add('icon-pause');
+                $('#stopPlaying').removeClass('icon-play');
+                $('#stopPlaying').addClass('icon-pause');
                 if (!timer) {
                     autoPlay();
                 }
             }
             else 
             {
-                stopPlaying.classList.remove('icon-pause');
-                stopPlaying.classList.add('icon-play');
+                $('#stopPlaying').removeClass('icon-pause');
+                $('#stopPlaying').addClass('icon-play');
                 if (timer)
                 {
-                    timer = clearInterval(timer)
+                    timer = clearInterval(timer);
                 }
                 else
                 {
                     return
                 }
             }
-        }
+        });
     }
  
     function autoPlay()
     {
-        var liData = document.querySelectorAll('#timeline li');
-        var pData = document.querySelectorAll('#timeline li p');
+        var liData = $('#timeline li');
+        var pData = $('#timeline li p');
         timer = setInterval(function()
         {
             if (index < pData.length - 1)
@@ -420,8 +428,9 @@ $(function()
             {
                 index = 0;               
                 classChange(liData, pData[index]);
-                stopPlaying.classList.remove('icon-pause');
-                stopPlaying.classList.add('icon-play');
+                $('#stopPlaying').removeClass('icon-pause');
+                $('#stopPlaying').addClass('icon-play');
+                $('#timeline li').removeClass('active');
                 clearInterval(timer);
             }
         }, 1000);
@@ -529,6 +538,5 @@ $(function()
     ?>
     <?php endforeach;?>
 })
-
 </script>
 <?php include '../../common/view/footer.lite.html.php';?>
