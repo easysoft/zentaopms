@@ -1,8 +1,7 @@
 .body-modal > .main {padding: 20px;}
 .body-modal > .main .table-form {border: 1px solid #ddd;}
 
-#modalTeam .modal-dialog {padding-bottom: 20px;}
-#modalTeam .modal-content {padding: 0 0 5px; height: 340px;}
+#modalTeam .modal-content {padding: 0 0 5px; min-height: 120px;}
 #modalTeam .modal-body {padding: 12px 13px 20px; max-height: 296px !important; overflow-y: scroll !important;}
 #modalTeam .modal-header {height: 44px; padding: 10px 20px; margin: 0; }
 #modalTeam .modal-header .modal-title {font-size: 13px; line-height: 24px;}
