@@ -66,36 +66,65 @@ $(function()
     adjustProductBoxMargin();
     adjustPlanBoxMargin();
 
-    /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
-    $("#productsBox select[name^='products']").each(function()
+    $(document).on('change', '[name*=products]', function()
     {
-        var isExistedProduct = $.inArray($(this).attr('data-last'), unmodifiableProducts);
-        var productType      = $(this).attr('data-type');
-        if(isExistedProduct != -1 && productType == 'normal')
-        {
-            $(this).prop('disabled', true).trigger("chosen:updated");
-            $(this).siblings('div').find('span').attr('title', tip);
-        }
-    });
+        var current    = $(this).val();
+        var last       = $(this).attr('data-last');
+        var lastBranch = $(this).attr('data-lastBranch');
 
-    $("#productsBox select[name^='branch']").each(function()
-    {
-        var branchID        = $(this).attr('data-last');
-        var isExistedBranch = $.inArray(branchID, unmodifiableBranches);
-        if(isExistedBranch != -1)
+        $(this).attr('data-last', current);
+
+        var $branch  = $(this).closest('.has-branch').find("[name^='branch']");
+        if($branch !== undefined)
         {
-            var $product = $(this).closest('.has-branch').find("[name^='products']");
-            if($.inArray($product.val(), unmodifiableProducts) != -1)
+            var branchID = $branch.val();
+            $(this).attr('data-lastBranch', branchID);
+        }
+        else
+        {
+            $(this).removeAttr('data-lastBranch');
+        }
+
+        if(current != last && $.inArray(last, unmodifiableProducts) != -1)
+        {
+            if(lastBranch)
             {
-                if((branchID == 0 && unmodifiableMainBranches[$product.val()]) || branchID != 0)
+                if($.inArray(lastBranch, unmodifiableBranches) != -1)
                 {
-                    $(this).prop('disabled', true).trigger("chosen:updated");
-                    $product.prop('disabled', true).trigger("chosen:updated");
-                    $product.siblings('div').find('span').attr('title', tip);
+                    if((lastBranch == 0 && unmodifiableMainBranches[last]) || lastBranch != 0)
+                    {
+                        bootbox.alert(unLinkProductTip.replace("%s", allProducts[last]));
+                    }
                 }
+            }
+            else
+            {
+                bootbox.alert(unLinkProductTip.replace("%s", allProducts[last]));
             }
         }
     });
+
+    $(document).on('change', '[name*=branch]', function()
+    {
+        var current = $(this).val();
+        var last    = $(this).attr('data-last');
+        $(this).attr('data-last', current);
+
+        var $product = $(this).closest('.has-branch').find("[name^='products']");
+        $product.attr('data-lastBranch', current);
+
+        if($.inArray(last, unmodifiableBranches) != -1)
+        {
+            var productID = $product.val();
+            if($.inArray(productID, unmodifiableProducts) != -1)
+            {
+                if((last == 0 && unmodifiableMainBranches[productID]) || last != 0)
+                {
+                    bootbox.alert(unLinkProductTip.replace("%s", branchGroups[productID][last]));
+                }
+            }
+        }
+    })
 
    /* If end is longtime, set the default date to today */
    var today = $.zui.formatDate(new Date(), 'yyyy-MM-dd');

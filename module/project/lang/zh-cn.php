@@ -211,6 +211,7 @@ $lang->project->noDevStage             = '该项目下没有研发类型的阶�
 $lang->project->budgetOverrun          = '项目的预算超出了父项目集的剩余预算：';
 $lang->project->disabledInputTip       = '请先取消%s';
 $lang->project->linkRepoFailed         = '关联代码库失败';
+$lang->project->unLinkProductTip       = "您确认要取消与%s的关联关系吗？（不影响已关联的需求）";
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
