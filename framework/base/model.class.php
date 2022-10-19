@@ -303,7 +303,7 @@ class baseModel
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
         $extensionObject = new $extensionClass;
-        if($type == 'model') $extensionClass  = str_replace(ucfirst($type), '', $extensionClass);
+        if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         return $extensionObject;
     }
