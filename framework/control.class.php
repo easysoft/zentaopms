@@ -33,15 +33,7 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        if(!$moduleName) $moduleName = $this->moduleName;
-
-        $className = strtolower(get_class($this));
-        if($className == $moduleName || $className == 'my' . $moduleName)
-        {
-            $this->loadModel($moduleName, $appName, 'zen');
-            $zenClass = $moduleName . 'Zen';
-            if(isset($this->{$zenClass})) $this->{$zenClass}->view = $this->view;
-        }
+        $this->loadModel($moduleName, $appName, 'zen');
 
         $this->app->setOpenApp();
 
