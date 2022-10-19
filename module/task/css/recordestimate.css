@@ -21,3 +21,8 @@
 
 .table.has-sort-head thead>tr>th>a:after, .table.has-sort-head thead>tr>th>a:before {top: -7px;}
 .table.has-sort-head thead>tr>th>a:hover, .table.has-sort-head thead>tr>th>a:hover:after, .table.has-sort-head thead>tr>th>a:hover:before {color: #000;}
+
+#toggleFoldIcon:hover {cursor: pointer;}
+#toggleFoldIcon .icon-border {width: 20px; height: 20px; border-radius: 8px; border: 1px solid #D5E5FF;}
+#toggleFoldIcon .icon-border > .icon {color: #3785FF;}
+#toggleFoldIcon .text {color: #3785FF;}

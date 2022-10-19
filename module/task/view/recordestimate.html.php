@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('foldEffort', $lang->task->foldEffort);?>
+<?php js::set('unfoldEffort', $lang->task->unfoldEffort);?>
+<?php js::set('taskID', $task->id);?>
 <?php if(!$this->task->canOperateEffort($task) and empty($myOrders)):?>
 <style>#mainContent {min-height: unset;}</style>
 <?php endif;?>
@@ -59,7 +62,7 @@ if(!empty($members) && $task->mode == 'linear')
     <?php if(!empty($task->team) and $task->mode == 'linear'):?>
     <?php include __DIR__ . '/lineareffort.html.php';?>
     <?php else:?>
-    <table class='table table-bordered table-fixed table-recorded has-sort-head'>
+    <table class='table table-bordered table-fixed table-recorded has-sort-head taskEffort'>
       <thead>
         <tr class='text-center'>
           <?php $vars = "taskID=$task->id&from=$from&orderBy=%s";?>
@@ -72,8 +75,10 @@ if(!empty($members) && $task->mode == 'linear')
         </tr>
       </thead>
       <tbody>
+        <?php $i = 1;?>
         <?php foreach($efforts as $effort):?>
-        <tr class="text-center">
+        <?php $hidden = ($taskEffortFold and $i > 3) ? 'hidden' : ''?>
+        <tr class="text-center <?php echo $hidden;?>">
           <td><?php echo $effort->date;?></td>
           <td><?php echo zget($users, $effort->account);?></td>
           <td class="text-left" title="<?php echo $effort->work;?>"><?php echo $effort->work;?></td>
@@ -87,9 +92,18 @@ if(!empty($members) && $task->mode == 'linear')
             ?>
           </td>
         </tr>
+        <?php $i ++;?>
         <?php endforeach;?>
       </tbody>
     </table>
+    <?php if(count($efforts) > 3):?>
+    <div id='toggleFoldIcon'>
+      <?php $icon     = $taskEffortFold ? 'icon-angle-down' : 'icon-angle-top'?>
+      <?php $iconText = $taskEffortFold ? $lang->task->unfoldEffort : $lang->task->foldEffort;?>
+      <span class='icon-border'><i class="icon <?php echo $icon;?>"></i></span>
+      <span class='text'><?php echo $iconText;?></span>
+    </div>
+    <?php endif;?>
     <?php endif;?>
     <?php endif;?>
     <?php if(!$this->task->canOperateEffort($task) and empty($myOrders)):?>
