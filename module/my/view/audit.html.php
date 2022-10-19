@@ -5,11 +5,18 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $rawMethod = $app->rawMethod;?>
-    <?php foreach($lang->my->auditMenu as $key => $type):?>
-    <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
-    <?php $recTotalLabel = '';?>
-    <?php if($key == $browseType) $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a($this->createLink('my', $app->rawMethod, "mode=$mode&browseType=$key&param=&orderBy=time_desc"), '<span class="text">' . $type . '</span>' . $recTotalLabel, '', 'class="btn btn-link ' . $active .'"');?>
+    <?php $menuKey   = $rawMethod . 'Menu';?>
+    <?php foreach($lang->my->$menuKey->audit as $key => $type):?>
+    <?php
+    $active = $key == $browseType ? 'btn-active-text' : '';
+
+    $recTotalLabel = '';
+    if($key == $browseType) $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+
+    $param = "browseType=$key&param=&orderBy=time_desc";
+    if($rawMethod == 'contribute') $param = "mode=$mode&browseType=$key&param=&orderBy=time_desc";
+    ?>
+    <?php echo html::a($this->createLink('my', $app->rawMethod, $param), '<span class="text">' . $type . '</span>' . $recTotalLabel, '', 'class="btn btn-link ' . $active .'"');?>
     <?php endforeach;?>
   </div>
 </div>
@@ -24,14 +31,17 @@
   <form id='myReviewForm' class="main-table" method="post" data-ride="table">
   <table class='table has-sort-head' id='reviewList'>
     <thead>
-      <?php $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
+      <?php
+      $vars = "browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";
+      if($rawMethod == 'contribute') $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";
+      ?>
       <tr>
         <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th class='c-title'> <?php $rawMethod == 'contribute' ? print($lang->my->audit->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->audit->title);?></th>
         <th class='c-type'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->audit->type);?></th>
         <th class='c-date w-150px'> <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->audit->time);?></th>
         <th class='c-status w-80px'><?php $rawMethod == 'contribute' ? print($lang->my->audit->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->audit->status);?></th>
-        <?php if($rawMethod == 'work'):?>
+        <?php if($rawMethod == 'audit'):?>
         <th class='c-actions-2'><?php echo $lang->actions?></th>
         <?php endif;?>
       </tr>
@@ -58,7 +68,7 @@
         <td class='c-type'>  <?php echo $typeName;?></td>
         <td class='c-time'>  <?php echo $review->time?></td>
         <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
-        <?php if($rawMethod == 'work'):?>
+        <?php if($rawMethod == 'audit'):?>
         <td class='c-actions'>
           <?php
           $module = $type;

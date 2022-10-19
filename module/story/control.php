@@ -166,6 +166,10 @@ class story extends control
             }
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
 
+            /* Record submit review action. */
+            $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+            if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
+
             if($objectID != 0)
             {
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
@@ -1153,6 +1157,10 @@ class story extends control
                 $action   = !empty($changes) ? 'Changed' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                /* Record submit review action. */
+                $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+                if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
             }
 
             $this->executeHooks($storyID);
@@ -1341,7 +1349,7 @@ class story extends control
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t1.product')->eq($product->id)
                     ->andWhere('t2.type')->eq('project')
-                    ->fetch('model'); 
+                    ->fetch('model');
 
             if($projectModel === 'waterfall')
             {

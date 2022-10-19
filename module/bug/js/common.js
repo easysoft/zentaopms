@@ -327,7 +327,17 @@ function loadProductExecutions(productID, projectID = 0)
     branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    var execution = $('#execution').val();
+    if(projectExecutionPairs[projectID] !== undefined)
+    {
+        $('#executionIdBox').parents('.executionBox').hide();
+        var execution = projectExecutionPairs[projectID];
+    }
+    else
+    {
+        $('#executionIdBox').parents('.executionBox').show();
+        var execution = $('#execution').val();
+    }
+
     link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution);
     $('#executionIdBox').load(link, function()
     {

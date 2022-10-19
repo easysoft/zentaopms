@@ -909,6 +909,17 @@ class projectModel extends model
     }
 
     /**
+     * Get project and execution pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectExecutionPairs()
+    {
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
      * Process the project privs according to the project model.
      *
      * @param  string $model    sprint | waterfall
@@ -1713,7 +1724,11 @@ class projectModel extends model
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        if(!dao::isError())
+        {
+            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'start');
+            return common::createChanges($oldProject, $project);
+        }
     }
 
     /**
@@ -1773,7 +1788,11 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldProject, $project);
+        if(!dao::isError())
+        {
+            if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'suspend');
+            return common::createChanges($oldProject, $project);
+        }
     }
 
     /**
@@ -1816,6 +1835,8 @@ class projectModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'activate');
 
         /* Readjust task. */
         if($this->post->readjustTime and $this->post->readjustTask)
@@ -1909,6 +1930,8 @@ class projectModel extends model
            return false;
         }
 
+        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'close');
+
         /* Close the shadow product of the project. */
         if(!$oldProject->hasProduct)
         {
@@ -1919,6 +1942,22 @@ class projectModel extends model
 
         $this->loadModel('score')->create('project', 'close', $oldProject);
         return common::createChanges($oldProject, $project);
+    }
+
+    /**
+     * Modify the execution status when changing the status of no execution project.
+     *
+     * @param  int    $projectID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function changeExecutionStatus($projectID, $status)
+    {
+        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
+        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
+        return $this->loadModel('execution')->$status($executionID);
     }
 
     /**

@@ -10,7 +10,6 @@ $(function()
             $("#subNavbar li[data-id='bug'] a").append('<span class="label label-light label-badge">' + bugCount + '</span>');
             $("#subNavbar li[data-id='testcase'] a").append('<span class="label label-light label-badge">' + caseCount + '</span>');
             $("#subNavbar li[data-id='testtask'] a").append('<span class="label label-light label-badge">' + testTaskCount + '</span>');
-            $("#subNavbar li[data-id='audit'] a").append('<span class="label label-light label-badge">' + reviewCount + '</span>');
 
             if(isOpenedURAndSR !== 0) $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + requirementCount + '</span>');
 

@@ -68,6 +68,7 @@ $lang->my->menu             = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task", 'subModule' => 'task');
+$lang->my->menu->audit      = array('link' => "{$lang->review->common}|my|audit|type=all&param=&orderBy=time_desc", 'subModule' => 'review');
 $lang->my->menu->project    = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
@@ -79,7 +80,7 @@ $lang->my->menu->contacts   = array('link' => "$lang->contact|my|managecontacts|
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
 $lang->my->menuOrder[15] = 'work';
-$lang->my->menuOrder[20] = 'follow';
+$lang->my->menuOrder[20] = 'audit';
 $lang->my->menuOrder[25] = 'project';
 $lang->my->menuOrder[30] = 'execution';
 $lang->my->menuOrder[35] = 'contribute';
@@ -96,7 +97,6 @@ $lang->my->menu->work['subMenu']->story       = "$lang->SRCommon|my|work|mode=st
 $lang->my->menu->work['subMenu']->bug         = "{$lang->bug->common}|my|work|mode=bug";
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase&type=assigntome", 'subModule' => 'testtask');
 $lang->my->menu->work['subMenu']->testtask    = "{$lang->testtask->common}|my|work|mode=testtask&type=wait";
-$lang->my->menu->work['subMenu']->audit       = array('link' => "{$lang->review->common}|my|work|mode=audit&type=all&param=&orderBy=time_desc", 'subModule' => 'review');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
 $lang->my->menu->work['menuOrder'][10] = 'requirement';
@@ -114,7 +114,7 @@ $lang->my->menu->contribute['subMenu']->story       = "$lang->SRCommon|my|contri
 $lang->my->menu->contribute['subMenu']->bug         = "{$lang->bug->common}|my|contribute|mode=bug";
 $lang->my->menu->contribute['subMenu']->testcase    = "{$lang->testcase->shortCommon}|my|contribute|mode=testcase&type=openedbyme";
 $lang->my->menu->contribute['subMenu']->testtask    = "{$lang->testtask->common}|my|contribute|mode=testtask&type=done";
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=all", 'subModule' => 'review');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review');
 $lang->my->menu->contribute['subMenu']->doc         = "{$lang->doc->common}|my|contribute|mode=doc&type=openedbyme";
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
