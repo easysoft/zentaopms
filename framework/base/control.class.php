@@ -753,7 +753,6 @@ class baseControl
 
         $currentModuleName = $this->moduleName;
         $currentMethodName = $this->methodName;
-        $currentAppName    = $this->appName;
         $currentParams     = $this->app->getParams();
 
         /**
