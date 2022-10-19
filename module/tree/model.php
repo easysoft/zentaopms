@@ -82,8 +82,9 @@ class treeModel extends model
         }
 
         /* If feedback module is merge add story module.*/
-        $syncConfig = json_decode($this->config->global->syncProductFeedback, true);
-        if($type == 'feedback' and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type = 'story,' . $type;
+        $syncConfig = json_decode($this->config->global->syncProduct, true);
+        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -1313,6 +1314,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of ticket.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTicketLink($type, $module)
+    {
+        return html::a(helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * Create link of trainskill.
      *
      * @param  string $type
@@ -1382,8 +1396,9 @@ class treeModel extends model
     {
         if($type == 'line') $rootID = 0;
 
-        $syncConfig = json_decode($this->config->global->syncProductFeedback, true);
-        if($type == 'feedback' and isset($syncConfig[$rootID])) $type = "$type,story";
+        $syncConfig = json_decode($this->config->global->syncProduct, true);
+        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        if(($type == 'feedback' or $type == 'ticket') and isset($syncConfig[$rootID])) $type = "$type,story";
 
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
