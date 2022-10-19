@@ -2739,6 +2739,7 @@ class projectModel extends model
             }
         }
 
+        if(isset($this->lang->$navGroup->menu->storyGroup)) unset($this->lang->$navGroup->menu->storyGroup);
         foreach($this->lang->$navGroup->menu as $label => $menu)
         {
             $objectID = 0;

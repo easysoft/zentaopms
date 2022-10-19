@@ -8,12 +8,6 @@ $(function()
         hiddenRequireFields();
     });
 
-    if($("#navbar>ul>li[data-id='story'] .dropdown-menu").length)
-    {
-        $("#navbar>ul>li[data-id='story']>ul>li[data-id!='" + storyType + "']").removeClass('active');
-        $("#navbar>ul>li[data-id='story']>a").html($("#navbar>ul>li[data-id='story']>ul>li[data-id='" + storyType + "']").text() + "<span class='caret'></span>");
-    }
-
     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {

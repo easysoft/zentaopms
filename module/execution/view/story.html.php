@@ -224,6 +224,12 @@
       $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
+      if(!$execution->hasProduct and !$execution->multiple)
+      {
+          $planKey = array_search('plan', $config->story->datatable->defaultField);
+          if($planKey) unset($config->story->datatable->defaultField[$planKey]);
+      }
+
       $setting = $this->datatable->getSetting('execution');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
@@ -246,6 +252,7 @@
           <?php
           foreach($setting as $key => $value)
           {
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if($value->show)
               {
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
@@ -263,6 +270,7 @@
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
           {
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', 'story', $execution, $showBranch);
           }
           ?>
@@ -274,7 +282,11 @@
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);?>
+          <?php foreach($setting as $key => $value)
+          {
+              if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
+              $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution);
+          }?>
           </tr>
           <?php $i ++;?>
           <?php endforeach;?>
@@ -291,7 +303,7 @@
           <div class='btn-group dropup'>
             <?php
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
-            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=$execution->id");
+            $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=$execution->id&branch=0&storyType=$storyType");
             echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
             ?>
             <?php if($canBatchToTask):?>

@@ -411,6 +411,7 @@ class story extends control
                 $this->view->hiddenProduct = true;
 
                 if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+                if(!$project->multiple)          $this->view->hiddenPlan = true;
                 if($project->model === 'kanban') $this->view->hiddenURS  = true;
             }
         }
@@ -509,9 +510,9 @@ class story extends control
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
-            /* Hidden some fields of projects without products. */
 
-            if(in_array($execution->type, array('project', 'kanban', 'stage'), true))
+            /* Hidden some fields of projects without products. */
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
             {
                 $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
                 if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
@@ -520,7 +521,8 @@ class story extends control
                 {
                     $this->view->hiddenProduct = true;
 
-                    if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+                    if($project->model !== 'scrum') $this->view->hiddenPlan = true;
+                    if(!$project->multiple)         $this->view->hiddenPlan = true;
                 }
             }
         }
@@ -887,6 +889,7 @@ class story extends control
             $this->view->hiddenProduct = true;
 
             if($project->model !== 'scrum')  $this->view->hiddenPlan = true;
+            if(!$project->multiple)          $this->view->hiddenPlan = true;
             if($project->model === 'kanban') $this->view->hiddenURS  = true;
         }
 
@@ -949,13 +952,23 @@ class story extends control
     {
         $this->story->replaceURLang($storyType);
 
+        $this->view->hiddenPlan = false;
         if($this->app->tab == 'product')
         {
             $this->product->setMenu($productID);
         }
         else if($this->app->tab == 'project')
         {
-            $this->project->setMenu($executionID);
+            $project = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if($project->type == 'project')
+            {
+                $this->project->setMenu($executionID);
+            }
+            else
+            {
+                if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
+                $this->execution->setMenu($executionID);
+            }
         }
         else if($this->app->tab == 'execution')
         {
@@ -1346,21 +1359,23 @@ class story extends control
         $this->view->hiddenURS  = false;
         if(!empty($product->shadow))
         {
-            $projectModel = $this->dao->select('t2.model')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t1.product')->eq($product->id)
                     ->andWhere('t2.type')->eq('project')
-                    ->fetch('model');
+                    ->fetch();
 
-            if($projectModel === 'waterfall')
+            if($projectInfo->model == 'waterfall')
             {
                 $this->view->hiddenPlan = true;
             }
-            elseif($projectModel === 'kanban')
+            elseif($projectInfo->model == 'kanban')
             {
                 $this->view->hiddenPlan = true;
                 $this->view->hiddenURS  = true;
             }
+
+            if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
         }
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);

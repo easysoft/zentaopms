@@ -128,7 +128,6 @@ class executionModel extends model
         $this->loadModel('project')->setNoMultipleMenu($executionID);
 
         if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
-        if(isset($this->lang->project->menu->storyGroup))   unset($this->lang->project->menu->storyGroup);
     }
 
     /**

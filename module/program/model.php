@@ -571,7 +571,7 @@ class programModel extends model
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+            ->beginIF($browseType == 'bysearch' and $query)->andWhere($query)->fi()
             ->andWhere('t1.type')->eq('project')
             ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
