@@ -45,11 +45,11 @@ class tree extends control
             $products = $this->product->getProducts($this->session->project, 'all', '', false);
             if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
-        else if($this->app->tab == 'feedback' or $this->app->tab == 'ticket')
+        else if($this->app->tab == 'feedback')
         {
             $products = $this->loadModel('feedback')->getGrantProducts();
             if(!$rootID) $rootID = key($products);
-            $this->loadModel('feedback')->setMenu($rootID);
+            $this->loadModel('feedback')->setMenu($rootID, $viewType, $viewType);
         }
 
         /* According to the type, set the module root and modules. */

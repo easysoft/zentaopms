@@ -60,6 +60,9 @@ $lang->programplan->exporting        = 'Exporting';
 $lang->programplan->exportFail       = 'Export failed';
 $lang->programplan->hideCriticalPath = 'Hide Critical Path';
 $lang->programplan->showCriticalPath = 'Show Critical Path';
+$lang->programplan->delay            = 'Delay';
+$lang->programplan->delayDays        = 'Delay days';
+
 $lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
 $lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
 $lang->programplan->emptyBegin       = '『Begin』should not be blank';
@@ -69,6 +72,10 @@ $lang->programplan->checkEnd         = '『End』should be valid date';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
+
+$lang->programplan->delayList = array();
+$lang->programplan->delayList[1] = 'Yes';
+$lang->programplan->delayList[0] = 'No';
 
 $lang->programplan->noData        = 'No Data';
 $lang->programplan->children      = 'Sub Plan';
@@ -80,15 +87,17 @@ $lang->programplan->stageCustom = new stdClass();
 $lang->programplan->stageCustom->date = 'Show Date';
 $lang->programplan->stageCustom->task = 'Show Task';
 
-$lang->programplan->ganttCustom['PM']           ='Manager';
-$lang->programplan->ganttCustom['deadline']     ='Deadline';
-$lang->programplan->ganttCustom['status']       ='Status';
-$lang->programplan->ganttCustom['realBegan']    ='Actual Began';
-$lang->programplan->ganttCustom['realEnd']      ='Actual End';
-$lang->programplan->ganttCustom['progress']     ='Workload Ratio';
-$lang->programplan->ganttCustom['taskProgress'] ='Task Progress';
-$lang->programplan->ganttCustom['estimate']     ='Estimate';
-$lang->programplan->ganttCustom['consumed']     ='Consumed';
+$lang->programplan->ganttCustom['PM']           = 'Manager';
+$lang->programplan->ganttCustom['deadline']     = 'Deadline';
+$lang->programplan->ganttCustom['status']       = 'Status';
+$lang->programplan->ganttCustom['realBegan']    = 'Actual Began';
+$lang->programplan->ganttCustom['realEnd']      = 'Actual End';
+$lang->programplan->ganttCustom['progress']     = 'Workload Ratio';
+$lang->programplan->ganttCustom['taskProgress'] = 'Task Progress';
+$lang->programplan->ganttCustom['estimate']     = 'Estimate';
+$lang->programplan->ganttCustom['consumed']     = 'Consumed';
+$lang->programplan->ganttCustom['delay']        = 'Delay';
+$lang->programplan->ganttCustom['delayDays']    = 'Delay days';
 
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
