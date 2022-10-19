@@ -281,9 +281,9 @@ class baseControl
         global $loadedModels;
         if(isset($loadedModels[$type][$appName][$moduleName]))
         {
-            $this->$objectName = $loadedModels[$type][$appName][$moduleName];
-            if($type == 'model') $this->dao = $this->$objectName->dao;
-            return $this->$objectName;
+            $this->{$objectName} = $loadedModels[$type][$appName][$moduleName];
+            if($type == 'model') $this->dao = $this->{$objectName}->dao;
+            return $this->{$objectName};
         }
 
         $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
@@ -312,12 +312,18 @@ class baseControl
         }
 
         /**
-         * 初始化model对象，在control对象中可以通过$this->$objectName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
-         * Init the model object thus you can try $this->$objectName to access it. Also assign the $dao object as a member of control object.
+         * 因为zen继承control，构造函数里会调用loadModel方法，赋默认值值防止递归调用。
          */
-        $this->$objectName = new $modelClass($appName);
-        if($type == 'model') $this->dao = $this->$objectName->dao;
-        $loadedModels[$type][$appName][$moduleName] = $this->$objectName;
+        if($type == 'zen') $loadedModels[$type][$appName][$moduleName] = false;
+
+        /**
+         * 初始化model对象，在control对象中可以通过$this->$objectName来引用。同时将dao对象赋为control对象的成员变量，将view对象赋为zen对象的成员变量，方便引用。
+         * Init the model object thus you can try $this->$objectName to access it. Also assign the $dao object as a member of control object, assign the $view object as a member of zen object.
+         */
+        $this->{$objectName} = new $modelClass($appName);
+        if($type == 'model') $this->dao = $this->{$objectName}->dao;
+        if($type == 'zen') $this->{$objectName}->view = $this->view;
+        $loadedModels[$type][$appName][$moduleName] = $this->{$objectName};
         return $this->$objectName;
     }
 
