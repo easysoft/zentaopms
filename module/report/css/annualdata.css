@@ -86,7 +86,7 @@ section.active {border: 1px solid rgb(0, 166, 255);}
  #stopPlaying {font-size: 18px; position: absolute; left: 0; bottom: 16px;
  }
 
- #timeline li {display: inline-block; cursor: pointer; color: #444;  padding: 0 2px; margin: 0; position: relative;
+ #timeline li {display: inline-block; cursor: pointer; color: #444;  padding: 0; margin: 0; position: relative;
  }
  #showImg {width: 272px; height: 255px; border: none; margin: 0; margin-left: 20px;}
  #timeline li img { width: 200px; height: 200px;position: absolute; top: -300px; left: 0;}
