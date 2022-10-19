@@ -273,17 +273,22 @@ class baseModel
     public function loadExtension($extensionName, $moduleName = '')
     {
         if(empty($extensionName)) return false;
+        if(empty($moduleName)) $moduleName = $this->getModuleName();
 
-        $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
         $moduleName    = strtolower($moduleName);
         $extensionName = strtolower($extensionName);
 
+        $type      = 'model';
+        $className = strtolower(get_class($this));
+        if($className == $moduleName . 'tao' || $className == 'ext' . $moduleName . 'tao') $type = 'tao';
+
         /* 设置扩展类的名字。Set the extension class name. */
         $extensionClass = $extensionName . ucfirst($moduleName);
+        if($type != 'model') $extensionClass .= ucfirst($type);
         if(isset($this->$extensionClass)) return $this->$extensionClass;
 
         /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
-        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
+        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
@@ -292,13 +297,13 @@ class baseModel
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
 
         /* 载入父类。Try to import parent model file auto and then import the extension file. */
-        if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($this->appName, $moduleName) . 'model.php');
+        if(!class_exists($moduleName . ucfirst($type))) helper::import($this->app->getModulePath($this->appName, $moduleName) . $type . '.php');
         if(!helper::import($extensionFile)) return false;
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
         $extensionObject = new $extensionClass;
-        $extensionClass  = str_replace('Model', '', $extensionClass);
+        if($type == 'model') $extensionClass  = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         return $extensionObject;
     }
