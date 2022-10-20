@@ -100,12 +100,14 @@ foreach($efforts as $key => $effort)
             <?php endforeach;?>
           </tbody>
         </table>
+        <?php if($i > 4):?>
         <div id='toggleFoldIcon'>
           <?php $icon     = $taskEffortFold ? 'icon-angle-down' : 'icon-angle-top'?>
           <?php $iconText = $taskEffortFold ? $lang->task->unfoldEffort : $lang->task->foldEffort;?>
           <span class='icon-border'><i class="icon <?php echo $icon;?>"></i></span>
           <span class='text'><?php echo $iconText;?></span>
         </div>
+        <?php endif;?>
         <?php endif;?>
       </div>
       <div class='tab-pane' id='legendAllEffort'>
