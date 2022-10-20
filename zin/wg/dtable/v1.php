@@ -31,6 +31,8 @@ class dtable
 {
     public $cols = array();
 
+    public $search = '';
+
     public function __construct($text = '')
     {
         $this->text = $text;
@@ -48,9 +50,17 @@ class dtable
         $this->data = $data;
     }
 
+    public function search($status, $module)
+    {
+        $this->search = '<div class="cell' .  ($status == 'bySearch' ? " show" : "")  . '" id="queryBox" data-module="' . $module . '"></div>';
+        return $this;
+    }
+
     public function toString()
     {
-        $html  = '<div class="dtable"></div>';
+        $html = '';
+        if(!empty($this->search)) $html .= $this->search;
+        $html .= '<div class="dtable"></div>';
         $html .= '<script>new zui.DTable(".dtable", {plugins: ["nested", "rich"], cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . '})</script>';
 
         return $html;

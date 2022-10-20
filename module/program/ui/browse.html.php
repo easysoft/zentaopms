@@ -75,6 +75,7 @@ foreach($programs as $program)
 
     $rows[] = $row;
 }
+$table->search($status, $moduleName);
 $table->data($rows);
 
 $content = block();
