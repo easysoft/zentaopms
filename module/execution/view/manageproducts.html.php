@@ -11,6 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
+<?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->manageProducts;?></span></span>
@@ -23,25 +27,18 @@
         <div class='detail-title'><?php echo $lang->execution->linkedProducts;?></div>
         <div class='detail-content row'>
           <?php $i = 0;?>
-          <?php $attr = '';?>
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php if((in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) and !empty($linkedStoryIDList[$productID][$branchID])) $attr = "disabled='disabled'";?>
-          <?php if((!(in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) or empty($linkedStoryIDList[$productID][$branchID]))) $attr = '';?>
-          <?php if($execution->grade == '2' and ($linkedProducts[$productID]->type == 'normal' or $branchID == 0)) $attr = "disabled='disabled'";?>
-          <?php $title = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches) and !empty($linkedStoryIDList[$productID][$branchID])) ? sprintf($lang->execution->notAllowRemoveProducts, $linkedStoryIDList[$productID][$branchID]) : $productName;?>
-          <?php $checked = 'checked';?>
           <div class='col-sm-4'>
-            <div class='product <?php echo $checked . (isset($allBranches[$productID]) ? ' has-branch' : '')?>'>
-              <div class="checkbox-primary" title='<?php echo $title;?>'>
-                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked $attr id='products{$productID}'>";?>
+            <div class='product checked <?php echo (isset($allBranches[$productID]) ? ' has-branch' : '')?>'>
+              <div class="checkbox-primary" title='<?php echo $productName;?>'>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
               <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' disabled='disabled'");?>
             </div>
           </div>
-          <?php if(!empty($attr)) echo html::hidden("products[$i]", $productID);?>
           <?php echo html::hidden("branch[$i]", $branchID);?>
           <?php if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);?>
           <?php if(isset($branchGroups[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);?>
