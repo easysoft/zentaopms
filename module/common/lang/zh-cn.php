@@ -202,7 +202,7 @@ $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';
 $lang->app->common        = '应用';
 $lang->app->serverLink    = '服务器链接';
-$lang->review->common     = '评审';
+$lang->review->common     = '审批';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
