@@ -416,6 +416,7 @@ $lang->project->noMultiple->scrum->menu->qa         = $lang->scrum->menu->qa;
 $lang->project->noMultiple->scrum->menu->devops     = $lang->scrum->menu->devops;
 $lang->project->noMultiple->scrum->menu->doc        = $lang->scrum->menu->doc;
 $lang->project->noMultiple->scrum->menu->build      = $lang->scrum->menu->build;
+$lang->project->noMultiple->scrum->menu->release    = $lang->scrum->menu->release;
 $lang->project->noMultiple->scrum->menu->dynamic    = $lang->scrum->menu->dynamic;
 $lang->project->noMultiple->scrum->menu->settings   = $lang->scrum->menu->settings;
 
@@ -437,6 +438,7 @@ $lang->project->noMultiple->scrum->menuOrder[30] = 'qa';
 $lang->project->noMultiple->scrum->menuOrder[35] = 'devops';
 $lang->project->noMultiple->scrum->menuOrder[40] = 'doc';
 $lang->project->noMultiple->scrum->menuOrder[45] = 'build';
+$lang->project->noMultiple->scrum->menuOrder[48] = 'release';
 $lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
 $lang->project->noMultiple->scrum->menuOrder[55] = 'settings';
 

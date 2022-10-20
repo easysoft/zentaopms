@@ -31,7 +31,7 @@ $config->project->sortFields->end    = 'end';
 $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
-$config->project->multiple['project']   = ',qa,devops,doc,build,dynamic,settings,';
+$config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,';
 
 global $lang;

@@ -74,7 +74,8 @@
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
         <td title='<?php echo $release->executionName?>'><?php echo $release->executionName?></td>
-        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
+        <?php $dataApp = (!$project->hasProduct and !$project->multiple) ? 'data-app=project' : '';?>
+        <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '', "$dataApp");?></td>
         <td class='text-center'><?php echo $release->date;?></td>
         <?php $status = $this->processStatus('release', $release);?>
         <td class='c-status text-center' title='<?php echo $status;?>'>
