@@ -11,17 +11,15 @@ $(function()
         var $cb = $(this);
         $cb.closest('.product').toggleClass('checked', $cb.prop('checked'));
 
+        if($cb.prop('checked')) return true;
+
         var productID = String($cb.val());
         if($.inArray(productID, unmodifiableProducts) != -1)
         {
             var $branch = $cb.closest('.product').find('[name^=branch]');
-            if($branch)
+            if($branch.length)
             {
                 var branchID = String($branch.val());
-
-                console.log(productID);
-                console.log(unmodifiableMainBranches);
-                console.log($.inArray(productID, unmodifiableMainBranches));
 
                 if((branchID == BRANCH_MAIN && unmodifiableMainBranches[productID]) || (branchID != BRANCH_MAIN && $.inArray(branchID, unmodifiableBranches) != -1))
                 {
