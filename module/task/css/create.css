@@ -29,6 +29,7 @@
 
 .keep-row-height {height: 32px;}
 #modalTeam .modal-dialog {min-height: 120px; width: 520px; color: #3c4353;}
-#taskTeamEditor .chosen-single {width: 200px;}
+#taskTeamEditor .hourBox {padding-bottom: 7px; width: 135px;}
 #taskTeamEditor .estimateBox {width: 120px;}
+#taskTeamEditor td.sort-handler {padding-bottom: 12px;}
 #modalTeam .modal-content {padding: 0;}
