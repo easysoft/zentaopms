@@ -25,6 +25,7 @@
 <?php $isMultiple = !empty($task->team);?>
 <?php js::set('isMultiple', $isMultiple);?>
 <?php js::set('taskMode', $task->mode);?>
+<?php js::set('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control'"));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -50,7 +51,7 @@
           <th class='thWidth'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p35-f'>
             <div class="input-group<?php if($isMultiple) echo ' required';?>" id="dataPlanGroup">
-              <?php echo html::select('assignedTo', $members, $isMultiple ? '' : $task->finishedBy, "class='form-control chosen'");?>
+              <?php echo html::select('assignedTo', $isMultiple ? $teamMembers : $members, $isMultiple ? '' : $task->finishedBy, "class='form-control chosen'");?>
               <?php if($isMultiple):?>
               <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
               <?php endif;?>

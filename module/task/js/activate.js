@@ -63,11 +63,15 @@ $(function()
         $('.teamTemplate select, .teamTemplate input').val('');
         $('.teamTemplate input[name^=teamConsumed]').val('0');
         $('.teamTemplate select').trigger('chosen:updated');
-        var trCount  = $('#taskTeamEditor tr').length;
-        var tmpCount = $('#taskTeamEditor select:disabled').length;
 
-        var removeNum = tmpCount > 6 ? 1 : (5 - tmpCount);
-        $('#taskTeamEditor tr.teamTemplate').filter(':gt(' + removeNum + ')').remove();
+        /* Reset team modal. */
+        var oldTeamCount = $('#taskTeamEditor select:disabled').length;
+        var removeCount  = oldTeamCount > 6 ? 1 : (5 - oldTeamCount);
+        $('#taskTeamEditor tr.teamTemplate').filter(':gt(' + removeCount + ')').remove();
+
+        /* Reset assignedTo select.*/
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').replaceWith(assignedToHtml);
 
         if(showTeam)
         {
@@ -82,6 +86,7 @@ $(function()
             $('#left').removeAttr('readonly');
             $('#dataPlanGroup').addClass('required');
         }
+        $('#assignedTo').chosen();
         $('#assignedTo').trigger('chosen:updated');
     });
 
