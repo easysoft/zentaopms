@@ -1264,7 +1264,7 @@ class actionModel extends model
             {
                 $objectType  = str_replace('imported', '', $action->action);
                 $objectTable = zget($this->config->objectTables, $objectType);
-                $objectName  = $objectType == 'productplan' ? 'title' : 'name';
+                $objectName  = ($objectType == 'productplan' or $objectType == 'ticket') ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
             elseif($action->objectType == 'module' and !empty($action->extra) and $action->action != 'deleted')
