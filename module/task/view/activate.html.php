@@ -25,7 +25,7 @@
 <?php $isMultiple = !empty($task->team);?>
 <?php js::set('isMultiple', $isMultiple);?>
 <?php js::set('taskMode', $task->mode);?>
-<?php js::set('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control'"));?>
+<?php js::set('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
