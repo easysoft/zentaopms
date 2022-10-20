@@ -1278,6 +1278,7 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
 
             if($review->type == 'review') $review->type = 'project';
+            if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';
             if(isset($object->title))
             {
