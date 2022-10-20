@@ -79,14 +79,14 @@
               <?php endif;?>
             </div>
           </th>
-          <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
-          <th class='c-hours'><?php echo $lang->project->progress;?></th>
+          <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>
           <th class='c-hours text-right'><?php echo $lang->task->estimateAB;?></th>
           <th class='c-hours text-right'><?php echo $lang->task->consumedAB;?></th>
           <th class='c-hours text-right'><?php echo $lang->task->leftAB;?> </th>
+          <th class='c-hours'><?php echo $lang->project->progress;?></th>
           <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>

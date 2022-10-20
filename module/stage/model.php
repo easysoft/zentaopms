@@ -123,13 +123,13 @@ class stageModel extends model
      */
     public function getStages($orderBy = 'id_desc', $projectID = 0)
     {
-        $stages = $this->dao->select('t1.id,name,type,percent,openedBy as createdBy,begin as createdDate,lastEditedBy as editedBy,end as editedDate,deleted')
-            ->from(TABLE_EXECUTION)->alias('t1')
-            ->where('t1.type')->in('sprint,stage,kanban')
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+        $stages = $this->dao->select('id,name,type,percent,openedBy as createdBy,begin as createdDate,lastEditedBy as editedBy,end as editedDate,deleted')
+            ->from(TABLE_EXECUTION)
+            ->where('type')->in('sprint,stage,kanban')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
         $stages = !empty($stages) ? $stages : $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
