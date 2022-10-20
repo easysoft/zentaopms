@@ -68,6 +68,7 @@ $(function()
         var oldTeamCount = $('#taskTeamEditor select:disabled').length;
         var removeCount  = oldTeamCount > 6 ? 1 : (5 - oldTeamCount);
         $('#taskTeamEditor tr.teamTemplate').filter(':gt(' + removeCount + ')').remove();
+        $('.member-done').find('input[name^=teamLeft]').val(0);
 
         /* Reset assignedTo select.*/
         $('#assignedTo_chosen').remove();
@@ -134,12 +135,22 @@ function setTeamUser()
     var estimate   = parseInt($('#left').val());
     if(!assignedTo || !estimate) return;
 
-    var teamLine = '<input type="hidden" name="team[]" value="' + assignedTo + '">';
-    teamLine += '<input type="hidden" name="teamSource[]" value="' + assignedTo + '">';
-    teamLine += '<input type="hidden" name="teamEstimate[]" value="' + estimate + '">';
-    teamLine += '<input type="hidden" name="teamConsumed[]" value="0">';
-    teamLine += '<input type="hidden" name="teamLeft[]" value="' + estimate + '">';
-    $('.multi-append').html(teamLine);
+    if(taskMode == 'multi')
+    {
+        $('.member-done').each(function()
+        {
+            if($(this).find('select').val() == assignedTo) $(this).find('input[name^=teamLeft]').val(estimate);
+        });
+    }
+    else
+    {
+        var teamLine = '<input type="hidden" name="team[]" value="' + assignedTo + '">';
+        teamLine += '<input type="hidden" name="teamSource[]" value="' + assignedTo + '">';
+        teamLine += '<input type="hidden" name="teamEstimate[]" value="' + estimate + '">';
+        teamLine += '<input type="hidden" name="teamConsumed[]" value="0">';
+        teamLine += '<input type="hidden" name="teamLeft[]" value="' + estimate + '">';
+        $('.multi-append').html(teamLine);
+    }
 }
 
 /**
@@ -168,15 +179,7 @@ function updateAssignedTo()
 
             html += "<option value='" + account + "' title='" + realName + "'" + selected + ">" + realName + "</option>";
         });
-
-        if(mode == 'multi' && isTeamMember && mode != 'linear')
-        {
-            $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
-        }
-        else
-        {
-            $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
-        }
+        $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
     }
     else
     {
