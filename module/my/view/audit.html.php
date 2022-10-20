@@ -36,11 +36,11 @@
       if($rawMethod == 'contribute') $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";
       ?>
       <tr>
-        <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-        <th class='c-title text-left'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
-        <th class='c-type w-120px'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->auditField->type);?></th>
-        <th class='c-date w-150px'>  <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
-        <th class='c-status w-110px'><?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
+        <th class='c-id'>             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+        <th class='c-title text-left'><?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
+        <th class='c-type w-120px'>   <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->auditField->type);?></th>
+        <th class='c-date w-150px'>   <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
+        <th class='c-status w-110px'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
         <?php if($rawMethod == 'audit'):?>
         <th class='c-actions-2'><?php echo $lang->actions?></th>
         <?php endif;?>
@@ -72,8 +72,8 @@
           echo $titleHtml;
           ?>
         </td>
-        <td class='c-type'>  <?php echo $typeName;?></td>
-        <td class='c-time'>  <?php echo $review->time?></td>
+        <td class='c-type'><?php echo $typeName;?></td>
+        <td class='c-time text-left'><?php echo $review->time?></td>
         <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
         <?php if($rawMethod == 'audit'):?>
         <td class='c-actions text-left'>
