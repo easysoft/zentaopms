@@ -4630,7 +4630,7 @@ class executionModel extends model
         }
         else
         {
-            echo $execution->name;
+            echo "<span class='text-ellipsis'>" . $execution->name . '</span>';
             if(!helper::isZeroDate($execution->end))
             {
                 if($execution->status != 'closed')
