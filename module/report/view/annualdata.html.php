@@ -255,36 +255,34 @@ $(function()
         for(var contributionKey in contributionGroups)
         {
             yearsData.push(contributionKey);
-            var contributionItem = {
-                year: contributionKey,
-                data: [],
-                max: 0,
-                indicator: indicator,
-            }
+            var itemData = []
+            var newIndicator = []
             for(var itemKey in contributionGroups[contributionKey])
             {
-                contributionItem.data.push(contributionGroups[contributionKey][itemKey]);
+                itemData.push(contributionGroups[contributionKey][itemKey]);
             }
-            contributionItem.max = Math.max.apply(null,contributionItem.data);
+            itemMax = Math.max.apply(null,itemData);
+            var resultIndicator = indicator.map(function(item,index)
+            {
+                item.max = itemMax;
+                return {...item};
+            })
+            var contributionItem = {
+                year: contributionKey,
+                data: itemData || [],
+                max: itemMax,
+                indicator: resultIndicator,
+            }
             contributionData.push(contributionItem);
         }
     }
     var radarChart = echarts.init(document.getElementById('radarCanvas'));
-    function replaceMax(childData, max)
-    {
-        var result = [];
-        for(var i = 0; i < childData.length; i++)
-        {
-            childData[i].max = max;
-            result.push(childData[i]);
-        }
-        return result;
-    }
+
     var radarIndicatorData = [];
     for(var k = 0; k < contributionData.length; k++)
     {
         optionsItem = {
-            'radarIndicator': replaceMax(contributionData[k].indicator, contributionData[k].max),
+            'radarIndicator': contributionData[k].indicator,
             'tradeRange': contributionData[k].data,
         }
         radarIndicatorData.push(optionsItem);
