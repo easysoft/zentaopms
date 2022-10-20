@@ -245,24 +245,4 @@
 <div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div class="modal fade" id="promptBox">
-  <div class="modal-dialog mw-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php printf($lang->project->changeProgram, $project->name);?></h4>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form' id='promptTable'>
-          <thead>
-            <tr>
-              <th class='text-left'><?php echo $lang->project->multiLinkedProductsTip;?></th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
 <?php include '../../common/view/footer.html.php';?>
