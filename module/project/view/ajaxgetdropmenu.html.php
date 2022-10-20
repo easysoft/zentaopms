@@ -81,6 +81,10 @@ foreach($projects as $programID => $programProjects)
         {
             $link = helper::createLink('project', 'index', "projectID=%s");
         }
+        elseif(empty($project->multiple))
+        {
+            $link = helper::createLink('project', 'index', "projectID=%s");
+        }
         else
         {
             $link = $defaultLink;
