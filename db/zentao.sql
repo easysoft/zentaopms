@@ -6333,6 +6333,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `pinnedMessages` text NOT NULL DEFAULT '',
   `mergedChats` text NOT NULL DEFAULT '',
   `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
+  `avatar` text NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
   KEY `name` (`name`),
