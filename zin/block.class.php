@@ -29,7 +29,7 @@ class block
     }
 }
 
-function block($type)
+function block($type = 'v')
 {
     return new block($type);
 }
