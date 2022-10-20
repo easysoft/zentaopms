@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `deadline` date NOT NULL,
   `pri` tinyint unsigned NOT NULL DEFAULT '0',
   `estimate` float unsigned NOT NULL,
-  `consumed` float unsigned NOT NULL,
   `left` float unsigned NOT NULL,
   `status` varchar(30) NOT NULL,
   `openedBy` varchar(30) NOT NULL,
