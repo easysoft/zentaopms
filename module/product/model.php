@@ -2394,16 +2394,6 @@ class productModel extends model
 
                 $this->loadModel('action')->create('project', $projectID, 'Managed', '', $productID);
             }
-            else
-            {
-                $this->dao->delete()->from(TABLE_PROJECTPRODUCT)
-                    ->where('project')->eq($projectID)
-                    ->andWhere('product')->eq($productID)
-                    ->exec();
-
-                $newProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs('product','product');
-                $this->loadModel('action')->create('project', $projectID, 'Managed', '', join(',', $newProducts));
-            }
         }
     }
 
