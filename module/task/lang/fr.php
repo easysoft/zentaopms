@@ -60,6 +60,8 @@ $lang->task->replace             = 'Replace';
 $lang->task->myEffort            = 'My Effort';
 $lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';
+$lang->task->unfoldEffort        = 'Unfold Effort';
+$lang->task->foldEffort          = 'Fold Effort';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
