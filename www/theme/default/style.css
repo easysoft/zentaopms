@@ -122,8 +122,10 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .setting-input {width: 64px; height: 20px; margin: 0 4px; text-align: center;}
 .setting-input.disabled,.setting-input[disabled="disabled"] {color: #C4C4C4;}
 .width-radio-row {display: flex;}
-#dataform .width-radio-row.required:after {top: 1px; left: 360px;}
+#dataform .width-radio-row.required:after {top: 1px; left: 215px;}
+#dataform .width-radio-row.mt10.required:after {top: 1px; left: 355px;}
 .mt10 {margin-top: 10px;}
+#dataform tr > th {vertical-align: top;}
 
 
 #programTableList > tr:hover {background: #E6F0FFCC;}
