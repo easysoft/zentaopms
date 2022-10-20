@@ -14,11 +14,8 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
 <?php js::set('oldProgramID', $product->program);?>
-<?php js::set('canChangeProgram', $canChangeProgram);?>
-<?php js::set('singleLinkProjects', $singleLinkProjects);?>
-<?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
-<?php js::set('linkStoriesProjectIDList', array_keys($linkStoriesProjects));?>
-<?php js::set('projectPathList', $projectPathList);?>
+<?php js::set('singleLinkProjects', array_keys($singleLinkProjects));?>
+<?php js::set('multipleLinkProjects', array_keys($multipleLinkProjects));?>
 <?php js::set('programID', $product->program);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
@@ -117,26 +114,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <?php if($canChangeProgram):?>
         <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
-        <?php else:?>
-        <h4 class="modal-title"><?php echo sprintf($lang->product->changeProgramTip, $product->name);?></h4>
-        <?php endif;?>
       </div>
       <div class="modal-body">
         <table class='table table-form'>
-          <?php if(!$canChangeProgram):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->notChangeProgramTip;?></th>
-          </tr>
-          <?php foreach($linkStoriesProjects as $projectID => $projectName):?>
-          <tr>
-            <td>
-              <?php echo html::a($this->createLink('projectstory', 'story', 'projectID=' . $projectID), "<i class='icon icon-project'></i>" . $projectName, '', "title='$projectName'");?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
           <?php if($singleLinkProjects):?>
           <tr>
             <th class='text-left'><?php echo $lang->product->programChangeTip;?></th>

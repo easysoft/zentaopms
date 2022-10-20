@@ -5,25 +5,12 @@ $(function()
 
 $('#program').change(function()
 {
-    console.log(programID)
     var programID = $(this).val();
     programID > 0 ? $("#line").closest('tr').removeClass('hidden') : $("#line").closest('tr').addClass('hidden');
-    var canChange = true;
-    for(var i = 0; i < linkStoriesProjectIDList.length; i ++)
-    {
-        var projectID = linkStoriesProjectIDList[i];
-        var path      = projectPathList[projectID];
-        if(path.indexOf(',' + programID + ',') < 0) canChange = false;
-    }
 
-    if(!canChange && (!canChangeProgram || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0))
+    if(singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0)
     {
         $('#changeProgram').modal({show: true});
-        if(!canChangeProgram)
-        {
-            $('#program').val(oldProgramID);
-            $('#program').trigger("chosen:updated");
-        }
     }
 
     $.get(createLink('product', 'ajaxGetLine', 'programID=' + programID), function(data)

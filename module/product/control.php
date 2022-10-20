@@ -454,21 +454,8 @@ class product extends control
         /* Init vars. */
         $product = $this->product->getById($productID);
 
-        $unmodifiableProjects = array();
-        $canChangeProgram     = true;
         $singleLinkProjects   = array();
         $multipleLinkProjects = array();
-        $linkStoriesProjects  = array();
-
-        /* Link the projects stories under this product. */
-        $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetchPairs('project', 'product');
-
-        if(!empty($unmodifiableProjects)) $canChangeProgram = false;
 
         /* Get the projects linked with this product. */
         $projects = $this->dao->select('t2.id,t2.name,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -478,29 +465,13 @@ class product extends control
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('id');
 
-        $projectPathList = array();
         if(!empty($projects))
         {
             foreach($projects as $projectID => $project)
             {
-                $projectPathList[$projectID] = $project->path;
-                if($canChangeProgram)
-                {
-                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                    if(count($products) == 1)
-                    {
-                        $singleLinkProjects[$projectID] = $project->name;
-                    }
-
-                    if(count($products) > 1)
-                    {
-                        $multipleLinkProjects[$projectID] = $project->name;
-                    }
-                }
-                else
-                {
-                    if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $project->name;
-                }
+                $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                if(count($products) == 1) $singleLinkProjects[$projectID]   = $project->name;
+                if(count($products) > 1)  $multipleLinkProjects[$projectID] = $project->name;
             }
         }
 
@@ -585,11 +556,8 @@ class product extends control
         $this->view->programs             = array('') + $programs;
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
-        $this->view->canChangeProgram     = $canChangeProgram;
         $this->view->singleLinkProjects   = $singleLinkProjects;
         $this->view->multipleLinkProjects = $multipleLinkProjects;
-        $this->view->linkStoriesProjects  = $linkStoriesProjects;
-        $this->view->projectPathList      = $projectPathList;
 
         unset($this->lang->product->typeList['']);
         $this->display();
