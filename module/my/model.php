@@ -1242,7 +1242,7 @@ class myModel extends model
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 'objectType,objectID')
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;

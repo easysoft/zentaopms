@@ -30,14 +30,14 @@
   <?php else:?>
   <form id='myReviewForm' class="main-table" method="post" data-ride="table">
   <table class='table has-sort-head' id='reviewList'>
-    <thead>
+    <thead class='text-center'>
       <?php
       $vars = "browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";
       if($rawMethod == 'contribute') $vars = "mode=$mode&browseType=$browseType&param=&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";
       ?>
       <tr>
         <th class='c-id'>    <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-        <th class='c-title'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
+        <th class='c-title text-left'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
         <th class='c-type w-120px'>  <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->auditField->type);?></th>
         <th class='c-date w-150px'>  <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
         <th class='c-status w-110px'><?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
@@ -46,19 +46,21 @@
         <?php endif;?>
       </tr>
     </thead>
-    <tbody>
+    <tbody class='text-center'>
       <?php foreach($reviewList as $review):?>
       <?php
-      $type     = $review->type;
-      $typeName = $lang->$type->common;
+      $type = $review->type;
       if($type == 'project') $type = 'review';
+
+      $typeName = $lang->$type->common;
+      if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
 
       $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
       ?>
       <tr>
         <td class='c-id'><?php echo $review->id?></td>
-        <td class='c-title' title='<?php echo $review->title?>'>
+        <td class='c-title text-left' title='<?php echo $review->title?>'>
           <?php
           $titleHtml = $review->title;
           if($type != 'attend')
@@ -74,7 +76,7 @@
         <td class='c-time'>  <?php echo $review->time?></td>
         <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
         <?php if($rawMethod == 'audit'):?>
-        <td class='c-actions'>
+        <td class='c-actions text-left'>
           <?php
           $module = $type;
           $method = 'review';
