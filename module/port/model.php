@@ -408,8 +408,8 @@ class portModel extends model
         /* If empty values put system datas .*/
         if(empty($values))
         {
-            if(strpos($this->modelConfig->sysLangFields, $field) and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
+            if(strpos($this->modelConfig->sysLangFields, $field) !== false and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
+            if(strpos($this->modelConfig->sysDataFields, $field) !== false and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
         }
 
         if(is_array($values) and $withKey)
