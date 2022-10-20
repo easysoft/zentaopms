@@ -188,6 +188,63 @@ class control extends baseControl
     }
 
     /**
+     * 加载model的class扩展，主要是为了开发加密代码使用。
+     * 可以将主要的逻辑存放到$moduleName/ext/model/class/$extensionName.class.php中。
+     * 然后在ext/model/$extension.php的扩展里面使用$this->loadExtension()来调用相应的方法。
+     * ext/model/class/*.class.php代码可以加密。而ext/model/*.php可以不用加密。
+     * 因为框架对model的扩展是采取合并文件的方式，ext/model/*.php文件不能加密。
+     *
+     * Load extension class of a model thus user can encrypt the code.
+     * You can put the main extension logic codes in $moduleName/ext/model/class/$extensionName.class.php.
+     * And call them by the ext/model/$extension.php like this: $this->loadExtension('myextension')->method().
+     * You can encrypt the code in ext/model/class/*.class.php.
+     * Because the framework will merge the extension files in ext/model/*.php to the module/model.php.
+     *
+     * @param  string $extensionName
+     * @param  string $moduleName
+     * @access public
+     * @return void
+     */
+    public function loadExtension($extensionName, $moduleName = '')
+    {
+        if(empty($extensionName)) return false;
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+
+        $moduleName    = strtolower($moduleName);
+        $extensionName = strtolower($extensionName);
+
+        $type      = 'model';
+        $className = strtolower(get_class($this));
+        if($className == $moduleName . 'zen' || $className == 'ext' . $moduleName . 'zen') $type = 'zen';
+
+        /* 设置扩展类的名字。Set the extension class name. */
+        $extensionClass = $extensionName . ucfirst($moduleName);
+        if($type != 'model') $extensionClass .= ucfirst($type);
+        if(isset($this->$extensionClass)) return $this->$extensionClass;
+
+        /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
+        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
+        if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['vision'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['xuan']   . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
+
+        /* 载入父类。Try to import parent model file auto and then import the extension file. */
+        if(!class_exists($moduleName . ucfirst($type))) helper::import($this->app->getModulePath($this->appName, $moduleName) . $type . '.php');
+        if(!helper::import($extensionFile)) return false;
+        if(!class_exists($extensionClass)) return false;
+
+        /* 实例化扩展类。Create an instance of the extension class and return it. */
+        $extensionObject = new $extensionClass;
+        if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
+        $this->$extensionClass = $extensionObject;
+        $this->$extensionClass->view = $this->view;
+        return $extensionObject;
+    }
+
+    /**
      * 设置视图文件：主视图文件，扩展视图文件， 站点扩展视图文件，以及钩子脚本。
      * Set view files: the main file, extension view file, site extension view file and hook files.
      *
