@@ -367,9 +367,11 @@ class model extends baseModel
     public static function __callStatic($method, $arguments)
     {
         global $app;
-        $moduleName = $app->getModuleName();
-        $taoClass   = $moduleName . 'Tao';
+        $moduleName = get_called_class();
+        $taoClass   = 'ext' . $moduleName . 'Tao';
+        if(is_callable("{$taoClass}::{$method}")) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
+        $taoClass   = $moduleName . 'Tao';
         if(is_callable("{$taoClass}::{$method}")) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);

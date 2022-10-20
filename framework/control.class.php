@@ -666,8 +666,10 @@ class control extends baseControl
     {
         global $app;
         $moduleName = $app->getModuleName();
-        $zenClass   = $moduleName . 'Zen';
+        $zenClass   = 'ext' . $moduleName . 'Zen';
+        if(is_callable("{$zenClass}::{$method}")) return call_user_func_array("{$zenClass}::{$method}", $arguments);
 
+        $zenClass = $moduleName . 'Zen';
         if(is_callable("{$zenClass}::{$method}")) return call_user_func_array("{$zenClass}::{$method}", $arguments);
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
