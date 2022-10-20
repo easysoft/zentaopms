@@ -769,6 +769,21 @@ class projectModel extends model
     }
 
     /**
+     * Get project pairs.
+     *
+     * @access public
+     * @return object
+     */
+    public function getPairs()
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchPairs();
+    }
+
+    /**
      * Get project pairs by programID.
      *
      * @param  int    $programID
@@ -1465,6 +1480,7 @@ class projectModel extends model
             ->where('project')->eq($project->id)
             ->andWhere('deleted')->eq('0')
             ->fetchAll();
+
         if(!empty($executionsCount))
         {
             $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
@@ -1560,7 +1576,6 @@ class projectModel extends model
 
         if(!dao::isError())
         {
-            $this->updateProductProgram($oldProject->parent, $project->parent, $_POST['products']);
             $this->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
@@ -2327,13 +2342,6 @@ class projectModel extends model
 
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
-        }
-
-        /* Delete the execution linked products that is not linked with the execution. */
-        if((int)$projectID > 0)
-        {
-            $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
-            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
         }
 
         $oldProductKeys = array_keys($oldProjectProducts);

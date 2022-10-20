@@ -16,7 +16,7 @@ $config->port->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assi
 $config->port->datetimeFeilds = '';
 $config->port->listFields     = '';
 $config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change,category';
-$config->port->sysDataFields  = 'execution,product,user';
+$config->port->sysDataFields  = 'project,execution,product,user';
 $config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,resolvedBy,reviewedBy,mailto';
 
 $config->port->defaultZeroField  = 'severity,pri';

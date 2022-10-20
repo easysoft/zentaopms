@@ -2209,51 +2209,6 @@ class project extends control
         $this->display();
     }
 
-    /**
-     * AJAX: Check products.
-     *
-     * @param  int    $programID
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckProduct($programID, $projectID)
-    {
-        /* Set vars. */
-        $project   = $this->project->getByID($projectID);
-        $oldTopPGM = $this->loadModel('program')->getTopByID($project->parent);
-        $newTopPGM = $this->program->getTopByID($programID);
-
-        if($oldTopPGM == $newTopPGM) return;
-
-        $response  = array();
-        $response['result']  = true;
-        $response['message'] = $this->lang->project->changeProgramTip;
-
-        /* Get new program products. */
-        $newProducts = $this->program->getProductPairs($programID, 'assign', 'noclosed');
-        $response['newProducts'] = html::select("newProducts", array('0' => '') + $newProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
-
-        $multiLinkedProducts = $this->project->getMultiLinkedProducts($projectID);
-        $canChange           = true;
-        if($multiLinkedProducts)
-        {
-            $multiLinkedProjects = array();
-            $programIdList       = $this->dao->select('id, program')->from(TABLE_PRODUCT)->where('id')->in(array_keys($multiLinkedProducts))->fetchPairs();
-            foreach($multiLinkedProducts as $productID => $product)
-            {
-                if($programIdList[$productID] != $newTopPGM) $canChange = false;
-                $multiLinkedProjects[$productID] = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            }
-            $response['result']              = false;
-            $response['message']             = $multiLinkedProducts;
-            $response['multiLinkedProjects'] = $multiLinkedProjects;
-        }
-
-        if($canChange) return true;
-        echo json_encode($response);
-    }
-
    /**
      * AJAX: get executions of a project in html select.
      *
