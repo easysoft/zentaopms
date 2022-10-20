@@ -355,9 +355,11 @@ $(function()
                     if(target.tagName == 'LI')
                     {
                         $(liData[i]).prevAll().addClass('active');
+                        $(liData[i]).nextAll().removeClass('active');
                     }
                     else {
                         $(liData[i]).parent().prevAll().addClass('active');
+                        $(liData[i]).parent().nextAll().removeClass('active');
                     }
                     $('#showImg')[0].src = $(liData[i]).find('img')[0].src;
                     index = i;
@@ -373,15 +375,16 @@ $(function()
         for (var i = 0; i < liData.length; i++) {
             $(liData[i]).removeClass('selecteded');
         }
-        // isParent ? $(target).addClass('selecteded') : $(target).parent().addClass('selecteded');
         if(isParent)
         {
             $(target).addClass('selecteded');
             $(target).prevAll().addClass('active');
+            $(target).nextAll().removeClass('active');
         }
         else {
             $(target).parent().addClass('selecteded');
             $(target).parent().prevAll().addClass('active');
+            $(target).parent().nextAll().removeClass('active');
         }
     }
     if ($('#stopPlaying'))
