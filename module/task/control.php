@@ -1880,6 +1880,16 @@ class task extends control
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
 
+        if(!empty($this->view->task->team))
+        {
+            $teamAccounts = array_column($this->view->task->team, 'account');
+            $teamMembers  = array();
+            foreach($this->view->members as $account => $name)
+            {
+                if(!$account or in_array($account, $teamAccounts)) $teamMembers[$account] = $name;
+            }
+            $this->view->teamMembers = $teamMembers;
+        }
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
