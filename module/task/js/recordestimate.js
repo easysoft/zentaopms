@@ -74,4 +74,33 @@ $(function()
     {
         $(this).prev().datetimepicker('show');
     });
+
+    $('#toggleFoldIcon').click(function()
+    {
+        var fold  = $(this).find('.icon-angle-down').length > 0;
+        var $icon = $(this).find('.icon-border > i');
+        var $text = $(this).find('.text');
+
+        $.cookie('taskEffortFold', fold ? 0 : 1);
+
+        if(fold)
+        {
+            /* Update icon and text. */
+            $icon.removeClass('icon-angle-down')
+                .addClass('icon-angle-top');
+            $text.text(foldEffort);
+
+            /* Show all efforts. */
+            $('.taskEffort > tbody > tr').removeClass('hidden');
+        }
+        else
+        {
+            $icon.removeClass('icon-angle-top')
+                .addClass('icon-angle-down');
+            $text.text(unfoldEffort);
+
+            /* Efforts whose number is greater than 3 are hidden. */
+            $('.taskEffort > tbody > tr').filter(':gt(2)').addClass('hidden');
+        }
+    });
 })
