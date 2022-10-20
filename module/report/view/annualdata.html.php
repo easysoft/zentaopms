@@ -277,30 +277,41 @@ $(function()
         }
         radarIndicatorData.push(optionsItem);
     }
-
     var radarOption = {
         baseOption: {
             title: {},
             timeline: {
-                show: yearsData.length && yearsData.length>1,
+                show: yearsData.length && yearsData.length > 1,
                 axisType: 'category',
                 autoPlay: true,
-                playInterval: 2000,
-                bottom:"2%",
+                loop: false,
+                playInterval: 1000,
+                left: "1%",
+                bottom: "1%",
+                width: '90%',
                 data: yearsData,
+                symbolSize: [8, 4],
                 label: {
                     normal: {
                         color: '#fff',
-                        interval: 0,
+                        interval: 'auto',
                         fontSize: 12,
-                        padding: [0, 0, -40, 0],
-                        lineHeight: 100
+                        lineHeight: 20
                     },
-                }
+                    interval: 'auto',
+                },
+                lineStyle: {
+                    width: 5,
+                },
+                controlStyle: {
+                    itemSize: 18
+                },
+               
             },
             series: [{
                 name:'<?php echo $annualDataLang->radar;?>',
-                areaStyle:{color: 'rgb(45, 40, 33)'},
+                areaStyle:{color: 'rgb(45, 40, 33)', left: 8},
+                left: 8,
                 type: 'radar',
                 itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
                 lineStyle: {color: "rgb(247, 193, 35)"},
@@ -313,7 +324,7 @@ $(function()
     {
         optionsItem = {
             radar: {
-                splitNumber:5,
+                splitNumber: 5,
                 indicator:  radarIndicatorData[k].radarIndicator
             },
             series: [{
@@ -326,7 +337,7 @@ $(function()
     }
     radarOption.options = (radarOption.options).concat(newOptions);
     radarChart.setOption(radarOption);
-    
+
     var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
 
     <?php unset($lang->story->statusList['']);?>

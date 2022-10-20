@@ -59,7 +59,7 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #actionData .ratio .item {display: inline-block; text-align: center;}
 
 #radar {width: 350px; height: 330px; padding-left:10px;}
-#radarCanvas {width: 330px; height: 310px; margin: 0 auto;}
+#radarCanvas {width: 330px; height: 300px; margin: 0 auto;}
 
 #executionData, #productData {width: 633px; height: 350px; margin-top: 20px; position: relative;}
 #executionData div.has-table, #productData div.has-table {margin-top: 30px; height: 285px; overflow: auto;}
