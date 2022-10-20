@@ -109,7 +109,8 @@ class executionModel extends model
             unset($this->lang->execution->menu->build);
         }
 
-        if($this->config->edition == 'open' and in_array($execution->attribute, array('request', 'design', 'review')))
+        $stageFilter = array('request', 'design', 'review');
+        if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
         {
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->build);
