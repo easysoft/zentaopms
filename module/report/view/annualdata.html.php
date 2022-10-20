@@ -235,9 +235,20 @@
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
 <?php echo js::set('exportByZentao', $annualDataLang->exportByZentao);?>
+<?php js::set('radarData1', $radarData); ?>
+<?php js::set('annualDataLang1', $annualDataLang); ?>
 <script>
 $(function()
 {
+    <?php
+    $indicator = array();
+    foreach($annualDataLang->radarItems as $radarKey => $radarName)
+    {
+        $indicator[$radarKey]['name'] = $radarName;
+        $indicator[$radarKey]['max']  = 0;
+    }
+    ?>
+    var indicator = <?php echo json_encode(array_values($indicator));?>;
     var contributionData = [];
     var yearsData = [];
     if(contributionGroups) {
@@ -247,32 +258,33 @@ $(function()
             var contributionItem = {
                 year: contributionKey,
                 data: [],
+                max: 0,
+                indicator: indicator,
             }
             for(var itemKey in contributionGroups[contributionKey])
             {
                 contributionItem.data.push(contributionGroups[contributionKey][itemKey]);
             }
+            contributionItem.max = Math.max.apply(null,contributionItem.data);
             contributionData.push(contributionItem);
         }
     }
     var radarChart = echarts.init(document.getElementById('radarCanvas'));
-
-    <?php
-    $max = max($radarData);
-    if($max == 0) $max = 1;
-    $indicator = array();
-    foreach($annualDataLang->radarItems as $radarKey => $radarName)
+    function replaceMax(childData, max)
     {
-        $indicator[$radarKey]['name'] = $radarName;
-        $indicator[$radarKey]['max']  = $max;
+        var result = [];
+        for(var i = 0; i < childData.length; i++)
+        {
+            childData[i].max = max;
+            result.push(childData[i]);
+        }
+        return result;
     }
-    ?>
-    var indicator = <?php echo json_encode(array_values($indicator));?>;
     var radarIndicatorData = [];
     for(var k = 0; k < contributionData.length; k++)
     {
         optionsItem = {
-            'radarIndicator': indicator,
+            'radarIndicator': replaceMax(contributionData[k].indicator, contributionData[k].max),
             'tradeRange': contributionData[k].data,
         }
         radarIndicatorData.push(optionsItem);
@@ -284,7 +296,6 @@ $(function()
                 show: yearsData.length && yearsData.length > 1,
                 axisType: 'category',
                 autoPlay: true,
-                loop: false,
                 playInterval: 1000,
                 left: "1%",
                 bottom: "1%",
