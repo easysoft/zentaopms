@@ -31,7 +31,7 @@ class model extends baseModel
     {
         parent::__construct($appName);
 
-        $moduleName = $this->app->getModuleName();
+        $moduleName = $this->getModuleName();
         $this->loadModel($moduleName, $appName, 'tao');
     }
 
@@ -348,7 +348,7 @@ class model extends baseModel
      */
     public function __call($method, $arguments)
     {
-        $moduleName = $this->app->getModuleName();
+        $moduleName = $this->getModuleName();
         $taoClass   = $moduleName . 'Tao';
 
         if(!is_callable(array($this->{$taoClass}, $method))) $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
