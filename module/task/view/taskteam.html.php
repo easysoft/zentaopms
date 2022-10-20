@@ -31,7 +31,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-250px'>
-    <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
+    <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'" . ($memberDisabled ? ' disabled' : ''))?>
     <?php echo html::hidden("teamSource[]", $member->account);?>
     <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
   </td>
@@ -68,7 +68,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
     <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
   </td>
   <td class='w-240px'>
-    <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
+    <?php echo html::select("team[]", $members, '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
   <td class='w-130px'>
