@@ -64,7 +64,6 @@
         </tfoot>
       </table>
     </form>
-    <hr class='small' />
     <?php endif;?>
   </div>
 </div>
