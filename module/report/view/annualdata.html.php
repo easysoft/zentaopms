@@ -1,6 +1,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
+<?php js::import($jsRoot . 'echarts/timeline.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <?php $annualDataLang   = $lang->report->annualData;?>
 <?php $annualDataConfig = $config->report->annualData;?>
@@ -121,13 +122,7 @@
     </section>
     <section id='radar'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
-      <div id='radarCanvas' class="hidden"></div>
-      <div class="scroll-canvas hidden">
-        <img alt="" id="showImg">
-        <i class="icon icon-play" id="stopPlaying"></i>
-        <ul id="timeline" ref="timeline" class="scroll"></ul>
-      </div>
-        
+      <div id='radarCanvas'></div>
     </section>
     <section id='executionData'>
       <header><h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2></header>
@@ -244,13 +239,14 @@
 $(function()
 {
     var contributionData = [];
+    var yearsData = [];
     if(contributionGroups) {
         for(var contributionKey in contributionGroups)
         {
+            yearsData.push(contributionKey);
             var contributionItem = {
                 year: contributionKey,
                 data: [],
-                img: ''
             }
             for(var itemKey in contributionGroups[contributionKey])
             {
@@ -259,186 +255,78 @@ $(function()
             contributionData.push(contributionItem);
         }
     }
-    if(contributionData.length > 1)
+    var radarChart = echarts.init(document.getElementById('radarCanvas'));
+
+    <?php
+    $max = max($radarData);
+    if($max == 0) $max = 1;
+    $indicator = array();
+    foreach($annualDataLang->radarItems as $radarKey => $radarName)
     {
-        $('.scroll-canvas').removeClass('hidden');
-        for(var k = 0; k < contributionData.length; k++)
-        {
-            contributionData[k].img = renderCanvasImg([{value: contributionData[k].data}], true, k);
-        }
+        $indicator[$radarKey]['name'] = $radarName;
+        $indicator[$radarKey]['max']  = $max;
     }
-    else 
+    ?>
+    var indicator = <?php echo json_encode(array_values($indicator));?>;
+    var radarIndicatorData = [];
+    for(var k = 0; k < contributionData.length; k++)
     {
-        $('#radarCanvas').removeClass('hidden');
-        renderCanvasImg([{value: <?php echo json_encode(array_values($radarData));?>}], false)
-    }
-    
-    function renderCanvasImg(paramsData, renderImg, index)
-    {  
-        var radarChart = null;
-        if(renderImg)
-        {
-            var canvas = document.createElement('div');
-            canvas.id = 'canvas' + index;
-            canvas.style.width = '300px';
-            canvas.style.height = '300px';
-            canvas.style.display = 'none';
-            radarChart = echarts.init(canvas);
+        optionsItem = {
+            'radarIndicator': indicator,
+            'tradeRange': contributionData[k].data,
         }
-        else 
-        {
-            radarChart = echarts.init(document.getElementById('radarCanvas'));
-        }
-        var radarOption = {
-        tooltip: {},
-        radar: {
-            splitArea:{areaStyle:{color: ['#010419']}},
-            radius:'65%',
-            <?php
-            $max = max($radarData);
-            if($max == 0) $max = 1;
-            $indicator = array();
-            foreach($annualDataLang->radarItems as $radarKey => $radarName)
-            {
-                $indicator[$radarKey]['name'] = $radarName;
-                $indicator[$radarKey]['max']  = $max;
-            }
-            ?>
-            indicator: <?php echo json_encode(array_values($indicator));?>
-        },
-        series: [{
-            name:'<?php echo $annualDataLang->radar;?>',
-            areaStyle:{color: 'rgb(45, 40, 33)'},
-            type: 'radar',
-            itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
-            lineStyle: {color: "rgb(247, 193, 35)"},
-            data: paramsData
-        }]
-        };
-        radarChart.setOption(radarOption);
-        if(renderImg)
-        {
-            var radarCanvasimg = radarChart.getDataURL({
-                type: 'png',
-                PixelRatio: 2,
-            });
-            return radarCanvasimg;
-        }
-    }
-    
-    var index = 0;
-    var timer = null;
-    contributionData.map(function(item)
-    {
-        var createLi = document.createElement('li');
-        var createP = document.createElement('p');
-        var createImg = document.createElement('img');
-        createImg.src = item.img;
-        createImg.style.display = 'none';
-        createP.innerHTML = contributionData.length < 10 ? item.year : item.year.substring(item.year.length - 2, item.year.length);;
-        createLi.appendChild(createP);
-        createLi.appendChild(createImg);
-        timeline.appendChild(createLi);
-    });
-    
-    $('#timeline li')[0].classList.add('selecteded');
-    $('#showImg')[0].src = $('#timeline li img')[0].src;
-    $('#timeline').on('click', function(e) {
-        var liData = $('#timeline li');
-        var pData = $('#timeline li p');
-        var event = e || window.event;
-        var target = event.target || event.srcElement;
-        if (['P', 'LI'].includes(target.tagName) ) {  
-            classChange(liData, target, target.tagName == 'LI');
-            for (var i = 0; i < liData.length; i++) {
-                if ($(liData[i])[0].classList.contains('selecteded')) {
-                    if(target.tagName == 'LI')
-                    {
-                        $(liData[i]).prevAll().addClass('active');
-                        $(liData[i]).nextAll().removeClass('active');
-                    }
-                    else {
-                        $(liData[i]).parent().prevAll().addClass('active');
-                        $(liData[i]).parent().nextAll().removeClass('active');
-                    }
-                    $('#showImg')[0].src = $(liData[i]).find('img')[0].src;
-                    index = i;
-                    break;
-                }
-        
-            }
-        }
-    });
-   
-    function classChange(liData, target, isParent)
-    {
-        for (var i = 0; i < liData.length; i++) {
-            $(liData[i]).removeClass('selecteded');
-        }
-        if(isParent)
-        {
-            $(target).addClass('selecteded');
-            $(target).prevAll().addClass('active');
-            $(target).nextAll().removeClass('active');
-        }
-        else {
-            $(target).parent().addClass('selecteded');
-            $(target).parent().prevAll().addClass('active');
-            $(target).parent().nextAll().removeClass('active');
-        }
-    }
-    if ($('#stopPlaying'))
-    {
-        $('#stopPlaying').on('click', function()
-        {
-            if ($('#stopPlaying')[0].classList.contains('icon-play'))
-            {
-                $('#stopPlaying').removeClass('icon-play');
-                $('#stopPlaying').addClass('icon-pause');
-                if (!timer) {
-                    autoPlay();
-                }
-            }
-            else 
-            {
-                $('#stopPlaying').removeClass('icon-pause');
-                $('#stopPlaying').addClass('icon-play');
-                if (timer)
-                {
-                    timer = clearInterval(timer);
-                }
-                else
-                {
-                    return
-                }
-            }
-        });
-    }
- 
-    function autoPlay()
-    {
-        var liData = $('#timeline li');
-        var pData = $('#timeline li p');
-        timer = setInterval(function()
-        {
-            if (index < pData.length - 1)
-            {
-                classChange(liData, pData[index + 1]);
-                $('#showImg')[0].src = $('#timeline li img')[index].src;
-                index++;
-            }
-            else 
-            {
-                index = 0;               
-                classChange(liData, pData[index]);
-                $('#stopPlaying').removeClass('icon-pause');
-                $('#stopPlaying').addClass('icon-play');
-                $('#timeline li').removeClass('active');
-                clearInterval(timer);
-            }
-        }, 1000);
+        radarIndicatorData.push(optionsItem);
     }
 
+    var radarOption = {
+        baseOption: {
+            title: {},
+            timeline: {
+                show: yearsData.length && yearsData.length>1,
+                axisType: 'category',
+                autoPlay: true,
+                playInterval: 2000,
+                bottom:"2%",
+                data: yearsData,
+                label: {
+                    normal: {
+                        color: '#fff',
+                        interval: 0,
+                        fontSize: 12,
+                        padding: [0, 0, -40, 0],
+                        lineHeight: 100
+                    },
+                }
+            },
+            series: [{
+                name:'<?php echo $annualDataLang->radar;?>',
+                areaStyle:{color: 'rgb(45, 40, 33)'},
+                type: 'radar',
+                itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
+                lineStyle: {color: "rgb(247, 193, 35)"},
+            }]
+        },
+        options: []
+    };
+    var newOptions = [];
+    for(var k = 0; k < radarIndicatorData.length; k++)
+    {
+        optionsItem = {
+            radar: {
+                splitNumber:5,
+                indicator:  radarIndicatorData[k].radarIndicator
+            },
+            series: [{
+                data: [{
+                    value: radarIndicatorData[k].tradeRange
+                }]
+            }]
+        }
+        newOptions.push(optionsItem);
+    }
+    radarOption.options = (radarOption.options).concat(newOptions);
+    radarChart.setOption(radarOption);
+    
     var overviewCSS = {position: 'absolute', left: '172px', top: '160px'};
 
     <?php unset($lang->story->statusList['']);?>
