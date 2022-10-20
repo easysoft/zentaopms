@@ -118,6 +118,7 @@ $lang->story->pri              = 'Priority';
 $lang->story->estimate         = "Estimates";
 $lang->story->estimateAB       = 'Est.';
 $lang->story->hour             = $lang->hourCommon;
+$lang->story->consumed         = 'Consumed';
 $lang->story->status           = 'Status';
 $lang->story->statusAB         = 'Status';
 $lang->story->subStatus        = 'Sub Status';
