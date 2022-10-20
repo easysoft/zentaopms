@@ -1160,7 +1160,7 @@ class executionModel extends model
         }
 
         /* The total workload of the first stage should not exceed 100%. */
-        if($type == 'create' or (empty($oldExecution) and $oldExecution->grade == 1))
+        if($type == 'create' or (!empty($oldExecution) and $oldExecution->grade == 1))
         {
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
@@ -1174,7 +1174,7 @@ class executionModel extends model
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
             if(!empty($oldExecution) and $oldExecution->grade == 1) $percentTotal = $oldPercentTotal - $oldExecution->percent + $this->post->percent;
 
-            if($percentTotal >100)
+            if($percentTotal > 100)
             {
                 dao::$errors['percent'] = sprintf($this->lang->execution->workloadTotal, $oldPercentTotal . '%');
                 return false;
@@ -4774,16 +4774,16 @@ class executionModel extends model
     }
 
     /**
-     ** Set stage tree path.
-     **
-     ** @param  int    $executionID
-     ** @access public
-     ** @return bool
-     **/
+     * Set stage tree path.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return bool
+     */
     public function setTreePath($executionID)
     {
-        $execution = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
-        $parent    = $this->dao->select('id,type,parent,path,grade')->from(TABLE_PROJECT)->where('id')->eq($execution->parent)->fetch();
+        $execution = $this->dao->select('id, type, parent, path, grade')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+        $parent    = $this->dao->select('id, type, parent, path, grade')->from(TABLE_PROJECT)->where('id')->eq($execution->parent)->fetch();
 
         if($parent->type == 'project')
         {
