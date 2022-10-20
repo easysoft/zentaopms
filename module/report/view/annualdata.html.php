@@ -319,8 +319,7 @@ $(function()
             },
             series: [{
                 name:'<?php echo $annualDataLang->radar;?>',
-                areaStyle:{color: 'rgb(45, 40, 33)', left: 8},
-                left: 8,
+                areaStyle:{color: 'rgb(45, 40, 33)'},
                 type: 'radar',
                 itemStyle: {color: "#fff", borderColor:"rgb(247, 193, 35)"},
                 lineStyle: {color: "rgb(247, 193, 35)"},
@@ -334,6 +333,7 @@ $(function()
         optionsItem = {
             radar: {
                 splitNumber: 5,
+                radius: 88,
                 indicator:  radarIndicatorData[k].radarIndicator
             },
             series: [{
