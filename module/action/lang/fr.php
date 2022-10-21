@@ -224,6 +224,7 @@ $lang->action->desc->merged               = '$date, merged by <strong>$actor</st
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->switchtolean         = '$date, Switch from new mode to lean mode by <strong>'. $lang->admin->system .'</strong>.' . "\n";
+$lang->action->desc->unlinkproduct        = '$date, the project is disassociated from the $extra, synchronization disassociates the sprints of the project from the $extra.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
