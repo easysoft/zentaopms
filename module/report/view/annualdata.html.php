@@ -293,6 +293,7 @@ $(function()
                 show: yearsData.length && yearsData.length > 1,
                 axisType: 'category',
                 autoPlay: true,
+                loop: false,
                 playInterval: 1000,
                 left: "1%",
                 bottom: "1%",
