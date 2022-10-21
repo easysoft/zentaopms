@@ -84,11 +84,7 @@ class treeModel extends model
         /* If feedback module is merge add story module.*/
         $syncConfig = json_decode($this->config->global->syncProduct, true);
         $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
-        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID]))
-        {
-            $grade = $syncConfig[$rootID];
-            $type  = 'story,' . $type;
-        }
+        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -2125,8 +2121,19 @@ class treeModel extends model
     public function getDataStructure($stmt, $viewType, $keepModules = array())
     {
         $parent = array();
+
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = json_decode($this->config->global->syncProduct, true);
+        $syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
+
         while($module = $stmt->fetch())
         {
+            /* If is feedback or ticket filter story module by grade.*/
+            if(($viewType == 'feedback' or $viewType == 'ticket') and $module->type == 'story')
+            {
+                if(isset($syncConfig[$module->root]) and $module->grade > $syncConfig[$module->root]) continue;
+            }
+
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->execution->task->allModule) and ($this->config->execution->task->allModule == 1));
             if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
@@ -2141,6 +2148,7 @@ class treeModel extends model
         }
 
         if($viewType == 'task') $parentTypePairs = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($parent))->andWhere('deleted')->eq(0)->fetchPairs('id', 'type');
+
         $tree = array();
         foreach($parent as $module)
         {
