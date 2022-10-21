@@ -384,7 +384,7 @@ class storyModel extends model
                     }
                 }
             }
-            $this->setStage($storyID);
+            if(!defined('TUTORIAL')) $this->setStage($storyID);
             if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
 
             /* Callback the callable method to process the related data for object that is transfered to story. */
