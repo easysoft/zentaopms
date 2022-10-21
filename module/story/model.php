@@ -4646,7 +4646,7 @@ class storyModel extends model
         }
         elseif($tab == 'execution')
         {
-            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id");
+            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
             $canView   = common::hasPriv('execution', 'storyView');
         }
 

@@ -919,15 +919,16 @@ class execution extends control
      * View a story.
      *
      * @param  int    $storyID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function storyView($storyID)
+    public function storyView($storyID, $executionID = 0)
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->execution);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . ($executionID ? $executionID : $this->session->execution));
     }
 
     /**
