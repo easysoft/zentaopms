@@ -2646,6 +2646,7 @@ class story extends control
         $this->view->storyType     = $storyType;
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
+        $this->view->projectID     = $projectID;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }
