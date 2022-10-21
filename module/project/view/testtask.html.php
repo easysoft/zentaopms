@@ -60,7 +60,7 @@
           <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='<?php echo $project->model == 'scrum' ? 'c-actions-5' : 'c-actions-4';?> text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -102,7 +102,7 @@
             {
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                if(common::hasPriv('execution', 'testreport') and $project->model == 'scrum')
+                if(common::hasPriv('execution', 'testreport'))
                 {
                     echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
                 }

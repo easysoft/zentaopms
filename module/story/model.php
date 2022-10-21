@@ -4641,7 +4641,7 @@ class storyModel extends model
 
         if($tab == 'project')
         {
-            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
+            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
             $canView   = common::hasPriv('projectstory', 'view');
         }
         elseif($tab == 'execution')

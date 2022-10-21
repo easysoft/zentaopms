@@ -7,7 +7,6 @@
 #modalTeam .modal-header .modal-title {font-size: 13px; line-height: 24px;}
 #taskTeamEditor tr {padding: 8px 7px 8px 7px;}
 #taskTeamEditor td .chosen-single .chosen-search input,
-#taskTeamEditor tr td .chosen-single {height: 35px; line-height: 24px;}
 #taskTeamEditor td .chosen-single .chosen-search::before {top: 10px;}
 #taskTeamEditor tr td:first-child {width: 40px; position: relative;}
 .team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
@@ -19,8 +18,10 @@
 #modalTeam .modal-content input[type="text"]::-webkit-input-placeholder{color: #c4c4c4;text-align: left;}
 #modalTeam .modal-content input[type="text"]::-moz-placeholder{color: #c4c4c4;text-align: left;}
 #modalTeam .modal-content input[type="text"]::-ms-input-placeholder{color: #c4c4c4;text-align: left;}
+#modalTeam #team_chosen span {line-height: 24px;}
+#modalTeam #team_chosen a.chosen-default > span {color: #c4c4c4;}
 
-#modalTeam .input-control input[type="text"]::input-placeholder{text-align: right;}
-#modalTeam .input-control input[type="text"]::-webkit-input-placeholder{text-align: right;}
-#modalTeam .input-control input[type="text"]::-moz-placeholder{text-align: right;}
-#modalTeam .input-control input[type="text"]::-ms-input-placeholder{text-align: right;}
+#modalTeam .input-control input[type="text"]::input-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-webkit-input-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-moz-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-ms-input-placeholder{text-align: center;}

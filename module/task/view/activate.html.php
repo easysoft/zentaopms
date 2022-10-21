@@ -17,9 +17,15 @@
 <?php js::set('currentUser', $app->user->account);?>
 <?php js::set('members', $members);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('teamLeftEmpty', $lang->task->error->teamLeftEmpty);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
-<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
-<?php js::set('leftNotEmpty', sprintf($lang->error->notempty, $lang->task->left))?>
+<?php js::set('estimateNotEmpty', sprintf($lang->task->error->notempty, $lang->task->estimate))?>
+<?php js::set('leftNotEmpty', sprintf($lang->task->error->notempty, $lang->task->left))?>
+<?php js::set('teamNotEmpty', sprintf($lang->error->notempty, $lang->task->assignedTo))?>
+<?php $isMultiple = !empty($task->team);?>
+<?php js::set('isMultiple', $isMultiple);?>
+<?php js::set('taskMode', $task->mode);?>
+<?php js::set('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -34,7 +40,6 @@
 
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
-        <?php $isMultiple = !empty($task->team);?>
         <?php if($isMultiple):?>
         <tr>
           <th class='thWidth'><?php echo $lang->task->mode;?></th>
@@ -45,17 +50,17 @@
         <tr>
           <th class='thWidth'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p35-f'>
-            <div class="input-group" id="dataPlanGroup">
-              <?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control chosen'" . ($isMultiple ? ' disabled' : ''));?>
+            <div class="input-group<?php if($isMultiple) echo ' required';?>" id="dataPlanGroup">
+              <?php echo html::select('assignedTo', $isMultiple ? $teamMembers : $members, $isMultiple ? '' : $task->finishedBy, "class='form-control chosen'");?>
               <?php if($isMultiple):?>
-              <span class="input-group-btn team-group"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
+              <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
               <?php endif;?>
             </div>
           </td>
           <td>
             <?php if($isMultiple):?>
             <div class="checkbox-primary c-multipleTask affair">
-              <input type="checkbox" name="multiple" value="1" id="multiple" checked disabled /><label for="multiple" class="no-margin"><?php echo $lang->task->multiple;?></label>
+              <input type="checkbox" name="multiple" value="1" id="multiple" /><label for="multiple" class="no-margin"><?php echo $lang->task->manageTeam;?></label>
             </div>
             <?php endif;?>
           </td>
@@ -65,7 +70,7 @@
           <th><?php echo $lang->task->left;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('left', '', "class='form-control'" . ($isMultiple ? ' readonly' : ''));?>
+              <?php echo html::input('left', '', "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
@@ -105,7 +110,12 @@
                   <?php include __DIR__ . DS . 'taskteam.html.php';?>
                 </tbody>
                 <tfoot>
-                  <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
+                  <tr>
+                    <td colspan='4' class='text-center form-actions'>
+                      <div class='multi-append'></div>
+                      <?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?>
+                    </td>
+                  </tr>
                 </tfoot>
               </table>
             </div>
