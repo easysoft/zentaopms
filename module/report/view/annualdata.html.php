@@ -15,7 +15,6 @@
     <div id='toolbar'>
       <div class='pull-left'>
         <span><?php echo $annualDataLang->scope;?></span>
-        
         <?php echo html::select('year', $years, $year, "class='form-control'");?>
         <?php echo html::select('dept', $depts, $dept, "class='form-control chosen'");?>
         <?php echo html::select('userID', $users, $userID, "class='form-control chosen'");?>
@@ -234,7 +233,7 @@
   </main>
   <div id='loadIndicator' class='load-indicator'></div>
 </div>
-<?php echo js::set('exportByZentao', $annualDataLang->exportByZentao);?>
+<?php js::set('exportByZentao', $annualDataLang->exportByZentao);?>
 <?php js::set('radarData1', $radarData); ?>
 <?php js::set('annualDataLang1', $annualDataLang); ?>
 <script>
@@ -248,15 +247,15 @@ $(function()
         $indicator[$radarKey]['max']  = 0;
     }
     ?>
-    var indicator = <?php echo json_encode(array_values($indicator));?>;
+    var indicator        = <?php echo json_encode(array_values($indicator));?>;
     var contributionData = [];
-    var yearsData = [];
+    var yearsData        = [];
     if(contributionGroups) {
         for(var contributionKey in contributionGroups)
         {
             yearsData.push(contributionKey);
-            var itemData = []
-            var newIndicator = []
+            var itemData     = [];
+            var newIndicator = [];
             for(var itemKey in contributionGroups[contributionKey])
             {
                 itemData.push(contributionGroups[contributionKey][itemKey]);
