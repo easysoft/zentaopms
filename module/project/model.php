@@ -1599,6 +1599,13 @@ class projectModel extends model
             $oldProject->linkedProducts = implode(',', $linkedProducts);
             $project->linkedProducts    = implode(',', $_POST['products']);
 
+            $unlinkedProducts = array_diff($linkedProducts, $_POST['products']);
+            if(!empty($unlinkedProducts))
+            {
+                $products = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->in($unlinkedProducts)->fetchPairs();
+                $this->action->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+            }
+
             /* Activate or close the shadow product of the project. */
             if(!$oldProject->hasProduct && $oldProject->status != $project->status && strpos('doing,closed', $project->status) !== false)
             {
