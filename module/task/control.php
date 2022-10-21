@@ -45,7 +45,7 @@ class task extends control
         parse_str($extra, $output);
 
         if(!empty($executionID)) $execution = $this->execution->getById($executionID);
-        $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
+        $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
         $this->execution->setMenu($executionID);
@@ -294,7 +294,7 @@ class task extends control
         $executionAll = array();
         if(!empty($projectID))
         {
-            $executionList = $this->execution->getByProject($projectID, 'noclosed', 0, true);
+            $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
             $project       = $this->loadModel('project')->getByID($projectID);
             $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
             if(isset($project->model) and $project->model == 'waterfall')
