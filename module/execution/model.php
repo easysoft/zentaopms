@@ -110,10 +110,13 @@ class executionModel extends model
         }
 
         $stageFilter = array('request', 'design', 'review');
-        if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
+        if(isset($execution->attribute))
         {
-            unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->menu->build);
+            if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
+            {
+                unset($this->lang->execution->menu->qa);
+                unset($this->lang->execution->menu->build);
+            }
         }
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
