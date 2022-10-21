@@ -125,7 +125,7 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 #dataform .width-radio-row.required:after {top: 1px; left: 215px;}
 #dataform .width-radio-row.mt10.required:after {top: 1px; left: 355px;}
 .mt10 {margin-top: 10px;}
-#dataform tr > th {vertical-align: top;}
+#dataform tr > th {vertical-align: middle;}
 
 
 #programTableList > tr:hover {background: #E6F0FFCC;}
