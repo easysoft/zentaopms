@@ -2618,22 +2618,30 @@ class story extends control
             }
         }
 
+        $this->story->replaceURLang($storyType);
+
         if($this->app->tab == 'project')
         {
             $project = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
             if($project->type == 'project')
             {
                 $this->loadModel('project')->setMenu($projectID);
-                $this->lang->story->report->charts['storysPerProduct'] = str_replace($this->lang->productCommon, $this->lang->projectCommon, $this->lang->story->report->charts['storysPerProduct']);
                 if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storysPerPlan']);
             }
             else
             {
                 $this->loadModel('execution')->setMenu($projectID);
             }
+
+            if(!$project->hasProduct and !$project->multiple)
+            {
+                unset($this->lang->story->report->charts['storysPerProduct']);
+                unset($this->lang->story->report->charts['storysPerPlan']);
+            }
         }
 
-        $this->story->replaceURLang($storyType);
+        if($storyType != 'story') unset($this->lang->story->report->charts['storysPerStage']);
+
         $this->products = $this->product->getPairs('', 0, '', 'all');
         $this->product->setMenu($productID, $branchID);
 

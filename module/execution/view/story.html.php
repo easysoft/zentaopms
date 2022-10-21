@@ -78,7 +78,7 @@
     </div>
     <?php endif;?>
     <?php
-    if($productID) common::printIcon('story', 'report', "productID=$productID&branchID=&storyType=story&browseType=$type&moduleID=$param&chartType=pie&projectID=$execution->id", '', 'button', 'bar-chart muted');
+    if($productID) common::printIcon('story', 'report', "productID=$productID&branchID=&storyType=$storyType&browseType=$type&moduleID=$param&chartType=pie&projectID=$execution->id", '', 'button', 'bar-chart muted');
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe'");
 
     $canLinkStory = $execution->hasProduct or $execution->multiple;
@@ -271,7 +271,7 @@
           <?php foreach($setting as $key => $value)
           {
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
-              $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', 'story', $execution, $showBranch);
+              $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType, $execution, $showBranch);
           }
           ?>
           </tr>
