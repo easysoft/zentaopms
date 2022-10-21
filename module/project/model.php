@@ -1595,6 +1595,7 @@ class projectModel extends model
             $oldWhitelist = explode(',', $oldProject->whitelist) and $oldWhitelist = array_filter($oldWhitelist);
             $newWhitelist = explode(',', $project->whitelist) and $newWhitelist = array_filter($newWhitelist);
             if(count($oldWhitelist) == count($newWhitelist) and count(array_diff($oldWhitelist, $newWhitelist)) == 0) unset($project->whitelist);
+
             /* Add linkedproducts changes. */
             $oldProject->linkedProducts = implode(',', $linkedProducts);
             $project->linkedProducts    = implode(',', $_POST['products']);
@@ -2308,9 +2309,12 @@ class projectModel extends model
     public function updateProducts($projectID, $products = '')
     {
         $this->loadModel('user');
+
         $products           = isset($_POST['products']) ? $_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
+
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
+
         $members = array_keys($this->getTeamMembers($projectID));
         if(empty($products))
         {
@@ -2350,6 +2354,10 @@ class projectModel extends model
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }
+
+        /* Delete the execution linked products that is not linked with the execution. */
+        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq((int)$projectID)->fetchPairs('id');
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
