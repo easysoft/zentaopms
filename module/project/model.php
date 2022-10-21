@@ -931,7 +931,7 @@ class projectModel extends model
      */
     public function getProjectExecutionPairs()
     {
-        return $this->dao->select('project, id')->from(TABLE_PROJECT)->andWhere('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
     }
 
     /**
