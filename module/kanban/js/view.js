@@ -783,7 +783,7 @@ function renderTicketItem(item, $item)
     var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
-        var icon = 'file-text';
+        var icon = 'ticket';
         if(privs.includes('viewTicket') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('ticket', 'view', 'ticketID=' + item.fromID));
         if(!privs.includes('viewTicket') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
     }
