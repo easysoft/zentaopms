@@ -63,7 +63,11 @@
         <td class='c-title text-left' title='<?php echo $review->title?>'>
           <?php
           $titleHtml = $review->title;
-          if($type != 'attend')
+          if($type == 'attend')
+          {
+              $titleHtml = html::a($this->createLink($type, 'review', "objectID=$review->id", 'html', true), $review->title, '', "data-toggle='modal'");
+          }
+          else
           {
               $class = "class='iframe' data-width='90%'";
               if(strpos(",{$config->my->oaObjectType},", ",{$type},") !== false) $class = "data-toggle='modal'";
