@@ -40,6 +40,9 @@
         <th class='c-title text-left'><?php $rawMethod == 'contribute' ? print($lang->my->auditField->title) : common::printOrderLink('title', $orderBy, $vars, $lang->my->auditField->title);?></th>
         <th class='c-type w-120px'>   <?php common::printOrderLink('type', $orderBy, $vars, $lang->my->auditField->type);?></th>
         <th class='c-date w-150px'>   <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
+        <?php if($rawMethod == 'contribute'):?>
+        <th class='c-status w-150px'> <?php print($lang->my->auditField->result);?></th>
+        <?php endif;?>
         <th class='c-status w-110px'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
         <?php if($rawMethod == 'audit'):?>
         <th class='c-actions-1'><?php echo $lang->actions?></th>
@@ -78,6 +81,13 @@
         </td>
         <td class='c-type'><?php echo $typeName;?></td>
         <td class='c-time text-left'><?php echo $review->time?></td>
+        <?php if($rawMethod == 'contribute'):?>
+        <?php
+        $reviewResultList = zget($lang->$type, 'reviewResultList', array());
+        if(strpos(",{$config->my->oaObjectType},", ",$type,") !== false) $reviewResultList = zget($lang->$type, 'reviewStatusList', array());
+        ?>
+        <td class='c-status'><?php echo zget($reviewResultList, $review->result);?></td>
+        <?php endif;?>
         <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
         <?php if($rawMethod == 'audit'):?>
         <td class='c-actions text-left'>

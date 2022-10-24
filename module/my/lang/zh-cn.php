@@ -85,6 +85,7 @@ $lang->my->auditField = new stdclass();
 $lang->my->auditField->title  = '评审标题';
 $lang->my->auditField->time   = '提交时间';
 $lang->my->auditField->type   = '评审对象';
+$lang->my->auditField->result = '评审结果';
 $lang->my->auditField->status = '状态';
 
 $lang->my->auditField->oaTitle['attend']   = '%s的考勤申请：%s';

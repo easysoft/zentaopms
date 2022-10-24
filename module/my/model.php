@@ -1235,7 +1235,7 @@ class myModel extends model
             $condition  = "($condition)";
         }
 
-        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`')->from(TABLE_ACTION)
+        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('objectType')->in($this->config->my->reviewObjectType)
             ->andWhere($condition)
@@ -1274,6 +1274,7 @@ class myModel extends model
             $review->id     = $object->id;
             $review->type   = $objectType;
             $review->time   = $action->date;
+            $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : $object->status;
 
             if($review->type == 'review') $review->type = 'project';

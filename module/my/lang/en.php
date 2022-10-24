@@ -85,6 +85,7 @@ $lang->my->auditField = new stdclass();
 $lang->my->auditField->title  = 'Title';
 $lang->my->auditField->time   = 'Time';
 $lang->my->auditField->type   = 'Type';
+$lang->my->auditField->result = 'Result';
 $lang->my->auditField->status = 'Status';
 
 $lang->my->auditField->oaTitle['attend']   = '%s application for attend: %s';
