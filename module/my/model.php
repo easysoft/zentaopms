@@ -513,7 +513,7 @@ class myModel extends model
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
-        $executions = $this->execution->getPairs();
+        $executions = $this->execution->getPairs(0, 'all', 'multiple');
         $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
 
         $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
@@ -634,8 +634,8 @@ class myModel extends model
             unset($this->config->bug->search['fields']['closedBy']);
         }
 
-        $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs();
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
