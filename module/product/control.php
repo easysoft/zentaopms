@@ -451,42 +451,9 @@ class product extends control
     {
         $this->app->loadLang('custom');
 
-        /* Init vars. */
-        $product = $this->product->getById($productID);
-
-        $singleLinkProjects   = array();
-        $multipleLinkProjects = array();
-
-        /* Get the projects linked with this product. */
-        $projects = $this->dao->select('t2.id,t2.name,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->eq('project')
-            ->andWhere('t2.deleted')->eq('0')
-            ->fetchAll('id');
-
-        if(!empty($projects))
-        {
-            foreach($projects as $projectID => $project)
-            {
-                $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
-                if(count($products) == 1) $singleLinkProjects[$projectID]   = $project->name;
-                if(count($products) > 1)  $multipleLinkProjects[$projectID] = $project->name;
-            }
-        }
-
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID);
-
-            if($this->config->systemMode == 'new')
-            {
-                /* Change the projects set of the program. */
-                if(($_POST['program'] != $product->program) and ($singleLinkProjects or $multipleLinkProjects))
-                {
-                    $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
-                }
-            }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
@@ -514,6 +481,7 @@ class product extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $product   = $this->product->getById($productID);
         $productID = $this->product->saveState($productID, $this->products);
         $this->product->setMenu($productID);
 
@@ -556,8 +524,6 @@ class product extends control
         $this->view->programs             = array('') + $programs;
         $this->view->lines                = $lines;
         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
-        $this->view->singleLinkProjects   = $singleLinkProjects;
-        $this->view->multipleLinkProjects = $multipleLinkProjects;
 
         unset($this->lang->product->typeList['']);
         $this->display();

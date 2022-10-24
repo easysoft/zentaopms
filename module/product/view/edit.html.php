@@ -14,8 +14,6 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', false);?>
 <?php js::set('oldProgramID', $product->program);?>
-<?php js::set('singleLinkProjects', array_keys($singleLinkProjects));?>
-<?php js::set('multipleLinkProjects', array_keys($multipleLinkProjects));?>
 <?php js::set('programID', $product->program);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
@@ -107,43 +105,6 @@
         </tbody>
       </table>
     </form>
-  </div>
-</div>
-<div class="modal fade" id="changeProgram">
-  <div class="modal-dialog mw-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form'>
-          <?php if($singleLinkProjects):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->programChangeTip;?></th>
-          </tr>
-          <?php foreach($singleLinkProjects as $project):?>
-          <tr>
-            <td><i class="icon icon-project"></i><?php echo $project;?></td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php if($multipleLinkProjects):?>
-          <tr>
-            <th class='text-left'><?php echo $lang->product->confirmChangeProgram;?></th>
-          </tr>
-          <tr>
-            <td><?php echo html::checkbox('projects', $multipleLinkProjects);?></td>
-          </tr>
-          <tr>
-            <td class='text-center'>
-              <?php echo html::commonButton($lang->save, 'onclick = "setChangeProjects();"', 'btn btn-primary btn-wide');?>
-            </td>
-          </tr>
-          <?php endif;?>
-        </table>
-      </div>
-    </div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
