@@ -164,3 +164,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1 {color: #FB2B2B;}
 .severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
+.label-pri-1, .label-selector>.label-pri[data-value="1"] {color: #FF4912; border-color: #FF4912;}
+.label-pri-2, .label-selector>.label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
+.label-pri-3, .label-selector>.label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
+.label-pri-4, .label-selector>.label-pri[data-value="4"] {color: #9EA3B0; border-color: #9EA3B0;}
