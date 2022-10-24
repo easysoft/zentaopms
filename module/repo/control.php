@@ -1230,7 +1230,7 @@ class repo extends control
         $shadowProduct    = $this->loadModel('product')->getShadowProductByProject($postData->projectID);
         $selectedProducts = array_diff($postData->products, array($shadowProduct->id)); // Remove shadow product.
 
-        return print html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple");
+        return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));
     }
 
     /**

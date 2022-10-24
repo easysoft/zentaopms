@@ -7,6 +7,12 @@ $(function()
         $form.css('min-height', $form.height());
     });
 
+    /**
+     * Handle product changed event.
+     *
+     * @access public
+     * @return void
+     */
     function productChanged()
     {
         var projects = $('#projects').val();
@@ -19,6 +25,14 @@ $(function()
         });
     }
 
+    /**
+     * Handle projects changed event.
+     *
+     * @param  object $event
+     * @param  object $data
+     * @access public
+     * @return void
+     */
     function projectsChanged(event, data)
     {
         if(!data.deselected) return;
