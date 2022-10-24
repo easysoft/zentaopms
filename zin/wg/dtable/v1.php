@@ -13,6 +13,13 @@ class column
         return $this;
     }
 
+    /**
+     * Set the column output type.
+     *
+     * @param  string $type link|avatar|circleProgress|html
+     * @access public
+     * @return object
+     */
     public function type($type)
     {
         $this->type = $type;
@@ -25,6 +32,12 @@ class column
         return $this;
     }
 
+    public function fixed($position)
+    {
+        $this->fixed = $position;
+        return $this;
+    }
+
 }
 
 class dtable
@@ -33,9 +46,14 @@ class dtable
 
     public $search = '';
 
+    public $config;
+
     public function __construct($text = '')
     {
-        $this->text = $text;
+        global $config;
+
+        $this->config = $config;
+        $this->text   = $text;
     }
 
     public function col($name, $title)
@@ -43,6 +61,25 @@ class dtable
         $col = new column($name, $title);
         $this->cols[] = $col;
         return $col;
+    }
+
+    /**
+     * Build columns of table.
+     *
+     * @param  array  $fieldList
+     * @access public
+     * @return void
+     */
+    public function buildCols($fieldList)
+    {
+        foreach($fieldList as $field)
+        {
+            $col = $this->col($field['name'], $field['title']);
+            foreach($field as $attr => $value)
+            {
+                if(in_array($attr, $this->config->dtable->colVars)) $col->$attr($value);
+            }
+        }
     }
 
     public function data($data)
