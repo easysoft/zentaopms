@@ -25,6 +25,7 @@
         <table class='table table-form'>
           <?php if($this->app->tab =='project' and $shadowProduct):?>
           <?php echo html::hidden('product[]', $shadowProduct->id);?>
+          <?php echo html::hidden('projects', $objectID);?>
           <?php else:?>
           <tr>
             <th><?php echo $lang->repo->product;?></th>
