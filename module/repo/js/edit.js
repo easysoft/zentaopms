@@ -7,16 +7,36 @@ $(function()
         $form.css('min-height', $form.height());
     });
 
-    $('#product').change(function()
+    function productChanged()
     {
         var projects = $('#projects').val();
         var products = $('#product').val();
         $.post(createLink('repo', 'ajaxProjectsOfProducts'), {products, projects}, function(response)
         {
             $('#projectContainer').html('').append(response);
+            $('#projects').change(projectsChanged);
             $('#projects').chosen().trigger("chosen:updated");
         });
-    });
+    }
+
+    function projectsChanged(event, data)
+    {
+        if(!data.deselected) return;
+
+        var products = $('#product').val();
+        var projects = $('#projects').val();
+
+        $.post(createLink('repo', 'ajaxFilterShadowProducts'), {products, projectID: data.deselected, objectID}, function(response)
+        {
+            $('#productContainer').html('').append(response);
+            $('#product').change(productChanged);
+            $('#product').chosen().trigger("chosen:updated");
+        });
+    }
+
+    $('#product').change(productChanged);
+
+    $('#projects').change(projectsChanged);
 
     $('#serviceHost').change(function()
     {
