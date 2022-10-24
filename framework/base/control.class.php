@@ -912,6 +912,8 @@ class baseControl
         include $this->app->getBasePath() . 'zin' . DS . 'block.class.php';
         include $this->app->getBasePath() . 'zin' . DS . 'page.class.php';
 
+        define('ZUI3', 'zui3');
+
         /**
          * 设置视图文件。(PHP7有一个bug，不能直接$viewFile = $this->setViewFile())。
          * Set viewFile. (Can't assign $viewFile = $this->setViewFile() directly because one php7's bug.)
