@@ -1560,7 +1560,6 @@ class project extends control
             }
             if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
-            if(!$project->multiple) $this->config->project->includedPriv = $this->config->project->noSprintPriv;
             if(!$project->multiple and !$project->hasProduct)
             {
                 unset($this->lang->resource->story->batchChangePlan);

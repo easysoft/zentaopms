@@ -937,12 +937,14 @@ class projectModel extends model
     /**
      * Process the project privs according to the project model.
      *
-     * @param  string $model    sprint | waterfall
+     * @param  string $model    sprint | waterfall | noSprint
      * @access public
      * @return object
      */
     public function processProjectPrivs($model = 'waterfall')
     {
+        if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+
         $this->app->loadLang('group');
 
         $privs    = new stdclass();
