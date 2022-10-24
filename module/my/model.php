@@ -1172,11 +1172,11 @@ class myModel extends model
         foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
 
         $oa = array();
-        if(common::hasPriv('attend',   'review')) $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
-        if(common::hasPriv('leave',    'review')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('overtime', 'review')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('makeup',   'review')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('lieu',     'review')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('attend',   'review'))                                         $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
+        if(common::hasPriv('leave',    'review') and common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('overtime', 'review') and common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('makeup',   'review') and common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('lieu',     'review') and common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
 
         $reviewList = array();
         foreach($oa as $type => $reviewings)

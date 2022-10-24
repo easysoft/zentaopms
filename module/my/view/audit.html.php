@@ -94,19 +94,11 @@
           }
           elseif($module == 'attend')
           {
-              extCommonModel::printLink('attend', 'review', "attendID={$review->id}&status=pass",   $passIcon,   "class='btn' title='{$lang->attend->reviewStatusList['pass']}' data-status='pass' data-toggle='ajax'");
-              extCommonModel::printLink('attend', 'review', "attendID={$review->id}&status=reject", $rejectIcon, "class='btn' title='{$lang->attend->reviewStatusList['reject']}' data-toggle='modal'");
+              common::printLink($module, 'review', "attendID={$review->id}&status=", $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
-          elseif($module == 'leave')
+          elseif(strpos(",{$config->my->oaObjectType},", ",$module,") !== false)
           {
-              $leaveMode = $review->status == 'pass' ? 'back' : '';
-              extCommonModel::printLink('leave', 'review', "id={$review->id}&status=pass&mode=$leaveMode",   $passIcon,   "class='btn' title='{$lang->$module->statusList['pass']}' data-status='pass' data-toggle='ajax'");
-              extCommonModel::printLink('leave', 'review', "id={$review->id}&status=reject&mode=$leaveMode", $rejectIcon, "class='btn' title='{$lang->$module->statusList['reject']}' data-toggle='modal'");
-          }
-          elseif(strpos('|makeup|overtime|lieu|', "|$module|") !== false)
-          {
-              extCommonModel::printLink($module, $method, "id={$review->id}&status=pass",   $passIcon,   "class='btn' title='{$lang->$module->statusList['pass']}' data-status='pass' data-toggle='ajax'");
-              extCommonModel::printLink($module, $method, "id={$review->id}&status=reject", $rejectIcon, "class='btn' title='{$lang->$module->statusList['reject']}' data-toggle='modal'");
+              common::printLink($module, 'view', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
           else
           {
