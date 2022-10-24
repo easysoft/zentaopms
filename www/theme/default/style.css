@@ -161,6 +161,6 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-draft {color: #8166EE;}
 .status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
 .status-done, .status-resolved, .status-replied, .status-checked, #workflowTable td.text-success, .result-testcase.pass, .c-lastRunResult .result-pass {color: #0DBB7D;}
-.status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1 {color: #FB2B2B;}
-.severity-issue.severity-2 {color: #FF9F42;}
-.severity-issue.severity-4 {color: #313C52;}
+.status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1 {color: #FB2B2B;}
+.severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
+.severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
