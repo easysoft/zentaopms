@@ -1225,10 +1225,13 @@ class repo extends control
             ->setDefault('objectID', 0)
             ->get();
 
-        $products = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-
         $shadowProduct    = $this->loadModel('product')->getShadowProductByProject($postData->projectID);
         $selectedProducts = array_diff($postData->products, array($shadowProduct->id)); // Remove shadow product.
+
+        $products           = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $linkedProducts     = $this->loadModel('product')->getByIdList($postData->products);
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
 
         return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));
     }
@@ -1246,8 +1249,17 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
-        $projectOptions = $this->repo->filterProject($postData->products, $postData->projects);
-        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
+        /* Get all projects that can be accessed. */
+        $accessProjects = array();
+        foreach($postData->products as $productID)
+        {
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $accessProjects = $accessProjects + $projects;
+        }
+
+        $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
+
+        return print (html::select('projects[]', $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
 
     /**
