@@ -2998,7 +2998,7 @@ class projectModel extends model
                 ->where('id')->eq($repo->id)->exec();
 
             /* Save action log. */
-            $this->action->create('project', $projectID, 'unlinkRepo', $repo->name);
+            $this->action->create('project', $projectID, 'unlinkedRepo', $repo->name);
         }
 
         /* 2. Add new relations. */
@@ -3022,7 +3022,7 @@ class projectModel extends model
                 ->set('projects')->eq(implode(',', $newProjects))
                 ->where('id')->eq($repo->id)->exec();
 
-            $this->action->create('project', $projectID, 'linkRepo', $repo->name);
+            $this->action->create('project', $projectID, 'linkedRepo', $repo->name);
         }
     }
 
