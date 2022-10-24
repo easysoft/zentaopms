@@ -1195,7 +1195,7 @@ class repo extends control
         else
         {
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
         session_start();
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
