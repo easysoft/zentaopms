@@ -834,9 +834,9 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     $parentTd = $form.find('td.has-child');
     if($parentTd.length == 0) return false;
 
-    var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
-    var nameClass   = objectType == 'product' ? 'c-title'      : 'c-name';
-    $form.find('th.' + nameClass).append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
+    var toggleClass = ['product', 'requirement'].includes(objectType) ? 'story-toggle' : 'task-toggle';
+    var nameClass   = ['product', 'productplan'].indexOf(objectType) !== -1 ? 'c-title' : 'c-name';
+    $form.find('th.' + nameClass).addClass('clearfix').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
 
     var allUnfold = true;
     $parentTd.each(function()
@@ -849,7 +849,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         $(this).find('a.' + toggleClass).addClass('collapsed')
     })
 
-    $form.find('th.' + nameClass + ' #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
+    $form.find('th.' + nameClass + ' #toggleFold').toggleClass('collapsed', !allUnfold);
 
     $(document).on('click', '#toggleFold', function()
     {
@@ -864,7 +864,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
             newUnfoldID.push(dataID);
         })
 
-        $(this).html(collapsed ? foldAll : unfoldAll).toggleClass('collapsed', !collapsed);
+        $(this).toggleClass('collapsed', !collapsed);
         url = createLink('misc', 'ajaxSetUnfoldID', 'objectID=' + objectID + '&objectType=' + objectType + '&action=' + (collapsed ? 'add' : 'delete'));
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
     });
@@ -884,7 +884,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         setTimeout(function()
         {
             hasCollapsed = $table.find('td.has-child a.' + toggleClass + '.collapsed').length != 0;
-            $('#toggleFold').html(hasCollapsed ? unfoldAll : foldAll).toggleClass('collapsed', hasCollapsed);
+            $('#toggleFold').toggleClass('collapsed', hasCollapsed);
         }, 100);
 
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});

@@ -11,7 +11,7 @@ $(function()
         var $title = $('#storyList thead th.c-title');
         var headerWidth = $('#storyList thead th.c-title a').innerWidth();
         var buttonWidth = $('#storyList thead th.c-title button').innerWidth();
-        if($title.width() < headerWidth + buttonWidth) $title.width(headerWidth + buttonWidth + 10);
+        if($title.width() < headerWidth + buttonWidth + 16) $title.width(headerWidth + buttonWidth + 30);
     });
 
     $('#storyList td.has-child .story-toggle').each(function()

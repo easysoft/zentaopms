@@ -103,7 +103,8 @@
             <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
             <td class='text-left table-nest-title' title="<?php echo $program['programName']?>">
-              <span class="table-nest-icon icon table-nest-toggle"></span>
+              <i class="table-nest-icon icon table-nest-toggle icon-plus"></i>
+              <i class="icon icon-cards-view"></i>
               <span><?php echo $program['programName']?></span>
             </td>
             <td class='c-manager'>

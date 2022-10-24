@@ -217,6 +217,7 @@ $lang->action->desc->importedproductplan  = '$date, imported to <strong>$extra</
 $lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedticket       = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
 $lang->action->desc->tolib                = '$date, Importé par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->updatetolib          = '$date, MàJ de ' . $lang->testcase->common . ' par  <strong>$actor</strong>.' . "\n";
@@ -745,6 +746,7 @@ $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
 $lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
+$lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

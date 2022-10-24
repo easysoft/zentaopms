@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
+<?php js::set('pageAllSummary', $lang->release->pageAllSummary)?>
+<?php js::set('pageSummary', $lang->release->pageSummary)?>
+<?php js::set('type', $type)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
@@ -48,13 +51,13 @@
       <tr>
         <th class='c-id'><?php echo $lang->release->id;?></th>
         <th class="c-name"><?php echo $lang->release->name;?></th>
-        <th class="c-project"><?php echo $lang->release->project;?></th>
         <th class="c-build"><?php echo $lang->release->build;?></th>
         <?php if($product->type != 'normal'):?>
         <th class='text-center c-branch'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
-        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
+        <th class="c-project"><?php echo $lang->release->project;?></th>
         <th class='text-center c-status'><?php echo $lang->release->status;?></th>
+        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <?php
         $extendFields = $this->release->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
@@ -65,7 +68,7 @@
     <tbody>
       <?php foreach($releases as $release):?>
       <?php $canBeChanged = common::canBeChanged('release', $release);?>
-      <tr>
+      <tr data-type='<?php echo $release->status;?>'>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
           <?php
@@ -73,16 +76,16 @@
           echo html::a(inlink('view', "release=$release->id"), $release->name, '', "title='$release->name'") . $flagIcon;
           ?>
         </td>
-        <td title='<?php echo $release->projectName?>'><?php echo $release->projectName;?></td>
         <td title='<?php echo $release->buildName?>'><?php echo empty($release->execution) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
-        <td class='text-center'><?php echo $release->date;?></td>
+        <td title='<?php echo $release->projectName?>'><?php echo $release->projectName;?></td>
         <?php $status = $this->processStatus('release', $release);?>
         <td class='c-status text-center' title='<?php echo $status;?>'>
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>
+        <td class='text-center'><?php echo $release->date;?></td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
           <?php echo $this->release->buildOperateMenu($release, 'browse');?>
@@ -92,6 +95,7 @@
     </tbody>
   </table>
   <div class='table-footer'>
+    <div class="table-statistic"></div>
     <?php $pager->show('right', 'pagerjs');?>
   </div>
   <?php endif;?>

@@ -60,13 +60,23 @@
           <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='<?php echo $project->model == 'scrum' ? 'c-actions-5' : 'c-actions-4';?> text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
+        <?php
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        ?>
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
+        <?php if($task->status == 'wait')    $waitCount ++;?>
+        <?php if($task->status == 'doing')   $testingCount ++;?>
+        <?php if($task->status == 'blocked') $blockedCount ++;?>
+        <?php if($task->status == 'done')    $doneCount ++;?>
         <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
@@ -92,7 +102,7 @@
             {
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-                if(common::hasPriv('execution', 'testreport') and $project->model == 'scrum')
+                if(common::hasPriv('execution', 'testreport'))
                 {
                     echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
                 }
@@ -117,6 +127,7 @@
       </tbody>
     </table>
     <div class="table-footer">
+      <div class="table-statistic"><?php echo sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

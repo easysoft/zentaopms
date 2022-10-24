@@ -116,6 +116,7 @@ $lang->story->pri            = 'Ưu tiên';
 $lang->story->estimate       = "{$lang->hourCommon} dự tính";
 $lang->story->estimateAB     = 'DT.' . $lang->hourCommon == 'giờ' ? '(giờ)' : '(SP)';
 $lang->story->hour           = $lang->hourCommon;
+$lang->story->consumed       = 'Mất thời gian';
 $lang->story->status         = 'Tình trạng';
 $lang->story->subStatus      = 'Tình trạng con';
 $lang->story->stage          = 'Giai đoạn';

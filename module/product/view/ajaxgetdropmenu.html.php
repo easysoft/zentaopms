@@ -29,6 +29,7 @@
 div#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 #swapper li >.selected {color: #0c64eb!important;background: #e9f2fb!important;}
+#dropMenu .col-footer .selected{color: #2e7fff!important;background: #e6f0ff!important; padding: 1px 10px;border-radius: 4px;}
 </style>
 <?php
 $productCounts      = array();
@@ -136,6 +137,15 @@ $closedProductsHtml .= '</ul>';
       <?php //echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
       <?php //echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
+      <?php if($this->app->tab == 'feedback'):?>
+      <?php $selected = !$productID ? 'selected' : '';?>
+      <?php if($module == 'feedback'):?>
+      <?php echo html::a(helper::createLink('feedback', 'admin', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
+      <?php if($module == 'ticket'):?>
+      <?php echo html::a(helper::createLink('ticket', 'browse', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
+      <?php endif;?>
+      <?php endif;?>
     </div>
   </div>
   <div id="gray-line" hidden></div>

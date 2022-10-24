@@ -14,7 +14,11 @@
 <?php
 js::set('programID', $programID);
 js::set('browseType', $browseType);
-$canBatchEdit = common::hasPriv('project', 'batchEdit');
+$canBatchEdit   = common::hasPriv('project', 'batchEdit');
+$waitCount      = 0;
+$doingCount     = 0;
+$suspendedCount = 0;
+$closedCount    = 0;
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
@@ -42,7 +46,7 @@ $canBatchEdit = common::hasPriv('project', 'batchEdit');
       </p>
     </div>
     <?php else:?>
-    <form class='main-table' id='projectsForm' method='post' data-ride="table">
+    <form class='main-table' id='projectsForm' method='post'>
       <?php
         $vars    = "programID=$programID&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
         $setting = $this->datatable->getSetting('program');
@@ -62,8 +66,12 @@ $canBatchEdit = common::hasPriv('project', 'batchEdit');
         </thead>
         <tbody class="sortable" id='projectTableList'>
           <?php foreach($projectStats as $project):?>
-          <tr data-id="<?php echo $project->id;?>">
+          <tr data-id="<?php echo $project->id;?>" data-status="<?php echo $project->status;?>">
             <?php $project->from = 'pgmproject';?>
+            <?php if($project->status == 'wait')      $waitCount ++;?>
+            <?php if($project->status == 'doing')     $doingCount ++;?>
+            <?php if($project->status == 'suspended') $suspendedCount ++;?>
+            <?php if($project->status == 'closed')    $closedCount ++;?>
             <?php foreach($setting as $value) $this->project->printCell($value, $project, $users, $programID);?>
           </tr>
           <?php endforeach;?>
@@ -83,12 +91,19 @@ $canBatchEdit = common::hasPriv('project', 'batchEdit');
         }
         ?>
         </div>
+        <div class="table-statistic"><?php echo $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
   </div>
 </div>
+<?php
+js::set('summary', sprintf($lang->project->summary, count($projectStats)));
+js::set('allSummary', sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount));
+js::set('checkedSummary', $lang->project->checkedSummary);
+js::set('checkedAllSummary', $lang->project->checkedAllSummary);
+?>
 <script>
 $('input[name^="involved"]').click(function()
 {

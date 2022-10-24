@@ -118,6 +118,7 @@ $lang->story->pri              = '优先级';
 $lang->story->estimate         = "预计{$lang->hourCommon}";
 $lang->story->estimateAB       = '预计';
 $lang->story->hour             = $lang->hourCommon;
+$lang->story->consumed         = '耗时';
 $lang->story->status           = '当前状态';
 $lang->story->statusAB         = '状态';
 $lang->story->subStatus        = '子状态';
