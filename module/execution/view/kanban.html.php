@@ -61,16 +61,16 @@ js::set('rdSearchValue', '');
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
 
-$canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
+$canSortRegion       = (commonModel::hasPriv('kanban', 'sortRegion') and count($regions) > 1);
 $canCreateRegion     = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
 $canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
 $canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
 $canCreateTask       = common::hasPriv('task', 'create');
 $canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
-$canImportTask       = common::hasPriv('execution', 'importTask');
+$canImportTask       = (common::hasPriv('execution', 'importTask') and $execution->multiple);
 $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
-$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') && $execution->multiple);
+$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate') and $execution->multiple);
 $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
@@ -118,7 +118,7 @@ js::set('priv',
         'canDeleteStory'        => common::hasPriv('story', 'delete'),
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
-        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct),
+        'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') and !empty($execution->hasProduct)),
         'canViewStory'          => common::hasPriv('execution', 'storyView'),
     )
 );
