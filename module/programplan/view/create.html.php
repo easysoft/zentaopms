@@ -22,7 +22,7 @@
       echo "<span class='text'>{$title}</span>";
       ?>
     </span>
-    <?php if($productList):?>
+    <?php if($productList and $project->division):?>
     <div class='btn-group'>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : current($productList);?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>

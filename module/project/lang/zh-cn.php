@@ -127,6 +127,7 @@ $lang->project->realBeganAB        = '实际开始';
 $lang->project->realEndAB          = '实际完成';
 $lang->project->realBegan          = '实际开始日期';
 $lang->project->realEnd            = '实际完成日期';
+$lang->project->division           = '按产品创建阶段';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -176,6 +177,9 @@ $lang->project->kanban             = '看板';
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';
+
+$lang->project->divisionList['0'] = '关闭';
+$lang->project->divisionList['1'] = '开启';
 
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';

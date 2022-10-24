@@ -75,6 +75,7 @@ $lang->project->dateRange          = 'Duration';
 $lang->project->to                 = ' to ';
 $lang->project->realEnd            = 'Actual End';
 $lang->project->realBegan          = 'Actual Began';
+$lang->project->division           = 'Create Stages by Product';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';

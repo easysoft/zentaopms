@@ -253,9 +253,11 @@ function setAclList(programID)
  */
 function loadBranches(product)
 {
+    var chosenProducts = 0;
     $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
+        if($(this).val() > 0) chosenProducts ++;
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
             bootbox.alert(errorSameProducts);
@@ -264,6 +266,8 @@ function loadBranches(product)
             return false;
         }
     });
+
+    chosenProducts > 1 ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {

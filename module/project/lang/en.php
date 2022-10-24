@@ -127,6 +127,7 @@ $lang->project->realBeganAB        = 'Actual Begin';
 $lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
+$lang->project->division           = 'Create Stages by Product';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -176,6 +177,9 @@ $lang->project->kanban             = 'Kanban';
 $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
+
+$lang->project->divisionList['0'] = 'Disable';
+$lang->project->divisionList['1'] = 'Enable';
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';

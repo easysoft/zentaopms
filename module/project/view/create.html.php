@@ -175,6 +175,10 @@
             </div>
           </td>
         </tr>
+        <tr class='hide division'>
+          <th><?php echo $lang->project->division;?></th>
+          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, '0');?></td>
+        </tr>
         <?php if($model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

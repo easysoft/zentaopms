@@ -175,6 +175,12 @@
             </div>
           </td>
         </tr>
+        <?php if(!$project->division):?>
+        <tr>
+          <th><?php echo $lang->project->division;?></th>
+          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division);?></td>
+        </tr>
+        <?php endif;?>
         <?php if($project->model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>

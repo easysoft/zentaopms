@@ -2042,6 +2042,7 @@ class project extends control
     {
         $this->loadModel('product');
         $this->loadModel('program');
+        $this->loadModel('execution');
 
         if(!empty($_POST))
         {
@@ -2058,6 +2059,14 @@ class project extends control
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
+
+            if(!$project->division and $newProducts)
+            {
+                $stages = $this->execution->getPairs($projectID);
+                $this->post->set('products', $newProducts);
+                foreach($stages as $stageID => $name) $this->execution->updateProducts($stageID);
+            }
+
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 

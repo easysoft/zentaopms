@@ -727,7 +727,8 @@ class programplanModel extends model
             $datas[] = $plan;
         }
 
-        $project = $this->loadModel('project')->getByID($projectID);
+        $project     = $this->loadModel('project')->getByID($projectID);
+        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -928,8 +929,9 @@ class programplanModel extends model
 
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
-
-                    $this->post->set('products', array(0 => $productID));
+    
+                    $linkProducts = $project->division ? array(0 => $productID) : array_keys($productList);
+                    $this->post->set('products', $linkProducts);
                     $this->execution->updateProducts($stageID);
 
                     /* Record version change information. */
