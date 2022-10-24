@@ -979,7 +979,6 @@ class myModel extends model
      */
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
-        if($this->app->rawMethod != 'audit') return array();
         $reviewList = array();
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());

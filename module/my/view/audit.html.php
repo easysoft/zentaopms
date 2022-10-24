@@ -42,7 +42,7 @@
         <th class='c-date w-150px'>   <?php common::printOrderLink('time', $orderBy, $vars, $lang->my->auditField->time);?></th>
         <th class='c-status w-110px'> <?php $rawMethod == 'contribute' ? print($lang->my->auditField->status) : common::printOrderLink('status', $orderBy, $vars, $lang->my->auditField->status);?></th>
         <?php if($rawMethod == 'audit'):?>
-        <th class='c-actions-2'><?php echo $lang->actions?></th>
+        <th class='c-actions-1'><?php echo $lang->actions?></th>
         <?php endif;?>
       </tr>
     </thead>

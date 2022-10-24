@@ -305,13 +305,15 @@ $lang->block->default['full']['my']['8']['block']  = 'projectteam';
 $lang->block->default['full']['my']['8']['source'] = 'project';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['params']['todoCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['taskCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['bugCount']     = '20';
-$lang->block->default['full']['my']['8']['params']['riskCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
-$lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
-$lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
+$lang->block->default['full']['my']['8']['params']['todoCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['taskCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['bugCount']      = '20';
+$lang->block->default['full']['my']['8']['params']['riskCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['issueCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['storyCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['reviewCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['meetingCount']  = '20';
+$lang->block->default['full']['my']['8']['params']['feedbackCount'] = '20';
 
 $lang->block->default['full']['my']['9']['title']  = 'Project List';
 $lang->block->default['full']['my']['9']['block']  = 'project';
@@ -465,6 +467,7 @@ $lang->block->bugCount      = 'Bugs';
 $lang->block->riskCount     = 'Risk';
 $lang->block->issueCount    = 'Issues';
 $lang->block->storyCount    = 'Stories';
+$lang->block->reviewCount   = 'Reviews';
 $lang->block->meetingCount  = 'Meetings';
 $lang->block->feedbackCount = 'Feedbacks';
 

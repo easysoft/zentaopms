@@ -824,6 +824,10 @@ class blockModel extends model
         $params->storyCount['default'] = 20;
         $params->storyCount['control'] = 'input';
 
+        $params->reviewCount['name']    = $this->lang->block->reviewCount;
+        $params->reviewCount['default'] = 20;
+        $params->reviewCount['control'] = 'input';
+
         return json_encode($params);
     }
 

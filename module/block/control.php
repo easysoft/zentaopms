@@ -1902,6 +1902,17 @@ class block extends control
             $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
         }
 
+        $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, $limitCount, 1);
+        $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
+        if($reviews)
+        {
+            $hasViewPriv['review'] = true;
+            $count['review']       = count($reviews);
+            $this->view->reviews   = $reviews;
+        }
+
         $this->view->selfCall    = $this->selfCall;
         $this->view->hasViewPriv = $hasViewPriv;
         $this->view->count       = $count;

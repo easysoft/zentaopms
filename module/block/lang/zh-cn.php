@@ -305,13 +305,15 @@ $lang->block->default['full']['my']['8']['block']  = 'assigntome';
 $lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['params']['todoCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['taskCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['bugCount']     = '20';
-$lang->block->default['full']['my']['8']['params']['riskCount']    = '20';
-$lang->block->default['full']['my']['8']['params']['issueCount']   = '20';
-$lang->block->default['full']['my']['8']['params']['storyCount']   = '20';
-$lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
+$lang->block->default['full']['my']['8']['params']['todoCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['taskCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['bugCount']      = '20';
+$lang->block->default['full']['my']['8']['params']['riskCount']     = '20';
+$lang->block->default['full']['my']['8']['params']['issueCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['storyCount']    = '20';
+$lang->block->default['full']['my']['8']['params']['reviewCount']   = '20';
+$lang->block->default['full']['my']['8']['params']['meetingCount']  = '20';
+$lang->block->default['full']['my']['8']['params']['feedbackCount'] = '20';
 
 $lang->block->default['full']['my']['9']['title']  = '项目人力投入';
 $lang->block->default['full']['my']['9']['block']  = 'projectteam';
@@ -465,6 +467,7 @@ $lang->block->bugCount      = 'Bug数';
 $lang->block->riskCount     = '风险数';
 $lang->block->issueCount    = '问题数';
 $lang->block->storyCount    = '需求数';
+$lang->block->reviewCount   = '审批数';
 $lang->block->meetingCount  = '会议数';
 $lang->block->feedbackCount = '反馈数';
 
