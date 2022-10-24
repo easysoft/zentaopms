@@ -82,8 +82,8 @@ class treeModel extends model
         }
 
         /* If feedback module is merge add story module.*/
-        $syncConfig = json_decode($this->config->global->syncProduct, true);
-        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        $syncConfig = $this->getSyncConfig($type);
+
         if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
@@ -170,6 +170,9 @@ class treeModel extends model
             }
         }
 
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = $this->getSyncConfig($type);
+
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
@@ -177,6 +180,12 @@ class treeModel extends model
             $modules = array();
             while($module = $stmt->fetch())
             {
+                /* If is feedback or ticket filter story module by grade.*/
+                if(($type == 'feedback' or $type == 'ticket') and $module->type == 'story')
+                {
+                    if(isset($syncConfig[$module->root]) and $module->grade > $syncConfig[$module->root]) continue;
+                }
+
                 if($grade != 'all' and $module->grade > $grade) continue;
                 $modules[$module->id] = $module;
             }
@@ -1394,10 +1403,9 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        if($type == 'line') $rootID = 0;
+        $syncConfig = $this->getSyncConfig($type);
 
-        $syncConfig = json_decode($this->config->global->syncProduct, true);
-        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        if($type  == 'line') $rootID = 0;
         if(($type == 'feedback' or $type == 'ticket') and isset($syncConfig[$rootID])) $type = "$type,story";
 
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
@@ -2123,8 +2131,7 @@ class treeModel extends model
         $parent = array();
 
         /* If feedback or ticket module is merge add story module.*/
-        $syncConfig = json_decode($this->config->global->syncProduct, true);
-        $syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
+        $syncConfig = $this->getSyncConfig($viewType);
 
         while($module = $stmt->fetch())
         {
@@ -2205,6 +2212,21 @@ class treeModel extends model
         }
 
         return $tree;
+    }
+
+    /**
+     * Get syncProduct module config.
+     *
+     * @param  string $type feedback|ticket
+     * @access public
+     * @return array
+     */
+    public function getSyncConfig($type = '')
+    {
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = json_decode($this->config->global->syncProduct, true);
+        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        return $syncConfig;
     }
 
     /**
