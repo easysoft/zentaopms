@@ -50,3 +50,45 @@ $config->program->search['params']['lastEditedDate'] = array('operator' => '=', 
 $config->program->search['params']['realBegan']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->program->search['params']['realEnd']        = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->program->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+
+/* Data table field config. */
+global $lang;
+$config->program->dtable = new stdclass();
+
+$config->program->dtable->fieldList['name']['name']  = 'name';
+$config->program->dtable->fieldList['name']['title'] = $lang->nameAB;
+$config->program->dtable->fieldList['name']['type']  = 'html';
+$config->program->dtable->fieldList['name']['flex']  = 1;
+
+$config->program->dtable->fieldList['status']['name']  = 'status';
+$config->program->dtable->fieldList['status']['title'] = $lang->program->status;
+$config->program->dtable->fieldList['status']['width'] = 65;
+$config->program->dtable->fieldList['status']['type']  = 'html';
+
+$config->program->dtable->fieldList['pm']['name']  = 'pm';
+$config->program->dtable->fieldList['pm']['title'] = $lang->program->PM;
+$config->program->dtable->fieldList['pm']['width'] = 100;
+$config->program->dtable->fieldList['pm']['type']  = 'html';
+
+$config->program->dtable->fieldList['budget']['name']  = 'budget';
+$config->program->dtable->fieldList['budget']['title'] = $lang->program->budget;
+$config->program->dtable->fieldList['budget']['width'] = 100;
+
+$config->program->dtable->fieldList['begin']['name']  = 'begin';
+$config->program->dtable->fieldList['begin']['title'] = $lang->program->begin;
+$config->program->dtable->fieldList['begin']['width'] = 100;
+
+$config->program->dtable->fieldList['end']['name']  = 'end';
+$config->program->dtable->fieldList['end']['title'] = $lang->program->end;
+$config->program->dtable->fieldList['end']['width'] = 100;
+
+$config->program->dtable->fieldList['progress']['name']  = 'progress';
+$config->program->dtable->fieldList['progress']['title'] = $lang->program->progressAB;
+$config->program->dtable->fieldList['progress']['width'] = 100;
+$config->program->dtable->fieldList['progress']['type']  = 'circleProgress';
+
+$config->program->dtable->fieldList['actions']['name']  = 'actions';
+$config->program->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->program->dtable->fieldList['actions']['width'] = 160;
+$config->program->dtable->fieldList['actions']['type']  = 'html';
+$config->program->dtable->fieldList['actions']['fixed'] = 'right';

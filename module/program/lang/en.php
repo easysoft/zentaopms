@@ -84,6 +84,7 @@ $lang->program->exRateNotNegative       = 'The『exchange rate』should not be n
 $lang->program->changePRJUnit           = 'Update the budget unit of the project';
 
 $lang->program->progress         = 'Progress';
+$lang->program->progressAB       = 'Progress';
 $lang->program->children         = 'Add Child';
 $lang->program->allInvest        = 'Input';
 $lang->program->teamCount        = 'Team';

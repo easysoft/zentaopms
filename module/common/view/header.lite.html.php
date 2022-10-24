@@ -1,4 +1,4 @@
-<?php 
+<?php
 if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}
 $clientLang   = $app->getClientLang();
 $webRoot      = $this->app->getWebRoot();
@@ -25,16 +25,24 @@ $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
       $timestamp = time();
 
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
-      css::import($defaultTheme . 'style.css?t=' . $timestamp);
+      if(defined('ZUI3'))
+      {
+          css::import('https://ztui.sh.oop.cc/assets/style.4d294030.css');
+          css::import('https://ztui.sh.oop.cc/zui/zui.css');
+      }
 
+      css::import($defaultTheme . 'style.css?t=' . $timestamp);
       css::import($langTheme);
+
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css?t=' . $timestamp);
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
+
+      if(defined('ZUI3')) js::import('https://ztui.sh.oop.cc/zui/zui.umd.cjs');
+
       if(!in_array($clientLang, $commonLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
-
   }
   else
   {
@@ -81,10 +89,10 @@ $xuanExtFile = $extensionRoot . 'xuan/common/ext/view/header.xuanxuan.html.hook.
 if(file_exists($xuanExtFile)) include $xuanExtFile;
 ?>
 </head>
-<?php 
+<?php
 $bodyClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';
 if(isset($pageBodyClass)) $bodyClass = $bodyClass . ' ' . $pageBodyClass;
-if($this->moduleName == 'index' && $this->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');
+if($this->app->moduleName == 'index' && $this->app->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');
 if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') !== false) $bodyClass .= ' xxc-embed';
 ?>
 <body class='<?php echo $bodyClass; ?>'>
