@@ -47,6 +47,7 @@ class tree extends control
         }
         else if($this->app->tab == 'feedback')
         {
+            $branch   = 'all';
             $products = $this->loadModel('feedback')->getGrantProducts();
             if(!$rootID) $rootID = key($products);
             $this->loadModel('feedback')->setMenu($rootID, $viewType, $viewType);
