@@ -100,7 +100,7 @@
                 <?php if($executionInfo['multiple']):?>
                 <td class="text-center" title="<?php echo $executionName;?>"><?php echo html::a($this->createLink('execution', 'view', "executionID={$executionInfo['executionID']}"), $executionName);?></td>
                 <?php else:?>
-                <td></td>
+                <td><?php echo $lang->null;?></td>
                 <?php endif;?>
                 <td class="text-center"><?php echo $executionInfo['count'];?></td>
                 <td class="text-center"><?php echo $executionInfo['manhour'];?></td>
