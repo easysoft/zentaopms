@@ -54,13 +54,13 @@ function getDiffs(fileName)
                 if(code.type == 'all' || code.type == 'new')
                 {
                     result.code.new += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.new.push(code.newlc);
+                    result.line.new.push(parseInt(code.newlc));
                 }
 
                 if(code.type == 'all' || code.type == 'old')
                 {
                     result.code.old += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.old.push(code.oldlc);
+                    result.line.old.push(parseInt(code.oldlc));
                 }
             })
             return result;
