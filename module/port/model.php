@@ -185,6 +185,8 @@ class portModel extends model
      */
     public function export($model = '')
     {
+        ini_set('memory_limit', '-1');
+
         $fields = $this->post->exportFields;
 
         /* Init config fieldList */
