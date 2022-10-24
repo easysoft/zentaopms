@@ -17,6 +17,9 @@
 #queryBox {padding-top: 25px;}
 </style>
 <div class='main-content' id='mainContent'>
+  <div class='main-header'>
+    <h2><?php echo $lang->repo->linkTask;?></h2>
+  </div>
   <div id='queryBox' data-module='task' class='show no-margin'></div>
   <div id='unlinkTaskList'>
     <form class='main-table table-task' data-ride='table' method='post' id='unlinkedTasksForm' target='hiddenwin' action='<?php echo $this->createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>

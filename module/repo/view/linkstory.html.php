@@ -14,6 +14,9 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='main-content' id='mainContent'>
+  <div class='main-header'>
+    <h2><?php echo $lang->repo->linkStory;?></h2>
+  </div>
   <div id='queryBox' data-module='story' class='show no-margin'></div>
   <form class="main-table table-story" data-ride="table" method="post" target='hiddenwin' id='linkStoryForm' action="<?php echo $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy")?>">
     <div class='table-header hl-primary text-primary strong'>

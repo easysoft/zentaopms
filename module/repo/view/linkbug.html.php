@@ -17,6 +17,9 @@
 #queryBox {padding-top: 25px;}
 </style>
 <div class='main-content' id='mainContent'>
+  <div class='main-header'>
+    <h2><?php echo $lang->repo->linkBug;?></h2>
+  </div>
   <div id='queryBox' data-module='bug' class='show no-margin'></div>
   <div id='unlinkBugList'>
     <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
