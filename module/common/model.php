@@ -2621,7 +2621,6 @@ EOD;
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
         {
-            if(!$program->multiple) $this->config->project->includedPriv = $this->config->project->noSprintPriv;
             /* If priv way is reset, unset common program priv, and cover by program priv. */
             $projectPrivs = $this->loadModel('project')->processProjectPrivs($program->multiple ? $program->model : 'noSprint');
             foreach($projectPrivs as $module => $methods)
