@@ -2206,7 +2206,7 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "productID=%s&type=$extra");
             }
-            elseif($module == 'product' && $method == 'create')
+            elseif($module == 'product' && ($method == 'create' or $method == 'showimport'))
             {
                 $link = helper::createLink($module, 'browse', "productID=%s&type=$extra");
             }
