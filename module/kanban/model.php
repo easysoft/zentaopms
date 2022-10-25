@@ -512,17 +512,40 @@ class kanbanModel extends model
      */
     public function importCard($kanbanID, $regionID, $groupID, $columnID)
     {
-        $data = fixer::input('post')->get();
+        $data         = fixer::input('post')->get();
         $importIDList = $data->cards;
         $targetLaneID = $data->targetLane;
-
-        $oldCardsKanban = $this->dao->select('id,kanban')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchPairs();
+        $cardList     = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchAll('id');
 
         $updateData = new stdClass();
         $updateData->kanban = $kanbanID;
         $updateData->region = $regionID;
         $updateData->group  = $groupID;
         $this->dao->update(TABLE_KANBANCARD)->data($updateData)->where('id')->in($importIDList)->exec();
+
+        $kanban         = $this->getByID($kanbanID);
+        $oldCardsKanban = array();
+        $kanbanUsers    = trim($kanban->owner) . ',' . trim($kanban->team);
+        $users          = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        foreach($cardList as $cardID => $card)
+        {
+            $oldCardsKanban[$cardID] = $card->kanban;
+            if(empty($card->assignedTo)) continue;
+            $assignedToList = explode(',', $card->assignedTo);
+            foreach($assignedToList as $index => $account)
+            {
+                if(!isset($users[$account])) unset($assignedToList[$index]);
+            }
+
+            $assignedTo = implode(',', $assignedToList);
+            $assignedTo = trim($assignedTo, ',');
+
+            if($card->assignedTo != $assignedTo)
+            {
+                $this->dao->update(TABLE_KANBANCARD)->set('assignedTo')->eq($assignedTo)->where('id')->eq($cardID)->exec();
+            }
+        }
 
         if(!dao::isError())
         {
