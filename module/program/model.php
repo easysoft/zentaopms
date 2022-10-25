@@ -271,9 +271,8 @@ class programModel extends model
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
-        $projectGroup = $this->dao->select('DISTINCT t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $projectGroup = $this->dao->select('DISTINCT t1.product, t2.id, t2.name, t2.status, t2.end, t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
             ->andWhere('t2.type')->eq('project')
@@ -336,6 +335,7 @@ class programModel extends model
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
+                    if(!$this->config->program->showAllProjects and strpos($project->path, ",{$product->program},") !== 0) continue;
 
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());

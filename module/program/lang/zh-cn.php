@@ -82,6 +82,7 @@ $lang->program->manageMembers           = '项目集团队';
 $lang->program->confirmChangePRJUint    = '是否同步更新该项目集下子项目集和项目的预算的单位？若确认更新,请填写今日汇率。';
 $lang->program->exRateNotNegative       = '『汇率』不能是负数。';
 $lang->program->changePRJUnit           = '更新项目预算单位';
+$lang->program->showNotCurrentProjects  = '显示非当前项目集的项目信息';
 
 $lang->program->progress         = '项目进度';
 $lang->program->children         = '添加子项目集';
