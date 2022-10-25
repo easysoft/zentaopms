@@ -7,6 +7,7 @@ class tab extends wg
 
     public function __construct($text)
     {
+        parent::__construct();
         $this->text = $text;
     }
 

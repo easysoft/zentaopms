@@ -8,6 +8,7 @@ class button extends wg
 
     public function __construct($text)
     {
+        parent::__construct();
         $this->text = $text;
     }
 
@@ -37,6 +38,6 @@ class button extends wg
 
     public function toString()
     {
-        return html::a($this->link, $this->text, $this->target, $this->misc, $this->newline);
+        return html::a($this->link, $this->text, $this->target, $this->misc . $this->toHx(), $this->newline);
     }
 }

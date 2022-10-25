@@ -3,6 +3,7 @@ class column extends wg
 {
     public function __construct($name, $title)
     {
+        parent::__construct();
         $this->name  = $name;
         $this->title = $title;
     }

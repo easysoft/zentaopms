@@ -1,75 +1,78 @@
 <?php
 class wg
 {
-    public $url;
-    public $method;
-    public $trigger = '';
-    public $target  = '';
-    public $swap    = '';
-    public $include = '';
-    public $params  = '';
+    public $hxProperties;
+
+    public function __construct()
+    {
+        $this->hxProperties = new stdClass();
+    }
 
     public function get($url, $trigger = '', $target = '')
     {
-        $this->method  = __FUNCTION__;
-        $this->url     = $url;
-        $this->trigger = $trigger;
-        $this->target  = $target;
+        $this->hxProperties->method  = __FUNCTION__ ;
+        $this->hxProperties->url     = $url;
+        $this->hxProperties->trigger = $trigger;
+        $this->hxProperties->target  = $target;
 
         return $this;
     }
 
     public function post($url, $trigger = '', $target = '')
     {
-        $this->method  = __FUNCTION__;
-        $this->url     = $url;
-        $this->trigger = $trigger;
-        $this->target  = $target;
+        $this->hxProperties->method  = __FUNCTION__ ;
+        $this->hxProperties->url     = $url;
+        $this->hxProperties->trigger = $trigger;
+        $this->hxProperties->target  = $target;
 
         return $this;
     }
 
     public function trigger($trigger)
     {
-        $this->trigger = $trigger;
+        $this->hxProperties->trigger = $trigger;
         return $this;
     }
 
-    public function target($target)
+    public function targetHx($target)
     {
-        $this->target = $target;
+        $this->hxProperties->target = $target;
         return $this;
     }
 
     public function swap($swap)
     {
-        $this->swap = $swap;
+        $this->hxProperties->swap = $swap;
         return $this;
     }
 
     public function include($include)
     {
-        $this->include = $include;
+        $this->hxProperties->include = $include;
         return $this;
     }
 
     public function params($params = '*')
     {
-        $this->params = $params;
+        $this->hxProperties->params = $params;
         return $this;
     }
 
     public function toHx()
     {
-        $html   = '';
-        $prefix = 'hx-';
+        $properties = $this->hxProperties;
+        $prefix     = 'hx-';
 
-        $properties = array_keys(get_class_vars(__CLASS__));
+        if(empty($properties->method) || empty($properties->url)) return '';
 
-        foreach($properties as $property)
+        $html = "{$prefix}{$properties->method}='{$properties->url}'";
+
+        unset($properties->method, $properties->url);
+
+        foreach($properties as $property => $item)
         {
-            if(empty($this->$property)) continue;
-            $html .= "{$prefix}{$property}='{$this->$property}' ";
+            if(empty($item)) continue;
+            $html .= "{$prefix}{$property}='{$item}' ";
         }
 
         return $html;

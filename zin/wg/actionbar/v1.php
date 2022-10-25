@@ -5,6 +5,7 @@ class actionbar extends wg
 
     public function __construct($text = '')
     {
+        parent::__construct();
     }
 
     public function append($item)
