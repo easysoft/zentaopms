@@ -82,9 +82,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           </tr>
           <?php $showExecution = (strpos(",$showFields,", ',execution,') !== false);?>
           <tr>
-            <th>
-              <?php echo ($showExecution) ? $lang->bug->project : $lang->bug->type;?>
-            </th>
+            <th><?php echo $showExecution ? $lang->bug->project : $lang->bug->type;?></th>
 
             <?php if(!$showExecution):?>
             <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
