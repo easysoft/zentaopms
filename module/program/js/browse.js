@@ -79,24 +79,26 @@ function showEditCheckbox(show)
 {
     $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban').each(function()
     {
-        $this     = $(this);
-        $tr       = $(this).closest('tr');
-        projectID = $tr.attr('data-id');
+        var $this     = $(this);
+        var $tr       = $(this).closest('dtable-row');
+        var projectID = $tr.attr('data-id');
+        var $firstDiv = $tr.find('.dtable-flexable div:first');
         if(show)
         {
-            var marginLeft = $tr.find('td:first').find('span.table-nest-icon').css('margin-left');
+            var marginLeft = $firstDiv.find('span.table-nest-icon').css('margin-left');
 
-            $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
-            $tr.find('td:first').find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', '0');
+            $firstDiv.prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
+            $firstDiv.find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
+            $firstDiv.find('span.table-nest-icon').css('margin-left', '0');
         }
         else
         {
-            var marginLeft = $tr.find('td:first').find('.checkbox-primary').css('margin-left');
-            $tr.find('td:first').find('span.table-nest-icon').css('margin-left', marginLeft);
-            $tr.find('td:first').find('[name^="projectIdList"]').parent().remove();
+            var marginLeft = $firstDiv.find('.checkbox-primary').css('margin-left');
+            $firstDiv.find('span.table-nest-icon').css('margin-left', marginLeft);
+            $firstDiv.find('[name^="projectIdList"]').parent().remove();
         }
     });
+
     if(show && hasProject)
     {
         var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";

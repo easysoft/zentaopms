@@ -403,3 +403,6 @@ $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');
+
+$config->dtable = new stdclass();
+$config->dtable->colVars = array('width', 'type', 'flex', 'fixed');

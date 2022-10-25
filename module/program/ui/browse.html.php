@@ -50,6 +50,7 @@ foreach($programs as $program)
 }
 
 $table->search($status, $moduleName);
+$table->form('programForm', 'main-table', "data-preserve-nested='true'");
 $table->data($rows);
 
 $content = block();
@@ -59,6 +60,9 @@ $content->table = $table;
 $page = page('list');
 $page->top->menu      = $menu;
 $page->right->content = $content;
+
+$hide = $status == 'bySearch' ? 'hide' : '';
+$table->footer($status != 'bySearch' ? $pager : '', $hide, $summary, 'programSummary');
 
 $page->x();
 
