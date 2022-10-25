@@ -1,5 +1,5 @@
 <?php
-class tab
+class tab extends wg
 {
     private $text;
 

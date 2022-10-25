@@ -1,5 +1,5 @@
 <?php
-class actionbar
+class actionbar extends wg
 {
     private $children = array();
 

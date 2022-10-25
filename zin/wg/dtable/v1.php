@@ -1,5 +1,5 @@
 <?php
-class column
+class column extends wg
 {
     public function __construct($name, $title)
     {

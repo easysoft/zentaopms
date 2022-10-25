@@ -1,5 +1,5 @@
 <?php
-class button
+class button extends wg
 {
     public $link = '';
     public $target = '';
