@@ -75,4 +75,20 @@
     </form>
   </div>
 </div>
+<?php if(!$project->division and count($linkedProducts) == 1):?>
+<?php js::set('noticeDivsion', $lang->project->noticeDivsion);?>
+<script>
+$('#submit').click(function()
+{
+    var checkedProducts = $("input[name*='products']:checked").length;
+    if(checkedProducts > 1)
+    {
+        if(confirm(noticeDivsion))
+        {
+            $('div.form-actions').append("<input type='hidden' value='1' name='division'>");
+        }
+    }
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

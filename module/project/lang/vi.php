@@ -116,6 +116,7 @@ $lang->project->changeProgram          = '%s > Change project';
 $lang->project->changeProgramTip       = 'After modifying the project set, the products linked with the project will also modify the project set to which it belongs. Please confirm whether to modify it.';
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
+$lang->project->noticeDivsion          = "The current project is associated with multiple products, you can click Confirm to open the mode by {$lang->productCommon} creation stage, click Cancel to keep the status quo.";
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';

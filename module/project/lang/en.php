@@ -196,6 +196,7 @@ $lang->project->changeProgram          = '%s > Change project';
 $lang->project->changeProgramTip       = 'Once the program is edited, the product that is linked to this program will be changed. Do you want to edit it?';
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
+$lang->project->noticeDivsion          = "The current project is associated with multiple products, you can click Confirm to open the mode by {$lang->productCommon} creation stage, click Cancel to keep the status quo.";
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";

@@ -2044,6 +2044,8 @@ class project extends control
         $this->loadModel('program');
         $this->loadModel('execution');
 
+        $project = $this->project->getById($projectID);
+
         if(!empty($_POST))
         {
             if(!isset($_POST['products']))
@@ -2075,7 +2077,6 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $project = $this->project->getById($projectID);
         if($this->app->tab == 'program')
         {
             $this->program->setMenu($project->parent);
@@ -2120,6 +2121,7 @@ class project extends control
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
+        $this->view->project                  = $project;
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
