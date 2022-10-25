@@ -945,8 +945,9 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $notClosed  = ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
-        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $notClosed);
+        $mode  = ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+        $mode .= !$projectID ? ',multiple' : '';
+        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
