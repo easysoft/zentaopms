@@ -141,7 +141,6 @@ class repo extends control
 
         $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
         $products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($products))->andWhere('shadow')->eq(0)->fetchPairs('id', 'name'); /* Remove shadow products. */
-        $productID = count($products) > 0 ? key($products) : '';
 
         $shadowProduct = null;
         if($this->app->tab == 'project' && $objectID) $shadowProduct = $this->loadModel('product')->getShadowProductByProject($objectID);
@@ -152,7 +151,6 @@ class repo extends control
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
         $this->view->relatedProjects = array();
-        $this->view->productID       = $productID;
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
         $this->view->objectID        = $objectID;
         $this->view->shadowProduct   = $shadowProduct;
@@ -1214,6 +1212,31 @@ class repo extends control
     }
 
     /**
+     * Create new product select options by remove shadow products if remove project.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxFilterShadowProducts()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('products', array())
+            ->setDefault('projectID', 0)
+            ->setDefault('objectID', 0)
+            ->get();
+
+        $shadowProduct    = $this->loadModel('product')->getShadowProductByProject($postData->projectID);
+        $selectedProducts = array_diff($postData->products, array($shadowProduct->id)); // Remove shadow product.
+
+        $products           = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
+        $linkedProducts     = $this->loadModel('product')->getByIdList($postData->products);
+        $linkedProductPairs = array_combine(array_keys($linkedProducts), array_column($linkedProducts, 'name'));
+        $products           = $products + $linkedProductPairs;
+
+        return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));
+    }
+
+    /**
      * Get projects list by product id list by ajax.
      *
      * @access public
@@ -1226,8 +1249,17 @@ class repo extends control
             ->setDefault('projects', array())
             ->get();
 
-        $projectOptions = $this->repo->filterProject($postData->products, $postData->projects);
-        return print html::select('projects[]', $projectOptions, $postData->projects, "class='form-control chosen' multiple");
+        /* Get all projects that can be accessed. */
+        $accessProjects = array();
+        foreach($postData->products as $productID)
+        {
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $accessProjects = $accessProjects + $projects;
+        }
+
+        $selectedProjects = array_intersect(array_keys($accessProjects), $postData->projects);
+
+        return print (html::select('projects[]', $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
 
     /**

@@ -18,7 +18,8 @@
 .user-addon{padding-right: 16px; padding-left: 16px;}
 </style>
 <?php endif;?>
-<?php js::set('scm',  $repo->SCM)?>
+<?php js::set('scm', $repo->SCM);?>
+<?php js::set('objectID', $objectID);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -29,7 +30,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->repo->product;?></th>
-            <td class='required'><?php echo html::select('product[]', $products, $repo->product, "class='form-control chosen' multiple");?></td>
+            <td id='productContainer' class='required'><?php echo html::select('product[]', $products, $repo->product, "class='form-control chosen' multiple");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->projects;?></th>
