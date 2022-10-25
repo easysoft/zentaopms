@@ -1,5 +1,5 @@
 <?php
-class toolbar
+class toolbar extends wg
 {
     private $children = array();
 
