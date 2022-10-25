@@ -119,6 +119,7 @@ class programplan extends control
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
         $this->view->productID    = $this->productID;
+        $this->view->productList  = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->type         = $type;
         $this->view->plans        = $plans;
         $this->view->orderBy      = $orderBy;
@@ -245,19 +246,40 @@ class programplan extends control
      */
     public function ajaxCustom()
     {
-        $data    = fixer::input('post')->get();
-        $owner   = $this->app->user->account;
-        $module  = 'programplan';
-        $section = 'browse';
-        $object  = 'stageCustom';
-        $setting = $this->loadModel('setting');
-        $custom  = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
-        $setting->setItem("$owner.$module.$section.$object", $custom);
+        $owner  = $this->app->user->account;
+        $module = 'programplan';
+        $this->app->loadLang('execution');
+        $this->loadModel('datatable');
+        $this->loadModel('setting');
 
-        $response            = array();
-        $response['result']  = 'success';
-        $response['message'] = '';
-        return $this->send($response);
+        $stageCustom = $this->setting->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
+        $ganttFields = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=ganttFields");
+        $zooming     = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=zooming");
+
+        if($_POST)
+        {
+            $data        = fixer::input('post')->get();
+            $zooming     = empty($data->zooming) ? '' : $data->zooming;
+            $stageCustom = empty($data->stageCustom) ? '' : implode(',', $data->stageCustom);
+            $ganttFields = empty($data->ganttFields) ? '' : implode(',', $data->ganttFields);
+
+            $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
+            $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
+            $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        /* Set Custom. */
+        foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+
+        $this->view->zooming      = $zooming;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        $this->view->ganttFields  = $ganttFields;
+        $this->view->stageCustom  = $stageCustom;
+
+        $this->display();
     }
 
     /**

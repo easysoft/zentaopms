@@ -62,6 +62,8 @@ $lang->programplan->hideCriticalPath = '隐藏关键路径';
 $lang->programplan->showCriticalPath = '显示关键路径';
 $lang->programplan->delay            = '是否延期';
 $lang->programplan->delayDays        = '延期天数';
+$lang->programplan->settingGantt     = '设置甘特图';
+$lang->programplan->viewSetting      = '显示设置';
 
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
