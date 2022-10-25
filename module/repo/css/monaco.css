@@ -1,6 +1,7 @@
 .m-repo-monaco {overflow: hidden;}
 .repoCode .nav > li > a {padding: 8px 10px;}
 .repoCode .nav-tabs > li > a > span {margin-right: 5px;}
+.repoCode {min-height: 500px;}
 
 #fileTabs .tab-pane {display: none;}
 #fileTabs .tab-pane.active {display: block;}

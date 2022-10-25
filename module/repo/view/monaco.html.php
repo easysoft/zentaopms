@@ -12,6 +12,7 @@
 include '../../common/view/header.html.php';
 js::import($jsRoot  . '/zui/tabs/tabs.min.js');
 js::import($jsRoot . 'misc/base64.js');
+js::set('isonlybody', isonlybody());
 js::set('entry', $entry);
 js::set('repoID', $repoID);
 js::set('repo', $repo);

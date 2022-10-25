@@ -16,6 +16,7 @@ table.diff {margin-bottom: 0px;}
 .repoCode .diff tr.over td.line-new, .repoCode .diff tr.over td.line-new {background: #8eff8e;}
 .repoCode .diff tr.over td.line-old, .repoCode .diff tr.over td.line-old {background: #f6b2b2;}
 
+.repoCode {min-height: 500px;}
 .repoCode form > .btn {margin-right: 10px;}
 .label-exchange {background-color: #566F7C; cursor: pointer;}
 .label-exchange i {padding: 0;}

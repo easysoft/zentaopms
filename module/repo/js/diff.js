@@ -115,6 +115,7 @@ $(document).ready(function()
     function setHeight()
     {
         var paneHeight = $(window).height() - 120;
+        if(isonlybody) paneHeight = 500;
         $('#fileTabs .tab-pane').css('height', paneHeight + 'px')
         $('#filesTree').css('height', paneHeight + 45)
     }
