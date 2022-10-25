@@ -138,7 +138,7 @@ $closedProductsHtml .= '</ul>';
       <?php //echo html::a(helper::createLink('project', 'browse', 'programID=0&browseType=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
       <?php if($this->app->tab == 'feedback'):?>
-      <?php $selected = !$productID ? 'selected' : '';?>
+      <?php $selected = $productID == 'all' ? 'selected' : '';?>
       <?php if($module == 'feedback'):?>
       <?php echo html::a(helper::createLink('feedback', 'admin', 'browseType=byProduct&param=all'), $lang->product->all, '', "class='not-list-item pull-left toggle-left-col $selected'"); ?>
       <?php endif;?>

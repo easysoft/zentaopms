@@ -1550,14 +1550,18 @@ class testcase extends control
      * Confirm story changes.
      *
      * @param  int    $caseID
+     * @param  bool   $reload
      * @access public
      * @return void
      */
-    public function confirmStoryChange($caseID,$reload=true)
+    public function confirmStoryChange($caseID, $reload = true)
     {
         $case = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
-        $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+        if($case->story)
+        {
+            $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
+            $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+        }
         if($reload) return print(js::reload('parent'));
     }
 

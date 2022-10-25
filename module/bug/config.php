@@ -306,7 +306,7 @@ $config->bug->datatable->fieldList['story']['fixed']      = 'no';
 $config->bug->datatable->fieldList['story']['width']      = '120';
 $config->bug->datatable->fieldList['story']['required']   = 'no';
 $config->bug->datatable->fieldList['story']['control']    = 'select';
-$config->bug->datatable->fieldList['story']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'story&id,title');
+$config->bug->datatable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' =>'getProductStoryPairs', 'params' => '$productID');
 
 $config->bug->datatable->fieldList['task']['title']      = 'task';
 $config->bug->datatable->fieldList['task']['fixed']      = 'no';

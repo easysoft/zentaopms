@@ -1263,7 +1263,8 @@ class story extends control
         $from = $this->app->tab;
         if($from == 'execution')
         {
-            $this->execution->setMenu($param);
+            $result = $this->execution->setMenu($param);
+            if($result) return;
         }
         elseif($from == 'project')
         {

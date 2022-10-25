@@ -389,6 +389,7 @@ $lang->action->label->importedproductplan   = '导入了';
 $lang->action->label->importedrelease       = '导入了';
 $lang->action->label->importedexecution     = '导入了';
 $lang->action->label->importedbuild         = '导入了';
+$lang->action->label->importedticket        = '导入了';
 $lang->action->label->fromsonarqube         = '由SonarQube问题创建';
 $lang->action->label->bind                  = '绑定了';
 $lang->action->label->unbind                = '取消绑定了';

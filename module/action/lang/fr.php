@@ -388,6 +388,7 @@ $lang->action->label->importedproductplan   = 'imported';
 $lang->action->label->importedrelease       = 'imported';
 $lang->action->label->importedexecution     = 'imported';
 $lang->action->label->importedbuild         = 'imported';
+$lang->action->label->importedticket        = 'imported';
 $lang->action->label->fromsonarqube         = 'created a bug from SonarQube Issue named:';
 $lang->action->label->bind                  = 'bound';
 $lang->action->label->unbind                = 'unbound';
