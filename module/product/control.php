@@ -1572,4 +1572,16 @@ class product extends control
         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
         $this->display();
     }
+
+    /**
+     * Ajax set show setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowSetting()
+    {
+        $data = fixer::input('post')->get();
+        $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $data->showAllProjects);
+    }
 }

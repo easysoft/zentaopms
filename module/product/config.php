@@ -1,6 +1,7 @@
 <?php
 $config->product = new stdclass();
-$config->product->orderBy = 'isClosed,program_asc,order_asc';
+$config->product->orderBy         = 'isClosed,program_asc,order_asc';
+$config->product->showAllProjects = 0;
 
 $config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,acl';
 if($config->systemMode == 'new') $config->product->customBatchEditFields = 'program,' . $config->product->customBatchEditFields;

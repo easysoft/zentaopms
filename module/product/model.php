@@ -1895,7 +1895,7 @@ class productModel extends model
         $programList = $this->program->getTopPairs('', '', true);
         $projectList = $this->program->getProjectStats(0, 'doing');
 
-        $projectProduct = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectProduct = $this->dao->select('t1.product,t1.project,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.product')->in(array_keys($productList))
             ->andWhere('t1.project')->in($this->app->user->view->projects)
@@ -1903,6 +1903,19 @@ class productModel extends model
             ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'project');
+
+        if(!$this->config->product->showAllProjects)
+        {
+            foreach($projectProduct as $productID => $projects)
+            {
+                if(!isset($productList[$productID])) continue;
+                $product = $productList[$productID];
+                foreach($projects as $projectID => $project)
+                {
+                    if($project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) unset($projectProduct[$productID][$projectID]);
+                }
+            }
+        }
 
         $planList = $this->dao->select('id,product,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($productList))
@@ -1912,7 +1925,7 @@ class productModel extends model
             ->orderBy('begin desc')
             ->fetchGroup('product', 'id');
 
-        $executionList    = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executionList = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
             ->where('type')->in('stage,sprint,kanban')
             ->andWhere('t2.project')->in(array_keys($projectList))
