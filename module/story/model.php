@@ -226,7 +226,7 @@ class storyModel extends model
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket')
             ->get();
 
         /* Check repeat story. */
@@ -384,7 +384,7 @@ class storyModel extends model
                     }
                 }
             }
-            $this->setStage($storyID);
+            if(!defined('TUTORIAL')) $this->setStage($storyID);
             if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
 
             /* Callback the callable method to process the related data for object that is transfered to story. */
@@ -4641,12 +4641,12 @@ class storyModel extends model
 
         if($tab == 'project')
         {
-            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
+            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
             $canView   = common::hasPriv('projectstory', 'view');
         }
         elseif($tab == 'execution')
         {
-            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id");
+            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
             $canView   = common::hasPriv('execution', 'storyView');
         }
 

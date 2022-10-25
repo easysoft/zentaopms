@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+
 <?php js::set('mode', $mode);?>
 <?php js::set('total', $pager->recTotal);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
@@ -31,7 +32,7 @@
         echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php $this->loadModel('search');echo $lang->search->common;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
 </div>
 <div id="mainContent">
@@ -79,7 +80,7 @@
         $canBeChanged = common::canBeChanged('story', $story);
         $spanClass    = $canBatchAction ? 'c-span' : '';
         ?>
-        <tr>
+        <tr data-id='<?php echo $story->id;?>' >
           <td class="c-id">
             <?php if($canBatchAction):?>
             <div class="checkbox-primary">
@@ -91,7 +92,7 @@
           </td>
           <td class='c-name nobr <?php if(!empty($story->children)) echo "has-child" ?>'>
             <?php echo common::hasPriv('requirement', 'view') ? html::a($storyLink, $story->title, null, "style='color: $story->color' data-group='product' title='$story->title'") : "<span title='$story->title'>$story->title</span>";?>
-            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
+            <?php if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>

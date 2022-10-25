@@ -1259,7 +1259,6 @@ class taskModel extends model
             unset($task->parent);
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
             if(isset($oldTask->team))
             {
                 $users = $this->loadModel('user')->getPairs('noletter|noempty');
@@ -1352,7 +1351,7 @@ class taskModel extends model
             if($task->status == 'closed')          $task->assignedTo = 'closed';
             if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
 
-            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left))
+            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left) and $task->parent >= 0)
             {
                 dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
                 return false;
@@ -4054,14 +4053,14 @@ class taskModel extends model
             }
         }
         $list .= '</td>';
-        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
-        $list .= '<td></td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
         $list .= helper::isZeroDate($task->deadline) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->deadline . '</td>';
-        $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td></td>';
         $list .= '<td></td>';
         $list .= '<td class="c-actions">';
         $list .= $this->buildOperateMenu($task, 'browse');

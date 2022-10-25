@@ -105,17 +105,17 @@ $config->task->datatable->fieldList['deadline']['control'] = 'date';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->task->datatable->fieldList['estimate']['width']    = '55';
+$config->task->datatable->fieldList['estimate']['width']    = '65';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';
 $config->task->datatable->fieldList['consumed']['fixed']    = 'no';
-$config->task->datatable->fieldList['consumed']['width']    = '55';
+$config->task->datatable->fieldList['consumed']['width']    = '65';
 $config->task->datatable->fieldList['consumed']['required'] = 'no';
 
 $config->task->datatable->fieldList['left']['title']    = 'leftAB';
 $config->task->datatable->fieldList['left']['fixed']    = 'no';
-$config->task->datatable->fieldList['left']['width']    = '55';
+$config->task->datatable->fieldList['left']['width']    = '65';
 $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';

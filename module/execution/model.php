@@ -109,6 +109,16 @@ class executionModel extends model
             unset($this->lang->execution->menu->build);
         }
 
+        $stageFilter = array('request', 'design', 'review');
+        if(isset($execution->attribute))
+        {
+            if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
+            {
+                unset($this->lang->execution->menu->qa);
+                unset($this->lang->execution->menu->build);
+            }
+        }
+
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
         $moduleName = $this->app->getModuleName();
@@ -4251,7 +4261,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 3) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
@@ -4623,7 +4633,7 @@ class executionModel extends model
         }
         else
         {
-            echo $execution->name;
+            echo "<span class='text-ellipsis'>" . $execution->name . '</span>';
             if(!helper::isZeroDate($execution->end))
             {
                 if($execution->status != 'closed')
@@ -4632,14 +4642,14 @@ class executionModel extends model
                 }
             }
         }
-        echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
-        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
         echo helper::isZeroDate($execution->end) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->end . '</td>';
         echo "<td class='hours text-right' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours text-right' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours text-right' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
+        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
         echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);

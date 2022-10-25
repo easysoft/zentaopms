@@ -28,8 +28,7 @@
 .c-modulel {width: 110px;}
 
 .keep-row-height {height: 32px;}
-#modalTeam .modal-dialog {height: 340px; width: 620px; color: #3c4353;}
-#modalTeam .modal-content {padding: 0 0 5px; height: 340px;}
-#modalTeam .modal-header {height: 44px; padding: 10px 20px; margin: 0;}
-#modalTeam .modal-header .modal-title {font-size: 13px; line-height: 24px;}
-#modalTeam .modal-body {padding: 12px 13px 20px; max-height: 296px!important; overflow-y: scroll!important;}
+#modalTeam .modal-dialog {min-height: 120px; width: 520px; color: #3c4353;}
+#taskTeamEditor .chosen-single {width: 200px;}
+#taskTeamEditor .estimateBox {width: 120px;}
+#modalTeam .modal-content {padding: 0;}

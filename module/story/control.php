@@ -1235,6 +1235,7 @@ class story extends control
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         $this->session->set('buildList',   $uri, $buildApp);
+        $this->app->loadLang('bug');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -1261,7 +1262,8 @@ class story extends control
         $from = $this->app->tab;
         if($from == 'execution')
         {
-            $this->execution->setMenu($param);
+            $result = $this->execution->setMenu($param);
+            if($result) return;
         }
         elseif($from == 'project')
         {
@@ -1315,7 +1317,6 @@ class story extends control
         $this->view->param              = $param;
         $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
         $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
-        $this->view->bugStatusList      = $this->app->loadLang('bug')->bug->statusList;
 
         $this->display();
     }

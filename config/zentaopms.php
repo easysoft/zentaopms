@@ -216,6 +216,7 @@ $config->openMethods[] = 'kanban.importplan';
 $config->openMethods[] = 'kanban.importrelease';
 $config->openMethods[] = 'kanban.importexecution';
 $config->openMethods[] = 'kanban.importbuild';
+$config->openMethods[] = 'kanban.importticket';
 $config->openMethods[] = 'kanban.activatecard';
 $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
@@ -225,6 +226,7 @@ $config->openMethods[] = 'tree.viewhistory';
 $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
+$config->openMethods[] = 'feedback.mergeproductmodule';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -402,7 +404,7 @@ $config->waterfallModules = array('workestimation', 'durationestimation', 'budge
 $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
-$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback');
+$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->dtable = new stdclass();
 $config->dtable->colVars = array('width', 'type', 'flex', 'fixed');
