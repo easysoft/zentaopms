@@ -38,6 +38,24 @@ class column
         return $this;
     }
 
+    /**
+     * Set sortType.
+     *
+     * @param  string|bool $type up|down|true|false
+     * @access public
+     * @return void
+     */
+    public function sortType($type)
+    {
+        $this->sortType = $type;
+        return $this;
+    }
+
+    public function checkbox()
+    {
+        $this->checkbox = 1;
+        return $this;
+    }
 }
 
 class dtable
@@ -153,7 +171,7 @@ class dtable
         if(!empty($this->footer)) $html .= $this->footer;
         if(!empty($this->form))   $html .= '</form>';
 
-        $html .= '<script>new zui.DTable(".dtable", {plugins: ["nested", "rich"], cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . '})</script>';
+        $html .= '<script>new zui.DTable(".dtable", {plugins: ["nested", "rich", "checkable", "sortable"], cols: ' . json_encode($this->cols) . ', data: ' . json_encode($this->data) . '})</script>';
 
         return $html;
     }

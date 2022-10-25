@@ -6,8 +6,15 @@ $(function()
         $.cookie('editProject', editProject, {expires:config.cookieLife, path:config.webRoot});
         showEditCheckbox(editProject);
     });
+
     if($.cookie('editProject') == 1) $('input#editProject1').prop('checked', 'true');
-    if($('input#editProject1').prop('checked')) showEditCheckbox(true);
+    if($('input#editProject1').prop('checked'))
+    {
+        setTimeout(function()
+        {
+            showEditCheckbox(true);
+        }, 100);
+    }
 
     $(document).on('click', ":checkbox[name^='projectIdList']", function()
     {
@@ -79,23 +86,23 @@ function showEditCheckbox(show)
 {
     $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban').each(function()
     {
-        var $this     = $(this);
-        var $tr       = $(this).closest('dtable-row');
-        var projectID = $tr.attr('data-id');
-        var $firstDiv = $tr.find('.dtable-flexable div:first');
+        var $this      = $(this);
+        var $row       = $(this).closest('.dtable-row');
+        var projectID  = $row.attr('data-id');
+        var $firstCell = $row.find('.dtable-flexable .dtable-cell-content').first().find('.dtable-cell-html');
         if(show)
         {
-            var marginLeft = $firstDiv.find('span.table-nest-icon').css('margin-left');
+            var marginLeft = $firstCell.find('span.table-nest-icon').css('margin-left');
 
-            $firstDiv.prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
-            $firstDiv.find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
-            $firstDiv.find('span.table-nest-icon').css('margin-left', '0');
+            $firstCell.prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
+            $firstCell.find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
+            $firstCell.find('span.table-nest-icon').css('margin-left', '0');
         }
         else
         {
-            var marginLeft = $firstDiv.find('.checkbox-primary').css('margin-left');
-            $firstDiv.find('span.table-nest-icon').css('margin-left', marginLeft);
-            $firstDiv.find('[name^="projectIdList"]').parent().remove();
+            var marginLeft = $firstCell.find('.checkbox-primary').css('margin-left');
+            $firstCell.find('span.table-nest-icon').css('margin-left', marginLeft);
+            $firstCell.find('[name^="projectIdList"]').parent().remove();
         }
     });
 

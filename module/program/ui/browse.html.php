@@ -45,6 +45,7 @@ foreach($programs as $program)
         $row->$fieldName = $this->program->buildCell($field, $program, $users, $usersAvatar, $userIdPairs, $PMList, $progressList);
     }
 
+    $row->id     = $program->id;
     $row->parent = $program->parent;
     $rows[] = $row;
 }
