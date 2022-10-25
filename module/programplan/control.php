@@ -64,14 +64,6 @@ class programplan extends control
         $products = $this->loadModel('product')->getProducts($projectID);
         $this->lang->modulePageNav = $this->product->select($products, $this->productID, 'programplan', 'browse', $type, 0, 0, '', false);
 
-        $this->lang->TRActions  = "<button class='btn btn-link' data-toggle='dropdown'><i class='icon icon-export muted'></i> <span class='text'>" . $this->lang->export . "</span> <span class='caret'></span></button>";
-        $this->lang->TRActions .= "<ul class='dropdown-menu' id='exportActionMenu'>";
-        $this->lang->TRActions .= "<li><a href='javascript:exportGantt()'>" . $this->lang->execution->gantt->exportImg . "</a></li>";
-        $this->lang->TRActions .= "<li><a href='javascript:exportGantt(" . '"pdf"' . ")'>" . $this->lang->execution->gantt->exportPDF . "</a></li>";
-        $this->lang->TRActions .= "</ul>";
-
-        if(common::hasPriv('programplan', 'create')) $this->lang->TRActions .= html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
-
         $selectCustom = 0; // Display date and task settings.
         $dateDetails  = 1; // Gantt chart detail date display.
         if($type == 'gantt')
