@@ -280,10 +280,6 @@ class project extends control
             $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
 
-        $allProducts = array(0 => '') + $this->program->getProductPairs(0, 'all', 'noclosed');
-        $data['allProducts'] = html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
-        $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
-
         /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
         if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
@@ -603,7 +599,7 @@ class project extends control
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
-        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs(0, 'all', 'noclosed', '', $shadow);
+        $this->view->allProducts         = array('0' => '') + $this->program->getProductPairsWithProgram(0, 'all', 'noclosed', '', $shadow);
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
@@ -711,7 +707,7 @@ class project extends control
         $productPlans        = array(0 => '');
         $branches            = $this->project->getBranchesByProject($projectID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
-        $allProducts         = $this->program->getProductPairs(0, 'all', 'noclosed', $linkedProductIdList);
+        $allProducts         = $this->program->getProductPairsWithProgram($project->parent, 'all', 'noclosed');
         $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
         $parentProject       = $this->program->getByID($project->parent);
         $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
@@ -729,6 +725,7 @@ class project extends control
             {
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
+
                 if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
                 $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 

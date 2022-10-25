@@ -135,23 +135,7 @@ function setParentProgram(parentProgram)
         selectedParent = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent)
-        {
-            $('#budget').val('');
-            /* Hide product and plan dropdown controls. */
-            $('#productsBox .row .col-sm-4:not(:last)').remove();
-            $('#productsBox .row .col-sm-4:last select').remove();
-            $('#productsBox .row .col-sm-4:last .chosen-container').remove();
-            var select = data.allProducts;
-            $('#productsBox .row .col-sm-4 .input-group').prepend(select)
-            $('#productsBox .row .col-sm-4 .input-group select').chosen();
-
-            $('#plansBox .col-sm-4:not(:last)').remove();
-            $('#plansBox .col-sm-4').children().remove();
-            var planSelect = data.plans;
-            $('#plansBox .col-sm-4').prepend(planSelect);
-            $('#plansBox .col-sm-4 select').chosen();
-        }
+        if(selectedParent != lastSelectedParent) $('#budget').val('');
 
         if(parentProgram != 0)
         {
