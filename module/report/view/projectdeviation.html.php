@@ -65,7 +65,11 @@
                   <?php echo $execution->name ? $execution->projectName : html::a($this->createLink('project', 'index', "projectID=$execution->projectID"), $execution->projectName);?>
                 </td>
                 <td class="text-left" title="<?php echo $execution->name;?>">
+                  <?php if($execution->multiple):?>
                   <?php echo $execution->name ? html::a($this->createLink('execution', 'view', "executionID=$id"), $execution->name) : '';?>
+                  <?php else:?>
+                  <?php echo $lang->null;?>
+                  <?php endif;?>
                 </td>
                 <td><?php echo round($execution->estimate, 2);?></td>
                 <td><?php echo round($execution->consumed, 2);?></td>
