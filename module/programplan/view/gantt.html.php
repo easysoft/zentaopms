@@ -45,7 +45,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_row.task-item{cursor: pointer;}
 
 #ganttDownload, #ganttHeader {display: none;}
-#ganttContainer {margin-top: 10px;}
+#ganttContainer {margin-top: 40px;}
 #mainContent:before {background: #fff;}
 #mainContent.loading {overflow: hidden}
 #mainContent.loading #ganttView {overflow: hidden}
@@ -65,6 +65,9 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_line.gantt_task_inline_color{border:0px;}
 .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
 #myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;height:unset!important;}
+.button-group{position: relative;}
+.flax{display: flex; margin-bottom: 10px;}
+.switchBtn > i {padding-left: 7px;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -74,34 +77,43 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
-  <div class="pull-right btn-toolbar">
-  <?php
-  if($this->app->getModuleName() == 'programplan')
-  {
-      $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=ganttCustom&key=ganttFields');
-      include '../../common/view/customfield.html.php';
-  }
-  ?>
-  </div>
-  <form class="main-form form-ajax not-watch">
-    <div class="example">
-      <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-      <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
-      <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
-      <div class='btn btn-link'>
-        <strong><?php echo $lang->execution->gantt->format . '：';?></strong>
-        <?php echo html::radio('zooming', $lang->execution->gantt->zooming, 'day', "onchange='zoomTasks(this)'");?>
-      </div>
-      <div class='btn btn-link' id='ganttPris'>
-        <strong><?php echo $lang->task->pri . " : "?></strong>
-        <?php foreach($lang->execution->gantt->progressColor as $pri => $color):?>
-        <?php if($pri <= 4):?>
-        <span style="background:<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
-        <?php endif;?>
-        <?php endforeach;?>
-      </div>
+  <?php if($this->app->getModuleName() == 'programplan'):?>
+  <div class='btn-toolbar pull-left'>
+    <div class='btn-group'>
+      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          $class = '';
+          if($productID == 0) $class = 'class="active"';
+          foreach($productList as $key => $product)
+          {
+              $class = $productID == $key ? 'class="active"' : '';
+              echo "<li $class>" . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), $product) . "</li>";
+          }
+        ?>
+      </ul>
     </div>
-  </form>
+  </div>
+  <div class="pull-right btn-toolbar flax">
+    <div class="btn-group">
+      <?php echo html::a($this->createLink('project', 'execution', "status=all&projectID=$projectID"),"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->project->bylist}'");?>
+      <?php echo html::a('',"<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->programplan->gantt}'");?>
+    </div>
+    <a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> <?php echo $lang->programplan->full;?></a>
+    <div class='button-group'>
+    <button class='btn btn-link' data-toggle='dropdown'><i class='icon icon-export'></i> <span class='text'><?php echo $this->lang->export;?></span> <span class='caret'></span></button>
+      <ul class='dropdown-menu' id='exportActionMenu'>
+      <li><a href='javascript:exportGantt()'><?php echo $lang->execution->gantt->exportImg;?></a></li>
+      <li><a href="javascript:exportGantt('pdf')"><?php echo $lang->execution->gantt->exportPDF;?></a></li>
+      </ul>
+    </div>
+    <?php
+    echo html::a(helper::createLink('programplan', 'ajaxcustom', '', '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link' data-width='30%'");
+    if(common::hasPriv('programplan', 'create')) echo html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'>    </i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
+    ?>
+  </div>
+  <?php endif;?>
   <div id='ganttContainer'>
     <div class='gantt' id='ganttView'></div>
   </div>
@@ -145,7 +157,7 @@ gantt.init("gantt_here");
 gantt.attachEvent("onBeforeExpand",function(){
     $('#myCover').css('display', 'unset');
     $('#mainContent .pull-right').css('opacity', '0');
-    $('.example').css('display', 'none');
+    $('.btn-toolbar').css('display', 'none');
     return true;
 });
 
@@ -153,7 +165,7 @@ gantt.attachEvent("onBeforeExpand",function(){
 gantt.attachEvent("onCollapse", function (){
     $('#myCover').css('display', 'none');
     $('#mainContent .pull-right').css('opacity', '1');
-    $('.example').css('display', 'block');
+    $('.btn-toolbar').css('display', 'flex');
 });
 
 /**
