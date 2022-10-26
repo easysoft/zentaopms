@@ -216,5 +216,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .pri-text > .label-severity[data-severity="4"] {color: #B89664; background-position: 2px -99px;}
 
 .flow-block .footerbar span.label-success {background-color: #0DBB7D;}
-.flow-block .footerbar span.label-muted {background-color: #313C52;}
-.flow-block .footerbar span.label-warning {background-color: #9EA3B0;}
+.flow-block .footerbar span.label-default {background-color: #9EA3B0;}
+.flow-block .footerbar span.label-warning {background-color: #313C52;}
