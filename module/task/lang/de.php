@@ -61,7 +61,6 @@ $lang->task->myEffort            = 'My Effort';
 $lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';
 $lang->task->manageTeam          = 'Manage Team';
-$lang->task->manageTeam          = 'Manage Team';
 $lang->task->unfoldEffort        = 'Unfold Effort';
 $lang->task->foldEffort          = 'Fold Effort';
 
