@@ -105,7 +105,7 @@ $status = strtolower($status);
       <td class='c-name' title="<?php echo $task->executionName?>"><?php echo $task->executionName?></td>
       <?php $statusName = $this->processStatus('testtask', $task);?>
       <td title='<?php echo $statusName;?>'>
-        <span class='status-task status-<?php echo $task->status?>'>
+        <span class='status-testtask status-<?php echo $task->status?>'>
           <?php echo $statusName;?>
         </span>
       </td>
