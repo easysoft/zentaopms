@@ -113,7 +113,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->status;?></th>
-              <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+              <td class='status-testtask status-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->testreport;?></th>

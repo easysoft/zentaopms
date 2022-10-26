@@ -143,7 +143,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td>
+                  <td class='status-<?php echo $bug->status;?>'>
                     <?php
                     echo zget($lang->bug->statusList, $bug->status);
                     echo html::hidden('status', $bug->status);
@@ -152,7 +152,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
-                  <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
+                  <td class='confirm<?php echo $bug->confirmed;?>'><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->assignedTo;?></th>
