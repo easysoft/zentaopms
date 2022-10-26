@@ -33,8 +33,8 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .tile {margin-bottom: 30px;}
-.block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
-.block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
+.block-statistic .tile-title {font-size: 18px; margin-top: 10px;}
+.block-statistic .tile-amount {font-size: 44px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 220px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative}
 .block-statistic .nav-secondary > li:hover {background: #f5f5f5;}
