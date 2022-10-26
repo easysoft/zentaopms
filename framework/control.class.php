@@ -185,6 +185,22 @@ class control extends baseControl
     }
 
     /**
+     * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadZen方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 调用父类的loadZen方法来避免这个错误。
+     * Some codes merged from ZDOO called the function loadZen with a non-empty appName which causes an error in zentao.
+     * Call the parent function with empty appName to avoid this error.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     */
+    public function loadZen($moduleName = '', $appName = '')
+    {
+        return parent::loadZen($moduleName);
+    }
+
+    /**
      * 加载model的class扩展，主要是为了开发加密代码使用。
      * 可以将主要的逻辑存放到$moduleName/ext/model/class/$extensionName.class.php中。
      * 然后在ext/model/$extension.php的扩展里面使用$this->loadExtension()来调用相应的方法。
