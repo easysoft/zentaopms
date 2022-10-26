@@ -160,19 +160,21 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .label.label-outline.status-closed {color: #9EA3B0; border-color: #9EA3B0;}
 
 .status-draft {color: #8166EE;}
-.status-reviewing {color: #18A6FD;}
+.status-clarify {color: #8166EE;}
+.status-testtask.status-blocked {left: 0;}
 .status-done .label-dot {background-color: #0DBB7D;}
+.status-reviewing, .status-noreview {color: #18A6FD;}
 .status-doing .label-dot {background-color: #FF6F42;}
 .status-pause .label-dot {background-color: #B89664;}
 .status-draft .label-dot {background-color: #8166EE;}
 .status-cancel .label-dot {background-color: #B89664;}
 .status-closed .label-dot {background-color: #9EA3B0;}
 .status-changing .label-dot {background-color: #FB2B2B;}
-.status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
-.status-closed, #workflowTable td.text-center.text-muted {color: #9EA3B0;}
 .status-reviewing .label-dot {background-color: #18A6FD;}
+.status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
 .status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
-.status-doing, .status-commenting, .status-checkingi, .status-confirmed {color: #FF6F42;}
+.status-doing, .status-commenting, .status-checking, .status-confirmed {color: #FF6F42;}
+.status-closed, #workflowTable td.text-center.text-mutedi, .status-testtask.status-done {color: #9EA3B0;}
 .status-suspended, .status-pause, .status-blocked, .status-hangup, .result-testcase.blocked, .c-lastRunResult .result-blocked {color: #B89664;}
 .status-done, .status-resolved, .status-replied, .status-checked, #workflowTable td.text-success, .result-testcase.pass, .c-lastRunResult .result-pass {color: #0DBB7D;}
 .status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1, .status-changed {color: #FB2B2B;}
