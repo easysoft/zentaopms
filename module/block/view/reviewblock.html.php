@@ -71,7 +71,7 @@
           if($module == 'review')
           {
               $method = 'assess';
-              $params = "reviewID=$review->id&from={$rawMethod}";
+              $params = "reviewID=$review->id";
               common::printLink($module, $method, $params, $reviewIcon, '', "class='btn' title='{$lang->review->common}'");
           }
           elseif($module == 'attend')
