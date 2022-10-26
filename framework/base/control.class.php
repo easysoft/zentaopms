@@ -309,18 +309,7 @@ class baseControl
     public function loadZen($moduleName = '', $appName = '')
     {
         $zen = $this->app->loadTarget($moduleName, $appName, 'zen');
-
-        /**
-         * 如果加载zen失败，尝试加载config, lang配置信息。
-         * If zen is not loaded, try load config and lang.
-         */
-        if(!$zen)
-        {
-            $this->app->loadModuleConfig($moduleName, $appName);
-            $this->app->loadLang($moduleName, $appName);
-            $this->dao = new dao();
-            return false;
-        }
+        if(!$zen) return false;
 
         $zen->view = $this->view;
 
