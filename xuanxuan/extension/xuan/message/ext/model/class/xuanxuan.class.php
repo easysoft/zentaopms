@@ -23,19 +23,10 @@ class xuanxuanMessage extends messageModel
                 {
                     $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
                 }
-                else if($objectType == 'feedback')
-                {
-                    $field = 'obj.*,product.name as productName';
-                }
-                else if($objectType == 'review')
-                {
-                    $field = 'obj.*,project.name as projectName';
-                }
                 else
                 {
                     $field = 'obj.*';
                 }
-
                 $object = $this->dao->select($field)->from($this->config->objectTables[$objectType])->alias('obj')
                     ->beginIF($objectType == 'task')
                     ->leftJoin($this->config->objectTables['project'])->alias('project')->on('project.id = obj.project')
@@ -49,12 +40,6 @@ class xuanxuanMessage extends messageModel
                     ->leftJoin($this->config->objectTables['execution'])->alias('execu')->on('execu.id = obj.execution')
                     ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
                     ->fi()
-                    ->beginIF($objectType == 'feedback')
-                    ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
-                    ->fi()
-                    ->beginIF($objectType == 'review')
-                    ->leftJoin($this->config->objectTables['project'])->alias('project')->on('project.id = obj.project')
-                    ->fi()
                     ->where('obj.id')->eq($objectID)
                     ->fetch();
                 $field = $this->config->action->objectNameFields[$objectType];
@@ -64,41 +49,16 @@ class xuanxuanMessage extends messageModel
                     $notifyType = strtolower(explode(',', $extra)[0]);
                     if ($notifyType == 'pass')
                     {
-                        $title = sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
                     }
                     else if($notifyType == 'clarify')
                     {
-                        $title = sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
                     }
                     else if($notifyType == 'reject')
                     {
-                        $title = sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
                     }
-                }
-
-                if ($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
-                {
-                    if ($actionType == 'tobug')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToBugTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'tostory')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToStoryTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'totask')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToTaskTitle, $this->app->user->realname, 1);
-                    }
-                    else if($actionType == 'todo')
-                    {
-                        $title = sprintf($this->lang->message->feedbackToDoTitle, $this->app->user->realname, 1);
-                    }
-                }
-
-                if ($objectType == 'review' && $actionType == 'toaudit')
-                {
-                    $title = sprintf($this->lang->message->reviewToauditTitle, $this->app->user->realname, 1);
                 }
 
                 $server   = $this->loadModel('im')->getServer('zentao');
@@ -111,12 +71,10 @@ class xuanxuanMessage extends messageModel
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
                 if(($objectType == 'mr' or $objectType == 'kanbancard') and !empty($object->createdBy)) $target .= ",{$object->createdBy}";
-                if($objectType == 'review') $target .= ",{$object->auditedBy}";
                 $target = trim($target, ',');
-                $target = explode(',', $target);
                 $target = $this->dao->select('id')->from(TABLE_USER)
                     ->where('account')->in($target)
-                    ->beginIF($objectType != 'mr' && $objectType != 'review')->andWhere('account')->ne($this->app->user->account)->fi()
+                    ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
                     ->fetchAll('id');
                 $target = array_keys($target);
 
@@ -151,24 +109,6 @@ class xuanxuanMessage extends messageModel
                     $subcontent->parent       = $object->$parentType;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
                     $subcontent->cardURL      = $url;
-                }
-                elseif($objectType == 'feedback')
-                {
-                    $subcontent->headTitle  = $object->productName;
-                    $subcontent->headSubTitle = $object->execuName;
-                    $subcontent->parentType = 'product';
-                    $subcontent->parent     = $object->product;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
-                    $subcontent->cardURL    = $url;
-                }
-                elseif($objectType == 'review')
-                {
-                    $subcontent->headTitle  = $object->projectName;
-                    $subcontent->headSubTitle = $object->execuName;
-                    $subcontent->parentType = 'product';
-                    $subcontent->parent     = $object->product;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('review', 'browse', "id=$object->product", 'html'));
-                    $subcontent->cardURL    = $url;
                 }
                 else
                 {
@@ -206,11 +146,11 @@ class xuanxuanMessage extends messageModel
                     $contentData->actions     = array();
                     $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
                 }
-                $contentData->extra = is_array($extra) ? $extra : '';
+                $contentData->extra = $extra;
 
                 $content = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
-                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story' || $objectType == 'feedback' || $objectType == 'review')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
                 {
