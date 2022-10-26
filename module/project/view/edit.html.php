@@ -175,8 +175,8 @@
             </div>
           </td>
         </tr>
-        <?php if(!$project->division):?>
-        <tr>
+        <?php if($project->model == 'waterfall'):?>
+        <tr class='hide division'>
           <th><?php echo $lang->project->division;?></th>
           <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division);?></td>
         </tr>
