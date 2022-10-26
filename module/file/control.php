@@ -318,7 +318,7 @@ class file extends control
         $this->view->method     = $method;
         $this->view->showDelete = $showDelete;
 
-        if(strpos('view,edit', $method) !== false) return $this->display('file', 'viewfiles');
+        if(strpos('view,edit', $method) !== false and $this->app->clientDevice != 'mobile') return $this->display('file', 'viewfiles');
         $this->display();
     }
 
@@ -353,8 +353,26 @@ class file extends control
             if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
             $newFile = $this->file->getByID($fileID);
 
+            if($this->app->clientDevice == 'mobile') return print(js::reload('parent.parent'));
             echo json_encode($newFile);
         }
+
+        if($this->app->clientDevice == 'mobile')
+        {
+            $file = $this->file->getById($fileID);
+            if(strrpos($file->title, '.') !== false)
+            {
+                /* Fix the file name exe.exe */
+                $title     = explode('.', $file->title);
+                $extension = end($title);
+                if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
+                array_pop($title);
+                $file->title = join('.', $title);
+            }
+
+            $this->view->file = $file;
+            $this->display();
+         }
     }
 
     /**

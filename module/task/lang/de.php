@@ -60,6 +60,9 @@ $lang->task->replace             = 'Replace';
 $lang->task->myEffort            = 'My Effort';
 $lang->task->allEffort           = 'Team Effort';
 $lang->task->teamOrder           = 'Order';
+$lang->task->manageTeam          = 'Manage Team';
+$lang->task->unfoldEffort        = 'Unfold Effort';
+$lang->task->foldEffort          = 'Fold Effort';
 
 $lang->task->common            = 'Aufgabe';
 $lang->task->id                = 'ID';
@@ -116,6 +119,7 @@ $lang->task->assignedTo        = 'Zuständiger';
 $lang->task->assignedToAB      = 'Zuständiger';
 $lang->task->assignedDate      = 'Zugewisen am';
 $lang->task->openedBy          = 'Ersteller';
+$lang->task->openedByAB        = 'Created';
 $lang->task->openedDate        = 'Erstellt am';
 $lang->task->openedDateAB      = 'Hinzufügen';
 $lang->task->finishedBy        = 'Abgeschlossen';
@@ -147,6 +151,7 @@ $lang->task->my                = 'My ';
 $lang->task->hasConsumed       = 'Verbraucht';
 $lang->task->multiple          = 'Mehere Aufgaben';
 $lang->task->multipleAB        = ' Mehrere';
+$lang->task->teamSetting       = 'Team Setting';
 $lang->task->team              = 'Team';
 $lang->task->transfer          = 'Transfer';
 $lang->task->transferTo        = 'Transfer nach';
@@ -275,6 +280,8 @@ $lang->task->error->alreadyConsumed   = 'The currently selected parent task has 
 $lang->task->error->date              = 'The date should be <= today.';
 $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left" cannot be 0';
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
+$lang->task->error->notempty          = '%s must be > 0.';
+$lang->task->error->teamLeftEmpty     = 'Please maintain team hours.';
 
 /* Report. */
 $lang->task->report = new stdclass();

@@ -1004,6 +1004,7 @@ class baseRouter
                     array($ztSessionHandler, "destroy"),
                     array($ztSessionHandler, "gc")
                 );
+                register_shutdown_function('session_write_close');
             }
         }
 
@@ -1014,7 +1015,7 @@ class baseRouter
         session_name($sessionName);
         session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
-        session_start();
+        if(!session_id()) session_start();
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
@@ -3167,7 +3168,6 @@ class ztSessionHandler
     {
         $this->tagID = $tagID;
         ini_set('session.save_handler', 'files');
-        register_shutdown_function('session_write_close');
     }
 
     /**

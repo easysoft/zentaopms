@@ -560,7 +560,9 @@ $(function()
     if(showFields.indexOf('taskProgress') != -1) gantt.config.columns.push({name: 'taskProgress', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 80});
-    if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: false, width: 60});
+    if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
 
     endField = gantt.config.columns.pop();
     endField.resize = false;
@@ -578,6 +580,8 @@ $(function()
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
     gantt.locale.labels.column_estimate     = "<?php echo $lang->programplan->estimate;?>";
     gantt.locale.labels.column_consumed     = "<?php echo $lang->programplan->consumed;?>";
+    gantt.locale.labels.column_delay        = "<?php echo $lang->programplan->delay;?>";
+    gantt.locale.labels.column_delayDays    = "<?php echo $lang->programplan->delayDays;?>";
 
     if((module == 'review' && method == 'assess') || dateDetails) gantt.config.show_chart = false;
 

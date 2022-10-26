@@ -33,6 +33,12 @@
     <?php endif;?>
   </div>
 </div>
+<?php
+$waitCount    = 0;
+$testingCount = 0;
+$blockedCount = 0;
+$doneCount    = 0;
+?>
 <div id="mainContent">
   <?php if(empty($tasks)):?>
   <div class="table-empty-tip">
@@ -44,7 +50,7 @@
     </p>
   </div>
   <?php else:?>
-  <form class="main-table table-testtask" data-ride="table" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
+  <form class="main-table table-testtask" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "executionID=$executionID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
@@ -61,10 +67,10 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
           <th><?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
           <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
-          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -72,7 +78,11 @@
         <?php foreach($tasks as $product => $productTasks):?>
         <?php $productName = zget($products, $product, '');?>
         <?php foreach($productTasks as $task):?>
-        <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
+        <?php if($task->status == 'wait')    $waitCount ++;?>
+        <?php if($task->status == 'doing')   $testingCount ++;?>
+        <?php if($task->status == 'blocked') $blockedCount ++;?>
+        <?php if($task->status == 'done')    $doneCount ++;?>
+        <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?> data-status='<?php echo $task->status;?>'>
           <?php if($task == reset($productTasks)):?>
           <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
             <a class='text-primary' title='<?php echo $productName;?>'><i class='icon icon-caret-down'></i> <?php echo $productName;?></a>
@@ -88,13 +98,13 @@
           </td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
-          <td><?php echo zget($users, $task->owner);?></td>
-          <td><?php echo $task->begin?></td>
-          <td><?php echo $task->end?></td>
           <?php $status = $this->processStatus('testtask', $task);?>
           <td title='<?php echo $status;?>'>
             <span class='status-testtask status-<?php echo $task->status?>'><?php echo $status;?></span>
           </td>
+          <td><?php echo zget($users, $task->owner);?></td>
+          <td><?php echo $task->begin?></td>
+          <td><?php echo $task->end?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)
@@ -136,9 +146,12 @@
       ?>
       </div>
       <?php endif;?>
+      <div class="table-statistic"><?php echo sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount);?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
+<?php js::set('pageSummary', sprintf($lang->testtask->allSummary, $total, $waitCount, $testingCount, $blockedCount, $doneCount));?>
+<?php js::set('checkedAllSummary', $lang->testtask->checkedAllSummary);?>
 <?php include '../../common/view/footer.html.php';?>

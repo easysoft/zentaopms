@@ -866,6 +866,7 @@ class story extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
+        $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
 
         $this->display();
@@ -1158,6 +1159,7 @@ class story extends control
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
+        $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
 
         $this->display();
     }
@@ -1233,6 +1235,7 @@ class story extends control
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         $this->session->set('buildList',   $uri, $buildApp);
+        $this->app->loadLang('bug');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -1259,7 +1262,8 @@ class story extends control
         $from = $this->app->tab;
         if($from == 'execution')
         {
-            $this->execution->setMenu($param);
+            $result = $this->execution->setMenu($param);
+            if($result) return;
         }
         elseif($from == 'project')
         {
@@ -1573,11 +1577,12 @@ class story extends control
         $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
         $story->reviewer = array_keys($reviewerList);
 
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-        $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->story        = $story;
+        $this->view->actions      = $this->action->getList('story', $storyID);
+        $this->view->reviewers    = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->users        = $this->user->getPairs('noclosed|noletter');
+        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
     }
@@ -2464,24 +2469,6 @@ class story extends control
         $storyInfo['status']   = $story->status;
 
         echo json_encode($storyInfo);
-    }
-
-    /**
-     * AJAX: get the user requirements of the product.
-     *
-     * @param  int    $productID
-     * @param  string $labelName
-     * @param  bool   $isMultiple
-     * @param  int    $defaultID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetProductURS($productID, $labelName = '', $isMultiple = false, $defaultID = '')
-    {
-        $requirements = array('0' => '') + $this->story->getRequirements($productID);
-        $labelName    = $isMultiple ? $labelName . '[]' : $labelName;
-        $misc         = $isMultiple ? 'class="form-control" multiple' : 'class="form-control"';
-        return print(html::select($labelName, $requirements, $defaultID, $misc));
     }
 
     /**

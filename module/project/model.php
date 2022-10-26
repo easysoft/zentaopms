@@ -617,17 +617,17 @@ class projectModel extends model
             }
             elseif($module == 'repo')
             {
-                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s#app=project");
+                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s") . "#app=project";
             }
             elseif($module == 'doc')
             {
-                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s#app=project");
+                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s") . "#app=project";
             }
             elseif($module == 'build')
             {
                 if($method == 'create')
                 {
-                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s#app=project");
+                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s") . "#app=project";
                 }
                 else
                 {
@@ -660,7 +660,7 @@ class projectModel extends model
             {
                 if($method == 'projectsummary')
                 {
-                    $link = helper::createLink($module, $method, "projectID=%s#app=project");
+                    $link = helper::createLink($module, $method, "projectID=%s"). "#app=project";
                 }
                 else
                 {

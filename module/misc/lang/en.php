@@ -103,6 +103,7 @@ $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme
 $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R & D affairs in <span style='color: #0c60e1'>[R&D]</span> and daily office affairs in <span style='color: #0c60e1'>[Lite]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+$lang->misc->releaseDate['17.7']        = '2022-10-19';
 $lang->misc->releaseDate['17.6.2']      = '2022-09-23';
 $lang->misc->releaseDate['17.6.1']      = '2022-09-08';
 $lang->misc->releaseDate['17.6']        = '2022-08-26';
@@ -190,6 +191,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['17.7'][]       = array('title' => "The table is optimized in the transition version. At the same time, we have added the new feature of Work Order and get the Feedback features improved as well. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.6.2'][]     = array('title' => "3 themes in ZenTao including Green, ZenTao Blue, and Young Blue are updated. At the same time, the attachments could be uploaded in bulk in ZenTao. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.6.1'][]     = array('title' => "Optimized the processing logic of multi-member tasks. Fix bugs.", 'desc' => '');
 $lang->misc->feature->all['17.6'][]       = array('title' => "The processing logic of requirements is optimized, and the permissions of user requirements and soft requirements are split. Gantt chart supports manual drag and drop to manage task relationship. Fix bugs.", 'desc' => '');

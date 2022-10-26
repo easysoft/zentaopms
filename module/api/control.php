@@ -787,7 +787,9 @@ EOT;
      */
     public function debug($filePath, $action)
     {
-        $filePath = helper::safe64Decode($filePath);
+        $filePath    = helper::safe64Decode($filePath);
+        $fileDirPath = realpath(dirname($filePath));
+        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 and strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
         if($action == 'extendModel')
         {
             $method = $this->api->getMethod($filePath, 'Model');

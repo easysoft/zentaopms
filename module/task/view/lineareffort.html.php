@@ -19,6 +19,7 @@ $recorders   = array();
 $allOrders   = array();
 $allEfforts  = array();
 $myOrders    = array();
+$myCountList = array();
 $myLastID    = array();
 $myEfforts   = array();
 $myLastOrder = 0;
@@ -35,11 +36,15 @@ foreach($efforts as $key => $effort)
     if($app->user->account == $account)
     {
         if($allOrders[$myLastOrder] != $effort->order + 1) $myLastOrder = $order;
-        $myOrders[$myLastOrder]    = isset($myOrders[$myLastOrder]) ? ++$myOrders[$myLastOrder] : 1;
+        $myCountList[$myLastOrder] = isset($myCountList[$myLastOrder]) ? ++$myCountList[$myLastOrder] : 1;
         $myLastID[$myLastOrder]    = isset($myLastID[$myLastOrder]) ? ($myLastID[$myLastOrder] < $effort->id ? $effort->id : $myLastID[$myLastOrder]) : $effort->id;
         $myEfforts[$myLastOrder][] = $effort;
+
+        if(!isset($myOrders[$effort->order])) $myOrders[$effort->order] = 0;
+        $myOrders[$effort->order] += 1;
     }
 }
+ksort($myOrders);
 ?>
 <div id='linearefforts'>
   <div class='tabs'>
@@ -49,8 +54,8 @@ foreach($efforts as $key => $effort)
     </ul>
     <div class='tab-content'>
       <div class='tab-pane' id='legendMyEffort'>
-        <?php if(!empty($myOrders)):?>
-        <table class='table table-bordered table-fixed table-recorded has-sort-head'>
+        <?php if(!empty($myCountList)):?>
+        <table class='table table-bordered table-fixed table-recorded has-sort-head taskEffort'>
           <thead>
             <tr class='text-center'>
               <?php
@@ -69,11 +74,13 @@ foreach($efforts as $key => $effort)
             </tr>
           </thead>
           <tbody>
-            <?php foreach($myOrders as $order => $count):?>
+            <?php $i = 1;?>
+            <?php foreach($myCountList as $order => $count):?>
             <?php $showOrder = false;?>
             <?php foreach($myEfforts[$order] as $effort):?>
             <?php if($effort->account != $this->app->user->account) continue;?>
-            <tr class="text-center">
+            <?php $hidden = ($taskEffortFold and $i > 3) ? 'hidden' : ''?>
+            <tr class="text-center <?php echo $hidden;?>">
               <?php if(!$showOrder):?>
               <td rowspan='<?php echo $count;?>'><?php echo $allOrders[$order];?></td>
               <?php $showOrder = true;?>
@@ -93,10 +100,19 @@ foreach($efforts as $key => $effort)
                 ?>
               </td>
             </tr>
+            <?php $i ++;?>
             <?php endforeach;?>
             <?php endforeach;?>
           </tbody>
         </table>
+        <?php if($i > 4):?>
+        <div id='toggleFoldIcon'>
+          <?php $icon     = $taskEffortFold ? 'icon-angle-down' : 'icon-angle-top'?>
+          <?php $iconText = $taskEffortFold ? $lang->task->unfoldEffort : $lang->task->foldEffort;?>
+          <span class='icon-border'><i class="icon <?php echo $icon;?>"></i></span>
+          <span class='text'><?php echo $iconText;?></span>
+        </div>
+        <?php endif;?>
         <?php endif;?>
       </div>
       <div class='tab-pane' id='legendAllEffort'>
@@ -132,7 +148,7 @@ foreach($efforts as $key => $effort)
             <?php endforeach;?>
           </tbody>
         </table>
-      <?php if(!empty($myOrders)):?>
+      <?php if(!empty($myCountList)):?>
       </div>
     </div>
     <?php endif;?>

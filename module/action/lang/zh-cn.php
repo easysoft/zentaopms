@@ -215,6 +215,7 @@ $lang->action->desc->importedproductplan  = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->importedrelease      = '$date, 由 <strong>$actor</strong> 从产品发布 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedexecution    = '$date, 由 <strong>$actor</strong> 从项目执行 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从项目版本 <strong>$extra</strong> 导入。' . "\n";
+$lang->action->desc->importedticket       = '$date, 由 <strong>$actor</strong> 从反馈工单 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 从<strong>SonarQube问题</strong>转化而来。' . "\n";
 $lang->action->desc->tolib                = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
 $lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 从' . $lang->testcase->common . '更新。' . "\n";
@@ -379,6 +380,7 @@ $lang->action->label->importedproductplan   = '导入了';
 $lang->action->label->importedrelease       = '导入了';
 $lang->action->label->importedexecution     = '导入了';
 $lang->action->label->importedbuild         = '导入了';
+$lang->action->label->importedticket        = '导入了';
 $lang->action->label->fromsonarqube         = '由SonarQube问题创建';
 $lang->action->label->bind                  = '绑定了';
 $lang->action->label->unbind                = '取消绑定了';
@@ -717,6 +719,7 @@ $lang->action->label->mr           = '合并请求|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab服务器|gitlab|view|id=%s';
 $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 $lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
+$lang->action->label->ticket       = '工单|ticket|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

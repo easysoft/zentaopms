@@ -28,7 +28,7 @@
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=assigntome"), "<span class='text'>{$lang->my->assignedToMe}</span>" . ($type == 'assigntome' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
     }
     ?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php $this->loadModel('search');echo $lang->search->common;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
 </div>
 <div id="mainContent">
@@ -94,11 +94,11 @@
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
-          <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
+          <td class='status-testcase status-<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
           <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
-          <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+          <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
           <td class='c-actions'>
             <?php
             if($canBeChanged)

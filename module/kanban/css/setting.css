@@ -8,3 +8,4 @@
 #mainContent .objectBox .checkbox-primary>label:after {width: 14px; height: 14px;}
 #mainContent table > tbody th {width: 110px !important;}
 [lang^=en] .laneHeightBox > label, [lang^=de] .laneHeightBox > label, [lang^=fr] .laneHeightBox > label, [lang^=en] .importBox > label, [lang^=de] .importBox > label, [lang^=fr] .importBox > label {margin-left: 0px;}
+#dataform tr > th {vertical-align: top;}

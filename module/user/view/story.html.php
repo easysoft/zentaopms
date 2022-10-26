@@ -73,7 +73,7 @@
           <?php endif;?>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td class='estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-          <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
+          <td class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <?php if($this->config->vision != 'lite'):?>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
           <?php endif;?>

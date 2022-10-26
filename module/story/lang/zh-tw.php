@@ -107,6 +107,7 @@ $lang->story->pri            = '優先順序';
 $lang->story->estimate       = "預計{$lang->hourCommon}";
 $lang->story->estimateAB     = '預計';
 $lang->story->hour           = $lang->hourCommon;
+$lang->story->consumed       = '耗時';
 $lang->story->status         = '當前狀態';
 $lang->story->subStatus      = '子狀態';
 $lang->story->stage          = '所處階段';

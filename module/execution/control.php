@@ -516,7 +516,10 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $recTotal   = count($tasks2Imported);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
+
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
+        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         /* Save session. */
         $this->app->session->set('taskList',  $this->app->getURI(true), 'execution');
@@ -525,7 +528,7 @@ class execution extends control
         $this->view->pager            = $pager;
         $this->view->position[]       = html::a(inlink('browse', "executionID=$toExecution"), $execution->name);
         $this->view->position[]       = $this->lang->execution->importTask;
-        $this->view->tasks2Imported   = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $this->view->tasks2Imported   = $tasks2ImportedList;
         $this->view->executions       = $executions;
         $this->view->executionID      = $execution->id;
         $this->view->fromExecution    = $fromExecution;
@@ -916,15 +919,16 @@ class execution extends control
      * View a story.
      *
      * @param  int    $storyID
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function storyView($storyID)
+    public function storyView($storyID, $executionID = 0)
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $story = $this->loadModel('story')->getByID($storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->execution);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . ($executionID ? $executionID : $this->session->execution));
     }
 
     /**
@@ -3760,6 +3764,7 @@ class execution extends control
         $this->view->from           = $from;
         $this->view->param          = $param;
         $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
 
         $this->display();
     }

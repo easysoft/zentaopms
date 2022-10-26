@@ -67,10 +67,11 @@ class treeModel extends model
      * @param  int        $startModule
      * @param  string|int $branch
      * @param  string     $param
+     * @param  int        $grade
      * @access public
      * @return void
      */
-    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted')
+    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted', $grade = 0)
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -80,6 +81,10 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
+        /* If feedback module is merge add story module.*/
+        $syncConfig = $this->getSyncConfig($type);
+
+        if(($type == 'feedback' or $type == 'ticket') and strpos($param, 'noproduct') === false and isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('*')->from(TABLE_MODULE)
@@ -99,8 +104,10 @@ class treeModel extends model
 
         /* $createdVersion < 4.1 or $type == 'story'. */
         return $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('root')->eq((int)$rootID)
-            ->andWhere('type')->eq($type)
+            ->where('1=1')
+            ->beginIF($type != 'feedback' or !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
+            ->andWhere('type')->in($type)
+            ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch !== 'all' and $branch !== '' and $branch !== false)
             ->andWhere('(branch')->eq(0)
@@ -120,10 +127,11 @@ class treeModel extends model
      * @param  int       $startModule
      * @param  int|array $branch
      * @param  string    $param
+     * @param  string    $grade
      * @access public
-     * @return string
+     * @return void
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted')
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted', $grade = 'all')
     {
         if(empty($branch)) $branch = 0;
         if(defined('TUTORIAL'))
@@ -162,12 +170,25 @@ class treeModel extends model
             }
         }
 
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = $this->getSyncConfig($type);
+
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
             $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
-            while($module = $stmt->fetch()) $modules[$module->id] = $module;
+            while($module = $stmt->fetch())
+            {
+                /* If is feedback or ticket filter story module by grade.*/
+                if(($type == 'feedback' or $type == 'ticket') and $module->type == 'story')
+                {
+                    if(isset($syncConfig[$module->root]) and $module->grade > $syncConfig[$module->root]) continue;
+                }
+
+                if($grade != 'all' and $module->grade > $grade) continue;
+                $modules[$module->id] = $module;
+            }
 
             foreach($modules as $module)
             {
@@ -1302,6 +1323,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of ticket.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTicketLink($type, $module)
+    {
+        return html::a(helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * Create link of trainskill.
      *
      * @param  string $type
@@ -1369,15 +1403,19 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        if($type == 'line') $rootID = 0;
+        $syncConfig = $this->getSyncConfig($type);
+
+        if($type  == 'line') $rootID = 0;
+        if(($type == 'feedback' or $type == 'ticket') and isset($syncConfig[$rootID])) $type = "$type,story";
 
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
         {
+
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('parent')->eq((int)$moduleID)
-                ->andWhere('type')->eq($type)
+                ->andWhere('type')->in($type)
                 ->beginIF($branch !== 'all')
                 ->andWhere("(branch")->eq(0)
                 ->orWhere("branch")->eq((int)$branch)
@@ -1590,7 +1628,7 @@ class treeModel extends model
     public function updateOrder($orders)
     {
         asort($orders);
-        $orderInfo = $this->dao->select('id,grade, parent, branch')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
+        $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
         $newOrders = array();
         foreach($orders as $moduleID => $order)
         {
@@ -2091,8 +2129,18 @@ class treeModel extends model
     public function getDataStructure($stmt, $viewType, $keepModules = array())
     {
         $parent = array();
+
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = $this->getSyncConfig($viewType);
+
         while($module = $stmt->fetch())
         {
+            /* If is feedback or ticket filter story module by grade.*/
+            if(($viewType == 'feedback' or $viewType == 'ticket') and $module->type == 'story')
+            {
+                if(isset($syncConfig[$module->root]) and $module->grade > $syncConfig[$module->root]) continue;
+            }
+
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->execution->task->allModule) and ($this->config->execution->task->allModule == 1));
             if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
@@ -2107,6 +2155,7 @@ class treeModel extends model
         }
 
         if($viewType == 'task') $parentTypePairs = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($parent))->andWhere('deleted')->eq(0)->fetchPairs('id', 'type');
+
         $tree = array();
         foreach($parent as $module)
         {
@@ -2163,6 +2212,21 @@ class treeModel extends model
         }
 
         return $tree;
+    }
+
+    /**
+     * Get syncProduct module config.
+     *
+     * @param  string $type feedback|ticket
+     * @access public
+     * @return array
+     */
+    public function getSyncConfig($type = '')
+    {
+        /* If feedback or ticket module is merge add story module.*/
+        $syncConfig = json_decode($this->config->global->syncProduct, true);
+        $syncConfig = isset($syncConfig[$type]) ? $syncConfig[$type] : array();
+        return $syncConfig;
     }
 
     /**

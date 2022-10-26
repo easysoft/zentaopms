@@ -25,7 +25,7 @@ class productProjectsEntry extends entry
         $appendFields = $this->param('fields', '');
 
         $control = $this->loadController('product', 'project');
-        $control->project($this->param('status', 'all'), $productID, $this->param('branch', 0), $this->param('involved', 0), $this->param('order', 'order_desc'));
+        $control->project($this->param('status', 'all'), $productID, $this->param('branch', 0), $this->param('involved', 0), $this->param('order', 'order_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')

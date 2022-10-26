@@ -67,28 +67,28 @@
               <?php endif;?>
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
-            <th class='c-pri' title=<?php echo $lang->task->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
+            <th class='c-pri' title=<?php echo $lang->task->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
             <?php if($config->systemMode == 'new'):?>
             <th class='c-project'><?php common::printOrderLink('project',   $orderBy, $vars, $lang->my->projects);?></th>
             <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
             <?php else:?>
             <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->my->executions);?></th>
             <?php endif;?>
-            <?php if($type != 'openedBy'): ?>
-            <th class='c-user-short'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <?php endif;?>
-            <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <?php if($type != 'assignedTo'): ?>
             <th class='c-user assigned-title'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
             <?php endif;?>
-            <?php if($type != 'finishedBy'): ?>
-            <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedBy);?></th>
-            <?php endif;?>
+            <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <th class='c-hours estimate'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
             <th class='c-hours consumed'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='c-hours'><?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->leftAB);?></th>
-            <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+            <?php if($type != 'openedBy'): ?>
+            <th class='c-user-short'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->task->openedByAB);?></th>
+            <?php endif;?>
+            <?php if($type != 'finishedBy'): ?>
+            <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedByAB);?></th>
+            <?php endif;?>
             <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
           </tr>
         </thead>
@@ -105,7 +105,6 @@
               <?php endif;?>
               <?php printf('%03d', $task->id);?>
             </td>
-            <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
             <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
               <?php if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
               <?php
@@ -120,7 +119,12 @@
                   echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "class='$class' data-width='80%' style='color: $task->color'");
               }
               ?>
-              <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
+              <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-right"></i></a>';?>
+            </td>
+            <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
+            <td class='c-status'>
+              <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
+              <?php $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
             </td>
             <?php if($config->systemMode == 'new'):?>
             <?php $projectName = isset($projects[$task->execution]->name) ? $projects[$task->execution]->name : '';?>
@@ -130,23 +134,19 @@
             </td>
             <?php endif;?>
             <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
-            <?php if($type != 'openedBy'): ?>
-            <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-            <?php endif;?>
-            <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);?></td>
             <?php if($type != 'assignedTo'): ?>
             <td class="c-assignedTo has-btn" title="<?php echo zget($users, $task->assignedTo);?>"> <?php $this->task->printAssignedHtml($task, $users);?></td>
+            <?php endif;?>
+            <td class="text-center <?php echo isset($task->delay) ? 'delayed' : '';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';?></td>
+            <td class='c-hours' title="<?php echo round($task->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->estimate, 1) . $lang->execution->workHourUnit;?></td>
+            <td class='c-hours' title="<?php echo round($task->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->consumed, 1) . $lang->execution->workHourUnit;?></td>
+            <td class='c-hours' title="<?php echo round($task->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->left,     1) . $lang->execution->workHourUnit;?></td>
+            <?php if($type != 'openedBy'): ?>
+            <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
             <?php endif;?>
-            <td class='c-hours' title="<?php echo round($task->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->estimate, 1) . $lang->execution->workHourUnit;?></td>
-            <td class='c-hours' title="<?php echo round($task->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->consumed, 1) . $lang->execution->workHourUnit;?></td>
-            <td class='c-hours' title="<?php echo round($task->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($task->left,     1) . $lang->execution->workHourUnit;?></td>
-            <td class='c-status'>
-              <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
-              <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
-            </td>
             <td class='c-actions'>
               <?php
               if($canBeChanged)
@@ -194,10 +194,14 @@
                 <?php endif;?>
                 <?php printf('%03d', $child->id);?>
               </td>
-              <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->task->priList, $child->pri);?>'><?php echo zget($lang->task->priList, $child->pri);?></span></td>
               <td class='c-name' title='<?php echo $child->name?>'>
                 <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
                 <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color'");?>
+              </td>
+              <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->task->priList, $child->pri);?>'><?php echo zget($lang->task->priList, $child->pri);?></span></td>
+              <td class='c-status'>
+                <?php $storyChanged = (!empty($child->storyStatus) and $child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion and !in_array($child->status, array('cancel', 'closed')));?>
+                <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$child->status}'> " . $this->processStatus('task', $child) . "</span>");?>
               </td>
               <?php if($config->systemMode == 'new'):?>
               <?php $projectName = isset($projects[$child->execution]->name) ? $projects[$child->execution]->name : '';?>
@@ -207,23 +211,19 @@
               </td>
               <?php endif;?>
               <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?></td>
-              <?php if($type != 'openedBy'): ?>
-              <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
-              <?php endif;?>
-              <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
               <?php if($type != 'assignedTo'): ?>
               <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
+              <?php endif;?>
+              <td class="text-center <?php echo isset($child->delay) ? 'delayed' : '';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo '<span>' . substr($child->deadline, 5, 6) . '</span>';?></td>
+              <td class='c-hours' title="<?php echo round($child->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->estimate, 1) . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='c-hours' title="<?php echo round($child->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->consumed, 1) . ' ' . $lang->execution->workHourUnit;?></td>
+              <td class='c-hours' title="<?php echo round($child->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->left,     1) . ' ' . $lang->execution->workHourUnit;?></td>
+              <?php if($type != 'openedBy'): ?>
+              <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
               <?php endif;?>
               <?php if($type != 'finishedBy'): ?>
               <td class='c-user'><?php echo zget($users, $child->finishedBy);?></td>
               <?php endif;?>
-              <td class='c-hours' title="<?php echo round($child->estimate, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->estimate, 1) . ' ' . $lang->execution->workHourUnit;?></td>
-              <td class='c-hours' title="<?php echo round($child->consumed, 1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->consumed, 1) . ' ' . $lang->execution->workHourUnit;?></td>
-              <td class='c-hours' title="<?php echo round($child->left,     1) . ' ' . $lang->execution->workHour;?>"><?php echo round($child->left,     1) . ' ' . $lang->execution->workHourUnit;?></td>
-              <td class='c-status'>
-                <?php $storyChanged = (!empty($child->storyStatus) and $child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion and !in_array($child->status, array('cancel', 'closed')));?>
-                <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->my->storyChanged}</span>") : print("<span class='status-task status-{$child->status}'> " . $this->processStatus('task', $child) . "</span>");?>
-              </td>
               <td class='c-actions'>
                 <?php
                 if($canBeChanged)

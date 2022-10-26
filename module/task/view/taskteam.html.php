@@ -1,3 +1,23 @@
+<style>
+#taskTeamEditor button > i {color: #5e626d;}
+#taskTeamEditor .estimateBox span {background-color: #fff;}
+#taskTeamEditor .estimateBox input {background-color: #fff; border-right-width: 0px;}
+#taskTeamEditor input, #taskTeamEditor span, #taskTeamEditor .chosen-container > a {border-color: #eee;}
+#taskTeamEditor td.sort-handler {padding-bottom: 12px;}
+</style>
+<?php if($app->rawMethod != 'create'):?>
+<style>
+#modalTeam .modal-dialog {width: 855px;}
+#taskTeamEditor .hourBox {padding-bottom: 1px;}
+</style>
+<?php endif;?>
+<?php if($app->rawMethod == 'assignto'):?>
+<style>
+#taskTeamEditor td.sort-handler {width: 70px !important;}
+</style>
+<?php endif;?>
+<?php $hiddenArrow = (empty($task->mode) or $task->mode == 'linear') ? '' : 'hidden';?>
+<?php $i = 1;?>
 <?php if(!empty($task->team)):?>
 <?php foreach($task->team as $member):?>
 <?php
@@ -17,60 +37,81 @@ if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !=
 $hourDisabled = $memberDisabled;
 if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = false;
 ?>
-<tr class='member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
+<tr class='member member-<?php echo $memberStatus;?>' data-estimate='<?php echo (float)$member->estimate?>' data-consumed='<?php echo (float)$member->consumed?>' data-left='<?php echo (float)$member->left?>'>
+  <td>
+    <span class="team-number"><?php echo $i;?></span>
+    <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
+  </td>
   <td class='w-250px'>
-    <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'" . ($memberDisabled ? ' disabled' : ''))?>
+    <?php echo html::select("team[]", $members, $member->account, "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'" . ($memberDisabled ? ' disabled' : ''))?>
     <?php echo html::hidden("teamSource[]", $member->account);?>
     <?php if($memberDisabled) echo html::hidden("team[]", $member->account);?>
   </td>
-  <td>
+  <td class='hourBox'>
     <div class='input-group'>
-      <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-      <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-      <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'" . ($hourDisabled ? ' readonly' : ''))?>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->estimate}'" . ($hourDisabled ? ' readonly' : ''))?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->consumed}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+      <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->left}'" . ($hourDisabled ? ' readonly' : ''))?>
+        <label class="input-control-icon-right">h</label>
+      </div>
     </div>
   </td>
-  <td class='w-130px sort-handler'>
+  <td class='w-100px sort-handler'>
     <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(isset($task->mode) and $task->mode == 'linear'):?>
     <button type="button" <?php echo $sortDisabled   ? 'disabled' : '';?> class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
     <?php endif;?>
-    <button type="button" <?php echo $memberDisabled ? 'disabled' : '';?> class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
+<?php $i ++;?>
 <?php endforeach;?>
 <?php endif;?>
-<tr class='template teamTemplate member-wait'>
-  <td class='w-250px'>
-    <?php echo html::select("team[]", $members, '', "class='form-control chosen'")?>
+<tr class='template teamTemplate member member-wait'>
+  <td>
+    <span class="team-number"><?php echo $i;?></span>
+    <i class="icon icon-angle-down <?php echo $hiddenArrow;?>"></i>
+  </td>
+  <td class='w-240px'>
+    <?php echo html::select("team[]", $members, '', "class='form-control chosen' data-placeholder='{$lang->task->assignedTo}'")?>
     <?php echo html::hidden("teamSource[]", '');?>
   </td>
-  <td>
+  <td class='hourBox'>
     <?php if(empty($task->team)):?>
-    <div class='input-group'>
+    <div class='input-group estimateBox'>
       <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-      <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+      <span class='input-group-addon'><?php echo 'h';?></span>
     </div>
     <?php else:?>
     <div class='input-group'>
-      <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
-      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-      <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
-      <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-      <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimate}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamConsumed[]", 0, "class='form-control text-center' readonly placeholder='{$lang->task->consumed}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
+      <div class="input-control has-icon-right">
+        <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->left}'")?>
+        <label class="input-control-icon-right">h</label>
+      </div>
     </div>
     <?php endif;?>
   </td>
-  <td class='w-130px sort-handler'>
+  <td class='w-100px sort-handler'>
     <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
     <?php if(empty($task->mode) or $task->mode == 'linear'):?>
     <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
     <?php endif;?>
-    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
   </td>
 </tr>
 <?php $newRowCount = (!empty($task->team) and count($task->team) < 6) ? 6 - count($task->team) : 1;?>
@@ -83,7 +124,7 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php if($newRowCount == 0 and $app->rawMethod == 'edit'):?>
 <tr>
-  <td colspan='3'>
+  <td colspan='4'>
     <div class='alert alert-info'><?php printf($lang->task->noticeManageTeam, zget($lang->task->statusList, $task->status));?></div>
   </td>
 </tr>
@@ -92,8 +133,20 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <script>
 $(document).ready(function()
 {
-    <?php if(isset($task->mode) and $task->mode == 'multi'):?>
+
     $('tr.teamTemplate').closest('tbody.sortable').sortable('destroy');
+
+    <?php if(!isset($task->mode) or $task->mode != 'multi'):?>
+    var canSort = false;
+    var options = {
+        trigger: '.icon-move',
+        selector: 'tr.teamTemplate',
+        dragCssClass: 'drag-row',
+        reverse: true,
+        finish: setLineNumber
+    }
+
+    $('#taskTeamEditor > .sortable').sortable(options);
     <?php endif;?>
 
     /* Init task team manage dialog */
@@ -198,8 +251,13 @@ $(document).ready(function()
         {
             $newRow.removeClass('highlight');
         }, 1600);
+
+        var taskMode = $('#mode').val();
+        if(taskMode == 'multi') $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
+
         disableMembers();
         adjustButtons();
+        setLineNumber();
     }).on('click', '.btn-delete', function()
     {
         var $row = $(this).closest('tr');
@@ -211,11 +269,13 @@ $(document).ready(function()
             $row.remove();
             disableMembers();
             adjustButtons();
+            setLineNumber();
         });
     });
 
     adjustButtons();
     disableMembers();
+    setLineNumber();
 
     $taskTeamEditor.on('change', 'select#team', function()
     {
@@ -247,9 +307,11 @@ $(document).ready(function()
         if($(this).val() == 'multi')
         {
             disableMembers();
+            $('#taskTeamEditor tr.member .icon-angle-down').addClass('hidden');
         }
         else
         {
+            $('#taskTeamEditor tr.member .icon-angle-down').removeClass('hidden');
             $taskTeamEditor.find('select#team').each(function()
             {
                 $(this).find('option:disabled').removeAttr('disabled').trigger("chosen:updated");
@@ -258,4 +320,21 @@ $(document).ready(function()
         if($('#teamMember').val() != '') $taskTeamEditor.find('tfoot .btn').click();
     })
 });
+
+/**
+ * Set line number.
+ *
+ * @access public
+ * @return void
+ */
+function setLineNumber()
+{
+    var lineNumber = 1;
+    $('.team-number').each(function()
+    {
+        $(this).text(lineNumber);
+        lineNumber ++;
+    });
+
+}
 </script>
