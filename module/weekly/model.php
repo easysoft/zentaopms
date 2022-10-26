@@ -531,4 +531,44 @@ class weeklyModel extends model
 
         return '';
     }
+
+    /**
+     * Get report data.
+     *
+     * @param  int     $projectID
+     * @param  string  $date
+     * @param  bool    $loadMaster
+     * @access public
+     * @return stdclass
+     */
+    public function getReportData($projectID = 0, $date = '', $loadMaster = false)
+    {
+        $data = new stdclass();
+
+        $PVEV     = $this->getPVEV($projectID, $date);
+        $data->pv = $PVEV['PV'];
+        $data->ev = $PVEV['EV'];
+        $data->ac = $this->getAC($projectID, $date);
+        $data->sv = $this->getSV($data->ev, $data->pv);
+        $data->cv = $this->getCV($data->ev, $data->ac);
+
+        $data->project   = $this->loadModel('project')->getByID($projectID);
+        $data->weekSN    = $this->getWeekSN($data->project->begin, $date);
+        $data->monday    = $this->getThisMonday($date);
+        $data->lastDay   = $this->getLastDay($date);
+        $data->staff     = $this->getStaff($projectID, $date);
+        $data->finished  = $this->getFinished($projectID, $date);
+        $data->postponed = $this->getPostponed($projectID, $date);
+        $data->nextWeek  = $this->getTasksOfNextWeek($projectID, $date);
+        $data->workload  = $this->getWorkloadByType($projectID, $date);
+        $data->progress  = $this->getTips('progress', $data->sv);
+
+        if($loadMaster)
+        {
+            $data->users = $this->loadModel('user')->getPairs('noletter');
+            $data->master = zget($data->users, $data->project->PM, '');
+        }
+
+        return $data;
+    }
 }
