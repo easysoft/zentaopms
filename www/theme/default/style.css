@@ -154,6 +154,18 @@ td.delayed > span {display: inline-block; height: 20px; line-height: 18px; backg
 .table.has-sort-head thead > tr > th:last-child {padding-right: 8px;}
 tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 
+.label.label-outline.status-wait {color: #313C52; border-color: #313C52;}
+.label.label-outline.status-doing {color: #FF6F42; border-color: #FF6F42;}
+.label.label-outline.status-suspended {color: #B89664; border-color: #B89664;}
+.label.label-outline.status-closed {color: #9EA3B0; border-color: #9EA3B0;}
+.status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
+.status-draft .label-dot {background-color: #8166EE;}
+.status-closed .label-dot {background-color: #9EA3B0;}
+.status-changing .label-dot {background-color: #FB2B2B;}
+.status-doing .label-dot {background-color: #FF6F42;}
+.status-done .label-dot {background-color: #0DBB7D;}
+.status-pause .label-dot {background-color: #B89664;}
+.status-cancel .label-dot {background-color: #B89664;}
 .status-wait, .status-active, .status-active.status-bug, .status-normal, .status-asked, #workflowTable td.text-center.text-warning, .result-testcase, .c-lastRunResult span, .status-unconfirmed {color: #313C52;}
 .status-doing, .status-commenting, .status-checkingi, .status-confirmed {color: #FF6F42;}
 .status-suspended, .status-pause, .status-blocked, .status-hangup, .result-testcase.blocked, .c-lastRunResult .result-blocked {color: #B89664;}
@@ -164,7 +176,8 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1, .status-changed {color: #FB2B2B;}
 .severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
+.label-pri, .label-selector > .label {color: #9EA3B0; border-color: #9EA3B0;}
 .label-pri-1, .label-selector > .label-pri[data-value="1"] {color: #FF4912; border-color: #FF4912;}
 .label-pri-2, .label-selector > .label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
 .label-pri-3, .label-selector > .label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
-.label-pri-4, .label-selector > .label-pri[data-value="4"] {color: #9EA3B0; border-color: #9EA3B0;}
+.label-pri-4, .label-pri-5, .label-selector > .label-pri[data-value="4"], .label-selector > .label-pri[data-value="5"] {color: #9EA3B0; border-color: #9EA3B0;}
