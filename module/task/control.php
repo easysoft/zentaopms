@@ -1219,7 +1219,7 @@ class task extends control
         {
             if(empty($orderBy))
             {
-                $orderBy = 'order_asc,id';
+                $orderBy = 'id_desc';
             }
             else
             {
@@ -1227,14 +1227,35 @@ class task extends control
                 $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
             }
         }
-        if(!$orderBy) $orderBy = 'date_asc';
 
-        $this->view->title   = $this->lang->task->record;
-        $this->view->task    = $task;
-        $this->view->from    = $from;
-        $this->view->orderBy = $orderBy;
-        $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
+        if(!$orderBy) $orderBy = 'id_desc';
+
+        /* Set the fold state of the current task. */
+        $referer = strtolower($_SERVER['HTTP_REFERER']);
+        if(strpos($referer, 'recordestimate') and $this->cookie->taskEffortFold !== false)
+        {
+            $taskEffortFold = $this->cookie->taskEffortFold;
+        }
+        else
+        {
+            $taskEffortFold = 0;
+            $currentAccount = $this->app->user->account;
+            if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
+            if(!empty($task->team))
+            {
+                $teamMember = array_column($task->team, 'account');
+                if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+            }
+        }
+
+        $this->view->title          = $this->lang->task->record;
+        $this->view->task           = $task;
+        $this->view->from           = $from;
+        $this->view->orderBy        = $orderBy;
+        $this->view->efforts        = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->taskEffortFold = $taskEffortFold;
+
         $this->display();
     }
 
