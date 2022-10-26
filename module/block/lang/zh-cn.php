@@ -303,7 +303,7 @@ $lang->block->default['full']['my']['7']['block']  = 'recentproject';
 $lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['title']  = '待处理';
+$lang->block->default['full']['my']['8']['title']  = '我的待处理';
 $lang->block->default['full']['my']['8']['block']  = 'assigntome';
 $lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
