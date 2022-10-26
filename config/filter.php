@@ -138,6 +138,7 @@ $filter->svn->cat                 = new stdclass();
 $filter->svn->diff                = new stdclass();
 $filter->task->create             = new stdclass();
 $filter->task->export             = new stdclass();
+$filter->task->recordestimate     = new stdclass();
 $filter->execution->default       = new stdclass();
 $filter->execution->story         = new stdclass();
 $filter->testcase->default        = new stdclass();
@@ -298,8 +299,9 @@ $filter->story->track->cookie['preProductID']       = 'int';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
 
-$filter->task->create->cookie['lastTaskModule'] = 'int';
-$filter->task->export->cookie['checkedItem']    = 'reg::checked';
+$filter->task->create->cookie['lastTaskModule']         = 'int';
+$filter->task->export->cookie['checkedItem']            = 'reg::checked';
+$filter->task->recordestimate->cookie['taskEffortFold'] = 'reg::checked';
 
 $filter->execution->default->cookie['kanbanview']         = 'code';
 $filter->execution->story->cookie['storyPreExecutionID']  = 'int';
