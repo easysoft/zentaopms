@@ -208,7 +208,11 @@ class baseModel
      */
     public function loadModel($moduleName, $appName = '')
     {
-        return $this->app->loadTarget($moduleName, $appName);
+        $model = $this->app->loadTarget($moduleName, $appName);
+        if(!$model) return false;
+
+        $this->{$moduleName} = $model;
+        return $model;
     }
 
     /**
@@ -224,7 +228,12 @@ class baseModel
      */
     public function loadTao($moduleName, $appName = '')
     {
-        return $this->app->loadTarget($moduleName, $appName, 'tao');
+        $tao = $this->app->loadTarget($moduleName, $appName, 'tao');
+        if(!$tao) return false;
+
+        $taoObjectName = $moduleName . 'Tao';
+        $this->{$taoObjectName} = $tao;
+        return $tao;
     }
 
     /**
