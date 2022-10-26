@@ -39,7 +39,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
 .block-todoes .todo-title.text-ellipsis {text-overflow: unset;}
 [lang^='en'] .block-todoes .todo-pri {width: 60px; min-width: 60px;}
-.block-todoes .todoes-input .todo-form-trigger > button {width: 100%;}
+.block-todoes .todoes-input .todo-form-trigger > .btn-info {width: 100%; opacity: 0.8; margin-left: 10px;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
