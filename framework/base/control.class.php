@@ -264,8 +264,10 @@ class baseControl
     }
 
     /**
-     * 加载指定模块的model对象。
-     * Load the model object of one module.
+     * 加载一个模块的model对象。加载完成后，使用$this->$moduleName来访问这个model对象。
+     * 比如：loadModel('user')引入user模块的model实例对象，可以通过$this->user来访问它。
+     *
+     * Load the model object of one module. After loaded, can use $this->$moduleName to visit the model object.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
@@ -294,8 +296,10 @@ class baseControl
     }
 
     /**
-     * 加载指定模块的zen对象。
-     * Load the zen object of one module.
+     * 加载一个模块的zen对象。加载完成后，使用$this->{$moduleName}Zen来访问这个zen对象。
+     * 比如：loadZen('user')引入user模块的zen实例对象，可以通过$this->userZen来访问它。
+     *
+     * Load the zen object of one module. After loaded, can use $this->{$moduleName}Zen to visit the zen object.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
