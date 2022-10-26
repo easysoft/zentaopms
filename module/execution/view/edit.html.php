@@ -157,14 +157,7 @@
                   <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' $class onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php
-              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
-              {
-                  echo html::hidden("products[$i]", $product->id);
-                  echo html::hidden("branch[$i]", $branchID);
-              }
-              $i++;
-              ?>
+              <?php $i++; ?>
               <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
