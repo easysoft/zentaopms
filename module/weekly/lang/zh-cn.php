@@ -40,4 +40,4 @@ $lang->weekly->cv = '成本偏差率（CV%）';
 
 $lang->weekly->totalCount = '总计 : %u 个任务';
 
-$lang->weekly->exportWeeklyReport = '周报导出';
+$lang->weekly->exportWeeklyReport = '导出周报';
