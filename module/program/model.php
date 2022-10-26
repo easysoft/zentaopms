@@ -95,6 +95,61 @@ class programModel extends model
     }
 
     /**
+     * Get product pairs which name with program.
+     *
+     * @param  int    $programID
+     * @param  string $mode
+     * @param  string $status
+     * @param  string $append
+     * @param  int    $shadow
+     * @access public
+     * @return array
+     */
+    public function getProductPairsWithProgram($programID = 0, $mode = 'assign', $status = 'all', $append = '', $shadow = 0)
+    {
+        /* Get the top programID. */
+        if($programID)
+        {
+            $program   = $this->getByID($programID);
+            $path      = array_filter(explode(',', $program->path));
+            $programID = current($path);
+        }
+
+        /* When mode equals assign and programID equals 0, you can query the standalone product. */
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
+
+        $products = $this->dao->select("t1.id, t1.program, concat(t2.name, '/', t1.name) AS name")->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->beginIF($mode == 'assign')->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
+            ->fetchGroup('program');
+
+        /* Put products of current program first.*/
+        if($mode != 'assign' && $programID)
+        {
+            $currentProgramProducts = $products[$programID];
+
+            unset($products[$programID]);
+
+            array_unshift($products, $currentProgramProducts);
+        }
+
+        $productPairs = array();
+        foreach($products as $programProducts)
+        {
+            foreach($programProducts as $product) $productPairs[$product->id] = $product->name;
+        }
+
+        return $productPairs;
+    }
+
+
+    /**
      * Get program by id.
      *
      * @param  int  $programID
