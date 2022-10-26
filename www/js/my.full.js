@@ -930,19 +930,21 @@ function adjustMenuWidth()
  * @access public
  * @return void
  */
-function scrollToSelected(id)
+function scrollToSelected()
 {
-    if(typeof(id) == 'undefined') id = '#dropMenu .table-col .list-group'
-
-    $id = $(id);
-    $selected = $id.find('.selected');
-
-    $id.mouseout(function(){$(this).find('a.active:not(.not-list-item)').removeClass('active')});
-    if($selected.length > 0)
+    setTimeout(function()
     {
-        var offsetHeight = 75;
-        $id.scrollTop($selected.position().top - offsetHeight);
-    }
+        $selected = $('#dropMenu .selected');
+        if($selected.length == 0) return;
+
+        $id = $selected.closest('.list-group');
+        $id.mouseout(function(){$(this).find('a.active:not(.not-list-item)').removeClass('active')});
+
+        var fixOffset = 160;
+        offsetTop = $selected.offset().top;
+        if(offsetTop < fixOffset) return;
+        $id.scrollTop(offsetTop - fixOffset);
+    }, 100);
 }
 
 /**

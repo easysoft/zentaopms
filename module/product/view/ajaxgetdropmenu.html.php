@@ -37,6 +37,7 @@ $tabActive          = '';
 $myProducts         = 0;
 $others             = 0;
 $closeds            = 0;
+$currentProduct     = '';
 
 foreach($products as $programID => $programProducts)
 {
@@ -72,6 +73,7 @@ foreach($products as $programID => $programProducts)
 
     foreach($programProducts as $index => $product)
     {
+        if($product->id == $productID) $currentProduct = $product;
         $selected    = $product->id == $productID ? 'selected' : '';
         $productName = ($config->systemMode == 'new' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
@@ -144,10 +146,15 @@ $closedProductsHtml .= '</ul>';
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentProduct->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 

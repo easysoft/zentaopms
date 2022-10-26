@@ -35,6 +35,7 @@ $tabActive          = '';
 $myProjects         = 0;
 $others             = 0;
 $dones              = 0;
+$currentProject     = '';
 
 foreach($projects as $programID => $programProjects)
 {
@@ -70,8 +71,9 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $selected    = $project->id == $projectID ? 'selected' : '';
-        $icon        = '<i class="icon icon-sprint"></i> ';
+        if($project->id == $projectID) $currentProject = $project;
+        $selected = $project->id == $projectID ? 'selected' : '';
+        $icon     = '<i class="icon icon-sprint"></i> ';
 
         if($project->model != 'waterfall' and (in_array($module, $config->waterfallModules) or $method == 'track'))
         {
@@ -163,10 +165,15 @@ $closedProjectsHtml .= '</ul>';
    <div class='list-group projects'><?php echo $closedProjectsHtml;?></div>
   </div>
 </div>
-<script>scrollToSelected();</script>
 <script>
 $(function()
 {
+    <?php if($currentProject->status == 'done' or $currentProject->status == 'closed'):?>
+    $('.col-footer .toggle-right-col').click(function(){ scrollToSelected(); })
+    <?php else:?>
+    scrollToSelected();
+    <?php endif;?>
+
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 
