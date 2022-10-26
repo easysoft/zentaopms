@@ -107,6 +107,7 @@ $lang->programplan->error->createdTask     = '已分解任务，不可添加子�
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
 $lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
+$lang->programplan->error->sameCode        = '阶段代号不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
 
