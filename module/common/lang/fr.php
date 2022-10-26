@@ -291,6 +291,7 @@ $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
 $lang->devops->set      = 'Set';
 
+$lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';
 $lang->admin->entry       = 'Application';
 $lang->admin->data        = 'Data';

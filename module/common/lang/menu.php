@@ -170,7 +170,7 @@ $lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|ta
 $lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
 
-if(strpos(",$config->disabledFeatures,", ',track,') === false)
+if(strpos(",$config->disabledFeatures,", ',productTrack,') === false)
 {
     $lang->product->menu->track = array('link' => "{$lang->track}|product|track|productID=%s");
 }
@@ -577,7 +577,7 @@ $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|admin|setmodule", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
@@ -647,6 +647,7 @@ $lang->admin->menu->dev['menuOrder'][15] = 'editor';
 $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
 $lang->admin->menu->system['subMenu']              = new stdclass();
+$lang->admin->menu->system['subMenu']->setModule   = array('link' => "{$lang->admin->module}|admin|setmodule");
 $lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
 $lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
 $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak,resetpwdsetting');

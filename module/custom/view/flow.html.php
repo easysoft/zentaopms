@@ -34,7 +34,7 @@
           </div>
         </li>
 
-        <?php if(strpos(",{$this->config->disabledFeatures},", ',URStory,') === false):?>
+        <?php if(strpos(",{$this->config->disabledFeatures},", ',productURStory,') === false):?>
         <li>
           <div class="form-group">
             <label><?php echo $lang->custom->conceptQuestions['URAndSR']?></label>
