@@ -214,15 +214,10 @@ class xuanxuanIm extends imModel
                     $messageGroups[$contentData->contentType][] = $message;
                     continue;
                 }
-                if($contentData->objectType == 'story' && $contentData->action == 'reviewed')
+                if ($contentData->objectType == 'story' && $contentData->action == 'reviewed')
                 {
                     $extra = explode(',', $contentDataOuter->extra)[0];
                     $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor-$extra"][] = $message;
-                }
-                if($message->contentType == 'text')
-                {
-                    $messageGroups['text'][] = $message;
-                    continue;
                 }
                 else
                 {
