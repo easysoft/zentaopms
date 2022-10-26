@@ -16,7 +16,7 @@
 .progress-pie {position: relative;}
 .progress-pie .progress-info {position: absolute; width: 100%; height: 100%; left: 0; top: 0; text-align: center; padding-top: 25px;}
 .progress-pie .progress-info > small {display: block; color: #A6AAB8; line-height: 14px;}
-.progress-pie .progress-info > strong {display: block; font-size: 36px; line-height: 40px;}
+.progress-pie .progress-info > strong {display: block; font-size: 32px; line-height: 40px;}
 </style>
 <div class="panel-body table-row">
   <div class="col-6 text-middle text-center">
