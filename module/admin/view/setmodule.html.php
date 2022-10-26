@@ -31,13 +31,22 @@
         <tbody>
           <?php foreach($this->config->admin->module as $module => $options):?>
           <?php if(strpos(",$disabledFeatures,", ",$module,") !== false) continue;?>
+
+          <?php $hasData = false;?>
+          <?php foreach($options as $option):?>
+          <?php $code = $module . ucfirst($option);?>
+          <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
+          <?php $hasData = true;?>
+          <?php endForeach;?>
+
+          <?php if($hasData):?>
           <tr>
             <th class='text-right'><?php echo $lang->admin->setModule->{$module};?></th>
             <td>
               <?php foreach($options as $option):?>
               <?php $code = $module . ucfirst($option);?>
               <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php if(strpos(",$closedFeatures,", ",$code,") !== false) continue;?>
+              <?php if(strpos(",$closedFeatures,",   ",$code,") !== false) continue;?>
               <div class='group-item'>
               <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$option}), '1', "data-code='{$code}'", 'inline');?>
               <?php echo html::hidden("module[{$code}][]", '1', 'disabled');?>
@@ -48,7 +57,7 @@
               <?php foreach($options as $option):?>
               <?php $code = $module . ucfirst($option);?>
               <?php if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;?>
-              <?php if(strpos(",$closedFeatures,", ",$code,") === false) continue;?>
+              <?php if(strpos(",$closedFeatures,",   ",$code,") === false) continue;?>
               <div class='group-item'>
               <?php echo html::checkbox("module[{$code}]", array('1' => $lang->admin->setModule->{$option}), '0', "data-code='{$code}'", 'inline');?>
               <?php echo html::hidden("module[{$code}][]", '0');?>
@@ -56,6 +65,7 @@
               <?php endForeach;?>
             </td>
           </tr>
+          <?php endif;?>
           <?php endForeach;?>
           <tr>
             <th></th>
