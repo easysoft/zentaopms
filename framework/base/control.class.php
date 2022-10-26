@@ -231,6 +231,8 @@ class baseControl
          * Set super vars.
          */
         $this->setSuperVars();
+
+        $this->loadZen($moduleName, $appName);
     }
 
     //-------------------- Model相关方法(Model related methods) --------------------//
@@ -289,6 +291,38 @@ class baseControl
         $this->{$moduleName} = $model;
         $this->dao           = $model->dao;
         return $model;
+    }
+
+    /**
+     * 加载指定模块的zen对象。
+     * Load the zen object of one module.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool 如果没有zen文件，返回false，否则返回zen对象。If no zen file, return false, else return the zen object.
+     */
+    public function loadZen($moduleName = '', $appName = '')
+    {
+        $zen = $this->app->loadTarget($moduleName, $appName, 'zen');
+
+        /**
+         * 如果加载zen失败，尝试加载config, lang配置信息。
+         * If zen is not loaded, try load config and lang.
+         */
+        if(!$zen)
+        {
+            $this->app->loadModuleConfig($moduleName, $appName);
+            $this->app->loadLang($moduleName, $appName);
+            $this->dao = new dao();
+            return false;
+        }
+
+        $zen->view = $this->view;
+
+        $zenObjectName = $moduleName . 'Zen';
+        $this->{$zenObjectName} = $zen;
+        return $zen;
     }
 
     /**
