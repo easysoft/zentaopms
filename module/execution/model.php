@@ -4261,7 +4261,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 3) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);

@@ -185,6 +185,8 @@ class portModel extends model
      */
     public function export($model = '')
     {
+        ini_set('memory_limit', '-1');
+
         $fields = $this->post->exportFields;
 
         /* Init config fieldList */
@@ -806,10 +808,25 @@ class portModel extends model
      */
     public function getQueryDatas($model = '')
     {
-        $queryCondition = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+        $queryCondition    = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition     = $this->session->{$model . 'OnlyCondition'};
+        $transferCondition = $this->session->{$model . 'TransferCondition'};
 
         $modelDatas = array();
+
+        if($transferCondition)
+        {
+            $selectKey = 'id';
+            $stmt = $this->dbh->query($transferCondition);
+            while($row = $stmt->fetch())
+            {
+                if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
+                $modelDatas[$row->id] = $row;
+            }
+
+            return $modelDatas;
+        }
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
