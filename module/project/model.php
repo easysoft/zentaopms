@@ -1441,7 +1441,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if(!$project->multiple and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -1617,6 +1617,8 @@ class projectModel extends model
                 if($project->status == 'closed') $this->product->close($productID);
             }
 
+            if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+
             return common::createChanges($oldProject, $project);
         }
     }
@@ -1667,6 +1669,7 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
+        $this->loadModel('execution');
         $this->lang->error->unique = $this->lang->error->repeat;
         foreach($projects as $projectID => $project)
         {
@@ -1688,10 +1691,7 @@ class projectModel extends model
             if(dao::isError())
             {
                 $errors = dao::getError();
-                foreach($errors as $key => $error)
-                {
-                    dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
-                }
+                foreach($errors as $key => $error) dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
 
                 return false;
             }
@@ -1708,6 +1708,8 @@ class projectModel extends model
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
                 $this->executeHooks($projectID);
+
+                if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->execution->syncNoMultipleSprint($projectID);
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
@@ -2135,6 +2137,8 @@ class projectModel extends model
                 ->andWhere('account')->in($removedAccounts)
                 ->exec();
         }
+
+        if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
     }
 
     /**
