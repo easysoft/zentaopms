@@ -200,13 +200,14 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .label-selector > .label.label-severity[data-severity="3"], .label-selector > .label.label-severity[data-value="3"] {color: #FAAE1A; background-position: 0px -80px;}
 .label-selector > .label.label-severity[data-severity="4"], .label-selector > .label.label-severity[data-value="4"] {color: #B89664; background-position: 0px -123px;}
 
-.c-severity > .label-severity {height: 28px;}
 .c-severity > .label-severity:after {top: 9px;}
-.c-severity > .label-severity {background: url('images/severity/severity-sprite.png') no-repeat; background-size:cover; border: none; height: 26px; line-height: 32px; background-position: 2px -136px; color: #9EA3B0; background-size: 83%;}
-.c-severity > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 2px 1px;}
-.c-severity > .label-severity[data-severity="2"] {color: #FF8058; background-position: 2px -32px;}
-.c-severity > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 2px -65px;}
-.c-severity > .label-severity[data-severity="4"] {color: #B89664; background-position: 2px -101px;}
+.kanban-item-bug .label-severity:after, #legendBasicInfo .label-severity:after {top: 8px;}
+.kanban-item-bug .label-severity, #legendBasicInfo .label-severity, .c-severity > .label-severity {height: 28px;}
+.kanban-item-bug .label-severity, #legendBasicInfo .label-severity, .c-severity > .label-severity {background: url('images/severity/severity-sprite.png') no-repeat; background-size:cover; border: none; height: 26px; line-height: 32px; background-position: 2px -136px; color: #9EA3B0; background-size: 83%;}
+.kanban-item-bug .label-severity[data-severity="1"], #legendBasicInfo .label-severity[data-severity="1"], .c-severity > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 2px 1px;}
+.kanban-item-bug .label-severity[data-severity="2"], #legendBasicInfo .label-severity[data-severity="2"], .c-severity > .label-severity[data-severity="2"] {color: #FF8058; background-position: 2px -32px;}
+.kanban-item-bug .label-severity[data-severity="3"], #legendBasicInfo .label-severity[data-severity="3"], .c-severity > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 2px -65px;}
+.kanban-item-bug .label-severity[data-severity="4"], #legendBasicInfo .label-severity[data-severity="4"], .c-severity > .label-severity[data-severity="4"] {color: #B89664; background-position: 2px -101px;}
 
 .pri-text > .label-pri, .pri-text > .label-severity {height: 20px;}
 .pri-text > .label-severity {background-size: 80%; background-position: 2px -132px;}
