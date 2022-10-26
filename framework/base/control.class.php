@@ -262,37 +262,23 @@ class baseControl
     }
 
     /**
-     * 加载指定模块的model文件。
-     * Load the model file of one module.
+     * 加载指定模块的model对象。
+     * Load the model object of one module.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
-     * @param  string $type       对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
      * @access public
      * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
      */
-    public function loadModel($moduleName = '', $appName = '', $type = 'model')
+    public function loadModel($moduleName = '', $appName = '')
     {
-        if(empty($moduleName)) $moduleName = $this->moduleName;
-        if(empty($appName)) $appName = $this->appName;
-
-        $objectName = $type == 'model' ? $moduleName : $moduleName . ucfirst($type);
-
-        global $loadedModels;
-        if(isset($loadedModels[$type][$appName][$moduleName]))
-        {
-            $this->{$objectName} = $loadedModels[$type][$appName][$moduleName];
-            if($type == 'model') $this->dao = $this->{$objectName}->dao;
-            return $this->{$objectName};
-        }
-
-        $modelFile = $this->app->setModelFile($moduleName, $appName, $type);
+        $model = $this->app->loadTarget($moduleName, $appName);
 
         /**
-         * 如果没有model文件，尝试加载config配置信息。
-         * If no model file, try load config.
+         * 如果加载model失败，尝试加载config, lang配置信息。
+         * If model is not loaded, try load config and lang.
          */
-        if(!helper::import($modelFile))
+        if(!$model)
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
@@ -300,31 +286,9 @@ class baseControl
             return false;
         }
 
-        /**
-         * 如果没有扩展文件，model类名是$moduleName + $type，如果有扩展，还需要增加ext前缀。
-         * If no extension file, model class name is $moduleName + $type, else with 'ext' as the prefix.
-         */
-        $modelClass = class_exists('ext' . $appName . $moduleName . $type) ? 'ext' . $appName . $moduleName . $type : $appName . $moduleName . $type;
-        if(!class_exists($modelClass))
-        {
-            $modelClass = class_exists('ext' . $moduleName . $type) ? 'ext' . $moduleName . $type : $moduleName . $type;
-            if(!class_exists($modelClass)) $this->app->triggerError(" The $type $modelClass not found", __FILE__, __LINE__, $exit = true);
-        }
-
-        /**
-         * 因为zen继承control，构造函数里会调用loadModel方法，赋默认值值防止递归调用。
-         */
-        if($type == 'zen') $loadedModels[$type][$appName][$moduleName] = false;
-
-        /**
-         * 初始化model对象，在control对象中可以通过$this->$objectName来引用。同时将dao对象赋为control对象的成员变量，将view对象赋为zen对象的成员变量，方便引用。
-         * Init the model object thus you can try $this->$objectName to access it. Also assign the $dao object as a member of control object, assign the $view object as a member of zen object.
-         */
-        $this->{$objectName} = new $modelClass($appName);
-        if($type == 'model') $this->dao = $this->{$objectName}->dao;
-        if($type == 'zen') $this->{$objectName}->view = $this->view;
-        $loadedModels[$type][$appName][$moduleName] = $this->{$objectName};
-        return $this->$objectName;
+        $this->{$moduleName} = $model;
+        $this->dao           = $model->dao;
+        return $model;
     }
 
     /**
