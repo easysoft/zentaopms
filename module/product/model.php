@@ -644,6 +644,7 @@ class productModel extends model
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
             if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $isShowBranch = true;
             if($currentModule == 'testcase' and $currentMethod == 'showimport') $isShowBranch = false;
+            if($currentModule == 'release' and strpos(',browse,create,', $currentMethod) !== false) $isShowBranch = true;
             if($isShowBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -2205,7 +2206,7 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "productID=%s&type=$extra");
             }
-            elseif($module == 'product' && $method == 'create')
+            elseif($module == 'product' && ($method == 'create' or $method == 'showimport'))
             {
                 $link = helper::createLink($module, 'browse', "productID=%s&type=$extra");
             }

@@ -40,6 +40,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->ticket->title;?></th>
+          <th class='c-name'><?php echo $lang->ticket->product;?></th>
           <th class='c-pri'><?php echo $lang->ticket->priAB;?></th>
           <th class='c-status'><?php echo $lang->ticket->status;?></th>
           <th class='c-type'><?php echo $lang->ticket->type;?></th>
@@ -64,6 +65,7 @@
           <?php else:?>
           <td title='<?php echo $ticket->title;?>'><?php echo $ticket->title;?></td>
           <?php endif;?>
+          <td title='<?php echo zget($products, $ticket->product);?>'><?php echo zget($products, $ticket->product);?></td>
           <td><span class='label-pri label-pri-<?php echo $ticket->pri;?>' title='<?php echo zget($this->lang->ticket->priList, $ticket->pri, $ticket->pri);?>'><?php echo zget($this->lang    ->ticket->priList, $ticket->pri, $ticket->pri); ?></span></td>
           <td title='<?php echo zget($this->lang->ticket->statusList, $ticket->status, $ticket->status);?>'><?php echo zget($this->lang->ticket->statusList, $ticket->status, $ticket->status);?></td>
           <td title='<?php echo zget($this->lang->ticket->typeList, $ticket->type, $ticket->type);?>'><?php echo zget($this->lang->ticket->typeList, $ticket->type, $ticket->type);?></td>

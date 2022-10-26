@@ -110,10 +110,13 @@ class executionModel extends model
         }
 
         $stageFilter = array('request', 'design', 'review');
-        if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
+        if(isset($execution->attribute))
         {
-            unset($this->lang->execution->menu->qa);
-            unset($this->lang->execution->menu->build);
+            if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
+            {
+                unset($this->lang->execution->menu->qa);
+                unset($this->lang->execution->menu->build);
+            }
         }
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
@@ -4258,7 +4261,7 @@ class executionModel extends model
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 1) . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * (float)$rate, 3) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);

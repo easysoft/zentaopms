@@ -79,7 +79,7 @@
         <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
         <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
         <th class='c-execution c-actions'><?php echo $lang->productplan->execution;?></th>
-        <th><?php echo $lang->productplan->desc;?></th>
+        <th class='c-desc'><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";

@@ -19,6 +19,7 @@ $recorders   = array();
 $allOrders   = array();
 $allEfforts  = array();
 $myOrders    = array();
+$myCountList = array();
 $myLastID    = array();
 $myEfforts   = array();
 $myLastOrder = 0;
@@ -35,11 +36,15 @@ foreach($efforts as $key => $effort)
     if($app->user->account == $account)
     {
         if($allOrders[$myLastOrder] != $effort->order + 1) $myLastOrder = $order;
-        $myOrders[$myLastOrder]    = isset($myOrders[$myLastOrder]) ? ++$myOrders[$myLastOrder] : 1;
+        $myCountList[$myLastOrder] = isset($myCountList[$myLastOrder]) ? ++$myCountList[$myLastOrder] : 1;
         $myLastID[$myLastOrder]    = isset($myLastID[$myLastOrder]) ? ($myLastID[$myLastOrder] < $effort->id ? $effort->id : $myLastID[$myLastOrder]) : $effort->id;
         $myEfforts[$myLastOrder][] = $effort;
+
+        if(!isset($myOrders[$effort->order])) $myOrders[$effort->order] = 0;
+        $myOrders[$effort->order] += 1;
     }
 }
+ksort($myOrders);
 ?>
 <div id='linearefforts'>
   <div class='tabs'>
@@ -49,7 +54,7 @@ foreach($efforts as $key => $effort)
     </ul>
     <div class='tab-content'>
       <div class='tab-pane' id='legendMyEffort'>
-        <?php if(!empty($myOrders)):?>
+        <?php if(!empty($myCountList)):?>
         <table class='table table-bordered table-fixed table-recorded has-sort-head taskEffort'>
           <thead>
             <tr class='text-center'>
@@ -70,7 +75,7 @@ foreach($efforts as $key => $effort)
           </thead>
           <tbody>
             <?php $i = 1;?>
-            <?php foreach($myOrders as $order => $count):?>
+            <?php foreach($myCountList as $order => $count):?>
             <?php $showOrder = false;?>
             <?php foreach($myEfforts[$order] as $effort):?>
             <?php if($effort->account != $this->app->user->account) continue;?>
@@ -143,7 +148,7 @@ foreach($efforts as $key => $effort)
             <?php endforeach;?>
           </tbody>
         </table>
-      <?php if(!empty($myOrders)):?>
+      <?php if(!empty($myCountList)):?>
       </div>
     </div>
     <?php endif;?>
