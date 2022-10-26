@@ -917,7 +917,7 @@ class customModel extends model
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function()) $disabledFeatures .= "$feature,";
             }
-            $disabledFeatures .= 'scrumMeasrecord,track';
+            $disabledFeatures .= 'scrumMeasrecord,productTrack,productRoadmap';
         }
 
         $disabledFeatures = rtrim($disabledFeatures, ',');
@@ -932,7 +932,7 @@ class customModel extends model
      * @access public
      * @return int
      */
-    public function hasURStoryData()
+    public function hasProductURStoryData()
     {
         return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
     }
