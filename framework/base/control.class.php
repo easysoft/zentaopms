@@ -232,7 +232,7 @@ class baseControl
          */
         $this->setSuperVars();
 
-        $this->loadZen($moduleName, $appName);
+        $this->loadZen($this->moduleName, $appName);
     }
 
     //-------------------- Model相关方法(Model related methods) --------------------//
