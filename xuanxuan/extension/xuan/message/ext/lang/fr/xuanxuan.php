@@ -13,8 +13,6 @@ $lang->message->feedbackToTaskTitle   = '%s have forwarded %d feedback to task';
 $lang->message->feedbackToDoTitle     = '%s have forwarded %d feedback to todo';
 $lang->message->feedbackToStoryTitle  = '%s have forwarded %d feedback to story';
 
-$lang->message->reviewToauditTitle  = '%s have submit %d audits';
-
 $lang->message->mr = new stdClass();
 $lang->message->mr->logTitle    = 'Build log';
 $lang->message->mr->compilefail = 'Your submitted merge request: %s, build failed';
