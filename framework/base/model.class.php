@@ -150,6 +150,8 @@ class baseModel
 
         $this->loadDAO();
         $this->setSuperVars();
+
+        $this->loadTao($moduleName, $this->appName);
     }
 
     /**
@@ -194,10 +196,10 @@ class baseModel
     }
 
     /**
-     * 加载一个模块的model。加载完成后，使用$this->$moduleName来访问这个model对象。
+     * 加载一个模块的model对象。加载完成后，使用$this->$moduleName来访问这个model对象。
      * 比如：loadModel('user')引入user模块的model实例对象，可以通过$this->user来访问它。
      *
-     * Load the model of one module. After loaded, can use $this->$moduleName to visit the model object.
+     * Load the model object of one module. After loaded, can use $this->$moduleName to visit the model object.
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
@@ -207,6 +209,22 @@ class baseModel
     public function loadModel($moduleName, $appName = '')
     {
         return $this->app->loadTarget($moduleName, $appName);
+    }
+
+    /**
+     * 加载一个模块的tao对象。加载完成后，使用$this->$moduleName来访问这个tao对象。
+     * 比如：loadModel('user')引入user模块的tao实例对象，可以通过$this->user来访问它。
+     *
+     * Load the tao object of one module. After loaded, can use $this->$moduleName to visit the tao object.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @access public
+     * @return object|bool  the tao object or false if tao file not exists.
+     */
+    public function loadTao($moduleName, $appName = '')
+    {
+        return $this->app->loadTarget($moduleName, $appName, 'tao');
     }
 
     /**
