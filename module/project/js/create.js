@@ -267,7 +267,7 @@ function loadBranches(product)
         }
     });
 
-    chosenProducts > 1 ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+    (chosenProducts > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
     if($('#productsBox .row .input-group:last select:first').val() != 0)
     {

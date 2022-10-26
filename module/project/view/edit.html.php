@@ -176,9 +176,11 @@
           </td>
         </tr>
         <?php if($project->model == 'waterfall'):?>
-        <tr class='hide division'>
+        <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
+        <?php $disabled = $multiProductStages ? "disabled='disabled'" : '';?>
+        <tr class='<?php echo $class;?> division'>
           <th><?php echo $lang->project->division;?></th>
-          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division);?></td>
+          <td colspan='3'><?php echo html::radio('division', $lang->project->divisionList, $project->division, $disabled);?></td>
         </tr>
         <?php endif;?>
         <?php if($project->model == 'kanban'):?>
