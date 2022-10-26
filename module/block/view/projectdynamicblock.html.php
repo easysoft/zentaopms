@@ -13,6 +13,8 @@
 .timeline>li.active:before {left: -30px;}
 .timeline>li>div:after {left: -27px;}
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.timeline >li >div > .timeline-tag {color: #838A9D;}
+.timeline >li >div > .timeline-text > * {color: #313C52;}
 </style>
 <div class='panel-body scrollbar-hover'>
   <ul class="timeline timeline-tag-left no-margin">
