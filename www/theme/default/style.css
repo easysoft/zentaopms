@@ -160,6 +160,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .label.label-outline.status-closed {color: #9EA3B0; border-color: #9EA3B0;}
 
 .status-draft {color: #8166EE;}
+.status-reviewing {color: #18A6FD;}
 .status-done .label-dot {background-color: #0DBB7D;}
 .status-doing .label-dot {background-color: #FF6F42;}
 .status-pause .label-dot {background-color: #B89664;}
@@ -176,7 +177,9 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1, .status-changed {color: #FB2B2B;}
 .status-wait, .status-active, .status-active.status-bug, .status-normal, .status-asked, #workflowTable td.text-center.text-warning, .result-testcase, .c-lastRunResult span, .status-unconfirmed {color: #313C52;}
 
+.severity-issue.severity-1, .c-severity .severity-1 {color: #FB2B2B;}
 .severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
+.severity-issue.severity-3, .c-severity .severity-3 {color: #18A6FD;}
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
 
 .label-pri, .label-selector > .label {color: #9EA3B0; border-color: #9EA3B0;}
