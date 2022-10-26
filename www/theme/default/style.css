@@ -170,6 +170,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-changing .label-dot {background-color: #FB2B2B;}
 .status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
 .status-closed, #workflowTable td.text-center.text-muted {color: #9EA3B0;}
+.status-reviewing .label-dot {background-color: #18A6FD;}
 .status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
 .status-doing, .status-commenting, .status-checkingi, .status-confirmed {color: #FF6F42;}
 .status-suspended, .status-pause, .status-blocked, .status-hangup, .result-testcase.blocked, .c-lastRunResult .result-blocked {color: #B89664;}
