@@ -181,3 +181,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .label-pri-2, .label-selector > .label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
 .label-pri-3, .label-selector > .label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
 .label-pri-4, .label-pri-5, .label-selector > .label-pri[data-value="4"], .label-selector > .label-pri[data-value="5"] {color: #9EA3B0; border-color: #9EA3B0;}
+
+.panel-actions > li > a {color: #838A9D;}
