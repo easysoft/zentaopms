@@ -158,34 +158,46 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .label.label-outline.status-doing {color: #FF6F42; border-color: #FF6F42;}
 .label.label-outline.status-suspended {color: #B89664; border-color: #B89664;}
 .label.label-outline.status-closed {color: #9EA3B0; border-color: #9EA3B0;}
-.status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
+
+.status-draft {color: #8166EE;}
+.status-done .label-dot {background-color: #0DBB7D;}
+.status-doing .label-dot {background-color: #FF6F42;}
+.status-pause .label-dot {background-color: #B89664;}
 .status-draft .label-dot {background-color: #8166EE;}
+.status-cancel .label-dot {background-color: #B89664;}
 .status-closed .label-dot {background-color: #9EA3B0;}
 .status-changing .label-dot {background-color: #FB2B2B;}
-.status-doing .label-dot {background-color: #FF6F42;}
-.status-done .label-dot {background-color: #0DBB7D;}
-.status-pause .label-dot {background-color: #B89664;}
-.status-cancel .label-dot {background-color: #B89664;}
-.status-wait, .status-active, .status-active.status-bug, .status-normal, .status-asked, #workflowTable td.text-center.text-warning, .result-testcase, .c-lastRunResult span, .status-unconfirmed {color: #313C52;}
+.status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
+.status-closed, #workflowTable td.text-center.text-muted {color: #9EA3B0;}
+.status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
 .status-doing, .status-commenting, .status-checkingi, .status-confirmed {color: #FF6F42;}
 .status-suspended, .status-pause, .status-blocked, .status-hangup, .result-testcase.blocked, .c-lastRunResult .result-blocked {color: #B89664;}
-.status-closed, #workflowTable td.text-center.text-muted {color: #9EA3B0;}
-.status-draft {color: #8166EE;}
-.status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
 .status-done, .status-resolved, .status-replied, .status-checked, #workflowTable td.text-success, .result-testcase.pass, .c-lastRunResult .result-pass {color: #0DBB7D;}
 .status-changing, .status-active.status-risk, .result-testcase.fail, .c-lastRunResult .result-fail, .severity-issue.severity-1, .c-severity .severity-1, .status-changed {color: #FB2B2B;}
+.status-wait, .status-active, .status-active.status-bug, .status-normal, .status-asked, #workflowTable td.text-center.text-warning, .result-testcase, .c-lastRunResult span, .status-unconfirmed {color: #313C52;}
+
 .severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
+
 .label-pri, .label-selector > .label {color: #9EA3B0; border-color: #9EA3B0;}
-.label-pri-1, .label-selector>.label-pri[data-value="1"] {color: #FF4912; border-color: #FF4912;}
-.label-pri-2, .label-selector>.label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
-.label-pri-3, .label-selector>.label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
+.label-pri-1, .label-selector > .label-pri[data-value="1"] {color: #FF4912; border-color: #FF4912;}
+.label-pri-2, .label-selector > .label-pri[data-value="2"] {color: #F38F19; border-color: #F38F19;}
+.label-pri-3, .label-selector > .label-pri[data-value="3"] {color: #37B2FE; border-color: #37B2FE;}
 .label-pri-4, .label-pri-5, .label-selector > .label-pri[data-value="4"], .label-selector > .label-pri[data-value="5"] {color: #9EA3B0; border-color: #9EA3B0;}
-.label-severity[data-severity="1"]:before, .label-severity[data-value="1"]:before, .label-severity[data-severity="2"]:before, .label-severity[data-value="2"]:before {content: '';}
-.label-selector>.label-severity[data-severity="1"], .label-selector>.label-severity[data-value="1"], .label-selector>.label-severity[data-severity="2"], .label-selector>.label-severity[data-value="2"] {background: url('images/severity/severity-sprite.png') no-repeat; background-size:cover; border: none; height: 26px; line-height: 32px;}
-.label-selector>.label-severity[data-severity="1"], .label-selector>.label-severity[data-value="1"]{background-position: 0px -1px; color: #FB2B2B;}
-.label-selector>.label-severity[data-severity="2"], .label-selector>.label-severity[data-value="2"]{background-position: 0px -42px; color: #FF8058;}
-.label-selector>.label-severity[data-severity="3"], .label-selector>.label-severity[data-value="3"]{color: #FAAE1A;}
-.label-selector>.label-severity[data-severity="4"], .label-selector>.label-severity[data-value="4"]{color: #B89664;}
-.label-selector>.label-severity[data-severity="5"], .label-selector>.label-severity[data-value="5"]{color: #9EA3B0;}
-.label-severity:before {font-weight: unset;}
+
+.label-severity:before {content: '';}
+.c-severity > .label-severity {height: 28px;}
+.c-severity > .label-severity:after {top: 9px;}
+.c-severity > .label-severity {background-position: 0px -132px;}
+.label-selector > .label.label-severity, .label-selector > .label.label-severity.active, .c-severity > .label-severity, .pri-text > .label-severity {background: url('images/severity/severity-sprite.png') no-repeat; background-size:cover; border: none; height: 26px; line-height: 32px; background-position: 0px -165px; color: #9EA3B0;}
+.label-selector > .label.label-severity[data-severity="1"], .label-selector > .label.label-severity[data-value="1"], .c-severity > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 0px -1px;}
+.label-selector > .label.label-severity[data-severity="2"], .label-selector > .label.label-severity[data-value="2"], .c-severity > .label-severity[data-severity="2"] {color: #FF8058; background-position: 0px -41px;}
+.label-selector > .label.label-severity[data-severity="3"], .label-selector > .label.label-severity[data-value="3"], .c-severity > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 0px -80px;}
+.label-selector > .label.label-severity[data-severity="4"], .label-selector > .label.label-severity[data-value="4"], .c-severity > .label-severity[data-severity="4"] {color: #B89664; background-position: 0px -123px;}
+
+.pri-text > .label-pri, .pri-text > .label-severity {height: 20px;}
+.pri-text > .label-severity {background-size: 80%; background-position: 2px -132px;}
+.pri-text > .label-severity[data-severity="1"] {color: #FB2B2B; background-position: 2px -1px;}
+.pri-text > .label-severity[data-severity="2"] {color: #FF8058; background-position: 2px -33px;}
+.pri-text > .label-severity[data-severity="3"] {color: #FAAE1A; background-position: 2px -64px;}
+.pri-text > .label-severity[data-severity="4"] {color: #B89664; background-position: 2px -99px;}
