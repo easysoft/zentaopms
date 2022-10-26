@@ -129,7 +129,7 @@ $(function()
               <div class="tile-amount text-primary"><?php echo array_sum($product->stories);?></div>
               <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm" data-app="product"');?>
               <?php else:?>
-              <div class="tile-amount">0</div>
+              <div class="tile-amount text-primary">0</div>
               <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm" data-app="product"');?>
               <?php endif;?>
             </div>
