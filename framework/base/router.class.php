@@ -2182,6 +2182,57 @@ class baseRouter
     }
 
     /**
+     * 加载指定模块下的某种对象。
+     * Load the target object of one module.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $class      对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
+     * @access public
+     * @return object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     */
+    public function loadTarget($moduleName = '', $appName = '', $class = 'model')
+    {
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($appName)) $appName = $this->appName;
+
+        global $loadedTargets;
+        if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
+
+        $targetFile = $this->setModelFile($moduleName, $appName, $class);
+
+        /**
+         * 如果没有target文件，返回false。
+         * If no target file, return false.
+         */
+        if(!helper::import($targetFile)) return false;
+
+        /**
+         * 如果没有扩展文件，target类名是$moduleName + $class，如果有扩展，还需要增加ext前缀。
+         * If no extension file, target class name is $moduleName + $class, else with 'ext' as the prefix.
+         */
+        $targetClass = class_exists('ext' . $appName . $moduleName. $class) ? 'ext' . $appName . $moduleName . $class : $appName . $moduleName . $class;
+        if(!class_exists($targetClass))
+        {
+            $targetClass = class_exists('ext' . $moduleName. $class) ? 'ext' . $moduleName . $class : $moduleName . $class;
+            if(!class_exists($targetClass)) $this->triggerError(" The $class $targetClass not found", __FILE__, __LINE__, $exit = true);
+        }
+
+        /**
+         * 因为zen继承自control，tao继承自model，构造函数里会调用loadTarget方法，赋默认值值防止递归调用。
+         */
+        if($class == 'zen' || $class == 'tao') $loadedTargets[$class][$appName][$moduleName] = false;
+
+        /**
+         * 初始化target 对象并返回。
+         * Init the target object and return it.
+         */
+        $target = new $targetClass($appName);
+        $loadedTargets[$class][$appName][$moduleName] = $target;
+        return $target;
+    }
+
+    /**
      * 设置请求的参数(PATH_INFO 方式)。
      * Set the params by PATH_INFO.
      *
