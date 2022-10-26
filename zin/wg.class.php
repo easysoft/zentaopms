@@ -1,6 +1,10 @@
 <?php
 class wg
 {
+    /**
+     * @link https://htmx.org/docs/
+     * @var stdClass
+     */
     public $hxProperties;
 
     public function __construct()
@@ -8,22 +12,36 @@ class wg
         $this->hxProperties = new stdClass();
     }
 
-    public function get($url, $trigger = '', $target = '')
+    /**
+     * Issues a GET request to the given URL.
+     *
+     * @param string $url
+     * @param string $target
+     *
+     * @return $this
+     */
+    public function get($url, $target = '')
     {
-        $this->hxProperties->method  = __FUNCTION__ ;
-        $this->hxProperties->url     = $url;
-        $this->hxProperties->trigger = $trigger;
-        $this->hxProperties->target  = $target;
+        $this->hxProperties->method = __FUNCTION__;
+        $this->hxProperties->url    = $url;
+        $this->hxProperties->target = $target;
 
         return $this;
     }
 
-    public function post($url, $trigger = '', $target = '')
+    /**
+     * Issues a POST request to the given URL.
+     *
+     * @param string $url
+     * @param string $target
+     *
+     * @return $this
+     */
+    public function post($url, $target = '')
     {
-        $this->hxProperties->method  = __FUNCTION__ ;
-        $this->hxProperties->url     = $url;
-        $this->hxProperties->trigger = $trigger;
-        $this->hxProperties->target  = $target;
+        $this->hxProperties->method = __FUNCTION__;
+        $this->hxProperties->url    = $url;
+        $this->hxProperties->target = $target;
 
         return $this;
     }
@@ -31,30 +49,28 @@ class wg
     public function trigger($trigger)
     {
         $this->hxProperties->trigger = $trigger;
-        return $this;
-    }
 
-    public function targetHx($target)
-    {
-        $this->hxProperties->target = $target;
         return $this;
     }
 
     public function swap($swap)
     {
         $this->hxProperties->swap = $swap;
+
         return $this;
     }
 
     public function include($include)
     {
         $this->hxProperties->include = $include;
+
         return $this;
     }
 
     public function params($params = '*')
     {
         $this->hxProperties->params = $params;
+
         return $this;
     }
 
