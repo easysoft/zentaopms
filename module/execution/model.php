@@ -5035,7 +5035,6 @@ class executionModel extends model
         $_POST['end']         = $project->end;
         $_POST['status']      = 'wait';
         $_POST['days']        = $project->days;
-        $_POST['products']    = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
         $_POST['team']        = $project->team;
         $_POST['teamMembers'] = array($this->app->user->account);
         $_POST['acl']         = 'open';
@@ -5046,11 +5045,69 @@ class executionModel extends model
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
 
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+        foreach($projectProducts as $projectProduct)
+        {
+            $_POST['products'][] = $projectProduct->product;
+            $_POST['branch'][]   = $projectProduct->branch;
+            if($projectProduct->plan) $_POST['plans'][$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
+        }
+
         $executionID = $this->create();
         if($project->model == 'kanban')
         {
             $execution = $this->getById($executionID);
             $this->loadModel('kanban')->createRDKanban($execution);
+        }
+
+        $_POST = $post;
+
+        return $executionID;
+    }
+
+    /**
+     * Sync no multiple project to sprint.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function syncNoMultipleSprint($projectID)
+    {
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $post    = $_POST;
+
+        $_POST = array();
+        $_POST['project'] = $projectID;
+        $_POST['name']    = $project->name;
+        $_POST['code']    = $project->code;
+        $_POST['begin']   = $project->begin;
+        $_POST['end']     = $project->end;
+        $_POST['days']    = $project->days;
+        $_POST['team']    = $project->team;
+        $_POST['PO']      = $project->PO;
+        $_POST['QD']      = $project->QD;
+        $_POST['PM']      = $project->PM;
+        $_POST['RD']      = $project->RD;
+        $_POST['status']  = $project->status;
+        $_POST['acl']     = 'open';
+
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
+        foreach($projectProducts as $projectProduct)
+        {
+            $_POST['products'][] = $projectProduct->product;
+            $_POST['branch'][]   = $projectProduct->branch;
+            if($projectProduct->plan) $_POST['plans'][$projectProduct->product][$projectProduct->branch] = explode(',', trim($projectProduct->plan, ','));
+        }
+
+        $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
+        $_POST['teamMembers'] = array_values($teamMembers);
+
+        $executionID = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
+        if($executionID)
+        {
+            $this->update($executionID);
+            $this->updateProducts($executionID);
         }
 
         $_POST = $post;
