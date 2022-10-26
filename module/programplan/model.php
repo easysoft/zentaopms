@@ -702,6 +702,15 @@ class programplanModel extends model
             return false;
         }
 
+        $setCode = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
+        $checkCode = $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '');
+        if($setCode and $checkCode !== true)
+        {
+            if($checkCode) dao::$errors['message'][] = sprintf($this->lang->error->repeat, $this->lang->execution->code, $checkCode);
+            else dao::$errors['message'][] = $this->lang->programplan->error->sameCode;
+            return false;
+        }
+
         $datas = array();
         foreach($names as $key => $name)
         {
@@ -713,6 +722,7 @@ class programplanModel extends model
             $plan->project   = $projectID;
             $plan->parent    = $parentID ? $parentID : $projectID;
             $plan->name      = $names[$key];
+            if($setCode) $plan->code = $codes[$key];
             $plan->percent   = $percents[$key];
             $plan->attribute = empty($parentID) ? $attributes[$key] : $parentAttribute;
             $plan->milestone = $milestone[$key];
@@ -782,6 +792,11 @@ class programplanModel extends model
 
             if(helper::isZeroDate($plan->begin)) $plan->begin = '';
             if(helper::isZeroDate($plan->end))   $plan->end   = '';
+            if($setCode and empty($plan->code))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
+                return false;
+            }
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1006,6 +1021,13 @@ class programplanModel extends model
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
         if(dao::isError()) return false;
 
+        $setCode = (!isset($this->config->setCode) or $this->config->setCode == 1) ? true : false;
+        if($setCode and empty($plan->code))
+        {
+            dao::$errors['code'][] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
+            return false;
+        }
+
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 
         if($plan->parent > 0)
@@ -1045,15 +1067,19 @@ class programplanModel extends model
         if($planChanged)  $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
 
+        $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
+
         /* Fix bug #22030. Reset field name for show dao error. */
         $this->lang->project->name = $this->lang->programplan->name;
+        $this->lang->project->code = $this->lang->execution->code;
 
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
-            ->checkIF((!empty($plan->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project}")
+            ->checkIF((!empty($plan->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0'" . ($parentStage ? " and `parent` = {$oldPlan->parent}" : ''))
+            ->checkIF(!empty($plan->code), 'code', 'unique', "id != $planID and type in ('sprint','stage','kanban') and `deleted` = '0'")
             ->where('id')->eq($planID)
             ->exec();
 
@@ -1229,6 +1255,29 @@ class programplanModel extends model
     {
         $names = array_filter($names);
         if(count(array_unique($names)) != count($names)) return false;
+        return true;
+    }
+
+    /**
+     * Check code unique.
+     *
+     * @param array $codes
+     * @param array $planIDList
+     * @access public
+     * @return mix
+     */
+    public function checkCodeUnique($codes, $planIDList)
+    {
+        $codes = array_filter($codes);
+        if(count(array_unique($codes)) != count($codes)) return false;
+
+        $code = $this->dao->select('code')->from(TABLE_EXECUTION)
+            ->where('type')->in('sprint,stage,kanban')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('code')->in($codes)
+            ->beginIF($planIDList)->andWhere('id')->notin($planIDList)->fi()
+            ->fetch('code');
+        if($code) return $code;
         return true;
     }
 
