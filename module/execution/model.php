@@ -4622,7 +4622,6 @@ class executionModel extends model
 
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
-        if(!empty($execution->division)) echo "<td class='text-center' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='c-name text-left flex sort-handler'>";
         if(common::hasPriv('execution', 'batchEdit')) echo "<span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
@@ -4652,6 +4651,7 @@ class executionModel extends model
                 }
             }
         }
+        if(!empty($execution->division)) echo "<td class='text-center' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
