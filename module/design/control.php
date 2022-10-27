@@ -465,6 +465,14 @@ class design extends control
         $this->display();
     }
 
+    /**
+     * Ajax get stories by productID and projectID.
+     *
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
     public function ajaxGetProductStories($productID, $projectID)
     {
         $products      = $this->product->getProductPairsByProject($projectID);
