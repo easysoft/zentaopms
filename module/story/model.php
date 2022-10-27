@@ -2441,7 +2441,7 @@ class storyModel extends model
         /* If no executions, in plan, stage is planned. No plan, wait. */
         if(!$executions)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq('')->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan', true)->eq('')->orWhere('plan')->eq(0)->markRight(1)->exec();
 
             foreach($stages as $branch => $stage)
             {
