@@ -390,7 +390,7 @@ class programModel extends model
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
-                    if(!$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
+                    if($this->config->systemMode == 'new' and !$this->config->program->showAllProjects and $project->parent != $product->program and strpos($project->path, ",{$product->program},") !== 0) continue;
 
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());

@@ -1904,7 +1904,7 @@ class productModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'project');
 
-        if(!$this->config->product->showAllProjects)
+        if($this->config->systemMode == 'new' and !$this->config->product->showAllProjects)
         {
             foreach($projectProduct as $productID => $projects)
             {

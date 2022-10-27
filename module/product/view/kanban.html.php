@@ -11,12 +11,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php if($config->systemMode == 'new'):?>
 <div id='showSettingsBox'>
   <div class="checkbox-primary checkbox">
     <input type="checkbox" value="1" id="showAllProjects" title="<?php echo $lang->program->showNotCurrentProjects;?>" <?php echo $config->product->showAllProjects ? 'checked' : '';?>>
     <label for="showAllProjects"><?php echo $lang->program->showNotCurrentProjects;?></label>
   </div>
 </div>
+<?php endif;?>
 <div id='kanbanList'>
   <?php if(empty($kanbanList)):?>
   <div class="table-empty-tip cell">
