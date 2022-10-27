@@ -2316,12 +2316,47 @@ class projectModel extends model
     {
         $this->loadModel('user');
 
+        $members = array_keys($this->getTeamMembers($projectID));
+
+        if($_POST['otherProducts'])
+        {
+            $products      = array();
+            $otherProducts = $_POST['otherProducts'];
+            foreach($otherProducts as $index => $otherProduct)
+            {
+                if(!$otherProduct) continue;
+
+                $data = new stdclass();
+                $data->project = $projectID;
+                $data->plan    = 0;
+
+                if(strpos($otherProduct, '_') !== false)
+                {
+                    $params = explode('_', $otherProduct);
+                    $data->product = $params[0];
+                    $data->branch  = $params[1];
+                }
+                else
+                {
+                    $data->product = $otherProduct;
+                    $data->branch  = 0;
+                }
+
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+
+                $products[] = $data->product;
+            }
+
+            $this->user->updateUserView($products, 'product', $members);
+
+            return !dao::isError();
+        }
+
         $products           = isset($_POST['products']) ? $_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
 
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
 
-        $members = array_keys($this->getTeamMembers($projectID));
         if(empty($products))
         {
             $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);

@@ -41,6 +41,7 @@ $lang->project->whitelist          = 'Project Whitelist';
 $lang->project->addWhitelist       = 'Project Add Whitelist';
 $lang->project->unbindWhitelist    = 'Project Remove Whitelist';
 $lang->project->manageProducts     = 'Manage Products';
+$lang->project->manageOtherProducts = 'Manage Other Products';
 $lang->project->copyTitle          = 'Please select an project to copy';
 $lang->project->errorSameProducts  = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorSameBranches  = 'Project cannot be associated with multiple identical branches.';
@@ -68,6 +69,7 @@ $lang->project->manageRepo         = 'Manage Repo';
 $lang->project->linkedRepo         = 'Link Repo';
 $lang->project->unlinkedRepo       = 'Unlink Repo';
 $lang->project->disableExecution   = 'Project of disable iteration';
+$lang->project->selectProduct       = 'Select Product';
 
 /* Fields. */
 $lang->project->common             = 'Project';

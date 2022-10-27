@@ -42,4 +42,38 @@ $(function()
             $(this).closest('div').find("input[id^=products]").prop('checked', true);
         }
     });
+
+    $('.saveOtherProduct').click(function()
+    {
+        $('#productsBox').ajaxForm(
+        {
+            finish:function(response)
+            {
+                if(response.result == 'success')
+                {
+                    $('#productsBox #submit').popover('destroy');
+                    
+                    $('.saveOtherProduct').popover(
+                    {
+                        trigger: 'manual',
+                        content: response.message,
+                        tipClass: 'popover-success popover-form-result',
+                        placement: 'right'
+                    }).popover('show');
+
+                    setTimeout(function(){$('.saveOtherProduct').popover('destroy')}, 2000);
+
+                    var reloadUrl = response.locate == 'reload' ? location.href : response.locate;
+                    setTimeout(function(){location.href = reloadUrl;}, 1200);
+                }
+            }
+        });
+
+        $('form#productsBox').submit();
+    });
+
+    $('.cancelOtherProduct').click(function()
+    {
+        $('#otherProductsModal').modal('hide');
+    });
 });
