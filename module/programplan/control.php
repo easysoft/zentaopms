@@ -110,6 +110,7 @@ class programplan extends control
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
+        $this->view->project      = $this->project->getByID($projectID);
         $this->view->productID    = $this->productID;
         $this->view->productList  = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->type         = $type;

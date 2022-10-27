@@ -339,6 +339,12 @@ class executionModel extends model
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
+            if($project->model == 'waterfall')
+            {
+                $this->checkWorkload('create', $_POST['percent'], $project);
+                if(dao::isError()) return false;
+            }
+
             $this->config->execution->create->requiredFields .= ',project';
         }
 
@@ -1175,7 +1181,7 @@ class executionModel extends model
         }
 
         /* The total workload of the first stage should not exceed 100%. */
-        if($type == 'create' or (empty($oldExecution) and $oldExecution->grade == 1))
+        if($type == 'create' or (!empty($oldExecution) and $oldExecution->grade == 1))
         {
             $oldPercentTotal = $this->dao->select('SUM(t2.percent) as total')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
@@ -4616,6 +4622,7 @@ class executionModel extends model
 
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class='$trClass'>";
+        if(!empty($execution->division)) echo "<td class='text-center' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='c-name text-left flex sort-handler'>";
         if(common::hasPriv('execution', 'batchEdit')) echo "<span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')

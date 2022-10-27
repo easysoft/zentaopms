@@ -1035,10 +1035,19 @@ class project extends control
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
-        $showToggleIcon = false;
+        $executionStats  = $this->execution->getStatData($projectID, $status, $productID, 0, $this->cookie->showTask, '', $orderBy, $pager);
+        $showToggleIcon  = false;
+        $productNameList = $this->dao->select('t1.id,GROUP_CONCAT(t3.`name`) as productName')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->leftjoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.type')->eq('stage')
+            ->groupBy('t1.id')
+            ->fetchPairs();
+
         foreach($executionStats as $execution)
         {
+            $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
             if(!empty($execution->tasks) or !empty($execution->children))
             {
                 $showToggleIcon = true;
