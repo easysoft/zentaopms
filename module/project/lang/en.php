@@ -178,8 +178,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = 'Projects Ownedbyme';
 $lang->project->typeList['other'] = 'Other Projects';
 
-$lang->project->divisionList['0'] = 'Disable';
 $lang->project->divisionList['1'] = 'Enable';
+$lang->project->divisionList['0'] = 'Disable';
 
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';

@@ -876,6 +876,7 @@ class programplanModel extends model
             {
                 unset($data->id);
                 $data->status        = 'wait';
+                $data->division      = $project->division;
                 $data->version       = 1;
                 $data->parentVersion = $data->parent == 0 ? 0 : $this->dao->findByID($data->parent)->from(TABLE_PROJECT)->fetch('version');
                 $data->team          = substr($data->name,0, 30);

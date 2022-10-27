@@ -178,8 +178,8 @@ $lang->project->typeList = array();
 $lang->project->typeList['my']    = '我负责的项目';
 $lang->project->typeList['other'] = '其他项目';
 
-$lang->project->divisionList['0'] = '关闭';
 $lang->project->divisionList['1'] = '开启';
+$lang->project->divisionList['0'] = '关闭';
 
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
