@@ -76,7 +76,7 @@ class productModel extends model
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
-
+        $isFeedbackModel = strpos(',feedback,', ",{$this->app->tab},") !== false ? true : false;
         if(count($products) <= 2 and isset($products[0]))
         {
             unset($products[0]);
@@ -86,7 +86,7 @@ class productModel extends model
         if(empty($products)) return;
 
         $this->app->loadLang('product');
-        if(!$isQaModule and !$productID)
+        if(!$isQaModule and !$productID and !$isFeedbackModel)
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
             return;
@@ -109,12 +109,21 @@ class productModel extends model
             $currentProduct->name = $products[$productID];
             $currentProduct->type = 'normal';
         }
+        if($isFeedbackModel and !$productID)
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = isset($products[$productID]) ? $products[$productID] : current($products);
+            $currentProduct->type = 'normal';
+        }
         $this->session->set('currentProductType', $currentProduct->type);
 
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $moduleName = 'product';
+            if($isQaModule) $moduleName = 'bug';
+            if($isFeedbackModel) $moduleName = 'feedback';
+            $dropMenuLink = helper::createLink($moduleName, 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
@@ -643,6 +652,7 @@ class productModel extends model
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
             if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $isShowBranch = true;
             if($currentModule == 'testcase' and $currentMethod == 'showimport') $isShowBranch = false;
+            if($currentModule == 'release' and strpos(',browse,create,', $currentMethod) !== false) $isShowBranch = true;
             if($isShowBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -1217,15 +1227,16 @@ class productModel extends model
     /**
      * Get project list by product.
      *
-     * @param  int       $productID
-     * @param  string    $browseType
-     * @param  int       $branch
-     * @param  int       $involved
-     * @param  string    $orderBy
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $branch
+     * @param  int    $involved
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1242,6 +1253,7 @@ class productModel extends model
             ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
+            ->page($pager, 't2.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
@@ -1263,12 +1275,13 @@ class productModel extends model
      * @param  int       $branch
      * @param  int       $involved
      * @param  string    $orderBy
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc', $pager = null)
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
@@ -1415,13 +1428,14 @@ class productModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $projectID
+     * @param  string $mode stagefilter or empty
      * @access public
      * @return array
      */
-    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0)
+    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0, $mode = '')
     {
         if(empty($productID)) return array();
-        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent,t2.attribute')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('stage,sprint,kanban')
@@ -1454,7 +1468,10 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+
+            /* Some stage of waterfall not need.*/
+            if(strpos($mode, 'stagefilter') !== false and in_array($execution->attribute, array('request', 'design', 'review'))) continue;
+            if(isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
         }
 
         return $executionPairs;
@@ -2218,7 +2235,7 @@ class productModel extends model
             {
                 $link = helper::createLink($module, $method, "productID=%s&type=$extra");
             }
-            elseif($module == 'product' && $method == 'create')
+            elseif($module == 'product' && ($method == 'create' or $method == 'showimport'))
             {
                 $link = helper::createLink($module, 'browse', "productID=%s&type=$extra");
             }
@@ -2327,6 +2344,14 @@ class productModel extends model
             $objectID = $module == 'project' ? 'projectID' : 'executionID';
             return helper::createLink($module, $method, "$objectID=$extra&productID=%s");
         }
+        elseif($module == 'feedback')
+        {
+            return helper::createLink('feedback', 'admin', "browseType=byProduct&productID=%s");
+        }
+        elseif($module == 'ticket')
+        {
+            return helper::createLink('ticket', 'browse', "browseType=byProduct&productID=%s");
+        }
 
         return $link;
     }
@@ -2425,7 +2450,7 @@ class productModel extends model
      */
     public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied();
 
         $product = $this->getByID($productID);
         $params  = array('branch' => $branch);

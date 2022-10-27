@@ -62,6 +62,8 @@ $app->loadLang('execution');
 $app->loadLang('release');
 $app->loadLang('build');
 $app->loadLang('productplan');
+if($this->config->edition != 'open') $app->loadLang('ticket');
+js::set('systemMode', $this->config->systemMode);
 ?>
 <div class='panel'>
   <div class='panel-heading text-center'>
@@ -102,7 +104,12 @@ $app->loadLang('productplan');
         <?php else:?>
         <?php
         $name = isset($card->title) ? $card->title : $card->name;
-        $delayed = ($card->fromType == 'execution' and !empty($card->delay)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
+        $delayed = '';
+        if($card->fromType == 'execution' or $card->fromType == 'ticket')
+        {
+            $delayed = (!empty($card->delay) or (!helper::isZeroDate($card->deadline) and helper::now() > $card->deadline)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
+        }
+
         if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$name'") . "$delayed</div>";
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'><div title='$name'>$name</div>$delayed</div>";
         if($card->fromType == 'productplan' or $card->fromType == 'build')
@@ -127,6 +134,9 @@ $app->loadLang('productplan');
             <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01' and $card->fromType != ''):?>
             <span class="time label label-light"><?php echo date("m-d", strtotime($card->begin)) . ' ' . $lang->{$card->fromType}->to . ' ' . date("m-d", strtotime($card->end));?></span>
             <?php endif;?>
+            <?php if($card->fromType == 'ticket' and !helper::isZeroDate($card->deadline) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
+            <span class="time label label-light"><?php echo date("m-d", strtotime($card->deadline)) . ' ' . $lang->kanbancard->deadlineAB;?></span>
+            <?php endif;?>
             <?php
             if($card->begin == '2030-01-01' or $card->end == '2030-01-01') echo '<span class="date label label-future" title="' . $lang->{$card->fromType}->future . '">' . $lang->{$card->fromType}->future . '</span>';
 
@@ -134,6 +144,7 @@ $app->loadLang('productplan');
             if($card->fromType == 'execution') $assignedToList = $card->PM;
             if($card->fromType == 'build')     $assignedToList = $card->builder;
             if($card->fromType == 'release' or $card->fromType == 'productplan') $assignedToList = $card->createdBy;
+            if($card->fromType == 'ticket')    $assignedToList = $card->assignedTo;
             $count          = 0;
             $members        = '';
             ?>
@@ -218,6 +229,7 @@ $(function()
         if($item.children('.build').length)       icon = '<i class="icon icon-ver">';
         if($item.children('.productplan').length) icon = '<i class="icon icon-delay">';
         if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
+        if($item.children('.ticket').length)      icon = '<i class="icon icon-file-text">';
 
         if($item.children('.execution').length) icon = '<i class="icon icon-run">';
 

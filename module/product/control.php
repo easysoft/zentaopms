@@ -73,10 +73,13 @@ class product extends control
      * @param  int    $branch
      * @param  int    $involved
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
+    public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadLang('execution');
         $this->loadModel('project');
@@ -87,9 +90,13 @@ class product extends control
 
         $this->product->setMenu($productID, $branch);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Get PM id list. */
         $accounts     = array();
-        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
+        $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy, $pager);
         $product      = $this->product->getByID($productID);
         $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
 
@@ -112,6 +119,10 @@ class product extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchID     = $branch;
         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->pager        = $pager;
         $this->display();
     }
 
@@ -1086,7 +1097,20 @@ class product extends control
             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
         }
 
-        $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList(0, 'all', 0, 0, $shadow);
+        $programProducts = array();
+
+        if($this->app->tab == 'project')
+        {
+            $products = $this->product->getProducts($this->session->project);
+        }
+        elseif($this->app->tab == 'feedback')
+        {
+            $products = $this->loadModel('feedback')->getGrantProducts(false);
+        }
+        else
+        {
+            $products = $this->product->getList(0, 'all', 0, 0, $shadow);
+        }
 
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
@@ -1391,7 +1415,6 @@ class product extends control
             $productConfig = $this->config->product;
 
             /* Create field lists. */
-            if(!$this->config->URAndSR) $productConfig->list->exportFields = str_replace('activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,', '', $productConfig->list->exportFields);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
@@ -1404,28 +1427,21 @@ class product extends control
 
             $lastProgram  = $lastLine = '';
             $lines        = $this->product->getLinePairs();
+            $users        = $this->user->getPairs('noletter');
             $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
-                $product->line = zget($lines, $product->line, '');
-                if($this->config->URAndSR)
-                {
-                    $product->activeRequirements  = (int) $product->requirements['active'];
-                    $product->changedRequirements = (int) $product->requirements['changing'];
-                    $product->draftRequirements   = (int) $product->requirements['draft'];
-                    $product->closedRequirements  = (int) $product->requirements['closed'];
-                    $product->totalRequirements   = $product->activeRequirements + $product->changedRequirements + $product->draftRequirements + $product->closedRequirements;
-                    $product->requireCompleteRate = ($product->totalRequirements == 0 ? 0 : round($product->closedRequirements / $product->totalRequirements, 3) * 100) . '%';
-                }
+                $product->line              = zget($lines, $product->line, '');
+                $product->manager           = zget($users, $product->PO, '');
+                $product->draftStories      = (int)$product->stories['draft'];
                 $product->activeStories     = (int)$product->stories['active'];
                 $product->changedStories    = (int)$product->stories['changing'];
-                $product->draftStories      = (int)$product->stories['draft'];
+                $product->reviewingStories  = (int)$product->stories['reviewing'];
                 $product->closedStories     = (int)$product->stories['closed'];
-                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
+                $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
                 $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
                 $product->unResolvedBugs    = (int)$product->unResolved;
                 $product->assignToNullBugs  = (int)$product->assignToNull;
-                $product->closedBugs        = (int)$product->closedBugs;
                 $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
                 $product->program           = $product->programName;
 

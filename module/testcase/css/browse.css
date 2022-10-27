@@ -17,9 +17,6 @@ body {margin-bottom: 25px;}
 
 .pl-5px {padding-left: 5px;}
 
-.fail .result-fail, .blocked .result-blocked {color: #f00;}
-.pass .result-pass {color: green;}
-
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-share {font-size: 9px;}
 

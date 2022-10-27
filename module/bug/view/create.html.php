@@ -155,11 +155,11 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php if($showNoticefeedbackBy):?>
           <tr>
             <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
-            <td><?php echo html::input('feedbackBy', $feedbackBy, "class='form-control'");?></td>
+            <td><?php echo html::input('feedbackBy', isset($feedbackBy) ? $feedbackBy : '', "class='form-control'");?></td>
             <td id='notifyEmailTd'>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->bug->notifyEmail?></span>
-                <span><?php echo html::input('notifyEmail', $notifyEmail, "class='form-control'");?></span>
+                <span><?php echo html::input('notifyEmail', isset($notifyEmail) ? $notifyEmail : '', "class='form-control'");?></span>
               </div>
             </td>
           </tr>

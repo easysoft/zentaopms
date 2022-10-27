@@ -61,10 +61,13 @@ class projectrelease extends control
      * @param  int    $executionID
      * @param  string $type
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc')
+    public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->session->set('releaseList', $this->app->getURI(true), 'project');
         $project   = $this->project->getById($projectID);
@@ -75,16 +78,24 @@ class projectrelease extends control
 
         $objectName = isset($project->name) ? $project->name : $execution->name;
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $this->view->title       = $objectName . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[]  = $this->lang->release->browse;
         $this->view->execution   = $execution;
         $this->view->project     = $project;
         $this->view->products    = $this->loadModel('product')->getProducts($projectID);
-        $this->view->releases    = $this->projectrelease->getList($projectID, $type, $orderBy);
+        $this->view->releases    = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
         $this->view->from        = $this->app->tab;
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->pager       = $pager;
         $this->display();
     }
 

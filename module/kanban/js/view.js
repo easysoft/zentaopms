@@ -343,6 +343,10 @@ function renderKanbanItem(item, $item)
     {
         renderProductplanItem(item, $item);
     }
+    else if(item.fromType == 'ticket')
+    {
+        renderTicketItem(item, $item);
+    }
     else
     {
         if(!$title.length)
@@ -743,6 +747,88 @@ function renderBuildItem(item, $item)
     {
         if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
         $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.builder]);
+    }
+}
+
+/**
+ * Render execution item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderTicketItem(item, $item)
+{
+    /* Output header information. */
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
+    var $header = $item.children('.header');
+    if(!$header.length) $header = $(
+    [
+        '<div class="header">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $titleBox = $header.children('.ticketTitle');
+    if(!$titleBox.length) $titleBox = $(
+    [
+        '<div class="ticketTitle">',
+        '</div>'
+    ].join('')).appendTo($header);
+
+    /* Print ticket name. */
+    var $title = $titleBox.children('.title');
+    var name   = item.title ? item.title : item.name;
+    if(!$title.length)
+    {
+        var icon = 'ticket';
+        if(privs.includes('viewTicket') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('ticket', 'view', 'ticketID=' + item.fromID));
+        if(!privs.includes('viewTicket') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
+    }
+    $title.attr('title', name);
+    $item.data('card', item);
+
+    var $info = $item.children('.info');
+    if(!$info.length) $info = $(
+    [
+        '<div class="info">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.execStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="execStatus label label-' + item.objectStatus + '">' + ticketLang.statusList[item.objectStatus] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="execStatus label label-deleted">' + ticketLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display deadline of execution. */
+    if(item.deadline != '0000-00-00')
+    {
+        var $date     = $info.children('.date');
+        var deadline  = $.zui.createDate(item.deadline);
+        var today     = new Date();
+        var labelType = deadline.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
+        if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+
+        $date.text($.zui.formatDate(deadline, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(deadline, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+    }
+
+    /* Display avatars of ticket assignedTo. */
+    var $user = $info.children('.user');
+    var user  = [item.assignedTo];
+    if(users[item.assignedTo])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.assignedTo]);
     }
 }
 
@@ -1399,8 +1485,8 @@ function initKanban($kanban)
         maxColHeight:          510,
         calcColHeight:         calcColHeight,
         fluidBoardWidth:       fluidBoard,
-        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth: defaultMinColWidth,
-        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth: defaultMaxColWidth,
+        minColWidth:           typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth,
+        maxColWidth:           typeof window.maxColWidth === 'number' ? window.maxColWidth : defaultMaxColWidth,
         cardHeight:            cardHeight,
         displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:      kanbanLang.createColumn,
@@ -1428,6 +1514,13 @@ function initKanban($kanban)
     {
         $.zui.ContextMenu.hide();
     });
+    var kanbanMinColWidth = typeof window.minColWidth === 'number' ? window.minColWidth : defaultMinColWidth;
+    if(kanbanMinColWidth < 190)
+    {
+        var miniColWidth = kanbanMinColWidth * 0.2;
+        $('.kanban-header-col>.title>span:not(.text)').hide();
+        $('.kanban-header-col>.title > span.text').css('max-width', miniColWidth + 'px');
+    }
 }
 
 /**
@@ -1498,7 +1591,8 @@ $(function()
         var importReleaseLink   = kanban.object.indexOf('releases') != -1 ? "<li><a class='iframe' data-toggle='modal'' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
         var importExecutionLink = kanban.object.indexOf('executions') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
         var importBuildLink     = kanban.object.indexOf('builds') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
-        var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
+        var importTicketLink    = kanban.object.indexOf('tickets') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importTicket', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importTicket + '</a></li>' : '';
+        var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink + importTicketLink + '</ul>';
         $('.import').parent().append(importSubmenu);
 
     });
@@ -1559,6 +1653,7 @@ $(function()
 
     distance    = 0;
     radiusWidth = 10;
+    initRegionTabs();
 
     $('.leftBtn').click(function()
     {

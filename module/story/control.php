@@ -416,6 +416,11 @@ class story extends control
             }
         }
 
+        /* Get the module's children id list. */
+        $moduleID     = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $moduleID     = isset($moduleOptionMenu[$moduleID]) ? $moduleID : 0;
+        $moduleIdList = $this->tree->getAllChildId($moduleID);
+
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -428,7 +433,7 @@ class story extends control
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'browse', "productID=$productID") : '';
         $this->view->products         = $products;
         $this->view->users            = $users;
-        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = str_replace('2030-01-01', $this->lang->story->undetermined, $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent|unexpired|noclosed'));
         $this->view->planID           = $planID;
@@ -450,7 +455,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->blockID          = $blockID;
-        $this->view->URS              = $storyType == 'story' ? $this->story->getRequirements($productID) : '';
+        $this->view->URS              = $storyType == 'story' ? $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement') : '';
         $this->view->needReview       = ($this->app->user->account == $product->PO or $objectID > 0 or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) ? "checked='checked'" : "";
         $this->view->type             = $storyType;
 
@@ -932,6 +937,7 @@ class story extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = array_keys($reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
+        $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', array_keys($reviewerList), 0, $productReviewers);
 
         $this->display();
@@ -1238,6 +1244,7 @@ class story extends control
         $this->view->needReview       = (($this->app->user->account == $this->view->product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($reviewer)) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
+        $this->view->lastReviewer     = $this->story->getLastReviewer($story->id);
 
         $this->display();
     }
@@ -1313,12 +1320,15 @@ class story extends control
         $releaseApp = $tab == 'execution' ? 'product' : $tab;
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
         $this->session->set('buildList',   $uri, $buildApp);
+        $this->app->loadLang('bug');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
         $version = empty($version) ? $story->version : $version;
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
+
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
         $story = $this->story->mergeReviewer($story, true);
 
@@ -1339,7 +1349,8 @@ class story extends control
         $from = $this->app->tab;
         if($from == 'execution')
         {
-            $this->execution->setMenu($param);
+            $result = $this->execution->setMenu($param);
+            if($result) return;
         }
         elseif($from == 'project')
         {
@@ -1681,11 +1692,12 @@ class story extends control
         $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
         $story->reviewer = array_keys($reviewerList);
 
-        $this->view->story      = $story;
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->reviewers  = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-        $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->story        = $story;
+        $this->view->actions      = $this->action->getList('story', $storyID);
+        $this->view->reviewers    = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->users        = $this->user->getPairs('noclosed|noletter');
+        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
     }
@@ -2586,6 +2598,20 @@ class story extends control
     }
 
     /**
+     * AJAX: get the parent story.
+     *
+     * @param  int    $productID
+     * @param  string $labelName
+     * @access public
+     * @return string
+     */
+    public function ajaxGetParentStory($productID, $labelName = '')
+    {
+        $stories = $this->story->getParentStoryPairs($productID);
+        return print(html::select($labelName, $stories, 0, 'class="form-control"'));
+    }
+
+    /**
      * The report page.
      *
      * @param  int    $productID
@@ -2858,5 +2884,24 @@ class story extends control
 
         return false;
 
+    }
+
+    /**
+     * AJAX: Get user requirements.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  int    $moduleID
+     * @param  string $requirementList
+     * @access public
+     * @return string
+     */
+    public function ajaxGetURS($productID, $branchID = 0, $moduleID = 0, $requirementList = 0)
+    {
+        $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
+
+        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+
+        return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
     }
 }

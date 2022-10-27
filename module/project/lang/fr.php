@@ -211,6 +211,10 @@ $lang->project->budgetOverrun          = "Le budget du projet a dépassé le bud
 $lang->project->disabledInputTip       = 'Please cancel %s first';
 $lang->project->linkRepoFailed         = 'Failed to link projects and code repositories.';
 $lang->project->unLinkProductTip       = 'Are you sure you want to unlink %s? (Does not affect linked requirements)';
+$lang->project->summary                = 'Total projects: <strong>%s</strong>.';
+$lang->project->allSummary             = 'Total projects: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>, Suspended: <strong>%s</strong>, Closed: <strong>%s</strong>.';
+$lang->project->checkedSummary         = 'Seleted: <strong>%total%</strong>.';
+$lang->project->checkedAllSummary      = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>, Suspended: <strong>%suspended%</strong>, Closed: <strong>%closed%</strong>.';
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';

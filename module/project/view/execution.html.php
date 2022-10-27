@@ -8,6 +8,10 @@
 <?php js::set('disabledTaskTip', sprintf($lang->project->disabledInputTip, $lang->edit . $lang->executionCommon));?>
 <?php js::set('defaultExecutionTip', $lang->edit . $lang->executionCommon);?>
 <?php js::set('disabledExecutionTip', sprintf($lang->project->disabledInputTip, $lang->programplan->stageCustom->task));?>
+<?php js::set('checkedSummary', $lang->execution->checkedExecSummary);?>
+<?php js::set('pageSummary', $lang->execution->pageExecSummary);?>
+<?php js::set('executionSummary', $lang->execution->executionSummary);?>
+<?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if($project->hasProduct):?>
@@ -64,25 +68,27 @@
   </div>
   <?php else:?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
-  <form class='main-table' id='executionForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
+  <form class='main-table' id='executionForm' method='post' data-nested='true' data-expand-nest-child='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
     <table class="table table-from table-fixed table-nested" id="executionList">
       <?php $vars = "status=$status&orderBy=%s";?>
       <thead>
         <tr>
           <th class='table-nest-title'>
-          <?php if($showToggleIcon):?>
-            <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
-          <?php endif;?>
-          <?php echo $lang->nameAB;?>
+            <div class="flex-between">
+              <?php echo $lang->nameAB;?>
+              <?php if($canBatchEdit and $showToggleIcon):?>
+                <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+              <?php endif;?>
+            </div>
           </th>
-          <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
-          <th class='c-hours'><?php echo $lang->project->progress;?></th>
+          <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
           <th class='c-date'><?php echo $lang->programplan->end;?></th>
-          <th class='c-hours'><?php echo $lang->task->estimateAB;?></th>
-          <th class='c-hours'><?php echo $lang->task->consumedAB;?></th>
-          <th class='c-hours'><?php echo $lang->task->leftAB;?> </th>
+          <th class='c-hours text-right'><?php echo $lang->task->estimateAB;?></th>
+          <th class='c-hours text-right'><?php echo $lang->task->consumedAB;?></th>
+          <th class='c-hours text-right'><?php echo $lang->task->leftAB;?> </th>
+          <th class='c-hours'><?php echo $lang->project->progress;?></th>
           <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
@@ -94,14 +100,12 @@
       </tbody>
     </table>
     <div class='table-footer'>
-    <?php $pager->show('right', 'pagerjs');?>
+      <div class="table-statistic"></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
 </div>
 <?php js::set('status', $status)?>
 <?php js::set('orderBy', $orderBy)?>
-<script>
-$("#<?php echo $status;?>Tab").addClass('btn-active-text');
-</script>
 <?php include '../../common/view/footer.html.php';?>

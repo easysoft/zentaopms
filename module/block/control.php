@@ -488,7 +488,8 @@ class block extends control
                 return true;
             }
 
-            $blocks     = json_decode($blocks, true);
+            $blocks = json_decode($blocks, true);
+            if(empty($blocks)) $blocks = array();
             $blockPairs = array('' => '') + $blocks;
 
             echo '<div class="form-group">';
@@ -1766,6 +1767,7 @@ class block extends control
         if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasIssue)     $hasViewPriv['issue']       = true;
         if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
         if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))                             $hasViewPriv['feedback']    = true;
+        if(common::hasPriv('ticket', 'view') and in_array($this->config->edition, array('max', 'biz')))                               $hasViewPriv['ticket']      = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1786,14 +1788,14 @@ class block extends control
                 $objectCountList += array('issue' => 'issueCount');
             }
 
-            $objectList      += array('feedback' => 'feedbacks');
-            $objectCountList += array('feedback' => 'feedbackCount');
+            $objectList      += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
         }
 
         if($this->config->edition == 'biz')
         {
-            $objectList      += array('feedback' => 'feedbacks');
-            $objectCountList += array('feedback' => 'feedbackCount');
+            $objectList      += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
         }
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
@@ -1809,6 +1811,7 @@ class block extends control
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF($objectType == 'issue' or $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
+                ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
@@ -1819,6 +1822,7 @@ class block extends control
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
                 ->beginIF($objectType == 'issue' or $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -1863,9 +1867,10 @@ class block extends control
             if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
 
-            if($objectType == 'feedback')
+            if($objectType == 'feedback' or $objectType == 'ticket')
             {
                 $this->app->loadLang('feedback');
+                $this->app->loadLang('ticket');
                 $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
                 $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
             }

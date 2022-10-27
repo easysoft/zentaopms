@@ -8,7 +8,7 @@ $config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
 $config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
@@ -135,6 +135,7 @@ $config->execution->all->search['fields']['realEnd']        = $lang->execution->
 $config->execution->all->search['fields']['closedBy']       = $lang->execution->closedBy;
 $config->execution->all->search['fields']['lastEditedDate'] = $lang->execution->lastEditedDate;
 $config->execution->all->search['fields']['closedDate']     = $lang->execution->closedDate;
+$config->execution->all->search['fields']['teamCount']      = $lang->execution->teamCount;
 
 $config->execution->all->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->all->search['params']['id']             = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -150,6 +151,7 @@ $config->execution->all->search['params']['realEnd']        = array('operator' =
 $config->execution->all->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['teamCount']      = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;
@@ -193,6 +195,12 @@ $config->execution->datatable->fieldList['name']['fixed']    = 'left';
 $config->execution->datatable->fieldList['name']['width']    = 'auto';
 $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
+
+$config->execution->datatable->fieldList['project']['title']    = 'project';
+$config->execution->datatable->fieldList['project']['fixed']    = 'no';
+$config->execution->datatable->fieldList['project']['width']    = '128';
+$config->execution->datatable->fieldList['project']['required'] = 'no';
+
 if(!isset($config->setCode) or $config->setCode == 1)
 {
     $config->execution->datatable->fieldList['code']['title']    = 'execCode';
@@ -201,26 +209,15 @@ if(!isset($config->setCode) or $config->setCode == 1)
     $config->execution->datatable->fieldList['code']['required'] = 'no';
 }
 
-$config->execution->datatable->fieldList['project']['title']    = 'project';
-$config->execution->datatable->fieldList['project']['fixed']    = 'no';
-$config->execution->datatable->fieldList['project']['width']    = '100';
-$config->execution->datatable->fieldList['project']['required'] = 'no';
-
-$config->execution->datatable->fieldList['PM']['title']    = 'owner';
-$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
-$config->execution->datatable->fieldList['PM']['width']    = '70';
-$config->execution->datatable->fieldList['PM']['required'] = 'no';
-
 $config->execution->datatable->fieldList['status']['title']    = 'execStatus';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
 $config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';
 
-$config->execution->datatable->fieldList['progress']['title']    = 'progress';
-$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
-$config->execution->datatable->fieldList['progress']['width']    = '70';
-$config->execution->datatable->fieldList['progress']['required'] = 'no';
-$config->execution->datatable->fieldList['progress']['sort']     = 'no';
+$config->execution->datatable->fieldList['PM']['title']    = 'owner';
+$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
+$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['required'] = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
@@ -266,6 +263,12 @@ $config->execution->datatable->fieldList['left']['fixed']    = 'no';
 $config->execution->datatable->fieldList['left']['width']    = '70';
 $config->execution->datatable->fieldList['left']['required'] = 'no';
 $config->execution->datatable->fieldList['left']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['progress']['title']    = 'progress';
+$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
+$config->execution->datatable->fieldList['progress']['width']    = '70';
+$config->execution->datatable->fieldList['progress']['required'] = 'no';
+$config->execution->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['burn']['title']    = 'burn';
 $config->execution->datatable->fieldList['burn']['fixed']    = 'no';

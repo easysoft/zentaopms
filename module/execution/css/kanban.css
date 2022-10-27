@@ -121,3 +121,4 @@
 #kanban .kanban-affixed .kanban-header-col .title.action-dbc {pointer-events: none;}
 #kanban .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .text {color: #fff;}
 #kanban .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .caret {display: none;}
+.kanban-card a[disabled] {color: #313c52;}

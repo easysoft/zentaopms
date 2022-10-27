@@ -212,6 +212,10 @@ $lang->project->budgetOverrun          = '项目的预算超出了父项目集�
 $lang->project->disabledInputTip       = '请先取消%s';
 $lang->project->linkRepoFailed         = '关联代码库失败';
 $lang->project->unLinkProductTip       = "您确认要取消与%s的关联关系吗？（不影响已关联的需求）";
+$lang->project->summary                = '本页共 <strong>%s</strong> 个项目。';
+$lang->project->allSummary             = '本页共 <strong>%s</strong> 个项目，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>，已挂起 <strong>%s</strong>，已关闭 <strong>%s</strong> 。';
+$lang->project->checkedSummary         = '选中 <strong>%total%</strong> 个项目。';
+$lang->project->checkedAllSummary      = '选中 <strong>%total%</strong> 个项目，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>，已挂起 <strong>%suspended%</strong>，已关闭 <strong>%closed%</strong> 。';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';

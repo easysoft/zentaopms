@@ -425,8 +425,9 @@ class testcase extends control
             setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
-            $useSession         = $this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false;
-            $response['locate'] = $useSession ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $useSession         = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
+            $locateLink         = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            $response['locate'] = $useSession ? $this->session->caseList : $locateLink;
             return $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -1568,14 +1569,18 @@ class testcase extends control
      * Confirm story changes.
      *
      * @param  int    $caseID
+     * @param  bool   $reload
      * @access public
      * @return void
      */
-    public function confirmStoryChange($caseID,$reload=true)
+    public function confirmStoryChange($caseID, $reload = true)
     {
         $case = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
-        $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+        if($case->story)
+        {
+            $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
+            $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
+        }
         if($reload) return print(js::reload('parent'));
     }
 

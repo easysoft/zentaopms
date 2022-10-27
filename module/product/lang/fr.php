@@ -72,6 +72,8 @@ $lang->product->changedStories        = 'Changées [S]';
 $lang->product->changedStoriesTitle   = 'Stories Modifiées';
 $lang->product->draftStories          = 'Brouillon [S]';
 $lang->product->draftStoriesTitle     = 'Stories en Analyse';
+$lang->product->reviewingStories      = "Reviewing [S]";
+$lang->product->reviewingStoriesTitle = "Reviewing Stories";
 $lang->product->closedStories         = 'Fermées [S]';
 $lang->product->closedStoriesTitle    = 'Stories Fermées';
 $lang->product->storyCompleteRate     = "{$lang->SRCommon} Completion rate";
@@ -213,8 +215,7 @@ $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
-$lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
-$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+
 $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
@@ -223,6 +224,8 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+$lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
+$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
 $lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']    = $lang->product->activeStory;

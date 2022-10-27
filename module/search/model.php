@@ -1071,7 +1071,7 @@ class searchModel extends model
             }
             elseif($objectType == 'todo')
             {
-                $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->fetchPairs('id', 'id');
+                $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->andWhere('account')->ne($this->app->user->account)->fetchPairs('id', 'id');
                 foreach($objectTodos as $todoID)
                 {
                     if(isset($objectIdList[$todoID]))

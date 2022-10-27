@@ -406,7 +406,7 @@ body {margin-bottom: 25px;}
 <script>
 $(function()
 {
-    // Update table summary text
+    /* Update table summary text. */
     var checkedSummary = '<?php echo $lang->execution->checkedSummary?>';
     var pageSummary    = '<?php echo $lang->execution->pageSummary?>';
     $('#executionTaskForm').table(
@@ -428,7 +428,7 @@ $(function()
             $rows.each(function()
             {
                 var $row = $(this);
-                if ($originTable)
+                if($originTable)
                 {
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }

@@ -575,7 +575,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif($actionName == 'linkstory' or $actionName == 'unlinkstory')
+            elseif(strpos('linkstory,unlinkstory,createchildrenstory', $actionName) !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -1280,7 +1280,7 @@ class actionModel extends model
             {
                 $objectType  = str_replace('imported', '', $action->action);
                 $objectTable = zget($this->config->objectTables, $objectType);
-                $objectName  = $objectType == 'productplan' ? 'title' : 'name';
+                $objectName  = ($objectType == 'productplan' or $objectType == 'ticket') ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
             elseif($action->objectType == 'module' and !empty($action->extra) and $action->action != 'deleted')

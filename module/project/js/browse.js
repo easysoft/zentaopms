@@ -25,7 +25,7 @@ $(function()
 
     $(":checkbox[name^='projectIdList']").on('click', function()
     {
-        updateStatistic()
+        updateStatistic();
     });
 
     $(".check-all").on('click', function()
@@ -38,7 +38,17 @@ $(function()
         {
             $(":checkbox[name^='projectIdList']").prop('checked', true);
         }
-        updateStatistic()
+        updateStatistic();
+    });
+
+    $('.main-table').on('click', 'tr', function(e)
+    {
+        if($.cookie('showProjectBatchEdit') == 1) updateStatistic();
+    });
+
+    $('#tableCustomBtn').on('click', function()
+    {
+        $('.contextmenu-show').removeClass('contextmenu-show').find('.contextmenu-menu').removeClass('open');
     });
 });
 
@@ -51,15 +61,15 @@ $(function()
 function setCheckbox()
 {
     $('#projectForm .checkbox-primary').hide();
+    $('.check-all, .sortable tr').removeClass('checked');
+    $(":checkbox[name^='projectIdList']").prop('checked', false);
     if($.cookie('showProjectBatchEdit') == 1)
     {
         $('#projectForm .checkbox-primary').show();
     }
     else
     {
-        $(":checkbox[name^='projectIdList']").prop('checked', false);
         $('.table-actions').hide();
-        $('.check-all').removeClass('checked');
     }
 }
 

@@ -1497,7 +1497,7 @@ class testtaskModel extends model
             if($id == 'status') $class .= $run->status;
             if($id == 'title')  $class .= ' text-left';
             if($id == 'id')     $class .= ' cell-id';
-            if($id == 'lastRunResult') $class .= " $run->lastRunResult";
+            if($id == 'lastRunResult') $class .= "result-testcase $run->lastRunResult";
             if($id == 'assignedTo' && $run->assignedTo == $account) $class .= ' red';
             if($id == 'actions') $class .= 'c-actions';
 
@@ -1594,8 +1594,7 @@ class testtaskModel extends model
                 break;
             case 'lastRunResult':
                 $lastRunResultText = $run->lastRunResult ? zget($this->lang->testcase->resultList, $run->lastRunResult, $run->lastRunResult) : $this->lang->testcase->unexecuted;
-                $class = 'result-' . $run->lastRunResult;
-                echo "<span class='$class'>" . $lastRunResultText . "</span>";
+                echo $lastRunResultText;
                 break;
             case 'story':
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);

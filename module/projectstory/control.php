@@ -71,11 +71,13 @@ class projectStory extends control
      * View a story.
      *
      * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function view($storyID)
+    public function view($storyID, $projectID = 0)
     {
+        if($projectID) $this->session->set('project', $projectID, 'project');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $story = $this->loadModel('story')->getByID($storyID);

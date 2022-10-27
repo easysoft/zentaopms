@@ -1259,7 +1259,6 @@ class taskModel extends model
             unset($task->parent);
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
-
             if(isset($oldTask->team))
             {
                 $users = $this->loadModel('user')->getPairs('noletter|noempty');
@@ -1352,7 +1351,7 @@ class taskModel extends model
             if($task->status == 'closed')          $task->assignedTo = 'closed';
             if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
 
-            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left))
+            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left) and $task->parent >= 0)
             {
                 dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
                 return false;
@@ -2281,6 +2280,12 @@ class taskModel extends model
             return false;
         }
 
+        if(empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->notempty, $this->lang->task->left);
+            return false;
+        }
+
         if(!empty($oldTask->team))
         {
             $this->manageTaskTeam($oldTask->mode, $oldTask->id, $task->status);
@@ -2613,7 +2618,7 @@ class taskModel extends model
             ->fi()
             ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed') )")->fi()
             ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -3767,7 +3772,7 @@ class taskModel extends model
                 echo round($task->progress, 2) . '%';
                 break;
             case 'deadline':
-                if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
+                if(substr($task->deadline, 0, 4) > 0) echo '<span>' . substr($task->deadline, 5, 6) . '</span>';
                 break;
             case 'openedBy':
                 echo zget($users, $task->openedBy);
@@ -4044,14 +4049,14 @@ class taskModel extends model
             }
         }
         $list .= '</td>';
-        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status} text-center'>" . $this->processStatus('task', $task) . '</td>';
-        $list .= '<td></td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= helper::isZeroDate($task->estStarted) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->estStarted . '</td>';
         $list .= helper::isZeroDate($task->deadline) ? '<td class="c-date"></td>' : '<td class="c-date">' . $task->deadline . '</td>';
-        $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
-        $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td class="hours text-right">' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td></td>';
         $list .= '<td></td>';
         $list .= '<td class="c-actions">';
         $list .= $this->buildOperateMenu($task, 'browse');

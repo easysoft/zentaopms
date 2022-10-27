@@ -208,7 +208,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
-                  <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
+                  <td class='confirm<?php echo $bug->confirmed;?>'><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->lblAssignedTo;?></th>

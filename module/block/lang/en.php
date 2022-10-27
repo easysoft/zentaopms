@@ -94,8 +94,8 @@ $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<span class='label-action'>%s</span>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Cannot place the block at left side.';
 $lang->block->cannotPlaceInRight = 'Cannot place the block at right side.';
 
@@ -349,6 +349,7 @@ $lang->block->availableBlocks->risk        = 'Risks';
 $lang->block->availableBlocks->issue       = 'Issues';
 $lang->block->availableBlocks->meeting     = 'Meetings';
 $lang->block->availableBlocks->feedback    = 'My Feedbacks';
+$lang->block->availableBlocks->ticket      = 'Ticket';
 
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['project']   = 'Project';
@@ -470,6 +471,7 @@ $lang->block->storyCount    = 'Stories';
 $lang->block->reviewCount   = 'Reviews';
 $lang->block->meetingCount  = 'Meetings';
 $lang->block->feedbackCount = 'Feedbacks';
+$lang->block->ticketCount   = 'Tickets';
 
 $lang->block->typeList = new stdclass();
 

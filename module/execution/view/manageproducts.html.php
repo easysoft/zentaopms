@@ -36,7 +36,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' checked id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control chosen' disabled='disabled'");?>
+              <?php if(isset($allBranches[$productID][$branchID])) echo html::select("branch[$i]", $allBranches[$productID], $branchID, "class='form-control picker-select' disabled='disabled'");?>
             </div>
           </div>
           <?php echo html::hidden("branch[$i]", $branchID);?>
@@ -60,7 +60,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control chosen'");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control picker-select'");?>
             </div>
           </div>
           <?php $i++;?>
@@ -84,7 +84,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control chosen'");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control picker-select'");?>
             </div>
           </div>
           <?php $i++;?>

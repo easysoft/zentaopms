@@ -12,7 +12,7 @@ $config->product->custom->batchEditFields = 'line,PO,QD,RD';
 if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',program';
 
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,program,line,name,activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,activeStories,changedStories,draftStories,closedStories,storyCompleteRate,plans,releases,bugs,unResolvedBugs,assignToNullBugs,closedBugs,bugFixedRate';
+$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
 
 $config->product->showBranchMethod = 'browse,project';
 

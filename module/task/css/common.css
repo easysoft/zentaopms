@@ -1,2 +1,27 @@
 .body-modal > .main {padding: 20px;}
 .body-modal > .main .table-form {border: 1px solid #ddd;}
+
+#modalTeam .modal-content {padding: 0 0 5px; min-height: 120px;}
+#modalTeam .modal-body {padding: 12px 13px 20px; max-height: 296px !important; overflow-y: scroll !important;}
+#modalTeam .modal-header {height: 44px; padding: 10px 20px; margin: 0; }
+#modalTeam .modal-header .modal-title {font-size: 13px; line-height: 24px;}
+#taskTeamEditor tr {padding: 8px 7px 8px 7px;}
+#taskTeamEditor td .chosen-single .chosen-search input,
+#taskTeamEditor td .chosen-single .chosen-search::before {top: 10px;}
+#taskTeamEditor tr td:first-child {width: 40px; position: relative;}
+.team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
+#taskTeamEditor tr td:first-child .icon { position: absolute; top: 42px; left: 10.5px; display: block; font-size: 8px; color: #9ea3bd;}
+#taskTeamEditor tr:last-child td:first-child .icon, #taskTeamEditor tr.member-last td:first-child .icon {display: none;}
+#taskTeamEditor tr .input-control {display: inline-block; width: 110px;}
+#taskTeamEditor tr .input-control + .input-control {margin-left: 12px; border-left: 1px solid #eee;}
+#modalTeam .modal-content input[type="text"]::input-placeholder{color: #c4c4c4;text-align: left;}
+#modalTeam .modal-content input[type="text"]::-webkit-input-placeholder{color: #c4c4c4;text-align: left;}
+#modalTeam .modal-content input[type="text"]::-moz-placeholder{color: #c4c4c4;text-align: left;}
+#modalTeam .modal-content input[type="text"]::-ms-input-placeholder{color: #c4c4c4;text-align: left;}
+#modalTeam #team_chosen span {line-height: 24px;}
+#modalTeam #team_chosen a.chosen-default > span {color: #c4c4c4;}
+
+#modalTeam .input-control input[type="text"]::input-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-webkit-input-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-moz-placeholder{text-align: center;}
+#modalTeam .input-control input[type="text"]::-ms-input-placeholder{text-align: center;}

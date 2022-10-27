@@ -124,7 +124,7 @@
                 <?php if(isset($project->delay)):?>
                 <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                 <?php else:?>
-                <span class="label label-success label-outline"><?php echo $this->processStatus('project', $project);?></span>
+                <span class="label status-<?php echo $project->status;?> label-outline"><?php echo $this->processStatus('project', $project);?></span>
                 <?php endif;?>
               </p>
             </div>

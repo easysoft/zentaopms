@@ -45,7 +45,7 @@ class task extends control
         parse_str($extra, $output);
 
         if(!empty($executionID)) $execution = $this->execution->getById($executionID);
-        $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
+        $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $execution   = $this->execution->getById($executionID);
 
@@ -289,7 +289,25 @@ class task extends control
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
-        $executions = $this->execution->getByProject($projectID, 'noclosed', 0, true);
+        $executions = array();
+        if(!empty($projectID))
+        {
+            $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
+            $project       = $this->loadModel('project')->getByID($projectID);
+            $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                foreach($executionList as $key => $val)
+                {
+                    $values = str_replace($replace, $project->name, $val);
+                    $executions[$key] = $values;
+                }
+            }
+            else
+            {
+                $executions = $executionList;
+            }
+        }
 
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $execution->id);
         /* Stories that can be used to create test tasks. */
@@ -733,7 +751,7 @@ class task extends control
         /* Get execution teams. */
         $executionIDList = array();
         foreach($tasks as $task) if(!in_array($task->execution, $executionIDList)) $executionIDList[] = $task->execution;
-        $executionTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($executionIDList)->fetchGroup('task', 'id');
+        $executionTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($executionIDList)->andWhere('type')->eq('execution')->fetchGroup('root', 'account');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -1187,7 +1205,7 @@ class task extends control
         {
             if(empty($orderBy))
             {
-                $orderBy = 'order_asc,id';
+                $orderBy = 'id_desc';
             }
             else
             {
@@ -1195,14 +1213,35 @@ class task extends control
                 $orderBy .= preg_replace('/(order_|date_)/', ',id_', $orderBy);
             }
         }
-        if(!$orderBy) $orderBy = 'date_asc';
 
-        $this->view->title   = $this->lang->task->record;
-        $this->view->task    = $task;
-        $this->view->from    = $from;
-        $this->view->orderBy = $orderBy;
-        $this->view->efforts = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
+        if(!$orderBy) $orderBy = 'id_desc';
+
+        /* Set the fold state of the current task. */
+        $referer = strtolower($_SERVER['HTTP_REFERER']);
+        if(strpos($referer, 'recordestimate') and $this->cookie->taskEffortFold !== false)
+        {
+            $taskEffortFold = $this->cookie->taskEffortFold;
+        }
+        else
+        {
+            $taskEffortFold = 0;
+            $currentAccount = $this->app->user->account;
+            if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
+            if(!empty($task->team))
+            {
+                $teamMember = array_column($task->team, 'account');
+                if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+            }
+        }
+
+        $this->view->title          = $this->lang->task->record;
+        $this->view->task           = $task;
+        $this->view->from           = $from;
+        $this->view->orderBy        = $orderBy;
+        $this->view->efforts        = $this->task->getTaskEstimate($taskID, '', '', $orderBy);
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->taskEffortFold = $taskEffortFold;
+
         $this->display();
     }
 
@@ -1827,6 +1866,16 @@ class task extends control
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
 
+        if(!empty($this->view->task->team))
+        {
+            $teamAccounts = array_column($this->view->task->team, 'account');
+            $teamMembers  = array();
+            foreach($this->view->members as $account => $name)
+            {
+                if(!$account or in_array($account, $teamAccounts)) $teamMembers[$account] = $name;
+            }
+            $this->view->teamMembers = $teamMembers;
+        }
         $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

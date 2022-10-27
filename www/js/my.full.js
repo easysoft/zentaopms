@@ -99,6 +99,12 @@
     }
 
     init();
+
+    /* Hide context menu when window is scroll. */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 }(jQuery));
 
 /**
@@ -828,9 +834,9 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     $parentTd = $form.find('td.has-child');
     if($parentTd.length == 0) return false;
 
-    var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
-    var nameClass   = objectType == 'product' ? 'c-title'      : 'c-name';
-    $form.find('th.' + nameClass).append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
+    var toggleClass = ['product', 'requirement'].includes(objectType) ? 'story-toggle' : 'task-toggle';
+    var nameClass   = ['product', 'productplan'].indexOf(objectType) !== -1 ? 'c-title' : 'c-name';
+    $form.find('th.' + nameClass).addClass('clearfix').append("<span id='toggleFold' class='collapsed'><i  class='icon icon-angle-double-right'></i></span>");
 
     var allUnfold = true;
     $parentTd.each(function()
@@ -843,7 +849,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         $(this).find('a.' + toggleClass).addClass('collapsed')
     })
 
-    $form.find('th.' + nameClass + ' #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
+    $form.find('th.' + nameClass + ' #toggleFold').toggleClass('collapsed', !allUnfold);
 
     $(document).on('click', '#toggleFold', function()
     {
@@ -858,7 +864,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
             newUnfoldID.push(dataID);
         })
 
-        $(this).html(collapsed ? foldAll : unfoldAll).toggleClass('collapsed', !collapsed);
+        $(this).toggleClass('collapsed', !collapsed);
         url = createLink('misc', 'ajaxSetUnfoldID', 'objectID=' + objectID + '&objectType=' + objectType + '&action=' + (collapsed ? 'add' : 'delete'));
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
     });
@@ -878,7 +884,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         setTimeout(function()
         {
             hasCollapsed = $table.find('td.has-child a.' + toggleClass + '.collapsed').length != 0;
-            $('#toggleFold').html(hasCollapsed ? unfoldAll : foldAll).toggleClass('collapsed', hasCollapsed);
+            $('#toggleFold').toggleClass('collapsed', hasCollapsed);
         }, 100);
 
         $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
@@ -1330,4 +1336,45 @@ function refreshBudgetUnit(data)
         $('#budget').removeAttr('disabled');
         $('#future').prop('checked', false);
     }
+}
+
+/**
+ * Handle radio logic of Kanban column width setting.
+ *
+ * @access public
+ * @return void
+ */
+function handleKanbanWidthAttr ()
+{
+    $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
+    $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
+    var fluidBoard = $("#mainContent input[name='fluidBoard'][checked='checked']").val() || 0;
+    var addAttrEle = fluidBoard == 0 ? '#colWidth' : '#minColWidth, #maxColWidth';
+    $(addAttrEle).closest('.width-radio-row').addClass('required');
+    $('#colWidth').attr('disabled',fluidBoard == 1);
+    $('#minColWidth, #maxColWidth').attr('disabled',fluidBoard == 0);
+    $("#minColWidth, #maxColWidth").on('input', function()
+    {
+        $('#minColWidthLabel, #maxColWidthLabel').remove();
+        $('#minColWidth, #maxColWidth').removeClass('has-error');
+    });
+    $(document).on('change', "#mainContent input[name='fluidBoard']", function(e)
+    {
+        $('#colWidth').attr('disabled', e.target.value == 1);
+        $('#minColWidth, #maxColWidth').attr('disabled', e.target.value == 0);
+        if(e.target.value == 0 && $('#minColWidthLabel, #maxColWidthLabel'))
+        {
+            $('#colWidth').closest('.width-radio-row').addClass('required');
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').removeClass('required');
+            $('#minColWidthLabel, #maxColWidthLabel').remove();
+            $('#minColWidth, #maxColWidth').removeClass('has-error');
+        }
+        else if(e.target.value == 1 && $('#colWidthLabel'))
+        {
+            $('#minColWidth, #maxColWidth').closest('.width-radio-row').addClass('required');
+            $('#colWidth').closest('.width-radio-row').removeClass('required');
+            $('#colWidthLabel').remove();
+            $('#colWidth').removeClass('has-error');
+        }
+    });
 }

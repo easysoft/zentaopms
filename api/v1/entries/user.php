@@ -62,6 +62,7 @@ class userEntry extends Entry
         $info->profile->role          = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
         $info->profile->admin         = strpos($this->app->company->admins, ",{$profile->account},") !== false;
         $info->profile->superReviewer = isset($this->config->story) ? strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',') : false;
+        $info->profile->view          = $this->app->user->view;
 
         if(!$fields) return $this->send(200, $info);
 

@@ -663,6 +663,10 @@ class personnelModel extends model
                 foreach($deletedAccounts as $account) $this->deleteProjectWhitelist($objectID, $account);
             }
         }
+
+        /* Update user view. */
+        $this->loadModel('user');
+        foreach($deletedAccounts as $account) $this->user->updateUserView($objectID, $objectType, array($account));
     }
 
     /**

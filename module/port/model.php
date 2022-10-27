@@ -185,6 +185,8 @@ class portModel extends model
      */
     public function export($model = '')
     {
+        ini_set('memory_limit', '-1');
+
         $fields = $this->post->exportFields;
 
         /* Init config fieldList */
@@ -459,7 +461,15 @@ class portModel extends model
         foreach($sysDataFields as $field)
         {
             $dataList[$field] = $this->loadModel($field)->getPairs();
-            if($field == 'user') $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+            if($field == 'user')
+            {
+                $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+                unset($dataList[$field]['']);
+                if(!in_array(strtolower($this->app->methodName) ,array('ajaxgettbody','ajaxgetoptions','showimport')))
+                {
+                    foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
+                }
+            }
         }
 
         return $dataList;
@@ -1388,8 +1398,11 @@ class portModel extends model
 
                 elseif($control == 'hidden')   $html .= html::hidden("$name", $selected);
 
-                elseif($control == 'textarea') $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
-
+                elseif($control == 'textarea')
+                {
+                    if($model == 'bug' and $field == 'steps') $selected = str_replace("\n\n\n\n\n\n", '', $selected);
+                    $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
+                }
                 elseif($field == 'stepDesc' or $field == 'stepExpect')
                 {
                     $stepDesc = $this->process4Testcase($field, $tmpList, $row);

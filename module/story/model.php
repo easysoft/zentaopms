@@ -205,7 +205,7 @@ class storyModel extends model
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
-            dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
+            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedBy);
             return false;
         }
 
@@ -226,7 +226,7 @@ class storyModel extends model
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket')
             ->get();
 
         /* Check repeat story. */
@@ -384,7 +384,7 @@ class storyModel extends model
                     }
                 }
             }
-            $this->setStage($storyID);
+            if(!defined('TUTORIAL')) $this->setStage($storyID);
             if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
 
             /* Callback the callable method to process the related data for object that is transfered to story. */
@@ -4675,12 +4675,12 @@ class storyModel extends model
 
         if($tab == 'project' and $this->session->multiple)
         {
-            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
+            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
             $canView   = common::hasPriv('projectstory', 'view');
         }
         elseif($tab == 'execution')
         {
-            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id");
+            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
             $canView   = common::hasPriv('execution', 'storyView');
         }
 
@@ -4838,8 +4838,8 @@ class storyModel extends model
                 if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') echo "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
-                if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
+                echo $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
+                if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
                 break;
             case 'plan':
                 echo isset($story->planTitle) ? $story->planTitle : '';
@@ -6072,5 +6072,26 @@ class storyModel extends model
         $product   = $this->loadModel('product')->getByID($productID);
         $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '', '');
         return $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+    }
+
+    /**
+     * Get the last reviewer.
+     *
+     * @param  int $storyID
+     * @access public
+     * @return string
+     */
+    public function getLastReviewer($storyID)
+    {
+        $lastReviewer = $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t1.objectID')->eq($storyID)
+            ->andWhere('t2.field')->in('reviewer,reviewers')
+            ->andWhere('t2.new')->ne('')
+            ->orderBy('t1.id_desc')
+            ->fetch('new');
+
+        return $lastReviewer;
     }
 }

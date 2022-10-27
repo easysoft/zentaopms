@@ -892,6 +892,31 @@ class myModel extends model
     }
 
     /**
+     * Build ticket search form.
+     *
+     * @param  string    $queryID
+     * @param  string    $actionURL
+     * @access public
+     * @return mixed
+     */
+    public function buildTicketSearchForm($queryID, $actionURL)
+    {
+        $this->loadModel('ticket');
+        $this->app->loadConfig('ticket');
+
+        $this->config->ticket->search['module'] = 'workTicket';
+        $this->config->ticket->search['queryID']   = $queryID;
+        $this->config->ticket->search['actionURL'] = $actionURL;
+        $this->config->ticket->search['params']['product']['values'] = array('' => '') + $this->loadModel('feedback')->getGrantProducts();
+        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs();
+        $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+        $productIDlist = array_keys($grantProducts);
+        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist);
+
+        $this->loadModel('search')->setSearchParams($this->config->ticket->search);
+    }
+
+    /**
      * Get requirements by search.
      *
      * @param  int    $queryID

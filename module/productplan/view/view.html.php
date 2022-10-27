@@ -20,6 +20,9 @@
 <?php js::set('storyPageID', $storyPager->pageID);?>
 <?php js::set('storyRecPerPage', $storyPager->recPerPage);?>
 <?php js::set('storyRecTotal', $storyPager->recTotal);?>
+<?php js::set('storySummary', $summary);?>
+<?php js::set('storyCommon', $lang->SRCommon);?>
+<?php js::set('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->product");?>
@@ -100,7 +103,7 @@
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride="<?php echo $this->app->getViewType() == 'xhtml' ? '' : 'table' ?>" method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
+        <form class='main-table table-story' data-ride="" method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='storyList'>
             <?php
             $canBatchUnlink       = common::hasPriv('productPlan', 'batchUnlinkStory');
@@ -158,7 +161,7 @@
               $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
               $totalEstimate += $story->estimate;
               ?>
-              <tr data-id='<?php echo $story->id;?>'>
+              <tr data-id='<?php echo $story->id;?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
                 <?php if($this->app->getViewType() == 'xhtml'):?>
                 <td class='c-id text-left'>
                 <?php printf('%03d', $story->id);?>

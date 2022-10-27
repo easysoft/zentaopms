@@ -11,13 +11,14 @@ $(document).on('click', '.task-toggle', function(e)
 
 $(function()
 {
+    if(viewType != 'kanban') toggleFold('#productplanForm', unfoldPlans, productID, 'productplan');
     $('#productplanList tbody tr').each(function()
     {
         var $content = $(this).find('td.content');
         var content  = $content.find('div').html();
         if(content.indexOf('<br') >= 0 || content.indexOf('<img') >= 0)
         {
-            $content.append("<a href='###' class='more'><i class='icon icon-chevron-double-down'></i></a>");
+            $content.append("<a href='###' class='more'><i class='icon icon-angle-right'></i></a>");
         }
     });
 
@@ -99,6 +100,27 @@ $(function()
     {
         $.zui.ContextMenu.hide();
     });
+
+    $('.execution-popover').on('click', function(e)
+    {
+        e.stopPropagation();
+        var showPopover = $(this).next().css('display') == 'block';
+        $('.popover.right').hide();
+        if(!showPopover) $(this).next().show();
+    });
+
+    $('.execution-link').on('click', function()
+    {
+        $('.popover.right').hide();
+    });
+
+    /* Hide popover tip. */
+    $(document).on('mousedown', function(e)
+    {
+        var $target = $(e.target);
+        var $toggle = $target.closest('.popover, .execution-popover');
+        if(!$toggle.length) $('.popover.right').hide();
+    });
 });
 
 /* Define menu creators. */
@@ -162,14 +184,14 @@ $(document).on('click', 'td.content .more', function(e)
         $toggle.removeClass('open');
         $toggle.closest('.content').find('div').css('height', '25px');
         $toggle.css('padding-top', 0);
-        $toggle.find('i').removeClass('icon-chevron-double-up').addClass('icon-chevron-double-down');
+        $toggle.find('i').removeClass('rotate-down');
     }
     else
     {
         $toggle.addClass('open');
         $toggle.closest('.content').find('div').css('height', 'auto');
         $toggle.css('padding-top', ($toggle.closest('.content').find('div').height() - $toggle.height()) / 2);
-        $toggle.find('i').removeClass('icon-chevron-double-down').addClass('icon-chevron-double-up');
+        $toggle.find('i').addClass('rotate-down');
     }
 });
 

@@ -290,7 +290,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
               <button type='button' class='close' data-dismiss='modal'>
                 <i class="icon icon-close"></i>
               </button>
-              <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
+              <h4 class='modal-title'><?php echo $lang->task->teamSetting;?></h4>
             </div>
             <div class='modal-body'>
               <table class="table table-form" id='taskTeamEditor'>
@@ -299,7 +299,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
+                    <td colspan='4' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>

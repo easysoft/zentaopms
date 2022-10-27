@@ -94,8 +94,8 @@ $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<span class='label-action'>%s</span>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<span class='label-action'>%s</span>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
 
@@ -300,7 +300,7 @@ $lang->block->default['full']['my']['7']['block']  = 'recentproject';
 $lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
 
-$lang->block->default['full']['my']['8']['title']  = '待处理';
+$lang->block->default['full']['my']['8']['title']  = '我的待处理';
 $lang->block->default['full']['my']['8']['block']  = 'assigntome';
 $lang->block->default['full']['my']['8']['source'] = '';
 $lang->block->default['full']['my']['8']['grid']   = 8;
@@ -349,6 +349,7 @@ $lang->block->availableBlocks->risk        = '风险';
 $lang->block->availableBlocks->issue       = '问题';
 $lang->block->availableBlocks->meeting     = '会议';
 $lang->block->availableBlocks->feedback    = '反馈';
+$lang->block->availableBlocks->ticket      = '工单';
 
 $lang->block->moduleList['product']   = $lang->productCommon;
 $lang->block->moduleList['project']   = '项目';
@@ -470,6 +471,7 @@ $lang->block->storyCount    = '需求数';
 $lang->block->reviewCount   = '审批数';
 $lang->block->meetingCount  = '会议数';
 $lang->block->feedbackCount = '反馈数';
+$lang->block->ticketCount   = '工单数';
 
 $lang->block->typeList = new stdclass();
 

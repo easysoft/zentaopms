@@ -157,7 +157,7 @@ js::set('priv',
       </div>
     </div>
     <?php
-    $width = common::checkNotCN() ? '600px' : '470px';
+    $width = common::checkNotCN() ? '600px' : '520px';
     echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     if(common::hasPriv('execution', 'setKanban')) echo html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link text-left' data-width='$width'");

@@ -84,6 +84,7 @@ class project extends control
                 $project->status     = $this->processStatus('project', $project);
                 $project->model      = zget($projectLang->modelList, $project->model);
                 $project->budget     = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
+                $project->budget     = $project->budget != 0 ? $project->budget . zget($projectLang->unitList, $project->budgetUnit) : $this->lang->project->future;
                 $project->parent     = $project->parentName;
                 $project->hasProduct = zget($projectLang->projectTypeList, $project->hasProduct);
 
@@ -1086,6 +1087,7 @@ class project extends control
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
         $this->view->project        = $project;
+        $this->view->projects       = $projects;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
@@ -1219,6 +1221,7 @@ class project extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
         $bugs = $this->bug->processBuildForBugs($bugs);
+        $bugs = $this->bug->checkDelayedBugs($bugs);
 
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();

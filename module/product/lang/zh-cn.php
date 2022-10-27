@@ -72,6 +72,8 @@ $lang->product->changedStories        = "已变更{$lang->SRCommon}";
 $lang->product->changedStoriesTitle   = "已变更{$lang->SRCommon}";
 $lang->product->draftStories          = "草稿{$lang->SRCommon}";
 $lang->product->draftStoriesTitle     = "草稿{$lang->SRCommon}";
+$lang->product->reviewingStories      = "评审中{$lang->SRCommon}";
+$lang->product->reviewingStoriesTitle = "评审中{$lang->SRCommon}";
 $lang->product->closedStories         = "已关闭{$lang->SRCommon}";
 $lang->product->closedStoriesTitle    = "已关闭{$lang->SRCommon}";
 $lang->product->storyCompleteRate     = "{$lang->SRCommon}完成率";
@@ -214,7 +216,6 @@ $lang->product->featureBar['browse']['allstory']     = '全部';
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
-$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
@@ -223,6 +224,8 @@ $lang->product->featureBar['all']['all']      = '全部' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+
+$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
 $lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']    = $lang->product->activeStory;

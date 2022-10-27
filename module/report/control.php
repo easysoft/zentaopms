@@ -371,15 +371,49 @@ class report extends control
 
         if(empty($dept) and empty($userID)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
+        $contributionGroups = array();
+        $maxCount           = 0;
+        $contributions      = 0;
+        foreach($years as $yearValue)
+        {
+            $contributionList  = $this->report->getUserYearContributions($accounts, $yearValue);
+            $contributionCount = 0;
+            $max               = 0;
+            $radarData         = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
+            foreach($contributionList as $objectType => $objectContributions)
+            {
+                $sum = array_sum($objectContributions);
+                if($sum > $max) $max = $sum;
+                $contributionCount += $sum;
+
+                foreach($objectContributions as $actionName => $count)
+                {
+                    $radarTypes = isset($this->config->report->annualData['radar'][$objectType][$actionName]) ? $this->config->report->annualData['radar'][$objectType][$actionName] : array('other');
+                    foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
+                }
+                $contributionGroups[$yearValue] = $radarData;
+            }
+
+            if($yearValue == $year)
+            {
+                $maxCount      = $max;
+                $contributions = $contributionCount;
+            }
+        }
+
         $this->view->title  = sprintf($this->lang->report->annualData->title, ($userID ? zget($users, $userID, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : $depts[''])), $year);
-        $this->view->data   = $data;
-        $this->view->year   = $year;
-        $this->view->users  = $users;
-        $this->view->depts  = $depts;
-        $this->view->years  = $years;
-        $this->view->dept   = $dept;
-        $this->view->userID = $userID;
-        $this->view->months = $this->report->getYearMonths($year);
+        $this->view->data               = $data;
+        $this->view->year               = $year;
+        $this->view->users              = $users;
+        $this->view->depts              = $depts;
+        $this->view->years              = $years;
+        $this->view->dept               = $dept;
+        $this->view->userID             = $userID;
+        $this->view->months             = $this->report->getYearMonths($year);
+        $this->view->contributionGroups = $contributionGroups;
+        $this->view->radarData          = $contributionGroups[$year];
+        $this->view->maxCount           = $maxCount;
+        $this->view->contributions      = $contributions;
 
         $this->display();
     }

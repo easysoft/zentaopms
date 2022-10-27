@@ -16,3 +16,8 @@ $(document).ready(function()
         }
     });
 });
+
+$(function()
+{
+    parent.$(' #triggerModal .modal-dialog').css('width', '800px');
+});

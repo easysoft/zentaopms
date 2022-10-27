@@ -78,7 +78,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->join('os', ',')
             ->join('browser', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane,ticket')
             ->get();
 
         if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
@@ -752,7 +752,7 @@ class bugModel extends model
             /* Link bug to build and release. */
             if($bug->resolution == 'fixed' and !empty($bug->resolvedBuild) and $oldBug->resolvedBuild != $bug->resolvedBuild)
             {
-                if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, (int)$bugID);
+                if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, (int)$bugID);
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
@@ -2211,6 +2211,7 @@ class bugModel extends model
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getById($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
 
+        if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
@@ -3294,6 +3295,9 @@ class bugModel extends model
                     $class .= ' text-ellipsis';
                     $title  = "title='" . $browser . "'";
                     break;
+                case 'deadline':
+                    $class .= ' text-center';
+                    break;
             }
 
             if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
@@ -3437,7 +3441,7 @@ class bugModel extends model
                 echo helper::isZeroDate($bug->assignedDate) ? '' : substr($bug->assignedDate, 5, 11);
                 break;
             case 'deadline':
-                echo helper::isZeroDate($bug->deadline) ? '' : substr($bug->deadline, 5, 11);
+                echo helper::isZeroDate($bug->deadline) ? '' : '<span>' . substr($bug->deadline, 5, 11) . '</span>';
                 break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);

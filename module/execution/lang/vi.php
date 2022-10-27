@@ -54,6 +54,7 @@ $lang->execution->RD              = 'Quản lý phát hành';
 $lang->execution->release         = 'Phát hành';
 $lang->execution->acl             = 'Quyền truy cập';
 $lang->execution->teamname        = 'Tên đội nhóm';
+$lang->execution->teamCount       = 'số người';
 $lang->execution->order           = "Đánh giá {$lang->executionCommon}";
 $lang->execution->orderAB         = "Đánh giá";
 $lang->execution->products        = "Liên kết {$lang->productCommon}";

@@ -122,14 +122,14 @@ class productplanModel extends model
 
             foreach($planIdList as $planID)
             {
-                $planProjects[$planID] = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($product)
                     ->andWhere('t2.deleted')->eq(0)
                     ->andWhere('t1.plan')->like(",$planID,")
                     ->andWhere('t2.type')->in('sprint,stage,kanban')
                     ->orderBy('project_desc')
-                    ->fetch('project');
+                    ->fetchAll('project');
             }
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
@@ -159,12 +159,11 @@ class productplanModel extends model
                         ->andWhere('deleted')->eq(0)
                         ->fetchPairs('id', 'estimate');
                 }
-                $plan->stories   = count($storyPairs);
-                $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-                $plan->hour      = array_sum($storyPairs);
-                $plan->project   = zget($planProjects, $plan->id, '');
-                $plan->projectID = $plan->project;
-                $plan->expired   = $plan->end < $date ? true : false;
+                $plan->stories  = count($storyPairs);
+                $plan->bugs     = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
+                $plan->hour     = array_sum($storyPairs);
+                $plan->projects = zget($planProjects, $plan->id, '');
+                $plan->expired  = $plan->end < $date ? true : false;
 
                 /* Sync linked stories. */
                 if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
@@ -1176,7 +1175,7 @@ class productplanModel extends model
                 $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
             }
 
-            if(($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
+            if($type == 'browse' and ($canStart or $canFinish or $canClose or $canCreateExec) and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild or $canDelete))
             {
                 $menu .= "<div class='dividing-line'></div>";
             }
@@ -1204,7 +1203,7 @@ class productplanModel extends model
 
         $menu .= $this->buildMenu($this->app->rawModule, 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
 
-        if(($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
+        if($type == 'browse' and ($canLinkStory or $canLinkBug or $canEdit or $canCreateChild) and $canDelete)
         {
             $menu .= "<div class='dividing-line'></div>";
         }

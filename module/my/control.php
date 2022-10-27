@@ -108,6 +108,7 @@ class my extends control
         $this->loadModel('bug');
         $this->loadModel('testcase');
         $this->loadModel('testtask');
+        $this->loadModel('ticket');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -154,6 +155,7 @@ class my extends control
         $ncCount      = 0;
         $qaCount      = 0;
         $meetingCount = 0;
+        $ticketCount  = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
 
         $feedbackCount = 0;
@@ -192,6 +194,9 @@ class my extends control
             /* Get the number of meetings assigned to me. */
             $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $meetingCount = $pager->recTotal;
+
+            $ticketList  = $this->ticket->getList('assignedtome', 'id_desc', $pager);
+            $ticketCount = $pager->recTotal;
         }
 
 echo <<<EOF
@@ -216,6 +221,7 @@ if(isMax !== 0)
     var riskCount    = $riskCount;
     var qaCount      = $qaCount;
     var meetingCount = $meetingCount;
+    var ticketCount  = $ticketCount;
 }
 </script>
 EOF;
@@ -322,7 +328,7 @@ EOF;
     {
         $this->loadModel('story');
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -387,7 +393,7 @@ EOF;
     {
         /* Save session. */
         $this->loadModel('story');
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1031,7 +1037,8 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
-        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');
+        $status = $this->app->rawMethod == 'contribute' ? '' : 'active';
+        $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
 
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
@@ -1087,6 +1094,9 @@ EOF;
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
+        $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram('', 'all', true);
+        $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $this->view->rooms      = array('' => '') + $this->loadModel('meetingroom')->getPairs();
 
         $this->display();
     }
@@ -1180,6 +1190,50 @@ EOF;
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, $viewType = 'feedback', 0);
+        $this->display();
+    }
+
+    /**
+     * My ticket.
+     *
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('ticket');
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+
+        $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        if($browseType != 'bysearch')
+        {
+            $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+        }
+        else
+        {
+            $tickets = $this->ticket->getBySearch($queryID, $orderBy, $pager);
+        }
+
+        $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildTicketSearchForm($queryID, $actionURL);
+
+        $this->view->title      = $this->lang->ticket->browse;
+        $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
+        $this->view->tickets    = $tickets;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 

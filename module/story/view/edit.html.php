@@ -23,6 +23,7 @@
 <?php js::set('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyStatus', $story->status);?>
+<?php js::set('lastReviewer', explode(',', $lastReviewer))?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
