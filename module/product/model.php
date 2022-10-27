@@ -605,7 +605,7 @@ class productModel extends model
      * 
      * @param  array  $appendIDList 
      * @access public
-     * @return void
+     * @return array
      */
     public function getProductsGroupByProgram($appendIDList = array())
     {

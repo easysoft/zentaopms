@@ -2135,6 +2135,8 @@ class project extends control
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
+            $oldProducts = $this->product->getProducts($projectID);
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -2144,7 +2146,6 @@ class project extends control
                 if($executionID) $this->execution->updateProducts($executionID);
             }
 
-            $oldProducts    = $this->product->getProducts($projectID);
             $newProducts    = $this->product->getProducts($projectID);
             $oldProductIDs  = array_keys($oldProducts);
             $newProductIDs  = array_keys($newProducts);
