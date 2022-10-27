@@ -163,7 +163,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 .status-draft {color: #8166EE;}
 .status-clarify {color: #8166EE;}
-.status-testtask.status-blocked {left: 0;}
+.status-blocked {left: 0;}
 .status-testcase.status-wait {color: #18A6FD;}
 .status-done .label-dot {background-color: #0DBB7D;}
 .status-reviewing, .status-noreview {color: #18A6FD;}
