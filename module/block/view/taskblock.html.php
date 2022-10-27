@@ -48,7 +48,7 @@
         $class    = $task->executionType == 'kanban' ? "class='iframe' data-toggle='modal'" : '';
         ?>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', $onlybody, $task->project), $task->name, null, "$class data-width='80%'")?></td>
-        <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
+        <td class='c-pri <?php if($longBlock) echo "c-pri-long"?>'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri)?></span></td>
         <?php $status = $this->processStatus('task', $task);?>
         <td class='c-status' title='<?php echo $status;?>'>
           <span class="status-task status-<?php echo $task->status?>"><?php echo $status;?></span>
