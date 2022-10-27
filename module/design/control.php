@@ -171,6 +171,7 @@ class design extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList);
         $this->view->productID  = $productID;
+        $this->view->projectID  = $projectID;
         $this->view->type       = $type;
         $this->view->project    = $this->loadModel('project')->getByID($projectID);
 
