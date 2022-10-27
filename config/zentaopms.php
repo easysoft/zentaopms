@@ -390,7 +390,9 @@ $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
 
-$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->disabledFeatures = '';
+$config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
