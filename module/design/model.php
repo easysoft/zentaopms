@@ -317,7 +317,7 @@ class designModel extends model
                 ->where('deleted')->eq(0)
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
-                ->andWhere('product')->eq($productID)
+                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -376,11 +376,11 @@ class designModel extends model
 
         $designQuery = $this->session->designQuery;
 
-        $designs =  $this->dao->select('*')->from(TABLE_DESIGN)
+        $designs = $this->dao->select('*')->from(TABLE_DESIGN)
             ->where($designQuery)
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -424,9 +424,17 @@ class designModel extends model
 
         if($this->app->rawMethod == 'browse') $this->lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $this->lang->searchAB . '</a>');
 
-        if(empty($products) || !$productID) return '';
-        $currentProduct = $this->loadModel('product')->getById($productID);
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        if(empty($products)) return '';
+        if($productID)
+        {
+            $currentProduct = $this->loadModel('product')->getById($productID);
+            setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        }
+        else
+        {
+            $currentProduct = new stdclass();
+            $currentProduct->name = $this->lang->product->all;
+        }
 
         $output = '';
         if(!empty($products))
