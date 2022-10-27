@@ -502,11 +502,11 @@ class product extends control
         if($product->program and $this->config->systemMode == 'new') $lines = array('') + $this->product->getLinePairs($product->program);
 
         /* Get programs. */
-        $programs = $this->loadModel('program')->getTopPairs();
+        $programs = $this->loadModel('program')->getTopPairs('', 'noclosed');
         if(!isset($programs[$product->program]) and $product->program)
         {
-            $program  = $this->program->getByID($product->program);
-            $programs = array($product->program => $program->name);
+            $program   = $this->program->getByID($product->program);
+            $programs += array($product->program => $program->name);
         }
 
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
