@@ -171,7 +171,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures')")->fetchAll();
+                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -185,6 +185,7 @@ class router extends baseRouter
         $score            = '0';
         $projectKey       = ITERATION_KEY;
         $disabledFeatures = '';
+        $closedFeatures   = '';
 
         foreach($commonSettings as $setting)
         {
@@ -195,6 +196,7 @@ class router extends baseRouter
             if($setting->key == 'mode' and $setting->section == 'global')        $mode             = $setting->value;
             if($setting->key == 'scoreStatus' and $setting->section == 'global') $score            = $setting->value;
             if($setting->key == 'disabledFeatures')                              $disabledFeatures = $setting->value;
+            if($setting->key == 'closedFeatures')                                $closedFeatures   = $setting->value;
         }
 
         /* Lite Version is compatible with classic modes */
@@ -203,7 +205,7 @@ class router extends baseRouter
         /* Record system mode. */
         $config->systemMode = $mode;
 
-        $config->disabledFeatures = $disabledFeatures;
+        $config->disabledFeatures = $disabledFeatures . $closedFeatures;
 
         /* Record system score.*/
         $config->systemScore = $score;
