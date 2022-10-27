@@ -1646,7 +1646,7 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
-        if(!$project->division)
+        if(!empty($project) and !$project->division)
         {
             $products = $this->loadModel('product')->getProducts($projectID);
             $branches = $this->project->getBranchesByProject($projectID);
@@ -1775,6 +1775,7 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->project             = $project;
+        $this->view->division            = !empty($project) ? $project->division : 1;
         $this->display();
     }
 

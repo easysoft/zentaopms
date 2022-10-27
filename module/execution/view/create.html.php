@@ -48,7 +48,7 @@
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
-<?php js::set('model', $project->model);?>
+<?php js::set('model', isset($project->model) ? $project->model : '');?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -138,7 +138,7 @@
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
-              <?php $class = $project->division ? '' : 'disabled';?>
+              <?php $class = $division ? '' : 'disabled';?>
               <?php foreach($products as $product):?>
               <?php $hasBranch = ($product->type != 'normal' and isset($branchGroups[$product->id]));?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
@@ -153,7 +153,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
-              <?php if($project->division):?>
+              <?php if($division):?>
               <div class='col-sm-4'>
                 <div class="input-group">
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
