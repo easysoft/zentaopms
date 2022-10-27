@@ -194,7 +194,7 @@ class repoTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return !empty($objects) ? array_keys($objects) : 'empty';
     }
 
     public function getGitRevisionNameTest($revision, $commit)
@@ -386,13 +386,17 @@ class repoTest
         return $objects;
     }
 
-    public function addLinkTest($matches, $method)
+    public function addLinkTest($comment, $type)
     {
-        $objects = $this->objectModel->addLink($matches, $method);
+        $rules     = $this->objectModel->processRules();
+        $objectReg = '/' . $rules[$type . 'Reg'] . '/i';
+        if(preg_match_all($objectReg, $comment, $result))
+        {
+            $links = $this->objectModel->addLink($result, $type);
+            foreach($links as $link) return $link;
+        }
 
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return 'empty';
     }
 
     public function parseCommentTest($comment)
