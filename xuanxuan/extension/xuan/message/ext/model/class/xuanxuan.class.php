@@ -95,10 +95,23 @@ class xuanxuanMessage extends messageModel
                 $url    = $server . helper::createLink($objectType == 'kanbancard' ? 'kanban' : $objectType, 'view', "id=$dataID", 'html');
 
                 $target = '';
-                if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
-                if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                if($objectType == 'feedback')
+                {
+                    $feedback   = $this->loadModel('feedback')->getByID($objectID);
+                    $senderUser = $this->feedback->getToAndCcList($feedback);
+                    foreach ($senderUser as $user)
+                    {
+                        $target .= ',' . $user;
+                    }
+                }
+                else
+                {
+                    if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
+                    if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                }
                 if(($objectType == 'mr' or $objectType == 'kanbancard') and !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
+                $target = explode(',', $target);
                 $target = $this->dao->select('id')->from(TABLE_USER)
                     ->where('account')->in($target)
                     ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
