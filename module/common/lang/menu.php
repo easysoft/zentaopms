@@ -24,6 +24,7 @@ $hasProductTrack   = strpos(",$config->disabledFeatures,", ',productTrack,')   =
 $hasProductRoadmap = strpos(",$config->disabledFeatures,", ',productRoadmap,') === false;
 $hasScrumAuditplan = strpos(",$config->disabledFeatures,", ',scrumAuditplan,') === false;
 $hasScrumProcess   = strpos(",$config->disabledFeatures,", ',scrumProcess,')   === false;
+$hasScrumRepo      = strpos(",$config->disabledFeatures,", ',scrumRepo,')      === false;
 
 if(defined('TUTORIAL'))
 {
@@ -111,6 +112,7 @@ $lang->my->menu->work['menuOrder'][20] = 'bug';
 $lang->my->menu->work['menuOrder'][25] = 'testcase';
 $lang->my->menu->work['menuOrder'][30] = 'testtask';
 $lang->my->menu->work['menuOrder'][35] = 'audit';
+
 if(!$config->URAndSR) unset($lang->my->menu->work['subMenu']->requirement, $lang->my->menu->work['menuOrder'][10]);
 
 $lang->my->menu->contribute['subMenu']              = new stdclass();
@@ -192,10 +194,6 @@ $lang->product->menuOrder[55] = 'settings';
 $lang->product->menuOrder[60] = 'create';
 $lang->product->menuOrder[65] = 'all';
 
-if(!$hasProductRoadmap) unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
-if(!$config->URAndSR)   unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
-if(!$hasProductTrack)   unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
-
 $lang->product->menu->doc['subMenu'] = new stdclass();
 
 $lang->product->menu->settings['subMenu'] = new stdclass();
@@ -245,6 +243,7 @@ $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
 $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'settings';
+
 
 $lang->scrum->menu->doc['subMenu'] = new stdclass();
 
@@ -784,3 +783,8 @@ $lang->navGroup->index   = 'index';
 $lang->navGroup->tree    = 'tree';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
+
+if(!$hasProductRoadmap) unset($lang->product->menu->roadmap,     $lang->product->menuOrder[30]);
+if(!$config->URAndSR)   unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
+if(!$hasProductTrack)   unset($lang->product->menu->track,       $lang->product->menuOrder[40]);
+if(!$hasScrumRepo)      unset($lang->scrum->menu->devops,        $lang->scrum->menuOrder[25]);
