@@ -205,7 +205,7 @@ class router extends baseRouter
         /* Record system mode. */
         $config->systemMode = $mode;
 
-        $config->disabledFeatures = $disabledFeatures . $closedFeatures;
+        $config->disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
         /* Record system score.*/
         $config->systemScore = $score;
@@ -226,7 +226,7 @@ class router extends baseRouter
 
         /* User preference init. */
         $config->URSR          = $URSR;
-        $config->URAndSR       = ($URAndSR and strpos(",{$disabledFeatures},", ',productURStory,') === false);
+        $config->URAndSR       = ($URAndSR and strpos(",{$config->disabledFeatures},", ',productURStory,') === false);
         $config->programLink   = 'program-browse';
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
