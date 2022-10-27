@@ -86,7 +86,7 @@
             <tr>
               <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
               <?php if(!isset($config->setCode) or $config->setCode == 1):?>
-              <td><?php echo html::input("codes[$i]", $stage->code, "class='form-control'");?></td>
+              <td><?php echo html::input("codes[$i]", isset($stage->code) ? $stage->code : '', "class='form-control'");?></td>
               <?php endif;?>
               <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
               <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
