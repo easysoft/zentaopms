@@ -46,6 +46,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 
 #ganttDownload, #ganttHeader {display: none;}
 #ganttContainer {margin-top: 40px;}
+#mainContent {padding: 10px 20px 20px 20px;}
 #mainContent:before {background: #fff;}
 #mainContent.loading {overflow: hidden}
 #mainContent.loading #ganttView {overflow: hidden}
@@ -68,6 +69,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .button-group{position: relative;}
 .flax{display: flex; margin-bottom: 10px;}
 .switchBtn > i {padding-left: 7px;}
+#mainContent > .pull-left > .btn-group{padding: 7px;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -76,7 +78,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('ganttType', $ganttType);?>
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
-<?php js::set('zooming', $this->config->programplan->ganttCustom->zooming);?>
+<?php js::set('zooming', $zooming);?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
@@ -96,7 +98,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
         ?>
       </ul>
       <?php else:?>
-      <?php echo $lang->programplan->gantt;?>
+      <?php echo "<span class='text'>{$lang->programplan->gantt}</span>";?>
       <?php endif;?>
     </div>
   </div>

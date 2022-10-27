@@ -68,11 +68,15 @@ class programplan extends control
         $dateDetails  = 1; // Gantt chart detail date display.
         if($type == 'gantt')
         {
+            $this->loadModel('setting');
             $owner        = $this->app->user->account;
             $module       = 'programplan';
             $section      = 'browse';
             $object       = 'stageCustom';
-            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task');
+
+            $selectCustom = $this->setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
             $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
@@ -107,6 +111,7 @@ class programplan extends control
             $plans = $this->programplan->getPlans($projectID, $this->productID, $sort);
         }
 
+        $zooming = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
         $this->view->title        = $this->lang->programplan->browse;
         $this->view->position[]   = $this->lang->programplan->browse;
         $this->view->projectID    = $projectID;
@@ -119,6 +124,7 @@ class programplan extends control
         $this->view->selectCustom = $selectCustom;
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->zooming      = $zooming;
         $this->view->ganttType    = $type;
         $this->display();
     }
