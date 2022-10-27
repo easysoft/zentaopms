@@ -1864,7 +1864,7 @@ class projectModel extends model
 
         if(dao::isError()) return false;
 
-        if(!$oldProject->multiple) $this->changeExecutionStatus($projectID, 'activate');
+        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
         /* Readjust task. */
         if($this->post->readjustTime and $this->post->readjustTask)

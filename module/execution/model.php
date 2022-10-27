@@ -5078,19 +5078,21 @@ class executionModel extends model
         $post    = $_POST;
 
         $_POST = array();
-        $_POST['project'] = $projectID;
-        $_POST['name']    = $project->name;
-        $_POST['code']    = $project->code;
-        $_POST['begin']   = $project->begin;
-        $_POST['end']     = $project->end;
-        $_POST['days']    = $project->days;
-        $_POST['team']    = $project->team;
-        $_POST['PO']      = $project->PO;
-        $_POST['QD']      = $project->QD;
-        $_POST['PM']      = $project->PM;
-        $_POST['RD']      = $project->RD;
-        $_POST['status']  = $project->status;
-        $_POST['acl']     = 'open';
+        $_POST['project']   = $projectID;
+        $_POST['name']      = $project->name;
+        $_POST['code']      = $project->code;
+        $_POST['begin']     = $project->begin;
+        $_POST['end']       = $project->end;
+        $_POST['realBegan'] = $project->realBegan;
+        $_POST['realEnd']   = $project->realEnd;
+        $_POST['days']      = $project->days;
+        $_POST['team']      = $project->team;
+        $_POST['PO']        = $project->PO;
+        $_POST['QD']        = $project->QD;
+        $_POST['PM']        = $project->PM;
+        $_POST['RD']        = $project->RD;
+        $_POST['status']    = $project->status;
+        $_POST['acl']       = 'open';
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
