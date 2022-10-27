@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     project 
+ * @package     project
  * @version     $Id: suspend.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -28,8 +28,8 @@
     <table class='table table-form'>
       <tr style='height:50px;'>
         <th class='w-70px'><?php echo $lang->execution->beginAndEnd;?></th>
-        <td class='muted' colspan='2'>
-          <div id='sourceTimeBox'><?php echo $project->begin . ' ~ ' . $project->end;?></div>
+        <td colspan='2'>
+          <div id='sourceTimeBox' class='muted'><?php echo $project->begin . ' ~ ' . $project->end;?></div>
           <div id='readjustTimeBox' class='hide'>
             <div class='input-group'>
               <?php echo html::input('begin', $newBegin, "class='form-control form-date'")?>
@@ -72,7 +72,7 @@ $(function()
     $('#readjustTime').change(function()
     {
         $('#sourceTimeBox').toggle(!$(this).prop('checked'))
-        $('#readjustTimeBox').toggle($(this).prop('checked'))
+        $('#readjustTimeBox').toggleClass('hide', !$(this).prop('checked'))
         $('#readjustTaskBox').toggleClass('hidden')
     })
 })
