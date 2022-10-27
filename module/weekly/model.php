@@ -407,7 +407,7 @@ class weeklyModel extends model
             if(helper::isZeroDate($task->deadline))
             {
                 $task->deadline = helper::isZeroDate($execution->realEnd) ? $execution->end : $execution->realEnd;
-                if(helper::isZeroDate($task->finishedDate)) $task->deadline = date('Y-m-d', strtotime($task->finishedDate));
+                if(!helper::isZeroDate($task->finishedDate)) $task->deadline = date('Y-m-d', strtotime($task->finishedDate));
             }
 
             $fullDays = $this->holiday->getActualWorkingDays($task->estStarted, $task->deadline);
