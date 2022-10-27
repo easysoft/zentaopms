@@ -85,7 +85,7 @@
               <?php endif;?>
             </div>
           </th>
-          <?php if($project->division) echo "<th class='text-center'>{$lang->project->product}</th>";?>
+          <?php if($project->division) echo "<th class='text-left c-product'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>
