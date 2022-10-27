@@ -33,7 +33,6 @@
             <div class="checkbox"> <?php echo html::radio('sprintConcept', $lang->custom->sprintConceptList, zget($this->config->custom, 'sprintConcept', '0'))?> </div>
           </div>
         </li>
-
         <?php if(strpos(",{$this->config->disabledFeatures},", ',productURStory,') === false):?>
         <li>
           <div class="form-group">
@@ -42,7 +41,6 @@
           </div>
         </li>
         <?php endif;?>
-
         <?php if($this->config->edition != 'max'):?>
         <li>
           <div class="form-group">
