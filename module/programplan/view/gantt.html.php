@@ -80,6 +80,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
+      <?php if(!empty($project->division) or !empty($project->hasProduct)):?>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -93,6 +94,9 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
           }
         ?>
       </ul>
+      <?php else:?>
+      <?php echo $lang->programplan->gantt;?>
+      <?php endif;?>
     </div>
   </div>
   <div class="pull-right btn-toolbar flax">

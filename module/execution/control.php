@@ -1646,6 +1646,26 @@ class execution extends control
             $this->view->linkedBranches = $linkedBranches;
         }
 
+        if(!empty($project) and !$project->division)
+        {
+            $products = $this->loadModel('product')->getProducts($projectID);
+            $branches = $this->project->getBranchesByProject($projectID);
+            $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+
+            $linkedBranches = array();
+            foreach($products as $productID => $product)
+            {
+                foreach($branches[$productID] as $branchID => $branch)
+                {
+                    $linkedBranches[$productID][$branchID] = $branchID;
+                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                }
+            }
+
+            $this->view->branches       = $branches;
+            $this->view->linkedBranches = $linkedBranches;
+        }
+
         if(!empty($_POST))
         {
             $executionID = $this->execution->create($copyExecutionID);
@@ -1755,6 +1775,7 @@ class execution extends control
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->view->project             = $project;
+        $this->view->division            = !empty($project) ? $project->division : 1;
         $this->display();
     }
 
