@@ -346,7 +346,6 @@
                 </div>
               </div>
             </div>
-            <?php endif; ?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -367,6 +366,7 @@
                 </div>
               </div>
             </div>
+            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->execution->lblStats;?></strong></div>
               <div class="detail-content">
