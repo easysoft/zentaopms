@@ -106,9 +106,11 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .xxc-embed #header > #mainHeader > .container {z-index: 10;}
 .xxc-embed #toolbar {position: fixed;right: 120px!important;}
 .xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
+.xxc-embed.body-modal #main {top: 0;}
 .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
 .xxc-embed #headerActions {right: 310px!important;}
 .xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important;}
+.xxc-embed .modal-body {min-height: 500px!important;}
 
 #downloadMobile .dropdown-menu {top: -31px !important; min-width: 130px; padding: 0;}
 #downloadMobile .dropdown-menu .mobile-qrcode {padding: 15px 0px 0 10px;}

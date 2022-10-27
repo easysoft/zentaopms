@@ -2431,7 +2431,7 @@ class productModel extends model
      */
     public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return $this->accessDenied();
 
         $product = $this->getByID($productID);
         $params  = array('branch' => $branch);
