@@ -76,6 +76,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('ganttType', $ganttType);?>
 <?php js::set('showFields', $this->config->programplan->ganttCustom->ganttFields);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
+<?php js::set('zooming', $this->config->programplan->ganttCustom->zooming);?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
@@ -113,7 +114,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       </ul>
     </div>
     <?php
-    echo html::a(helper::createLink('programplan', 'ajaxcustom', '', '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link' data-width='30%'");
+    echo html::a(helper::createLink('programplan', 'ajaxcustom', '', '', true), '<i class="icon icon-cog-outline"></i> ' . $lang->settings, '', "class='iframe btn btn-link' data-width='45%'");
     if(common::hasPriv('programplan', 'create')) echo html::a($this->createLink('programplan', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'>    </i> " . $this->lang->programplan->create, '', "class='btn btn-primary'");
     ?>
   </div>
@@ -390,13 +391,13 @@ function getByIdForGantt(list, id)
 /**
  * Zoom tasks.
  *
- * @param  node $node
+ * @param  value
  * @access public
  * @return void
  */
-function zoomTasks(node)
+function zoomTasks(value)
 {
-    switch(node.value)
+    switch(value)
     {
         case "day":
             gantt.config.min_column_width = 70;
@@ -416,7 +417,11 @@ function zoomTasks(node)
     }
 
     gantt.render();
-    $('.gantt_grid_head_cell .sort').addClass(node.value);
+    $('.gantt_grid_head_cell .sort').addClass(value);
+}
+
+window.onload = function () {
+    zoomTasks(zooming);
 }
 
 /**
