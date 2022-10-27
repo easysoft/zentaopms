@@ -2812,7 +2812,7 @@ class projectModel extends model
             if(strpos($this->config->project->multiple['execution'], ",{$label},") !== false)
             {
                 $objectID = $executionID;
-                $this->lang->$navGroup->menu->$label['subModule'] = 'project';
+                $this->lang->$navGroup->menu->{$label}['subModule'] = 'project';
             }
             $this->lang->$navGroup->menu->$label = commonModel::setMenuVarsEx($menu, $objectID);
             if(isset($menu['subMenu']))
