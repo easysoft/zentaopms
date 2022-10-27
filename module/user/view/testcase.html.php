@@ -51,7 +51,7 @@
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?></td>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title);?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
+          <td class='c-pri'><span class='<?php if($case->pri) echo 'label-pri label-pri-' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td class='status-testcase status-<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>

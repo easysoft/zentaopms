@@ -65,7 +65,7 @@
         <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
         <tr class='text-left'>
           <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+          <td><span class='<?php echo "label-pri label-pri-{$story->pri} pri" . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td><?php echo $story->productTitle;?></td>
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>

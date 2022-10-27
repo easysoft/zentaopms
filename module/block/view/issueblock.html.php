@@ -32,8 +32,8 @@
         <td class='c-id-xs'><?php echo sprintf('%03d', $issue->id);?></td>
         <td class='c-name' title='<?php echo $issue->title?>'><?php echo html::a($this->createLink('issue', 'view', "issueID=$issue->id", '', '', $issue->project), $issue->title)?></td>
         <?php if($longBlock):?>
-        <td class='c-pri'><?php echo zget($lang->issue->priList, $issue->pri)?></td>
-        <td class='c-severity'><?php echo zget($lang->issue->severityList, $issue->severity)?></td>
+        <td class='c-pri'><span class="label-pri label-pri-<?php echo $issue->pri;?>"><?php echo zget($lang->issue->priList, $issue->pri)?></span></td>
+        <td class='c-severity severity-issue severity-<?php echo $issue->severity;?>'><?php echo zget($lang->issue->severityList, $issue->severity)?></td>
         <td class='c-deadline'><?php echo $issue->deadline == '0000-00-00' ? '' : $issue->deadline;?></td>
         <?php endif;?>
         <?php $status = $this->processStatus('issue', $issue);?>

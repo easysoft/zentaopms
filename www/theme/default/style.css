@@ -165,7 +165,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 .status-draft {color: #8166EE;}
 .status-clarify {color: #8166EE;}
-.status-testtask.status-blocked {left: 0;}
+.status-blocked {left: 0;}
 .status-testcase.status-wait {color: #18A6FD;}
 .status-done .label-dot {background-color: #0DBB7D;}
 .status-reviewing, .status-noreview {color: #18A6FD;}
@@ -186,7 +186,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-wait, .status-active, .status-active.status-bug, .status-normal, .status-asked, #workflowTable td.text-center.text-warning, .result-testcase, .c-lastRunResult span, .status-unconfirmed {color: #313C52;}
 
 .severity-issue.severity-1, .c-severity .severity-1 {color: #FB2B2B;}
-.severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F44;}
+.severity-issue.severity-2, .c-severity .severity-2 {color: #FF9F42;}
 .severity-issue.severity-3, .c-severity .severity-3 {color: #18A6FD;}
 .severity-issue.severity-4, .c-severity .severity-3 {color: #313C52;}
 
@@ -222,3 +222,6 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .flow-block .footerbar span.label-success {background-color: #0DBB7D;}
 .flow-block .footerbar span.label-default {background-color: #9EA3B0;}
 .flow-block .footerbar span.label-warning {background-color: #313C52;}
+
+.btn.disabled {pointer-events: auto;}
+.btn.disabled i {color: #313c52;}
