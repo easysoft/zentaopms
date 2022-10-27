@@ -77,7 +77,6 @@
       <?php $vars = "status=$status&orderBy=%s";?>
       <thead>
         <tr>
-          <?php if($project->division) echo "<th class='c-name text-center'>{$lang->project->product}</th>";?>
           <th class='table-nest-title'>
             <div class="flex-between">
               <?php echo $lang->nameAB;?>
@@ -86,6 +85,7 @@
               <?php endif;?>
             </div>
           </th>
+          <?php if($project->division) echo "<th class='text-center'>{$lang->project->product}</th>";?>
           <th class='c-status text-center'><?php echo $lang->project->status;?></th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->programplan->begin;?></th>

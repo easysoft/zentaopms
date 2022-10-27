@@ -1059,11 +1059,12 @@ class project extends control
         foreach($executionStats as $execution)
         {
             $execution->productName = isset($productNameList[$execution->id]) ? $productNameList[$execution->id] : '';
-            if(!empty($execution->tasks) or !empty($execution->children))
+
+            if(!empty($execution->children))
             {
-                $showToggleIcon = true;
-                break;
+                foreach($execution->children as $childrenID => $children) $children->productName = isset($productNameList[$childrenID]) ? $productNameList[$childrenID] : '';
             }
+            if(!empty($execution->tasks) or !empty($execution->children)) $showToggleIcon = true;
         }
 
         $this->view->executionStats = $executionStats;
