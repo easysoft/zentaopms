@@ -158,19 +158,11 @@ function loadAllBuilds(object)
     else
     {
         productID   = $('#product').val();
-        executionID = $('#execution').val();
 
         var buildBox = '';
         if(page == 'edit') buildBox = $(object).closest('.input-group').attr('id');
 
-        if(executionID)
-        {
-            loadAllExecutionBuilds(executionID, productID, buildBox);
-        }
-        else
-        {
-            loadAllProductBuilds(productID, buildBox);
-        }
+        loadAllProductBuilds(productID, buildBox);
     }
 }
 
