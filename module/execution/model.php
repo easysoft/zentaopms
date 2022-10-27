@@ -1189,9 +1189,10 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.parent')->eq($oldExecution)
+                ->andWhere('t2.parent')->eq($oldExecution->id)
                 ->fetch('total');
 
+            if(!$oldPercentTotal) $oldPercentTotal = 0;
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
             if(!empty($oldExecution) and $oldExecution->grade == 1) $percentTotal = $oldPercentTotal - $oldExecution->percent + $this->post->percent;
 
@@ -4651,7 +4652,7 @@ class executionModel extends model
                 }
             }
         }
-        if(!empty($execution->division)) echo "<td class='text-center' title='{$execution->productName}'>{$execution->productName}</td>";
+        if(!empty($execution->division)) echo "<td class='text-left' title='{$execution->productName}'>{$execution->productName}</td>";
         echo "<td class='status-{$execution->status} text-center'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo helper::isZeroDate($execution->begin) ? '<td class="c-date"></td>' : '<td class="c-date">' . $execution->begin . '</td>';
@@ -4713,7 +4714,11 @@ class executionModel extends model
 
         if(!empty($execution->children))
         {
-            foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
+            foreach($execution->children as $child)
+            {
+                $child->division = $execution->division;
+                $this->printNestedList($child, true, $users, $productID);
+            }
         }
 
         if(!empty($execution->tasks))
