@@ -19,6 +19,12 @@ list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
 
+$hasWaterfall      = strpos(",$config->disabledFeatures,", ',waterfall,')      === false;
+$hasProductTrack   = strpos(",$config->disabledFeatures,", ',productTrack,')   === false;
+$hasProductRoadmap = strpos(",$config->disabledFeatures,", ',productRoadmap,') === false;
+$hasScrumAuditplan = strpos(",$config->disabledFeatures,", ',scrumAuditplan,') === false;
+$hasScrumProcess   = strpos(",$config->disabledFeatures,", ',scrumProcess,')   === false;
+
 if(defined('TUTORIAL'))
 {
     $programModule   = 'program';
@@ -164,16 +170,12 @@ $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|bro
 $lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');
 $lang->product->menu->project     = array('link' => "{$lang->project->common}|product|project|status=all&productID=%s");
 $lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
-$lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
 $lang->product->menu->requirement = array('link' => "$lang->URCommon|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|tableContents|type=product&objectID=%s", 'subModule' => 'doc');
 $lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
 $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
-
-if(strpos(",$config->disabledFeatures,", ',productTrack,') === false)
-{
-    $lang->product->menu->track = array('link' => "{$lang->track}|product|track|productID=%s");
-}
+if($hasProductRoadmap) $lang->product->menu->roadmap = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
+if($hasProductTrack)   $lang->product->menu->track   = array('link' => "{$lang->track}|product|track|productID=%s");
 
 /* Product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';
@@ -584,19 +586,10 @@ $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globa
 
 if($config->edition == 'max')
 {
-    if(strpos(",$config->disabledFeatures,", ',scrumAuditplan,') === false || strpos(",$config->disabledFeatures,", ',waterfall,') === false)
-    {
-        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-    }
-    else if(strpos(",$config->disabledFeatures,", ',scrumProcess,') === false || strpos(",$config->disabledFeatures,", ',waterfall,') === false)
-    {
-        $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
-    }
+    if($hasScrumAuditplan) $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
+    if($hasScrumProcess)   $lang->admin->menu->model['dropMenu']->scrum = array('link' => "{$lang->scrumModel}|process|scrumbrowse|processID=0&browseType=scrum", 'subModule' => 'auditcl,process,activity,zoutput,classify,');
 }
-if(strpos(",$config->disabledFeatures,", ',waterfall,') === false)
-{
-    $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
-}
+if($hasWaterfall) $lang->admin->menu->model['dropMenu']->waterfall = array('link' => "{$lang->waterfallModel}|stage|setType|", 'subModule' => 'stage,auditcl,cmcl,process,activity,zoutput,classify,reviewcl,reviewsetting,design');
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");

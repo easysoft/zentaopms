@@ -1888,10 +1888,12 @@ $lang->dev->methodOrder[15] = 'editor';
 $lang->dev->methodOrder[20] = 'translate';
 
 global $config;
-$hasWaterfall = strpos(",$config->disabledFeatures,", ',waterfall,') === false || (defined('IN_UPGRADE') && IN_UPGRADE);
-$hasTrack     = strpos(",$config->disabledFeatures,", ',productTrack,') === false     || (defined('IN_UPGRADE') && IN_UPGRADE);
-$isURSR       = $config->URAndSR || (defined('IN_UPGRADE') && IN_UPGRADE);
-$hasProgram   = $config->systemMode == 'new' || (defined('IN_UPGRADE') && IN_UPGRADE);
+$disabledFeatures  = $config->disabledFeatures . $config->closedFeatures;
+$hasWaterfall      = (strpos(",$disabledFeatures,", ',waterfall,')      === false or (defined('IN_UPGRADE') and IN_UPGRADE));
+$hasProductTrack   = (strpos(",$disabledFeatures,", ',productTrack,')   === false);
+$hasProductRoadmap = (strpos(",$disabledFeatures,", ',productRoadmap,') === false);
+$isURSR            = ($config->URAndSR             or (defined('IN_UPGRADE') and IN_UPGRADE));
+$hasProgram        = ($config->systemMode == 'new' or (defined('IN_UPGRADE') and IN_UPGRADE));
 if(!$hasWaterfall)
 {
     unset($lang->resource->design);
@@ -1909,6 +1911,7 @@ if(!$isURSR)
     unset($lang->resource->story->linkStory);
     unset($lang->resource->requirement);
 }
-if(!$hasTrack) unset($lang->resource->product->track);
+if(!$hasProductTrack)   unset($lang->resource->product->track);
+if(!$hasProductRoadmap) unset($lang->resource->product->roadmap);
 
 include (dirname(__FILE__) . '/changelog.php');
