@@ -176,7 +176,7 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 .status-reviewing .label-dot {background-color: #18A6FD;}
 .status-cancel, .status-investigate, .status-canceled {color: #838A9D;}
 .status-active .label-dot, .status-wait .label-dot {background-color: #313C52;}
-.status-doing, .status-commenting, .status-checking, .status-confirmed {color: #FF6F42;}
+.status-doing, .status-commenting, .status-checking, .status-confirmed, .status-issue.status-active {color: #FF6F42;}
 .status-closed, #workflowTable td.text-center.text-muted, .status-testtask.status-done {color: #9EA3B0;}
 .status-suspended, .status-pause, .status-blocked, .status-hangup, .result-testcase.blocked, .c-lastRunResult .result-blocked {color: #B89664;}
 .status-done, .status-resolved, .status-replied, .status-checked, #workflowTable td.text-success, .result-testcase.pass, .c-lastRunResult .result-pass {color: #0DBB7D;}
