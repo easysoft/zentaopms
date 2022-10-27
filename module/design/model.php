@@ -240,11 +240,12 @@ class designModel extends model
      */
     public function getByID($designID = 0)
     {
+        $this->app->loadLang('product');
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
         $design->files       = $this->loadModel('file')->getByObject('design', $designID);
-        $design->productName = $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name');
+        $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
 
 
         $design->commit = '';
