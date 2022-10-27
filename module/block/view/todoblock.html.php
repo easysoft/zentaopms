@@ -39,11 +39,14 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
 .block-todoes .todo-title.text-ellipsis {text-overflow: unset;}
 [lang^='en'] .block-todoes .todo-pri {width: 60px; min-width: 60px;}
+.block-todoes .todoes-input .todo-form-trigger > .btn-info {width: 100%; opacity: 0.8; margin-left: 10px;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
     <div class="todoes-input">
-      <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" autocomplete="off" class="form-control"></div>
+      <div class="todo-form-trigger">
+        <button class='btn btn-info'><i class='icon icon-plus'></i> <?php echo $lang->todo->create;?></button>
+      </div>
       <form class="form-horizontal todoes-form layer not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&userID=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <?php $leftWidth  = common::checkNotCN() ? 'col-sm-3' : 'col-sm-2';?>
