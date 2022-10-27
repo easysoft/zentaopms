@@ -24,8 +24,6 @@
   </div>
 
   <div class='btn-toolbar pull-right'>
-    <?php echo html::a(inlink('manageOtherProducts'), "<i class='icon icon-link'></i> " . $lang->project->manageOtherProducts, '', "class='btn btn-primary' data-toggle='modal'");?>
-
     <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#otherProductsModal'><i class='icon icon-link'></i> <?php echo $lang->project->manageOtherProducts; ?></button>
   </div>
 </div>
