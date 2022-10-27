@@ -1777,16 +1777,30 @@ class baseRouter
      *
      * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
-     * @param  string $type       对象的类型，可选值 model、zen、tao，默认为 model。The type of the object, optional values model, zen, tao, the default is model.
      * @access public
      * @return string the model file
      */
-    public function setModelFile($moduleName, $appName = '', $type = 'model')
+    public function setModelFile($moduleName, $appName = '')
+    {
+        return $this->setTargetFile($moduleName, $appName);
+    }
+
+    /**
+     * 设置一个模块的target文件，如果存在target扩展，一起合并。
+     * Set the target file of one module. If there's an extension file, merge it with the main target file.
+     *
+     * @param  string $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param  string $appName    应用名，如果为空，使用当前应用。The app name, if empty, use current app's name.
+     * @param  string $class       对象的类型，可选值 target、zen、tao，默认为 target。The type of the object, optional values target, zen, tao, the default is target.
+     * @access public
+     * @return string the target file
+     */
+    public function setTargetFile($moduleName, $appName = '', $class = 'model')
     {
         if($appName == '') $appName = $this->getAppName();
 
         /* 设置主model文件。 Set the main model file. */
-        $mainModelFile = $this->getModulePath($appName, $moduleName) . "{$type}.php";
+        $mainModelFile = $this->getModulePath($appName, $moduleName) . "{$class}.php";
         if($this->config->framework->extensionLevel == 0) return $mainModelFile;
 
         /* 计算扩展的文件和hook文件。Compute the extension files and hook files. */
@@ -1795,7 +1809,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, $type);
+        $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
         foreach($modelExtPaths as $extType => $modelExtPath)
         {
             if(empty($modelExtPath)) continue;
@@ -1817,7 +1831,7 @@ class baseRouter
         $extModelPrefix = $this->config->edition . DS . $this->config->vision . DS;
         if($siteExtended and !empty($this->siteCode)) $extModelPrefix .= $this->siteCode[0] . DS . $this->siteCode;
 
-        $mergedModelDir  = $this->getTmpRoot() . $type . DS . $extModelPrefix;
+        $mergedModelDir  = $this->getTmpRoot() . $class . DS . $extModelPrefix;
         $mergedModelFile = $mergedModelDir . $moduleName . '.php';
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
@@ -1825,8 +1839,8 @@ class baseRouter
         if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
 
         /* 合并扩展和hook文件。Merge the extension and hook files. */
-        $modelLines = $this->mergeModelExtFiles($moduleName, $extFiles, $mergedModelDir, $type);
-        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles, $type);
+        $modelLines = $this->mergeModelExtFiles($moduleName, $extFiles, $mergedModelDir, $class);
+        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles, $class);
 
         return $mergedModelFile;
     }
@@ -2199,7 +2213,7 @@ class baseRouter
         global $loadedTargets;
         if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
 
-        $targetFile = $this->setModelFile($moduleName, $appName, $class);
+        $targetFile = $this->setTargetFile($moduleName, $appName, $class);
 
         /**
          * 如果没有target文件，返回false。
