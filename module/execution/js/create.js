@@ -85,7 +85,6 @@ $(function()
             if(attribute == 'request' || attribute == 'design' || attribute == 'review')
             {
                 $('#plansBox').closest('tr').addClass('hide');
-                $('#plansBox select[name^="plans"]').val('').trigger('chosen:updated');
             }
             else
             {
