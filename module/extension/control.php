@@ -428,7 +428,7 @@ class extension extends control
 
         if($_FILES)
         {
-            if($_FILES['file']['size'] == 0) return print(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorFileNotEmpty, $fileName, $return->error))));
+            if($_FILES['file']['error'] == UPLOAD_ERR_NO_FILE) return print(js::alert($this->lang->extension->errorFileNotEmpty));
 
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
