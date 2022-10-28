@@ -1752,10 +1752,16 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-        $hasWaterfall = strpos(",{$this->config->disabledFeatures},", ',waterfall,')    === false;
-        $hasIssue     = strpos(",{$this->config->disabledFeatures},", ',scrumIssue,')   === false or $hasWaterfall;
-        $hasRisk      = strpos(",{$this->config->disabledFeatures},", ',scrumRisk,')    === false or $hasWaterfall;
-        $hasMeeting   = strpos(",{$this->config->disabledFeatures},", ',scrumMeeting,') === false or $hasWaterfall;
+        $hasWaterfall        = strpos(",{$this->config->disabledFeatures},",  ',waterfall,')        === false;
+        $hasScrumIssue       = strpos(",{$this->config->disabledFeatures},",  ',scrumIssue,')       === false;
+        $hasScrumRisk        = strpos(",{$this->config->disabledFeatures},",  ',scrumRisk,')        === false;
+        $hasScrumMeeting     = strpos(",{$this->config->disabledFeatures},",  ',scrumMeeting,')     === false;
+        $hasWaterfallIssue   = (strpos(",{$this->config->disabledFeatures},", ',waterfallIssue,')   === false and $hasWaterfall);
+        $hasWaterfallRisk    = (strpos(",{$this->config->disabledFeatures},", ',waterfallRisk,')    === false and $hasWaterfall);
+        $hasWaterfallMeeting = (strpos(",{$this->config->disabledFeatures},", ',waterfallMeeting,') === false and $hasWaterfall);
+        $hasIssue            = ($hasScrumIssue   or $hasWaterfallIssue);
+        $hasRisk             = ($hasScrumRisk    or $hasWaterfallRisk);
+        $hasMeeting          = ($hasScrumMeeting or $hasWaterfallMeeting);
 
         $hasViewPriv = array();
         if(common::hasPriv('todo',  'view'))                                                                                          $hasViewPriv['todo']        = true;

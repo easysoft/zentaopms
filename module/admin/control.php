@@ -233,6 +233,12 @@ class admin extends control
         $this->display();
     }
 
+    /**
+     * Set closed features config.
+     * 
+     * @access public
+     * @return void
+     */
     public function setModule()
     {
         if($_POST)
