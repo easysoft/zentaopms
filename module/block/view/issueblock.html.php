@@ -4,9 +4,10 @@
 <style>
 .block-issues .c-id {width: 50px;}
 .block-issues .c-pri {width: 50px;text-align: center;}
-.block-issues .c-deadline {width: 95px;}
+.block-issues .c-category {width: 90px;}
+.block-issues .c-identifiedDate {width: 100px;}
 .block-issues .c-severity {width: 80px;}
-.block-issues .c-status {width: 80px;}
+.block-issues .c-status {width: 90px;}
 .block-issues.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
