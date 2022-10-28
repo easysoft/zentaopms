@@ -373,7 +373,7 @@ function renderKanbanItem(item, $item)
         if(item.estimate == 0) $info.children('.estimate').hide();
 
         $info.children('.pri')
-            .attr('class', 'pri label-pri label-pri-' + item.pri)
+            .attr('class', 'pri' + (item.pri ? ' label-pri label-pri-' + item.pri : ''))
             .text(item.pri);
 
         var $time = $info.children('.time');

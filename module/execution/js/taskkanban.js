@@ -156,7 +156,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 2)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit +'</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
@@ -221,7 +221,7 @@ function renderBugItem(item, $item, col)
     {
         var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
-        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml      = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
@@ -284,7 +284,7 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var priHtml    = '<span class="info info-pri' + (item.pri ? ' label-pri label-pri-' + item.pri : '') + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
 
