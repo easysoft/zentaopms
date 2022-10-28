@@ -2073,13 +2073,6 @@ class project extends control
             $newProducts  = $this->product->getProducts($projectID);
             $newProducts  = array_keys($newProducts);
 
-            if(!$project->division and $newProducts)
-            {
-                $stages = $this->execution->getPairs($projectID);
-                $this->post->set('products', $newProducts);
-                foreach($stages as $stageID => $name) $this->execution->updateProducts($stageID);
-            }
-
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 

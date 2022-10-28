@@ -1469,13 +1469,6 @@ class projectModel extends model
             $this->updateProducts($projectID, $_POST['products']);
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
-            /* Link project's products to project's stages when project's division is closed and products has changed. */
-            if(!$project->division and $_POST['products'] != $linkedProducts and $oldProject->model == 'waterfall')
-            {
-                $stages = $this->loadModel('execution')->getPairs($projectID);
-                foreach($stages as $stageID => $name) $this->execution->updateProducts($stageID);
-            }
-
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
             if($project->acl != 'open')
