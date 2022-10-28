@@ -1555,8 +1555,8 @@ class baseRouter
             {
                 if($this->config->framework->filterParam == 2)
                 {
-                    $_GET     = validater::filterParam($_GET, 'get');
-                    $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+                    $_GET    = validater::filterParam($_GET, 'get');
+                    $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
             return true;
