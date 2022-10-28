@@ -227,6 +227,8 @@
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
 <?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
-<?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <?php include '../../common/view/footer.html.php';?>

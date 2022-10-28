@@ -12,9 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
-<?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
-<?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
-<?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
+<?php js::set('linkedStoryIDList', $linkedStoryIDList);?>
+<?php js::set('allProducts', $allProducts);?>
+<?php js::set('branchGroups', $branchGroups);?>
+<?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->manageProducts;?></span></span>
