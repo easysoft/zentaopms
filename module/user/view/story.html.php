@@ -41,8 +41,8 @@
       <?php $vars = "userID={$user->id}&storyType=$storyType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
         <tr class='colhead'>
-          <th class='c-id'>   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
           <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
           <?php if($this->config->vision == 'lite'):?>
@@ -53,10 +53,10 @@
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <th class='c-plan'><?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
           <?php endif;?>
-          <th class='c-openedBy'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-openedBy'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-estimate text-right'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
           <?php if($this->config->vision != 'lite'):?>
-          <th class='c-stage'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+          <th class='c-stage'><?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
           <?php endif;?>
         </tr>
       </thead>
