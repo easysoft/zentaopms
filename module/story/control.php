@@ -1602,6 +1602,7 @@ class story extends control
     {
         $this->app->loadLang('bug');
         $story = $this->story->getById($storyID);
+        $this->commonAction($storyID);
 
         if(!empty($_POST))
         {
