@@ -209,6 +209,26 @@ class baseControl
         $this->loadModel($this->moduleName, $appName);
 
         /**
+         * 检查用户是否登录，如果没有登录，跳转到登录页面。
+         * Check the user has logon or not, if not, goto the login page.
+         */
+        if(empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
+        {
+            $uri = $this->app->getURI(true);
+            if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
+            {
+                $uri = helper::createLink('my');
+            }
+            elseif(helper::isAjaxRequest())
+            {
+                die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout)));
+            }
+
+            $referer = helper::safe64Encode($uri);
+            die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+        }
+
+        /**
          * 如果客户端是手机的话，视图文件增加m.前缀。
          * If the clent is mobile, add m. as prefix for view file.
          */
