@@ -551,6 +551,7 @@ class project extends control
         $whitelist     = '';
         $acl           = 'private';
         $auth          = 'extend';
+        $multiple      = 1;
         $hasProduct    = 1;
         $shadow        = 0;
         $products      = array();
@@ -566,6 +567,7 @@ class project extends control
             $whitelist   = $copyProject->whitelist;
             $acl         = $copyProject->acl;
             $auth        = $copyProject->auth;
+            $multiple    = $copyProject->multiple;
             $hasProduct  = $copyProject->hasProduct;
             $programID   = $copyProject->parent;
             $model       = $copyProject->model;
@@ -614,6 +616,7 @@ class project extends control
         $this->view->acl                 = $acl;
         $this->view->auth                = $auth;
         $this->view->whitelist           = $whitelist;
+        $this->view->multiple            = $multiple;
         $this->view->hasProduct          = $hasProduct;
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->programList         = $this->program->getParentPairs();

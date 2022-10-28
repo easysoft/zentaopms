@@ -76,12 +76,22 @@
         <?php if($model != 'waterfall'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, '1'));?></td>
+          <td colspan='3'>
+            <?php
+            echo nl2br(html::radio('multiple', $lang->project->multipleList, $multiple, $copyProjectID ? 'disabled' : ''));
+            if($copyProjectID) echo html::hidden('multiple', $multiple);
+            ?>
+          </td>
         </tr>
         <?php endif;?>
         <tr>
           <th id='projectType'><?php echo $lang->project->type;?></th>
-          <td><?php echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');?></td>
+          <td>
+            <?php
+            echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');
+            if($copyProjectID) echo html::hidden('hasProduct', $hasProduct);
+            ?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
