@@ -23,6 +23,8 @@ class product extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!isset($this->app->user)) return;
+
         /* Load need modules. */
         $this->loadModel('story');
         $this->loadModel('release');
