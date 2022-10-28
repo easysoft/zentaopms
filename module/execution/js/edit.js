@@ -62,7 +62,7 @@ $(function()
             {
                 if($.inArray(lastBranch, unmodifiableBranches) != -1)
                 {
-                    if(linkedStoryIDList[last][lastBranch]) bootbox.alert(unLinkProductTip.replace("%s", branchGroups[last][lastBranch]));
+                    if(linkedStoryIDList[last][lastBranch]) bootbox.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
                 }
             }
             else

@@ -23,7 +23,7 @@ $(function()
 
                 if($.inArray(branchID, unmodifiableBranches) != -1 && linkedStoryIDList[productID][branchID])
                 {
-                    bootbox.alert(unLinkProductTip.replace("%s", branchGroups[productID][branchID]));
+                    bootbox.alert(unLinkProductTip.replace("%s", allProducts[productID] + branchGroups[productID][branchID]));
                 }
             }
             else
