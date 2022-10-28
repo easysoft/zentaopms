@@ -1478,12 +1478,9 @@ class projectModel extends model
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
-        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
-            ->where('project')->eq($project->id)
-            ->andWhere('deleted')->eq('0')
-            ->fetchAll();
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->fetch('count');
 
-        if(!empty($executionsCount))
+        if(!empty($executionsCount) and $oldProject->multiple)
         {
             $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
             $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
