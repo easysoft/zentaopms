@@ -114,6 +114,7 @@ class executionModel extends model
         {
             if($this->config->edition == 'open' and in_array($execution->attribute, $stageFilter))
             {
+                unset($this->lang->execution->menu->story);
                 unset($this->lang->execution->menu->qa);
                 unset($this->lang->execution->menu->build);
             }
