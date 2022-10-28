@@ -41,18 +41,14 @@ class execution extends control
         $this->loadModel('project');
 
         if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
+        if(!isset($this->app->user)) return;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
-        if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution' and isset($this->app->user))
+        if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {
-            $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-            $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
-            if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
-            {
-                if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
-            }
+            if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
     }
 
