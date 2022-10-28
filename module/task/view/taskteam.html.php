@@ -3,7 +3,7 @@
 #taskTeamEditor .estimateBox span {background-color: #fff;}
 #taskTeamEditor .estimateBox input {background-color: #fff; border-right-width: 0px;}
 #taskTeamEditor input, #taskTeamEditor span, #taskTeamEditor .chosen-container > a {border-color: #eee;}
-#taskTeamEditor td.sort-handler {padding-bottom: 12px;}
+#taskTeamEditor td.sort-handler {padding-bottom: 11px;}
 </style>
 <?php if($app->rawMethod != 'create'):?>
 <style>

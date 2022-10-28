@@ -94,7 +94,7 @@
           <td class='c-name' title='<?php echo $case->taskName;?>'><?php echo $case->taskName;?></td>
           <?php endif;?>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
-          <td class='status-testcase status-<?php echo $case->status;?>'>
+          <td class='status-testcase status-<?php echo $case->status;?> nobr'>
             <?php
             if($case->needconfirm)
             {
