@@ -241,13 +241,15 @@
                 <tbody>
                   <tr>
                     <th><?php echo $lang->story->common;?></th>
-                    <td><?php echo $statData->storyCount;?></td>
+                    <td title="<?php echo $statData->storyCount;?>"><?php echo $statData->storyCount;?></td>
                     <th><?php echo $lang->task->common;?></th>
-                    <td><?php echo $statData->taskCount;?></td>
+                    <td title="<?php echo $statData->taskCount;?>"><?php echo $statData->taskCount;?></td>
+                  </tr>
+                  <tr>
                     <th><?php echo $lang->bug->common;?></th>
-                    <td><?php echo $statData->bugCount;?></td>
+                    <td title="<?php echo $statData->bugCount;?>"><?php echo $statData->bugCount;?></td>
                     <th><?php echo $lang->project->budget;?></th>
-                    <td><?php echo $project->budget;?></td>
+                    <td title="<?php echo $project->budget;?>"><?php echo $project->budget;?></td>
                   </tr>
                 </tbody>
               </table>
