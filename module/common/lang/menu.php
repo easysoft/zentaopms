@@ -244,7 +244,6 @@ $lang->scrum->menuOrder[40] = 'release';
 $lang->scrum->menuOrder[48] = 'dynamic';
 $lang->scrum->menuOrder[50] = 'settings';
 
-
 $lang->scrum->menu->doc['subMenu'] = new stdclass();
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
