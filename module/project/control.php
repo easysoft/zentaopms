@@ -704,16 +704,6 @@ class project extends control
 
         if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
-        /* Get stages group by project's product. */
-        $productStages = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t2.type')->ne('project')
-            ->andWhere('t2.project')->eq($projectID)
-            ->andWhere('t1.product')->in($linkedProductIdList)
-            ->groupBy('t1.product')
-            ->fetchGroup('product');
-
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
 
@@ -729,7 +719,7 @@ class project extends control
         $this->view->linkedProducts           = $linkedProducts;
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->branches                 = $branches;
-        $this->view->multiProductStages       = ($project->division and count($linkedProducts) > 1 and count($productStages) > 1);
+        $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;

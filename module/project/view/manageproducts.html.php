@@ -87,14 +87,14 @@ $('#submit').click(function()
       {
           'message' : noticeDivsion,
           'buttons':{
-            confirm:{
-                label: divisionList['1'],
-                className: 'btn'
-            },
-            cancel:{
-                label: divisionList['0'],
-                className: 'btn-primary'
-            },
+              confirm:{
+                  label: divisionList['1'],
+                  className: 'btn'
+              },
+              cancel:{
+                  label: divisionList['0'],
+                  className: 'btn-primary'
+              },
           },
           callback: function(result)
           {
