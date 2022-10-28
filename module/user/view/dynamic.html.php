@@ -30,7 +30,7 @@
     <?php endforeach;?>
   </div>
 
-  <div id="dynamics" class='main-content'>
+  <div id="dynamics" class='main-content <?php echo empty($dateGroups) ? '' : 'hasData';?>'>
     <?php if(!empty($dateGroups)):?>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
