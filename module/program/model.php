@@ -350,6 +350,7 @@ class programModel extends model
             ->where('type')->in('sprint,stage,kanban')
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('multiple')->ne(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('id_asc')
             ->fetchAll('project');

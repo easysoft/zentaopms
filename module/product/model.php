@@ -602,8 +602,8 @@ class productModel extends model
 
     /**
      * Get products group by program.
-     * 
-     * @param  array  $appendIDList 
+     *
+     * @param  array  $appendIDList
      * @access public
      * @return array
      */
@@ -1980,6 +1980,7 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.product')->in(array_keys($productList))
             ->andWhere('status')->eq('doing')
+            ->andWhere('multiple')->ne('0')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchGroup('project', 'id');
