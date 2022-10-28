@@ -12,3 +12,5 @@
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
 .timeline > li > div > .timeline-text > a {color: #313C52;}
+
+.table-data.data-basic tbody > tr > td {overflow: hidden;}

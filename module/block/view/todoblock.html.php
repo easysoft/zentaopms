@@ -39,7 +39,9 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
 .block-todoes .todo-title.text-ellipsis {text-overflow: unset;}
 [lang^='en'] .block-todoes .todo-pri {width: 60px; min-width: 60px;}
-.block-todoes .todoes-input .todo-form-trigger > .btn-info {width: 100%; opacity: 0.8; margin-left: 10px;}
+.block-todoes .todoes-input .todo-form-trigger > .btn-info {width: 98%; opacity: 0.8; margin-left: 10px;}
+.block-todoes .todoes > li:hover {width: 98%; margin-left: 10px; padding-left: 25px;}
+.block-todoes .todoes > li:hover > span {left: 0;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
