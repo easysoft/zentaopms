@@ -248,7 +248,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testcase->status;?></th>
-              <td class='status-<?php echo $case->status;?>'>
+              <td class='status-testcase status-<?php echo $case->status;?>'>
                 <?php
                 echo $this->processStatus('testcase', $case);
                 if($case->version > $case->currentVersion and $from == 'testtask')

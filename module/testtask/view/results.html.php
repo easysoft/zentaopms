@@ -47,7 +47,7 @@
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
-          <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
+          <td class='w-50px text-right'><strong class='result-testcase <?php echo $result->caseResult;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
