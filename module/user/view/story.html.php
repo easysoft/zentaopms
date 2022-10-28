@@ -69,7 +69,7 @@
           <td><?php echo $story->productTitle;?></td>
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
-          <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+          <td class='nobr' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <?php endif;?>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td class='estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
