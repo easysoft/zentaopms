@@ -82,6 +82,7 @@ $lang->program->manageMembers           = 'Program Team';
 $lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the subprograms and the projects of the program? If yes, please the current exchange rate.';
 $lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
 $lang->program->changePRJUnit           = 'Update the budget unit of the project';
+$lang->program->showNotCurrentProjects  = 'Display project information of non current program';
 
 $lang->program->progress         = 'Progress';
 $lang->program->children         = 'Child';
