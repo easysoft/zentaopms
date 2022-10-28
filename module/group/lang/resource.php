@@ -1889,8 +1889,8 @@ $lang->dev->methodOrder[20] = 'translate';
 
 global $config;
 $hasWaterfall      = (strpos(",$config->disabledFeatures,", ',waterfall,')      === false or (defined('IN_UPGRADE') and IN_UPGRADE));
-$hasProductTrack   = (strpos(",$config->disabledFeatures,", ',productTrack,')   === false);
-$hasProductRoadmap = (strpos(",$config->disabledFeatures,", ',productRoadmap,') === false);
+$hasProductTrack   = (strpos(",$config->disabledFeatures,", ',productTrack,')   === false or (defined('IN_UPGRADE') and IN_UPGRADE));
+$hasProductRoadmap = (strpos(",$config->disabledFeatures,", ',productRoadmap,') === false or (defined('IN_UPGRADE') and IN_UPGRADE));
 $isURSR            = ($config->URAndSR             or (defined('IN_UPGRADE') and IN_UPGRADE));
 $hasProgram        = ($config->systemMode == 'new' or (defined('IN_UPGRADE') and IN_UPGRADE));
 if(!$hasWaterfall)

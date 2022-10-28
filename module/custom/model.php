@@ -1080,7 +1080,11 @@ class customModel extends model
     public function processMeasrecordCron($disabledFeatures)
     {
         $cronStatus = 'normal';
-        if(strpos(",$disabledFeatures,", ',waterfall,') !== false and strpos(",$disabledFeatures,", ',scrumMeasrecord,') !== false) $cronStatus = 'stop';
+
+        $hasWaterfall           = strpos(",{$this->config->disabledFeatures},",  ',waterfall,')           === false;
+        $hasScrumMeasrecord     = strpos(",{$this->config->disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasWaterfallMeasrecord = (strpos(",{$this->config->disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
 
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
