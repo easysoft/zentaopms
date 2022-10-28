@@ -31,7 +31,7 @@
               </div>
               <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -60,7 +60,7 @@
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
               <?php if(common::hasPriv('execution', 'dynamic')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -84,7 +84,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -130,7 +130,7 @@
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
               <?php if(common::hasPriv('doc', 'objectLibs')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -164,7 +164,7 @@
               <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
               <?php if(common::hasPriv('execution', 'cfd')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -189,7 +189,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -331,7 +331,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts')) common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts')) common::printLink('execution', 'manageproducts', "executionID=$execution->id", strtoupper($lang->more), '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
