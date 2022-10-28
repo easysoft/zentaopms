@@ -342,7 +342,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks              = new stdclass();
-$lang->block->availableBlocks->todo        = 'schedule';
+$lang->block->availableBlocks->todo        = 'Schedule';
 $lang->block->availableBlocks->task        = 'Tasks';
 $lang->block->availableBlocks->bug         = 'Bugs';
 $lang->block->availableBlocks->case        = 'Cases';
@@ -357,8 +357,8 @@ $lang->block->availableBlocks->testtask    = 'Requests';
 $lang->block->availableBlocks->risk        = 'Risks';
 $lang->block->availableBlocks->issue       = 'Issues';
 $lang->block->availableBlocks->meeting     = 'Meetings';
-$lang->block->availableBlocks->feedback    = 'My Feedbacks';
-$lang->block->availableBlocks->ticket      = 'Ticket';
+$lang->block->availableBlocks->feedback    = 'Feedbacks';
+$lang->block->availableBlocks->ticket      = 'Tickets';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
