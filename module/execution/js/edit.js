@@ -62,12 +62,12 @@ $(function()
             {
                 if($.inArray(lastBranch, unmodifiableBranches) != -1)
                 {
-                    if(linkedStoryIDList[last][lastBranch]) bootbox.alert(tip.replace('%s', linkedStoryIDList[last][lastBranch]));
+                    if(linkedStoryIDList[last][lastBranch]) bootbox.alert(unLinkProductTip.replace("%s", branchGroups[last][lastBranch]));
                 }
             }
             else
             {
-                bootbox.alert(tip.replace('%s', linkedStoryIDList[last][0]));
+                bootbox.alert(unLinkProductTip.replace("%s", allProducts[last]));
             }
         }
     });

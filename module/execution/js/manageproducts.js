@@ -23,12 +23,12 @@ $(function()
 
                 if($.inArray(branchID, unmodifiableBranches) != -1 && linkedStoryIDList[productID][branchID])
                 {
-                    bootbox.alert(tip.replace('%s', linkedStoryIDList[productID][branchID]));
+                    bootbox.alert(unLinkProductTip.replace("%s", branchGroups[productID][branchID]));
                 }
             }
             else
             {
-                bootbox.alert(tip.replace('%s', linkedStoryIDList[productID][0]));
+                bootbox.alert(unLinkProductTip.replace("%s", allProducts[productID]));
             }
         }
     });
