@@ -51,10 +51,10 @@ class xuanxuanMessage extends messageModel
                     ->fetch();
                 $field = $this->config->action->objectNameFields[$objectType];
                 $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
-                if ($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
+                if($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
                 {
                     $notifyType = strtolower(explode(',', $extra)[0]);
-                    if ($notifyType == 'pass')
+                    if($notifyType == 'pass')
                     {
                         $title = sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
                     }
@@ -68,9 +68,9 @@ class xuanxuanMessage extends messageModel
                     }
                 }
 
-                if ($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
+                if($objectType == 'feedback' && ($actionType == 'tobug' || $actionType == 'tostory' || $actionType == 'totask' || $actionType == 'todo'))
                 {
-                    if ($actionType == 'tobug')
+                    if($actionType == 'tobug')
                     {
                         $title = sprintf($this->lang->message->feedbackToBugTitle, $this->app->user->realname, 1);
                     }
@@ -99,7 +99,7 @@ class xuanxuanMessage extends messageModel
                 {
                     $feedback   = $this->loadModel('feedback')->getByID($objectID);
                     $senderUser = $this->feedback->getToAndCcList($feedback);
-                    foreach ($senderUser as $user)
+                    foreach($senderUser as $user)
                     {
                         $target .= ',' . $user;
                     }
