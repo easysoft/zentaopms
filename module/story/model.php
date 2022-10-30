@@ -4512,11 +4512,18 @@ class storyModel extends model
             {
                 if(!isset($group[$story->id])) continue;
                 $story->children = $this->getByList($group[$story->id]);
+
+                /* Splice linkStories When report requirement. */
+                foreach($story->children as $child)
+                {
+                    $story->linkStories .= $child->title . ',';
+                }
             }
         }
 
-        $parents    = array();
-        $tmpStories = array();
+        $parents      = array();
+        $tmpStories   = array();
+        $childStories = array();
         foreach($stories as $story)
         {
             $tmpStories[$story->id] = $story;
@@ -4526,6 +4533,14 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
+            /* Splice linkStories When report story. */
+            if($story->parent == -1)
+            {
+                $childrenTitle      = $this->dao->select('title')->from(TABLE_STORY)->where('parent')->eq($story->id)->fetchAll();
+                $childrenTitle      = array_column($childrenTitle, 'title');
+                $story->linkStories = implode(',', $childrenTitle);
+            }
+
             if($story->parent > 0)
             {
                 if(isset($stories[$story->parent]))

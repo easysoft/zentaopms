@@ -767,7 +767,7 @@ class portModel extends model
     }
 
     /**
-     * Get Rows .
+     * Get Rows.
      *
      * @param  int    $model
      * @param  int    $fieldList
@@ -796,8 +796,34 @@ class portModel extends model
         /* Deal children datas and multiple tasks .*/
         if($modelDatas) $modelDatas = $this->updateChildDatas($modelDatas);
 
+        /* Deal linkStories datas*/
+        if($modelDatas) $modelDatas = $this->updateLinkStories($modelDatas);
+
         return $modelDatas;
     }
+
+    /**
+     * Update LinkStories datas
+     *
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function updateLinkStories($stories)
+    {
+        $productID = array();
+        foreach($stories as $values)
+        {
+            $productID[] = $values->product;
+        }
+        $storyDatas = end($stories);
+        $lastBranch = $storyDatas->branch;
+        $lastType   = $storyDatas->type;
+        $stories    = $this->story->mergePlanTitle($productID , $stories, $lastBranch, $lastType);
+
+        return $stories;
+    }
+
 
     /**
      * Get query datas.
