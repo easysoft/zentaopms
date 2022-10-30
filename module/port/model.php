@@ -824,7 +824,6 @@ class portModel extends model
         return $stories;
     }
 
-
     /**
      * Get query datas.
      *
