@@ -5,6 +5,8 @@ function addItem(obj)
     {
         var trname = $(this).attr('class');
         var index  = trname.match(/\d+/g);
+
+        index  = parseInt(index);
         maxNum = index > maxNum ? index : maxNum;
     })
 
