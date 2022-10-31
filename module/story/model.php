@@ -4513,7 +4513,7 @@ class storyModel extends model
                 if(!isset($group[$story->id])) continue;
                 $story->children = $this->getByList($group[$story->id]);
 
-                /* Splice linkStories When report requirement. */
+                /* export requirement linkstories. */
                 foreach($story->children as $child) $story->linkStories .= $child->title . ',';
             }
         }
@@ -4530,7 +4530,7 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
-            /* Splice linkStories When report story. */
+            /* export story linkstories. */
             if($story->parent == -1)
             {
                 $childrenTitle      = $this->dao->select('title')->from(TABLE_STORY)->where('parent')->eq($story->id)->fetchAll();
