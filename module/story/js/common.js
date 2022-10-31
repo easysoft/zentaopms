@@ -86,3 +86,31 @@ function loadURS()
         $('#URS').chosen();
     });
 }
+
+$('.sibling').mouseover(function() {
+    $(this).find('.unlink').removeClass('hide');
+});
+$('.sibling').mouseout(function() {
+    $(this).find('.unlink').addClass('hide');
+});
+
+$('[data-toggle="popover"]').each(function(item) {
+    $index = $(this).attr('data-id');
+    $(this).popover({
+        placement: 'bottom',
+        html: true,
+        content: '<div class="popover-icon"><i class="icon-info"></i></div><div class="content">孪生关系解除后无法恢复，需求的内容不再同步，是否解除？</div><div class="popover-custom text-right"><a href="javascript:relieve(' + $index + ')" class="text-active btn-info">解除</a> <a href="javascript:popoverCancel(' + $index + ');" class="text-cancel">取消</a></div>'
+    });
+})
+
+function relieve(index)
+{
+    $.post(relieveURL, {storyID:index}, function(data){
+        if(data == 'success') $('[data-id="' + index + '"]').popover('hide').parent('li').remove();
+    });
+}
+
+function popoverCancel(index)
+{
+    $('[data-id="' + index + '"]').popover('hide').addClass('hide');
+}

@@ -17,3 +17,13 @@
 .c-source {width: 130px}
 .c-note {width: 100px}
 .c-category {width: 90px}
+
+.icon-info {color: #ff9800; border-color: #ff9800;}
+.text-active {text-decoration: underline;}
+.text-cancel {text-decoration: underline;color:#838a9d;margin-left:10px;}
+.popover {border:unset;}
+.popover.bottom .arrow{border-bottom-color:#ffffff;}
+.popover-icon {float:left;}
+.popover .content {margin-left:20px;overflow: overlay;}
+.hide {display:none !important;}
+.sibling {padding:6px;}

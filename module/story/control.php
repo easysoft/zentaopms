@@ -1296,32 +1296,33 @@ class story extends control
         $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
-        $this->view->title              = $title;
-        $this->view->position           = $position;
-        $this->view->product            = $product;
-        $this->view->branches           = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan               = $plan;
-        $this->view->bugs               = $bugs;
-        $this->view->fromBug            = $fromBug;
-        $this->view->cases              = $cases;
-        $this->view->story              = $story;
-        $this->view->linkedMRs          = $linkedMRs;
-        $this->view->track              = $this->story->getTrackByID($story->id);
-        $this->view->users              = $this->user->getPairs('noletter');
-        $this->view->reviewers          = $reviewers;
-        $this->view->relations          = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->executions         = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution          = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
-        $this->view->actions            = $this->action->getList('story', $storyID);
-        $this->view->storyModule        = $storyModule;
-        $this->view->modulePath         = $modulePath;
-        $this->view->storyProducts      = $storyProducts;
-        $this->view->version            = $version;
-        $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->from               = $from;
-        $this->view->param              = $param;
-        $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
-        $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->product       = $product;
+        $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->siblings      = !empty($story->sibling) ? $this->story->getByList($story->sibling) : array();
+        $this->view->plan          = $plan;
+        $this->view->bugs          = $bugs;
+        $this->view->fromBug       = $fromBug;
+        $this->view->cases         = $cases;
+        $this->view->story         = $story;
+        $this->view->linkedMRs     = $linkedMRs;
+        $this->view->track         = $this->story->getTrackByID($story->id);
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->reviewers     = $reviewers;
+        $this->view->relations     = $this->story->getStoryRelation($story->id, $story->type);
+        $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->execution     = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
+        $this->view->actions       = $this->action->getList('story', $storyID);
+        $this->view->storyModule   = $storyModule;
+        $this->view->modulePath    = $modulePath;
+        $this->view->storyProducts = $storyProducts;
+        $this->view->version       = $version;
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->from          = $from;
+        $this->view->param         = $param;
+        $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
 
         $this->display();
     }
@@ -2740,5 +2741,18 @@ class story extends control
         $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
 
         return print(html::select('URS[]', $URS, $requirementList, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * AJAX: Deleted story sibling.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxRelieveSibling()
+    {
+        $storyID = !empty($_POST['storyID']) ? $_POST['storyID'] : 0;
+        $this->dao->update(TABLE_STORY)->set('SIBLING')->eq('')->where('id')->eq($_POST['storyID'])->exec();
+        return print('success');
     }
 }
