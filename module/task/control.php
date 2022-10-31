@@ -297,6 +297,18 @@ class task extends control
             $executionList = $this->execution->getByProject($projectID, 'all', 0, true);
             $project       = $this->loadModel('project')->getByID($projectID);
             $replace       = substr(current($executionList), 0, strpos(current($executionList), '/'));
+
+            /* Fix bug #26228 closed execution chose execution when create task.*/
+            $keys         = array_keys($executionList);
+            $executionKey = 0;
+            $executionModifyList = $this->execution->getByIdList($keys);
+            foreach($executionModifyList as $execution)
+            {
+                if(!common::canModify('execution', $execution)) $executionKey = $execution->id;
+                if($executionKey) unset($executionList[$executionKey]);
+            }
+            $executionAll = $executionList;
+
             if(isset($project->model) and $project->model == 'waterfall')
             {
                 foreach($executionList as $key => $val)
@@ -304,10 +316,6 @@ class task extends control
                     $values = str_replace($replace, $project->name, $val);
                     $executionAll[$key] = $values;
                 }
-            }
-            else
-            {
-                $executionAll = $executionList;
             }
         }
         $executions = $this->config->systemMode == 'classic' ? $executions : $executionAll;
