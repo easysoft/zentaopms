@@ -634,7 +634,8 @@ class portModel extends model
                 }
                 elseif(strpos($this->config->port->userFields, $field) !== false)
                 {
-                    $rows[$id]->$field = zget($exportDatas['user'], $value, '');
+                    /* if user deleted when export set userFields is itself. */
+                    $rows[$id]->$field = zget($exportDatas['user'], $value, $value);
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''*/
