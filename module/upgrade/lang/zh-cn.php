@@ -152,11 +152,12 @@ $lang->upgrade->projectKanban    = '项目-看板模型';
 $lang->upgrade->execution        = '执行、测试、DevOps、看板、文档、统计、组织';
 $lang->upgrade->assetlib         = '资产库';
 $lang->upgrade->oa               = '办公、运维、反馈、学堂、工作流';
+$lang->upgrade->vision           = '研发综合界面、运营管理界面';
 $lang->upgrade->selectUsage      = '请选择使用场景';
 $lang->upgrade->useLean          = '使用迅捷模式';
 $lang->upgrade->useNew           = '使用综合模式';
 $lang->upgrade->remark           = '备注';
-$lang->upgrade->remarkDesc       = '后续您还可以在系统的后台自定义中进行模式切换。';
+$lang->upgrade->remarkDesc       = '后续您还可以在禅道的后台-系统-模式中进行切换。';
 
 $lang->upgrade->to18Mode['lean'] = '迅捷模式';
 $lang->upgrade->to18Mode['new']  = '综合模式';
