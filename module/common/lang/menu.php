@@ -575,11 +575,11 @@ $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code,custom-mode');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|admin|setmodule", 'subModule' => 'cron,backup,action,admin,search,convert', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|custom|mode", 'subModule' => 'cron,backup,action,admin,search,convert,custom', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
 $lang->admin->menu->model['dropMenu'] = new stdclass();
 $lang->admin->menu->model['dropMenu']->allModel = array('link' => "{$lang->globalSetting}|custom|browsestoryconcept|", 'subModule' => 'measurement,report,sqlbuilder,subject,custom,meetingroom,baseline');
@@ -640,6 +640,7 @@ $lang->admin->menu->dev['menuOrder'][15] = 'editor';
 $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
 $lang->admin->menu->system['subMenu']              = new stdclass();
+$lang->admin->menu->system['subMenu']->mode        = array('link' => "{$lang->custom->mode}|custom|mode");
 $lang->admin->menu->system['subMenu']->setModule   = array('link' => "{$lang->admin->module}|admin|setmodule");
 $lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
 $lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
@@ -719,7 +720,6 @@ $lang->navGroup->kanbancard   = 'kanban';
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
 $lang->navGroup->api    = 'doc';
-
 
 $lang->navGroup->report = 'report';
 

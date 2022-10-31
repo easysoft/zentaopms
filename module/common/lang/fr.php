@@ -183,6 +183,7 @@ $lang->automation->common = 'Automation';
 $lang->team->common       = 'Team';
 $lang->user->common       = 'User';
 $lang->custom->common     = 'Custom';
+$lang->custom->mode       = 'Mode';
 $lang->extension->common  = 'Extension';
 $lang->company->common    = 'Company';
 $lang->dept->common       = 'Dept';

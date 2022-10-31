@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php js::set('changeModeTitleTips', $lang->custom->changeModeTitleTips);?>
 <?php js::set('changeModeContentTips', $lang->custom->changeModeContentTips);?>
 <?php js::set('mode', $mode);?>
