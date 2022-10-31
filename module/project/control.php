@@ -2163,8 +2163,6 @@ class project extends control
                     $unlinkedProductPairs = array();
                     foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
 
-                    $this->action->create('project', $projectID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
-
                     $executionIDList = $this->execution->getIdList($projectID);
                     foreach($executionIDList as $executionID) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
                 }

@@ -397,7 +397,7 @@ $lang->action->label->submitreview          = '提交了评审';
 $lang->action->label->switchtolean          = '从综合模式切换为迅捷模式';
 $lang->action->label->linkedrepo            = '关联代码库到';
 $lang->action->label->unlinkedrepo          = '取消了项目与代码库的关联';
-$lang->action->label->unlinkproduct         = '取消了项目与产品的关联';
+$lang->action->label->unlinkproduct         = '取消了与产品的关联';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
