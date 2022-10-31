@@ -340,8 +340,8 @@ $lang->exportTypeList['all']      = 'Toutes les Données';
 $lang->exportTypeList['selected'] = 'Données sélectionnées';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = 'R&D';
-$lang->visionList['lite'] = 'Lite';
+$lang->visionList['rnd']  = 'Full Feature Interface';
+$lang->visionList['lite'] = 'Operation Management Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
