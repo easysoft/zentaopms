@@ -1709,7 +1709,7 @@ class baseRouter
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
 
-        if(!empty( $moduleExtPaths['saas']))
+        if(!empty($moduleExtPaths['saas']))
         {
             $this->extActionFile = $moduleExtPaths['saas'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;

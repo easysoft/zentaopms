@@ -1660,7 +1660,6 @@ class task extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
-
     }
 
     /**

@@ -300,9 +300,6 @@ class baseEntry
              * 引入该模块的control文件。
              * Include the control file of the module.
              **/
-
-            $file2Included = $app->setActionExtFile() ? $app->extActionFile : $app->controlFile;
-
             $isExt = $app->setActionExtFile();
             if($isExt)
             {
@@ -342,7 +339,7 @@ class baseEntry
      */
     public function loadModel($moduleName = '', $appName = '')
     {
-        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($moduleName)) $moduleName = $this->app->moduleName;
         if(empty($appName))    $appName    = $this->app->appName;
 
         global $loadedModels;
