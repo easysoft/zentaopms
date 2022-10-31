@@ -4514,10 +4514,7 @@ class storyModel extends model
                 $story->children = $this->getByList($group[$story->id]);
 
                 /* Splice linkStories When report requirement. */
-                foreach($story->children as $child)
-                {
-                    $story->linkStories .= $child->title . ',';
-                }
+                foreach($story->children as $child) $story->linkStories .= $child->title . ',';
             }
         }
 

@@ -812,10 +812,7 @@ class portModel extends model
     public function updateLinkStories($stories)
     {
         $productID = array();
-        foreach($stories as $values)
-        {
-            $productID[] = $values->product;
-        }
+        foreach($stories as $values) $productID[] = $values->product;
         $storyDatas = end($stories);
         $lastBranch = $storyDatas->branch;
         $lastType   = $storyDatas->type;
