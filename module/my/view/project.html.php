@@ -61,7 +61,6 @@
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;?>
             <?php
             $suffix      = '';
             $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;
