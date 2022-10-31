@@ -90,10 +90,7 @@
                 </tr>
                 <tr>
                   <th></th>
-                  <td>
-                    <?php echo html::commonButton($lang->save, '', 'btn btn-primary btn-wide saveOtherProduct');?>
-                    <?php echo html::commonButton($lang->cancel, '', 'btn btn-wide cancelOtherProduct');?>
-                  </td>
+                  <td><?php echo html::commonButton($lang->save, '', 'btn btn-primary btn-wide saveOtherProduct');?></td>
                 </tr>
               </table>
             </div>

@@ -71,9 +71,4 @@ $(function()
 
         $('form#productsBox').submit();
     });
-
-    $('.cancelOtherProduct').click(function()
-    {
-        $('#otherProductsModal').modal('hide');
-    });
 });
