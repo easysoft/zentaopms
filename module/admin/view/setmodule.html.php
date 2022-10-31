@@ -41,7 +41,7 @@
 
           <?php if($hasData):?>
           <tr>
-            <td class='text-right'><?php echo $lang->admin->setModule->{$module};?></th>
+            <td class='text-right'><?php echo $lang->admin->setModule->{$module};?></td>
             <td>
               <?php foreach($options as $option):?>
               <?php $code = $module . ucfirst($option);?>

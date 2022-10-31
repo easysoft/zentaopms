@@ -1891,6 +1891,7 @@ global $config;
 $hasWaterfall      = (strpos(",$config->disabledFeatures,", ',waterfall,')      === false or (defined('IN_UPGRADE') and IN_UPGRADE));
 $hasProductTrack   = (strpos(",$config->disabledFeatures,", ',productTrack,')   === false or (defined('IN_UPGRADE') and IN_UPGRADE));
 $hasProductRoadmap = (strpos(",$config->disabledFeatures,", ',productRoadmap,') === false or (defined('IN_UPGRADE') and IN_UPGRADE));
+$hasWaterfallTrack = (strpos(",$config->disabledFeatures,", ',waterfallTrack,') === false or (defined('IN_UPGRADE') and IN_UPGRADE));
 $isURSR            = ($config->URAndSR             or (defined('IN_UPGRADE') and IN_UPGRADE));
 $hasProgram        = ($config->systemMode == 'new' or (defined('IN_UPGRADE') and IN_UPGRADE));
 if(!$hasWaterfall)
@@ -1912,5 +1913,6 @@ if(!$isURSR)
 }
 if(!$hasProductTrack)   unset($lang->resource->product->track);
 if(!$hasProductRoadmap) unset($lang->resource->product->roadmap);
+if(!$hasWaterfallTrack) unset($lang->resource->projectstory->track);
 
 include (dirname(__FILE__) . '/changelog.php');
