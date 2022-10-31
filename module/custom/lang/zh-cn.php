@@ -33,7 +33,6 @@ $lang->custom->URStory              = "用户需求";
 $lang->custom->SRStory              = "软件需求";
 $lang->custom->epic                 = "史诗";
 $lang->custom->default              = "默认";
-$lang->custom->mode                 = "模式";
 $lang->custom->scrumStory           = "故事";
 $lang->custom->waterfallCommon      = "瀑布";
 $lang->custom->buildin              = "系统内置";
@@ -118,10 +117,9 @@ $lang->custom->menuOrder[55] = 'user';
 $lang->custom->menuOrder[60] = 'block';
 $lang->custom->menuOrder[65] = 'flow';
 $lang->custom->menuOrder[70] = 'score';
-$lang->custom->menuOrder[85] = 'mode';
 
 $lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,mode';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score';
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';

@@ -183,6 +183,7 @@ $lang->automation->common = '自动化';
 $lang->team->common       = '团队';
 $lang->user->common       = '用户';
 $lang->custom->common     = '自定义';
+$lang->custom->mode       = '模式';
 $lang->extension->common  = '插件';
 $lang->company->common    = '公司';
 $lang->dept->common       = '部门';

@@ -33,7 +33,6 @@ $lang->custom->URStory              = "User requirements";
 $lang->custom->SRStory              = "Software requirements";
 $lang->custom->epic                 = "Epic";
 $lang->custom->default              = "Default";
-$lang->custom->mode                 = "Mode";
 $lang->custom->scrumStory           = "Story";
 $lang->custom->waterfallCommon      = "Waterfall";
 $lang->custom->buildin              = "Buildin";
@@ -102,7 +101,6 @@ $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'Block';
 $lang->custom->object['flow']      = 'Flow';
 $lang->custom->object['score']     = 'Score';
-$lang->custom->object['mode']      = 'Mode';
 
 $lang->custom->menuOrder[5]  = 'project';
 $lang->custom->menuOrder[10] = 'product';
@@ -118,10 +116,9 @@ $lang->custom->menuOrder[55] = 'user';
 $lang->custom->menuOrder[60] = 'block';
 $lang->custom->menuOrder[65] = 'flow';
 $lang->custom->menuOrder[70] = 'score';
-$lang->custom->menuOrder[85] = 'mode';
 
 $lang->custom->dividerMenu  = ',story,todo,block,';
-$lang->custom->separatePage = ',execution,product,kanban,flow,score,mode,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
 
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Closed Block';
