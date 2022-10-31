@@ -73,6 +73,18 @@ $(function()
         $('tr:first').addClass("show-detail");
         $('#tr-detail_1').removeClass("hide");
     });
+
+    $('#resultsContainer').click(function(event)
+    {
+        if(event.target.id.indexOf('checkAll') !== -1)
+        {
+            var checkAll  = document.getElementById(event.target.id);
+            var checkAll  = $(checkAll);
+            var isChecked = checkAll.prop('checked');
+
+            checkAll.closest('tbody').children('tr').find('input[type=checkbox]').prop('checked', isChecked);
+        }
+    });
 });
 var sessionString = '<?php echo session_name() . '=' . session_id();?>';
 </script>
