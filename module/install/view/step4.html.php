@@ -109,6 +109,11 @@
               </tr>
               <?php endif;?>
               <tr>
+                <td colspan='2'><?php echo $this->lang->upgrade->vision;?></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+                <td colspan='2' class="text-center"><i class="icon icon-check"></i></td>
+              </tr>
+              <tr>
                 <td colspan='2' style="font-weight:bold;font-size:14px;"><?php echo $this->lang->upgrade->selectUsage;?></td>
                 <td colspan='2' class="text-center"><button class="btn" type="button" id='useLean'><?php echo $this->lang->upgrade->useLean;?></button></td>
                 <td colspan='2' class="text-center"><button class="btn" type="button" id='useNew'><?php echo $this->lang->upgrade->useNew;?></button></td>

@@ -152,11 +152,12 @@ $lang->upgrade->projectKanban    = 'Project - Kanban model';
 $lang->upgrade->execution        = 'Execute, test, DevOps, Kanban, document, statistics, organize';
 $lang->upgrade->assetlib         = 'Assetlib';
 $lang->upgrade->oa               = 'OA, operation and maintenance, feedback, school, workflow';
+$lang->upgrade->vision           = 'Full Feature Interface, Operation Management Interface';
 $lang->upgrade->selectUsage      = 'Select a scenario';
 $lang->upgrade->useLean          = 'Use lean mode';
 $lang->upgrade->useNew           = 'User program mode';
 $lang->upgrade->remark           = 'Remark';
-$lang->upgrade->remarkDesc       = 'You can also switch the mode in the background customization of the system.';
+$lang->upgrade->remarkDesc       = 'You can also switch the mode in the Admin-System-Mode page of the system.';
 
 $lang->upgrade->to18Mode['lean'] = 'Lean Mode';
 $lang->upgrade->to18Mode['new']  = 'Program Mode';
