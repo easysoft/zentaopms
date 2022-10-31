@@ -16,3 +16,5 @@
 .source .input-group-addon, .sourceNote .input-group-addon {padding-top: 9px;}
 #sourceNoteBox {width: 80px;}
 #moduleIdBox .input-group-addon {min-width: 77px;}
+
+.btn.btn-action, .c-actions .btn {color: grey}

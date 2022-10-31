@@ -108,3 +108,36 @@ function setLane(regionID)
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
+
+/**
+ * Add item
+ *
+ * @param  obj   $obj
+ * @access public
+ * @return void
+ */
+ function addItem(obj)
+ {
+     var item = $('#addItem').html().replace(/%i%/g, itemIndex);
+     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
+     $('#branch_i__chosen').remove();
+     $('#branch' + itemIndex).chosen();
+     $('#module_i__chosen').remove();
+     $('#module' + itemIndex).chosen();
+     $('#plan_i__chosen').remove();
+     $('#plan' + itemIndex).chosen();
+     itemIndex ++;
+     $('.addedItem #planBox').css('flex', '0 0 ' + gap + 'px')
+ }
+
+ /**
+  * Delete item.
+  *
+  * @param  obj  $obj
+  * @access public
+  * @return void
+  */
+ function deleteItem(obj)
+ {
+     $(obj).closest('tr').remove();
+ }

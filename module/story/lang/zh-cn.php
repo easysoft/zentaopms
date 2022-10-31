@@ -466,6 +466,12 @@ $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
+$lang->story->branchBox = new stdClass();
+$lang->story->branchBox->branch       = '分支';
+$lang->story->branchBox->sourceBranch = '所属分支';
+$lang->story->branchBox->sourceModule = '所属模块';
+$lang->story->branchBox->sourcePlan   = '所属计划';
+
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";
 $lang->requirement->batchCreate        = "批量创建";
