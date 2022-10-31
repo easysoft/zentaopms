@@ -61,7 +61,8 @@
         <tr>
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
-            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project' title='{$project->name} ({$this->lang->project->{$project->model}})'");?>
+            <?php $projectType = $project->model == 'scrum' ? 'sprint' : $project->model;?>
+            <?php echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), "<i class='icon icon-{$projectType}'></i> " . $project->name, '', "data-group='project' title='{$project->name}'");?>
           </td>
           <td class='c-manager'>
             <?php if(!empty($project->PM)):?>

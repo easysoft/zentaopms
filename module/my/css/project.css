@@ -8,3 +8,5 @@
 .label-warning, .label-info {width: 60px !important;}
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .c-date {width: 120px;}
+
+#projectList td.c-name > a > i {color: #A6AAB8;}
