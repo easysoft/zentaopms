@@ -69,8 +69,8 @@ $lang->admin->bind->success = "关联账户成功";
 $lang->admin->setModule = new stdclass();
 $lang->admin->setModule->module         = '功能点';
 $lang->admin->setModule->optional       = '可选功能';
-$lang->admin->setModule->opened         = '开启的';
-$lang->admin->setModule->closed         = '关闭的';
+$lang->admin->setModule->opened         = '已开启';
+$lang->admin->setModule->closed         = '已关闭';
 
 $lang->admin->setModule->product        = '产品';
 $lang->admin->setModule->scrum          = '敏捷项目';

@@ -16,8 +16,8 @@ $config->admin->log->saveDays = 30;
 
 $config->admin->module = new stdclass();
 $config->admin->module->product   = array('roadmap', 'track', 'URStory');
-$config->admin->module->scrum     = array('repo', 'issue', 'risk', 'opportunity', 'process', 'measrecord', 'auditplan', 'meeting');
-$config->admin->module->waterfall = array('repo', 'track', 'researchplan', 'issue', 'risk', 'opportunity', 'process', 'measrecord', 'auditplan', 'gapanalysis', 'meeting');
+$config->admin->module->scrum     = array();
+$config->admin->module->waterfall = array('track');
 $config->admin->module->assetlib  = array('storylib', 'caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
 $config->admin->module->other     = array('devops', 'kanban', 'oa', 'deploy', 'traincourse');
 
