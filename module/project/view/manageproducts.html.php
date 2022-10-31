@@ -14,7 +14,7 @@
 <?php js::set('unmodifiableProducts', $unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches);?>
 <?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches);?>
-<?php js::set('allProducts', $currentProducts);?>
+<?php js::set('allProducts', $allProducts);?>
 <?php js::set('branchGroups', $branchGroups);?>
 <?php js::set('BRANCH_MAIN', BRANCH_MAIN);?>
 <?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>

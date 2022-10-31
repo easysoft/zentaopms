@@ -2155,13 +2155,19 @@ class project extends control
             $diffProductIDs = array_merge(array_diff($oldProductIDs, $newProductIDs), array_diff($newProductIDs, $oldProductIDs));
             if($diffProductIDs) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
-            $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
-            if(!empty($unlinkedProducts))
+            if($project->multiple)
             {
-                $unlinkedProductPairs = array();
-                foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
+                $unlinkedProducts = array_diff($oldProductIDs, $newProductIDs);
+                if(!empty($unlinkedProducts))
+                {
+                    $unlinkedProductPairs = array();
+                    foreach($unlinkedProducts as $unlinkedProduct) $unlinkedProductPairs[$unlinkedProduct] = $oldProducts[$unlinkedProduct]->name;
 
-                $this->action->create('project', $projectID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
+                    $this->action->create('project', $projectID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
+
+                    $executionIDList = $this->execution->getIdList($projectID);
+                    foreach($executionIDList as $executionID) $this->action->create('execution', $executionID, 'unlinkproduct', '', implode(',', $unlinkedProductPairs));
+                }
             }
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
@@ -2251,6 +2257,7 @@ class project extends control
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $branchGroups;
         $this->view->allBranches              = $this->branch->getByProducts(array_keys($allProducts), 'ignoreNormal');
+        $this->view->allProducts              = $allProducts;
         $this->view->otherProducts            = $otherProducts;
 
         $this->display();
