@@ -41,7 +41,7 @@
 
           <?php if($hasData):?>
           <tr>
-            <th class='text-right'><?php echo $lang->admin->setModule->{$module};?></th>
+            <td class='text-right'><?php echo $lang->admin->setModule->{$module};?></th>
             <td>
               <?php foreach($options as $option):?>
               <?php $code = $module . ucfirst($option);?>
@@ -68,8 +68,7 @@
           <?php endif;?>
           <?php endForeach;?>
           <tr>
-            <th></th>
-            <td colspan='2'><?php echo html::submitButton();?></td>
+            <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
           </tr>
         </tbody>
       </table>
