@@ -73,6 +73,7 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
+        <?php if(!empty($siblings)):?>
         <tr id='siblingTh'>
           <td colspan='2'>
             <?php echo $lang->story->changeSyncTip;?>
@@ -91,6 +92,7 @@
             </ul>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td><?php include './affected.html.php';?></td>

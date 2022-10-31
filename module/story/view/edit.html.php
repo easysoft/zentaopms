@@ -98,6 +98,7 @@
           </div>
           <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
+          <?php if(!empty($siblings)):?>
           <div class='detail' id='siblingList'>
             <div class='detail-title'>
               <?php echo $lang->story->changeSyncTip;?>
@@ -116,6 +117,7 @@
               </div>
             </div>
           </div>
+          <?php endif;?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
             <div class='form-group'>
