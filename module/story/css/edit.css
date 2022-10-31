@@ -5,4 +5,4 @@
 .needNotReviewBox {width: 130px;}
 .needNotReviewBox span.input-group-addon {border: 1px solid #dcdcdc; border-left-width: 0px; width:130px;}
 #moduleIdBox .chosen-container, #planIdBox .chosen-container {min-width: unset;}
-#siblingList ul li {padding-top:5px;}
+#siblingList ul li {padding-top:5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}

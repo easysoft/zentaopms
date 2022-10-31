@@ -5,4 +5,4 @@
 .colorpicker {right: 7px; top: 7px; opacity: 1;}
 #siblingTd td, #siblingTh td {padding-left: 65px;}
 #siblingTh td {font-weight: 700;}
-#siblingTd ul li {padding-top: 5px;}
+#siblingTd ul li {padding-top: 5px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
