@@ -9,4 +9,9 @@
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .c-date {width: 120px;}
 
-#projectList td.c-name > a > i {color: #A6AAB8;}
+#projectList td.c-name a > i {color: #A6AAB8;}
+#projectList td.c-name .project-name {display: flex; align-items: center;}
+#projectList td.c-name .project-name > span,
+#projectList td.c-name .project-name > span {flex: none;}
+#projectList td.c-name .project-name > a {display: inline-block; max-width: calc(100% - 50px);}
+#projectList td.c-name .project-name.has-suffix > a {padding-right: 5px;}
