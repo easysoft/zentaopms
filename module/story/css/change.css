@@ -3,3 +3,6 @@
 .nav-tabs>li>a {height: 36px;}
 .table-form>tbody>tr>th {width: 100px !important;}
 .colorpicker {right: 7px; top: 7px; opacity: 1;}
+#siblingTd td, #siblingTh td {padding-left: 65px;}
+#siblingTh td {font-weight: 700;}
+#siblingTd ul li {padding-top: 5px;}

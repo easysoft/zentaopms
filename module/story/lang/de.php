@@ -95,6 +95,8 @@ $lang->story->successToTask    = "Converted to task.";
 $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『%s』should be positive number, decimals included.";
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
+$lang->story->changeSyncTip    = "The modification of this story will be synchronized to the following twin requirements";
+$lang->story->syncTip          = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';

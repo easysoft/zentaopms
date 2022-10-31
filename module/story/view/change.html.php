@@ -73,6 +73,24 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
+        <tr id='siblingTh'>
+          <td colspan='2'>
+            <?php echo $lang->story->changeSyncTip;?>
+            <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
+          </td>
+        </tr>
+        <tr id='siblingTd'>
+          <td colspan='2'>
+            <ul class='list-unstyled'>
+              <?php foreach($siblings as $siblingID => $sibling):?>
+              <li>
+                <span class='label label-outline label-badge'><?php echo $branches[$sibling->branch];?></span>
+                <?php echo $siblingID . ' ' . $sibling->title;?>
+              </li>
+              <?php endforeach;?>
+            </ul>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td><?php include './affected.html.php';?></td>

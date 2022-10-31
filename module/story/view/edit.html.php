@@ -98,6 +98,24 @@
           </div>
           <?php endif;?>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
+          <div class='detail' id='siblingList'>
+            <div class='detail-title'>
+              <?php echo $lang->story->changeSyncTip;?>
+              <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
+            </div>
+            <div class='form-group'>
+              <div>
+                <ul class='list-unstyled'>
+                  <?php foreach($siblings as $siblingID => $sibling):?>
+                  <li>
+                    <span class='label label-outline label-badge'><?php echo $branchTagOption[$sibling->branch];?></span>
+                    <?php echo $siblingID . ' ' . $sibling->title;?>
+                  </li>
+                  <?php endforeach;?>
+                </ul>
+              </div>
+            </div>
+          </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
             <div class='form-group'>
