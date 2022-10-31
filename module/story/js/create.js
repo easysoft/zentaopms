@@ -110,15 +110,15 @@ $(window).unload(function(){
 });
 
 /**
- * Add item
+ * Add branch box.
  *
  * @param  obj   $obj
  * @access public
  * @return void
  */
- function addItem(obj)
+ function addBranchesBox(obj)
  {
-     var item = $('#addItem').html().replace(/%i%/g, itemIndex);
+     var item = $('#addBranchesBox').html().replace(/%i%/g, itemIndex);
      $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
      $('#branch_i__chosen').remove();
      $('#branch' + itemIndex).chosen();
@@ -131,13 +131,13 @@ $(window).unload(function(){
  }
 
  /**
-  * Delete item.
+  * Delete branch box.
   *
   * @param  obj  $obj
   * @access public
   * @return void
   */
- function deleteItem(obj)
+ function deleteBranchesBox(obj)
  {
      $(obj).closest('tr').remove();
  }

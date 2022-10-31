@@ -466,12 +466,6 @@ $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
-$lang->story->branchBox = new stdClass();
-$lang->story->branchBox->branch       = 'branch';
-$lang->story->branchBox->sourceBranch = 'branch';
-$lang->story->branchBox->sourceModule = 'module';
-$lang->story->branchBox->sourcePlan   = 'plan';
-
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';
 $lang->requirement->batchCreate        = "Batch Create";

@@ -86,53 +86,32 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <?php if($type == 'story'):?>
           <?php if($branches): ?>
           <tr>
-            <th><?php echo $lang->story->branchBox->branch;?></th>
+            <th><?php echo $lang->product->branchName[$product->type];?></th>
             <td colspan="4">
               <div class='input-group' style='display: flex;'>
                 <div class='table-col' id='branchBox'>
                   <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourceBranch?></span>
+                    <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
                     <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranch2(this.value, 0);' class='form-control chosen control-branch'");?>
                   </div>
                 </div>
                 <div class='table-col' id='moduleBox'>
                   <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourceModule?></span>
-                    <?php
-                    echo html::select('modules[0]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
-                    if(count($moduleOptionMenu) == 1)
-                    {
-                        echo "<div class='input-group-addon'>";
-                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
-                        echo '&nbsp; ';
-                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='refresh' onclick='loadProductModules($productID)'");
-                        echo '</div>';
-                    }
-                    ?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
+                    <?php echo html::select('modules[0]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
                   </div>
                 </div>
                 <div class='table-col' id='planBox'>
                   <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourcePlan;?></span>
-                    <?php
-                    echo html::select('plans[0]', $plans, $planID, "class='form-control chosen'");
-                    if(count($plans) == 1)
-                    {
-                        echo "<div class='input-group-btn'>";
-                        echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$lang->productplan->create}'");
-                        echo '</div>';
-                        echo "<div class='input-group-btn'>";
-                        echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadProductPlans($productID)'");
-                        echo '</div>';
-                    }
-                    ?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
+                    <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen'");?>
                   </div>
                 </div>
               </div>
             </td>
             <td class="table-col c-actions text-left w-60px">
               <div>
-                <a href='javascript:;' onclick='addItem(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
+                <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
               </div>
             </td>
           </tr>
@@ -367,55 +346,34 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
 <?php js::set('itemIndex', 1);?>
 <?php $i = '%i%';?>
   <table class="hidden">
-    <tr id="addItem" class="hidden">
+    <tr id="addBranchesBox" class="hidden">
       <th></th>
       <td colspan="4">
         <div class='input-group' style='display: flex;'>
           <div class='table-col' id='branchBox' style='flex: 1 0 160px'>
             <div class='input-group'>
-              <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourceBranch?></span>
+              <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
               <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranches();' class='form-control chosen control-branch'");?>
             </div>
           </div>
           <div class='table-col' id='moduleBox' style='flex: 1 0 160px'>
             <div class='input-group'>
-              <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourceModule?></span>
-              <?php
-              echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");
-              if(count($moduleOptionMenu) == 1)
-              {
-                  echo "<div class='input-group-addon'>";
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
-                  echo '&nbsp; ';
-                  echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='refresh' onclick='loadProductModules($productID)'");
-                  echo '</div>';
-              }
-              ?>
+              <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
+              <?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
             </div>
           </div>
           <div class='table-col' id='planBox'>
             <div class='input-group'>
-              <span class='input-group-addon fix-border'><?php echo $lang->story->branchBox->sourcePlan;?></span>
-              <?php
-              echo html::select("plans[$i]", $plans, $planID, "class='form-control chosen'");
-              if(count($plans) == 1)
-              {
-                  echo "<div class='input-group-btn'>";
-                  echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$lang->productplan->create}'");
-                  echo '</div>';
-                  echo "<div class='input-group-btn'>";
-                  echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadProductPlans($productID)'");
-                  echo '</div>';
-              }
-              ?>
+              <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
+              <?php echo html::select("plans[$i]", $plans, $planID, "class='form-control chosen'");?>
             </div>
           </div>
         </div>
       </td>
       <td class="table-col text-left w-60px c-actions">
         <div>
-          <a href='javascript:;' onclick='addItem(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
-          <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link' title=''><i class='icon icon-close'></i></a>
+          <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
+          <a href='javascript:;' onclick='deleteBranchesBox(this)' class='btn btn-link' title=''><i class='icon icon-close'></i></a>
         </div>
       </td>
     </tr>
@@ -428,7 +386,6 @@ $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');}
 
 var gap = $('#assignedTo').parent().parent().width();
 $('#planBox').css('flex', '0 0 ' + gap + 'px')
-// $('.c-actions').css('flex', '0 0 60px')
 $("#branches0").parent().parent().css('flex', '1 0 160px')
 $("#modules0").parent().parent().css('flex', '1 0 160px')
 
