@@ -151,7 +151,14 @@ class baseModel
         $this->loadDAO();
         $this->setSuperVars();
 
-        $this->loadTao($moduleName, $this->appName);
+        /**
+         * 读取当前模块的tao类。
+         * Load the tao file auto.
+         */
+        $taoClass      = $moduleName . 'Tao';
+        $selfClass     = get_class($this);
+        $parentClasses = class_parents($this);
+        if($selfClass != $taoClass && !isset($parentClasses[$taoClass])) $this->loadTao($moduleName, $this->appName);
     }
 
     /**
