@@ -76,6 +76,9 @@ $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
 $lang->story->saveDraft          = '存为草稿';
 $lang->story->doNotSubmit        = '保存暂不提交';
+$lang->story->currentBranch      = '当前分支';
+$lang->story->sibling            = '孪生需求';
+$lang->story->relieved           = '解除';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
@@ -97,6 +100,7 @@ $lang->story->float            = "『%s』应当是正数，可以是小数。";
 $lang->story->saveDraftSuccess = '存为草稿成功';
 $lang->story->changeSyncTip    = "该需求的修改会同步到如下的孪生需求";
 $lang->story->syncTip          = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
+$lang->story->relievedTip      = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';

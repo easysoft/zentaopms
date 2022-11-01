@@ -401,6 +401,9 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
+          <?php if($product->type != 'normal' and $story->siblings):?>
+          <li><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->sibling;?></a></li>
+          <?php endif;?>
           <?php if($this->config->URAndSR):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
@@ -410,6 +413,13 @@
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
+          <?php if($product->type != 'normal'):?>
+          <div class='tab-pane' id='legendSiblings'>
+            <ul class="list-unstyled">
+                <?php include './blocksibling.html.php';?>
+            </ul>
+          </div>
+          <?php endif;?>
           <?php if($this->config->URAndSR):?>
           <div class='tab-pane active' id='legendStories'>
             <ul class="list-unstyled">
@@ -639,7 +649,6 @@ js::set('unlink', $lang->story->unlink);
 js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
-<script>
-</script>
+
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

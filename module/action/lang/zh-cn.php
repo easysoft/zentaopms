@@ -224,6 +224,7 @@ $lang->action->desc->reopen               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->merged               = '$date, 由 <strong>$actor</strong> 合并。' . "\n";
 $lang->action->desc->submitreview         = '$date, 由 <strong>$actor</strong> 提交评审。' . "\n";
 $lang->action->desc->ganttmove            = '$date, 由 <strong>$actor</strong> 排序。' . "\n";
+$lang->action->desc->relieved             = '$date, 由 <strong>$actor</strong> 解除孪生需求关系。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
