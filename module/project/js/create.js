@@ -143,10 +143,35 @@ function setParentProgram(parentProgram)
     $.get(createLink('project', 'ajaxGetObjectInfo', 'objectType=program&objectID=' + lastSelectedID + "&selectedProgramID=" + parentProgram), function(data)
     {
         var data = JSON.parse(data);
-        selectedParent = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
+        selectedParent     = parentProgram != 0 ? data.selectedProgramPath[1] : 0;
         lastSelectedParent = lastSelectedID != 0 ? data.objectPath[1] : 0;
 
-        if(selectedParent != lastSelectedParent) $('#budget').val('');
+        if(selectedParent != lastSelectedParent)
+        {
+            $('#budget').val('');
+
+            var select = data.allProducts;
+            var planSelect = data.plans;
+
+            var index = 0;
+            $('#productsBox .row .col-sm-4 .input-group').each(function()
+            {
+                var selectedProduct = $(this).find('[name^=products]').val();
+                var selectedBranch  = $(this).find('[name^=branch]').val();
+
+                $(this).html(select);
+                $(this).find('[name^=products]').attr('name', 'products[' + index + ']').attr('id', 'products' + index).attr('data-branch', selectedBranch);
+                $(this).find('[name^=products]').val(selectedProduct).chosen().change();
+
+                index ++;
+            });
+
+            /* Hide product and plan dropdown controls. */
+            $('#plansBox .col-sm-4:not(:last)').remove();
+            $('#plansBox .col-sm-4').children().remove();
+            $('#plansBox .col-sm-4').prepend(planSelect);
+            $('#plansBox .col-sm-4 select').chosen();
+        }
 
         if(parentProgram != 0)
         {
@@ -289,8 +314,9 @@ function loadBranches(product)
     if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
-    var index       = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
+    var index     = $inputgroup.find('select:first').attr('id').replace('products' , '');
+    var oldBranch = $(product).attr('data-branch') !== undefined ? $(product).attr('data-branch') : 0;
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
     {
         if(data)
         {

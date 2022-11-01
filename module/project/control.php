@@ -281,6 +281,13 @@ class project extends control
             $data['selectedProgramPath']  = explode(',', $selectedProgram->path);
         }
 
+        if($objectType == 'program')
+        {
+            $allProducts = array(0 => '') + $this->program->getProductPairsWithProgram($selectedProgramID, 'all', 'noclosed');
+            $data['allProducts'] = html::select("products[]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
+            $data['plans']       = html::select('plans[][][]', '', '', 'class=\'form-control chosen\' multiple');
+        }
+
         /* Finish task #64882.Get the path of the last selected program. */
         if(!empty($objectID))       $data['objectPath']      = explode(',', $object->path);
         if(isset($availableBudget)) $data['availableBudget'] = $availableBudget;
