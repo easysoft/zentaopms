@@ -7548,6 +7548,20 @@ CREATE TABLE IF NOT EXISTS `zt_deployscope` (
   `remove` text NOT NULL,
   `add` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_dimension`;
+CREATE TABLE IF NOT EXISTS `zt_dimension` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(90) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_vm`;
 CREATE TABLE IF NOT EXISTS `zt_vm` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
