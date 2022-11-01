@@ -340,6 +340,7 @@ if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefi
 define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
 define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
+define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
