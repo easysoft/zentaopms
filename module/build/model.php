@@ -235,6 +235,7 @@ class buildModel extends model
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
+            ->beginIF($objectType === 'execution' and !$objectID)->andWhere('t1.id')->in($buildIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
