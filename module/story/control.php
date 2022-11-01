@@ -1300,7 +1300,7 @@ class story extends control
         $this->view->position      = $position;
         $this->view->product       = $product;
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->siblings      = !empty($story->sibling) ? $this->story->getByList($story->sibling) : array();
+        $this->view->siblings      = !empty($story->siblings) ? $this->story->getByList($story->siblings) : array();
         $this->view->plan          = $plan;
         $this->view->bugs          = $bugs;
         $this->view->fromBug       = $fromBug;
@@ -2751,8 +2751,20 @@ class story extends control
      */
     public function ajaxRelieveSibling()
     {
-        $storyID = !empty($_POST['storyID']) ? $_POST['storyID'] : 0;
-        $this->dao->update(TABLE_STORY)->set('SIBLING')->eq('')->where('id')->eq($_POST['storyID'])->exec();
-        return print('success');
+        $siblingID = !empty($_POST['siblingID']) ? $_POST['siblingID'] : 0;
+        $story     = $this->story->getByID($siblingID);
+
+        if(empty($story->siblings)) return $this->send(array('result' => 'fail'));
+
+        $siblings = str_replace(",$siblingID", '', $story->siblings);
+
+        /* If siblings == ,$siblingID, update siblings empty.*/
+        if(count(explode(',', $siblings)) == 3) $siblings = '';
+
+        $this->dao->update(TABLE_STORY)->set('siblings')->eq('')->where('id')->eq($siblingID)->exec();
+        $this->dao->update(TABLE_STORY)->set('siblings')->eq($siblings)->where('siblings')->like("%,{$_POST['siblingID']},%")->exec();
+
+        if(!dao::isError()) $this->loadModel('action')->create('story', $siblingID, 'relieved');
+        return $this->send(array('result' => 'success', 'data' => $siblings));
     }
 }

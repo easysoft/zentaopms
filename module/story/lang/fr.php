@@ -76,6 +76,9 @@ $lang->story->undetermined       = 'undetermined';
 $lang->story->order              = 'Order';
 $lang->story->saveDraft          = 'Save as draft';
 $lang->story->doNotSubmit        = 'Do Not Submit';
+$lang->story->currentBranch      = 'Current Branch';
+$lang->story->sibling            = 'Sibling story';
+$lang->story->relieved           = 'Relieved';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";
@@ -97,6 +100,7 @@ $lang->story->float            = "『 %s 』doit avoir des nombres positifs ou d
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 $lang->story->changeSyncTip    = "The modification of this story will be synchronized to the following twin requirements";
 $lang->story->syncTip          = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->relievedTip      = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';

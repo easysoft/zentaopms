@@ -224,6 +224,7 @@ $lang->action->desc->reopen               = '$date, reopened by <strong>$actor</
 $lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->submitreview         = '$date, submitted for review by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->ganttmove            = '$date, sort by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->relieved             = '$date, relieved by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

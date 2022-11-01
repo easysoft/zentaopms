@@ -401,8 +401,8 @@
     <div class="cell">
       <div class='tabs'>
         <ul class='nav nav-tabs'>
-          <?php if($product->type != 'normal'):?>
-          <li><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <?php if($product->type != 'normal' and $story->siblings):?>
+          <li><a href='#legendSiblings' data-toggle='tab'><?php echo $lang->story->sibling;?></a></li>
           <?php endif;?>
           <?php if($this->config->URAndSR):?>
           <li class='active'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
