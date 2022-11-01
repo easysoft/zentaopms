@@ -2309,7 +2309,10 @@ class storyModel extends model
 
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Assigned');
+        if(!dao::isError()) return $changes;
         return false;
     }
 
@@ -6060,5 +6063,44 @@ class storyModel extends model
             ->fetch('new');
 
         return $lastReviewer;
+    }
+
+    /**
+     * Sync siblings.
+     *
+     * @param  int    $changeStoryID
+     * @param  string $siblings
+     * @param  array  $changes
+     * @param  string $operate
+     * @access public
+     * @return void
+     */
+    public function syncSiblings($changeStoryID, $siblings, $changes, $operate)
+    {
+        if(empty($siblings) or empty($changes)) return;
+
+        /* Get the fields and values to be synchronized. */
+        $syncFieldList = array();
+        foreach($changes as $changeInfo)
+        {
+            $fieldName  = $changeInfo['field'];
+            $fieldValue = $changeInfo['new'];
+
+            if(strpos('product,branch,module,plan', $fieldName) !== false) continue;
+            $syncFieldList[$fieldName] = $fieldValue;
+        }
+
+        /* Synchronize and record dynamics. */
+        $this->loadModel('action');
+        $siblings = explode(',', trim($siblings, ','));
+        foreach($siblings as $storyID)
+        {
+            $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError())
+            {
+                $actionID = $this->action->create('story', $storyID, 'siblingsSync', '', "$operate|$changeStoryID");
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
     }
 }

@@ -101,6 +101,7 @@ $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 $lang->story->changeSyncTip    = "The modification of this story will be synchronized to the following twin requirements";
 $lang->story->syncTip          = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
 $lang->story->relievedTip      = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
+$lang->story->assignSyncTip    = "Both twin stories modify the assignor synchronously.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
@@ -347,6 +348,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, décompos�
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
+$lang->story->action->syncsiblings          = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -471,6 +473,9 @@ $lang->story->featureBar['browse']['all']       = $lang->all;
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
+
+$lang->story->operateList = array();
+$lang->story->operateList['assigned'] = 'assigned';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';

@@ -101,6 +101,7 @@ $lang->story->saveDraftSuccess = '存为草稿成功';
 $lang->story->changeSyncTip    = "该需求的修改会同步到如下的孪生需求";
 $lang->story->syncTip          = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
 $lang->story->relievedTip      = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
+$lang->story->assignSyncTip    = "孪生需求均同步修改指派人";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
@@ -347,6 +348,7 @@ $lang->story->action->subdividestory        = array('main' => "\$date, 由 <stro
 $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <strong>\$actor</strong> 移除相关{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
+$lang->story->action->syncsiblings          = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -471,6 +473,9 @@ $lang->story->featureBar['browse']['all']       = '全部';
 $lang->story->featureBar['browse']['unclosed']  = $lang->story->unclosed;
 $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draft'];
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
+
+$lang->story->operateList = array();
+$lang->story->operateList['assigned'] = '指派';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";
