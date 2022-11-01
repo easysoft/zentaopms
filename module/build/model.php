@@ -231,7 +231,8 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
-            ->where('t1.deleted')->eq(0)
+            ->where(1)->eq(1)
+            ->beginIF(strpos($params, 'hasDeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
@@ -245,6 +246,7 @@ class buildModel extends model
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
+            if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
             $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
 
             $builds[$key] = $build->name;
