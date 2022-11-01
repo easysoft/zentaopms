@@ -232,7 +232,14 @@ class baseControl
          */
         $this->setSuperVars();
 
-        $this->loadZen($this->moduleName, $appName);
+        /**
+         * 读取当前模块的zen类。
+         * Load the zen file auto.
+         */
+        $zenClass      = $this->moduleName . 'Zen';
+        $selfClass     = get_class($this);
+        $parentClasses = class_parents($this);
+        if($selfClass != $zenClass && !isset($parentClasses[$zenClass])) $this->loadZen($this->moduleName, $appName);
     }
 
     //-------------------- Model相关方法(Model related methods) --------------------//
