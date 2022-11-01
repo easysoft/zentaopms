@@ -92,16 +92,16 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                 <div class='table-col' id='branchBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
-                    <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranch2(this.value, 0);' class='form-control chosen control-branch'");?>
+                    <?php echo html::select('branches[0]', $branches, $branch, "onchange='loadBranchForBranch(this.value, 0);' class='form-control chosen control-branch'");?>
                   </div>
                 </div>
-                <div class='table-col' id='moduleBox'>
+                <div class='table-col' id='moduleIdBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
                     <?php echo html::select('modules[0]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
                   </div>
                 </div>
-                <div class='table-col' id='planBox'>
+                <div class='table-col' id='planIdBox'>
                   <div class='input-group'>
                     <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
                     <?php echo html::select('plans[0]', $plans, $planID, "class='form-control chosen'");?>
@@ -111,8 +111,14 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td class="table-col c-actions text-left w-60px">
               <div>
-                <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
+                <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->addBranch;?>'><i class='icon-plus'></i></a>
               </div>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td colspan="4" id="storyNoticeBranch">
+              <i class="icon-exclamation-sign"></i>&nbsp;<?php echo $lang->story->notice->branch;?>
             </td>
           </tr>
           <?php else: ?>
@@ -353,16 +359,16 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
           <div class='table-col' id='branchBox' style='flex: 1 0 160px'>
             <div class='input-group'>
               <span class='input-group-addon fix-border'><?php echo sprintf($lang->product->branch, $lang->product->branchName[$product->type])?></span>
-              <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranches();' class='form-control chosen control-branch'");?>
+              <?php echo html::select("branches[$i]", $branches, $branch, "onchange='loadBranchForBranch(this.value, $i);' class='form-control chosen control-branch'");?>
             </div>
           </div>
-          <div class='table-col' id='moduleBox' style='flex: 1 0 160px'>
+          <div class='table-col' id='moduleIdBox' style='flex: 1 0 160px'>
             <div class='input-group'>
               <span class='input-group-addon fix-border'><?php echo $lang->story->module?></span>
               <?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?>
             </div>
           </div>
-          <div class='table-col' id='planBox'>
+          <div class='table-col' id='planIdBox'>
             <div class='input-group'>
               <span class='input-group-addon fix-border'><?php echo $lang->story->plan;?></span>
               <?php echo html::select("plans[$i]", $plans, $planID, "class='form-control chosen'");?>
@@ -372,20 +378,21 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
       </td>
       <td class="table-col text-left w-60px c-actions">
         <div>
-          <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='xxxx'><i class='icon-plus'></i></a>
-          <a href='javascript:;' onclick='deleteBranchesBox(this)' class='btn btn-link' title=''><i class='icon icon-close'></i></a>
+          <a href='javascript:;' onclick='addBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->addBranch;?>'><i class='icon-plus'></i></a>
+          <a href='javascript:;' onclick='deleteBranchesBox(this)' class='btn btn-link' title='<?php echo $lang->story->deleteBranch;?>'><i class='icon icon-close'></i></a>
         </div>
       </td>
     </tr>
   </table>
 <?php js::set('executionID', $objectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
+<?php js::set('storyPlan', $lang->story->plan);?>
 <?php js::set('storyType', $type);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 
 var gap = $('#assignedTo').parent().parent().width();
-$('#planBox').css('flex', '0 0 ' + gap + 'px')
+$('#planIdBox').css('flex', '0 0 ' + gap + 'px')
 $("#branches0").parent().parent().css('flex', '1 0 160px')
 $("#modules0").parent().parent().css('flex', '1 0 160px')
 

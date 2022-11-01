@@ -69,6 +69,58 @@ function loadBranch()
 }
 
 /**
+ * Load branch for multi branch or multi platform.
+ *
+ * @access public
+ * @return void
+ */
+function loadBranchForBranch(branch, branchIndex)
+{
+    var branch    = $('#branches' + branchIndex).val();
+    var productID = $('#product').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(productID) == 'undefined' && config.currentMethod == 'edit') productID = oldProductID;
+
+    /* Load module */
+    var currentModule = 0;
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + branchIndex + '&needManage=true&extra=&currentModuleID=' + currentModule);
+    if(branchIndex > 0)
+    {
+        var $moduleIDBox = $('.addBranchesBox'+ branchIndex +' #moduleIdBox');
+    }
+    else
+    {
+        var $moduleIDBox = $('#moduleIdBox');
+    }
+    $moduleIDBox.load(moduleLink, function()
+    {
+        $moduleIDBox.find('#modules' + branchIndex).chosen();
+        $moduleIDBox.prepend("<span class='input-group-addon fix-border'>" + storyModule + "</span>");
+        $moduleIDBox.fixInputGroup();
+    });
+
+    /* Load plan */
+    if(typeof(branch) == 'undefined') branch = 0;
+    if(!branch) branch = 0;
+    var expired = config.currentMethod == 'create' ? 'unexpired' : '';
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=' + branchIndex + '&needCreate=true&expired='+ expired +'&param=skipParent,' + config.currentMethod);
+    if(branchIndex > 0)
+    {
+        var $planIdBox = $('.addBranchesBox'+ branchIndex +' #planIdBox');
+    }
+    else
+    {
+        var $planIdBox = $('#planIdBox');
+    }
+    $planIdBox.load(planLink, function()
+    {
+        $planIdBox.find('#plans' + branchIndex).chosen();
+        $planIdBox.prepend("<span class='input-group-addon fix-border'>" + storyPlan + "</span>");
+        $planIdBox.fixInputGroup();
+    });
+}
+
+/**
  * Load branches when change product.
  *
  * @param  int   $productID

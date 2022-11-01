@@ -119,15 +119,15 @@ $(window).unload(function(){
  function addBranchesBox(obj)
  {
      var item = $('#addBranchesBox').html().replace(/%i%/g, itemIndex);
-     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-     $('#branch_i__chosen').remove();
-     $('#branch' + itemIndex).chosen();
-     $('#module_i__chosen').remove();
-     $('#module' + itemIndex).chosen();
-     $('#plan_i__chosen').remove();
-     $('#plan' + itemIndex).chosen();
+     $(obj).closest('tr').after('<tr class="addBranchesBox' + itemIndex + '">' + item  + '</tr>');
+     $('#branches_i__chosen').remove();
+     $('#branches' + itemIndex).chosen();
+     $('#modules_i__chosen').remove();
+     $('#modules' + itemIndex).chosen();
+     $('#plans_i__chosen').remove();
+     $('#plans' + itemIndex).chosen();
+     $('.addBranchesBox' + itemIndex + ' #planIdBox').css('flex', '0 0 ' + gap + 'px');
      itemIndex ++;
-     $('.addedItem #planBox').css('flex', '0 0 ' + gap + 'px')
  }
 
  /**

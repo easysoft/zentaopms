@@ -490,3 +490,7 @@ $lang->requirement->batchAssignTo      = "批量指派";
 $lang->requirement->batchChangeModule  = "批量修改模块";
 $lang->requirement->submitReview       = $lang->story->submitReview;
 $lang->requirement->linkStory          = "关联{$lang->SRCommon}";
+
+$lang->story->addBranch      = '添加分支';
+$lang->story->deleteBranch   = '删除分支';
+$lang->story->notice->branch = '每个分支会建立一个需求，需求间互为孪生关系，孪生需求间除产品、分支、模块、计划、阶段字段外均同步，后期您可以手动解除孪生关系';

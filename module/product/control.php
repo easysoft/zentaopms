@@ -1063,7 +1063,7 @@ class product extends control
     {
         $param    = strtolower($param);
         $plans    = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
-        $field    = $fieldID ? "plans[$fieldID]" : 'plan';
+        $field    = $fieldID !== '' ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
         $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
 

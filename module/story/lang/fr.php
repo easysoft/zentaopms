@@ -490,3 +490,7 @@ $lang->requirement->batchAssignTo      = "Batch Assign";
 $lang->requirement->batchChangeModule  = "Batch Change Modules";
 $lang->requirement->submitReview       = $lang->story->submitReview;
 $lang->requirement->linkStory          = 'Lier Story';
+
+$lang->story->addBranch      = 'Add branch';
+$lang->story->deleteBranch   = 'Delete branch';
+$lang->story->notice->branch = 'Each branch will establish a requirement, and the requirements are twins. The twins requirements are synchronized except for the product, branch, module, plan, and stage fields. You can manually remove the twins relationship later';
