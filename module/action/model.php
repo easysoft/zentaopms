@@ -853,6 +853,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
+            elseif($action->objectType == 'story' and $action->action == 'closed' and $action->extra === 'autoclosed')
+            {
+                $desc = $this->lang->$objectType->action->autoclosed;
+            }
             elseif($action->objectType == 'productplan' and in_array($action->action, array('startedbychild','finishedbychild','closedbychild','activatedbychild', 'createchild')))
             {
                 $desc = $this->lang->$objectType->action->changebychild;

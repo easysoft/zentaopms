@@ -1159,11 +1159,16 @@ class storyModel extends model
                 $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
                 $changes = common::createChanges($oldParentStory, $newParentStory);
                 $action  = '';
+                $extra   = '';
                 if($status == 'active') $action = 'Activated';
-                if($status == 'closed') $action = 'Closed';
+                if($status == 'closed')
+                {
+                    $action = 'Closed';
+                    $extra  = 'autoclosed';
+                }
                 if($action)
                 {
-                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
+                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $extra, '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
 

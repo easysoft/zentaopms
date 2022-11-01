@@ -320,6 +320,7 @@ $lang->story->action->reviewed              = array('main' => '$date, 由 <stron
 $lang->story->action->rejectreviewed        = array('main' => '$date, 由 <strong>$actor</strong> 记录评审意见，评审意见为 <strong>$extra</strong>，原因为 <strong>$reason</strong>。', 'extra' => 'reviewResultList', 'reason' => 'reasonList');
 $lang->story->action->recalled              = array('main' => '$date, 由 <strong>$actor</strong> 撤销评审。');
 $lang->story->action->closed                = array('main' => '$date, 由 <strong>$actor</strong> 关闭，原因为 <strong>$extra</strong> $appendLink。', 'extra' => 'reasonList');
+$lang->story->action->autoclosed            = array('main' => '$date, 系统判定由于关闭了所有子需求，自动关闭父需求。');
 $lang->story->action->reviewpassed          = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>确认通过</strong>。');
 $lang->story->action->reviewrejected        = array('main' => '$date, 由 <strong>系统</strong> 关闭，原因为 <strong>拒绝</strong>。');
 $lang->story->action->reviewclarified       = array('main' => '$date, 由 <strong>系统</strong> 判定，结果为 <strong>有待明确</strong>，请编辑后重新发起评审。');
