@@ -4341,6 +4341,7 @@ class executionModel extends model
                     ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                     ->where('t1.project')->eq((int)$executionID)
                     ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t2.type')->eq('story')
                     ->orderBy('t1.`order`_desc')
                     ->fetchAll();
             }
