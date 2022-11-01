@@ -2317,6 +2317,7 @@ class projectModel extends model
 
         $members = array_keys($this->getTeamMembers($projectID));
 
+        /* Link products of other programs. */
         if($_POST['otherProducts'])
         {
             $products      = array();
@@ -2351,6 +2352,7 @@ class projectModel extends model
             return !dao::isError();
         }
 
+        /* Link products of current program of the project. */
         $products           = isset($_POST['products']) ? $_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
 

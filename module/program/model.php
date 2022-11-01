@@ -119,7 +119,7 @@ class programModel extends model
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
-        $products = $this->dao->select("t1.id, t1.program, CONCAT(IF(t2.name is not null, t2.name, ''), '/', t1.name) AS name")->from(TABLE_PRODUCT)->alias('t1')
+        $products = $this->dao->select("t1.id, t1.program, CONCAT(IF(t2.name IS NOT NULL, t2.name, ''), '/', t1.name) AS name")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)

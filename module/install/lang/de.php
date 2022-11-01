@@ -260,11 +260,11 @@ $lang->install->groupList['LIMITED']['desc']      = 'Können nur Inhalte bearbei
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
 $lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
 $lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
-$lang->install->groupList['LITEADMIN']['desc']    = 'Lite Admin';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Operation Management Interface Admin';
 $lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
-$lang->install->groupList['LITEPROJECT']['desc']  = 'Lite Rroject';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Operation Management Interface Project';
 $lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
-$lang->install->groupList['LITETEAM']['desc']     = 'Lite Team';
+$lang->install->groupList['LITETEAM']['desc']     = 'Operation Management Interface Team';
 
 $lang->install->cronList[''] = 'Cron Anzeigen';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
