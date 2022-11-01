@@ -24,6 +24,6 @@
 .popover {border:unset;}
 .popover.bottom .arrow{border-bottom-color:#ffffff;}
 .popover-icon {float:left;}
-.popover .content {margin-left:20px;overflow: overlay;}
+.popover .content {margin-left:25px;overflow: overlay;}
 .hide {display:none !important;}
-.sibling {padding:6px;}
+.sibling > a.iframe{padding:6px;white-space: nowrap;overflow: hidden;display: inline-flex;max-width: 80%;}
