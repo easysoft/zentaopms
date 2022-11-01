@@ -12,10 +12,8 @@
 <?php js::set('repoID', $repoID);?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
-    <?php
-    echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', 'btn btn-link');
-    echo '<div class="divider"></div>';
-    ?>
+    <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', 'btn btn-link');?>
+    <div class="divider"></div>
     <div class="page-title">
       <strong>
       <?php
@@ -42,7 +40,7 @@
       <li><a><?php echo $lang->repo->log;?></a></li>
       <li><?php echo html::a($this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=$encodeEntry&revision=$revision"), $lang->repo->view, '', "data-app='{$app->tab}'");?></li>
       <?php if($info->kind == 'file'):?>
-      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID*&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->tab}'");?></li>
+      <li><?php echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodeEntry&revision=$revision"), $lang->repo->blame, '', "data-app='{$app->tab}'");?></li>
       <li><?php echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodeEntry&fromRevision=$revision"), $lang->repo->download, 'hiddenwin');?></li>
       <?php endif;?>
     </ul>
