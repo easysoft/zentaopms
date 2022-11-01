@@ -3014,8 +3014,16 @@ class taskModel extends model
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
         if($estimate->isLast and $consumed == 0 and $task->status != 'wait')
         {
-            $data->status = 'wait';
-            $data->left   = $task->estimate;
+            $data->status       = 'wait';
+            $data->left         = $task->estimate;
+            $data->finishedBy   = '';
+            $data->canceledBy   = '';
+            $data->closedBy     = '';
+            $data->closedReason = '';
+            $data->finishedDate = '0000-00-00 00:00:00';
+            $data->canceledDate = '0000-00-00 00:00:00';
+            $data->closedDate   = '0000-00-00 00:00:00';
+            if($task->assignedTo == 'closed') $data->assignedTo = $this->app->user->account;
         }
         elseif($consumed != 0 and $left == 0 and strpos('done,pause,cancel,closed', $task->status) === false)
         {
