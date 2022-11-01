@@ -113,6 +113,17 @@ $(function()
         $('#days').addClass('has-info')
         $('#days').parent().after('<div id="daysLabelInfo" class="text-info">' + daysTips + '</div>')
     }
+
+    $("[name='multiple']").change(function()
+    {
+        $('#endList #delta999').closest('.radio-inline').toggle($(this).val() != 0);
+        if($('#endList #delta999').prop('checked') && $(this).val() == 0)
+        {
+            $('#endList #delta999').prop('checked', false);
+            $('#dateBox #end').val('');
+            $('#daysBox').removeClass('hidden');
+        }
+    })
 });
 
 /**

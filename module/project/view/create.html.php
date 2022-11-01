@@ -127,7 +127,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList, '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>

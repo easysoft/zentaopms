@@ -130,8 +130,12 @@
               ?>
             </div>
           </td>
-          <?php $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;?>
-          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
+          <?php
+          /* Remove LONG_TIME item when no multiple project. */
+          if(empty($project->multiple)) unset($lang->project->endList[999]);
+          $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
+          ?>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList, $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
           <th><?php echo $lang->project->days;?></th>
