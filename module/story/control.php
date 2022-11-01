@@ -856,7 +856,7 @@ class story extends control
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
         $this->view->story            = $story;
-        $this->view->siblings         = empty($story->sibling) ? array() : $this->story->getByList($story->sibling);
+        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
@@ -1155,7 +1155,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->siblings         = empty($story->sibling) ? array() : $this->story->getByList($story->sibling);
+        $this->view->siblings         = empty($story->siblings) ? array() : $this->story->getByList($story->siblings);
         $this->view->branches         = $this->loadModel('branch')->getPairs($story->product);
         $this->view->users            = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->assignedTo);
         $this->view->position[]       = $this->lang->story->change;
