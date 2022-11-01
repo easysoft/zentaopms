@@ -911,7 +911,7 @@ class baseControl
         /* Make sure locate in this tab. */
         global $lang;
         $moduleName = $this->app->rawModule;
-        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab and isset($data['locate']) and $data['locate'][0] == '/') $data['locate'] .= "#app={$this->app->tab}";
+        if(isset($lang->navGroup->{$moduleName}) and $lang->navGroup->{$moduleName} != $this->app->tab and isset($data['locate']) and $data['locate'][0] == '/' and !helper::inOnlyBodyMode()) $data['locate'] .= "#app={$this->app->tab}";
 
         if(helper::isAjaxRequest() or $this->viewType == 'json')
         {
