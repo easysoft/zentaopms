@@ -225,7 +225,7 @@ class buildModel extends model
                 ->fetchPairs();
         }
 
-        $allBuilds = $this->dao->select('t1.id, t1.name, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $allBuilds = $this->dao->select('t1.id, t1.name, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
