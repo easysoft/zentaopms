@@ -431,7 +431,7 @@ CREATE TABLE `zt_chart` (
   `type` varchar(30) NOT NULL,
   `group` varchar(30) NOT NULL,
   `dataset` varchar(30) NOT NULL,
-  `desc` desc NOT NULL,
+  `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
   `createdBy` char(30) NOT NULL,
