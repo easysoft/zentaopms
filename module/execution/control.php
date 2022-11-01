@@ -2900,7 +2900,7 @@ class execution extends control
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $stories = $this->loadModel('story')->getExecutionStories($executionID);
+        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         /* Get execution's product. */
