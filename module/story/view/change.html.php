@@ -83,12 +83,7 @@
         <tr id='siblingList'>
           <td colspan='2'>
             <ul class='list-unstyled'>
-              <?php foreach($siblings as $siblingID => $sibling):?>
-              <li>
-                <span class='label label-outline label-badge'><?php echo $branches[$sibling->branch];?></span>
-                <?php echo $siblingID . ' ' . $sibling->title;?>
-              </li>
-              <?php endforeach;?>
+                <?php include './blocksibling.html.php';?>
             </ul>
           </td>
         </tr>

@@ -121,6 +121,8 @@ function relieve(index)
                 $('[href="#legendSiblings"]').parent('li').remove();
                 $('#legendSiblings').next('div').addClass('active');
                 $('#legendSiblings').remove();
+                $('#siblingTitle').remove();
+                $('#siblingList').remove();
             }
         }
     }, 'json');
