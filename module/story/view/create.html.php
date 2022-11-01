@@ -53,9 +53,10 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
               <div class='input-group'>
               <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product' required");?>
               <span class='input-group-addon fix-border fix-padding'></span>
+              <?php if($branches and $type != 'story') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
               </div>
             </td>
-            <?php if($branches): ?>
+            <?php if($branches and $type == 'story'): ?>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
               <div class='input-group'>
                 <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>

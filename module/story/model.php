@@ -226,12 +226,15 @@ class storyModel extends model
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane,ticket,branches,modules,plans')
             ->get();
 
-        /* Check repeat story. */
-        $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if(!empty($output['checkDuplicate']) and $output['checkDuplicate'] == 'yes')
+        {
+            /* Check repeat story. */
+            $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
+            if(isset($result['stop']) and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        }
 
         if($story->status != 'draft' and $this->checkForceReview()) $story->status = 'reviewing';
         if(strpos('draft,reviewing', $story->status) !== false) $story->stage = $this->post->plan > 0 ? 'planned' : 'wait';
