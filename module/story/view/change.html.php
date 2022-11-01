@@ -74,13 +74,13 @@
           </td>
         </tr>
         <?php if(!empty($siblings)):?>
-        <tr id='siblingTh'>
+        <tr id='siblingTitle'>
           <td colspan='2'>
             <?php echo $lang->story->changeSyncTip;?>
             <span data-toggle='tooltip' data-placement='right' title='<?php echo $lang->story->syncTip;?>'><i class='icon-help'></i></span>
           </td>
         </tr>
-        <tr id='siblingTd'>
+        <tr id='siblingList'>
           <td colspan='2'>
             <ul class='list-unstyled'>
               <?php foreach($siblings as $siblingID => $sibling):?>
