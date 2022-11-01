@@ -6098,7 +6098,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$storyID)->exec();
             if(!dao::isError())
             {
-                $actionID = $this->action->create('story', $storyID, 'siblingsSync', '', "$operate|$changeStoryID");
+                $actionID = $this->action->create('story', $storyID, 'syncsiblings', '', "$operate|$changeStoryID");
                 $this->action->logHistory($actionID, $changes);
             }
         }
