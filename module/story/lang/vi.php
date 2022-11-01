@@ -95,7 +95,9 @@ $lang->story->float            = "『%s』should be positive number, decimals in
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 $lang->story->changeSyncTip    = "The modification of this story will be synchronized to the following twin requirements";
 $lang->story->syncTip          = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
-$lang->story->assignSyncTip    = "Both twin stories modify the assignor synchronously.";
+$lang->story->assignSyncTip    = "Both twin stories modify the assignor synchronously";
+$lang->story->closeSyncTip     = "Twin stories are closed synchronously";
+$lang->story->activateSyncTip  = "Twin stories are activated synchronously";
 
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Mẹ';

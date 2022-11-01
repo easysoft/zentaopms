@@ -6073,14 +6073,14 @@ class storyModel extends model
     /**
      * Sync siblings.
      *
-     * @param  int    $changeStoryID
+     * @param  int    $storyID
      * @param  string $siblings
      * @param  array  $changes
      * @param  string $operate
      * @access public
      * @return void
      */
-    public function syncSiblings($changeStoryID, $siblings, $changes, $operate)
+    public function syncSiblings($storyID, $siblings, $changes, $operate)
     {
         if(empty($siblings) or empty($changes)) return;
 
@@ -6103,7 +6103,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq((int)$storyID)->exec();
             if(!dao::isError())
             {
-                $actionID = $this->action->create('story', $storyID, 'syncsiblings', '', "$operate|$changeStoryID");
+                $actionID = $this->action->create('story', $storyID, 'syncsiblings', '', "$operate|$storyID");
                 $this->action->logHistory($actionID, $changes);
             }
         }
