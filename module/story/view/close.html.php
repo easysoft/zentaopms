@@ -31,7 +31,7 @@
         <?php if(!empty($story->siblings)):?>
         <tr>
           <th></th>
-          <td><i class='icon-exclamation-sign'></i> <?php echo $lang->story->closeSyncTip;?></td>
+          <td colspan='2'><i class='icon-exclamation-sign'></i> <?php echo $lang->story->closeSyncTip;?></td>
         </tr>
         <?php endif;?>
         <tr id='duplicateStoryBox' style='display:none'>
