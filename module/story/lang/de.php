@@ -475,7 +475,9 @@ $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draf
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
 $lang->story->operateList = array();
-$lang->story->operateList['assigned'] = 'assigned';
+$lang->story->operateList['assigned']  = 'assigned';
+$lang->story->operateList['closed']    = 'closed';
+$lang->story->operateList['activated'] = 'activated';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';

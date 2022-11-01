@@ -475,7 +475,9 @@ $lang->story->featureBar['browse']['draft']     = $lang->story->statusList['draf
 $lang->story->featureBar['browse']['reviewing'] = $lang->story->statusList['reviewing'];
 
 $lang->story->operateList = array();
-$lang->story->operateList['assigned'] = '指派';
+$lang->story->operateList['assigned']  = '指派';
+$lang->story->operateList['closed']    = '关闭';
+$lang->story->operateList['activated'] = '激活';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";

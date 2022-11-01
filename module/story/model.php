@@ -1794,7 +1794,10 @@ class storyModel extends model
 
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
-        return common::createChanges($oldStory, $story);
+
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Closed');
+        return $changes;
     }
 
     /**
@@ -2388,7 +2391,9 @@ class storyModel extends model
         /* Update parent story status. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
 
-        return common::createChanges($oldStory, $story);
+        $changes = common::createChanges($oldStory, $story);
+        if(!empty($oldStory->siblings)) $this->syncSiblings($storyID, $oldStory->siblings, $changes, 'Activated');
+        return $changes;
     }
 
     /**
