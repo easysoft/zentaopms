@@ -326,9 +326,22 @@ class projectrelease extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->release = $this->release->getById($releaseID);
-        $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $release = $this->release->getByID($releaseID);
+        $project = $this->loadModel('project')->getByID($release->project);
+
+        if(!$project->hasProduct)
+        {
+            unset($this->lang->release->notifyList['FB']);
+            unset($this->lang->release->notifyList['PO']);
+            unset($this->lang->release->notifyList['QD']);
+        }
+
+        if(!$project->multiple) unset($this->lang->release->notifyList['ET']);
+
+        $this->view->release    = $release;
+        $this->view->actions    = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->notifyList = $this->lang->release->notifyList;
         $this->display();
     }
 
