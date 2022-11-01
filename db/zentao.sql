@@ -429,12 +429,15 @@ CREATE TABLE `zt_chart` (
   `id` mediumint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL,
+  `group` varchar(30) NOT NULL,
   `dataset` varchar(30) NOT NULL,
-  `desc` mediumtext NOT NULL,
+  `desc` text NOT NULL,
   `settings` mediumtext NOT NULL,
   `filters` mediumtext NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
+  `editedBy` char(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
