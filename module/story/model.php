@@ -217,12 +217,14 @@ class storyModel extends model
             ->setDefault('plan,verify,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
+            ->setIF($this->post->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
+            ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
             ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
@@ -2441,7 +2443,7 @@ class storyModel extends model
         /* If no executions, in plan, stage is planned. No plan, wait. */
         if(!$executions)
         {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan')->eq('')->exec();
+            $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->andWhere('plan', true)->eq('')->orWhere('plan')->eq(0)->markRight(1)->exec();
 
             foreach($stages as $branch => $stage)
             {
@@ -4781,7 +4783,7 @@ class storyModel extends model
                 echo "<i class='icon-move'>";
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
+                echo "<span class='" . ($story->pri ? "label-pri label-pri-" . $story->pri : '') . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
                 echo zget($this->lang->story->priList, $story->pri, $story->pri);
                 echo "</span>";
                 break;

@@ -1015,7 +1015,7 @@ class baseRouter
         session_name($sessionName);
         session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
-        session_start();
+        if(!session_id()) session_start();
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
@@ -1555,8 +1555,8 @@ class baseRouter
             {
                 if($this->config->framework->filterParam == 2)
                 {
-                    $_GET     = validater::filterParam($_GET, 'get');
-                    $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+                    $_GET    = validater::filterParam($_GET, 'get');
+                    $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
                 }
             }
             return true;
@@ -1709,7 +1709,7 @@ class baseRouter
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
 
-        if(!empty( $moduleExtPaths['saas']))
+        if(!empty($moduleExtPaths['saas']))
         {
             $this->extActionFile = $moduleExtPaths['saas'] . $this->methodName . '.php';
             if(file_exists($this->extActionFile)) return true;
@@ -3262,19 +3262,15 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        if(md5_file($sessFile) == md5($sessData)) return true;
+
         if(file_put_contents($sessFile, $sessData))
         {
+            if(!file_exists($this->rawFile)) touch($this->rawFile);
             if(strpos($sessData, 'user|') !== false)
             {
-                if(file_exists($this->rawFile))
-                {
-                    $rawSessContent = (string) file_get_contents($this->rawFile);
-                    if(strpos($rawSessContent, 'user|') === false) copy($sessFile, $this->rawFile);
-                }
-                else
-                {
-                    copy($sessFile, $this->rawFile);
-                }
+                $rawSessContent = (string) file_get_contents($this->rawFile);
+                if(empty($rawSessContent)) file_put_contents($this->rawFile, $sessData);
             }
 
             return true;

@@ -10,6 +10,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('selectedWeekBegin', $date);?>
+<?php if(common::hasPriv('weekly', 'exportweeklyreport')):?>
+<script>
+$(function()
+{
+  $('#exportreport').modalTrigger();
+});
+</script>
+<?php endif;?>
 <div id="mainMenu" class="clearfix text-center">
   <div id='mainContent' >
     <div class='main-table'>

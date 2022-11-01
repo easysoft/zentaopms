@@ -144,7 +144,7 @@
               <tr class='text-center'>
                 <th class='w-50px'> <?php echo $lang->story->id;?></th>
                 <th class='w-40px' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
-                <th>                <?php echo $lang->story->title;?></th>
+                <th><?php echo $lang->story->title;?></th>
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
                 <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
                 <th class='w-80px'> <?php echo $lang->story->status;?></th>
@@ -157,7 +157,8 @@
                 <td><?php echo $child->id;?></td>
                 <td>
                   <?php
-                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
+                  $priClass = $child->pri ? 'label-pri label-pri-' . $child->pri : '';
+                  echo "<span class='$priClass'>";
                   echo $child->pri == '0' ? '' : zget($this->lang->story->priList, $child->pri, $child->pri);
                   echo "</span>";
                   ?>

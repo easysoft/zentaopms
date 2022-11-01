@@ -166,7 +166,7 @@ $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->repo->common       = '代码';
-$lang->report->common     = '统计';
+$lang->report->common     = 'BI';
 $lang->system->common     = '组织';
 $lang->admin->common      = '后台';
 $lang->story->common      = $lang->SRCommon;
@@ -274,6 +274,7 @@ $lang->project->report = '报告';
 
 $lang->report->weekly       = '周报';
 $lang->report->annual       = '年度总结';
+$lang->report->pivotTable   = '透视表';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 

@@ -166,7 +166,7 @@ $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
 $lang->repo->common       = 'Code';
-$lang->report->common     = 'Statistic';
+$lang->report->common     = 'BI';
 $lang->system->common     = 'System';
 $lang->admin->common      = 'Admin';
 $lang->story->common      = 'Story';
@@ -272,9 +272,10 @@ $lang->product->kanban = $lang->productCommon . ' Kanban';
 
 $lang->project->report = 'Report';
 
-$lang->report->weekly = 'Weekly';
-$lang->report->annual = 'Annual Summary';
-$lang->report->notice = new stdclass();
+$lang->report->weekly       = 'Weekly';
+$lang->report->annual       = 'Annual Summary';
+$lang->report->pivotTable   = 'Pivot Table';
+$lang->report->notice       = new stdclass();
 $lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click, e.g. AssignedToMe, then click Create Report to generate a report based on AssignedToMe list.';
 
 $lang->testcase->case      = 'Test Case';

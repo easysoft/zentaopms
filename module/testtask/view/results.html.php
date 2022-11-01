@@ -36,7 +36,7 @@
         </caption>
         <?php endif;?>
         <?php $failCount = 0; $trCount=1?>
-        <?php foreach($results as $result):?>
+        <?php foreach($results as $i => $result):?>
         <?php
         $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
         if($class != 'success') $failCount++;
@@ -47,7 +47,7 @@
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
-          <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
+          <td class='w-50px text-right'><strong class='result-testcase <?php echo $result->caseResult;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-angle-down text-muted'></i></td>
         </tr>
@@ -122,7 +122,13 @@
                   <?php endforeach;?>
                   <?php if($result->caseResult == 'fail' and common::hasPriv('testcase', 'createBug')):?>
                   <tr>
-                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                    <td>
+                      <div class="checkbox-primary">
+                      <input type='checkbox' id='<?php echo "checkAll[$i]";?>' name='checkAll' />
+                        <label><?php echo $lang->selectAll?></label>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td>
                     <td><?php echo html::commonButton($lang->testcase->createBug, "onclick='createBug(this)'", "btn btn-primary createBtn");?></td>
                   </tr>
                   <?php endif;?>

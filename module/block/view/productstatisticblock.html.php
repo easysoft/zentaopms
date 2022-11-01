@@ -33,8 +33,8 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .tile {margin-bottom: 30px;}
-.block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
-.block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
+.block-statistic .tile-title {font-size: 18px; margin-bottom: 10px; color: #313C52;}
+.block-statistic .tile-amount {font-size: 44px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 220px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative}
 .block-statistic .nav-secondary > li:hover {background: #f5f5f5;}
@@ -72,7 +72,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li.active > a.btn-view:hover {cursor: pointer; background: rgba(0,0,0,.1);}
 
 .status-count {margin:auto;}
-.status-count tr:first-child td:last-child {color:#000;font-weight:bold;}
+.status-count tr:first-child td:last-child {color:#000; font-weight:bold;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -126,10 +126,10 @@ $(function()
             <div class="tile">
               <div class="tile-title"><?php echo $lang->SRCommon;?></div>
               <?php if($product->stories):?>
-              <div class="tile-amount"><?php echo array_sum($product->stories);?></div>
+              <div class="tile-amount text-primary"><?php echo array_sum($product->stories);?></div>
               <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm" data-app="product"');?>
               <?php else:?>
-              <div class="tile-amount">0</div>
+              <div class="tile-amount text-primary">0</div>
               <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm" data-app="product"');?>
               <?php endif;?>
             </div>

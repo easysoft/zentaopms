@@ -20,7 +20,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->orderByEdit;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=byediteddate"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=byediteddate"), strtoupper($lang->more), '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <?php if(empty($latestEditedDocs)):?>
@@ -132,7 +132,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->myDoc;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=openedbyme"), strtoupper($lang->more), '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <?php if(empty($myDocs)):?>
@@ -170,7 +170,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->myCollection;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=collectedbyme"), strtoupper($lang->more), '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <?php if(empty($collectedDocs)):?>

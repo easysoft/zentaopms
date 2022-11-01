@@ -248,7 +248,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testcase->status;?></th>
-              <td>
+              <td class='status-testcase status-<?php echo $case->status;?>'>
                 <?php
                 echo $this->processStatus('testcase', $case);
                 if($case->version > $case->currentVersion and $from == 'testtask')
@@ -274,7 +274,7 @@
             </tr>
             <tr>
               <th><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></th>
-              <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+              <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
             </tr>
             <?php endif;?>
             <tr>

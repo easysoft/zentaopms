@@ -55,7 +55,7 @@
           <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           <td><?php echo $task->begin?></td>
           <td><?php echo $task->end?></td>
-          <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
+          <td class='status-testtask status-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
