@@ -7178,7 +7178,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   key `ticketId` (`ticketId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `zt_ticketrelation` (
+CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `ticketId` mediumint unsigned NOT NULL,
   `objectId` mediumint NOT NULL,
