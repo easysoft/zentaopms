@@ -1,29 +1,64 @@
 <?php
+/**
+ * The v1 file of actionbar module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @author      Jinyong Zhu <zhujinyong@easycorp.ltd>
+ * @package     actionbar
+ * @version     $Id
+ * @link        https://www.zentao.net
+ */
 class actionbar extends wg
 {
-    private $children = array();
+    /**
+     * Action list.
+     *
+     * @var    array
+     * @access private
+     */
+    private $actions = array();
 
-    public function __construct($text = '')
+    /**
+     * Construct function.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * Set action data.
+     *
+     * @param  object $item
+     * @access public
+     * @return void
+     */
     public function append($item)
     {
-        $this->children[] = $item;
+        $this->actions[] = $item;
     }
 
+    /**
+     * Get actionbar html.
+     *
+     * @access public
+     * @return string
+     */
     public function toString()
     {
         $html = '<div class="pull-right">';
-        foreach($this->children as $child)
+        foreach($this->actions as $action)
         {
-            if(is_string($child))
+            if(is_string($action))
             {
-                $html .= $child;
+                $html .= $action;
                 continue;
             }
-            $html .= $child->toString();
+
+            $html .= $action->toString();
         }
         return $html . '</div>';
     }
