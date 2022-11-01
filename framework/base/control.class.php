@@ -212,7 +212,7 @@ class baseControl
          * 检查用户是否登录，如果没有登录，跳转到登录页面。
          * Check the user has logon or not, if not, goto the login page.
          */
-        if($this->config->installed && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
+        if($this->config->installed && !in_array($this->moduleName, array('install', 'upgrade')) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
         {
             $uri = $this->app->getURI(true);
             if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
