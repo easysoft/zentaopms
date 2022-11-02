@@ -481,6 +481,8 @@ $lang->story->operateList = array();
 $lang->story->operateList['assigned']  = '指派';
 $lang->story->operateList['closed']    = '关闭';
 $lang->story->operateList['activated'] = '激活';
+$lang->story->operateList['changed']   = '变更';
+$lang->story->operateList['reviewed']  = '评审';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = "提{$lang->URCommon}";

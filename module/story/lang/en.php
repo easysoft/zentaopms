@@ -481,6 +481,8 @@ $lang->story->operateList = array();
 $lang->story->operateList['assigned']  = 'assigned';
 $lang->story->operateList['closed']    = 'closed';
 $lang->story->operateList['activated'] = 'activated';
+$lang->story->operateList['changed']   = 'changed';
+$lang->story->operateList['reviewed']  = 'reviewed';
 
 $lang->requirement->common             = $lang->URCommon;
 $lang->requirement->create             = 'Create Requirement';

@@ -736,6 +736,16 @@ class storyModel extends model
                 $data->files   = $story->files = $addedFiles . trim($storyFiles, ',');
                 $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
+                /* Sync siblings. */
+                if(!empty($oldStory->siblings))
+                {
+                    foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                    {
+                        $data->story = $siblingID;
+                        $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                    }
+                }
+
                 /* IF is story and has changed, update its relation version to new. */
                 if($oldStory->type == 'story')
                 {
@@ -764,6 +774,16 @@ class storyModel extends model
                     $reviewData->version  = $story->version;
                     $reviewData->reviewer = $reviewer;
                     $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+                    /* Sync siblings. */
+                    if(!empty($oldStory->siblings))
+                    {
+                        foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                        {
+                            $reviewData->story = $siblingID;
+                            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                        }
+                    }
                 }
 
                 if($reviewerHasChanged)
@@ -773,7 +793,9 @@ class storyModel extends model
                 }
             }
 
-            return common::createChanges($oldStory, $story);
+            $changes = common::createChanges($oldStory, $story);
+            if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Changed');
+            return $changes;
         }
     }
 
@@ -1474,6 +1496,15 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
 
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($this->post->result)->set('reviewDate')->eq($now)->where('story')->eq($siblingID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($this->app->user->account)->exec();
+            }
+        }
+
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
         $skipFields      = 'finalResult';
@@ -1504,6 +1535,8 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
+        if(!empty($oldStory->siblings)) $this->syncSiblings($oldStory->id, $oldStory->siblings, $changes, 'Reviewed');
+
         return true;
     }
 
@@ -1531,8 +1564,13 @@ class storyModel extends model
 
             $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
             $oldStory        = $oldStories[$storyID];
-
             if($oldStory->status != 'reviewing') continue;
+
+            foreach($reviewerList[$storyID] as $reviewer => $reviewerInfo)
+            {
+                if($reviewerInfo->version != $oldStory->version) unset($reviewerList[$storyID][$reviewer]);
+            }
+
             if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
@@ -5686,6 +5724,16 @@ class storyModel extends model
             /* Delete versions that is after this version. */
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWHere('version')->in($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($story->id)->andWhere('version')->in($oldStory->version)->exec();
+
+            /* Sync siblings. */
+            if(!empty($oldStory->siblings))
+            {
+                foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+                {
+                    $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($siblingID)->andWHere('version')->in($oldStory->version)->exec();
+                    $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($siblingID)->andWhere('version')->in($oldStory->version)->exec();
+                }
+            }
         }
 
         if($result == 'reject')
@@ -5791,6 +5839,19 @@ class storyModel extends model
             ->andWhere('version')->eq($oldStory->version)
             ->andWhere('result')->eq('')
             ->exec();
+
+        /* Sync siblings. */
+        if(!empty($oldStory->siblings))
+        {
+            foreach(explode(',', trim($oldStory->siblings, ',')) as $siblingID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)
+                    ->where('story')->eq($siblingID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->andWhere('result')->eq('')
+                    ->exec();
+            }
+        }
 
         return $story;
     }
@@ -6091,7 +6152,7 @@ class storyModel extends model
             $fieldName  = $changeInfo['field'];
             $fieldValue = $changeInfo['new'];
 
-            if(strpos('product,branch,module,plan', $fieldName) !== false) continue;
+            if(strpos('product,branch,module,plan,spec,verify,files,reviewers', $fieldName) !== false) continue;
             $syncFieldList[$fieldName] = $fieldValue;
         }
 
