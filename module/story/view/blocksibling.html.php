@@ -1,18 +1,14 @@
 <?php
+$lang->story->currentBranch = sprintf($this->lang->story->currentBranch, $this->lang->product->branchName[$product->type]);
 js::set('relieveURL',  inlink('ajaxRelieveSibling'));
 js::set('storyID',     $story->id);
 js::set('relieved',    $lang->story->relieved);
 js::set('relievedTip', $lang->story->relievedTip);
 js::set('cancel',      $lang->cancel);
+
 $canViewLinkStory = common::hasPriv('story', 'view');
 $canRelieved      = common::hasPriv('story', 'relieved');
-
-foreach($siblings as $id => $sibling)
-{
-    if($story->branch == $sibling->branch) continue;
-    unset($siblings[$id]);
-    $siblings[] = $sibling;
-}
+array_unshift($siblings, $story);
 
 foreach($siblings as $sibling)
 {

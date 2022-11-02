@@ -76,8 +76,8 @@ $lang->story->undetermined       = '待定';
 $lang->story->order              = '排序';
 $lang->story->saveDraft          = '存为草稿';
 $lang->story->doNotSubmit        = '保存暂不提交';
-$lang->story->currentBranch      = '当前分支';
-$lang->story->sibling            = '孪生需求';
+$lang->story->currentBranch      = '当前%s';
+$lang->story->siblings           = '孪生需求';
 $lang->story->relieved           = '解除';
 $lang->story->relievedSiblings   = '解除孪生需求';
 
