@@ -95,12 +95,11 @@ class zahost extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->zahost->edit;
+        $this->view->title = $this->lang->zahost->editAction;
         $this->view->host  = $this->zahost->getById($hostID);
         $this->display();
     }
