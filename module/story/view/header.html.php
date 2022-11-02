@@ -93,6 +93,8 @@ function loadProductBranches(productID)
 
             if(data)
             {
+                gap = $('#product').closest('td').next().width();
+                $('#planIdBox').css('flex', '0 0 ' + gap + 'px')
                 $.get(createLink('product', 'ajaxGetProductById', "productID=" + productID), function(data)
                 {
                     $('.switchBranch #branchBox .input-group .input-group-addon').html(data.branchSourceName)
